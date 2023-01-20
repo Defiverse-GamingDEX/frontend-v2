@@ -24,7 +24,8 @@ providePoolStaking(poolId);
  * COMPOSABLES
  */
 const { pool, poolQuery } = usePoolTransfers();
-const { isDeepPool } = usePool(pool);
+const { isDeepPool, isWeightedLikePool } = usePool(pool);
+
 const { activeTab } = useInvestPageTabs();
 
 // Instead of refetching pool data on every block, we refetch every minute to prevent
@@ -36,7 +37,7 @@ useIntervalFn(poolQuery.refetch.value, oneMinInMs);
 
 <template>
   <JoinPoolProvider
-    v-if="pool && isDeepPool"
+    v-if="pool && (isWeightedLikePool || isDeepPool)"
     :pool="pool"
     :isSingleAssetJoin="activeTab === Tab.SingleToken"
   >
