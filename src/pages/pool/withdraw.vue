@@ -22,7 +22,7 @@ import { hasFetchedPoolsForSor } from '@/lib/balancer.sdk';
  */
 const { network } = configService;
 const { pool, poolQuery, loadingPool, transfersAllowed } = usePoolTransfers();
-const { isDeepPool, isWeightedLikePool } = usePool(pool);
+const { isDeepPool, isWeightedLikePool, isStablePool } = usePool(pool);
 const { activeTab, resetTabs } = useWithdrawPageTabs();
 
 // Instead of refetching pool data on every block, we refetch every minute to prevent
@@ -44,6 +44,10 @@ const isLoading = computed(
     loadingPool.value || !transfersAllowed.value || isLoadingSor.value
 );
 
+const supportsExitPoolProvider = computed(
+  () => isWeightedLikePool.value || isDeepPool.value || isStablePool.value
+);
+
 onMounted(() => resetTabs());
 </script>
 
@@ -61,7 +65,7 @@ onMounted(() => resetTabs());
             <TradeSettingsPopover :context="TradeSettingsContext.invest" />
           </div>
           <BalTabs
-            v-if="isDeepPool || isWeightedLikePool"
+            v-if="supportsExitPoolProvider"
             v-model="activeTab"
             :tabs="tabs"
             class="p-0 m-0 -mb-px whitespace-nowrap"
@@ -70,7 +74,7 @@ onMounted(() => resetTabs());
         </div>
       </template>
       <ExitPoolProvider
-        v-if="isDeepPool || isWeightedLikePool"
+        v-if="supportsExitPoolProvider"
         :isSingleAssetExit="activeTab === Tab.SingleToken"
         :pool="pool"
       >
