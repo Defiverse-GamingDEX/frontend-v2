@@ -251,7 +251,7 @@ const provider = (props: Props) => {
   );
 
   const optimized = computed((): boolean => {
-    // const max = poolCalculator.propMax();
+    // const max = getPropMax();
     // return amountsIn.value.every((item, i) => item.value === max[i].value);
     return false;
   });
@@ -387,8 +387,12 @@ const provider = (props: Props) => {
     }
   }
 
-  function optimizeAmounts() {
-    const max = poolCalculator.propMax();
+  function getPropMax(): AmountIn[] {
+    return poolCalculator.propMax();
+  }
+
+  function setPropMax() {
+    const max = getPropMax();
     console.log({ max });
     setAmountsIn(max);
   }
@@ -451,7 +455,7 @@ const provider = (props: Props) => {
     resetAmounts,
     join,
     resetTxState,
-    optimizeAmounts,
+    setPropMax,
 
     // queries
     queryJoinQuery,
