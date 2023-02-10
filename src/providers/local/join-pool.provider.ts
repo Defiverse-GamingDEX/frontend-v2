@@ -39,6 +39,7 @@ import { useQuery, useQueryClient } from 'vue-query';
 import QUERY_KEYS, { QUERY_JOIN_ROOT_KEY } from '@/constants/queryKeys';
 import { captureException } from '@sentry/browser';
 import debounce from 'debounce-promise';
+import { SimulationType } from '@balancer-labs/sdk';
 
 /**
  * TYPES
@@ -205,6 +206,14 @@ const provider = (props: Props) => {
     (): string | undefined => queryJoinQuery.error.value?.message
   );
 
+  // Static call simulation is more accurate, but requires relay approval.
+  const simulationType = computed(
+    (): SimulationType =>
+      shouldSignRelayer.value
+        ? SimulationType.Static
+        : SimulationType.VaultModel
+  );
+
   /**
    * METHODS
    */
@@ -271,6 +280,7 @@ const provider = (props: Props) => {
         prices: prices.value,
         signer: getSigner(),
         slippageBsp: slippageBsp.value,
+        simulationType: simulationType.value,
       });
 
       bptOut.value = output.bptOut;
@@ -296,6 +306,7 @@ const provider = (props: Props) => {
         signer: getSigner(),
         slippageBsp: slippageBsp.value,
         relayerSignature: relayerSignature.value,
+        simulationType: simulationType.value,
       });
     } catch (error) {
       txError.value = (error as Error).message;
