@@ -344,7 +344,6 @@ export const tokensProvider = (
     if (!amount || bnum(amount).eq(0)) return false;
     if (!contractAddress) return false;
     if (isSameAddress(tokenAddress, nativeAsset.address)) return false;
-
     const allowance = bnum(
       (allowances.value[contractAddress] || {})[getAddress(tokenAddress)]
     );

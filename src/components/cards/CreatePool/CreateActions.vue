@@ -56,7 +56,7 @@ const { explorerLinks } = useWeb3();
 const { networkConfig } = useConfig();
 const { isTxConfirmed } = useEthers();
 const { tokenApprovalActions } = useTokenApprovalActions(
-  props.tokenAddresses,
+  ref(props.tokenAddresses),
   ref(props.amounts)
 );
 const {
@@ -74,7 +74,7 @@ const { networkSlug } = useNetwork();
  * COMPUTED
  */
 const actions = computed((): TransactionActionInfo[] => [
-  ...tokenApprovalActions,
+  ...tokenApprovalActions.value,
   {
     label: t('createPool'),
     loadingLabel: t('investment.preview.loadingLabel.create'),

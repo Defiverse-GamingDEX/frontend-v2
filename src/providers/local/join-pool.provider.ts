@@ -40,6 +40,7 @@ import QUERY_KEYS, { QUERY_JOIN_ROOT_KEY } from '@/constants/queryKeys';
 import { captureException } from '@sentry/browser';
 import debounce from 'debounce-promise';
 import { SimulationType } from '@balancer-labs/sdk';
+import useTokenApprovalActions from '@/composables/approvals/useTokenApprovalActions';
 
 /**
  * TYPES
@@ -72,6 +73,7 @@ const provider = (props: Props) => {
   const priceImpact = ref<number>(0);
   const highPriceImpactAccepted = ref<boolean>(false);
   const txError = ref<string>('');
+  const showInvestPreview = ref(false);
 
   const debounceQueryJoin = debounce(queryJoin, 1000);
 
@@ -194,9 +196,23 @@ const provider = (props: Props) => {
       !(relayerApproval.isUnlocked.value || relayerSignature.value)
   );
 
-  const approvalActions = computed((): TransactionActionInfo[] =>
-    shouldSignRelayer.value ? [relayerApprovalAction.value] : []
+  const tokensToApprove = computed(() => {
+    return amountsIn.value.map(amountIn => amountIn.address);
+  });
+  const amountsToApprove = computed(() => {
+    return amountsIn.value.map(amountIn => amountIn.value);
+  });
+  const { tokenApprovalActions } = useTokenApprovalActions(
+    tokensToApprove,
+    amountsToApprove
   );
+
+  // Approval actions like relayer approval and token approvals.
+  const approvalActions = computed((): TransactionActionInfo[] => {
+    return shouldSignRelayer.value
+      ? [relayerApprovalAction.value, ...tokenApprovalActions.value]
+      : tokenApprovalActions.value;
+  });
 
   const isLoadingQuery = computed(
     (): boolean => queryJoinQuery.isFetching.value
@@ -204,14 +220,6 @@ const provider = (props: Props) => {
 
   const queryError = computed(
     (): string | undefined => queryJoinQuery.error.value?.message
-  );
-
-  // Static call simulation is more accurate, but requires relayer approval.
-  const simulationType = computed(
-    (): SimulationType =>
-      shouldSignRelayer.value
-        ? SimulationType.VaultModel
-        : SimulationType.Static
   );
 
   /**
@@ -257,6 +265,14 @@ const provider = (props: Props) => {
     queryJoinQuery.remove.value();
   }
 
+  // Static call simulation is more accurate than VaultModel, but requires Vault approval for tokens
+  // and relayer approval.
+  function getSimulationType(): SimulationType {
+    return showInvestPreview.value && !approvalActions.value.length
+      ? SimulationType.Static
+      : SimulationType.VaultModel;
+  }
+
   /**
    * Simulate join transaction to get expected output and calculate price impact.
    */
@@ -273,6 +289,7 @@ const provider = (props: Props) => {
 
     try {
       joinPoolService.setJoinHandler(isSingleAssetJoin.value);
+      const simulationType = getSimulationType();
 
       const output = await joinPoolService.queryJoin({
         amountsIn: amountsInWithValue.value,
@@ -280,7 +297,8 @@ const provider = (props: Props) => {
         prices: prices.value,
         signer: getSigner(),
         slippageBsp: slippageBsp.value,
-        simulationType: simulationType.value,
+        relayerSignature: relayerSignature.value,
+        simulationType: simulationType,
       });
 
       bptOut.value = output.bptOut;
@@ -306,7 +324,9 @@ const provider = (props: Props) => {
         signer: getSigner(),
         slippageBsp: slippageBsp.value,
         relayerSignature: relayerSignature.value,
-        simulationType: simulationType.value,
+        // Always query the join before sending the transaction with the most accurate
+        // Static simulation (only for generalised joins)
+        simulationType: SimulationType.Static,
       });
     } catch (error) {
       txError.value = (error as Error).message;
@@ -341,6 +361,7 @@ const provider = (props: Props) => {
     // State
     amountsIn,
     highPriceImpactAccepted,
+    showInvestPreview,
     pool: readonly(pool),
     isSingleAssetJoin: readonly(isSingleAssetJoin),
     bptOut: readonly(bptOut),
