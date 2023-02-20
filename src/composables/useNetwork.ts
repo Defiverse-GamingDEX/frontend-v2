@@ -33,6 +33,7 @@ export const networkLabelMap = {
   [Network.ARBITRUM]: 'Arbitrum',
   [Network.GOERLI]: 'Goerli',
   [Network.OPTIMISM]: 'Optimism',
+  [Network.OASYS]: 'Oasys',
 };
 
 /**
@@ -45,6 +46,7 @@ export const isMainnet = computed(() => networkId.value === Network.MAINNET);
 export const isPolygon = computed(() => networkId.value === Network.POLYGON);
 export const isArbitrum = computed(() => networkId.value === Network.ARBITRUM);
 export const isGoerli = computed(() => networkId.value === Network.GOERLI);
+export const isOasys = computed(() => networkId.value === Network.OASYS);
 
 export const isL2 = computed(() => isPolygon.value || isArbitrum.value);
 export const isTestnet = computed(() => isGoerli.value);
@@ -63,6 +65,8 @@ export function networkFor(key: string | number): Network {
       return Network.POLYGON;
     case '42161':
       return Network.ARBITRUM;
+    case '16116':
+      return Network.OASYS;
     default:
       throw new Error('Network not supported');
   }

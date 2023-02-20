@@ -55,6 +55,12 @@ const networksDev = ref([
     networkSlug: 'goerli',
     key: '5',
   },
+  {
+    id: 'oasys',
+    name: 'Oasys',
+    networkSlug: 'oasys',
+    key: '16116',
+  },
 ]);
 
 // COMPUTED

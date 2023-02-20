@@ -1,6 +1,7 @@
 import { Network } from '@balancer-labs/sdk';
 
 import arbitrum from './arbitrum.json';
+import oasys from './oasys.json';
 import docker from './docker.json';
 import goerli from './goerli.json';
 import homestead from './homestead.json';
@@ -96,6 +97,7 @@ const config: Record<Network | number, Config> = {
   [Network.POLYGON]: polygon,
   [Network.ARBITRUM]: arbitrum,
   [Network.OPTIMISM]: optimism,
+  [Network.OASYS]: oasys,
   12345: test,
   // @ts-ignore
   17: docker,
