@@ -75,6 +75,7 @@ export default function useWeb3() {
   const isArbitrum = computed(
     () => appNetworkConfig.chainId === Network.ARBITRUM
   );
+  const isOasys = computed(() => appNetworkConfig.chainId === Network.OASYS);
   const isEIP1559SupportedNetwork = computed(
     () => appNetworkConfig.supportsEIP1559
   );
@@ -157,6 +158,7 @@ export default function useWeb3() {
     isGoerli,
     isPolygon,
     isArbitrum,
+    isOasys,
     isEIP1559SupportedNetwork,
     isWalletConnecting,
     isBlocked,

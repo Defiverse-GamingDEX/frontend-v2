@@ -120,11 +120,24 @@ export const TOKENS_GENERIC: TokenConstants = {
   },
 };
 
+export const TOKENS_OASYS: TokenConstants = {
+  Popular: {
+    Symbols: ['BAL', 'WETH'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    WETH: '0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980',
+    BAL: '0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7',
+  },
+};
+
 const TOKENS_MAP = {
   [Network.GOERLI]: TOKENS_GOERLI,
   [Network.MAINNET]: TOKENS_MAINNET,
   [Network.POLYGON]: TOKENS_POLYGON,
   [Network.ARBITRUM]: TOKENS_ARBITRUM,
+  [Network.OASYS]: TOKENS_OASYS,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]

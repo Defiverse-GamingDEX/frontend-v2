@@ -21,7 +21,7 @@ export class PoolDecorator {
   ): Promise<Pool[]> {
     const processedPools = this.pools.map(pool => {
       const poolService = new this.poolServiceClass(pool);
-      poolService.setUnwrappedTokens();
+      //poolService.setUnwrappedTokens(); // NEED CONFIRM
       return poolService.pool;
     });
 

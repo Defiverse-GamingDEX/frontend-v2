@@ -20,6 +20,7 @@ interface Env {
 }
 export default class ConfigService {
   public get env(): Env {
+    console.log(import.meta.env.VITE_ENV, 'import.meta.env.VITE_ENV');
     return {
       APP_ENV: import.meta.env.VITE_ENV || 'development',
       NETWORK: networkId.value,

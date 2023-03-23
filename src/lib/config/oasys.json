@@ -12,13 +12,13 @@
   "publicRpc": "https://arb1.arbitrum.io/rpc",
   "explorer": "https://scan.defiverse.net/",
   "explorerName": "defiverse",
-  "subgraph": "http://13.215.226.17:8000/subgraphs/name/balancer-labs/balancer-v2",
+  "subgraph": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/balancer-v2",
   "balancerApi": "https://api.balancer.fi",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
-      "http://13.215.226.17:8000/subgraphs/name/balancer-labs/balancer-v2"
+      "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/balancer-v2"
     ],
     "aave": "",
     "gauge": "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-arbitrum",

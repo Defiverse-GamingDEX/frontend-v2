@@ -13,6 +13,8 @@ const bridgeUrl = computed((): string => {
       return 'https://wallet.polygon.technology/polygon/bridge';
     case Network.ARBITRUM:
       return 'https://bridge.arbitrum.io/';
+    case Network.OASYS:
+      return 'https://www.portalbridge.com/#/transfer'; // from https://docs.oasis.io/general/manage-tokens/how-to-transfer-eth-erc20-to-emerald-paratime/
     default:
       return '';
   }

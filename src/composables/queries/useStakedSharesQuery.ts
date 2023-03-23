@@ -10,7 +10,7 @@ import { bnSum } from '@/lib/utils';
 import { formatUnits } from '@ethersproject/units';
 import { handleFetchException } from '@/lib/utils/exceptions';
 import { getMulticaller } from '@/dependencies/Multicaller';
-
+import { isOasys } from '../useNetwork';
 /**
  * TYPES
  */
@@ -44,7 +44,8 @@ export default function useStakedSharesQuery(
    * COMPUTED
    */
   const enabled = computed(
-    (): boolean => !!userGaugeShares.value && isWalletReady.value
+    (): boolean =>
+      !!userGaugeShares.value && isWalletReady.value && !isOasys.value
   );
 
   /**

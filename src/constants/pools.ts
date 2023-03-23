@@ -688,11 +688,56 @@ const POOLS_GENERIC: Pools = {
   DisabledJoins: [],
 };
 
+const POOLS_OASYS: Pools = {
+  IdsMap: {},
+  Pagination: {
+    PerPage: 10,
+    PerPool: 10,
+    PerPoolInitial: 5,
+  },
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
+  ZeroAddress: '0x0000000000000000000000000000000000000000',
+  DynamicFees: {
+    Gauntlet: [],
+  },
+  BlockList: [''],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'EulerLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
+  Stable: {
+    AllowList: [
+      '0xfedb19ec000d38d92af4b21436870f115db22725000000000000000000000010', // bb-ag-usd
+    ],
+  },
+  Investment: {
+    AllowList: [],
+  },
+  Factories: {
+    '0xcf3821727Baa9df36CA25a91DA330dD01A0e1743': 'composableStablePool', // ComposableStable V3
+    '0x4F6a9c852Bb5058C3e1d17824A860D60a203E71B': 'weightedPool', // WeightedPool V3
+  },
+  Stakable: {
+    AllowList: [],
+  },
+  Metadata: {},
+  DisabledJoins: [],
+};
+
 const POOLS_MAP = {
   [Network.GOERLI]: POOLS_GOERLI,
   [Network.MAINNET]: POOLS_MAINNET,
   [Network.POLYGON]: POOLS_POLYGON,
   [Network.ARBITRUM]: POOLS_ARBITRUM,
+  [Network.OASYS]: POOLS_OASYS,
 };
 
 export const POOLS: Pools = POOLS_MAP[networkId.value]
