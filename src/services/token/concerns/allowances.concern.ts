@@ -31,7 +31,7 @@ export default class AllowancesConcern {
       const tokenAddresses = Object.keys(tokens).filter(
         address => !isSameAddress(address, this.nativeAssetAddress)
       );
-
+      console.log(tokens, 'tokens=>allowances.concerns');
       const allContractAllowances = await Promise.all(
         contractAddresses.map(contractAddress =>
           this.getForContract(account, contractAddress, tokenAddresses, tokens)

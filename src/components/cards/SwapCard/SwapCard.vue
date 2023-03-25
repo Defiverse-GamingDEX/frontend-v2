@@ -380,7 +380,8 @@ export default defineComponent({
       }
       setTokenInAddress(assetIn || store.state.swap.inputAsset);
       setTokenOutAddress(assetOut || store.state.swap.outputAsset);
-
+      console.log(assetOut, 'assetOut');
+      console.log(store.state.swap.outputAsset, 'store.state.swap.outputAsset');
       let assetInAmount = router.currentRoute.value.query?.inAmount as string;
       let assetOutAmount = router.currentRoute.value.query?.outAmount as string;
       if (assetInAmount) {

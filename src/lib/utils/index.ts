@@ -43,7 +43,8 @@ export function lsGet<T = any>(
   version?: string
 ): T {
   const rawValue = localStorage.getItem(lsGetKey(key));
-
+  console.log(rawValue, 'rawValue');
+  console.log(defaultValue, 'defaultValue');
   if (rawValue != null) {
     try {
       const value = JSON.parse(rawValue);

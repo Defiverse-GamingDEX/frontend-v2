@@ -122,13 +122,16 @@ export const tokensProvider = (
    * and any injected tokens. Static and dynamic
    * meta data should be available for these tokens.
    */
-  const tokens = computed(
-    (): TokenInfoMap => ({
+  const tokens = computed((): TokenInfoMap => {
+    console.log(tokens.value, 'tokensBBB');
+    console.log(activeTokenListTokens.value, 'activeTokenListTokens.valueBBB');
+    console.log(state.injectedTokens, 'state.injectedTokensBBB');
+    return {
       [networkConfig.nativeAsset.address]: nativeAsset,
       ...activeTokenListTokens.value,
       ...state.injectedTokens,
-    })
-  );
+    };
+  });
 
   const tokenAddresses = computed((): string[] => Object.keys(tokens.value));
 
@@ -178,7 +181,7 @@ export const tokensProvider = (
     isError: allowancesQueryError,
     refetch: refetchAllowances,
   } = useAllowancesQuery(tokens, toRef(state, 'allowanceContracts'));
-
+  console.log(tokens, 'AAAAAtokens');
   const prices = computed(
     (): TokenPrices => (priceData.value ? priceData.value : {})
   );
@@ -216,14 +219,15 @@ export const tokensProvider = (
   function mapTokenListTokens(tokenListMap: TokenListMap): TokenInfoMap {
     const isEmpty = Object.keys(tokenListMap).length === 0;
     if (isEmpty) return {};
-
+    console.log('mapTokenListTokens', tokenListMap);
     const tokens = [...Object.values(tokenListMap)]
       .map(list => list.tokens)
       .flat();
-
+    console.log('mapTokenListTokens=>tokens', tokens);
     const tokensMap = tokens.reduce<TokenInfoMap>((acc, token) => {
       const address: string = getAddress(token.address);
-
+      console.log('token.chainId=>tokensMap', token.chainId);
+      console.log('networkConfig.chainId=>tokensMap', networkConfig.chainId);
       // Don't include if already included
       if (acc[address]) return acc;
 
@@ -233,7 +237,7 @@ export const tokensProvider = (
       acc[address] = token;
       return acc;
     }, {});
-
+    console.log('mapTokenListTokens=>tokensMap', tokensMap);
     return tokensMap;
   }
 
@@ -253,6 +257,8 @@ export const tokensProvider = (
     const existingAddresses = Object.keys(tokens.value);
 
     // Only inject tokens that aren't already in tokens
+    console.log(addresses, 'addresses=>injectTokens');
+    console.log(existingAddresses, 'existingAddresses=>injectTokens');
     const injectable = addresses.filter(
       address => !includesAddress(existingAddresses, address)
     );
@@ -260,12 +266,14 @@ export const tokensProvider = (
 
     //Wait for dynamic token list import to be resolved
     await tokensListPromise;
-
+    console.log(injectable, 'injectable');
+    console.log(addresses, 'addresses');
     const newTokens = await tokenService.metadata.get(
       injectable,
       allTokenLists.value
     );
 
+    console.log(newTokens, 'newTokens');
     state.injectedTokens = { ...state.injectedTokens, ...newTokens };
 
     // Wait for balances/allowances/prices to be fetched for newly injected tokens.
@@ -290,9 +298,9 @@ export const tokensProvider = (
 
     tokensToSearch =
       subset.length > 0 ? tokensToSearch : allTokenListTokens.value;
-
+    console.log(query, 'searchTokens=>query');
     const potentialAddress = getAddressFromPoolId(query);
-
+    console.log(potentialAddress, 'searchTokens=>potentialAddress');
     if (isAddress(potentialAddress)) {
       const address = getAddress(potentialAddress);
       const token = tokensToSearch[address];
@@ -410,6 +418,7 @@ export const tokensProvider = (
    */
   function getToken(address: string): TokenInfo {
     address = getAddressFromPoolId(address); // In case pool ID has been passed
+    console.log('getAddressFromPoolId', address);
     if (address) address = getAddress(address);
     return tokens.value[address];
   }
@@ -456,6 +465,8 @@ export const tokensProvider = (
   onBeforeMount(async () => {
     // Inject veBAL because it's not in tokenlists.
     const { veBAL } = configService.network.addresses;
+    console.log(configService, 'configService');
+    console.log(veBAL, 'veBAL');
     await injectTokens([veBAL]);
     state.loading = false;
   });

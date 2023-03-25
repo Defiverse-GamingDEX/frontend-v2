@@ -82,7 +82,6 @@ const appNetworkSupported = computed((): boolean => {
 
 const activeNetwork = computed((): NetworkOption | undefined =>
   allNetworks.value.find(network => {
-    console.log(allNetworks.value, 'networksAAAA');
     if (!appNetworkSupported.value && network.id === 'ethereum') return true;
     return isActive(network);
   })
@@ -135,11 +134,6 @@ function getNetworkChangeUrl(network: NetworkOption): string {
 }
 
 function isActive(network: NetworkOption): boolean {
-  console.log(
-    appNetworkSupported.value,
-    networkId.value,
-    'appNetworkSupportedAA'
-  );
   if (!appNetworkSupported.value && network.id === 'ethereum') return true;
   return networkId.value.toString() === network.key;
 }

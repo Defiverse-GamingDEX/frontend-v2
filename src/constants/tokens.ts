@@ -143,3 +143,6 @@ const TOKENS_MAP = {
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]
   ? TOKENS_MAP[networkId.value]
   : TOKENS_GENERIC;
+console.log(TOKENS, 'TOKENS');
+console.log(TOKENS_MAP, 'TOKENS_MAP');
+console.log(networkId.value, 'networkId');

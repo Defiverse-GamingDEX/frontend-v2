@@ -14,6 +14,12 @@ const state: SwapState = {
 
 const actions = {
   init({ commit }) {
+    console.log(initialTokens, 'initialTokens=>setOutputAsset');
+    console.log(networkId.value, 'networkId.value=>setOutputAsset');
+    console.log(
+      initialTokens[networkId.value].output,
+      '  initialTokens[networkId.value].output=>setOutputAsset'
+    );
     commit(
       'setInputAsset',
       lsGet(
@@ -38,6 +44,7 @@ const mutations = {
   },
 
   setOutputAsset(state: SwapState, asset: string): void {
+    console.log('setOutputAsset=>asset', asset);
     state.outputAsset = asset;
     lsSet(`swap.outputAsset.${networkId.value}`, asset);
   },

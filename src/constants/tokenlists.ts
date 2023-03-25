@@ -1,3 +1,4 @@
+import oasysJson from './oasys.listed.tokenlist.json';
 export interface TokenListMap {
   Balancer: {
     Default: string;
@@ -64,8 +65,7 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
   },
   '16116': {
     Balancer: {
-      Default:
-        'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/arbitrum.listed.tokenlist.json',
+      Default: JSON.stringify(oasysJson),
       Vetted:
         'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/arbitrum.vetted.tokenlist.json',
     },

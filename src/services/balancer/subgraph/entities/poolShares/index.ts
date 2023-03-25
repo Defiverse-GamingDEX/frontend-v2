@@ -16,6 +16,7 @@ export default class PoolShares {
   public async get(args = {}, attrs = {}): Promise<PoolShare[]> {
     const queryName = 'PoolShares';
     const query = this.query(args, attrs, queryName);
+    console.log(query, 'query');
     const data = await this.service.client.get(query);
     return data.poolShares;
   }
