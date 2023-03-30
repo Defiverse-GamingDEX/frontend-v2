@@ -58,6 +58,7 @@ export default class TokenListService {
       allFetchFns.map(fetchList => fetchList.catch(e => e))
     );
     const listsWithKey = lists.map((list, i) => [uris[i], list]);
+
     const validLists = listsWithKey.filter(list => !(list[1] instanceof Error));
     if (validLists.length === 0) {
       throw new Error('Failed to load any TokenLists');
@@ -69,6 +70,12 @@ export default class TokenListService {
 
   async get(uri: string): Promise<TokenList> {
     try {
+      // Hotfix: Defi Verse
+      if (uri.startsWith('{')) {
+        const rs = JSON.parse(uri);
+        return rs as any;
+      }
+
       const [protocol, path] = uri.split('://');
 
       if (uri.endsWith('.eth')) {
