@@ -25,19 +25,19 @@ const classes = computed(() => ({
 
 <style scoped>
 .desktop-link-item {
-  @apply h-full flex-col justify-center cursor-pointer hover:text-purple-600 dark:hover:text-yellow-500 flex relative
+  @apply h-full flex-col justify-center cursor-pointer text-white hover:text-gray-600 dark:hover:text-yellow-500 flex relative
     overflow-hidden p-0 transition-all
     ease-in-out duration-500;
 }
 
-.desktop-link-item::before {
+/* .desktop-link-item::before {
   content: '';
 
   @apply top-0 left-0 w-full block absolute overflow-hidden transition-all;
 
   border-top: 4px solid theme('colors.purple.600');
   transform: translate3d(0%, -101%, 0);
-}
+} */
 
 .dark .desktop-link-item::before {
   border-color: theme('colors.yellow.500');
@@ -66,7 +66,10 @@ const classes = computed(() => ({
 }
 
 .desktop-link-item.router-link-active {
-  @apply text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors;
+  @apply text-yellow-50 dark:text-blue-400 hover:text-yellow-50 dark:hover:text-blue-400 transition-colors;
+
+  font-weight: 600 !important;
+  font-size: 1.25rem;
 }
 
 .desktop-link-item:hover::before {
