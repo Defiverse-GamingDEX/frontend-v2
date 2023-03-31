@@ -13,6 +13,7 @@ type CommonTokens = {
   BAL: string;
   bbaUSD?: string;
   bbaUSDv2?: string;
+  DFV?: string;
 };
 
 type TokenConstants = {
@@ -120,15 +121,28 @@ export const TOKENS_GENERIC: TokenConstants = {
   },
 };
 
+// export const TOKENS_OASYS: TokenConstants = {
+//   Popular: {
+//     Symbols: ['BAL', 'WETH'],
+//   },
+//   Addresses: {
+//     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+//     wNativeAsset: '0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980', // need CONFIRM
+//     WETH: '0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980',
+//     BAL: '0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7',
+//   },
+// };
+
 export const TOKENS_OASYS: TokenConstants = {
   Popular: {
-    Symbols: ['BAL', 'WETH'],
+    Symbols: ['DFV', 'BAL', 'WETH', 'DAI', 'USDC', 'USDT'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    wNativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980', // need CONFIRM
     WETH: '0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980',
     BAL: '0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7',
+    DFV: '0xb7e40D63d0Aee3d6ce83070DD411D901F5E44a9C',
   },
 };
 
