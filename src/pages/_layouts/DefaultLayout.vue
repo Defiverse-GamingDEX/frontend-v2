@@ -13,9 +13,10 @@ const route = useRoute();
  * METHODS
  */
 function classBody() {
+  if (!route.name) return '';
   if (route.name === 'home') return 'bg-1';
   if (route.name === 'swap') return 'bg-2';
-  if (route.name === 'pool') return 'bg-3';
+  if (route.name === 'list-pool') return 'bg-3';
   return 'bg-4';
 }
 </script>
@@ -60,7 +61,7 @@ function classBody() {
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: contain;
-  padding-bottom: 20rem;
+  padding-bottom: 16.67vw;
 }
 
 .app-body.bg-4 {
@@ -68,7 +69,7 @@ function classBody() {
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: contain;
-  padding-bottom: 40rem;
+  padding-bottom: 33vw;
 }
 @media (max-width: 767px) {
   .app-body.bg-2 {

@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import HomePageHero from '@/components/heros/HomePageHero.vue';
+import PoolPageHero from '@/components/heros/PoolPageHero.vue';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
@@ -44,7 +44,7 @@ function onColumnSort(columnId: string) {
 
 <template>
   <div>
-    <HomePageHero />
+    <PoolPageHero />
     <div class="xl:container xl:px-4 pt-10 md:pt-8 xl:mx-auto">
       <BalStack vertical>
         <div class="px-4 xl:px-0">
