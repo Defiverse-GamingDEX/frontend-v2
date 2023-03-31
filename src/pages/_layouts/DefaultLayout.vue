@@ -1,11 +1,28 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
+
 import Footer from '@/components/footer/Footer.vue';
 import AppNav from '@/components/navs/AppNav/AppNav.vue';
+
+/**
+ * COMPOSABLES
+ */
+const route = useRoute();
+
+/**
+ * METHODS
+ */
+function classBody() {
+  if (route.name === 'home') return 'bg-1';
+  if (route.name === 'swap') return 'bg-2';
+  if (route.name === 'pool') return 'bg-3';
+  return 'bg-4';
+}
 </script>
 
 <template>
   <div>
-    <div class="app-body">
+    <div :class="['app-body', classBody()]">
       <AppNav />
       <div class="pb-16">
         <router-view v-slot="{ Component }" :key="$route.path">
@@ -25,8 +42,42 @@ import AppNav from '@/components/navs/AppNav/AppNav.vue';
 }
 
 .app-body {
-  @apply mb-8;
+  /* @apply mb-8; */
 
   min-height: calc(100vh - 2rem);
+}
+
+.app-body.bg-2 {
+  background-image: url('/images/backgrounds/bg-min.png');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% 100%;
+  min-height: 100vh;
+}
+
+.app-body.bg-3 {
+  background-image: url('/images/backgrounds/bg2-min.png');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: contain;
+  padding-bottom: 20rem;
+}
+
+.app-body.bg-4 {
+  background-image: url('/images/backgrounds/bg2-min.png');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: contain;
+  padding-bottom: 40rem;
+}
+@media (max-width: 767px) {
+  .app-body.bg-2 {
+    background-size: contain;
+  }
+
+  .app-body.bg-3,
+  .app-body.bg-4 {
+    padding-bottom: 2rem;
+  }
 }
 </style>
