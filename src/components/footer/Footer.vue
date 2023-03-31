@@ -18,7 +18,7 @@
             <p>
               <router-link
                 class="text-lg font-medium link"
-                :to="{ name: 'home', params: { networkSlug } }"
+                :to="{ name: 'list-pool', params: { networkSlug } }"
               >
                 {{ $t('pool') }}
               </router-link>

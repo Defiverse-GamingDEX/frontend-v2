@@ -25,8 +25,8 @@ function isActive(page: string): boolean {
 <template>
   <div class="desktop-links">
     <DesktopLinkItem
-      :to="{ name: 'home', params: { networkSlug } }"
-      :active="isActive('home')"
+      :to="{ name: 'list-pool', params: { networkSlug } }"
+      :active="isActive('list-pool')"
       @click="trackGoal(Goals.ClickNavPools)"
     >
       {{ $t('pool') }}
@@ -47,13 +47,13 @@ function isActive(page: string): boolean {
         {{ $t('claim') }}
       </div>
     </DesktopLinkItem>
-    <DesktopLinkItem
+    <!-- <DesktopLinkItem
       v-if="isGoerli"
       :to="{ name: 'faucet', params: { networkSlug } }"
       :active="isActive('faucet')"
     >
       Faucet
-    </DesktopLinkItem>
+    </DesktopLinkItem> -->
     <DesktopLinkItem
       :to="{ name: 'portfolio', params: { networkSlug } }"
       :active="isActive('portfolio')"
