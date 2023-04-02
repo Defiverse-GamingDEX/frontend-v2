@@ -120,12 +120,12 @@ const poolManagementText = computed(() => {
 
 <template>
   <div>
-    <h3 class="px-4 lg:px-0 mb-5" v-text="$t('poolDetails')" />
+    <h3 class="px-4 lg:px-0 mb-5 text-white" v-text="$t('poolDetails')" />
 
     <BalDetailsTable class="mb-12" :tableData="data" />
     <template v-if="poolManagementText">
-      <h4 class="px-4 lg:px-0 mb-2" v-text="$t('poolManagement')" />
-      <div class="px-4 lg:px-0">
+      <h4 class="px-4 lg:px-0 mb-2 text-white" v-text="$t('poolManagement')" />
+      <div class="px-4 lg:px-0 text-white">
         {{ poolManagementText }}
       </div>
     </template>

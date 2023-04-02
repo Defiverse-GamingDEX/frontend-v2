@@ -238,15 +238,13 @@ const chartGrid = computed(() => {
           v-if="failedToLoadPriceData && tokenOutAddress"
           class="flex justify-center items-center w-full h-full"
         >
-          <span class="text-sm text-gray-400">{{
-            $t('insufficientData')
-          }}</span>
+          <span class="text-sm text-white">{{ $t('insufficientData') }}</span>
         </div>
         <div
           v-if="failedToLoadPriceData && !tokenOutAddress"
           class="flex justify-center items-center w-full h-full"
         >
-          <span class="text-sm text-center text-gray-400">{{
+          <span class="text-sm text-center text-white">{{
             $t('chooseAPair')
           }}</span>
         </div>

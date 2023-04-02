@@ -448,7 +448,7 @@ function addLaggingTimestamps() {
           {{ isFocusedOnChart ? currentChartValue : defaultChartData.value }}
         </p>
         <div
-          class="text-sm font-medium text-secondary"
+          class="text-sm font-medium text-white"
           :class="{ 'text-pink-500': isFocusedOnChart }"
         >
           <p>

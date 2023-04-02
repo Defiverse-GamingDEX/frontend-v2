@@ -254,7 +254,7 @@ watch(poolQuery.error, () => {
           </div>
           <div class="mb-4">
             <h4
-              class="px-4 lg:px-0 mb-4"
+              class="px-4 lg:px-0 mb-4 text-white"
               v-text="$t('poolComposition.title')"
             />
             <BalLoadingBlock v-if="loadingPool" class="h-64" />

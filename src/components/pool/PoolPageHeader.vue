@@ -185,12 +185,12 @@ function symbolFor(titleTokenIndex: number): string {
         <BalIcon
           name="arrow-up-right"
           size="sm"
-          class="mt-2 ml-2 text-gray-500 hover:text-blue-500 transition-colors"
+          class="mt-2 ml-2 text-white hover:text-blue-500 transition-colors"
         />
       </BalLink>
     </div>
     <div class="flex items-center mt-2">
-      <div class="mr-1 text-sm text-secondary" v-html="poolFeeLabel" />
+      <div class="mr-1 text-sm text-white" v-html="poolFeeLabel" />
       <BalTooltip>
         <template #activator>
           <BalLink
@@ -204,7 +204,7 @@ function symbolFor(titleTokenIndex: number): string {
             v-else
             name="info"
             size="xs"
-            class="text-gray-400 dark:text-gray-500"
+            class="text-white dark:text-gray-500"
           />
         </template>
         <span>
@@ -290,7 +290,7 @@ function symbolFor(titleTokenIndex: number): string {
 </template>
 <style scoped>
 .pool-title {
-  @apply mr-4 capitalize mt-2;
+  @apply mr-4 capitalize mt-2 text-white;
 
   font-variation-settings: 'wght' 700;
 }

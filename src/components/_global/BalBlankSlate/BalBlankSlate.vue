@@ -17,7 +17,7 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <div :class="['bal-blank-slate text-secondary', classes]">
+  <div :class="['bal-blank-slate text-white', classes]">
     <slot v-text="$t('noContent')" />
   </div>
 </template>
