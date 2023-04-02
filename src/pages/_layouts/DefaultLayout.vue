@@ -25,7 +25,7 @@ function classBody() {
   <div>
     <div :class="['app-body', classBody()]">
       <AppNav />
-      <div class="pb-16">
+      <div>
         <router-view v-slot="{ Component }" :key="$route.path">
           <transition appear name="appear">
             <component :is="Component" />
