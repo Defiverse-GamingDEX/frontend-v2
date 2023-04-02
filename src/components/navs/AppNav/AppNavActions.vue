@@ -15,6 +15,7 @@ import { Goals, trackGoal } from '@/composables/useFathom';
  * COMPOSABLES
  */
 // const { isMobile, isDesktop } = useBreakpoints();
+const { isMobile } = useBreakpoints();
 const { account, connector, startConnectWithInjectedProvider } = useWeb3();
 const { setSidebarOpen } = useSidebar();
 

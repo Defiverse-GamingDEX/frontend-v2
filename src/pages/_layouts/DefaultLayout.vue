@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router';
 
 import Footer from '@/components/footer/Footer.vue';
+import FooterHome from '@/components/footer/FooterHome.vue';
 import AppNav from '@/components/navs/AppNav/AppNav.vue';
 
 /**
@@ -33,7 +34,8 @@ function classBody() {
         </router-view>
       </div>
     </div>
-    <Footer />
+    <FooterHome v-if="route.name === 'home'" />
+    <Footer v-else />
   </div>
 </template>
 
