@@ -37,7 +37,6 @@ useIntervalFn(poolQuery.refetch.value, oneMinInMs);
 </script>
 
 <template>
-  {{ isDeepPool }}{{ pool }}
   <JoinPoolProvider
     v-if="pool && isDeepPool"
     :pool="pool"
