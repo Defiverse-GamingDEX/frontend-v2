@@ -722,6 +722,7 @@ const POOLS_OASYS: Pools = {
     AllowList: [],
   },
   Factories: {
+    '0x7b1286E016D2c75bD38CAef3dA456E4ED6DB3328': 'oracleWeightedPool',
     '0xcf3821727Baa9df36CA25a91DA330dD01A0e1743': 'composableStablePool', // ComposableStable V3
     '0x4F6a9c852Bb5058C3e1d17824A860D60a203E71B': 'weightedPool', // WeightedPool V3
   },
