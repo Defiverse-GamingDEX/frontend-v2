@@ -10,6 +10,14 @@
   },
   "tokens": [
     {
+      "address": "0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7",
+      "chainId": 5,
+      "name": "Balancer",
+      "symbol": "BAL",
+      "decimals": 18,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+    },
+    {
       "address": "0x62400c6b2685599D1c1308A72C4cb2f6B86B4867",
       "chainId": 16116,
       "name": "Dai Stablecoin",

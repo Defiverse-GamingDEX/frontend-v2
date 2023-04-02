@@ -13,15 +13,15 @@
   "explorer": "https://scan.defiverse.net/",
   "explorerName": "defiverse",
   "subgraph": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse",
-  "balancerApi": "https://api.balancer.fi",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
-    "main": ["https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"],
+    "main": [
+      "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"
+    ],
     "aave": "",
-    "gauge": "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-arbitrum",
-    "blocks": "https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-one-blocks",
-    "oasys": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"
+    "gauge": "",
+    "blocks": ""
   },
   "supportsEIP1559": true,
   "supportsElementPools": false,
@@ -42,7 +42,7 @@
     "authorizer": "0x2476fB5aeDCD054c6e40f1Dee27b63912B947f0D",
     "vault": "0x0855eA6187dE973Bc5849d67C14f59c6fE2cF039",
     "weightedPoolFactory": "0x4F6a9c852Bb5058C3e1d17824A860D60a203E71B",
-    "stablePoolFactory": "0xb74D71Ac95427019439c606b70d24ebfd9B9FFF2",
+    "stablePoolFactory": "0x8a2618d39e63FFbAF491d6A9386231a33f575Caf",
     "weth": "0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980",
     "stMATIC": "",
     "rETH": "",
