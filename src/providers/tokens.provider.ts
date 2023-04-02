@@ -200,16 +200,23 @@ export const tokensProvider = (
       allowanceQuerySuccess.value
   );
 
-  const dynamicDataLoading = computed(
-    () =>
-      priceQueryLoading.value ||
-      priceQueryRefetching.value ||
+  const dynamicDataLoading = computed(() => {
+    console.log(balanceQueryLoading.value, 'balanceQueryLoading.value');
+    console.log(balanceQueryRefetching.value, 'balanceQueryRefetching.value');
+    console.log(allowanceQueryLoading.value, 'allowanceQueryLoading.value');
+    console.log(
+      allowanceQueryRefetching.value,
+      'allowanceQueryRefetching.value'
+    );
+    const rs = //priceQueryLoading.value || // TODO NEED PRICE
+      //priceQueryRefetching.value || // TODO NEED PRICE
       balanceQueryLoading.value ||
-      balanceQueryRefetching.value ||
-      allowanceQueryLoading.value ||
-      allowanceQueryRefetching.value
-  );
-
+      //balanceQueryRefetching.value ||  // TODO missing div redender issue
+      allowanceQueryLoading.value;
+    // allowanceQueryRefetching.value;  //  TODO missing div redender issue
+    return rs;
+  });
+  console.log(dynamicDataLoading.value, 'dynamicDataLoading');
   /**
    * METHODS
    */
@@ -418,8 +425,9 @@ export const tokensProvider = (
    */
   function getToken(address: string): TokenInfo {
     address = getAddressFromPoolId(address); // In case pool ID has been passed
-    console.log('getAddressFromPoolId', address);
+
     if (address) address = getAddress(address);
+
     return tokens.value[address];
   }
 

@@ -1,7 +1,7 @@
 <template>
   <component
     :is="tag"
-    :class="['bal-btn', btnClasses]"
+    :class="['bal-btn', btnClasses, classCustom]"
     :disabled="disabled || loading"
   >
     <div v-if="loading" class="flex justify-center items-center">
@@ -56,6 +56,12 @@ export default defineComponent({
           'white',
           'blue',
         ].includes(val),
+    },
+    classCustom: {
+      type: String,
+      default: '',
+      validator: (val: string): boolean =>
+        ['', 'outline-3', 'gray-blue'].includes(val),
     },
     label: { type: String, default: '' },
     block: { type: Boolean, default: false },
@@ -237,6 +243,20 @@ export default defineComponent({
 .bal-btn:focus,
 .bal-btn:active {
   outline: none !important;
+}
+
+.bal-btn.outline-3 {
+  box-shadow: 0 3px 6px #00000029;
+  border: 3px solid #fff;
+  border-radius: 14px;
+  background: transparent;
+}
+
+.bal-btn.gray-blue {
+  background: #ffffffad 0% 0% no-repeat padding-box;
+  box-shadow: 0 3px 6px #00000029;
+  border-radius: 14px;
+  color: #1eadee;
 }
 
 .content {

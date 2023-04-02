@@ -1,6 +1,7 @@
 export const EXTERNAL_LINKS = {
   Balancer: {
     Home: 'https://balancer.fi',
+    Build: 'https://balancer.fi/build/',
     Analytics: 'https://dune.xyz/balancerlabs',
     BalForGas:
       'https://docs.balancer.finance/core-concepts/bal-balancer-governance-token/bal-for-gas',

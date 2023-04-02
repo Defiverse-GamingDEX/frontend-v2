@@ -39,7 +39,7 @@ const router = useRouter();
 const blockIcon = ref<HTMLDivElement>();
 
 const navLinks = [
-  { label: t('pool'), path: '/', goal: Goals.ClickNavPools },
+  { label: t('pool'), path: `/${networkSlug}/pool`, goal: Goals.ClickNavPools },
   { label: t('swap'), path: `/${networkSlug}/swap`, goal: Goals.ClickNavSwap },
   {
     label: t('claim'),

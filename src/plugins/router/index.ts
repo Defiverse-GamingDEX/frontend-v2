@@ -18,6 +18,10 @@ const HomePage = () =>
   import(
     /* webpackChunkName: "HomePage" */ /* webpackPrefetch: true */ '@/pages/index.vue'
   );
+const ListPoolPage = () =>
+  import(
+    /* webpackChunkName: "PoolPage" */ /* webpackPrefetch: true */ '@/pages/pool/index.vue'
+  );
 const PoolPage = () =>
   import(
     /* webpackChunkName: "PoolPage" */ /* webpackPrefetch: true */ '@/pages/pool/_id.vue'
@@ -105,6 +109,11 @@ const routes: RouteRecordRaw[] = [
     name: 'create-pool',
     component: CreatePoolPage,
     meta: { layout: 'FocusedLayout' },
+  },
+  {
+    path: '/:networkSlug/pool',
+    name: 'list-pool',
+    component: ListPoolPage,
   },
   {
     path: '/:networkSlug/pool/:id',
