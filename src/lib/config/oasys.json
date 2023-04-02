@@ -12,16 +12,16 @@
   "publicRpc": "https://arb1.arbitrum.io/rpc",
   "explorer": "https://scan.defiverse.net/",
   "explorerName": "defiverse",
-  "subgraph": "https://graphnode.defiverse.net/subgraphs/name/defiverse",
+  "subgraph": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse",
   "balancerApi": "https://api.balancer.fi",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
-    "main": ["https://graphnode.defiverse.net/subgraphs/name/defiverse"],
+    "main": ["https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"],
     "aave": "",
     "gauge": "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-arbitrum",
     "blocks": "https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-one-blocks",
-    "oasys": "https://graphnode.defiverse.net/subgraphs/name/defiverse"
+    "oasys": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"
   },
   "supportsEIP1559": true,
   "supportsElementPools": false,
