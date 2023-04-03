@@ -26,8 +26,12 @@ export default class BlockService {
       secsSinceTimestamp / this.config.network.blockTime
     );
 
-    return currentBlock - blocksSinceTimestamp;
+    // TODO: Check me
+    return currentBlock > blocksSinceTimestamp
+      ? currentBlock - blocksSinceTimestamp
+      : currentBlock;
   }
+
   public async fetchBlockByTimeWithGraph(
     timestamp: string,
     useRange = true
