@@ -1,6 +1,6 @@
 import { GasPriceService } from '@/services/gas-price/gas-price.service';
 import { Pool } from '@/services/pool/types';
-import { BalancerSDK, SimulationType } from '@balancer-labs/sdk';
+import { BalancerSDK } from '@balancer-labs/sdk';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { Ref } from 'vue';
 import {
@@ -65,8 +65,8 @@ export class GeneralisedExitHandler implements ExitPoolHandler {
       evmAmountIn.toString(),
       signerAddress,
       slippage,
-      signer,
-      SimulationType.Tenderly, // TODO: update to use VaultModel + Static (see SDK example for more details)
+      //signer,
+      // SimulationType.Tenderly, // TODO: update to use VaultModel + Static (see SDK example for more details)
       relayerSignature
     );
     if (!this.lastExitRes) throw new Error('Failed to query exit.');
