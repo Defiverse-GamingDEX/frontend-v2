@@ -4,6 +4,7 @@ import useWeb3 from '@/services/web3/useWeb3';
 import DesktopLinkItem from './DesktopLinkItem.vue';
 import useNetwork from '@/composables/useNetwork';
 import { Goals, trackGoal } from '@/composables/useFathom';
+import { NAV_LINKS } from '@/constants/navLinks';
 
 const { isGoerli } = useWeb3();
 
@@ -12,6 +13,13 @@ const { isGoerli } = useWeb3();
  */
 const route = useRoute();
 const { networkSlug } = useNetwork();
+
+const navLinks = NAV_LINKS.map(i => {
+  return {
+    ...i,
+    goal: Goals[i.goal_key]
+  }
+})
 
 /**
  * METHODS
@@ -25,48 +33,13 @@ function isActive(page: string): boolean {
 <template>
   <div class="desktop-links">
     <DesktopLinkItem
-      :to="{ name: 'list-pool', params: { networkSlug } }"
-      :active="isActive('list-pool')"
-      @click="trackGoal(Goals.ClickNavPools)"
+      v-for="i in navLinks"
+      :key="i.text"
+      :to="{ name: i.name_link, params: { networkSlug } }"
+      :active="isActive(i.name_link)"
+      @click="trackGoal(i.goal)"
     >
-      {{ $t('pool') }}
-    </DesktopLinkItem>
-    <DesktopLinkItem
-      :to="{ name: 'swap', params: { networkSlug } }"
-      :active="isActive('swap')"
-      @click="trackGoal(Goals.ClickNavSwap)"
-    >
-      {{ $t('swap') }}
-    </DesktopLinkItem>
-    <DesktopLinkItem
-      :to="{ name: 'claim', params: { networkSlug } }"
-      :active="isActive('claim')"
-      @click="trackGoal(Goals.ClickNavClaim)"
-    >
-      <div class="flex items-center">
-        {{ $t('claim') }}
-      </div>
-    </DesktopLinkItem>
-    <!-- <DesktopLinkItem
-      v-if="isGoerli"
-      :to="{ name: 'faucet', params: { networkSlug } }"
-      :active="isActive('faucet')"
-    >
-      Faucet
-    </DesktopLinkItem> -->
-    <DesktopLinkItem
-      :to="{ name: 'portfolio', params: { networkSlug } }"
-      :active="isActive('portfolio')"
-      @click="trackGoal(Goals.ClickNavPortfolio)"
-    >
-      {{ $t('portfolio') }}
-    </DesktopLinkItem>
-    <DesktopLinkItem
-      :to="{ name: 'vebal', params: { networkSlug } }"
-      :active="isActive('vebal')"
-      @click="trackGoal(Goals.ClickNavVebal)"
-    >
-      veBAL
+      {{ $t(i.text) }}
     </DesktopLinkItem>
   </div>
 </template>

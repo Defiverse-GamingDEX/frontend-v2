@@ -101,6 +101,7 @@ import IconMedium from '@/components/icons/IconMedium.vue';
 import IconTwitter from '@/components/icons/IconTwitter.vue';
 import IconYoutube from '@/components/icons/IconYoutube.vue';
 import { EXTERNAL_LINKS } from '@/constants/links';
+import { NAV_LINKS } from '@/constants/navLinks';
 
 import useNetwork from '@/composables/useNetwork';
 
@@ -123,13 +124,7 @@ export default {
       t,
       networkSlug,
       isThirdPartyServicesModalVisible,
-      link_nav: [
-        { text: 'pool', name_link: 'list-pool' },
-        { text: 'swap', name_link: 'swap' },
-        { text: 'claim', name_link: 'claim' },
-        { text: 'portfolio', name_link: 'portfolio' },
-        { text: 'vebal', name_link: 'vebal' },
-      ],
+      link_nav: NAV_LINKS,
 
       links: [
         {

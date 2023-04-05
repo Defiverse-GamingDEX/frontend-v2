@@ -15,44 +15,12 @@
           </router-link>
 
           <div class="flex md:hidden flex-col gap-2">
-            <p>
+            <p v-for="i in link_nav" :key="i.text">
               <router-link
                 class="text-lg font-medium link"
-                :to="{ name: 'list-pool', params: { networkSlug } }"
+                :to="{ name: i.name_link, params: { networkSlug } }"
               >
-                {{ $t('pool') }}
-              </router-link>
-            </p>
-            <p>
-              <router-link
-                class="text-lg font-medium link"
-                :to="{ name: 'swap', params: { networkSlug } }"
-              >
-                {{ $t('swap') }}
-              </router-link>
-            </p>
-            <p>
-              <router-link
-                class="text-lg font-medium link"
-                :to="{ name: 'claim', params: { networkSlug } }"
-              >
-                {{ $t('claim') }}
-              </router-link>
-            </p>
-            <p>
-              <router-link
-                class="text-lg font-medium link"
-                :to="{ name: 'portfolio', params: { networkSlug } }"
-              >
-                {{ $t('portfolio') }}
-              </router-link>
-            </p>
-            <p>
-              <router-link
-                class="text-lg font-medium link"
-                :to="{ name: 'vebal', params: { networkSlug } }"
-              >
-                {{ $t('vebal') }}
+                {{ $t(i.text) }}
               </router-link>
             </p>
           </div>
@@ -230,6 +198,7 @@ import IconMedium from '@/components/icons/IconMedium.vue';
 import IconTwitter from '@/components/icons/IconTwitter.vue';
 import IconYoutube from '@/components/icons/IconYoutube.vue';
 import { EXTERNAL_LINKS } from '@/constants/links';
+import { NAV_LINKS } from '@/constants/navLinks';
 
 import useNetwork from '@/composables/useNetwork';
 
@@ -251,6 +220,7 @@ export default {
     const { networkSlug } = useNetwork();
 
     return {
+      link_nav: NAV_LINKS,
       EXTERNAL_LINKS,
       t,
       networkSlug,
