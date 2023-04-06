@@ -7,7 +7,7 @@
   },
   "scripts": {
     "vite": "vite --force",
-    "dev": "npm run generate:tokenlists && vite",
+    "dev": "npm run generate:tokenlists && vite --force",
     "serve": "npm run dev",
     "build": "npm run generate:tokenlists && vite build",
     "build:withouttokenlists": "vite build",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "@aave/protocol-js": "^4.3.0",
     "@balancer-labs/assets": "github:balancer-labs/assets#master",
-    "@balancer-labs/sdk": "https://github.com/P2302-Oasys-Balancer/balancer-sdk.git#v2.0.4",
+    "@balancer-labs/sdk": "https://github.com/P2302-Oasys-Balancer/balancer-sdk.git#v2.0.6",
     "@balancer-labs/sor": "4.1.1-beta.0",
     "@balancer-labs/typechain": "1.0.0",
     "@balancer-labs/v2-deployments": "1.1.1",

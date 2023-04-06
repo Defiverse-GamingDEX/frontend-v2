@@ -259,9 +259,9 @@
   dependencies:
     dotenv "^8.2.0"
 
-"@balancer-labs/sdk@https://github.com/P2302-Oasys-Balancer/balancer-sdk.git#v2.0.4":
+"@balancer-labs/sdk@https://github.com/P2302-Oasys-Balancer/balancer-sdk.git#v2.0.6":
   version "0.1.49"
-  resolved "https://github.com/P2302-Oasys-Balancer/balancer-sdk.git#700795afe81b7605d41f4f67a0d015addf8e51fd"
+  resolved "https://github.com/P2302-Oasys-Balancer/balancer-sdk.git#2489e38a64bf77f9e02cb9f4932ebaa0ca9e6579"
   dependencies:
     "@balancer-labs/sor" "4.1.1-beta.1"
     "@balancer-labs/typechain" "1.0.0"
