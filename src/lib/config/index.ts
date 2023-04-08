@@ -1,4 +1,4 @@
-import { Network } from '@balancer-labs/sdk';
+import { Network } from '@defiverse/balancer-sdk';
 console.log(Network, 'Network');
 import arbitrum from './arbitrum.json';
 import oasys from './oasys.json';

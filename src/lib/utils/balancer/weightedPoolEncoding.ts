@@ -1,4 +1,4 @@
-import { WeightedPoolEncoder } from '@balancer-labs/sdk';
+import { WeightedPoolEncoder } from '@defiverse/balancer-sdk';
 import { BigNumberish } from '@ethersproject/bignumber';
 
 export type JoinWeightedPoolInit = {

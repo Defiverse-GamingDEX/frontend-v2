@@ -80,12 +80,13 @@ export class PriceService {
       const pages = Array.from(Array(pageCount).keys());
       const requests: Promise<PriceResponse>[] = [];
 
+      console.log(`===================================================platformId:${this.platformId}`)
       pages.forEach(page => {
         const addressString = addresses.slice(
           addressesPerRequest * page,
           addressesPerRequest * (page + 1)
         );
-        const endpoint = `/simple/token_price/${this.platformId}?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
+        const endpoint = `/simple/token_price/ethereum?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
         const request = retryPromiseWithDelay(
           this.client.get<PriceResponse>(endpoint),
           3,

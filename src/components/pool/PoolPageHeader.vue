@@ -15,7 +15,7 @@ import { POOLS } from '@/constants/pools';
 import { includesAddress } from '@/lib/utils';
 import { Pool, PoolToken } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
-import { AprBreakdown } from '@balancer-labs/sdk';
+import { AprBreakdown } from '@defiverse/balancer-sdk';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 
 /**
@@ -116,7 +116,6 @@ const hasCustomToken = computed(() => {
 const poolTypeLabel = computed(() => {
   if (!props.pool?.factory) return '';
   const key = POOLS.Factories[props.pool.factory];
-
   return key ? t(key) : t('unknownPoolType');
 });
 
