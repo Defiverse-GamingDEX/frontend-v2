@@ -48,7 +48,7 @@ function onColumnSort(columnId: string) {
     <div class="xl:container xl:px-4 pt-10 md:pt-8 xl:mx-auto">
       <BalStack vertical>
         <div class="px-4 xl:px-0">
-          <div class="flex justify-between items-end mb-2">
+          <div class="text-white flex justify-between items-end mb-2">
             <h3>
               {{ networkConfig.chainName }}
               <span class="lowercase">{{ $t('pools') }}</span>
@@ -76,9 +76,8 @@ function onColumnSort(columnId: string) {
             />
             <BalBtn
               v-if="!upToMediumBreakpoint"
-              color="blue"
+              classCustom="white-blue"
               size="sm"
-              outline
               :class="{ 'mt-4': upToMediumBreakpoint }"
               :block="upToMediumBreakpoint"
               @click="navigateToCreatePool"

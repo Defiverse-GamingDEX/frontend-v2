@@ -39,8 +39,7 @@ const classes = computed(() => ({
           :href="EXTERNAL_LINKS.Balancer.Home"
           target="_blank"
           rel="noreferrer"
-          color="white"
-          outline
+          classCustom="gray-blue"
           @click="trackGoal(Goals.ClickHeroLearnMore)"
         >
           {{ $t('learnMore') }}
