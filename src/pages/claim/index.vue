@@ -236,7 +236,7 @@ onBeforeMount(async () => {
     />
     <div>
       <div class="xl:container py-12 xl:px-4 xl:mx-auto">
-        <h2 class="px-4 xl:px-0 font-body text-2xl font-semibold">
+        <h2 class="px-4 xl:px-0 font-body text-2xl font-semibold text-white">
           {{ configService.network.chainName }} {{ $t('liquidityIncentives') }}
         </h2>
 
@@ -244,14 +244,14 @@ onBeforeMount(async () => {
           <div class="mb-16">
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
-                <h3 class="inline-block mr-1.5 text-xl">
+                <h3 class="inline-block mr-1.5 text-xl text-white">
                   BAL {{ $t('incentives') }}
                 </h3>
                 <BalTooltip
                   iconSize="xs"
                   textAlign="left"
                   class="relative top-px"
-                  iconClass="text-secondary"
+                  iconClass="text-white"
                   width="60"
                 >
                   {{ $t('claimPage.tips.BalIncentives') }}
@@ -264,14 +264,14 @@ onBeforeMount(async () => {
             />
           </div>
           <div class="mb-16">
-            <h3 class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl">
+            <h3 class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white">
               {{ $t('protocolIncentives') }}
             </h3>
             <BalTooltip
               iconSize="xs"
               textAlign="left"
               class="relative top-px"
-              iconClass="text-secondary"
+              iconClass="text-white"
               width="60"
             >
               {{ $t('claimPage.tips.ProtocolAndVebal') }}
@@ -289,14 +289,14 @@ onBeforeMount(async () => {
           </div>
         </template>
         <div v-if="!isL2">
-          <h3 class="inline-block px-4 xl:px-0 mt-8 mr-1.5 text-xl">
+          <h3 class="inline-block px-4 xl:px-0 mt-8 mr-1.5 text-xl text-white">
             {{ $t('otherTokenIncentives') }}
           </h3>
           <BalTooltip
             iconSize="xs"
             textAlign="left"
             class="relative top-px"
-            iconClass="text-secondary"
+            iconClass="text-white"
             width="60"
           >
             {{ $t('claimPage.tips.OtherIncentives') }}
@@ -327,7 +327,7 @@ onBeforeMount(async () => {
           {{ $t('noClaimableIncentives') }}
         </BalBlankSlate>
         <div class="px-4 xl:px-0 mb-16">
-          <h2 class="mt-8 font-body text-2xl font-semibold">
+          <h2 class="mt-8 font-body text-2xl font-semibold text-white">
             {{ $t('pages.claim.titles.incentivesOnOtherNetworks') }}
           </h2>
           <BalFlexGrid class="mt-4" flexWrap>
@@ -350,7 +350,7 @@ onBeforeMount(async () => {
             v-if="isWalletReady"
             tag="router-link"
             to="/claim/legacy"
-            class="flex items-center"
+            class="flex items-center link-white"
             >{{ $t('legacyClaims') }}
             <BalIcon name="arrow-right" size="sm" class="mx-1"
           /></BalLink>
