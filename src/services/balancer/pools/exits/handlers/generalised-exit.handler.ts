@@ -1,6 +1,6 @@
 import { GasPriceService } from '@/services/gas-price/gas-price.service';
 import { Pool } from '@/services/pool/types';
-import { BalancerSDK, SimulationType } from '@defiverse/balancer-sdk';
+import { BalancerSDK } from '@defiverse/balancer-sdk';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { Ref } from 'vue';
 import {
@@ -59,14 +59,14 @@ export class GeneralisedExitHandler implements ExitPoolHandler {
 
     const signerAddress = await signer.getAddress();
     const slippage = slippageBsp.toString();
-
+    console.log('withdraw');
     this.lastExitRes = await balancer.pools.generalisedExit(
       this.pool.value.id,
       evmAmountIn.toString(),
       signerAddress,
       slippage,
-      signer,
-      SimulationType.Tenderly, // TODO: update to use VaultModel + Static (see SDK example for more details)
+      //signer,
+      // SimulationType.Tenderly, // TODO: update to use VaultModel + Static (see SDK example for more details)
       relayerSignature
     );
     if (!this.lastExitRes) throw new Error('Failed to query exit.');
