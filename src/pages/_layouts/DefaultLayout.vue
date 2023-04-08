@@ -56,6 +56,7 @@ function classBody() {
   background-position: bottom;
   background-size: 100% 100%;
   min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
 .app-body.bg-3 {
