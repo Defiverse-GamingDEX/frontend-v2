@@ -43,7 +43,6 @@ export default function useBalancesQuery(
   );
 
   const queryFn = async () => {
-    console.log('Fetching', tokenAddresses.value.length, 'balances');
     return await new TokenService().balances.get(account.value, tokens.value);
   };
 

@@ -23,7 +23,6 @@
     "decimals": 18,
     "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
   },
-
   {
     "address": "0x62400c6b2685599D1c1308A72C4cb2f6B86B4867",
     "chainId": 16116,

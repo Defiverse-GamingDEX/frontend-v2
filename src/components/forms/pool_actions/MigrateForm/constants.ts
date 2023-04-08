@@ -1,6 +1,6 @@
 import { networkId } from '@/composables/useNetwork';
 import { POOLS } from '@/constants/pools';
-import { Network } from '@balancer-labs/sdk';
+import { Network } from '@defiverse/balancer-sdk';
 import { keyBy } from 'lodash';
 
 import { PoolMigrationInfo, PoolMigrationType } from './types';

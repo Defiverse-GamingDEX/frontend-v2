@@ -1,5 +1,5 @@
 import { networkMap } from '@/services/web3/web3.plugin';
-import { Network } from '@balancer-labs/sdk';
+import { Network } from '@defiverse/balancer-sdk';
 import { Wallet } from '@/services/web3/web3.plugin';
 
 function getNetworkIconName(network: Network) {

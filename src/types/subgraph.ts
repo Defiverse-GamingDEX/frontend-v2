@@ -1,4 +1,4 @@
-import { GraphQLQuery } from '@balancer-labs/sdk';
+import { GraphQLQuery } from '@defiverse/balancer-sdk';
 
 export type QueryArgs = Record<string, any>;
 export type QueryAttrs = Record<string, any>;

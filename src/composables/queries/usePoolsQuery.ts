@@ -14,7 +14,7 @@ import {
   PoolsFallbackRepository,
   PoolsRepositoryFetchOptions,
   PoolRepository as SDKPoolRepository,
-} from '@balancer-labs/sdk';
+} from '@defiverse/balancer-sdk';
 import { PoolDecorator } from '@/services/pool/decorators/pool.decorator';
 import { flatten } from 'lodash';
 import { tokenTreeLeafs } from '../usePool';

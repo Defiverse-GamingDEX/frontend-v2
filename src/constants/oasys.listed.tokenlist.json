@@ -18,31 +18,31 @@
       "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     },
     {
-      "address": "0x62400c6b2685599D1c1308A72C4cb2f6B86B4867",
+      "address": "0x62400c6b2685599d1c1308a72c4cb2f6b86b4867",
       "chainId": 16116,
       "name": "Dai Stablecoin",
       "symbol": "DAI",
       "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
     },
     {
-      "address": "0x4D20BFe67C3F2B3d839B25F2B0Cc942BC84C481E",
-      "chainId": 16116,
-      "name": "Tether",
-      "symbol": "USDT",
-      "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
-    },
-    {
-      "address": "0x01aC28D93706f5c394B853BBa1456F54d9298C8d",
+      "address": "0x4d20bfe67c3f2b3d839b25f2b0cc942bc84c481e",
       "chainId": 16116,
       "name": "USD Coin",
       "symbol": "USDC",
-      "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+      "decimals": 6,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
     },
     {
-      "address": "0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980",
+      "address": "0x01ac28d93706f5c394b853bba1456f54d9298c8d",
+      "chainId": 16116,
+      "name": "Tether",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+    },
+    {
+      "address": "0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980",
       "chainId": 16116,
       "name": "Wrapped Ether",
       "symbol": "WETH",

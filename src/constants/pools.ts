@@ -1,4 +1,4 @@
-import { Network } from '@balancer-labs/sdk';
+import { Network } from '@defiverse/balancer-sdk';
 
 import { isMainnet, networkId } from '@/composables/useNetwork';
 
@@ -722,9 +722,9 @@ const POOLS_OASYS: Pools = {
     AllowList: [],
   },
   Factories: {
-    '0x7b1286E016D2c75bD38CAef3dA456E4ED6DB3328': 'oracleWeightedPool',
-    '0xcf3821727Baa9df36CA25a91DA330dD01A0e1743': 'composableStablePool', // ComposableStable V3
-    '0x4F6a9c852Bb5058C3e1d17824A860D60a203E71B': 'weightedPool', // WeightedPool V3
+    '0xcf3821727baa9df36ca25a91da330dd01a0e1743': 'composableStablePool', // ComposableStable V3
+    '0xb74d71ac95427019439c606b70d24ebfd9b9fff2': 'stablePool', // Stable V2
+    '0x4f6a9c852bb5058c3e1d17824a860d60a203e71b': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],

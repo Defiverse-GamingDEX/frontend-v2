@@ -1,7 +1,7 @@
 import { provide, ref } from 'vue';
 
 import useSwapping from '@/composables/swap/useSwapping';
-import { SwapInfo } from '@balancer-labs/sdk';
+import { SwapInfo } from '@defiverse/balancer-sdk';
 
 import * as useSor from '@/composables/swap/useSor';
 import mockSorOutput from './__mocks__/mockSorOutput';
