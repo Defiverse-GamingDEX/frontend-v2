@@ -56,7 +56,7 @@
         v-else
         :label="$t('preview')"
         :disabled="swapDisabled"
-        classCustom="pink-white"
+        classCustom="pink-white-shadow"
         block
         @click.prevent="handlePreviewButton"
       />

@@ -61,7 +61,7 @@ export default defineComponent({
       type: String,
       default: '',
       validator: (val: string): boolean =>
-        ['', 'outline-3', 'gray-blue', 'white-blue', 'pink-white'].includes(val),
+        ['', 'outline-3', 'gray-blue', 'white-blue', 'pink-white-shadow', 'pink-white'].includes(val),
     },
     label: { type: String, default: '' },
     block: { type: Boolean, default: false },
@@ -272,11 +272,22 @@ export default defineComponent({
   opacity: 0.8;
 }
 
-.bal-btn.pink-white {
+.bal-btn.pink-white-shadow {
   color: #fff;
   background: #FF5A8C 0% 0% no-repeat padding-box;
   box-shadow: 0px 3px 0px #AA3156CC;
   border-radius: 10px;
+}
+.bal-btn.pink-white-shadow:disabled {
+  @apply bg-gray-300 text-base shadow-none;
+}
+.bal-btn.pink-white-shadow:hover {
+  opacity: 0.8;
+}
+
+.bal-btn.pink-white {
+  color: #fff;
+  background: #FF5A8C 0% 0% no-repeat padding-box;
 }
 .bal-btn.pink-white:disabled {
   @apply bg-gray-300 text-base shadow-none;
