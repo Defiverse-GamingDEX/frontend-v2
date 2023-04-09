@@ -20,7 +20,7 @@ function onClickConnect() {
 </script>
 
 <template>
-  <BalBtn classCustom="outline-3" @click="onClickConnect">
+  <BalBtn classCustom="gray-blue" @click="onClickConnect">
     {{ $t('connectWallet') }}
   </BalBtn>
 </template>
