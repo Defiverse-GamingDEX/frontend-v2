@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { NAV_LINKS } from '@/constants/navLinks';
 
 import AppLogo from '@/components/images/AppLogo.vue';
 import useApp from '@/composables/useApp';
@@ -38,21 +39,13 @@ const router = useRouter();
  */
 const blockIcon = ref<HTMLDivElement>();
 
-const navLinks = [
-  { label: t('pool'), path: `/${networkSlug}/pool`, goal: Goals.ClickNavPools },
-  { label: t('swap'), path: `/${networkSlug}/swap`, goal: Goals.ClickNavSwap },
-  {
-    label: t('claim'),
-    path: `/${networkSlug}/claim`,
-    goal: Goals.ClickNavClaim,
-  },
-  {
-    label: t('portfolio'),
-    path: `/${networkSlug}/portfolio`,
-    goal: Goals.ClickNavPortfolio,
-  },
-  { label: 'veBAL', path: `/${networkSlug}/vebal`, goal: Goals.ClickNavVebal },
-];
+const navLinks = NAV_LINKS.map(i => {
+  return {
+    label: t(i.text),
+    path: `/${networkSlug}/${i.path}`,
+    goal: Goals[i.goal_key]
+  }
+})
 
 const ecosystemLinks = [
   { label: t('build'), url: 'https://balancer.fi/build' },

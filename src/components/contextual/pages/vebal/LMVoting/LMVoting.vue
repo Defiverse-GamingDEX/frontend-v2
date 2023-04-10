@@ -145,12 +145,12 @@ function handleVoteSuccess() {
       class="flex flex-col lg:flex-row gap-4 lg:justify-between lg:items-end"
     >
       <div class="px-4 xl:px-0 pb-2 max-w-3xl">
-        <h3 class="mb-2">
+        <h3 class="mb-2 text-white">
           {{ $t('veBAL.liquidityMining.title') }}
           <BalTooltip
             :text="$t('veBAL.liquidityMining.description')"
             iconSize="sm"
-            iconClass="text-gray-400 dark:text-gray-600"
+            iconClass="text-white dark:text-gray-600"
             width="72"
             class="mt-1"
           />

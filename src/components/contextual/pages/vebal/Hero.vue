@@ -38,24 +38,29 @@ function navigateToGetVeBAL() {
 <template>
   <div class="hero-container">
     <div class="hero-content">
-      <div
+      <!-- <div
         class="py-8 lg:py-4 px-4 lg:px-8 2xl:px-0 xl:pt-0 max-w-md hero-text"
+      > -->
+      <div
+        class="py-8 lg:py-4 px-4 lg:px-8 2xl:px-0 xl:pt-0 hero-text"
       >
-        <p class="font-medium eyebrow">veBAL</p>
-        <h1 class="mb-5 text-white title">
+        <!-- <p class="font-medium eyebrow">veBAL</p> -->
+        <h1 class="mb-5 text-white title text-center text-5xl">
           {{ $t('veBAL.hero.title') }}
         </h1>
-        <ul>
-          <li
-            v-for="(benefit, i) in benefits"
-            :key="i"
-            class="flex items-center mb-2 text-white"
-          >
-            – {{ benefit }}
-          </li>
-        </ul>
-        <div class="flex mt-6">
-          <BalBtn class="mr-3 hero-btn btn-gold" @click="navigateToGetVeBAL">
+        <div class="flex justify-center">
+          <ul>
+            <li
+              v-for="(benefit, i) in benefits"
+              :key="i"
+              class="flex items-center mb-2 text-white font-semibold"
+            >
+              – {{ benefit }}
+            </li>
+          </ul>
+        </div>
+        <div class="flex justify-center mt-6">
+          <BalBtn classCustom="gray-blue" class="mr-3 hero-btn" @click="navigateToGetVeBAL">
             {{ $t('veBAL.hero.buttons.getVeBAL') }}
           </BalBtn>
           <BalBtn
@@ -63,9 +68,8 @@ function navigateToGetVeBAL() {
             href="https://docs.balancer.fi/ecosystem/vebal-and-gauges"
             target="_blank"
             rel="noreferrer"
-            color="white"
             class="hero-btn"
-            outline
+            classCustom="outline-3"
           >
             {{ $t('veBAL.hero.buttons.learnMore') }}
             <BalIcon
@@ -76,7 +80,7 @@ function navigateToGetVeBAL() {
           </BalBtn>
         </div>
       </div>
-      <div class="coins">
+      <!-- <div class="coins">
         <div class="group coin">
           <div class="w-full coin-wrapper">
             <BalImage
@@ -140,36 +144,36 @@ function navigateToGetVeBAL() {
             </BalTooltip>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <style scoped>
 .hero-container {
-  @apply flex content-center relative w-full;
+  @apply flex content-center justify-center relative w-full;
 
-  min-height: 440px;
+  /* min-height: 440px; */
   z-index: 0;
-  background-color: #0b0f19;
+  /* background-color: #0b0f19; */
 }
 
-.dark .hero-container {
+/* .dark .hero-container {
   background-color: #0e1420;
-}
+} */
 
-.hero-container::before {
+/* .hero-container::before {
   content: ' ';
   background-image: url('/images/patterns/fish-scale.png');
   background-repeat: repeat;
 
   @apply block absolute left-0 top-0 w-full h-full opacity-10 z-0;
-}
+} */
 
-.dark .hero-container::before {
+/* .dark .hero-container::before {
   opacity: 0.07;
-}
+} */
 
-.hero-container::after {
+/* .hero-container::after {
   content: ' ';
   background: linear-gradient(45deg, rgb(0 0 0 / 100%), rgb(0 0 0 / 50%)),
     url('/images/backgrounds/vebal-hero-noise.svg');
@@ -177,10 +181,10 @@ function navigateToGetVeBAL() {
   @apply block absolute left-0 top-0 w-full h-full bg-no-repeat bg-cover opacity-20 z-0;
 
   min-height: 440px;
-}
+} */
 
 .hero-content {
-  @apply flex flex-col md:flex-row md:items-center max-w-screen-2xl mx-auto md:gap-4 lg:gap-8 py-4 md:py-8
+  @apply flex flex-col justify-center md:flex-row md:items-center max-w-screen-2xl mx-auto md:gap-4 lg:gap-8 py-4 md:py-8
     xl:pl-4 w-full z-10;
 }
 
@@ -199,9 +203,9 @@ function navigateToGetVeBAL() {
   animation: fadeIn 1s ease-out 0.1s both;
 }
 
-.title {
+/* .title {
   @apply max-w-sm;
-}
+} */
 
 .hero-btn {
   min-width: 140px;

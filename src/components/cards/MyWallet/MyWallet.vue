@@ -90,7 +90,7 @@ const emit = defineEmits<{
           v-if="!isLoadingBalances"
           class="ml-1 lg:ml-0 font-semibold lg:font-normal"
         >
-          <div
+          <!-- <div
             v-if="!hasNativeBalance"
             class="mr-0.5 text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
           >
@@ -109,7 +109,7 @@ const emit = defineEmits<{
               class="relative top-0.5"
             />
           </div>
-          <div v-else>{{ nativeBalance }} {{ nativeCurrency }}</div>
+          <div v-else>{{ nativeBalance }} {{ nativeCurrency }}</div> -->
         </div>
         <BalLoadingBlock v-else class="w-12 h-8" />
       </div>
