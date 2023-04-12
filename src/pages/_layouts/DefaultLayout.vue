@@ -63,7 +63,7 @@ function classBody() {
   background-image: url('/images/backgrounds/bg2-min.png');
   background-repeat: no-repeat;
   background-position: bottom;
-  background-size: contain;
+  background-size: 100%;
   padding-bottom: 16.67vw;
 }
 
@@ -71,7 +71,7 @@ function classBody() {
   background-image: url('/images/backgrounds/bg2-min.png');
   background-repeat: no-repeat;
   background-position: bottom;
-  background-size: contain;
+  background-size: 100%;
   padding-bottom: 33vw;
 }
 @media (max-width: 767px) {
