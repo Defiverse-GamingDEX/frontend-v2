@@ -10,8 +10,24 @@
   },
   "tokens": [
     {
+      "address": "0xEf67932B5DF15301B2dcCfd9120f7eC1B598561F",
+      "chainId": 16116,
+      "name": "DFV",
+      "symbol": "DFV",
+      "decimals": 18,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+    },
+    {
+      "address": "0xABD79d01da7Db35f53c4F495FE0684618C8535A6",
+      "chainId": 16116,
+      "name": "OAS",
+      "symbol": "OAS",
+      "decimals": 18,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+    },
+    {
       "address": "0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7",
-      "chainId": 5,
+      "chainId": 16116,
       "name": "Balancer",
       "symbol": "BAL",
       "decimals": 18,
