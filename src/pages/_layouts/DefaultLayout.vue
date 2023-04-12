@@ -78,10 +78,5 @@ function classBody() {
   .app-body.bg-2 {
     background-size: contain;
   }
-
-  .app-body.bg-3,
-  .app-body.bg-4 {
-    padding-bottom: 2rem;
-  }
 }
 </style>
