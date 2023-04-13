@@ -4,7 +4,7 @@ import { useReturnRoute } from '@/composables/useReturnRoute';
 const { getReturnRoute } = useReturnRoute();
 </script>
 <template>
-  <div class="pb-16">
+  <div class="wp-main-content">
     <div class="mb-12 layout-header">
       <div />
       <BalBtn tag="router-link" :to="getReturnRoute()" color="white" circle>
@@ -13,7 +13,7 @@ const { getReturnRoute } = useReturnRoute();
     </div>
     <router-view v-slot="{ Component }" :key="$route.path">
       <transition appear name="appear">
-        <component :is="Component" />
+        <component :is="Component"  />
       </transition>
     </router-view>
   </div>
@@ -24,5 +24,13 @@ const { getReturnRoute } = useReturnRoute();
   @apply h-16;
   @apply px-4 lg:px-6;
   @apply flex items-center justify-between;
+}
+.wp-main-content {
+  min-height: 100vh;
+  background-image: url('/images/backgrounds/bg2-min.png');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100%;
+  padding-bottom: 10vw;
 }
 </style>
