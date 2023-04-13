@@ -41,11 +41,9 @@ function navigateToGetVeBAL() {
       <!-- <div
         class="py-8 lg:py-4 px-4 lg:px-8 2xl:px-0 xl:pt-0 max-w-md hero-text"
       > -->
-      <div
-        class="py-8 lg:py-4 px-4 lg:px-8 2xl:px-0 xl:pt-0 hero-text"
-      >
+      <div class="py-8 lg:py-4 px-4 lg:px-8 2xl:px-0 xl:pt-0 hero-text">
         <!-- <p class="font-medium eyebrow">veBAL</p> -->
-        <h1 class="mb-5 text-white title text-center text-5xl">
+        <h1 class="mb-5 text-5xl text-center text-white title">
           {{ $t('veBAL.hero.title') }}
         </h1>
         <div class="flex justify-center">
@@ -53,14 +51,18 @@ function navigateToGetVeBAL() {
             <li
               v-for="(benefit, i) in benefits"
               :key="i"
-              class="flex items-center mb-2 text-white font-semibold"
+              class="flex items-center mb-2 font-semibold text-white"
             >
               – {{ benefit }}
             </li>
           </ul>
         </div>
         <div class="flex justify-center mt-6">
-          <BalBtn classCustom="gray-blue" class="mr-3 hero-btn" @click="navigateToGetVeBAL">
+          <BalBtn
+            classCustom="gray-blue"
+            class="mr-3 hero-btn"
+            @click="navigateToGetVeBAL"
+          >
             {{ $t('veBAL.hero.buttons.getVeBAL') }}
           </BalBtn>
           <BalBtn

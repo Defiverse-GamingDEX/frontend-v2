@@ -3966,7 +3966,7 @@
     "relativeWeightCap": "null",
     "addedTimestamp": 1667776463,
     "pool": {
-      "id": "0x05e7732bf9ae5592e6aa05afe8cd80f7ab0a7bea00020000000000000000005a",
+      "id": "0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012",
       "address": "0xeded8858e4756b147a9115c593bc0146847d3af2",
       "poolType": "Weighted",
       "symbol": "DFV/OAS",

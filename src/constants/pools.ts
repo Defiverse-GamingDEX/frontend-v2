@@ -689,7 +689,9 @@ const POOLS_GENERIC: Pools = {
 };
 
 const POOLS_OASYS: Pools = {
-  IdsMap: {},
+  IdsMap: {
+    veBAL: '0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012',
+  },
   Pagination: {
     PerPage: 10,
     PerPool: 10,

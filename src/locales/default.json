@@ -113,7 +113,7 @@
   "claimHero": {
     "title": "Claim liquidity incentives",
     "legacyTitle": "Claim legacy incentives",
-    "description": "Balancer Protocol liquidity incentives are directed to pools by veBAL voters. Stake in these pools to earn incentives. Boost with veBAL for up to 2.5x extra on Mainnet pools.",
+    "description": "Balancer Protocol liquidity incentives are directed to pools by veDFV voters. Stake in these pools to earn incentives. Boost with veDFV for up to 2.5x extra on Mainnet pools.",
     "legacyDescription": "Liquidity mining incentive systems before the launch of ve8020-tokenomics have been deprecated. If you provided liquidity before this change and have outstanding incentives you can claim them here.",
     "tipLabel": {
       "addLiquidity": "Add liquidity",
@@ -122,16 +122,16 @@
       "claim": "Claim anytime"
     },
     "tips": {
-      "addLiquidity": "To earn liquidity mining incentives, add liquidity to eligible pools across Ethereum Mainnet and supported Layer 2's like Polygon and Arbitrum (see the table on the veBAL page). Note: You'll earn swap fees with or without staking but you don't need to claim these as they are automatically added to your position.",
+      "addLiquidity": "To earn liquidity mining incentives, add liquidity to eligible pools across Ethereum Mainnet and supported Layer 2's like Polygon and Arbitrum (see the table on the veDFV page). Note: You'll earn swap fees with or without staking but you don't need to claim these as they are automatically added to your position.",
       "stake": "If you've provided liquidity in an eligible pool, you'll have an option to stake your Liquidity Provider (LP) tokens from that pool. Stake them to receive liquidity mining incentives in addition to any swap fees.",
-      "boost": "Get veBAL to boost your liquidity mining incentives by up to 2.5x (on Ethereum Mainnet only). The more veBAL you hold, the larger your boost. veBAL holders also earn protocol fees and can vote to direct future pool emissions. Note, there is no additional boost from holding veBAL on Layer 2 pools like Polygon and Arbitrum.",
-      "claim": "Token earnings from liquidity mining accumulate every block and can be claimed at any time. Some pools offer multiple token incentives (not just BAL). Additionally, veBAL holders also get a share of protocol revenue, in both bb-a-USD and BAL."
+      "boost": "VeDFV to boost your liquidity mining incentives by up to 2.5x (on Ethereum Mainnet only). The more veDFV you hold, the larger your boost. veDFV holders also earn protocol fees and can vote to direct future pool emissions. Note, there is no additional boost from holding veDFV on Layer 2 pools like Polygon and Arbitrum.",
+      "claim": "Token earnings from liquidity mining accumulate every block and can be claimed at any time. Some pools offer multiple token incentives (not just BAL). Additionally, veDFV holders also get a share of protocol revenue, in both bb-a-USD and BAL."
     }
   },
   "claimPage": {
     "tips": {
       "BalIncentives": "Incentives for LPs who stake in eligible pools (based on the previous week's voting). This doesn't include swap fees or intrinsic yield from certain yield bearing tokens which accumulate into LP positions automatically.",
-      "ProtocolAndVebal": "Additional incentives for veBAL holders: For locking in the B-80BAL-20WETH pool (based on the previous week's voting), and their share of protocol revenue.",
+      "ProtocolAndVebal": "Additional incentives for veDFV holders: For locking in the B-80DFV-20OAS pool (based on the previous week's voting), and their share of protocol revenue.",
       "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any BAL liquidity incentives."
     }
   },
@@ -432,7 +432,7 @@
   "hourAbbrev": "h",
   "incentives": "incentives",
   "incentiveToken": "Incentive token",
-  "inclXInVeBal": "{0} in veBAL",
+  "inclXInVeBal": "{0} in veDFV",
   "initialBPT": "Initial BPT",
   "initialWeight": "Initial weight",
   "insufficientBalance": "Not enough funds",
@@ -504,14 +504,14 @@
   "joinPool": "Join pool",
   "language": "Language",
   "learnMore": "Learn more",
-  "lockToGetVeBAL": "Lock this to get veBAL",
+  "lockToGetVeBAL": "Lock this to veDFV",
   "light": "Light",
   "liquidityBootstrappingPool": "Liquidity Bootstrapping Pool",
   "liquidityIncentives": "liquidity incentives",
   "liquidityMining": "Liquidity mining",
   "liquidityMiningAPR": "Liquidity Mining APR",
   "liquidityMiningIncentives": "Liquidity mining incentives",
-  "liquidityMiningIncentivesCopy": "Liquidity incentives on {0} are paused for 1 week during its upgrade to the veBAL system. Incentives will resume on April 28.",
+  "liquidityMiningIncentivesCopy": "Liquidity incentives on {0} are paused for 1 week during its upgrade to the veDFV system. Incentives will resume on April 28.",
   "liquidityMiningPopover": {
     "airdropEligibility": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $BAL distributions as incentives. $BAL token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
     "airdropExplainer": "Weekly distributions from liquidity mining on {0} are airdropped on Wednesdays, sent directly to your wallet using disperse.app",
@@ -538,9 +538,9 @@
   "locked": "Locked",
   "locking": {
     "expiredLockLpTokens": "Expired lock LP tokens",
-    "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any veBAL or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veBAL incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80BAL-20WETH LP tokens and then create a new lock to get veBAL.",
-    "lockBptForVeBal": "Lock LP for veBAL",
-    "lockedLpTokensTooltip": "The USD value of your veBAL. These are your locked LP tokens in the BAL 80% / WETH 20% pool.",
+    "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any veDFV or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veDFV incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80DFV-20OAS LP tokens and then create a new lock to veDFV.",
+    "lockBptForVeBal": "Lock LP for veDFV",
+    "lockedLpTokensTooltip": "The USD value of your veDFV. These are your locked LP tokens in the BAL 80% / WETH 20% pool.",
     "unlockedLpTokensTooltip": "The USD value of your liquidity provided to the BAL 80% / WETH 20% pool that has not been locked."
   },
   "logOut": "Log out",
@@ -563,7 +563,7 @@
   "modals": {
     "veBalRedirectModal": {
       "title": "Proceed to mainnet",
-      "description": "Getting and using veBAL to vest and vote must be performed on the Ethereum mainnet. \n\n You can still earn liquidity mining incentives on Arbitrum and Polygon and Oasys by adding liquidity to eligible pools. However to vote to direct emissions to your favored pools and to earn the protocol fees, you will need to use veBAL on Ethereum Mainnet by locking B-80BAL-20WETH."
+      "description": "Getting and using veDFV to vest and vote must be performed on the Ethereum mainnet. \n\n You can still earn liquidity mining incentives on Arbitrum and Polygon and Oasys by adding liquidity to eligible pools. However to vote to direct emissions to your favored pools and to earn the protocol fees, you will need to use veDFV on Ethereum Mainnet by locking B-80DFV-20OAS."
     }
   },
   "month": "month",
@@ -617,7 +617,7 @@
   "noResults": "No results",
   "noResultsTable": {
     "noBalIncentives": "No BAL incentives to claim from staking",
-    "noProtocolRevenue": "Nothing to claim from holding veBAL"
+    "noProtocolRevenue": "Nothing to claim from holding veDFV"
   },
   "noSwapsPool": "No swaps in this pool.",
   "noTokensInWallet": "You don't have any tokens in your connected wallet on {0}",
@@ -638,7 +638,7 @@
   "pages": {
     "claim": {
       "title": "Claim your liquidity mining incentives",
-      "description": "Incentives to attract liquidity are set by the Balancer protocol and partners. Stakers in eligible pools can claim incentives every block. People with veBAL get a boosted rate—up to 2.5x extra.",
+      "description": "Incentives to attract liquidity are set by the Balancer protocol and partners. Stakers in eligible pools can claim incentives every block. People with veDFV get a boosted rate—up to 2.5x extra.",
       "titles": {
         "incentivesOnOtherNetworks": "Incentives on other networks",
         "legacyIncentives": "Legacy incentives"
@@ -787,7 +787,7 @@
   "proportionalSuggestion": "Proportional suggestion",
   "proportionalWithdrawal": "Proportional withdrawal",
   "protocolFees": "Protocol fees",
-  "protocolIncentives": "Protocol revenue & veBAL incentives",
+  "protocolIncentives": "Protocol revenue & veDFV incentives",
   "rank": "Rank (1{0})",
   "receipt": "Receipt",
   "receive": "Receive",
@@ -874,43 +874,43 @@
       },
       "tokens": {
         "balWETH": "BAL + WETH",
-        "lpToken": "B-80BAL-20WETH",
+        "lpToken": "B-80DFV-20OAS",
         "veBAL": "veBAL"
       },
       "tokenInfo": {
-        "balWETH": "Add liquidity to the 80% BAL / 20% WETH pool to get the B-80BAL-20WETH LP token.",
-        "lpToken": "Lock up the LP tokens from the 80% BAL / 20% WETH pool for up to a year to get veBAL. The longer you lock, the more veBAL you get.",
-        "veBAL": "Use veBAL to earn extra on your staked pools. Only some pools are eligible for staking. Check any pools that you are in, and stake it to earn liquidity mining incentives. You can also use veBAL to vote to direct future liquidity mining emissions"
+        "balWETH": "Add liquidity to the 80% BAL / 20% WETH pool to get the B-80DFV-20OAS LP token.",
+        "lpToken": "Lock up the LP tokens from the 80% BAL / 20% WETH pool for up to a year to veDFV. The longer you lock, the more veDFV you get.",
+        "veBAL": "Use veDFV to earn extra on your staked pools. Only some pools are eligible for staking. Check any pools that you are in, and stake it to earn liquidity mining incentives. You can also use veDFV to vote to direct future liquidity mining emissions"
       },
       "buttons": {
-        "getVeBAL": "Get veBAL",
+        "getVeBAL": "VeDFV",
         "learnMore": "Learn more"
       }
     },
     "myVeBAL": {
-      "title": "My veBAL",
+      "title": "My veDFV",
       "cards": {
         "myLpToken": {
-          "label": "My B-80BAL-20WETH"
+          "label": "My B-80DFV-20OAS"
         },
         "myLockedLpToken": {
-          "label": "My locked B-80BAL-20WETH"
+          "label": "My locked B-80DFV-20OAS"
         },
         "lockedEndDate": {
           "label": "Locked until",
           "secondaryText": "{0} days"
         },
         "myVeBAL": {
-          "label": "My veBAL",
-          "secondaryText": "{0} of all veBAL"
+          "label": "My veDFV",
+          "secondaryText": "{0} of all veDFV"
         },
-        "myExpiredLockTooltip": "Your previous lockup period has expired, so you no longer have any veBAL or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veBAL incentives. However, you’ll still get the minimum 1.0x rate. Tap the minus icon to redeem your expired locked B-80BAL-20WETH LP tokens and then create a new lock to get veBAL."
+        "myExpiredLockTooltip": "Your previous lockup period has expired, so you no longer have any veDFV or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veDFV incentives. However, you’ll still get the minimum 1.0x rate. Tap the minus icon to redeem your expired locked B-80DFV-20OAS LP tokens and then create a new lock to veDFV."
       }
     },
     "communityVeBAL": {
-      "title": "Community veBAL",
+      "title": "Community veDFV",
       "cards": {
-        "totalVeBAL": "Total veBAL",
+        "totalVeBAL": "Total veDFV",
         "avgLockUpPeriod": "Ave. lock-up period",
         "effectiveBalLocked": "Effective BAL locked",
         "shareOfBalLocked": "Share of BAL locked"
@@ -928,14 +928,14 @@
     },
     "liquidityMining": {
       "title": "Pools eligible for liquidity mining",
-      "description": "Liquidity incentives are directed by the community of veBAL holders. If you hold veBAL, vote below on any pools across Ethereum and Layer 2’s. Your vote will persist until you change it and editing a pool can only be done once in 10 days.",
+      "description": "Liquidity incentives are directed by the community of veDFV holders. If you hold veDFV, vote below on any pools across Ethereum and Layer 2’s. Your vote will persist until you change it and editing a pool can only be done once in 10 days.",
       "myUnallocatedVotes": "My unallocated votes:",
-      "myUnallocatedVotesTooltip": "veBAL holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any veBAL, your votes will not count.",
+      "myUnallocatedVotesTooltip": "veDFV holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any veDFV, your votes will not count.",
       "unallocatedVotes": "My unallocated votes: {0}.",
       "votingPeriod": "Voting period ends: {0}d {1}h {2}m {3}s",
-      "votingPeriodTooltip": "There is a weekly vote for veBAL holders which ends at 0:00 UTC on Thursdays. This vote determines the BAL incentives allocation for all Stakers in these pools for the next week. Although you don’t have to vote to get a boosted yield, your vote can help you earn more by voting on pools where you are a staker.",
+      "votingPeriodTooltip": "There is a weekly vote for veDFV holders which ends at 0:00 UTC on Thursdays. This vote determines the BAL incentives allocation for all Stakers in these pools for the next week. Although you don’t have to vote to get a boosted yield, your vote can help you earn more by voting on pools where you are a staker.",
       "votingPeriodCountdown": "{0}d : {1}h : {2}m : {3}s",
-      "votingPowerExpiredTooltip": "Your previous lock period has expired, so you no longer have any veBAL or voting power. Any votes that have been allocated in the past will no longer count. Lock up B-80BAL-20WETH LP tokens to get veBAL for higher yields and voting power.",
+      "votingPowerExpiredTooltip": "Your previous lock period has expired, so you no longer have any veDFV or voting power. Any votes that have been allocated in the past will no longer count. Lock up B-80DFV-20OAS LP tokens to veDFV for higher yields and voting power.",
       "table": {
         "chain": "Chain",
         "assets": "Assets",
@@ -951,7 +951,7 @@
         "nextPeriod": "Next period: {0}"
       },
       "limitsTooltip": {
-        "distributionsCappedVeBAL": "Distributions to the veBAL gauge are capped at 10%",
+        "distributionsCappedVeBAL": "Distributions to the veDFV gauge are capped at 10%",
         "distributionsCappedAt": "Distributions to this gauge are capped at {0}%"
       },
       "popover": {
@@ -974,7 +974,7 @@
         "remainingVotes": "Your remaining votes: {0}",
         "remainingVotesEditing": "Your remaining votes: {0} ({1} current allocation in this pool + {2} unallocated votes)",
         "remainingVotesExceeded": "This exceeds your remaining votes of: {0}",
-        "resubmitVote": "Voting power is set at the time of the vote. If you get more veBAL later, resubmit your vote to use your increased power.",
+        "resubmitVote": "Voting power is set at the time of the vote. If you get more veDFV later, resubmit your vote to use your increased power.",
         "voteLockInfo": "Votes are timelocked for 10 days. If you vote now, no edits can be made until {0}.",
         "warnings": {
           "votedTooRecently": {
@@ -982,17 +982,17 @@
             "description": "You won't be able to make any edits to this vote allocation for {0}"
           },
           "noVeBal": {
-            "title": "You need some veBAL to vote on gauges",
-            "description": "Get veBAL by locking up LP tokens from the 80% BAL / 20% WETH pool.",
-            "inputHintText": "You can't vote since you have no veBAL"
+            "title": "You need some veDFV to vote on gauges",
+            "description": "VeDFV by locking up LP tokens from the 80% BAL / 20% WETH pool.",
+            "inputHintText": "You can't vote since you have no veDFV"
           },
           "veBalLockTooShort": {
-            "title": "veBAL not locked for 7 days",
-            "description": "You must have veBAL locked for more than 7 days to vote on gauges."
+            "title": "veDFV not locked for 7 days",
+            "description": "You must have veDFV locked for more than 7 days to vote on gauges."
           },
           "veBalVoteOverLimitWarning": {
-            "title": "You may be wasting your vote: veBAL cap hit",
-            "description": "Distributions to veBAL holders of weekly emissions are capped at 10%. Any votes exceeding this amount at Thursday 0:00 UTC will not be counted."
+            "title": "You may be wasting your vote: veDFV cap hit",
+            "description": "Distributions to veDFV holders of weekly emissions are capped at 10%. Any votes exceeding this amount at Thursday 0:00 UTC will not be counted."
           },
           "lpVoteOverLimitWarning": {
             "title": "You may be wasting your vote",
@@ -1017,17 +1017,17 @@
         },
         "hint": {
           "title": "Resubmit your votes to utilize your full voting power",
-          "description": "Votes on pools are set at the time of your last vote. Since you’ve added new veBAL after your original vote, the additional voting power is not being used."
+          "description": "Votes on pools are set at the time of your last vote. Since you’ve added new veDFV after your original vote, the additional voting power is not being used."
         },
-        "resubmitWarning": "Votes on pools are set at the time of the vote. Since you’ve added new veBAL since your original vote, you have additional voting power which is not being used. To use your full voting power, resubmit your votes.",
+        "resubmitWarning": "Votes on pools are set at the time of the vote. Since you’ve added new veDFV since your original vote, you have additional voting power which is not being used. To use your full voting power, resubmit your votes.",
         "btn": "Resubmit votes"
       }
     },
     "notSupported": {
       "title": "Locking is unavailable on this network",
-      "description": "Get veBAL on Ethereum Mainnet"
+      "description": "VeDFV on Ethereum Mainnet"
     },
-    "votingTransitionDescription": "Liquidity mining emissions as directed by veBAL holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so get veBAL and vote for pools. Your vote will persist until you edit. Editing can only be done once in 10 days."
+    "votingTransitionDescription": "Liquidity mining emissions as directed by veDFV holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so veDFV and vote for pools. Your vote will persist until you edit. Editing can only be done once in 10 days."
   },
   "getVeBAL": {
     "lockableTokens": {
@@ -1039,27 +1039,27 @@
       "steps": {
         "investPart1": "Add liquidity to the",
         "investPart2": "pool.",
-        "lock": "Lock-up the resulting LP token ({0}). The longer you lock (1 year max), the more veBAL you get."
+        "lock": "Lock-up the resulting LP token ({0}). The longer you lock (1 year max), the more veDFV you get."
       },
       "earn": {
-        "boost": "veBAL holders get boosted liquidity mining yields (up to 2.5x) and increased voting power.",
+        "boost": "veDFV holders get boosted liquidity mining yields (up to 2.5x) and increased voting power.",
         "voting": "Use this voting power to choose which pool gauges get allocated liquidity mining incentives. Vote on the pools where you have added liquidity to earn more yield."
       }
     },
     "myVeBAL": {
-      "title": "My veBAL",
+      "title": "My veDFV",
       "lockedEndDate": "Locked until",
       "expiredOn": "Expired on",
-      "percentVeBAL": "% of total veBAL"
+      "percentVeBAL": "% of total veDFV"
     },
     "lockForm": {
-      "title": "Lock to get veBAL",
+      "title": "Lock to veDFV",
       "lockAmount": {
         "title": "How much do you want to lock?"
       },
       "lockEndDate": {
         "title": "Lock until",
-        "tooltip": "The longer you lock your stake, the more veBAL voting power you get (up to 4 years). You can extend the lock later. Be careful, locking is not reversible."
+        "tooltip": "The longer you lock your stake, the more veDFV voting power you get (up to 4 years). You can extend the lock later. Be careful, locking is not reversible."
       },
       "summary": {
         "receive": {
@@ -1107,7 +1107,7 @@
           "explainer": "Lock-up end dates can only be on Thursdays at 0:00 UTC. To get as close as possible to a 1 year lock, locking on Thursday is recommended.",
           "table": {
             "lockPeriod": "Lock period",
-            "totalVeBAL": "Total veBAL"
+            "totalVeBAL": "Total veDFV"
           }
         },
         "increasedLockAmount": "Increased lock amount",
@@ -1138,18 +1138,18 @@
           "loadingLabel": "Confirm lock in wallet"
         }
       },
-      "returnToVeBalPage": "Return to veBAL page",
+      "returnToVeBalPage": "Return to veDFV page",
       "firstVeBALReceived": {
         "title": "Vote on pools to direct liquidity incentives",
-        "description": "Your voting weight is set at the time of the vote. If you acquire additional veBAL, resubmit your votes to utilize your newly acquired voting power. Voting per pool can only be done once every 10 days."
+        "description": "Your voting weight is set at the time of the vote. If you acquire additional veDFV, resubmit your votes to utilize your newly acquired voting power. Voting per pool can only be done once every 10 days."
       }
     },
     "notSupported": {
       "title": "Locking is unavailable on this network",
-      "description": "Get veBAL on Ethereum Mainnet"
+      "description": "VeDFV on Ethereum Mainnet"
     }
   },
-  "getVeBALToVote": "Get veBAL to vote",
+  "getVeBALToVote": "VeDFV to vote",
   "unlockVeBAL": {
     "expiredLockableTokens": {
       "title": "Expired locked tokens"
@@ -1182,7 +1182,7 @@
           "loadingLabel": "Confirm unlock in wallet"
         }
       },
-      "returnToVeBalPage": "Return to veBAL page"
+      "returnToVeBalPage": "Return to veDFV page"
     },
     "notSupported": {
       "title": "Unlocking is unavailable on this network",
@@ -1195,7 +1195,7 @@
     "apr": {
       "token": "Token APR",
       "boosted": "Boosted APR",
-      "veBAL": "veBAL APR"
+      "veBAL": "veDFV APR"
     },
     "fiat": {
       "token": "Token rewards",
@@ -1232,7 +1232,7 @@
       "total": "The total value in {0} you’ll be withdrawing from this pool."
     },
     "veBalApr": {
-      "title": "Max locking/veBAL APR",
+      "title": "Max locking/veDFV APR",
       "breakdown1": "BAL",
       "breakdown2": "bb-a-USD"
     }
@@ -1424,7 +1424,7 @@
   "value": "Value",
   "vault": "Vault",
   "vebal": "veBAL",
-  "veBalProtocolLiquidity": "veBAL protocol liquidity",
+  "veBalProtocolLiquidity": "veDFV protocol liquidity",
   "vestVote": "Vest+Vote",
   "viewAllAssets": "View all assets ({0})",
   "viewAndManangeOnElement": "View and manage all pools on Element.fi",
