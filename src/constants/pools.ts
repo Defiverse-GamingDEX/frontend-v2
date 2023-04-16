@@ -689,7 +689,15 @@ const POOLS_GENERIC: Pools = {
 };
 
 const POOLS_OASYS: Pools = {
-  IdsMap: {},
+  IdsMap: {
+    // staBAL:
+    //   '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
+    // bbAaveUSD: {
+    //   v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+    //   v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
+    // },
+    veBAL: '0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012',
+  },
   Pagination: {
     PerPage: 10,
     PerPool: 10,

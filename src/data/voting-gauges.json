@@ -3987,5 +3987,27 @@
       "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
       "0xba7834bb3cd2DB888E6A06Fb45E82b4225Cd0C71": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
     }
+  },
+  {
+    "address": "0xF2ca6F8961e91F1ee0D688F9926183314D866f1E",
+    "network": 16116,
+    "addedTimestamp": 1681652635,
+    "relativeWeightCap": "null",
+    "pool": {
+      "id": "0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012",
+      "address": "0xeded8858e4756b147a9115c593bc0146847d3af2",
+      "poolType": "Weighted",
+      "symbol": "veBAL",
+      "tokens": [
+        {
+          "address": "0xaf5fd2992899a6fe23c055c97588e389fdebf3e0",
+          "weight": "null",
+          "symbol": "veBAL"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xaf5fd2992899a6fe23c055c97588e389fdebf3e0": "https://raw.githubusercontent.com/balancer-labs/assets/master/assets/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56.png"
+    }
   }
 ]
