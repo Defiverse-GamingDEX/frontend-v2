@@ -31,8 +31,7 @@ const disabled = computed(() => {
     :color="showRemoveVotes ? 'red' : 'blue'"
     :disabled="disabled"
     :class="`vote-btn
-      ${showRemoveVotes ? 'vote-btn--red' : 'vote-btn--blue'}`"
-    outline
+      ${showRemoveVotes ? 'vote-btn--red' : 'vote-btn--blue pink-white'}`"
     size="sm"
     flat
     block
@@ -51,7 +50,7 @@ const disabled = computed(() => {
 }
 
 .vote-btn--blue:not(:disabled) {
-  @apply hover:bg-blue-500 focus:bg-blue-500 dark:hover:bg-blue-500 dark:focus:bg-blue-500;
+  /* @apply hover:bg-blue-500 focus:bg-blue-500 dark:hover:bg-blue-500 dark:focus:bg-blue-500; */
 }
 
 .vote-btn--red:not(:disabled) {

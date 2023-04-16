@@ -1,7 +1,7 @@
 import { differenceInSeconds, formatDistanceToNow, sub } from 'date-fns';
 import { computed, ref } from 'vue';
 
-import { isGoerli, isMainnet, isOasys } from '@/composables/useNetwork';
+import { isGoerli, isOasys, isMainnet } from '@/composables/useNetwork';
 import { POOLS } from '@/constants/pools';
 import { bnum } from '@/lib/utils';
 

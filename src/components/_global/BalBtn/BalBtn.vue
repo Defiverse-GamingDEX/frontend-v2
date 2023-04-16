@@ -61,7 +61,7 @@ export default defineComponent({
       type: String,
       default: '',
       validator: (val: string): boolean =>
-        ['', 'outline-3', 'gray-blue'].includes(val),
+        ['', 'outline-3', 'gray-blue', 'white-blue', 'pink-white-shadow', 'pink-white'].includes(val),
     },
     label: { type: String, default: '' },
     block: { type: Boolean, default: false },
@@ -251,12 +251,49 @@ export default defineComponent({
   border-radius: 14px;
   background: transparent;
 }
+.bal-btn.outline-3:hover {
+  opacity: 0.8;
+}
 
 .bal-btn.gray-blue {
   background: #ffffffad 0% 0% no-repeat padding-box;
   box-shadow: 0 3px 6px #00000029;
   border-radius: 14px;
   color: #1eadee;
+}
+.bal-btn.gray-blue:hover {
+  opacity: 0.8;
+}
+
+.bal-btn.white-blue {
+  @apply bg-white border-blue-200 text-blue-500;
+}
+.bal-btn.white-blue:hover {
+  opacity: 0.8;
+}
+
+.bal-btn.pink-white-shadow {
+  color: #fff;
+  background: #FF5A8C 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 0px #AA3156CC;
+  border-radius: 10px;
+}
+.bal-btn.pink-white-shadow:disabled {
+  @apply bg-gray-300 text-base shadow-none;
+}
+.bal-btn.pink-white-shadow:hover {
+  opacity: 0.8;
+}
+
+.bal-btn.pink-white {
+  color: #fff;
+  background: #FF5A8C 0% 0% no-repeat padding-box;
+}
+.bal-btn.pink-white:disabled {
+  @apply bg-gray-300 text-base shadow-none;
+}
+.bal-btn.pink-white:hover {
+  opacity: 0.8;
 }
 
 .content {

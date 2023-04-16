@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import AppHero from '@/components/heros/AppHero.vue';
+// import AppHero from '@/components/heros/AppHero.vue';
 import { useLock } from '@/composables/useLock';
 import useNetwork, { isL2 } from '@/composables/useNetwork';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
@@ -41,49 +41,59 @@ const isLoadingTotalValue = computed((): boolean => isLoadingPools.value);
 </script>
 
 <template>
-  <AppHero :class="classes">
-    <h1
-      class="mb-2 font-body text-base font-medium text-white opacity-90"
-      v-text="$t('myBalancerBalance')"
-    />
-
-    <template v-if="isWalletReady || isWalletConnecting">
-      <BalLoadingBlock
-        v-if="isLoadingTotalValue"
-        class="mx-auto w-40 h-10"
-        white
+  <!-- <AppHero :class="classes"> -->
+  <div class="bg-portfolio-hero">
+    <div class="mx-auto w-full max-w-lg">
+      <h1
+        class="mb-2 font-body text-base font-medium text-white opacity-90"
+        v-text="$t('myBalancerBalance')"
       />
-      <div v-else class="mb-1 text-3xl font-semibold text-white">
-        {{ totalInvestedLabel }}
-      </div>
-      <div v-if="!isL2" class="inline-block relative mt-2">
+
+      <template v-if="isWalletReady || isWalletConnecting">
         <BalLoadingBlock
           v-if="isLoadingTotalValue"
-          class="mx-auto w-40 h-8"
+          class="mx-auto w-40 h-10"
           white
         />
-        <div
-          v-else
-          class="group flex items-center px-3 h-8 text-sm font-medium text-yellow-500 hover:text-white focus:text-white rounded-tr rounded-bl border border-yellow-500 transition-colors cursor-pointer vebal-banner"
-          @click="router.push({ name: 'vebal', params: { networkSlug } })"
-        >
-          <span v-if="totalLockedValue === '0'"
-            >{{ totalLockedValue }} {{ $t('veBAL.hero.tokens.veBAL') }}</span
-          >
-          <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span>
+        <div v-else class="mb-1 text-3xl font-semibold text-white">
+          {{ totalInvestedLabel }}
         </div>
-      </div>
-    </template>
-    <template v-else>
-      <div class="text-3xl font-semibold text-white">
-        {{ fNum2('0', FNumFormats.fiat) }}
-      </div>
-      <HeroConnectWalletButton class="mt-4" />
-    </template>
-  </AppHero>
+        <div v-if="!isL2" class="inline-block relative mt-2">
+          <BalLoadingBlock
+            v-if="isLoadingTotalValue"
+            class="mx-auto w-40 h-8"
+            white
+          />
+          <div
+            v-else
+            class="group flex items-center px-3 h-8 text-sm font-medium text-yellow-500 hover:text-white focus:text-white rounded-tr rounded-bl border border-yellow-500 transition-colors cursor-pointer vebal-banner"
+            @click="router.push({ name: 'vebal', params: { networkSlug } })"
+          >
+            <span v-if="totalLockedValue === '0'"
+              >{{ totalLockedValue }} {{ $t('veBAL.hero.tokens.veBAL') }}</span
+            >
+            <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div class="text-3xl font-semibold text-white">
+          {{ fNum2('0', FNumFormats.fiat) }}
+        </div>
+        <HeroConnectWalletButton class="mt-4" />
+      </template>
+    </div>
+  </div>
+  <!-- </AppHero> -->
 </template>
 
 <style>
+.bg-portfolio-hero {
+  @apply bg-primary-200 relative flex items-center justify-center text-center px-4 h-64;
+  transition: all 0.3s ease-in-out;
+  background-image: url('/images/backgrounds/bg-blue.png');
+  @apply bg-no-repeat bg-cover bg-center;
+}
 .vebal-banner::before {
   @apply border border-yellow-500;
 

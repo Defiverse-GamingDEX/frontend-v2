@@ -56,13 +56,14 @@ function classBody() {
   background-position: bottom;
   background-size: 100% 100%;
   min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
 .app-body.bg-3 {
   background-image: url('/images/backgrounds/bg2-min.png');
   background-repeat: no-repeat;
   background-position: bottom;
-  background-size: contain;
+  background-size: 100%;
   padding-bottom: 16.67vw;
 }
 
@@ -70,17 +71,12 @@ function classBody() {
   background-image: url('/images/backgrounds/bg2-min.png');
   background-repeat: no-repeat;
   background-position: bottom;
-  background-size: contain;
+  background-size: 100%;
   padding-bottom: 33vw;
 }
 @media (max-width: 767px) {
   .app-body.bg-2 {
     background-size: contain;
-  }
-
-  .app-body.bg-3,
-  .app-body.bg-4 {
-    padding-bottom: 2rem;
   }
 }
 </style>

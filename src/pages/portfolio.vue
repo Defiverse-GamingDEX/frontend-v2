@@ -24,7 +24,7 @@ const { lockPool, lock } = useLock();
     <PortfolioPageHero />
     <div class="xl:container xl:px-4 pt-10 md:pt-12 xl:mx-auto">
       <BalStack vertical>
-        <div class="px-4 xl:px-0">
+        <div class="px-4 xl:px-0 text-white">
           <BalStack horizontal justify="between" align="center">
             <h3>{{ $t('myLiquidityInBalancerPools') }}</h3>
           </BalStack>

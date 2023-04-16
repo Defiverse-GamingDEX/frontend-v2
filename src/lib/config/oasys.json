@@ -9,7 +9,7 @@
   "unknown": false,
   "rpc": "https://rpc.defiverse.net",
   "ws": "wss://arb-mainnet.g.alchemy.com/v2/{{ALCHEMY_KEY}}",
-  "publicRpc": "https://arb1.arbitrum.io/rpc",
+  "publicRpc": "https://rpc.defiverse.net",
   "explorer": "https://scan.defiverse.net",
   "explorerName": "defiverse",
   "subgraph": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse",

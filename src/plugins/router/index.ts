@@ -139,12 +139,12 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'FocusedLayout' },
   },
   {
-    path: '/:networkSlug/vebal',
+    path: '/:networkSlug/vedfv',
     name: 'vebal',
     component: VeBalPage,
   },
   {
-    path: '/:networkSlug/get-vebal',
+    path: '/:networkSlug/get-vedfv',
     name: 'get-vebal',
     component: GetVeBalPage,
     meta: { layout: 'FocusedLayout' },

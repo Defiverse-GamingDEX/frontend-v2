@@ -3960,32 +3960,32 @@
     }
   },
   {
-    "address": "0xC02b1b15888277B54Fb4903ef3Dedf4881a8c73A",
-    "network": 10,
+    "address": "0x030Bfd99b10c82Ff61A7dd5835Ab7EC75d88b820",
+    "network": 16116,
     "isKilled": false,
     "relativeWeightCap": "null",
     "addedTimestamp": 1667776463,
     "pool": {
-      "id": "0x05e7732bf9ae5592e6aa05afe8cd80f7ab0a7bea00020000000000000000005a",
-      "address": "0x05e7732bF9ae5592E6AA05aFE8Cd80f7Ab0a7bEA",
+      "id": "0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012",
+      "address": "0xeded8858e4756b147a9115c593bc0146847d3af2",
       "poolType": "Weighted",
-      "symbol": "bb-STG-USD",
+      "symbol": "DFV/OAS",
       "tokens": [
         {
-          "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
-          "weight": "0.5",
-          "symbol": "STG"
+          "address": "0xEf67932B5DF15301B2dcCfd9120f7eC1B598561F",
+          "weight": "0.8",
+          "symbol": "DFV"
         },
         {
-          "address": "0xba7834bb3cd2DB888E6A06Fb45E82b4225Cd0C71",
-          "weight": "0.5",
-          "symbol": "bb-rf-aUSDC"
+          "address": "0xABD79d01da7Db35f53c4F495FE0684618C8535A6",
+          "weight": "0.2",
+          "symbol": "OAS"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
-      "0xba7834bb3cd2DB888E6A06Fb45E82b4225Cd0C71": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+      "0xEf67932B5DF15301B2dcCfd9120f7eC1B598561F": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
+      "0xABD79d01da7Db35f53c4F495FE0684618C8535A6": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
     }
   },
   {

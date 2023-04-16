@@ -70,7 +70,7 @@ async function handleUnstakeSuccess() {
 <template>
   <div>
     <BalStack vertical spacing="sm">
-      <h5 class="px-4 xl:px-0">
+      <h5 class="px-4 xl:px-0 text-white">
         {{ $t('staking.stakedPools') }}
       </h5>
       <PoolsTable

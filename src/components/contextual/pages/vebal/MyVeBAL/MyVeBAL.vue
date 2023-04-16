@@ -31,9 +31,10 @@ const isLoading = computed(() =>
 </script>
 
 <template>
-  <h3 class="mb-3">
+  <h3 class="mb-3 text-white">
     {{ $t('veBAL.myVeBAL.title') }}
   </h3>
+
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
     <template v-if="isLoading">
       <BalLoadingBlock v-for="n in 4" :key="n" class="h-24" />

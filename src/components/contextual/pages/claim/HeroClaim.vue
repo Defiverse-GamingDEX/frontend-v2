@@ -112,9 +112,10 @@ defineProps<Props>();
 
 <style scoped>
 .bg {
-  @apply bg-gradient-to-r from-pink-500 to-yellow-500 relative;
+  /* @apply bg-gradient-to-r from-pink-500 to-yellow-500 relative; */
+  @apply bg-primary-200 relative;
 
-  background-image: url('/images/backgrounds/claims-header.svg');
+  background-image: url('/images/backgrounds/bg-blue.png');
 
   @apply bg-no-repeat bg-cover bg-center;
 }

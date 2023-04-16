@@ -48,9 +48,7 @@ export const isArbitrum = computed(() => networkId.value === Network.ARBITRUM);
 export const isGoerli = computed(() => networkId.value === Network.GOERLI);
 export const isOasys = computed(() => networkId.value === Network.OASYS);
 
-export const isL2 = computed(
-  () => isPolygon.value || isArbitrum.value || isOasys.value
-);
+export const isL2 = computed(() => isPolygon.value || isArbitrum.value);
 export const isTestnet = computed(() => isGoerli.value);
 
 /**
