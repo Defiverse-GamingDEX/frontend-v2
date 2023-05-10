@@ -15,6 +15,8 @@ import InvestSummary from './components/InvestSummary.vue';
 import TokenAmounts from '@/components/forms/pool_actions/shared/TokenAmounts.vue';
 import useWeb3 from '@/services/web3/useWeb3';
 
+import { parseUnits } from '@ethersproject/units';
+
 /**
  * TYPES
  */
@@ -49,15 +51,24 @@ const investmentConfirmed = ref(false);
 const { t } = useI18n();
 const { getToken } = useTokens();
 const { toFiat } = useNumbers();
-const { fullAmounts, priceImpact, highPriceImpact, rektPriceImpact } = toRefs(
-  props.math
-);
+const {
+  fullAmounts,
+  priceImpact,
+  highPriceImpact,
+  rektPriceImpact,
+  fullBPTOut,
+} = toRefs(props.math);
 const { resetAmounts } = useInvestState();
 const { account } = useWeb3();
 
 /**
  * COMPUTED
  */
+
+const lpToken = computed(() => {
+  return bnum(fullBPTOut.value).div(parseUnits('1', 18).toString()).toFixed(0);
+});
+
 const title = computed((): string =>
   investmentConfirmed.value
     ? t('investment.preview.titles.confirmed')
@@ -146,6 +157,7 @@ watch(account, () => emit('close'));
       :fiatTotal="fiatTotal"
       :priceImpact="priceImpact"
       :highPriceImpact="highPriceImpact"
+      :lpToken="lpToken"
     />
 
     <BalAlert

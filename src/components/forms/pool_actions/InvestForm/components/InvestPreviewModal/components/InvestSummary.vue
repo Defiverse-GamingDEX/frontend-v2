@@ -13,6 +13,7 @@ type Props = {
   isLoadingPriceImpact?: boolean;
   highPriceImpact?: boolean;
   summaryTitle?: string | undefined;
+  lpToken: string;
 };
 
 /**
@@ -33,9 +34,10 @@ const { currency } = useUserSettings();
 
 <template>
   <BalDataList :title="$t('summary')">
-    <BalDataListRow :label="$t('investment.preview.summary.total')">
+    <BalDataListRow :label="`${$t('investment.preview.summary.total')} LP`">
       <template #value>
-        {{ fNum2(fiatTotal, FNumFormats.fiat) }}
+        <!-- {{ fNum2(fiatTotal, FNumFormats.fiat) }} -->
+        {{ lpToken }}
         <BalTooltip
           :text="$t('tooltips.addLiquidity.total', [currency.toUpperCase()])"
           iconSize="sm"
