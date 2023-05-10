@@ -502,6 +502,7 @@ function addLaggingTimestamps() {
 }
 
 .chart {
+  background: #fff;
   @apply sm:border rounded-xl sm:px-5 sm:pt-5 sm:shadow sm:dark:bg-gray-850 dark:border-transparent;
 }
 </style>

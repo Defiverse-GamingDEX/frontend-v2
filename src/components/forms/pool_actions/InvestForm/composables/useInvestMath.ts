@@ -336,6 +336,7 @@ export default function useInvestMath(
     shouldFetchBatchSwap,
     loadingData,
     supportsPropotionalOptimization,
+    fullBPTOut, // LP token
     // methods
     maximizeAmounts,
     optimizeAmounts,

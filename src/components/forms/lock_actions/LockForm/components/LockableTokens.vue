@@ -57,7 +57,8 @@ const fiatTotal = computed((): string =>
       </div>
       <div class="flex justify-between text-secondary">
         <div>{{ lockablePoolTokenInfo.name }}</div>
-        <div>{{ fNum2(fiatTotal, FNumFormats.fiat) }}</div>
+        <!-- <div>{{ fNum2(fiatTotal, FNumFormats.fiat) }}</div> -->
+        <div>-</div>
       </div>
       <BalLink
         tag="router-link"

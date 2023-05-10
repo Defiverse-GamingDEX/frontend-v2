@@ -34,7 +34,7 @@ const containerClasses = computed(() => {
 
 function stateClasses(tab: Tab): Record<string, boolean> {
   return {
-    'border-b-2 border-white dark:border-blue-400 text-white dark:text-blue-400 hover:text-slate-100 dark:border-blue-500 font-semibold':
+    'bal-tab font-medium border-b-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:border-blue-500 font-semibold':
       isActiveTab(tab),
     'hover:text-slate-100 dark:hover:text-yellow-500 dark:border-gray-700 transition-colors':
       !isActiveTab(tab),

@@ -87,12 +87,16 @@ const cards = computed(() => {
     {
       id: 'myLpToken',
       label: t('veBAL.myVeBAL.cards.myLpToken.label'),
+      // value: isWalletReady.value
+      //   ? fNum2(fiatTotal.value, FNumFormats.fiat)
+      //   : '—',
+      // secondaryText: isWalletReady.value
+      //   ? fNum2(bptBalance.value, FNumFormats.token)
+      //   : '—',
       value: isWalletReady.value
-        ? fNum2(fiatTotal.value, FNumFormats.fiat)
-        : '—',
-      secondaryText: isWalletReady.value
         ? fNum2(bptBalance.value, FNumFormats.token)
         : '—',
+      secondaryText: '-',
       showPlusIcon: isWalletReady.value ? true : false,
       plusIconTo: {
         name: 'invest',
@@ -103,12 +107,16 @@ const cards = computed(() => {
     {
       id: 'myLockedLpToken',
       label: t('veBAL.myVeBAL.cards.myLockedLpToken.label'),
+      // value: isWalletReady.value
+      //   ? fNum2(props.totalLockedValue, FNumFormats.fiat)
+      //   : '—',
+      // secondaryText: isWalletReady.value
+      //   ? fNum2(props.veBalLockInfo?.lockedAmount ?? '0', FNumFormats.token)
+      //   : '—',
       value: isWalletReady.value
-        ? fNum2(props.totalLockedValue, FNumFormats.fiat)
-        : '—',
-      secondaryText: isWalletReady.value
         ? fNum2(props.veBalLockInfo?.lockedAmount ?? '0', FNumFormats.token)
         : '—',
+      secondaryText: '-',
       showPlusIcon: isWalletReady.value && !isExpired ? true : false,
       plusIconTo: { name: 'get-vebal', query: { returnRoute: 'vebal' } },
       showUnlockIcon: isExpired ? true : false,

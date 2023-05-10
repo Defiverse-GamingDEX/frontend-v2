@@ -6,6 +6,9 @@ import useWeb3 from '@/services/web3/useWeb3';
 
 import { InvestMathResponse } from '../composables/useInvestMath';
 
+import { bnum } from '@/lib/utils';
+import { parseUnits } from '@ethersproject/units';
+
 /**
  * TYPES
  */
@@ -30,7 +33,7 @@ const { fNum2 } = useNumbers();
 const { isWalletReady } = useWeb3();
 
 const {
-  fiatTotal,
+  //fiatTotal,
   hasNoBalances,
   hasAllTokens,
   priceImpact,
@@ -39,11 +42,18 @@ const {
   optimized,
   loadingData,
   supportsPropotionalOptimization,
+  fullBPTOut,
 } = toRefs(reactive(props.math));
 
+console.log(props.math, 'props.math');
 /**
  * COMPUTED
  */
+const lpToken = computed(() => {
+  console.log(fullBPTOut.value, 'fullBPTOut.value');
+  return bnum(fullBPTOut.value).div(parseUnits('1', 18).toString()).toFixed(0);
+});
+
 const priceImpactClasses = computed(() => ({
   'dark:bg-gray-800': !highPriceImpact.value,
   'bg-red-500 dark:bg-red-500 text-white divide-red-400': highPriceImpact.value,
@@ -58,11 +68,10 @@ const optimizeBtnClasses = computed(() => ({
 <template>
   <div class="data-table">
     <div class="data-table-row total-row">
-      <div class="p-2">
-        {{ $t('total') }}
-      </div>
+      <div class="p-2">{{ $t('total') }} LP</div>
       <div class="data-table-number-col">
-        {{ fNum2(fiatTotal, FNumFormats.fiat) }}
+        <!-- {{ fNum2(fiatTotal, FNumFormats.fiat) }} -->
+        {{ lpToken }}
         <div v-if="isWalletReady && !hasNoBalances" class="text-sm">
           <span v-if="maximized" class="text-gray-400 dark:text-gray-600">
             {{ $t('maxed') }}
