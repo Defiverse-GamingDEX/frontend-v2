@@ -4000,14 +4000,14 @@
       "symbol": "veBAL",
       "tokens": [
         {
-          "address": "0xaf5fd2992899a6fe23c055c97588e389fdebf3e0",
+          "address": "0x273063888eeec4d9b68f27781f0f77074c1ee736",
           "weight": "null",
           "symbol": "veBAL"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0xaf5fd2992899a6fe23c055c97588e389fdebf3e0": "https://raw.githubusercontent.com/balancer-labs/assets/master/assets/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56.png"
+      "0x273063888eeec4d9b68f27781f0f77074c1ee736": "https://raw.githubusercontent.com/balancer-labs/assets/master/assets/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56.png"
     }
   }
 ]
