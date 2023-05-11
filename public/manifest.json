@@ -1,9 +1,9 @@
 {
-  "short_name": "Balancer",
-  "name": "Balancer",
-  "description": "Swap tokens and manage your assets on Balancer Protocol",
+  "short_name": "Gaming dex",
+  "name": "Gaming dex",
+  "description": "Swap tokens and manage your assets on Gaming dex Protocol",
   "providedBy": {
-    "name": "Balancer",
+    "name": "Gaming dex",
     "url": "https://balancer.fi"
   },
   "icons": [

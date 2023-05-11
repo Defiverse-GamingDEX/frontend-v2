@@ -540,8 +540,8 @@
     "expiredLockLpTokens": "Expired lock LP tokens",
     "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any veDFV or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veDFV incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80DFV-20OAS LP tokens and then create a new lock to veDFV.",
     "lockBptForVeBal": "Lock LP for veDFV",
-    "lockedLpTokensTooltip": "The USD value of your veDFV. These are your locked LP tokens in the BAL 80% / WETH 20% pool.",
-    "unlockedLpTokensTooltip": "The USD value of your liquidity provided to the BAL 80% / WETH 20% pool that has not been locked."
+    "lockedLpTokensTooltip": "The USD value of your veDFV. These are your locked LP tokens in the DFV 80% / OAS 20% pool.",
+    "unlockedLpTokensTooltip": "The USD value of your liquidity provided to the DFV 80% / OAS 20% pool that has not been locked."
   },
   "logOut": "Log out",
   "lost": "Lost",

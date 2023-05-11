@@ -37,7 +37,9 @@ const bptBalance = computed(() => balanceFor(props.pool.address));
 const fiatTotal = computed(() =>
   poolShares.value.times(bptBalance.value).toString()
 );
-
+console.log(poolShares.value, 'poolShares.value');
+console.log(props.pool.totalLiquidity, 'props.pool.totalLiquidity');
+console.log(props.pool.totalShares, 'props.pool.totalShares');
 const totalExpiredLpTokens = computed(() =>
   lock.value?.isExpired ? lock.value.lockedAmount : '0'
 );
@@ -111,7 +113,9 @@ const fiatTotalExpiredLpTokens = computed(() =>
                     </AnimatePresence>
                     <AnimatePresence :isVisible="true">
                       <span :class="{ 'text-red-500': lock?.isExpired }">
-                        {{ fNum2(totalLockedValue, FNumFormats.fiat) }}
+                        {{
+                          fNum2(lock?.lockedAmount || '0', FNumFormats.token)
+                        }}
                       </span>
                     </AnimatePresence>
                     <BalTooltip

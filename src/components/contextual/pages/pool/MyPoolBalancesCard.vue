@@ -44,7 +44,7 @@ const router = useRouter();
 const bptBalance = computed((): string =>
   bnum(balanceFor(props.pool.address)).plus(stakedShares.value).toString()
 );
-
+console.log(bptBalance, 'bptBalance');
 const fiatValue = computed(() => fiatValueOf(props.pool, bptBalance.value));
 
 const showMigrateButton = computed(
@@ -75,11 +75,10 @@ function navigateToPoolMigration(pool: Pool) {
   <BalCard shadow="2xl" noPad class="rounded-xl">
     <template #header>
       <div class="card-header">
-        <h5>
-          {{ $t('poolTransfer.myPoolBalancesCard.title') }}
-        </h5>
+        <h5>{{ $t('poolTransfer.myPoolBalancesCard.title') }} LP</h5>
         <h5 class="text-2xl">
-          {{ isWalletReady ? fNum2(fiatValue, FNumFormats.fiat) : '-' }}
+          <!-- {{ isWalletReady ? fNum2(fiatValue, FNumFormats.fiat) : '-' }} -->
+          {{ isWalletReady ? fNum2(bptBalance, FNumFormats.token) : '-' }}
         </h5>
       </div>
     </template>
