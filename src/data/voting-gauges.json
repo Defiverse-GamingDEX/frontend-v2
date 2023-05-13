@@ -3994,13 +3994,13 @@
     "addedTimestamp": 1681652635,
     "relativeWeightCap": "null",
     "pool": {
-      "id": "0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012",
-      "address": "0xeded8858e4756b147a9115c593bc0146847d3af2",
+      "id": "0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001",
+      "address": "0xebc6be23b7bd76774e8a9a168619954d07818c23",
       "poolType": "Weighted",
       "symbol": "veBAL",
       "tokens": [
         {
-          "address": "0x273063888eeec4d9b68f27781f0f77074c1ee736",
+          "address": "0x78c155933E62b4E3F70F23A232f9176470bf41C9",
           "weight": "null",
           "symbol": "veBAL"
         }

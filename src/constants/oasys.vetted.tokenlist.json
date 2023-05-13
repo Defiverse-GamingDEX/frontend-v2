@@ -2,7 +2,7 @@
   "name": "Balancer",
   "timestamp": "2023-03-23T00:00:00.000Z",
   "logoURI": "https://raw.githubusercontent.com/balancer-labs/pebbles/master/images/pebbles-pad.256w.png",
-  "keywords": ["balancer", "vetted"],
+  "keywords": ["balancer", "listed"],
   "version": {
     "major": 2,
     "minor": 1,
@@ -10,39 +10,31 @@
   },
   "tokens": [
     {
-      "address": "0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7",
+      "address": "0x738cB40a7CFcD770B9972F3e992811c08613f38D",
       "chainId": 16116,
-      "name": "Balancer",
-      "symbol": "BAL",
+      "name": "DFV",
+      "symbol": "DFV",
       "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     },
     {
-      "address": "0x8d1436958Bcbd5dB471F95e665Ac98DDE1E816f1",
+      "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
       "chainId": 16116,
-      "name": "Dai Stablecoin",
-      "symbol": "DAI",
+      "name": "OAS",
+      "symbol": "OAS",
       "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     },
     {
-      "address": "0x4d20bfe67c3f2b3d839b25f2b0cc942bc84c481e",
+      "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
       "chainId": 16116,
       "name": "USD Coin",
       "symbol": "USDC",
       "decimals": 6,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
     },
     {
-      "address": "0x01ac28d93706f5c394b853bba1456f54d9298c8d",
-      "chainId": 16116,
-      "name": "Tether",
-      "symbol": "USDT",
-      "decimals": 6,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
-    },
-    {
-      "address": "0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980",
+      "address": "0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980",
       "chainId": 16116,
       "name": "Wrapped Ether",
       "symbol": "WETH",
@@ -50,12 +42,20 @@
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
     },
     {
-      "address": "0x5979D7b546E38E414F7E9822514be443A4800529",
+      "address": "0x43831636C9cEc4C9c9A950B588Ac8Ec971588754",
       "chainId": 16116,
-      "name": "Wrapped liquid staked Ether 2.0",
-      "symbol": "wstETH",
+      "name": "Game Token A",
+      "symbol": "GMA",
       "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x5979d7b546e38e414f7e9822514be443a4800529.png"
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+    },
+    {
+      "address": "0xCC90040a931a8147cc2A4411c68348a5a3a363a0",
+      "chainId": 16116,
+      "name": "Game Token B",
+      "symbol": "GMB",
+      "decimals": 18,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     }
   ]
 }
