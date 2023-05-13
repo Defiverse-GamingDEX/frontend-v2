@@ -10,7 +10,7 @@
   },
   "tokens": [
     {
-      "address": "0xEf67932B5DF15301B2dcCfd9120f7eC1B598561F",
+      "address": "0x738cB40a7CFcD770B9972F3e992811c08613f38D",
       "chainId": 16116,
       "name": "DFV",
       "symbol": "DFV",
@@ -18,7 +18,7 @@
       "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     },
     {
-      "address": "0xABD79d01da7Db35f53c4F495FE0684618C8535A6",
+      "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
       "chainId": 16116,
       "name": "OAS",
       "symbol": "OAS",
@@ -26,36 +26,12 @@
       "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     },
     {
-      "address": "0x1F6fB04E57ff270B2c97168e48b5bf5a1e32D8b7",
-      "chainId": 16116,
-      "name": "Balancer",
-      "symbol": "BAL",
-      "decimals": 18,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
-    },
-    {
-      "address": "0x62400c6b2685599d1c1308a72c4cb2f6b86b4867",
-      "chainId": 16116,
-      "name": "Dai Stablecoin",
-      "symbol": "DAI",
-      "decimals": 18,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
-    },
-    {
-      "address": "0x4d20bfe67c3f2b3d839b25f2b0cc942bc84c481e",
+      "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
       "chainId": 16116,
       "name": "USD Coin",
       "symbol": "USDC",
       "decimals": 6,
       "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
-    },
-    {
-      "address": "0x01ac28d93706f5c394b853bba1456f54d9298c8d",
-      "chainId": 16116,
-      "name": "Tether",
-      "symbol": "USDT",
-      "decimals": 6,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
     },
     {
       "address": "0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980",
@@ -64,6 +40,22 @@
       "symbol": "WETH",
       "decimals": 18,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+    },
+    {
+      "address": "0x43831636C9cEc4C9c9A950B588Ac8Ec971588754",
+      "chainId": 16116,
+      "name": "Game Token A",
+      "symbol": "GMA",
+      "decimals": 18,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+    },
+    {
+      "address": "0xCC90040a931a8147cc2A4411c68348a5a3a363a0",
+      "chainId": 16116,
+      "name": "Game Token B",
+      "symbol": "GMB",
+      "decimals": 18,
+      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
     }
   ]
 }
