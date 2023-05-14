@@ -3966,26 +3966,26 @@
     "relativeWeightCap": "null",
     "addedTimestamp": 1667776463,
     "pool": {
-      "id": "0xeded8858e4756b147a9115c593bc0146847d3af2000200000000000000000012",
-      "address": "0xeded8858e4756b147a9115c593bc0146847d3af2",
+      "id": "0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001",
+      "address": "0xebc6be23b7bd76774e8a9a168619954d07818c23",
       "poolType": "Weighted",
       "symbol": "DFV/OAS",
       "tokens": [
         {
-          "address": "0xEf67932B5DF15301B2dcCfd9120f7eC1B598561F",
+          "address": "0x738cB40a7CFcD770B9972F3e992811c08613f38D",
           "weight": "0.8",
           "symbol": "DFV"
         },
         {
-          "address": "0xABD79d01da7Db35f53c4F495FE0684618C8535A6",
+          "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
           "weight": "0.2",
           "symbol": "OAS"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0xEf67932B5DF15301B2dcCfd9120f7eC1B598561F": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
-      "0xABD79d01da7Db35f53c4F495FE0684618C8535A6": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+      "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
+      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
     }
   },
   {

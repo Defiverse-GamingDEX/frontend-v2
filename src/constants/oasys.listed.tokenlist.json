@@ -15,7 +15,7 @@
       "name": "DFV",
       "symbol": "DFV",
       "decimals": 18,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+      "logoURI": ""
     },
     {
       "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
@@ -23,7 +23,7 @@
       "name": "OAS",
       "symbol": "OAS",
       "decimals": 18,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+      "logoURI": ""
     },
     {
       "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
@@ -47,7 +47,7 @@
       "name": "Game Token A",
       "symbol": "GMA",
       "decimals": 18,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+      "logoURI": ""
     },
     {
       "address": "0xCC90040a931a8147cc2A4411c68348a5a3a363a0",
@@ -55,7 +55,7 @@
       "name": "Game Token B",
       "symbol": "GMB",
       "decimals": 18,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xba100000625a3754423978a60c9317c58a424e3D/logo.png"
+      "logoURI": ""
     }
   ]
 }
