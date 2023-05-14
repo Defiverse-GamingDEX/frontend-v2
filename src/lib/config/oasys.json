@@ -38,7 +38,7 @@
   "addresses": {
     "merkleRedeem": "",
     "merkleOrchard": "",
-    "multicall": "0xB4FF7AeCCD6dfC8889e45170Caeb128A298821e2",
+    "multicall": "0xDD99819dDB53fFcc9FF77d8Cda4553b17D27b9a4",
     "authorizer": "0xeA9301cd7E9e795b2fCE9669168cceC016F290EF",
     "vault": "0x8F6a1A56D37Ff6Bd1c729c4B629Fe3FA92FC1Cf6",
     "weightedPoolFactory": "0xDC42d086aF7a4f4D7Cb5cbCD47dB9A67f95c0838",
