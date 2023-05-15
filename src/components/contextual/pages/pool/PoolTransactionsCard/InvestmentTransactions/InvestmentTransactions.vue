@@ -79,7 +79,12 @@ const title = computed((): string => {
       <div
         class="flex justify-between items-end mx-4 lg:mx-0 mb-6 border-b dark:border-gray-900"
       >
-        <BalTabs v-model="activeTab" :tabs="tabs" noPad class="-mb-px" />
+        <BalTabs
+          v-model="activeTab"
+          :tabs="tabs"
+          noPad
+          class="-mb-px custom-tabs"
+        />
       </div>
     </div>
 

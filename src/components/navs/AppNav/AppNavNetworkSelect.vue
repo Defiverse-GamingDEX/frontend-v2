@@ -28,33 +28,33 @@ const router = useRouter();
 const { addNotification } = useNotifications();
 
 const networks = ref([
-  {
-    id: 'ethereum',
-    name: 'Ethereum',
-    networkSlug: 'ethereum',
-    key: '1',
-  },
-  {
-    id: 'polygon',
-    name: 'Polygon',
-    networkSlug: 'polygon',
-    key: '137',
-  },
-  {
-    id: 'arbitrum',
-    name: 'Arbitrum',
-    networkSlug: 'arbitrum',
-    key: '42161',
-  },
+  // {
+  //   id: 'ethereum',
+  //   name: 'Ethereum',
+  //   networkSlug: 'ethereum',
+  //   key: '1',
+  // },
+  // {
+  //   id: 'polygon',
+  //   name: 'Polygon',
+  //   networkSlug: 'polygon',
+  //   key: '137',
+  // },
+  // {
+  //   id: 'arbitrum',
+  //   name: 'Arbitrum',
+  //   networkSlug: 'arbitrum',
+  //   key: '42161',
+  // },
 ]);
 
 const networksDev = ref([
-  {
-    id: 'goerli',
-    name: 'Goerli',
-    networkSlug: 'goerli',
-    key: '5',
-  },
+  // {
+  //   id: 'goerli',
+  //   name: 'Goerli',
+  //   networkSlug: 'goerli',
+  //   key: '5',
+  // },
   {
     id: 'oasys',
     name: 'Oasys',
@@ -152,11 +152,11 @@ function isActive(network: NetworkOption): boolean {
           <span class="ml-2">
             {{ activeNetwork.name }}
           </span>
-          <BalIcon name="chevron-down" size="sm" class="ml-2" />
+          <!-- <BalIcon name="chevron-down" size="sm" class="ml-2" /> -->
         </template>
       </BalBtn>
     </template>
-    <div class="flex overflow-hidden flex-col w-44 rounded-lg">
+    <!-- <div class="flex overflow-hidden flex-col w-44 rounded-lg">
       <div
         class="py-2 px-3 text-sm font-medium text-gray-500 whitespace-nowrap bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-900"
       >
@@ -184,7 +184,7 @@ function isActive(network: NetworkOption): boolean {
           class="text-blue-500 dark:text-blue-400"
         />
       </a>
-    </div>
+    </div> -->
   </BalPopover>
 </template>
 

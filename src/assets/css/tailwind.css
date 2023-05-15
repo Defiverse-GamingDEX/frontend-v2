@@ -105,3 +105,15 @@
     text-shadow: 0 1px 0 rgb(0 0 0 / 10%), 4px 4px 8px rgb(0 0 0 / 15%);
   }
 }
+
+
+.custom-tabs .bal-tab {
+  color: #fff;
+}
+.custom-tabs .bal-tab:hover {
+  color:   rgb(255 207 119);
+}
+.custom-tabs .border-b-2{
+  border-color:  rgb(255 207 119);
+  color:  rgb(255 207 119 );
+}

@@ -66,7 +66,7 @@ onMounted(() => resetTabs());
             v-if="isDeepPool"
             v-model="activeTab"
             :tabs="tabs"
-            class="p-0 m-0 -mb-px whitespace-nowrap"
+            class="p-0 m-0 -mb-px whitespace-nowrap custom-tabs"
             noPad
           />
         </div>
