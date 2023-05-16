@@ -873,13 +873,13 @@
         "vote": "Vote to direct liquidity mining emissions"
       },
       "tokens": {
-        "balWETH": "BAL + WETH",
+        "balWETH": "DFV + OAS",
         "lpToken": "B-80DFV-20OAS",
-        "veBAL": "veBAL"
+        "veBAL": "veDFV"
       },
       "tokenInfo": {
-        "balWETH": "Add liquidity to the 80% BAL / 20% WETH pool to get the B-80DFV-20OAS LP token.",
-        "lpToken": "Lock up the LP tokens from the 80% BAL / 20% WETH pool for up to a year to veDFV. The longer you lock, the more veDFV you get.",
+        "balWETH": "Add liquidity to the 80% DFV / 20% OAS pool to get the B-80DFV-20OAS LP token.",
+        "lpToken": "Lock up the LP tokens from the 80% DFV / 20% OAS pool for up to a year to veDFV. The longer you lock, the more veDFV you get.",
         "veBAL": "Use veDFV to earn extra on your staked pools. Only some pools are eligible for staking. Check any pools that you are in, and stake it to earn liquidity mining incentives. You can also use veDFV to vote to direct future liquidity mining emissions"
       },
       "buttons": {
@@ -983,7 +983,7 @@
           },
           "noVeBal": {
             "title": "You need some veDFV to vote on gauges",
-            "description": "VeDFV by locking up LP tokens from the 80% BAL / 20% WETH pool.",
+            "description": "VeDFV by locking up LP tokens from the 80% DFV / 20% OAS pool.",
             "inputHintText": "You can't vote since you have no veDFV"
           },
           "veBalLockTooShort": {

@@ -50,7 +50,7 @@ const hiddenColumns = ['poolVolume', 'migrate', 'actions', 'myBoost'];
 <template>
   <div>
     <BalStack vertical spacing="sm">
-      <h5 class="px-4 xl:px-0">
+      <h5 class="px-4 xl:px-0 text-white">
         {{ $t('veBalProtocolLiquidity') }}
       </h5>
       <PoolsTable
