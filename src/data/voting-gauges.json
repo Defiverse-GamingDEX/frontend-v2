@@ -3960,14 +3960,14 @@
     }
   },
   {
-    "address": "0x030Bfd99b10c82Ff61A7dd5835Ab7EC75d88b820",
+    "address": "0xE122f148Ea9f1515a89a7C3E5CFcC3C4BF741a9b",
     "network": 16116,
     "isKilled": false,
     "relativeWeightCap": "null",
-    "addedTimestamp": 1667776463,
+    "addedTimestamp": 1684203118,
     "pool": {
       "id": "0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001",
-      "address": "0xebc6be23b7bd76774e8a9a168619954d07818c23",
+      "address": "0xEBc6bE23b7BD76774e8a9a168619954d07818c23",
       "poolType": "Weighted",
       "symbol": "DFV/OAS",
       "tokens": [
@@ -3986,28 +3986,6 @@
     "tokenLogoURIs": {
       "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
       "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
-    }
-  },
-  {
-    "address": "0xF2ca6F8961e91F1ee0D688F9926183314D866f1E",
-    "network": 16116,
-    "addedTimestamp": 1681652635,
-    "relativeWeightCap": "null",
-    "pool": {
-      "id": "0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001",
-      "address": "0xebc6be23b7bd76774e8a9a168619954d07818c23",
-      "poolType": "Weighted",
-      "symbol": "veBAL",
-      "tokens": [
-        {
-          "address": "0x78c155933E62b4E3F70F23A232f9176470bf41C9",
-          "weight": "null",
-          "symbol": "veBAL"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x273063888eeec4d9b68f27781f0f77074c1ee736": "https://raw.githubusercontent.com/balancer-labs/assets/master/assets/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56.png"
     }
   }
 ]
