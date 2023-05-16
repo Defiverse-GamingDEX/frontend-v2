@@ -432,7 +432,12 @@ function addLaggingTimestamps() {
       class="flex flex-col xs:flex-row xs:flex-wrap justify-between mb-6 dark:border-gray-900"
     >
       <div class="flex mb-4">
-        <BalTabs v-model="activeTab" :tabs="tabs" noPad class="mr-6 -mb-px" />
+        <BalTabs
+          v-model="activeTab"
+          :tabs="tabs"
+          noPad
+          class="mr-6 -mb-px custom-tabs"
+        />
         <div class="flex items-center">
           <PoolChartPeriodSelect
             :options="periodOptions"

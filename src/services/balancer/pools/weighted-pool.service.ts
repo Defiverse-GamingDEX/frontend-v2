@@ -22,6 +22,7 @@ import { TransactionBuilder } from '@/services/web3/transactions/transaction.bui
 import { getOldMulticaller } from '@/dependencies/OldMulticaller';
 import { POOLS } from '@/constants/pools';
 import WeightedPoolFactoryV3Abi from '@/lib/abi/WeightedPoolFactoryV3.json';
+import { Contract } from '@ethersproject/contracts';
 type Address = string;
 
 export interface CreatePoolReturn {
@@ -200,7 +201,16 @@ export default class WeightedPoolService {
 
     return weightStrings;
   }
-
+  public async getAdminAddress(provider: Web3Provider | JsonRpcProvider) {
+    console.log(WeightedPoolFactoryV3Abi, 'WeightedPoolFactoryV3Abi');
+    const contract = new Contract(
+      configService.network.addresses.weightedPoolFactory,
+      WeightedPoolFactoryV3Abi,
+      provider
+    );
+    const adminAdrr = await contract?.admin();
+    return adminAdrr;
+  }
   private value(amountsIn: string[], tokensIn: string[]): EPBigNumber {
     let value = '0';
     const nativeAsset = configService.network.nativeAsset;

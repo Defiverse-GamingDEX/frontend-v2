@@ -576,6 +576,12 @@ export default function usePoolCreation() {
     await retrievePoolAddress(hash);
   }
 
+  async function getAdminAddress() {
+    const address = await balancerService.pools.weighted.getAdminAddress(
+      getProvider()
+    );
+    return address;
+  }
   return {
     ...toRefs(poolCreationState),
     updateTokenWeights,
@@ -620,5 +626,6 @@ export default function usePoolCreation() {
     isWethPool,
     hasInjectedToken,
     hasRestoredFromSavedState,
+    getAdminAddress,
   };
 }

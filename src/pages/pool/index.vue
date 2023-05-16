@@ -11,8 +11,12 @@ import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
 import usePools from '@/composables/pools/usePools';
-
+import usePoolCreation from '@/composables/pools/usePoolCreation';
+const { account } = useWeb3();
+// STATES
+const adminAddress = ref(null);
 // COMPOSABLES
+const { getAdminAddress } = usePoolCreation();
 const router = useRouter();
 const { appNetworkConfig } = useWeb3();
 const isElementSupported = appNetworkConfig.supportsElementPools;
@@ -30,6 +34,16 @@ const { networkSlug, networkConfig } = useNetwork();
 
 const isPaginated = computed(() => pools.value.length >= 10);
 
+const isCreatePool = computed(() => {
+  if (!adminAddress.value) {
+    return false;
+  }
+  if (adminAddress.value === account.value) {
+    return true;
+  }
+  return false;
+});
+
 /**
  * METHODS
  */
@@ -40,6 +54,15 @@ function navigateToCreatePool() {
 function onColumnSort(columnId: string) {
   poolsSortField.value = columnId;
 }
+
+/**
+ * LIFECYCLE
+ */
+onBeforeMount(async () => {
+  adminAddress.value = await getAdminAddress();
+  console.log(adminAddress.value, 'adminAddress.value');
+  console.log();
+});
 </script>
 
 <template>
@@ -48,13 +71,13 @@ function onColumnSort(columnId: string) {
     <div class="xl:container xl:px-4 pt-10 md:pt-8 xl:mx-auto">
       <BalStack vertical>
         <div class="px-4 xl:px-0">
-          <div class="text-white flex justify-between items-end mb-2">
+          <div class="flex justify-between items-end mb-2 text-white">
             <h3>
               {{ networkConfig.chainName }}
               <span class="lowercase">{{ $t('pools') }}</span>
             </h3>
             <BalBtn
-              v-if="upToMediumBreakpoint"
+              v-if="upToMediumBreakpoint && isCreatePool"
               color="blue"
               size="sm"
               outline
@@ -75,7 +98,7 @@ function onColumnSort(columnId: string) {
               @remove="removeSelectedToken"
             />
             <BalBtn
-              v-if="!upToMediumBreakpoint"
+              v-if="!upToMediumBreakpoint && isCreatePool"
               classCustom="white-blue"
               size="sm"
               :class="{ 'mt-4': upToMediumBreakpoint }"
