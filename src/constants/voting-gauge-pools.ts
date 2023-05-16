@@ -616,10 +616,18 @@ export const OPTIMISM_POOLS: Pool[] = [
   },
 ];
 
+export const OASYS_POOLS: Pool[] = [
+  {
+    id: '0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001',
+    network: Network.OASYS,
+  },
+]
+
 export const POOLS = [
   ...MAINNET_POOLS,
   ...ARBITRUM_POOLS,
   ...POLYGON_POOLS,
   ...GOERLI_POOLS,
   ...OPTIMISM_POOLS,
+  ...OASYS_POOLS
 ];
