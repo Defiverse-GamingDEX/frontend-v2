@@ -3960,25 +3960,25 @@
     }
   },
   {
-    "address": "0xE122f148Ea9f1515a89a7C3E5CFcC3C4BF741a9b",
+    "address": "0x58ddE15d0B9D3b0c5eBcA26484709B64834E7f17",
     "network": 16116,
     "isKilled": false,
-    "relativeWeightCap": "null",
-    "addedTimestamp": 1684203118,
+    "relativeWeightCap": "0.02",
+    "addedTimestamp": 1684682164,
     "pool": {
-      "id": "0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001",
-      "address": "0xEBc6bE23b7BD76774e8a9a168619954d07818c23",
+      "id": "0x402e0638b1d990479a2139709f984cd1ae8c6daf000200000000000000000001",
+      "address": "0x402E0638b1d990479A2139709f984Cd1Ae8c6DAF",
       "poolType": "Weighted",
-      "symbol": "DFV/OAS",
+      "symbol": "30OAS-70USDC",
       "tokens": [
         {
-          "address": "0x738cB40a7CFcD770B9972F3e992811c08613f38D",
-          "weight": "0.8",
-          "symbol": "DFV"
+          "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
+          "weight": "0.7",
+          "symbol": "USDC"
         },
         {
           "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
-          "weight": "0.2",
+          "weight": "0.3",
           "symbol": "OAS"
         }
       ]
