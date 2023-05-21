@@ -544,6 +544,9 @@ export default function usePoolCreation() {
         getProvider(),
         hash
       );
+
+      console.log(`================Hung-retrievePoolAddress:${hash}:`, response);
+
     if (response !== null) {
       poolCreationState.poolId = response.id;
       poolCreationState.poolAddress = response.address;

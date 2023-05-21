@@ -3960,55 +3960,26 @@
     }
   },
   {
-    "address": "0x0ff546F3BAE7c95182177d24766Aeffe7c826edb",
+    "address": "0x58ddE15d0B9D3b0c5eBcA26484709B64834E7f17",
     "network": 16116,
     "isKilled": false,
-    "relativeWeightCap": "null",
-    "addedTimestamp": 1684203118,
+    "relativeWeightCap": "0.02",
+    "addedTimestamp": 1684682164,
     "pool": {
-      "id": "0xd3361154e84118704bc404a8d290353543db0048000200000000000000000000",
-      "address": "0xD3361154e84118704bc404a8d290353543db0048",
+      "id": "0x402e0638b1d990479a2139709f984cd1ae8c6daf000200000000000000000001",
+      "address": "0x402E0638b1d990479A2139709f984Cd1Ae8c6DAF",
       "poolType": "Weighted",
-      "symbol": "80DFV-20OAS",
+      "symbol": "30OAS-70USDC",
       "tokens": [
         {
-          "address": "0x56AD20A8d5b610F1E57bc6AfB13B85e8573b23dE",
-          "weight": "0.8",
-          "symbol": "DFV"
+          "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
+          "weight": "0.7",
+          "symbol": "USDC"
         },
         {
           "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
-          "weight": "0.2",
+          "weight": "0.3",
           "symbol": "OAS"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
-      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
-    }
-  },
-  {
-    "address": "0x02641Be54e8eA664e57458bD8b808E695a6a76Fa",
-    "network": 16116,
-    "isKilled": false,
-    "relativeWeightCap": "null",
-    "addedTimestamp": 1684203118,
-    "pool": {
-      "id": "0x4dfc27035d4802c19579edae5f0bf77442b38964000200000000000000000001",
-      "address": "0x4dfc27035D4802c19579edAe5F0bf77442B38964",
-      "poolType": "Weighted",
-      "symbol": "50GMA-50DFV",
-      "tokens": [
-        {
-          "address": "0x43831636C9cEc4C9c9A950B588Ac8Ec971588754",
-          "weight": "0.5",
-          "symbol": "GMA"
-        },
-        {
-          "address": "0x56AD20A8d5b610F1E57bc6AfB13B85e8573b23dE",
-          "weight": "0.5",
-          "symbol": "DFV"
         }
       ]
     },

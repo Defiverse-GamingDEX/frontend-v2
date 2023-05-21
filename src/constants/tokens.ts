@@ -141,8 +141,8 @@ export const TOKENS_OASYS: TokenConstants = {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980', // need CONFIRM
     WETH: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980',
-    BAL: '0xf8019da005652fc202c0c6ac143fb2e575eea4d1',
-    DFV: '0xf8019da005652fc202c0c6ac143fb2e575eea4d1',
+    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    DFV: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
   },
   PriceChainMap: {
     '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980':
@@ -158,7 +158,7 @@ export const TOKENS_OASYS: TokenConstants = {
     '0x7914aa2d50cc4e9b5a6fb6ac58ec7095927b8897':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     // DFV
-    '0xf8019da005652fc202c0c6ac143fb2e575eea4d1':
+    '0xa3496414a9900a9ae5960c1fec30e563213b68be':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
 
     '0x43831636c9cec4c9c9a950b588ac8ec971588754':

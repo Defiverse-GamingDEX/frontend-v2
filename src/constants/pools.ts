@@ -696,7 +696,7 @@ const POOLS_OASYS: Pools = {
     //   v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
     //   v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
     // },
-    veBAL: '0xf4fa9f2a4f548894cba05105990df83d18fb4f16000200000000000000000000',
+    veBAL: '0x8ea93dfbe0c02aafdc8a9e6bfdd7efacdac8cca6000200000000000000000000',
   },
   Pagination: {
     PerPage: 10,
@@ -730,8 +730,8 @@ const POOLS_OASYS: Pools = {
     AllowList: [],
   },
   Factories: {
-    '0x0483d40301b7c08a61f9398b910f412248daf7a9': 'composableStablePool', // ComposableStable V3
-    '0x76feb4ea3c72e229ea0efb9b2f9f22edbb943f5e': 'weightedPool', // WeightedPool V3
+    '0x42dd917a3c8a14a766712fabe7b048f0306246f6': 'composableStablePool', // ComposableStable V3
+    '0x8c96ab92be9a17f6db66bb254c31dd0c263ea81a': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],

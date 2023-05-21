@@ -85,7 +85,6 @@ export default class WeightedPoolService {
   ): Promise<CreatePoolReturn | null> {
     const receipt = await provider.getTransactionReceipt(createHash);
     if (!receipt) return null;
-
     const weightedPoolFactoryAddress =
       configService.network.addresses.weightedPoolFactory;
     const weightedPoolFactoryInterface =
