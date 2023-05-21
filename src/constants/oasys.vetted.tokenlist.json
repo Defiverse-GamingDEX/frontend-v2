@@ -10,7 +10,7 @@
   },
   "tokens": [
     {
-      "address": "0x738cB40a7CFcD770B9972F3e992811c08613f38D",
+      "address": "0xf8019da005652fc202c0c6ac143fb2e575eea4d1",
       "chainId": 16116,
       "name": "DFV",
       "symbol": "DFV",
@@ -18,7 +18,7 @@
       "logoURI": ""
     },
     {
-      "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
+      "address": "0x7914aa2d50cc4e9b5a6fb6ac58ec7095927b8897",
       "chainId": 16116,
       "name": "OAS",
       "symbol": "OAS",
