@@ -112,7 +112,7 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
     },
     build: {
-      sourcemap: true,
+      sourcemap: false, // false to fix heap memory issue when build
       minify: true,
       rollupOptions: {
         plugins: [

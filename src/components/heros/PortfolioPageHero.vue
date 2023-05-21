@@ -18,7 +18,7 @@ const router = useRouter();
 const { fNum2 } = useNumbers();
 const { isWalletReady, isWalletConnecting } = useWeb3();
 const { totalFiatValue, isLoading: isLoadingPools } = useUserPools();
-const { totalLockedValue } = useLock();
+const { totalLockedValue, lock } = useLock();
 const { networkSlug } = useNetwork();
 
 /**
@@ -38,6 +38,10 @@ const totalVeBalLabel = computed((): string =>
 );
 
 const isLoadingTotalValue = computed((): boolean => isLoadingPools.value);
+
+const veDFV_amount = computed(() => {
+  return fNum2(lock?.value?.lockedAmount, FNumFormats.token);
+});
 </script>
 
 <template>
@@ -69,10 +73,11 @@ const isLoadingTotalValue = computed((): boolean => isLoadingPools.value);
             class="group flex items-center px-3 h-8 text-sm font-medium text-yellow-500 hover:text-white focus:text-white rounded-tr rounded-bl border border-yellow-500 transition-colors cursor-pointer vebal-banner"
             @click="router.push({ name: 'vebal', params: { networkSlug } })"
           >
-            <span v-if="totalLockedValue === '0'"
+            <!-- <span v-if="totalLockedValue === '0'"
               >{{ totalLockedValue }} {{ $t('veBAL.hero.tokens.veBAL') }}</span
             >
-            <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span>
+            <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span> -->
+            <span>{{ veDFV_amount }} {{ $t('veBAL.hero.tokens.veBAL') }}</span>
           </div>
         </div>
       </template>
