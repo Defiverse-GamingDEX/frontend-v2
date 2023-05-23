@@ -180,8 +180,8 @@ export class GaugeControllerDecorator {
   private getNetwork(): Network {
     if (this.config.env.NETWORK === Network.GOERLI) {
       return Network.GOERLI;
-    } else if (this.config.env.NETWORK === Network.OASYS) {
-      return Network.OASYS;
+    } else if (this.config.env.NETWORK === Network.DEFIVERSE) {
+      return Network.DEFIVERSE;
     } else {
       return Network.MAINNET;
     }

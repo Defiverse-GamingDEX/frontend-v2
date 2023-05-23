@@ -3,7 +3,7 @@
  */
 import usePoolsQuery from '@/composables/queries/usePoolsQuery';
 import { isQueryLoading } from '@/composables/queries/useQueryHelpers';
-import { isOasys } from '@/composables/useNetwork';
+import { isDefiverse } from '@/composables/useNetwork';
 import { fiatValueOf } from '@/composables/usePool';
 import symbolKeys from '@/constants/symbol.keys';
 import { Pool } from '@/services/pool/types';
@@ -67,7 +67,7 @@ const provider = () => {
 
   // Is loading any user staking data?
   const isLoading = computed((): boolean => {
-    return isOasys.value
+    return isDefiverse.value
       ? isQueryLoading(stakedPoolsQuery)
       : isQueryLoading(userGaugeSharesQuery) ||
           isQueryLoading(stakedSharesQuery) ||

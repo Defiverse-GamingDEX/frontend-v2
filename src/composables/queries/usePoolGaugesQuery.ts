@@ -5,7 +5,7 @@ import { useQuery } from 'vue-query';
 import QUERY_KEYS from '@/constants/queryKeys';
 import { subgraphRequest } from '@/lib/utils/subgraph';
 import { configService } from '@/services/config/config.service';
-import { isOasys } from '../useNetwork';
+import { isDefiverse } from '../useNetwork';
 /**
  * TYPES
  */
@@ -39,7 +39,7 @@ export default function usePoolGaugesQuery(
    * COMPUTED
    */
   const enabled = computed(
-    (): boolean => !!poolAddress?.value && !isOasys.value
+    (): boolean => !!poolAddress?.value && !isDefiverse.value
   );
 
   const subgraphQuery = computed(() => ({

@@ -67,7 +67,7 @@ const ALLOWED_RATE_PROVIDERS_MAP = {
       '0xf7c5c26b574063e7b098ed74fad6779e65e3f836': true,
     },
   },
-  [Network.OASYS]: {
+  [Network.DEFIVERSE]: {
     '*': {
       '0x0000000000000000000000000000000000000000': true,
     },

@@ -3,13 +3,13 @@ import { computed, onUnmounted, ref } from 'vue';
 
 import {
   GOERLI_VOTING_GAUGES,
-  OASYS_VOTING_GAUGES,
+  DEFIVERSE_VOTING_GAUGES,
   MAINNET_VOTING_GAUGES,
   VotingGauge,
 } from '@/constants/voting-gauges';
 
 import useGaugeVotesQuery from './queries/useGaugeVotesQuery';
-import { isGoerli, isOasys } from './useNetwork';
+import { isGoerli, isDefiverse } from './useNetwork';
 import { orderedPoolTokens } from '@/composables/usePool';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
 import { Pool } from '@/services/pool/types';
@@ -28,8 +28,8 @@ export default function useVotingGauges() {
   const _votingGauges = computed((): VotingGauge[] => {
     if (isGoerli.value) {
       return GOERLI_VOTING_GAUGES as VotingGauge[];
-    } else if (isOasys.value) {
-      return OASYS_VOTING_GAUGES as VotingGauge[];
+    } else if (isDefiverse.value) {
+      return DEFIVERSE_VOTING_GAUGES as VotingGauge[];
     } else {
       return MAINNET_VOTING_GAUGES as VotingGauge[];
     }

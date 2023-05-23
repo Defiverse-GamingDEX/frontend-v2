@@ -1,4 +1,4 @@
-import oasysJson from './oasys.listed.tokenlist.json';
+import defiverseJson from './defiverse.listed.tokenlist.json';
 export interface TokenListMap {
   Balancer: {
     Default: string;
@@ -65,8 +65,8 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
   },
   '16116': {
     Balancer: {
-      Default: JSON.stringify(oasysJson),
-      Vetted: JSON.stringify(oasysJson),
+      Default: JSON.stringify(defiverseJson),
+      Vetted: JSON.stringify(defiverseJson),
     },
     External: [],
   },

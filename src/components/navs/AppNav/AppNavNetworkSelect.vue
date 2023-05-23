@@ -56,9 +56,9 @@ const networksDev = ref([
   //   key: '5',
   // },
   {
-    id: 'oasys',
-    name: 'Oasys',
-    networkSlug: 'oasys',
+    id: 'defiverse',
+    name: 'Defiverse',
+    networkSlug: 'defiverse',
     key: '16116',
   },
 ]);

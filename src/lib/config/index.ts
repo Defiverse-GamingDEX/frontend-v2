@@ -1,7 +1,7 @@
 import { Network } from '@defiverse/balancer-sdk';
 console.log(Network, 'Network');
 import arbitrum from './arbitrum.json';
-import oasys from './oasys.json';
+import defiverse from './defiverse.json';
 import docker from './docker.json';
 import goerli from './goerli.json';
 import homestead from './homestead.json';
@@ -97,7 +97,7 @@ const config: Record<Network | number, Config> = {
   [Network.POLYGON]: polygon,
   [Network.ARBITRUM]: arbitrum,
   [Network.OPTIMISM]: optimism,
-  [Network.OASYS]: oasys,
+  [Network.DEFIVERSE]: defiverse,
   12345: test,
   // @ts-ignore
   17: docker,

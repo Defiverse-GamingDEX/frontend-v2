@@ -12,7 +12,7 @@ import ProtocolRewardsTable, {
   ProtocolRewardRow,
 } from '@/components/tables/ProtocolRewardsTable.vue';
 import { GaugePool, useClaimsData } from '@/composables/useClaimsData';
-import { isOasys, isL2, isMainnet } from '@/composables/useNetwork';
+import { isDefiverse, isL2, isMainnet } from '@/composables/useNetwork';
 import useNumbers from '@/composables/useNumbers';
 import { isStableLike } from '@/composables/usePool';
 import { useTokenHelpers } from '@/composables/useTokenHelpers';
@@ -81,7 +81,8 @@ const networks: NetworkMetadata[] = [
  * COMPUTED
  */
 const loading = computed(
-  (): boolean => isClaimsLoading.value && isWalletReady.value && !isOasys.value
+  (): boolean =>
+    isClaimsLoading.value && isWalletReady.value && !isDefiverse.value
 );
 
 const networkBtns = computed(() => {
@@ -91,7 +92,7 @@ const networkBtns = computed(() => {
 });
 
 const balRewardsData = computed((): RewardRow[] => {
-  if (!isWalletReady.value || isOasys.value) return [];
+  if (!isWalletReady.value || isDefiverse.value) return [];
   // Using reduce to filter out gauges we don't have corresponding pools for
   return gauges.value.reduce<RewardRow[]>((arr, gauge) => {
     const amount = formatUnits(gauge.claimableTokens, balToken.value.decimals);
@@ -182,7 +183,7 @@ function gaugeTitle(pool: GaugePool): string {
 }
 
 function formatRewardsData(data?: BalanceMap): ProtocolRewardRow[] {
-  if (!isWalletReady.value || !data || isOasys.value) return [];
+  if (!isWalletReady.value || !data || isDefiverse.value) return [];
 
   return Object.keys(data).map(tokenAddress => {
     const token = getToken(tokenAddress);
@@ -264,7 +265,9 @@ onBeforeMount(async () => {
             />
           </div>
           <div class="mb-16">
-            <h3 class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white">
+            <h3
+              class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white"
+            >
               {{ $t('protocolIncentives') }}
             </h3>
             <BalTooltip
@@ -315,7 +318,7 @@ onBeforeMount(async () => {
             </div>
           </div>
         </template>
-        <BalBlankSlate v-else-if="isOasys" class="px-4 xl:px-0 mt-4 mb-16">
+        <BalBlankSlate v-else-if="isDefiverse" class="px-4 xl:px-0 mt-4 mb-16">
           {{ $t('noClaimableIncentivesOnThisChain') }}
         </BalBlankSlate>
         <BalBlankSlate

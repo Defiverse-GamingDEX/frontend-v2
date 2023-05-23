@@ -5,7 +5,7 @@ import { useQuery } from 'vue-query';
 import QUERY_KEYS from '@/constants/queryKeys';
 import { gaugesSubgraphService } from '@/services/balancer/gauges/gauges-subgraph.service';
 import { SubgraphGauge } from '@/services/balancer/gauges/types';
-import { isOasys } from '../useNetwork';
+import { isDefiverse } from '../useNetwork';
 /**
  * TYPES
  */
@@ -38,7 +38,7 @@ export default function useGaugesQuery(
    * QUERY OPTIONS
    */
   const queryOptions = reactive({
-    enabled: !isOasys.value,
+    enabled: !isDefiverse.value,
     ...options,
   });
 

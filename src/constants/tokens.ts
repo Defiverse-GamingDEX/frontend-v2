@@ -121,7 +121,7 @@ export const TOKENS_GENERIC: TokenConstants = {
   },
 };
 
-// export const TOKENS_OASYS: TokenConstants = {
+// export const TOKENS_DEFIVERSE: TokenConstants = {
 //   Popular: {
 //     Symbols: ['BAL', 'WETH'],
 //   },
@@ -133,7 +133,7 @@ export const TOKENS_GENERIC: TokenConstants = {
 //   },
 // };
 
-export const TOKENS_OASYS: TokenConstants = {
+export const TOKENS_DEFIVERSE: TokenConstants = {
   Popular: {
     Symbols: ['DFV', 'BAL', 'WETH', 'DAI', 'USDC', 'USDT'],
   },
@@ -173,7 +173,7 @@ const TOKENS_MAP = {
   [Network.MAINNET]: TOKENS_MAINNET,
   [Network.POLYGON]: TOKENS_POLYGON,
   [Network.ARBITRUM]: TOKENS_ARBITRUM,
-  [Network.OASYS]: TOKENS_OASYS,
+  [Network.DEFIVERSE]: TOKENS_DEFIVERSE,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]

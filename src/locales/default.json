@@ -563,7 +563,7 @@
   "modals": {
     "veBalRedirectModal": {
       "title": "Proceed to mainnet",
-      "description": "Getting and using veDFV to vest and vote must be performed on the Ethereum mainnet. \n\n You can still earn liquidity mining incentives on Arbitrum and Polygon and Oasys by adding liquidity to eligible pools. However to vote to direct emissions to your favored pools and to earn the protocol fees, you will need to use veDFV on Ethereum Mainnet by locking B-80DFV-20OAS."
+      "description": "Getting and using veDFV to vest and vote must be performed on the Ethereum mainnet. \n\n You can still earn liquidity mining incentives on Arbitrum and Polygon and Defiverse by adding liquidity to eligible pools. However to vote to direct emissions to your favored pools and to earn the protocol fees, you will need to use veDFV on Ethereum Mainnet by locking B-80DFV-20OAS."
     }
   },
   "month": "month",

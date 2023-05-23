@@ -688,7 +688,7 @@ const POOLS_GENERIC: Pools = {
   DisabledJoins: [],
 };
 
-const POOLS_OASYS: Pools = {
+const POOLS_DEFIVERSE: Pools = {
   IdsMap: {
     // staBAL:
     //   '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
@@ -745,7 +745,7 @@ const POOLS_MAP = {
   [Network.MAINNET]: POOLS_MAINNET,
   [Network.POLYGON]: POOLS_POLYGON,
   [Network.ARBITRUM]: POOLS_ARBITRUM,
-  [Network.OASYS]: POOLS_OASYS,
+  [Network.DEFIVERSE]: POOLS_DEFIVERSE,
 };
 
 export const POOLS: Pools = POOLS_MAP[networkId.value]

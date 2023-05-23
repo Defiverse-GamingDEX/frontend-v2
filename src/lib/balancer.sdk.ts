@@ -14,7 +14,7 @@ const network = ((): Network => {
     case '42161':
       return Network.ARBITRUM;
     case '16116':
-      return Network.OASYS;
+      return Network.DEFIVERSE;
     default:
       return Network.MAINNET;
   }
