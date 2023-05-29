@@ -132,13 +132,13 @@
     "tips": {
       "BalIncentives": "Incentives for LPs who stake in eligible pools (based on the previous week's voting). This doesn't include swap fees or intrinsic yield from certain yield bearing tokens which accumulate into LP positions automatically.",
       "ProtocolAndVebal": "Additional incentives for veDFV holders: For locking in the B-80DFV-20OAS pool (based on the previous week's voting), and their share of protocol revenue.",
-      "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any BAL liquidity incentives."
+      "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any DFV liquidity incentives."
     }
   },
   "claimAll": "Claim all",
-  "claimBAL": "Claim $BAL for",
+  "claimBAL": "Claim $DFV for",
   "claiming": "Claiming...",
-  "claimSuccess": "You successfully claimed $BAL!",
+  "claimSuccess": "You successfully claimed $DFV!",
   "classic": "Classic",
   "clearForms": "Clear forms",
   "clearTransactions": "Clear transactions",
@@ -350,7 +350,7 @@
   "dynamicSwapFeeLabel": "Dynamic swap fees: Currently <span class='font-semibold'>{0}</span>",
   "docs": "Docs",
   "earnings": "Earnings",
-  "earnBAL": "Earn $BAL when swapping eligible tokens",
+  "earnBAL": "Earn $DFV when swapping eligible tokens",
   "effectivePrice": "Effective price:",
   "enterAmount": "Enter amount",
   "enterAPrice": "Enter a price",
@@ -494,7 +494,7 @@
   },
   "investmentPool": "Liquidity pool",
   "investmentPools": "Liquidity pools",
-  "investmentPoolsAbout": "Stake your assets to get $BAL tokens for participating in Balancer V2 liquidity mining.",
+  "investmentPoolsAbout": "Stake your assets to get $DFV tokens for participating in Balancer V2 liquidity mining.",
   "investmentPoolsAboutLink": "Learn more ->",
   "investmentSettled": "Your liquidity add has settled",
   "investmentSuccess": "Your tokens have been added to this pool, and you have received a new LP token representing this action.",
@@ -513,13 +513,13 @@
   "liquidityMiningIncentives": "Liquidity mining incentives",
   "liquidityMiningIncentivesCopy": "Liquidity incentives on {0} are paused for 1 week during its upgrade to the veDFV system. Incentives will resume on April 28.",
   "liquidityMiningPopover": {
-    "airdropEligibility": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $BAL distributions as incentives. $BAL token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
+    "airdropEligibility": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $DFV distributions as incentives. $DFV token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
     "airdropExplainer": "Weekly distributions from liquidity mining on {0} are airdropped on Wednesdays, sent directly to your wallet using disperse.app",
     "claimFreezeWarning": {
       "description": "Since you have several weeks' worth of tokens unclaimed, your screen may appear to freeze after pressing the claim button while it is processed. Just leave your browser open and your wallet will eventually pop open for you to complete the claim.",
       "title": "Too many claims"
     },
-    "networksExplainer": "Switch networks in the header to see your current cumulative $BAL incentives on {0} and {1}.",
+    "networksExplainer": "Switch networks in the header to see your current cumulative $DFV incentives on {0} and {1}.",
     "noRewards": {
       "description": "Certain eligible pools have ‘liquidity mining’ token incentives which are distributed to liquidity providers weekly in proportion to their contribution.",
       "title": "You have no token incentives to claim"
@@ -529,7 +529,7 @@
     },
     "title": "Token incentives"
   },
-  "liquidityProviderCopy": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $BAL distributions as incentives. $BAL token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
+  "liquidityProviderCopy": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $DFV distributions as incentives. $DFV token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
   "liquidityProvision": "Liquidity provision",
   "loading": "Loading...",
   "loadingBestPrice": "Looking for the best price...",
@@ -616,7 +616,7 @@
   "noRecentActivity": "Your recent activity will appear here…",
   "noResults": "No results",
   "noResultsTable": {
-    "noBalIncentives": "No BAL incentives to claim from staking",
+    "noBalIncentives": "No DFV incentives to claim from staking",
     "noProtocolRevenue": "Nothing to claim from holding veDFV"
   },
   "noSwapsPool": "No swaps in this pool.",
@@ -912,13 +912,13 @@
       "cards": {
         "totalVeBAL": "Total veDFV",
         "avgLockUpPeriod": "Ave. lock-up period",
-        "effectiveBalLocked": "Effective BAL locked",
-        "shareOfBalLocked": "Share of BAL locked"
+        "effectiveBalLocked": "Effective DFV locked",
+        "shareOfBalLocked": "Share of DFV locked"
       },
       "stats": {
         "currentWeekVoting": "Current week voting",
         "nextWeekVoting": "Next week voting",
-        "balIncentives": "BAL incentives"
+        "balIncentives": "DFV incentives"
       },
       "table": {
         "poolGauge": "Pool gauge",
@@ -933,7 +933,7 @@
       "myUnallocatedVotesTooltip": "veDFV holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any veDFV, your votes will not count.",
       "unallocatedVotes": "My unallocated votes: {0}.",
       "votingPeriod": "Voting period ends: {0}d {1}h {2}m {3}s",
-      "votingPeriodTooltip": "There is a weekly vote for veDFV holders which ends at 0:00 UTC on Thursdays. This vote determines the BAL incentives allocation for all Stakers in these pools for the next week. Although you don’t have to vote to get a boosted yield, your vote can help you earn more by voting on pools where you are a staker.",
+      "votingPeriodTooltip": "There is a weekly vote for veDFV holders which ends at 0:00 UTC on Thursdays. This vote determines the DFV incentives allocation for all Stakers in these pools for the next week. Although you don’t have to vote to get a boosted yield, your vote can help you earn more by voting on pools where you are a staker.",
       "votingPeriodCountdown": "{0}d : {1}h : {2}m : {3}s",
       "votingPowerExpiredTooltip": "Your previous lock period has expired, so you no longer have any veDFV or voting power. Any votes that have been allocated in the past will no longer count. Lock up B-80DFV-20OAS LP tokens to veDFV for higher yields and voting power.",
       "table": {
@@ -1233,7 +1233,7 @@
     },
     "veBalApr": {
       "title": "Max locking/veDFV APR",
-      "breakdown1": "BAL",
+      "breakdown1": "DFV",
       "breakdown2": "bb-a-USD"
     }
   },
@@ -1423,7 +1423,7 @@
   "v2": "V2",
   "value": "Value",
   "vault": "Vault",
-  "vebal": "veBAL",
+  "vebal": "veDFV",
   "veBalProtocolLiquidity": "veDFV protocol liquidity",
   "vestVote": "Vest+Vote",
   "viewAllAssets": "View all assets ({0})",
