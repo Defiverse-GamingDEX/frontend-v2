@@ -329,7 +329,7 @@ onBeforeMount(async () => {
         >
           {{ $t('noClaimableIncentives') }}
         </BalBlankSlate>
-        <div class="px-4 xl:px-0 mb-16">
+        <!-- <div class="px-4 xl:px-0 mb-16">
           <h2 class="mt-8 font-body text-2xl font-semibold text-white">
             {{ $t('pages.claim.titles.incentivesOnOtherNetworks') }}
           </h2>
@@ -357,7 +357,7 @@ onBeforeMount(async () => {
             >{{ $t('legacyClaims') }}
             <BalIcon name="arrow-right" size="sm" class="mx-1"
           /></BalLink>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
