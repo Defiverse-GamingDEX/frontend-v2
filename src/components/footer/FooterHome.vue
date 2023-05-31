@@ -18,7 +18,12 @@
         <!-- nav link -->
 
         <!-- links -->
-        <div v-for="(i, idx) in links" :key="idx" class="item">
+        <div
+          v-for="(i, idx) in links"
+          :key="idx"
+          class="item"
+          :class="{ 'w-40': idx === links.length - 1 }"
+        >
           <div class="label">{{ i.label }}</div>
           <p v-for="j in i.childs" :key="j.link">
             <BalLink :href="j.link" external noStyle class="link">
@@ -53,13 +58,13 @@
             >
               <IconMedium />
             </BalLink>
-            <BalLink
+            <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Youtube"
               external
               noStyle
             >
               <IconYoutube />
-            </BalLink>
+            </BalLink> -->
             <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Github"
               external
@@ -67,20 +72,20 @@
             >
               <IconGithub />
             </BalLink>
-            <BalLink
+            <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Linkedin"
               external
               noStyle
             >
               <IconLinkedin />
-            </BalLink>
-            <BalLink
+            </BalLink> -->
+            <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Mail"
               external
               noStyle
             >
               <IconMail />
-            </BalLink>
+            </BalLink> -->
           </div>
         </div>
         <!-- /Community -->
@@ -95,11 +100,10 @@ import { useI18n } from 'vue-i18n';
 import { isThirdPartyServicesModalVisible } from '@/App.vue';
 import IconDiscord from '@/components/icons/IconDiscord.vue';
 import IconGithub from '@/components/icons/IconGithub.vue';
-import IconLinkedin from '@/components/icons/IconLinkedin.vue';
-import IconMail from '@/components/icons/IconMail.vue';
+
 import IconMedium from '@/components/icons/IconMedium.vue';
 import IconTwitter from '@/components/icons/IconTwitter.vue';
-import IconYoutube from '@/components/icons/IconYoutube.vue';
+
 import { EXTERNAL_LINKS } from '@/constants/links';
 import { NAV_LINKS } from '@/constants/navLinks';
 
@@ -110,10 +114,7 @@ export default {
     IconTwitter,
     IconDiscord,
     IconMedium,
-    IconYoutube,
     IconGithub,
-    IconMail,
-    IconLinkedin,
   },
   setup() {
     const { t } = useI18n();
@@ -128,55 +129,43 @@ export default {
 
       links: [
         {
-          label: 'Balancer.fi',
+          label: 'dex.defiverse.net',
           childs: [
-            { text: 'Home', link: EXTERNAL_LINKS.Balancer.Home },
-            { text: 'Build', link: EXTERNAL_LINKS.Balancer.Build },
+            {
+              text: 'Home',
+              link: 'https://dex.defiverse.net/#/',
+            },
           ],
         },
         {
           label: 'Infrastructure',
           childs: [
-            { text: 'Explore pools', link: 'https://app.balancer.fi/#/' },
             {
-              text: 'Vote with veBAL',
-              link: 'https://app.balancer.fi/#/vebal',
+              text: 'Explore pools',
+              link: 'https://dex.defiverse.net/#/defiverse/pool',
+            },
+            {
+              text: 'Vote with veDFV',
+              link: 'https://dex.defiverse.net/#/defiverse/vedfv',
             },
             {
               text: 'Claim incentives',
-              link: 'https://app.balancer.fi/#/claim',
+              link: 'https://dex.defiverse.net/#/defiverse/claim',
             },
           ],
         },
         {
           label: 'Learn',
           childs: [
-            { text: 'Documentation', link: EXTERNAL_LINKS.Balancer.Docs },
             {
-              text: 'Question Center',
-              link: 'https://app.balancer.fi/#/risks',
+              text: 'Documentation',
+              link: 'https://gamingdexs-organization.gitbook.io/gamingdex/',
             },
-            { text: 'Whitepaper', link: 'https://balancer.fi/whitepaper.pdf' },
+
             {
-              text: 'Careers',
-              link: 'https://wellfound.com/company/balancer-labs-1',
+              text: 'Whitepaper',
+              link: 'https://gamingdexs-organization.gitbook.io/gamingdex/',
             },
-          ],
-        },
-        {
-          label: 'Ecosystem',
-          childs: [
-            { text: 'Snapshot governance', link: EXTERNAL_LINKS.Balancer.Vote },
-            {
-              text: 'Immunefi bug bounty',
-              link: EXTERNAL_LINKS.Balancer.BugBounty,
-            },
-            {
-              text: 'Dune analytics',
-              link: `${EXTERNAL_LINKS.Balancer.Home}/whitepaper.pdf`,
-            },
-            { text: 'Forum', link: EXTERNAL_LINKS.Balancer.Forum },
-            { text: 'Grants', link: EXTERNAL_LINKS.Balancer.Grants },
           ],
         },
       ],
@@ -219,6 +208,9 @@ footer :deep(.logotype) {
 
 .list-footer .item {
   @apply w-1/5;
+}
+.list-footer .item.w-40 {
+  width: 40%;
 }
 
 .list-footer .item .label {

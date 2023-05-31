@@ -2,11 +2,14 @@
 import AppHero from '@/components/heros/AppHero.vue';
 import useFathom from '@/composables/useFathom';
 import { EXTERNAL_LINKS } from '@/constants/links';
+import useNetwork from '@/composables/useNetwork';
 
 /**
  * COMPOSABLES
  */
 const { trackGoal, Goals } = useFathom();
+
+const { networkSlug } = useNetwork();
 
 const list_app = [
   { text: 'Balancer app', link: 'app.balancer.fi' },
@@ -25,16 +28,24 @@ const list_app = [
       <div class="flex justify-center mt-6">
         <BalBtn
           class="mr-4"
-          tag="a"
-          :href="EXTERNAL_LINKS.Balancer.Home"
-          target="_blank"
-          rel="noreferrer"
           classCustom="outline-3"
-          @click="trackGoal(Goals.ClickHeroLearnMore)"
+          tag="router-link"
+          :to="{ name: 'list-pool', params: { networkSlug } }"
         >
           {{ $t('explorePools') }}
         </BalBtn>
-        <BalBtn
+        <!-- <BalBtn
+          class="mr-4"
+          tag="router-link"
+          :to="{ name: 'pool', params: { networkSlug } }"
+          target="_blank"
+          rel="noreferrer"
+          classCustom="outline-3"
+          @click="trackGoal(Goals.ClickPoolsTableRow)"
+        >
+          {{ $t('explorePools') }}
+        </BalBtn> -->
+        <!-- <BalBtn
           tag="a"
           :href="EXTERNAL_LINKS.Balancer.Build"
           target="_blank"
@@ -43,7 +54,7 @@ const list_app = [
           @click="trackGoal(Goals.ClickHeroLearnMore)"
         >
           {{ $t('startBuilding') }}
-        </BalBtn>
+        </BalBtn> -->
       </div>
     </AppHero>
 

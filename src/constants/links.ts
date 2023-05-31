@@ -10,12 +10,13 @@ export const EXTERNAL_LINKS = {
     Forum: 'https://forum.balancer.finance/',
     Grants: 'http://grants.balancer.community/',
     Social: {
-      Discord: 'https://discord.balancer.fi',
-      Github: 'https://github.com/balancer-labs/',
+      Discord:
+        'https://discord.com/channels/1112739208692514948/1112739209321652316',
+      Github: 'https://github.com/GamingDEX',
       Mail: 'mailto:contact@balancer.finance',
-      Medium: 'https://medium.com/balancer-protocol',
+      Medium: 'https://medium.com/@GamingDEX_Oasys',
       Linkedin: 'https://www.linkedin.com/company/balancer-labs/',
-      Twitter: 'https://twitter.com/BalancerLabs',
+      Twitter: 'https://twitter.com/GamingDEX_Oasys',
       Youtube: 'https://www.youtube.com/channel/UCBRHug6Hu3nmbxwVMt8x_Ow',
     },
     Vote: 'https://vote.balancer.finance/',
