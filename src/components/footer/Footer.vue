@@ -27,7 +27,7 @@
 
           <div class="flex flex-wrap md:order-3 gap-3 md:gap-4">
             <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Home"
+              :href="`https://dex.defiverse.net/#/defiverse`"
               external
               noStyle
               class="group link link--external"
@@ -37,7 +37,7 @@
             </BalLink>
 
             <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Docs"
+              :href="`https://gamingdexs-organization.gitbook.io/gamingdex/`"
               external
               noStyle
               class="group link link--external"
@@ -46,55 +46,7 @@
               <BalIcon name="arrow-up-right" size="sm" class="arrow" />
             </BalLink>
 
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Forum"
-              external
-              noStyle
-              class="group link link--external"
-            >
-              {{ $t('forum') }}
-              <BalIcon name="arrow-up-right" size="sm" class="arrow" />
-            </BalLink>
-
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Vote"
-              external
-              noStyle
-              class="group link link--external"
-            >
-              {{ $t('vote') }}
-              <BalIcon name="arrow-up-right" size="sm" class="arrow" />
-            </BalLink>
-
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Grants"
-              external
-              noStyle
-              class="group link link--external"
-            >
-              {{ $t('grants') }}
-              <BalIcon name="arrow-up-right" size="sm" class="arrow" />
-            </BalLink>
-
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.BugBounty"
-              external
-              noStyle
-              class="group link link--external"
-            >
-              {{ $t('bugBounty') }}
-              <BalIcon name="arrow-up-right" size="sm" class="arrow" />
-            </BalLink>
-
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Analytics"
-              external
-              noStyle
-              class="group link link--external"
-            >
-              {{ $t('analytics') }}
-              <BalIcon name="arrow-up-right" size="sm" class="arrow" />
-            </BalLink>
+           
           </div>
         </div>
         <div class="flex flex-col gap-8">
