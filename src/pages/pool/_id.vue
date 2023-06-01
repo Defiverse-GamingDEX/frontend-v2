@@ -246,11 +246,11 @@ watch(poolQuery.error, () => {
               :loading="loadingPool"
               :loadingApr="loadingApr"
             />
-            <ApyVisionPoolLink
+            <!-- <ApyVisionPoolLink
               v-if="!loadingPool && pool"
               :poolId="pool.id"
               :tokens="titleTokens"
-            />
+            /> -->
           </div>
           <div class="mb-4">
             <h4

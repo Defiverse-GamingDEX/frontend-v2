@@ -86,7 +86,7 @@ function updateNetwork(network: number) {
       </BalBtn>
     </template>
     <div class="flex overflow-hidden flex-col py-4 px-3 w-64 rounded-lg">
-      <div class="text-xl font-bold whitespace-nowrap">
+      <!-- <div class="text-xl font-bold whitespace-nowrap">
         {{ $t('network') }}
       </div>
       <div
@@ -102,7 +102,7 @@ function updateNetwork(network: number) {
           alignCheckbox="items-center"
           @input="updateNetwork(Number(network))"
         />
-      </div>
+      </div> -->
 
       <div class="py-2 text-xl font-bold">
         {{ $t('gaugeFilter.gaugeDisplay') }}

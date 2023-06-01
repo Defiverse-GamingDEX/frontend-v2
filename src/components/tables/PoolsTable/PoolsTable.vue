@@ -363,14 +363,14 @@ function iconAddresses(pool: Pool) {
           <BalLoadingBlock v-if="!pool?.apr" class="w-12 h-4" />
           <template v-else>
             {{ aprLabelFor(pool) }}
-            <BalTooltip
+            <!-- <BalTooltip
               v-if="isLBP(pool.poolType)"
               width="36"
               :text="$t('lbpAprTooltip')"
               iconSize="sm"
               iconClass="ml-1"
             />
-            <APRTooltip v-else-if="pool?.apr" :pool="pool" />
+            <APRTooltip v-else-if="pool?.apr" :pool="pool" /> -->
           </template>
         </div>
       </template>
