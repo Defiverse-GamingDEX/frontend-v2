@@ -39,6 +39,13 @@ import {
   TokenListMap,
 } from '@/types/TokenList';
 
+import { getMulticaller } from '@/dependencies/Multicaller';
+
+import OracleAbi from '@/lib/abi/Oracle.json';
+import configs from '@/lib/config';
+import { networkId } from '@/composables/useNetwork';
+const oracleContractAddress = configs[networkId.value].addresses.oracle;
+console.log(oracleContractAddress, 'oracleContractAddress');
 /**
  * TYPES
  */
@@ -451,7 +458,33 @@ export const tokensProvider = (
     }
     return maxAmount;
   }
+  async function getAntiTraderInfo(tokenAddress, userAddress) {
+    const Multicaller = getMulticaller();
+    const multicaller = new Multicaller();
+    multicaller.call({
+      key: `isProtectedToken`,
+      address:
+        oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
+      function: 'isProtectedToken',
+      abi: OracleAbi,
+      params: [tokenAddress],
+    });
 
+    if (userAddress) {
+      multicaller.call({
+        key: `getSellable`,
+        address:
+          oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
+        function: 'getSellable',
+        abi: OracleAbi,
+        params: [tokenAddress, userAddress],
+      });
+    }
+    const result = await multicaller.execute();
+    console.log(result, 'getAntiTraderInfo');
+
+    return result;
+  }
   /**
    * LIFECYCLE
    */
@@ -499,6 +532,7 @@ export const tokensProvider = (
     getToken,
     injectPrices,
     getMaxBalanceFor,
+    getAntiTraderInfo,
   };
 };
 

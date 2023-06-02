@@ -7,6 +7,9 @@ import useVeBal from '@/composables/useVeBAL';
 import { bnum } from '@/lib/utils';
 
 import SwapPairToggle from './SwapPairToggle.vue';
+import SwapAntiTraderWarningModal from '@/components/modals/SwapAntiTraderWarningModal.vue';
+
+import useWeb3 from '@/services/web3/useWeb3';
 
 /**
  * TYPES
@@ -40,9 +43,9 @@ const emit = defineEmits<{
  * COMPOSABLES
  */
 const { fNum2 } = useNumbers();
-const { getToken } = useTokens();
+const { getToken, getAntiTraderInfo } = useTokens();
 const { veBalTokenInfo } = useVeBal();
-
+const { account } = useWeb3();
 /**
  * STATE
  */
@@ -53,8 +56,12 @@ const _tokenOutAddress = ref<string>('');
 
 const isInRate = ref<boolean>(true);
 
-const typingTimeout = ref<any>(undefined);
+const typingTimeout = ref<any>({});
 
+const modalAntiTraderWarning = ref<boolean>(false);
+
+const tokenInTraderInfo = ref<any>(undefined);
+const tokenOutTraderInfo = ref<any>(undefined);
 /**
  * COMPUTED
  */
@@ -92,6 +99,62 @@ const rateLabel = computed(() => {
   return `1 ${inSymbol} = ${fNum2(rate, FNumFormats.token)} ${outSymbol}`;
 });
 
+/**
+ * WATCHS
+ */
+watch(
+  () => _tokenInAddress.value,
+  async () => {
+    tokenInTraderInfo.value = await getAntiTraderInfo(
+      _tokenInAddress.value,
+      account.value
+    );
+
+    tokenInTraderInfo.value = mapDataTraderInfo(
+      tokenInTraderInfo.value,
+      tokenIn.value
+    );
+    console.log(tokenInTraderInfo.value, 'tokenInTraderInfo');
+  }
+);
+watch(
+  () => _tokenOutAddress.value,
+  async () => {
+    tokenOutTraderInfo.value = await getAntiTraderInfo(
+      _tokenOutAddress.value,
+      account.value
+    );
+
+    tokenOutTraderInfo.value = mapDataTraderInfo(
+      tokenOutTraderInfo.value,
+      tokenOut.value
+    );
+    console.log(tokenOutTraderInfo.value, 'tokenOutTraderInfo');
+  }
+);
+watch(
+  () => account.value,
+  async () => {
+    tokenInTraderInfo.value = await getAntiTraderInfo(
+      _tokenInAddress.value,
+      account.value
+    );
+
+    tokenInTraderInfo.value = mapDataTraderInfo(
+      tokenInTraderInfo.value,
+      tokenIn.value
+    );
+    tokenOutTraderInfo.value = await getAntiTraderInfo(
+      _tokenOutAddress.value,
+      account.value
+    );
+
+    tokenOutTraderInfo.value = mapDataTraderInfo(
+      tokenOutTraderInfo.value,
+      tokenOut.value
+    );
+  }
+);
 /**
  * METHODS
  */
@@ -142,6 +205,34 @@ async function handleOutputTokenChange(newTokenOut: string) {
   }
   emit('update:tokenOutAddress', newTokenOut);
 }
+function checkAmountAntiTrader() {
+  setTimeout(() => {
+    // check to show modal
+    console.log(props.tokenInAmount, 'props.tokenInAmount');
+    console.log(props.tokenOutAmount, 'props.tokenOutAmount');
+    if (
+      (tokenInTraderInfo?.value?.isProtectedToken === true &&
+        props.tokenInAmount > tokenInTraderInfo?.value?.sellableAmount) ||
+      (tokenOutTraderInfo?.value?.isProtectedToken === true &&
+        props.tokenOutAmount > tokenOutTraderInfo?.value?.sellableAmount)
+    ) {
+      modalAntiTraderWarning.value = true;
+    }
+  }, 1000);
+}
+function mapDataTraderInfo(tokenTraderInfo, tokenInfo) {
+  let rs = {
+    ...tokenTraderInfo,
+    ...tokenInfo,
+  };
+  rs.sellableAmount = bnum(tokenTraderInfo.getSellable)
+    .div(Math.pow(10, tokenInfo.decimals))
+    .toNumber();
+  return rs;
+}
+function handleModalAntiTraderClose() {
+  modalAntiTraderWarning.value = false;
+}
 
 /**
  * CALLBACKS
@@ -151,6 +242,7 @@ watchEffect(() => {
   _tokenInAddress.value = props.tokenInAddress;
   _tokenOutAmount.value = props.tokenOutAmount;
   _tokenOutAddress.value = props.tokenOutAddress;
+  checkAmountAntiTrader();
 });
 onMounted(() => {
   // populates initial tokenOutAmount
@@ -199,5 +291,15 @@ onMounted(() => {
       @update:address="handleOutputTokenChange"
       @input="emit('update:exactIn', false)"
     />
+    <teleport to="#modal">
+      <SwapAntiTraderWarningModal
+        v-if="modalAntiTraderWarning"
+        :tokenInTraderInfo="tokenInTraderInfo"
+        :tokenOutTraderInfo="tokenOutTraderInfo"
+        :tokenInAmount="_tokenInAmount"
+        :tokenOutAmount="_tokenOutAmount"
+        @close="handleModalAntiTraderClose"
+      />
+    </teleport>
   </div>
 </template>
