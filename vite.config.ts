@@ -113,7 +113,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       sourcemap: false, // false to fix heap memory issue when build
-      minify: true,
+      minify: false, // TODO for check bug
       rollupOptions: {
         plugins: [
           envConfig.VITE_BUILD_ANALIZE ? analyze({ summaryOnly: false }) : null,
