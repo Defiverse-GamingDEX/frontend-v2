@@ -216,7 +216,6 @@ export const tokensProvider = (
       allowanceQueryRefetching.value; //  TODO missing div redender issue
     return rs;
   });
-  console.log(dynamicDataLoading.value, 'dynamicDataLoading');
   /**
    * METHODS
    */

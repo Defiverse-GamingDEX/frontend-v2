@@ -338,7 +338,6 @@ function onAlertMountChange() {
               <div class="relative w-full">
                 <div
                   v-for="(token, i) of seedTokens"
-                  :key="`tokenweight-${token.id}`"
                   :ref="addTokenListElementRef"
                   class="absolute w-full"
                 >
