@@ -223,7 +223,7 @@ async function animateHeight(offset = 0) {
   });
   await nextTick();
   // get the last added token weight element
-  seedTokenElements.value.forEach((seedTokenElement, i) => {
+  seedTokenElements?.value?.forEach((seedTokenElement, i) => {
     anime.set(seedTokenElement, {
       left: 0,
       right: 0,
@@ -285,16 +285,17 @@ function distributeWeights() {
 
 function addTokenListElementRef(el: Element | ComponentPublicInstance | null) {
   if (!el) return;
+  console.log(seedTokenElements.value, 'seedTokenElements.value');
   // const filteredElements = seedTokenElements.value.filter(e => e !== null);
-  if (!seedTokenElements.value.includes(el) && el) {
-    seedTokenElements.value.push(el);
+  if (!seedTokenElements?.value?.includes(el) && el) {
+    seedTokenElements?.value?.push(el);
   }
 }
 
 async function handleRemoveToken(index: number) {
   updateTokenWeights(seedTokens.value.filter((_, i) => i !== index));
   await nextTick();
-  seedTokenElements.value = seedTokenElements.value.filter(
+  seedTokenElements.value = seedTokenElements?.value?.filter(
     (_, i) => i !== index
   );
   distributeWeights();
@@ -338,12 +339,11 @@ function onAlertMountChange() {
               <div class="relative w-full">
                 <div
                   v-for="(token, i) of seedTokens"
-                  :key="`tokenweight-${i}`"
+                  :key="`tokenweight-${token.id}`"
                   :ref="addTokenListElementRef"
                   class="absolute w-full"
                 >
-                  {{ i }}
-                  <!-- <AnimatePresence isVisible>
+                  <AnimatePresence isVisible>
                     <TokenWeightInput
                       v-model:weight="seedTokens[i].weight"
                       v-model:address="seedTokens[i].tokenAddress"
@@ -355,7 +355,7 @@ function onAlertMountChange() {
                       @update:is-locked="data => handleLockedWeight(data, i)"
                       @delete="() => handleRemoveToken(i)"
                     />
-                  </AnimatePresence> -->
+                  </AnimatePresence>
                 </div>
               </div>
 
