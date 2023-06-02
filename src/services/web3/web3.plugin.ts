@@ -61,7 +61,7 @@ export const networkMap = {
 };
 
 export const Web3ProviderSymbol = Symbol('WEB3_PROVIDER');
-
+console.log(Web3ProviderSymbol, 'Web3ProviderSymbol');
 export type Web3Plugin = {
   connectWallet: (wallet: Wallet) => Promise<void>;
   disconnectWallet: () => Promise<void>;
