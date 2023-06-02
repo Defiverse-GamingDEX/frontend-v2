@@ -338,10 +338,12 @@ function onAlertMountChange() {
               <div class="relative w-full">
                 <div
                   v-for="(token, i) of seedTokens"
+                  :key="`tokenweight-${i}`"
                   :ref="addTokenListElementRef"
                   class="absolute w-full"
                 >
-                  <AnimatePresence isVisible>
+                  {{ i }}
+                  <!-- <AnimatePresence isVisible>
                     <TokenWeightInput
                       v-model:weight="seedTokens[i].weight"
                       v-model:address="seedTokens[i].tokenAddress"
@@ -353,7 +355,7 @@ function onAlertMountChange() {
                       @update:is-locked="data => handleLockedWeight(data, i)"
                       @delete="() => handleRemoveToken(i)"
                     />
-                  </AnimatePresence>
+                  </AnimatePresence> -->
                 </div>
               </div>
 
