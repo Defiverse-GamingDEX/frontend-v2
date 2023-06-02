@@ -282,6 +282,7 @@ export default function usePoolCreation() {
   }
 
   function updateTokenWeights(weights: PoolSeedToken[]) {
+    console.log(weights, 'weights');
     poolCreationState.seedTokens = weights;
   }
 
@@ -545,7 +546,7 @@ export default function usePoolCreation() {
         hash
       );
 
-      console.log(`================Hung-retrievePoolAddress:${hash}:`, response);
+    console.log(`================Hung-retrievePoolAddress:${hash}:`, response);
 
     if (response !== null) {
       poolCreationState.poolId = response.id;

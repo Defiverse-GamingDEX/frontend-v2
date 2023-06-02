@@ -233,10 +233,12 @@ async function animateHeight(offset = 0) {
 }
 
 async function addTokenToPool() {
+  console.log(seedTokens.value, 'seedTokens.values');
   const newWeights: PoolSeedToken[] = [
     ...seedTokens.value,
     { ...emptyTokenWeight, id: uniqueId() } as PoolSeedToken,
   ];
+  console.log(newWeights, 'newWeights');
   updateTokenWeights(newWeights);
   await animateHeight(1);
   distributeWeights();
@@ -258,6 +260,7 @@ function distributeWeights() {
   const error = pctAvailableToDistribute.minus(
     evenDistributionWeight.times(unlockedWeights.length)
   );
+  console.log(lockedPct, 'lockedPct');
   const isErrorDivisible = error.mod(unlockedWeights.length).eq(0);
   const distributableError = isErrorDivisible
     ? error.div(unlockedWeights.length)
