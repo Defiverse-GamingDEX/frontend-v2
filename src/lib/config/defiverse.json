@@ -62,7 +62,8 @@
     "feeDistributor": "",
     "feeDistributorDeprecated": "",
     "faucet": "",
-    "gaugeRewardsHelper": ""
+    "gaugeRewardsHelper": "",
+    "oracle": "0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01"
   },
   "keys": {
     "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",
