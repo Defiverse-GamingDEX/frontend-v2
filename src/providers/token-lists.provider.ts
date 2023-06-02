@@ -47,7 +47,7 @@ const tokensListPromise =
 const activeTokenLists = computed(
   (): TokenListMap => pick(allTokenLists.value, state.activeListKeys)
 );
-console.log('activeTokenLists', activeTokenLists.value);
+
 /**
  * The default Balancer token list.
  */

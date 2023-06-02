@@ -159,7 +159,6 @@ const provider = (_poolId?: string) => {
       throw new Error(`No preferential gauge found for this pool.`);
     }
 
-    console.log('poolAddress.value', poolAddress.value);
     const gauge = new LiquidityGauge(preferentialGaugeAddress.value);
     // User's current full BPT balance for this pool.
     const userBptBalance = parseUnits(

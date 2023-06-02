@@ -61,7 +61,6 @@ function onColumnSort(columnId: string) {
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
   console.log(adminAddress.value, 'adminAddress.value');
-  console.log();
 });
 </script>
 

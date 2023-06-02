@@ -1,5 +1,5 @@
 import { Network } from '@defiverse/balancer-sdk';
-console.log(Network, 'Network');
+
 import arbitrum from './arbitrum.json';
 import defiverse from './defiverse.json';
 import docker from './docker.json';
@@ -102,5 +102,5 @@ const config: Record<Network | number, Config> = {
   // @ts-ignore
   17: docker,
 };
-console.log(config, 'config');
+
 export default config;

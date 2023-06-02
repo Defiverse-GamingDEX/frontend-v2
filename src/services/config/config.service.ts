@@ -52,7 +52,6 @@ export default class ConfigService {
   }
 
   public getNetworkConfig(key: Network): Config {
-    console.log(networkId.value, key, 'networkId.value');
     if (!Object.keys(configs).includes(key?.toString()))
       throw new Error(`No config for network key: ${key}`);
     return configs[key];
