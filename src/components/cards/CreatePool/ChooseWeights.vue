@@ -342,19 +342,19 @@ function onAlertMountChange() {
                   :ref="addTokenListElementRef"
                   class="absolute w-full"
                 >
-                  <!-- <AnimatePresence isVisible> -->
-                  <TokenWeightInput
-                    v-model:weight="seedTokens[i].weight"
-                    v-model:address="seedTokens[i].tokenAddress"
-                    noRules
-                    noMax
-                    :excludedTokens="excludedTokens"
-                    @update:weight="data => handleWeightChange(data, i)"
-                    @update:address="data => handleAddressChange(data, i)"
-                    @update:is-locked="data => handleLockedWeight(data, i)"
-                    @delete="() => handleRemoveToken(i)"
-                  />
-                  <!-- </AnimatePresence> -->
+                  <AnimatePresence isVisible>
+                    <TokenWeightInput
+                      v-model:weight="seedTokens[i].weight"
+                      v-model:address="seedTokens[i].tokenAddress"
+                      noRules
+                      noMax
+                      :excludedTokens="excludedTokens"
+                      @update:weight="data => handleWeightChange(data, i)"
+                      @update:address="data => handleAddressChange(data, i)"
+                      @update:is-locked="data => handleLockedWeight(data, i)"
+                      @delete="() => handleRemoveToken(i)"
+                    />
+                  </AnimatePresence>
                 </div>
               </div>
 
