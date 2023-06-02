@@ -215,6 +215,10 @@ function handleNavigate(stepIndex: number) {
   if (hasRestoredFromSavedState.value) {
     setRestoredState(false);
   }
+  if (stepIndex === 0) {
+    handleReset();
+    return;
+  }
   setActiveStep(stepIndex);
 }
 
