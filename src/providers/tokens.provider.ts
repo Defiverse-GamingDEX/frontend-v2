@@ -456,10 +456,12 @@ export const tokensProvider = (
    * LIFECYCLE
    */
   onBeforeMount(async () => {
-    // Inject veBAL because it's not in tokenlists.
-    const { veBAL } = configService.network.addresses;
+    // Hung: Remove veBAL from token list
 
-    await injectTokens([veBAL]);
+    // Inject veBAL because it's not in tokenlists.
+    // const { veBAL } = configService.network.addresses;
+
+    // await injectTokens([veBAL]);
     state.loading = false;
   });
 
