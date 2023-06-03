@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
+import { useTokens } from '@/providers/tokens.provider';
 import { Transaction } from '@/composables/useTransactions';
 import useWeb3 from '@/services/web3/useWeb3';
 
@@ -12,22 +12,75 @@ interface Props {
   isPendingTransactionStatus: (transaction: Transaction['status']) => boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 /**
  * COMPOSABLES
  */
 const { connector } = useWeb3();
-
+const { getAntiTraderInfo } = useTokens();
+console.log(props.transactions, 'transactions');
+const transactionsShow = ref([] as Transaction[]);
 /**
  * COMPUTED
  */
 const disablePending = computed(() => connector.value?.id === 'gnosis');
+/**
+ * WATCH
+ */
+watch(
+  () => props.transactions,
+  currentValue => {
+    currentValue.forEach(item => {
+      initTransactionShow(currentValue);
+    });
+  },
+  { deep: true }
+);
+/**
+ * METHODS
+ */
+async function initTransactionShow(currentTransaction) {
+  console.log(currentTransaction, 'currentTransaction');
+  transactionsShow.value = currentTransaction;
+  for (let i = 0; i < transactionsShow.value.length; i++) {
+    let transaction = transactionsShow.value[i];
+    let antiInfoFromAddress = await getAntiTraderInfo(
+      transaction?.details?.tokenInAddress,
+      null
+    );
+    let antiInfoToAddress = await getAntiTraderInfo(
+      transaction?.details?.tokenOutAddress,
+      null
+    );
+    console.log(antiInfoFromAddress, 'antiInfoFromAddress');
+    console.log(antiInfoToAddress, 'antiInfoToAddress');
+    if (
+      antiInfoFromAddress.isProtectedToken === true ||
+      antiInfoToAddress.isProtectedToken === true
+    ) {
+      transactionsShow.value[i].action = 'atfSwap';
+    }
+    if (transaction.status === 'failed') {
+      transactionsShow.value[i].action = 'atfLimit';
+    }
+  }
+}
+/**
+ * CALLBACKS
+ */
+onBeforeMount(async () => {
+  initTransactionShow(props.transactions);
+});
 </script>
 
 <template>
   <div>
-    <div v-for="transaction in transactions" :key="transaction.id" class="mb-3">
+    <div
+      v-for="transaction in transactionsShow"
+      :key="transaction.id"
+      class="mb-3"
+    >
       <div class="row">
         <BalLink
           :href="getExplorerLink(transaction.id, transaction.type)"

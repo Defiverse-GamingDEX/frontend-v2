@@ -48,7 +48,9 @@ export type TransactionAction =
   | 'voteForGauge'
   | 'unstake'
   | 'stake'
-  | 'restake';
+  | 'restake'
+  | 'atfSwap'
+  | 'atfLimit';
 
 export type TransactionType = 'order' | 'tx';
 
@@ -384,7 +386,7 @@ export default function useTransactions() {
     cowswapProtocolService
       .getOrder(transaction.id)
       .then(order => {
-        console.log(order);
+        console.log(order, 'checkOrderActivity');
         if (order != null && isFinalizedTransactionStatus(order.status)) {
           finalizeTransaction(transaction.id, 'order', order);
         }
