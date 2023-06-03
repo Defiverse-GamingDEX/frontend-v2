@@ -458,6 +458,25 @@ export const tokensProvider = (
     }
     return maxAmount;
   }
+
+  async function getProtectedTokens() {
+    const Multicaller = getMulticaller();
+    const multicaller = new Multicaller();
+
+    multicaller.call({
+      key: `getProtectedTokens`,
+      address:
+        oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
+      function: 'getProtectedTokens',
+      abi: OracleAbi,
+      params: [],
+    });
+
+    const result = await multicaller.execute();
+    console.log(result, 'getProtectedTokens');
+
+    return result;
+  }
   async function getAntiTraderInfo(tokenAddress, userAddress) {
     const Multicaller = getMulticaller();
     const multicaller = new Multicaller();
@@ -533,6 +552,7 @@ export const tokensProvider = (
     injectPrices,
     getMaxBalanceFor,
     getAntiTraderInfo,
+    getProtectedTokens,
   };
 };
 
