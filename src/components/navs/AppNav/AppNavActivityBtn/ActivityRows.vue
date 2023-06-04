@@ -48,9 +48,7 @@ async function initTransactionShow(currentTransaction) {
   for (let i = 0; i < transactionsShow.value.length; i++) {
     let transaction = transactionsShow.value[i];
     let isAFT = protectedTokens?.value?.getProtectedTokens?.find(
-      item =>
-        item === transaction?.details?.tokenInAddress ||
-        item === transaction?.details?.tokenOutAddress
+      item => item === transaction?.details?.tokenInAddress
     );
     if (isAFT) {
       transactionsShow.value[i].action = 'atfSwap';
