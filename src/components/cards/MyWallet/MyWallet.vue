@@ -29,7 +29,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 const { upToLargeBreakpoint } = useBreakpoints();
-const { setTokenInAddress } = useSwapState();
+const {
+  tokenInAddress,
+  tokenOutAddress,
+  tokenInAmount,
+  tokenOutAmount,
+  setTokenInAddress,
+  setTokenOutAddress,
+  setTokenInAmount,
+  setTokenOutAmount,
+} = useSwapState();
 
 const networkName = configService.network.name;
 const { t } = useI18n();
@@ -62,6 +71,13 @@ function handleAssetClick(tokenAddress) {
   setTokenInAddress(tokenAddress);
   const isPoolToken = includesAddress(poolTokenAddresses.value, tokenAddress);
   emit('click:asset', tokenAddress, isPoolToken);
+  console.log(tokenAddress, 'tokenAddress');
+  console.log(tokenOutAddress, 'tokenOutAddress');
+  if (tokenAddress === tokenOutAddress.value) {
+    setTokenOutAddress('');
+    setTokenOutAmount('');
+    return;
+  }
 }
 
 const emit = defineEmits<{

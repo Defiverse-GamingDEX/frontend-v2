@@ -67,7 +67,7 @@ function navigateToGetVeBAL() {
           </BalBtn>
           <BalBtn
             tag="a"
-            href="https://docs.balancer.fi/ecosystem/vebal-and-gauges"
+            href="https://gamingdex.gitbook.io/gamingdex/tokenomics/dfv"
             target="_blank"
             rel="noreferrer"
             class="hero-btn"

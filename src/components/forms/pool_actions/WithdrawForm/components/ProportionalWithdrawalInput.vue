@@ -126,7 +126,9 @@ onBeforeMount(() => {
           <WithdrawalTokenSelect :pool="pool" />
           <div class="text-xl text-right grow font-numeric">
             <BalLoadingBlock v-if="loadingData" class="float-right w-20 h-8" />
-            <span v-else>{{ missingPrices ? '-' : fiatTotalLabel }}</span>
+            <span v-else
+              >{{ missingPrices ? '-' : fNum2(propBptIn, FNumFormats.token) }}
+            </span>
           </div>
         </div>
         <div class="flex mt-2 text-sm text-secondary">

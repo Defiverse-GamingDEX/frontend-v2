@@ -224,7 +224,6 @@ export function poolURLFor(
   if (pool.poolType && pool.poolType.toString() === 'FX') {
     return `https://app.xave.finance/#/pool`;
   }
-
   return `${appUrl()}/${getNetworkSlug(network)}/pool/${pool.id}`;
 }
 

@@ -23,7 +23,7 @@
     "gauge": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/gauges-defiverse",
     "blocks": ""
   },
-  "supportsEIP1559": true,
+  "supportsEIP1559": false,
   "supportsElementPools": false,
   "blockTime": 2,
   "nativeAsset": {

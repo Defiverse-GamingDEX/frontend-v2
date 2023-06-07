@@ -87,6 +87,7 @@ async function cancelOrder(orderId: string) {
       </template>
       <div :class="['p-3', { 'h-72 overflow-auto': transactions.length > 5 }]">
         <template v-if="transactions.length > 0">
+          {{ pendingTransactions }}
           <ActivityRows
             :transactions="pendingTransactions"
             :getExplorerLink="getExplorerLink"

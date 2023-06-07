@@ -32,10 +32,7 @@ const disablePending = computed(() => connector.value?.id === 'gnosis');
 watch(
   () => props.transactions,
   currentValue => {
-    currentValue.forEach(item => {
-      console.log('AAAA');
-      initTransactionShow(currentValue);
-    });
+     initTransactionShow(props.transactions);
   },
   { deep: true }
 );
@@ -43,7 +40,6 @@ watch(
  * METHODS
  */
 async function initTransactionShow(currentTransaction) {
-  console.log(currentTransaction, 'currentTransaction');
   transactionsShow.value = cloneDeep(currentTransaction);
   for (let i = 0; i < transactionsShow.value.length; i++) {
     let transaction = transactionsShow.value[i];

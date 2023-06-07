@@ -43,44 +43,42 @@ const navLinks = NAV_LINKS.map(i => {
   return {
     label: t(i.text),
     path: `/${networkSlug}/${i.path}`,
-    goal: Goals[i.goal_key]
-  }
-})
+    goal: Goals[i.goal_key],
+  };
+});
 
 const ecosystemLinks = [
-  { label: t('build'), url: 'https://balancer.fi/build' },
-  { label: t('blog'), url: 'https://medium.com/balancer-protocol' },
-  { label: t('docs'), url: 'https://docs.balancer.fi/' },
-  { label: t('governance'), url: 'https://vote.balancer.fi/#/' },
-  { label: t('analytics'), url: 'https://dune.xyz/balancerlabs' },
-  { label: t('forum'), url: 'https://forum.balancer.fi/' },
-  {
-    label: t('grants'),
-    url: 'http://grants.balancer.community',
-  },
+  { label: t('docs'), url: 'https://gamingdex.gitbook.io/gamingdex/' },
+  // { label: t('governance'), url: 'https://vote.balancer.fi/#/' },
+  // { label: t('analytics'), url: 'https://dune.xyz/balancerlabs' },
+  // { label: t('forum'), url: 'https://forum.balancer.fi/' },
+  // {
+  //   label: t('grants'),
+  //   url: 'http://grants.balancer.community',
+  // },
 ];
 
 const socialLinks = {
   TwitterIcon: {
     component: TwitterIcon,
-    url: 'https://twitter.com/BalancerLabs',
+    url: 'https://twitter.com/GamingDEX_Oasys',
   },
   DiscordIcon: {
     component: DiscordIcon,
-    url: 'https://discord.balancer.fi/',
+    url: 'https://discord.com/channels/1112739208692514948/1112739209321652316',
   },
   MediumIcon: {
     component: MediumIcon,
-    url: 'https://medium.com/balancer-protocol',
+    url: 'https://medium.com/@GamingDEX_Oasys',
   },
 
-  YoutubeIcon: {
-    component: YoutubeIcon,
-    url: 'https://www.youtube.com/channel/UCBRHug6Hu3nmbxwVMt8x_Ow',
-  },
+  // YoutubeIcon: {
+  //   component: YoutubeIcon,
+  //   url: 'https://www.youtube.com/channel/UCBRHug6Hu3nmbxwVMt8x_Ow',
+  // },
 
   GithubIcon: {
-    url: 'https://github.com/balancer-labs/',
+    url: 'https://github.com/GamingDEX',
     component: GithubIcon,
   },
 };
