@@ -43,9 +43,15 @@ export default function useStakedSharesQuery(
   /**
    * COMPUTED
    */
+  // const enabled = computed(
+  //   (): boolean =>
+  //     !!userGaugeShares.value && isWalletReady.value && !isDefiverse.value
+  // );
+
+  // Hung: Check me
   const enabled = computed(
     (): boolean =>
-      !!userGaugeShares.value && isWalletReady.value && !isDefiverse.value
+      !!userGaugeShares.value && isWalletReady.value
   );
 
   /**

@@ -44,9 +44,15 @@ export default function useUserBoostsQuery(
   /**
    * COMPUTED
    */
+  // const enabled = computed(
+  //   (): boolean =>
+  //     !!gaugeShares.value && isWalletReady.value && !isDefiverse.value
+
+
+  // Hung: Check me
   const enabled = computed(
     (): boolean =>
-      !!gaugeShares.value && isWalletReady.value && !isDefiverse.value
+      !!gaugeShares.value && isWalletReady.value
   );
 
   /**

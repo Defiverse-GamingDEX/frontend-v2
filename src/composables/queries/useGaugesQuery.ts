@@ -37,8 +37,14 @@ export default function useGaugesQuery(
   /**
    * QUERY OPTIONS
    */
+  // const queryOptions = reactive({
+  //   enabled: !isDefiverse.value,
+  //   ...options,
+  // });
+
+  // Hung: Check me
   const queryOptions = reactive({
-    enabled: !isDefiverse.value,
+    enabled: true,
     ...options,
   });
 

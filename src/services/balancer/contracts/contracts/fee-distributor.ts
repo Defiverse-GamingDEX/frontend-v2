@@ -12,10 +12,14 @@ import { web3Service } from '@/services/web3/web3.service';
 import { getOldMulticaller } from '@/dependencies/OldMulticaller';
 
 export class FeeDistributor {
+  // public claimableTokens: string[] = [
+  //   '0x7B50775383d3D6f0215A8F290f2C9e2eEBBEceb2', // bb-a-USD v1
+  //   '0xA13a9247ea42D743238089903570127DdA72fE44', // bb-a-USD v2
+  //   '0xba100000625a3754423978a60c9317c58a424e3D', // BAL
+  // ];
+  // Hung
   public claimableTokens: string[] = [
-    '0x7B50775383d3D6f0215A8F290f2C9e2eEBBEceb2', // bb-a-USD v1
-    '0xA13a9247ea42D743238089903570127DdA72fE44', // bb-a-USD v2
-    '0xba100000625a3754423978a60c9317c58a424e3D', // BAL
+    '0xA3496414a9900A9AE5960C1fEC30e563213b68bE', // DFV
   ];
 
   constructor(
@@ -57,6 +61,7 @@ export class FeeDistributor {
         params: [userAddress, this.claimableTokens],
       }
     );
+    console.log('Hung balances:',balances)
     const stringBalances = balances.map(balance => balance.toString());
 
     return zipObject(this.claimableTokens, stringBalances);

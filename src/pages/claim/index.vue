@@ -80,9 +80,15 @@ const networks: NetworkMetadata[] = [
 /**
  * COMPUTED
  */
+// const loading = computed(
+//   (): boolean =>
+//     isClaimsLoading.value && isWalletReady.value && !isDefiverse.value
+// );
+
+// Hung: Check me???
 const loading = computed(
   (): boolean =>
-    isClaimsLoading.value && isWalletReady.value && !isDefiverse.value
+    isClaimsLoading.value && isWalletReady.value
 );
 
 const networkBtns = computed(() => {

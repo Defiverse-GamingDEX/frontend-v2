@@ -727,14 +727,22 @@ const POOLS_DEFIVERSE: Pools = {
     ],
   },
   Investment: {
-    AllowList: [],
+    AllowList: [
+      '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+    ],
   },
   Factories: {
     '0x42dd917a3c8a14a766712fabe7b048f0306246f6': 'composableStablePool', // ComposableStable V3
     '0x8c96ab92be9a17f6db66bb254c31dd0c263ea81a': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
-    AllowList: [],
+    AllowList: [
+      '0x402e0638b1d990479a2139709f984cd1ae8c6daf000200000000000000000001',
+      '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+      '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8000200000000000000000003',
+      '0x33b2ae985ecbc95c83b8cfa2fe2f6b8042763151000200000000000000000004',
+      '0xa7b4bee4364a9c161d985ab5a4e17349c868b261000200000000000000000005',
+    ],
   },
   Metadata: {},
   DisabledJoins: [],

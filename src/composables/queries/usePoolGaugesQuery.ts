@@ -38,8 +38,14 @@ export default function usePoolGaugesQuery(
   /**
    * COMPUTED
    */
+
+  // Hung: 2023-06-09 - Check me
+  // const enabled = computed(
+  //   (): boolean => !!poolAddress?.value && !isDefiverse.value
+  // );
+
   const enabled = computed(
-    (): boolean => !!poolAddress?.value && !isDefiverse.value
+    (): boolean => !!poolAddress?.value
   );
 
   const subgraphQuery = computed(() => ({

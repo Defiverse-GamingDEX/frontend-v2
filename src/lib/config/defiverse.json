@@ -59,8 +59,8 @@
     "veBAL": "0x2600f00FB8E1182B1bC101D27682EC7AB7B3BB30",
     "veDelegationProxy": "0x72437aAdcB3a28487E4d4975F4dE46ABdb946B32",
     "veBALHelpers": "",
-    "feeDistributor": "",
-    "feeDistributorDeprecated": "",
+    "feeDistributor": "0x6154359768818814bfceA0b4f4f8b0780AFa0dF4",
+    "feeDistributorDeprecated": "0x7df7A30016E2825F65DDe5af4059A662926Bd0E8",
     "faucet": "",
     "gaugeRewardsHelper": "",
     "oracle": "0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01"
