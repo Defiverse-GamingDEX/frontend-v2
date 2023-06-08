@@ -1,7 +1,7 @@
 {
-  "name": "Balancer",
+  "name": "Gaming DEX",
   "timestamp": "2023-03-23T00:00:00.000Z",
-  "logoURI": "https://raw.githubusercontent.com/balancer-labs/pebbles/master/images/pebbles-pad.256w.png",
+  "logoURI": "/src/assets/images/gamingdex_icon.png",
   "keywords": ["balancer", "listed"],
   "version": {
     "major": 2,

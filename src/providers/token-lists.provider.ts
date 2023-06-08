@@ -31,7 +31,7 @@ const { networkId } = useNetwork();
 const state: TokenListsState = reactive({
   activeListKeys: [uris.Balancer.Default],
 });
-console.log('state', state);
+console.log('state.activeListKeys', state.activeListKeys);
 const allTokenLists = ref({});
 
 const tokensListPromise =
@@ -44,10 +44,13 @@ const tokensListPromise =
 /**
  * All active (toggled) tokenlists
  */
-const activeTokenLists = computed(
-  (): TokenListMap => pick(allTokenLists.value, state.activeListKeys)
-);
 
+const activeTokenLists = computed((): TokenListMap => {
+  console.log(allTokenLists.value, 'allTokenLists');
+  console.log(state.activeListKeys, ' state.activeListKeysAAAAA');
+  return pick(allTokenLists.value, state.activeListKeys);
+});
+console.log(activeTokenLists, 'activeTokenListsBBBB');
 /**
  * The default Balancer token list.
  */
@@ -107,6 +110,7 @@ function isActiveList(uri: string): boolean {
 export const tokenListsProvider = () => {
   onBeforeMount(async () => {
     const module = await tokensListPromise;
+    console.log(module.default, 'module.default');
     allTokenLists.value = module.default;
   });
 

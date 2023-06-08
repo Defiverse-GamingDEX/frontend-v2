@@ -58,6 +58,7 @@ const state: ComponentState = reactive({
  */
 const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
   useTokenLists();
+console.log(activeTokenLists, 'activeTokenListsAAA');
 const {
   getToken,
   searchTokens,

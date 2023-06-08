@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center py-3 px-4 text-base leading-5 highlight">
     <img
-      :src="url(tokenlist.logoURI)"
+      :src="internal_url(tokenlist.logoURI)"
       class="inline-block mr-3 align-middle rounded-full"
       width="34"
       height="34"
@@ -83,10 +83,14 @@ export default {
         .replace('ipfs://', `https://${import.meta.env.VITE_IPFS_NODE}/ipfs/`)
         .replace('ipns://', `https://${import.meta.env.VITE_IPFS_NODE}/ipns/`);
     }
-
+    function internal_url(url) {
+      if (!url) return '';
+      return new URL(url, import.meta.url).href;
+    }
     return {
       ...toRefs(state),
       url,
+      internal_url,
       fNum2,
     };
   },

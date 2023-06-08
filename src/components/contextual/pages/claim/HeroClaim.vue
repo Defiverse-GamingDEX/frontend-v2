@@ -20,7 +20,7 @@ defineProps<Props>();
           </p>
         </div>
       </div>
-      <div class="hero-graphic-container">
+      <!-- <div class="hero-graphic-container">
         <div
           class="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-4 xl:gap-12 items-center w-full fade-in-slow"
         >
@@ -105,7 +105,7 @@ defineProps<Props>();
             </p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

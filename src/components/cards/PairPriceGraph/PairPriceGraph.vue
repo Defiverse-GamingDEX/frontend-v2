@@ -228,11 +228,11 @@ const chartGrid = computed(() => {
       <div class="relative p-4 h-full bg-transparent">
         <div v-if="!failedToLoadPriceData && !isLoadingPriceData" class="flex">
           <h6 class="font-medium">{{ outputSym }}/{{ inputSym }}</h6>
-          <BalTooltip class="ml-2" :text="$t('coingeckoPricingTooltip')">
+          <!-- <BalTooltip class="ml-2" :text="$t('coingeckoPricingTooltip')">
             <template #activator>
               <img class="h-5" src="@/assets/images/icons/coingecko.svg" />
             </template>
-          </BalTooltip>
+          </BalTooltip> -->
         </div>
         <div
           v-if="failedToLoadPriceData && tokenOutAddress"
