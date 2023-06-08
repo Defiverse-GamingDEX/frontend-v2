@@ -85,7 +85,7 @@ export default {
     }
     function internal_url(url) {
       if (!url) return '';
-      return new URL(url, import.meta.url).href;
+      return new URL(url, import.meta.url);
     }
     return {
       ...toRefs(state),
