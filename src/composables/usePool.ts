@@ -109,6 +109,9 @@ export function hasBoostedAPR(address: string): boolean {
     '0x25accb7943fd73dda5e23ba6329085a3c24bfb6a', // wstETH/bb-a-USD (mainnet)
     '0x5b3240b6be3e7487d61cd1afdfc7fe4fa1d81e64', // dola/bb-a-USD (mainnet)
     '0xb54b2125b711cd183edd3dd09433439d53961652', // miMATIC/bb-am-USD (polygon)
+    // Hung added
+    '0xD92e2e3C13c3712Af12E4389ee37b67021318812',
+    '0x900E9Ae430C8F011ab9250C9d4a3a8055EbD3bb8'
   ];
 
   return includesAddress(boostedPoolAddresses, address);

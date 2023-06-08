@@ -51,8 +51,13 @@ export default function useUserGaugeSharesQuery(
   /**
    * COMPUTED
    */
+  // const enabled = computed(
+  //   (): boolean => isWalletReady.value && !isDefiverse.value
+  // );
+
+  // Hung: Check me??
   const enabled = computed(
-    (): boolean => isWalletReady.value && !isDefiverse.value
+    (): boolean => isWalletReady.value
   );
 
   const queryArgs = computed(() => {

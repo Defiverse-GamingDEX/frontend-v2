@@ -621,6 +621,14 @@ export const DEFIVERSE_POOLS: Pool[] = [
     id: '0xebc6be23b7bd76774e8a9a168619954d07818c23000200000000000000000001',
     network: Network.DEFIVERSE,
   },
+  {
+    id: '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+    network: Network.DEFIVERSE,
+  },
+  {
+    id: '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8000200000000000000000003',
+    network: Network.DEFIVERSE,
+  },
 ];
 
 export const POOLS = [
