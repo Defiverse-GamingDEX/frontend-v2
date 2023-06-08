@@ -10,6 +10,7 @@ import { useTokens } from '@/providers/tokens.provider';
 import useUrls from '@/composables/useUrls';
 import { TokenInfoMap, TokenList } from '@/types/TokenList';
 import { useMagicKeys } from '@vueuse/core';
+import { configService } from '@/services/config/config.service';
 
 interface Props {
   open?: boolean;
@@ -106,6 +107,7 @@ const tokens = computed(() => {
 const excludedTokens = computed(() => [
   ...props.excludedTokens,
   ...(props.includeEther ? [] : [nativeAsset.address]),
+  configService.network.addresses.veBAL,
 ]);
 
 const focussedTokenAddress = computed((): string => {
