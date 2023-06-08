@@ -305,7 +305,7 @@ function getInitialWeightHighlightClass(tokenAddress: string) {
                 </button>
               </BalStack>
             </BalStack>
-            <BalStack horizontal justify="between">
+            <!-- <BalStack horizontal justify="between">
               <span class="text-sm">{{ $t('swapFeeManager') }}:</span>
               <BalStack horizontal spacing="sm">
                 <span class="text-sm">{{ getSwapFeeManager() }}</span>
@@ -313,7 +313,7 @@ function getInitialWeightHighlightClass(tokenAddress: string) {
                   <BalIcon name="edit" size="xs" />
                 </button>
               </BalStack>
-            </BalStack>
+            </BalStack> -->
           </BalStack>
         </BalCard>
         <AnimatePresence

@@ -63,7 +63,7 @@ const hasUnknownPrice = computed(() =>
                 <span>{{ fNum2(priceFor(token), FNumFormats.fiat) }}</span>
               </div>
             </div>
-            <img class="h-5" :src="coingecko" />
+            <!-- <img class="h-5" :src="coingecko" /> -->
           </BalStack>
         </BalStack>
       </BalStack>

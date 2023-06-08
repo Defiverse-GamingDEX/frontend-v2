@@ -18,7 +18,7 @@ const FIXED_FEE_OPTIONS = ['0.001', '0.003', '0.01'];
  * STATE
  */
 const isCustomFee = ref(false);
-const checkboxState = ref(true);
+const checkboxState = ref(false);
 const isInvalidFee = ref(false);
 const cardWrapper = ref<HTMLElement>();
 
@@ -203,7 +203,7 @@ async function onChangeFeeController(val: string) {
             {{ $t('invalidFeeExplain') }}
           </BalAlert>
         </BalStack>
-        <BalStack horizontal spacing="none" align="center">
+        <!-- <BalStack horizontal spacing="none" align="center">
           <BalCheckbox
             v-model="checkboxState"
             name="areFeesGovernanceManaged"
@@ -217,7 +217,7 @@ async function onChangeFeeController(val: string) {
             iconSize="sm"
             class="mt-1 ml-2"
           />
-        </BalStack>
+        </BalStack> -->
         <BalStack v-if="feeManagementType === 'self'" vertical spacing="sm">
           <h6 class="mb-1">
             {{ $t('createAPool.alternativeFeeManagement') }}
