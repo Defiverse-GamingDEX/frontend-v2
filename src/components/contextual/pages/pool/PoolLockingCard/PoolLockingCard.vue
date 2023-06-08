@@ -25,7 +25,7 @@ const { balanceFor } = useTokens();
 const { totalLockedValue, lock, isLoadingLockInfo, lockPool, lockPoolToken } =
   useLock();
 const { isWalletReady } = useWeb3();
-
+const lockUrl = ref({ name: 'get-vebal', query: { returnRoute: 'vebal' } });
 /**
  * COMPUTED
  */
@@ -146,10 +146,7 @@ const fiatTotalExpiredLpTokens = computed(() =>
                   </BalStack>
                 </BalStack>
                 <BalStack horizontal spacing="sm" class="mt-2">
-                  <BalLink
-                    v-if="Number(bptBalance) > 0"
-                    href="/#/get-vebal?returnRoute=vebal"
-                  >
+                  <router-link v-if="Number(bptBalance) > 0" :to="lockUrl">
                     <BalBtn
                       :disabled="Number(bptBalance) === 0"
                       color="gradient"
@@ -157,7 +154,7 @@ const fiatTotalExpiredLpTokens = computed(() =>
                     >
                       {{ $t('lock') }}
                     </BalBtn>
-                  </BalLink>
+                  </router-link>
                   <BalBtn
                     v-else
                     :disabled="Number(bptBalance) === 0"
