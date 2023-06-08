@@ -511,9 +511,9 @@ export const tokensProvider = (
     // Hung: Remove veBAL from token list
 
     // Inject veBAL because it's not in tokenlists.
-    // const { veBAL } = configService.network.addresses;
+    const { veBAL } = configService.network.addresses;
 
-    // await injectTokens([veBAL]);
+    await injectTokens([veBAL]);
     state.loading = false;
   });
 
