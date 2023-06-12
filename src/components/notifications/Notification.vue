@@ -127,7 +127,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .title {
-  @apply lowercase;
+  /* @apply lowercase; */
 }
 
 .title::first-letter {

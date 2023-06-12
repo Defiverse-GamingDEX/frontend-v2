@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useTokens } from '@/providers/tokens.provider';
+import useTransactions from '@/composables/useTransactions';
 import { Transaction } from '@/composables/useTransactions';
 import useWeb3 from '@/services/web3/useWeb3';
 import { cloneDeep } from 'lodash';
@@ -18,7 +18,7 @@ const props = defineProps<Props>();
  * COMPOSABLES
  */
 const { connector } = useWeb3();
-const { getAntiTraderInfo, getProtectedTokens } = useTokens();
+const { getProtectedTokens } = useTransactions();
 console.log(props.transactions, 'transactions');
 const transactionsShow = ref([] as Transaction[]);
 const protectedTokens = ref([] as Array<string>);
@@ -32,7 +32,7 @@ const disablePending = computed(() => connector.value?.id === 'gnosis');
 watch(
   () => props.transactions,
   currentValue => {
-     initTransactionShow(props.transactions);
+    initTransactionShow(props.transactions);
   },
   { deep: true }
 );
@@ -43,34 +43,17 @@ async function initTransactionShow(currentTransaction) {
   transactionsShow.value = cloneDeep(currentTransaction);
   for (let i = 0; i < transactionsShow.value.length; i++) {
     let transaction = transactionsShow.value[i];
-    let isAFT = protectedTokens?.value?.getProtectedTokens?.find(
-      item => item === transaction?.details?.tokenInAddress
-    );
-    if (isAFT) {
-      transactionsShow.value[i].action = 'atfSwap';
+    if (transaction.action === 'swap') {
+      let isAFT = protectedTokens?.value?.getProtectedTokens?.find(
+        item => item === transaction?.details?.tokenInAddress
+      );
+      if (isAFT) {
+        transactionsShow.value[i].action = 'atfSwap';
+      }
+      if (transaction.status === 'failed') {
+        transactionsShow.value[i].action = 'atfLimit';
+      }
     }
-    if (transaction.status === 'failed') {
-      transactionsShow.value[i].action = 'atfLimit';
-    }
-    // let antiInfoFromAddress = await getAntiTraderInfo(
-    //   transaction?.details?.tokenInAddress,
-    //   null
-    // );
-    // let antiInfoToAddress = await getAntiTraderInfo(
-    //   transaction?.details?.tokenOutAddress,
-    //   null
-    // );
-    // console.log(antiInfoFromAddress, 'antiInfoFromAddress');
-    // console.log(antiInfoToAddress, 'antiInfoToAddress');
-    // if (
-    //   antiInfoFromAddress.isProtectedToken === true ||
-    //   antiInfoToAddress.isProtectedToken === true
-    // ) {
-    //   transactionsShow.value[i].action = 'atfSwap';
-    // }
-    // if (transaction.status === 'failed') {
-    //   transactionsShow.value[i].action = 'atfLimit';
-    // }
   }
 }
 /**
@@ -78,7 +61,6 @@ async function initTransactionShow(currentTransaction) {
  */
 onBeforeMount(async () => {
   protectedTokens.value = await getProtectedTokens();
-  console.log(protectedTokens.value, 'protectedTokens.value');
   initTransactionShow(props.transactions);
 });
 </script>

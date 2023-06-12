@@ -11,11 +11,15 @@ import { cowswapExplorer } from '@/services/cowswap/explorer.service';
 import { cowswapProtocolService } from '@/services/cowswap/cowswapProtocol.service';
 import { OrderMetaData } from '@/services/cowswap/types';
 import useWeb3 from '@/services/web3/useWeb3';
-
 import { CowswapTransactionDetails } from './swap/useCowswap';
 import { processedTxs } from './useEthers';
 import useNotifications from './useNotifications';
 import useNumbers, { FNumFormats } from './useNumbers';
+
+import { getMulticaller } from '@/dependencies/Multicaller';
+import OracleAbi from '@/lib/abi/Oracle.json';
+import configs from '@/lib/config';
+
 
 const WEEK_MS = 86_400_000 * 7;
 // Please update the schema version when making changes to the transaction structure.
@@ -92,6 +96,8 @@ export type NewTransaction = Pick<
 >;
 
 const networkId = configService.network.chainId;
+console.log(networkId,"networkIdAAA");
+const oracleContractAddress = configs[networkId]?.addresses?.oracle;
 
 export type TransactionsMap = Record<string, Transaction>;
 
@@ -103,6 +109,10 @@ export type TransactionState = {
 export const transactionsState = ref<TransactionState>(
   lsGet<TransactionState>(LS_KEYS.Transactions, {}, TRANSACTIONS_SCHEMA_VERSION)
 );
+
+
+const protectedTokens = ref([] as Array<string>);
+
 
 // COMPUTED
 const transactions = computed(() =>
@@ -131,7 +141,6 @@ const pendingTxActivity = computed(() =>
   pendingTransactions.value.filter(({ type }) => type === 'tx')
 );
 
-// METHODS
 function normalizeTxReceipt(receipt: TransactionReceipt) {
   return {
     blockHash: receipt.blockHash,
@@ -267,7 +276,30 @@ export default function useTransactions() {
 
   // COMPUTED
   const provider = computed(() => getWeb3Provider());
+  /**
+   * CALLBACKS
+   */
+  onBeforeMount(async () => {
+    protectedTokens.value = await getProtectedTokens();
+  });
+  // METHODS
+  async function getProtectedTokens() {
+      const Multicaller = getMulticaller();
+      const multicaller = new Multicaller();
 
+      multicaller.call({
+        key: `getProtectedTokens`,
+        address:
+          oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
+        function: 'getProtectedTokens',
+        abi: OracleAbi,
+        params: [],
+      });
+
+      const result = await multicaller.execute();
+
+      return result;
+    }
   // METHODS
   function getSettledOrderSummary(
     transaction: Transaction,
@@ -299,7 +331,7 @@ export default function useTransactions() {
   function addTransaction(newTransaction: NewTransaction) {
     const transactionsMap = getTransactions();
     const txId = getId(newTransaction.id, newTransaction.type);
-
+    console.log(newTransaction,"newTransaction");
     if (transactionsMap[txId]) {
       throw new Error(`The transaction ${newTransaction.id} already exists.`);
     }
@@ -360,9 +392,25 @@ export default function useTransactions() {
   }
 
   function addNotificationForTransaction(id: string, type: TransactionType) {
-    const transaction = getTransaction(id, type);
+      
+      const transaction = getTransaction(id, type);
+      console.log(transaction, "transactionAAA");
+      console.log(protectedTokens.value, 'protectedTokens.valueBBB');
+      // check protected token to change label action 
+      if (transaction != null) {
+        if (transaction.action === 'swap') {
+          let isAFT = protectedTokens?.value?.getProtectedTokens?.find(
+            item => item === transaction?.details?.tokenInAddress
+          );
+          if (isAFT) {
+            transaction.action = 'atfSwap';
+          }
+          if (transaction.status === 'failed') {
+            transaction.action = 'atfLimit';
+          }
+        }
+      
 
-    if (transaction != null) {
       addNotification({
         type: isFinalizedTransactionStatus(transaction.status)
           ? isSuccessfulTransaction(transaction)
@@ -456,6 +504,7 @@ export default function useTransactions() {
     isSuccessfulTransaction,
     isPendingTransactionStatus,
     updateTransaction,
+    getProtectedTokens,
 
     // computed
     pendingTransactions,
