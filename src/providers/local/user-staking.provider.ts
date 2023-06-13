@@ -66,13 +66,23 @@ const provider = () => {
   });
 
   // Is loading any user staking data?
+  // const isLoading = computed((): boolean => {
+  //   return isDefiverse.value
+  //     ? isQueryLoading(stakedPoolsQuery)
+  //     : isQueryLoading(userGaugeSharesQuery) ||
+  //         isQueryLoading(stakedSharesQuery) ||
+  //         isQueryLoading(userBoostsQuery) ||
+  //         isQueryLoading(stakedPoolsQuery);
+  // });
+
+  // Hung open
   const isLoading = computed((): boolean => {
-    return isDefiverse.value
-      ? isQueryLoading(stakedPoolsQuery)
-      : isQueryLoading(userGaugeSharesQuery) ||
-          isQueryLoading(stakedSharesQuery) ||
-          isQueryLoading(userBoostsQuery) ||
-          isQueryLoading(stakedPoolsQuery);
+    return (
+      isQueryLoading(userGaugeSharesQuery) ||
+      isQueryLoading(stakedSharesQuery) ||
+      isQueryLoading(userBoostsQuery) ||
+      isQueryLoading(stakedPoolsQuery)
+    );
   });
 
   /**

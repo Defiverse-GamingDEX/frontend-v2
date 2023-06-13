@@ -61,7 +61,7 @@ export class FeeDistributor {
         params: [userAddress, this.claimableTokens],
       }
     );
-    console.log('Hung balances:',balances)
+
     const stringBalances = balances.map(balance => balance.toString());
 
     return zipObject(this.claimableTokens, stringBalances);

@@ -137,7 +137,6 @@ export class GaugesDecorator {
         const contractAddress = isL2.value
           ? configService.network.addresses.gaugeRewardsHelper
           : gauge.id;
-
         this.multicaller.call(
           `${gauge.id}.claimableRewards.${rewardToken}`,
           contractAddress,
