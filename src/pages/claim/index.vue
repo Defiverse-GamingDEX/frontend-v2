@@ -75,6 +75,11 @@ const networks: NetworkMetadata[] = [
     name: 'Arbitrum',
     key: Network.ARBITRUM,
   },
+  {
+    id: 'defiverse',
+    name: 'Defiverse',
+    key: Network.DEFIVERSE,
+  },
 ];
 
 /**
@@ -98,7 +103,9 @@ const networkBtns = computed(() => {
 });
 
 const balRewardsData = computed((): RewardRow[] => {
-  if (!isWalletReady.value || isDefiverse.value) return [];
+  // if (!isWalletReady.value || isDefiverse.value) return [];
+  // Hung open
+  if (!isWalletReady.value) return [];
   // Using reduce to filter out gauges we don't have corresponding pools for
   return gauges.value.reduce<RewardRow[]>((arr, gauge) => {
     const amount = formatUnits(gauge.claimableTokens, balToken.value.decimals);
@@ -189,7 +196,9 @@ function gaugeTitle(pool: GaugePool): string {
 }
 
 function formatRewardsData(data?: BalanceMap): ProtocolRewardRow[] {
-  if (!isWalletReady.value || !data || isDefiverse.value) return [];
+  // if (!isWalletReady.value || !data || isDefiverse.value) return [];
+  // Hung open
+  if (!isWalletReady.value || !data) return [];
 
   return Object.keys(data).map(tokenAddress => {
     const token = getToken(tokenAddress);
@@ -297,6 +306,7 @@ onBeforeMount(async () => {
             />
           </div>
         </template>
+
         <div v-if="!isL2">
           <h3 class="inline-block px-4 xl:px-0 mt-8 mr-1.5 text-xl text-white">
             {{ $t('otherTokenIncentives') }}
@@ -311,6 +321,7 @@ onBeforeMount(async () => {
             {{ $t('claimPage.tips.OtherIncentives') }}
           </BalTooltip>
         </div>
+
         <BalLoadingBlock v-if="loading" class="mt-6 mb-2 h-56" />
         <template v-if="!isClaimsLoading && gaugeTables.length > 0">
           <div v-for="{ gauge, pool } in gaugeTables" :key="gauge.id">
@@ -324,9 +335,9 @@ onBeforeMount(async () => {
             </div>
           </div>
         </template>
-        <BalBlankSlate v-else-if="isDefiverse" class="px-4 xl:px-0 mt-4 mb-16">
+        <!-- <BalBlankSlate v-else-if="isDefiverse" class="px-4 xl:px-0 mt-4 mb-16">
           {{ $t('noClaimableIncentivesOnThisChain') }}
-        </BalBlankSlate>
+        </BalBlankSlate> -->
         <BalBlankSlate
           v-else-if="
             (!isClaimsLoading && gaugeTables.length === 0) || !isWalletReady
@@ -335,6 +346,7 @@ onBeforeMount(async () => {
         >
           {{ $t('noClaimableIncentives') }}
         </BalBlankSlate>
+
         <!-- <div class="px-4 xl:px-0 mb-16">
           <h2 class="mt-8 font-body text-2xl font-semibold text-white">
             {{ $t('pages.claim.titles.incentivesOnOtherNetworks') }}

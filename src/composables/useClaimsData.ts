@@ -49,6 +49,7 @@ export function useClaimsData() {
   const gaugePoolQueryEnabled = computed(
     (): boolean => gaugePoolIds?.value && gaugePoolIds.value?.length > 0
   );
+
   const gaugePoolQuery = useGraphQuery<GaugePoolQueryResponse>(
     subgraphFallbackService.url.value,
     ['claim', 'gauge', 'pools'],
