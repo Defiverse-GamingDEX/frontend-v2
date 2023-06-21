@@ -6,7 +6,7 @@ import useNumbers from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { isSameAddress } from '@/lib/utils';
 import { TokenInfo } from '@/types/TokenList';
-
+import { truncateText } from '@/plugins/utils.js';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -79,7 +79,7 @@ function toggleModal(): void {
         <BalAsset :address="token?.address" class="shadow" />
       </div>
       <span class="text-base font-medium">
-        {{ token?.symbol }}
+        {{ truncateText(token?.symbol, 16, 5, 5) }}
       </span>
       <span v-if="Number(weight) > 0" class="ml-2 text-secondary">
         {{

@@ -159,12 +159,12 @@ export default {
           childs: [
             {
               text: 'Documentation',
-              link: 'https://gamingdexs-organization.gitbook.io/gamingdex/',
+              link: 'https://docs.gaming-dex.com/',
             },
 
             {
               text: 'Whitepaper',
-              link: 'https://gamingdexs-organization.gitbook.io/gamingdex/',
+              link: 'https://docs.gaming-dex.com/',
             },
           ],
         },
