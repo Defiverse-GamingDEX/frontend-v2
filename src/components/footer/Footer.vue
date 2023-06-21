@@ -37,7 +37,7 @@
             </BalLink>
 
             <BalLink
-              :href="`https://gamingdexs-organization.gitbook.io/gamingdex/`"
+              :href="`https://docs.gaming-dex.com/`"
               external
               noStyle
               class="group link link--external"
@@ -45,57 +45,55 @@
               {{ $t('docs') }}
               <BalIcon name="arrow-up-right" size="sm" class="arrow" />
             </BalLink>
-
-           
           </div>
         </div>
         <div class="flex flex-col gap-8">
           <div class="md:order-2">
             <div class="flex lg:flex-col md:justify-end">
               <div class="flex gap-3 md:justify-end">
-               <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Social.Twitter"
-              external
-              noStyle
-            >
-              <IconTwitter />
-            </BalLink>
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Social.Discord"
-              external
-              noStyle
-            >
-              <IconDiscord />
-            </BalLink>
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Social.Medium"
-              external
-              noStyle
-            >
-              <IconMedium />
-            </BalLink>
-            <!-- <BalLink
+                <BalLink
+                  :href="EXTERNAL_LINKS.Balancer.Social.Twitter"
+                  external
+                  noStyle
+                >
+                  <IconTwitter />
+                </BalLink>
+                <BalLink
+                  :href="EXTERNAL_LINKS.Balancer.Social.Discord"
+                  external
+                  noStyle
+                >
+                  <IconDiscord />
+                </BalLink>
+                <BalLink
+                  :href="EXTERNAL_LINKS.Balancer.Social.Medium"
+                  external
+                  noStyle
+                >
+                  <IconMedium />
+                </BalLink>
+                <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Youtube"
               external
               noStyle
             >
               <IconYoutube />
             </BalLink> -->
-            <BalLink
-              :href="EXTERNAL_LINKS.Balancer.Social.Github"
-              external
-              noStyle
-            >
-              <IconGithub />
-            </BalLink>
-            <!-- <BalLink
+                <BalLink
+                  :href="EXTERNAL_LINKS.Balancer.Social.Github"
+                  external
+                  noStyle
+                >
+                  <IconGithub />
+                </BalLink>
+                <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Linkedin"
               external
               noStyle
             >
               <IconLinkedin />
             </BalLink> -->
-            <!-- <BalLink
+                <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Mail"
               external
               noStyle
