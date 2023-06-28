@@ -19,7 +19,9 @@
     <div
       :class="['flex-auto', { 'text-blue-500 dark:text-blue-200': focussed }]"
     >
-      {{ token.symbol }}
+      <div class="flex items-center">
+        {{ token.symbol }} <AtfBadge :address="token?.address" />
+      </div>
       <div class="w-40 md:w-60 text-sm truncate text-gray">
         {{ token.name }}
       </div>
@@ -52,10 +54,12 @@ import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { useUserSettings } from '@/providers/user-settings.provider';
 import { TokenInfo } from '@/types/TokenList';
-
+import AtfBadge from '@/components/badge/AtfBadge.vue';
 export default {
   name: 'TokenListItem',
-
+  components: {
+    AtfBadge,
+  },
   props: {
     token: { type: Object as PropType<TokenInfo>, required: true },
     balanceLoading: { type: Boolean, default: true },

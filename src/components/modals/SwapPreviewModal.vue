@@ -23,7 +23,7 @@ import { getWrapAction, WrapType } from '@/lib/utils/balancer/wrapper';
 import useWeb3 from '@/services/web3/useWeb3';
 import { TransactionActionInfo } from '@/types/transactions';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
-
+import AtfBadge from '@/components/badge/AtfBadge.vue';
 const PRICE_UPDATE_THRESHOLD = 0.02;
 
 type Props = {
@@ -587,11 +587,14 @@ watch(blockNumber, () => {
                 />
               </div>
               <div>
-                <div class="font-medium">
+                <div class="flex items-center font-medium">
                   {{
                     fNum2(swapping.tokenInAmountInput.value, FNumFormats.token)
                   }}
                   {{ swapping.tokenIn.value.symbol }}
+                  <AtfBadge
+                    :address="swapping.tokenIn.value.address"
+                  ></AtfBadge>
                 </div>
                 <div class="text-sm text-secondary">
                   {{ tokenInFiatValue }}
@@ -611,11 +614,14 @@ watch(blockNumber, () => {
                 />
               </div>
               <div>
-                <div class="font-medium">
+                <div class="flex items-center font-medium">
                   {{
                     fNum2(swapping.tokenOutAmountInput.value, FNumFormats.token)
                   }}
                   {{ swapping.tokenOut.value.symbol }}
+                  <AtfBadge
+                    :address="swapping.tokenOut.value.address"
+                  ></AtfBadge>
                 </div>
                 <div class="text-sm text-secondary">
                   {{ tokenOutFiatValue }}

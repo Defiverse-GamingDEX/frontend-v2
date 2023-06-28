@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 
 import SelectTokenModal from '@/components/modals/SelectTokenModal/SelectTokenModal.vue';
+import AtfBadge from '@/components/badge/AtfBadge.vue';
 import useNumbers from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { isSameAddress } from '@/lib/utils';
@@ -78,8 +79,9 @@ function toggleModal(): void {
       <div class="w-8">
         <BalAsset :address="token?.address" class="shadow" />
       </div>
-      <span class="text-base font-medium">
+      <span class="flex items-center text-base font-medium">
         {{ truncateText(token?.symbol, 16, 5, 5) }}
+        <AtfBadge :address="token?.address"></AtfBadge>
       </span>
       <span v-if="Number(weight) > 0" class="ml-2 text-secondary">
         {{

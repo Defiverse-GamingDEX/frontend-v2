@@ -228,6 +228,7 @@ function mapDataTraderInfo(tokenTraderInfo, tokenInfo) {
   rs.sellableAmount = bnum(tokenTraderInfo.getSellable)
     .div(Math.pow(10, tokenInfo.decimals))
     .toNumber();
+  console.log(rs.sellableAmount, 'rs.sellableAmount');
   return rs;
 }
 function handleModalAntiTraderClose() {
@@ -257,6 +258,7 @@ onMounted(() => {
     <TokenInput
       :amount="_tokenInAmount"
       :address="_tokenInAddress"
+      :tokenInTraderInfo="tokenInTraderInfo"
       name="tokenIn"
       :excludedTokens="[veBalTokenInfo?.address]"
       :ignoreWalletBalance="swapLoading"
