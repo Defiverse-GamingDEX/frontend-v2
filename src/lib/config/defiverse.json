@@ -85,7 +85,7 @@
     }
   },
   "gauges": {
-    "type": 3,
-    "weight": 0
+    "type": 2,
+    "weight": 100
   }
 }
