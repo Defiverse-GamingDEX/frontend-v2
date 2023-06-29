@@ -2,11 +2,13 @@ import { Network } from '@defiverse/balancer-sdk';
 
 import { isMainnet, networkId } from '@/composables/useNetwork';
 
-export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 1; // 100K USD or $1 for other networks
+//export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 1; // 100K USD or $1 for other networks
+
+export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 100_000; // 100K USD or $1 for other networks
 
 // Do not display APR values greater than this amount; they are likely to be nonsensical
 // These can arise from pools with extremely low balances (e.g., completed LBPs)
-export const APR_THRESHOLD = 1_000_000;
+export const APR_THRESHOLD = 1_000_000_000;
 
 /**
  * For proportional exits from ComposableStable pools the ExactBPTInForTokensOut
