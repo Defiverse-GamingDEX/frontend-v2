@@ -151,19 +151,25 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     '0x738cb40a7cfcd770b9972f3e992811c08613f38d':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    // USDC
+    // usdc
     '0x8299f293ea0de5eda67ed75aad6e9c4a2b063837':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    // OAS
+    // oas
     '0x7914aa2d50cc4e9b5a6fb6ac58ec7095927b8897':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    // DFV
+    // dfv
     '0xa3496414a9900a9ae5960c1fec30e563213b68be':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
 
     '0x43831636c9cec4c9c9a950b588ac8ec971588754':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     '0xcc90040a931a8147cc2a4411c68348a5a3a363a0':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x2600f00fb8e1182b1bc101d27682ec7ab7b3bb30':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xd92e2e3c13c3712af12e4389ee37b67021318812':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };

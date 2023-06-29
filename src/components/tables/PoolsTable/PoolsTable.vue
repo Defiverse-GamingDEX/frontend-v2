@@ -257,6 +257,7 @@ function boostFor(pool: Pool): string {
 }
 
 function aprLabelFor(pool: Pool): string {
+  console.log('=============Hung:aprLabelFor:',pool);
   const poolAPRs = pool?.apr;
   if (!poolAPRs) return '0';
 
