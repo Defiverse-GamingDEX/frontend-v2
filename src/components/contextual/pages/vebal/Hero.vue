@@ -67,7 +67,7 @@ function navigateToGetVeBAL() {
           </BalBtn>
           <BalBtn
             tag="a"
-            href="https://gamingdex.gitbook.io/gamingdex/tokenomics/dfv"
+            href="https://docs.gaming-dex.com/token/dfv-token"
             target="_blank"
             rel="noreferrer"
             class="hero-btn"

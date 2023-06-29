@@ -48,7 +48,7 @@ const navLinks = NAV_LINKS.map(i => {
 });
 
 const ecosystemLinks = [
-  { label: t('docs'), url: 'https://gamingdex.gitbook.io/gamingdex/' },
+  { label: t('docs'), url: 'https://docs.gaming-dex.com/' },
   // { label: t('governance'), url: 'https://vote.balancer.fi/#/' },
   // { label: t('analytics'), url: 'https://dune.xyz/balancerlabs' },
   // { label: t('forum'), url: 'https://forum.balancer.fi/' },

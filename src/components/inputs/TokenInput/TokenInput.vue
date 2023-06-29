@@ -47,6 +47,7 @@ type Props = {
   tokenSelectProps?: Partial<TokenSelectProps>;
   slider?: boolean;
   sliderProps?: Partial<BalRangeInputProps>;
+  tokenInTraderInfo?: any; // for token ATF
 };
 
 /**
@@ -353,7 +354,21 @@ watch(_address, async (newAddress, oldAddress) => {
             ])
           }}
         </div>
+        <div
+          v-if="tokenInTraderInfo?.isProtectedToken"
+          class="mt-1 text-xs leading-none text-right text-gray-600 dark:text-gray-400"
+        >
+          Sellable amount:
+          <span class="font-medium">
+            {{
+              fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token)
+            }}</span
+          >
+        </div>
       </div>
     </template>
   </BalTextInput>
 </template>
+<style scoped>
+
+</style>

@@ -17,13 +17,13 @@
           })
         }}
         {{ $t('tokensLowerCase') }}
-        <BalLink :href="listUrl" external class="flex items-center">
+        <!-- <BalLink :href="listUrl" external class="flex items-center">
           <BalIcon
             name="arrow-up-right"
             size="sm"
             class="ml-1 text-gray-500 hover:text-blue-500 transition-colors"
           />
-        </BalLink>
+        </BalLink> -->
       </div>
     </div>
     <BalToggle
