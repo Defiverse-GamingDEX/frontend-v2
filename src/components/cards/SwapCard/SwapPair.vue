@@ -211,10 +211,8 @@ function checkAmountAntiTrader() {
     console.log(props.tokenInAmount, 'props.tokenInAmount');
     console.log(props.tokenOutAmount, 'props.tokenOutAmount');
     if (
-      (tokenInTraderInfo?.value?.isProtectedToken === true &&
-        props.tokenInAmount > tokenInTraderInfo?.value?.sellableAmount) ||
-      (tokenOutTraderInfo?.value?.isProtectedToken === true &&
-        props.tokenOutAmount > tokenOutTraderInfo?.value?.sellableAmount)
+      tokenInTraderInfo?.value?.isProtectedToken === true &&
+      props.tokenInAmount > tokenInTraderInfo?.value?.sellableAmount
     ) {
       modalAntiTraderWarning.value = true;
     }
