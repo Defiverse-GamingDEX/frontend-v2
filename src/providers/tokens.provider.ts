@@ -496,7 +496,7 @@ export const tokensProvider = (
           oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
         function: 'getSellable',
         abi: OracleAbi,
-        params: [tokenAddress, userAddress],
+        params: [userAddress, tokenAddress],
       });
     }
     const result = await multicaller.execute();
