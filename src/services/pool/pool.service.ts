@@ -67,16 +67,10 @@ export default class PoolService {
   public async setAPR(): Promise<AprBreakdown> {
     let apr = this.pool.apr;
 
-    console.log('=========Hung:setAPR:', this.pool);
     try {
       const sdkApr = await getBalancer().pools.apr(this.pool);
 
       console.log('=========Hung:setAPR:sdkApr:', sdkApr);
-
-      // @ts-ignore
-      const gauge = await getBalancer().pools.findGauge(this.pool.id);
-
-      console.log('=========Hung:setAPR:findGauge:', gauge);
 
       if (sdkApr) apr = sdkApr;
     } catch (error) {

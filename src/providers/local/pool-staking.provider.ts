@@ -154,9 +154,6 @@ const provider = (_poolId?: string) => {
    * this pool.
    */
   async function stake(): Promise<TransactionResponse> {
-    console.log('=================Hung poolGauges:',poolGauges)
-    console.log('=================Hung poolAddress:',poolAddress)
-    console.log('=================Hung preferentialGaugeAddress:',preferentialGaugeAddress)
     if (!poolAddress.value) throw new Error('No pool to stake.');
     if (!preferentialGaugeAddress.value) {
       throw new Error(`No preferential gauge found for this pool.`);
