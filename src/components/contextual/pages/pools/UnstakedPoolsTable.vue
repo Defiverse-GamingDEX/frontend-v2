@@ -74,6 +74,7 @@ onMounted(() => {
       </h5>
       <PoolsTable
         :key="poolsToRenderKey"
+        class="unstaked-pools"
         :isLoading="isLoadingPools"
         :data="unstakedPools"
         :shares="userPoolShares"
@@ -95,3 +96,11 @@ onMounted(() => {
     />
   </div>
 </template>
+<style>
+.unstaked-pools .content .max-w-full .overflow-hidden .table-fixed {
+  min-width: 1280px;
+}
+.unstaked-pools .content .max-w-full .overflow-auto .table-fixed {
+  min-width: 1280px;
+}
+</style> 

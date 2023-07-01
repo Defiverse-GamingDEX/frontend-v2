@@ -356,7 +356,7 @@ watch(_address, async (newAddress, oldAddress) => {
         </div>
         <div
           v-if="tokenInTraderInfo?.isProtectedToken"
-          class="mt-1 text-xs leading-none text-right text-gray-600 dark:text-gray-400"
+          class="mt-1 leading-none text-right text-gray-600 dark:text-gray-400 text-md"
         >
           Sellable amount:
           <span class="font-medium">

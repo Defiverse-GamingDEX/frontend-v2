@@ -75,6 +75,7 @@ async function handleUnstakeSuccess() {
       </h5>
       <PoolsTable
         :key="poolsToRenderKey"
+        class="staked-pools"
         :data="stakedPools"
         :shares="stakedShares"
         :boosts="poolBoostsMap"
@@ -99,3 +100,11 @@ async function handleUnstakeSuccess() {
     />
   </div>
 </template>
+<style>
+.staked-pools .content .max-w-full .overflow-hidden .table-fixed {
+  min-width: 1280px;
+}
+.staked-pools .content .max-w-full .overflow-auto .table-fixed {
+  min-width: 1280px;
+}
+</style> 
