@@ -51,15 +51,18 @@ const customInputClasses = computed(() => ({
  * METHODS
  */
 function onFixedInput(val: string): void {
+  console.log(val, 'val=>onFixedInput');
   state.isCustomInput = false;
   state.customSlippage = '';
   setSlippage(val);
 }
 
-function onCustomInput(val: string): void {
+function onCustomInput(event) {
   state.isCustomInput = true;
-  val = bnum(val).div(100).toString();
-  setSlippage(val);
+  console.log(event, 'event=>onCustomInput');
+  let value = event.target.value;
+  value = bnum(value).div(100).toString();
+  setSlippage(value);
 }
 
 /**
@@ -95,7 +98,7 @@ watch(
         type="number"
         step="any"
         min="0"
-        @update:modelValue="onCustomInput"
+        @input="onCustomInput"
       />
       <div class="px-2">%</div>
     </div>

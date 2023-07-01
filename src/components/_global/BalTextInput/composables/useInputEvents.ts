@@ -28,6 +28,9 @@ export default function useInputEvents(props, emit, validate) {
   function onInput(event: Event): void {
     if (event.target) {
       let value = (event.target as HTMLInputElement).value;
+      if (props.type === 'number-dot') {
+        value = value.replace(/[^0-9.]/g, '');
+      }
       if (props.type === 'number') {
         const overflowProtectedVal = overflowProtected(
           value,
@@ -36,6 +39,7 @@ export default function useInputEvents(props, emit, validate) {
         if (overflowProtectedVal !== value) value = overflowProtectedVal;
       }
       isActive.value = true;
+
       emit('input', value);
       emit('update:modelValue', value);
     }

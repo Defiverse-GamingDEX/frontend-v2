@@ -341,6 +341,8 @@ function getVolumeData(
 }
 
 const chartData = computed((): PoolChartData => {
+  console.log(currentPeriod.value.days, 'currentPeriod.value.days');
+  console.log(snapshotValues.value.length, 'snapshotValues.value.length');
   const periodSnapshots =
     currentPeriod.value.days === snapshotValues.value.length
       ? snapshotValues.value
@@ -348,7 +350,7 @@ const chartData = computed((): PoolChartData => {
   const isAllTimeSelected =
     periodSnapshots.length === snapshotValues.value.length;
   const pariodLastSnapshotIdx = periodSnapshots.length - 1;
-
+  console.log(periodSnapshots, 'periodSnapshot.length');
   if (activeTab.value === PoolChartTab.TVL) {
     return getTVLData(periodSnapshots);
   }
@@ -453,7 +455,7 @@ function addLaggingTimestamps() {
           {{ isFocusedOnChart ? currentChartValue : defaultChartData.value }}
         </p>
         <div
-          class="text-sm font-medium text-white"
+          class="text-sm font-medium"
           :class="{ 'text-pink-500': isFocusedOnChart }"
         >
           <p>
