@@ -11,6 +11,7 @@ import useUrls from '@/composables/useUrls';
 import { TokenInfoMap, TokenList } from '@/types/TokenList';
 import { useMagicKeys } from '@vueuse/core';
 import { configService } from '@/services/config/config.service';
+import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 
 interface Props {
   open?: boolean;
@@ -89,7 +90,7 @@ const tokenLists = computed<Record<string, TokenList>>(() => {
 });
 
 const tokens = computed(() => {
-  const tokensWithValues = Object.values(state.results).map(token => {
+  let tokensWithValues = Object.values(state.results).map(token => {
     const balance = balanceFor(token.address);
     const price = priceFor(token.address);
     const value = Number(balance) * price;
@@ -100,7 +101,7 @@ const tokens = computed(() => {
       value,
     };
   });
-
+  tokensWithValues = filterNativeToken(tokensWithValues);
   if (props.ignoreBalances) return tokensWithValues;
   else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
 });
@@ -112,7 +113,6 @@ const excludedTokens = computed(() => [
 ]);
 
 const focussedTokenAddress = computed((): string => {
-  console.log(state.results, state.focussedToken);
   const key = Object.keys(tokens.value)[state.focussedToken];
   return tokens.value[key].address;
 });
@@ -148,6 +148,19 @@ function toggleSelectTokenList(): void {
   state.query = '';
 }
 
+function filterNativeToken(tokens) {
+  let rs = [];
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
+    let tokenNative = defiverseJson.tokens.find(
+      item => item.address?.toUpperCase() === token?.address.toUpperCase()
+    );
+    if (tokenNative) {
+      rs.push(token);
+    }
+  }
+  return rs;
+}
 /**
  * WATCHERS
  */

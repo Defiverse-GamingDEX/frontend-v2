@@ -12,7 +12,7 @@ import { usePool } from '@/composables/usePool';
 import useMyWalletTokens from '@/composables/useMyWalletTokens';
 import { useSwapState } from '@/composables/swap/useSwapState';
 import { includesAddress } from '@/lib/utils';
-
+import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 type Props = {
   excludedTokens?: string[];
   // If pool prop is provided, Tokens are grouped into:
@@ -64,6 +64,9 @@ const noNativeCurrencyMessageEthereum = computed(() => {
 const noTokensMessage = computed(() => {
   return t('noTokensInWallet', [networkName]);
 });
+const tokensWithBalanceFilter = computed(() => {
+  return filterNativeToken(tokensWithBalance.value);
+});
 
 const { hasNativeBalance, nativeBalance, nativeCurrency } = useNativeBalance();
 
@@ -79,10 +82,25 @@ function handleAssetClick(tokenAddress) {
     return;
   }
 }
+function filterNativeToken(tokens) {
+  let rs = [];
+  for (let i = 0; i < tokens?.length; i++) {
+    let token = tokens[i];
+    let tokenNative = defiverseJson.tokens.find(
+      item => item.address?.toUpperCase() === token?.toUpperCase()
+    );
+    if (tokenNative) {
+      rs.push(tokenNative.address);
+    }
+  }
+  return rs;
+}
 
 const emit = defineEmits<{
   (e: 'click:asset', tokenAddress: string, isPoolToken: boolean): void;
 }>();
+
+onMounted(() => {});
 </script>
 
 <template>
@@ -99,9 +117,7 @@ const emit = defineEmits<{
         v-if="!upToLargeBreakpoint"
         class="flex lg:justify-between p-3 pb-0 lg:pb-3 lg:border-b dark:border-gray-900"
       >
-        <h6>
-          {{ $t('myWallet2') }}
-        </h6>
+        <h6>{{ $t('myWallet2') }}</h6>
         <div
           v-if="!isLoadingBalances"
           class="ml-1 lg:ml-0 font-semibold lg:font-normal"
@@ -183,14 +199,14 @@ const emit = defineEmits<{
               :width="275"
               wrap
               :size="30"
-              :addresses="tokensWithBalance"
+              :addresses="tokensWithBalanceFilter"
               :maxAssetsPerLine="7"
               @click="handleAssetClick"
             />
           </div>
 
           <p
-            v-if="tokensWithBalance.length === 0"
+            v-if="tokensWithBalanceFilter.length === 0"
             class="text-sm opacity-0 text-secondary fade-in"
           >
             {{ noTokensMessage }}.
