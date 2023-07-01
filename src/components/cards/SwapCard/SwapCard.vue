@@ -22,6 +22,7 @@
         :effectivePriceMessage="swapping.effectivePriceMessage"
         class="mb-4"
         @amount-change="swapping.handleAmountChange"
+        @modal-anti-trader-warning-change="updateModalAntiTraderWarning"
       />
       <BalAlert
         v-if="error"
@@ -55,7 +56,7 @@
       <BalBtn
         v-else
         :label="$t('preview')"
-        :disabled="swapDisabled"
+        :disabled="swapDisabled || modalAntiTraderWarning"
         classCustom="pink-white-shadow"
         block
         @click.prevent="handlePreviewButton"
@@ -215,6 +216,8 @@ export default defineComponent({
     const dismissedErrors = ref({
       highPriceImpact: false,
     });
+    const modalAntiTraderWarning = ref<boolean>(false);
+
     const alwaysShowRoutes = lsGet('alwaysShowRoutes', false);
     const swapCardShadow = computed(() => {
       switch (bp.value) {
@@ -246,8 +249,15 @@ export default defineComponent({
         !dismissedErrors.value.highPriceImpact
     );
     const swapDisabled = computed(() => {
+      console.log(tokenInAmount.value, 'tokenInAmount.value');
+      console.log(tokenOutAmount.value, 'tokenOutAmount.value');
       const hasMismatchedNetwork = isMismatchedNetwork.value;
-      const hasAmountsError = !tokenInAmount.value || !tokenOutAmount.value;
+      const hasAmountsError =
+        !tokenInAmount.value ||
+        !tokenOutAmount.value ||
+        Number(tokenInAmount.value) === 0 ||
+        Number(tokenOutAmount.value) === 0;
+      console.log(hasAmountsError, 'hasAmountsError');
       const hasCowswapErrors =
         swapping.isCowswapSwap.value &&
         swapping.cowswap.hasValidationError.value;
@@ -401,6 +411,9 @@ export default defineComponent({
       swapping.resetSubmissionError();
       modalSwapPreviewIsOpen.value = false;
     }
+    function updateModalAntiTraderWarning(payload) {
+      modalAntiTraderWarning.value = payload;
+    }
     // INIT
     onBeforeMount(() => {
       populateInitialTokens();
@@ -420,6 +433,7 @@ export default defineComponent({
       alwaysShowRoutes,
       exactIn,
       swapping,
+      modalAntiTraderWarning,
       // computed
       pools,
       title,
@@ -435,6 +449,7 @@ export default defineComponent({
       swap,
       switchToWETH,
       handleErrorButtonClick,
+      updateModalAntiTraderWarning,
     };
   },
 });

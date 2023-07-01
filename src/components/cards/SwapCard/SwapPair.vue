@@ -208,14 +208,15 @@ async function handleOutputTokenChange(newTokenOut: string) {
 function checkAmountAntiTrader() {
   setTimeout(() => {
     // check to show modal
-    console.log(props.tokenInAmount, 'props.tokenInAmount');
-    console.log(props.tokenOutAmount, 'props.tokenOutAmount');
     if (
       tokenInTraderInfo?.value?.isProtectedToken === true &&
       props.tokenInAmount > tokenInTraderInfo?.value?.sellableAmount
     ) {
       modalAntiTraderWarning.value = true;
+    } else {
+      modalAntiTraderWarning.value = false;
     }
+    emit('modalAntiTraderWarningChange', modalAntiTraderWarning.value);
   }, 1000);
 }
 function mapDataTraderInfo(tokenTraderInfo, tokenInfo) {

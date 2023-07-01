@@ -45,7 +45,7 @@ function closeModal() {
         You've hit the Anti Trader Field's limit. You are unable to make a token
         swap.
       </div>
-      <div
+      <!-- <div
         v-if="
           tokenInTraderInfo?.isProtectedToken &&
           tokenInAmount > tokenInTraderInfo?.sellableAmount
@@ -88,7 +88,7 @@ function closeModal() {
           Anti trader limit:
           {{ fNum2(tokenOutTraderInfo?.sellableAmount, FNumFormats.token) }}
         </div>
-      </div>
+      </div> -->
       <div class="mt-4 anti-modal-btn-actions">
         <button
           :class="[
@@ -111,6 +111,7 @@ function closeModal() {
 }
 .anti-modal-description {
   margin-bottom: 24px;
+  text-align: center;
 }
 .anti-modal-btn-actions button {
   color: #fff;

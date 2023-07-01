@@ -13,7 +13,7 @@ const { getReturnRoute } = useReturnRoute();
     </div>
     <router-view v-slot="{ Component }" :key="$route.path">
       <transition appear name="appear">
-        <component :is="Component"  />
+        <component :is="Component" />
       </transition>
     </router-view>
   </div>
@@ -23,7 +23,7 @@ const { getReturnRoute } = useReturnRoute();
 .layout-header {
   @apply h-16;
   @apply px-4 lg:px-6;
-  @apply flex items-center justify-between;
+  @apply flex items-center;
 }
 .wp-main-content {
   min-height: 100vh;
