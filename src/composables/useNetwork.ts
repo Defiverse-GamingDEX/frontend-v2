@@ -34,6 +34,7 @@ export const networkLabelMap = {
   [Network.GOERLI]: 'Goerli',
   [Network.OPTIMISM]: 'Optimism',
   [Network.DEFIVERSE]: 'defiverse',
+  [Network.DEFIVERSE_TESTNET]: 'defiverse-testnet',
 };
 
 /**
@@ -48,6 +49,9 @@ export const isArbitrum = computed(() => networkId.value === Network.ARBITRUM);
 export const isGoerli = computed(() => networkId.value === Network.GOERLI);
 export const isDefiverse = computed(
   () => networkId.value === Network.DEFIVERSE
+);
+export const isDefiverseTestnet = computed(
+  () => networkId.value === Network.DEFIVERSE_TESTNET
 );
 
 export const isL2 = computed(() => isPolygon.value || isArbitrum.value);
@@ -69,6 +73,8 @@ export function networkFor(key: string | number): Network {
       return Network.ARBITRUM;
     case '16116':
       return Network.DEFIVERSE;
+    case '17117':
+      return Network.DEFIVERSE_TESTNET;
     default:
       throw new Error('Network not supported');
   }

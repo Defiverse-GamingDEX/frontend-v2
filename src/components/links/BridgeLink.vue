@@ -15,7 +15,9 @@ const bridgeUrl = computed((): string => {
       return 'https://bridge.arbitrum.io/';
     case Network.DEFIVERSE:
       return 'https://www.portalbridge.com/#/transfer'; // from https://docs.oasis.io/general/manage-tokens/how-to-transfer-eth-erc20-to-emerald-paratime/  
-    default:
+    case Network.DEFIVERSE_TESTNET:
+        return 'https://www.portalbridge.com/#/transfer';
+      default:
       return '';
   }
 });

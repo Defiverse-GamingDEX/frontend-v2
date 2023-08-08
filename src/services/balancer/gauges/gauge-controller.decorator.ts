@@ -182,6 +182,8 @@ export class GaugeControllerDecorator {
       return Network.GOERLI;
     } else if (this.config.env.NETWORK === Network.DEFIVERSE) {
       return Network.DEFIVERSE;
+    } else if (this.config.env.NETWORK === Network.DEFIVERSE_TESTNET) {
+      return Network.DEFIVERSE_TESTNET;
     } else {
       return Network.MAINNET;
     }

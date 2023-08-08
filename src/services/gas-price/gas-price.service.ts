@@ -12,7 +12,7 @@ import { GasPrice, GasSettings } from './providers/types';
 import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers';
 import ArbitrumProvider from './providers/arbitrum.provider';
 import DefiverseProvider from './providers/defiverse.provider';
-
+import DefiverseTestnetProvider from './providers/defiverse-testnet.provider';
 const USE_BLOCKNATIVE_GAS_PLATFORM =
   import.meta.env.VITE_USE_BLOCKNATIVE_GAS_PLATFORM === 'false' ? false : true;
 export const GAS_LIMIT_BUFFER = 0.1;
@@ -23,7 +23,8 @@ export class GasPriceService {
     private readonly blocknativeProvider = new BlocknativeProvider(),
     private readonly polygonProvider = new PolygonProvider(),
     private readonly arbitrumProvider = new ArbitrumProvider(),
-    private readonly defiverseProvider = new DefiverseProvider()
+    private readonly defiverseProvider = new DefiverseProvider(),
+    private readonly defiverseTestnetProvider = new DefiverseTestnetProvider()
   ) {}
 
   public async getGasPrice(): Promise<GasPrice | null> {
@@ -36,6 +37,8 @@ export class GasPriceService {
         return await this.arbitrumProvider.getGasPrice();
       case '16116':
         return await this.defiverseProvider.getGasPrice();
+      case '17117':
+        return await this.defiverseTestnetProvider.getGasPrice();
       default:
         return null;
     }

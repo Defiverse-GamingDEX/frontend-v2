@@ -174,12 +174,54 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
   },
 };
 
+export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
+  Popular: {
+    Symbols: ['DFV', 'BAL', 'WETH', 'DAI', 'USDC', 'USDT'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980', // need CONFIRM
+    WETH: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980',
+    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    DFV: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+  },
+  PriceChainMap: {
+    '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x62400c6b2685599d1c1308a72c4cb2f6b86b4867':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x738cb40a7cfcd770b9972f3e992811c08613f38d':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    // usdc
+    '0x8299f293ea0de5eda67ed75aad6e9c4a2b063837':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    // oas
+    '0x7914aa2d50cc4e9b5a6fb6ac58ec7095927b8897':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    // dfv
+    '0xa3496414a9900a9ae5960c1fec30e563213b68be':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x43831636c9cec4c9c9a950b588ac8ec971588754':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xcc90040a931a8147cc2a4411c68348a5a3a363a0':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x2600f00fb8e1182b1bc101d27682ec7ab7b3bb30':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xd92e2e3c13c3712af12e4389ee37b67021318812':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+  },
+};
+
 const TOKENS_MAP = {
   [Network.GOERLI]: TOKENS_GOERLI,
   [Network.MAINNET]: TOKENS_MAINNET,
   [Network.POLYGON]: TOKENS_POLYGON,
   [Network.ARBITRUM]: TOKENS_ARBITRUM,
   [Network.DEFIVERSE]: TOKENS_DEFIVERSE,
+  [Network.DEFIVERSE_TESTNET]: TOKENS_DEFIVERSE_TESTNET,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]

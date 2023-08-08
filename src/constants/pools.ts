@@ -4,7 +4,9 @@ import { isMainnet, networkId } from '@/composables/useNetwork';
 
 //export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 1; // 100K USD or $1 for other networks
 
-export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 100_000; // 100K USD or $1 for other networks
+export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value
+  ? 100_000
+  : 100_000; // 100K USD or $1 for other networks
 
 // Do not display APR values greater than this amount; they are likely to be nonsensical
 // These can arise from pools with extremely low balances (e.g., completed LBPs)
@@ -750,12 +752,73 @@ const POOLS_DEFIVERSE: Pools = {
   DisabledJoins: [],
 };
 
+const POOLS_DEFIVERSE_TESTNET: Pools = {
+  IdsMap: {
+    // staBAL:
+    //   '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
+    // bbAaveUSD: {
+    //   v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+    //   v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
+    // },
+    veBAL: '0x8ea93dfbe0c02aafdc8a9e6bfdd7efacdac8cca6000200000000000000000000',
+  },
+  Pagination: {
+    PerPage: 10,
+    PerPool: 10,
+    PerPoolInitial: 5,
+  },
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
+  ZeroAddress: '0x0000000000000000000000000000000000000000',
+  DynamicFees: {
+    Gauntlet: [],
+  },
+  BlockList: [''],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'EulerLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
+  Stable: {
+    AllowList: [
+      // '0xfedb19ec000d38d92af4b21436870f115db22725000000000000000000000010', // bb-ag-usd
+    ],
+  },
+  Investment: {
+    AllowList: [
+      '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+    ],
+  },
+  Factories: {
+    '0x42dd917a3c8a14a766712fabe7b048f0306246f6': 'composableStablePool', // ComposableStable V3
+    '0x8c96ab92be9a17f6db66bb254c31dd0c263ea81a': 'weightedPool', // WeightedPool V3
+  },
+  Stakable: {
+    AllowList: [
+      '0x402e0638b1d990479a2139709f984cd1ae8c6daf000200000000000000000001',
+      '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+      '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8000200000000000000000003',
+      '0x33b2ae985ecbc95c83b8cfa2fe2f6b8042763151000200000000000000000004',
+      '0xa7b4bee4364a9c161d985ab5a4e17349c868b261000200000000000000000005',
+    ],
+  },
+  Metadata: {},
+  DisabledJoins: [],
+};
+
 const POOLS_MAP = {
   [Network.GOERLI]: POOLS_GOERLI,
   [Network.MAINNET]: POOLS_MAINNET,
   [Network.POLYGON]: POOLS_POLYGON,
   [Network.ARBITRUM]: POOLS_ARBITRUM,
   [Network.DEFIVERSE]: POOLS_DEFIVERSE,
+  [Network.DEFIVERSE_TESTNET]: POOLS_DEFIVERSE_TESTNET,
 };
 
 export const POOLS: Pools = POOLS_MAP[networkId.value]

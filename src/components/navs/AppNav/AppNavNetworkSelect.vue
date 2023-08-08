@@ -46,6 +46,12 @@ const networks = ref([
   //   networkSlug: 'arbitrum',
   //   key: '42161',
   // },
+  {
+    id: 'defiverse',
+    name: 'Defiverse',
+    networkSlug: 'defiverse',
+    key: '16116',
+  },
 ]);
 
 const networksDev = ref([
@@ -56,10 +62,10 @@ const networksDev = ref([
   //   key: '5',
   // },
   {
-    id: 'defiverse',
-    name: 'Defiverse',
-    networkSlug: 'defiverse',
-    key: '16116',
+    id: 'defiverse-testnet',
+    name: 'Defiverse-Testnet',
+    networkSlug: 'defiverse-testnet',
+    key: '17117',
   },
 ]);
 
@@ -152,11 +158,11 @@ function isActive(network: NetworkOption): boolean {
           <span class="ml-2">
             {{ activeNetwork.name }}
           </span>
-          <!-- <BalIcon name="chevron-down" size="sm" class="ml-2" /> -->
+          <BalIcon name="chevron-down" size="sm" class="ml-2" />
         </template>
       </BalBtn>
     </template>
-    <!-- <div class="flex overflow-hidden flex-col w-44 rounded-lg">
+    <div class="flex overflow-hidden flex-col w-44 rounded-lg">
       <div
         class="py-2 px-3 text-sm font-medium text-gray-500 whitespace-nowrap bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-900"
       >
@@ -184,7 +190,7 @@ function isActive(network: NetworkOption): boolean {
           class="text-blue-500 dark:text-blue-400"
         />
       </a>
-    </div> -->
+    </div>
   </BalPopover>
 </template>
 

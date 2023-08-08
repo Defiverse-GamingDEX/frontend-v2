@@ -1,7 +1,12 @@
 import { differenceInSeconds, formatDistanceToNow, sub } from 'date-fns';
 import { computed, ref } from 'vue';
 
-import { isGoerli, isDefiverse, isMainnet } from '@/composables/useNetwork';
+import {
+  isGoerli,
+  isDefiverse,
+  isDefiverseTestnet,
+  isMainnet,
+} from '@/composables/useNetwork';
 import { POOLS } from '@/constants/pools';
 import { bnum } from '@/lib/utils';
 
@@ -19,7 +24,11 @@ const showRedirectModal = ref(false);
  * COMPUTED
  */
 export const isVeBalSupported = computed(
-  () => isMainnet.value || isGoerli.value || isDefiverse.value
+  () =>
+    isMainnet.value ||
+    isGoerli.value ||
+    isDefiverse.value ||
+    isDefiverseTestnet.value
 );
 
 /**

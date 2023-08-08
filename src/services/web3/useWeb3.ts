@@ -75,7 +75,12 @@ export default function useWeb3() {
   const isArbitrum = computed(
     () => appNetworkConfig.chainId === Network.ARBITRUM
   );
-  const isDefiverse = computed(() => appNetworkConfig.chainId === Network.DEFIVERSE);
+  const isDefiverse = computed(
+    () => appNetworkConfig.chainId === Network.DEFIVERSE
+  );
+  const isDefiverseTestnet = computed(
+    () => appNetworkConfig.chainId === Network.DEFIVERSE_TESTNET
+  );
   const isEIP1559SupportedNetwork = computed(
     () => appNetworkConfig.supportsEIP1559
   );
@@ -159,6 +164,7 @@ export default function useWeb3() {
     isPolygon,
     isArbitrum,
     isDefiverse,
+    isDefiverseTestnet,
     isEIP1559SupportedNetwork,
     isWalletConnecting,
     isBlocked,

@@ -80,6 +80,11 @@ const networks: NetworkMetadata[] = [
     name: 'Defiverse',
     key: Network.DEFIVERSE,
   },
+  {
+    id: 'defiverse-testnet',
+    name: 'Defiverse-Testnet',
+    key: Network.DEFIVERSE_TESTNET,
+  },
 ];
 
 /**

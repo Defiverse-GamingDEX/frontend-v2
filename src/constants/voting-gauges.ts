@@ -30,6 +30,10 @@ export const DEFIVERSE_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
 ).filter(gauge => gauge.network === Network.DEFIVERSE);
 
+export const DEFIVERSE_TESTNET_VOTING_GAUGES: VotingGauge[] = (
+  ALL_VOTING_GAUGES as VotingGauge[]
+).filter(gauge => gauge.network === Network.DEFIVERSE_TESTNET);
+
 export const MAINNET_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
 ).filter(gauge => gauge.network !== Network.GOERLI);

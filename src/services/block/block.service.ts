@@ -2,7 +2,7 @@ import { BlockNumberResponse } from './types';
 import { blockSubgraphService } from './subgraph/block-subgraph.service';
 import { getSecondsSince, oneHourInSecs } from '@/composables/useTime';
 import { bnum } from '@/lib/utils';
-import { isDefiverse } from '@/composables/useNetwork';
+import { isDefiverse, isDefiverseTestnet } from '@/composables/useNetwork';
 import { rpcProviderService } from '../rpc-provider/rpc-provider.service';
 import { configService } from '../config/config.service';
 export default class BlockService {
@@ -15,7 +15,8 @@ export default class BlockService {
     timestamp: string,
     useRange = true
   ): Promise<number> {
-    if (isDefiverse.value) return this.fetchBlockByApprox(timestamp);
+    if (isDefiverse.value || isDefiverseTestnet.value)
+      return this.fetchBlockByApprox(timestamp);
     return this.fetchBlockByTimeWithGraph(timestamp, useRange);
   }
 
