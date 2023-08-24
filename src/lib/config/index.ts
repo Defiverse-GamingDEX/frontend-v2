@@ -2,7 +2,7 @@ import { Network } from '@defiverse/balancer-sdk';
 
 import arbitrum from './arbitrum.json';
 import defiverse from './defiverse.json';
-import defiverse_testnet from './defiverse-testnet.json';
+import defiverseTestnet from './defiverse-testnet.json';
 import docker from './docker.json';
 import goerli from './goerli.json';
 import homestead from './homestead.json';
@@ -100,7 +100,7 @@ const config: Record<Network | number, Config> = {
   [Network.ARBITRUM]: arbitrum,
   [Network.OPTIMISM]: optimism,
   [Network.DEFIVERSE]: defiverse,
-  [Network.DEFIVERSE_TESTNET]: defiverse_testnet,
+  [Network.DEFIVERSE_TESTNET]: defiverseTestnet,
   12345: test,
   // @ts-ignore
   17: docker,

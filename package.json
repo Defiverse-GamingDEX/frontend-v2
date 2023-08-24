@@ -2,7 +2,6 @@
   "name": "@balancer-labs/frontend-v2",
   "version": "1.89.1",
   "engines": {
-    "node": "=16",
     "npm": ">=8"
   },
   "scripts": {
@@ -28,13 +27,13 @@
     "stylelint:fix": "npm run stylelint -- --fix",
     "tailwind:build": "tailwind-config-viewer export ./tailwind-static",
     "tailwind:view": "tailwind-config-viewer -o",
-    "generate:tokenlists": "NODE_ENV=development npx vite-node --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk ./src/lib/scripts/tokenlists.generator.ts",
-    "generate:voting-gauges": "NODE_ENV=development npx vite-node --options.deps.inline=date-fns --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk ./src/lib/scripts/voting-gauge.generator.ts",
+    "generate:tokenlists": "npx vite-node --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk ./src/lib/scripts/tokenlists.generator.ts",
+    "generate:voting-gauges": "npx vite-node --options.deps.inline=date-fns --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk ./src/lib/scripts/voting-gauge.generator.ts",
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {
     "@aave/protocol-js": "^4.3.0",
-    "@defiverse/balancer-sdk": "0.1.102",
+    "@defiverse/balancer-sdk": "0.1.105",
     "@balancer-labs/assets": "github:balancer-labs/assets#master",
     "@balancer-labs/sor": "4.1.1-beta.1",
     "@balancer-labs/typechain": "1.0.0",

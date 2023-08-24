@@ -15,6 +15,8 @@ const network = ((): Network => {
       return Network.ARBITRUM;
     case '16116':
       return Network.DEFIVERSE;
+    case '17117':
+      return Network.DEFIVERSE_TESTNET;
     default:
       return Network.MAINNET;
   }

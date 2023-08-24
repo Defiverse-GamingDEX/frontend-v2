@@ -152,12 +152,18 @@ function filterNativeToken(tokens) {
   let rs = [];
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
-    let tokenNative = defiverseJson.tokens.find(
-      item => item.address?.toUpperCase() === token?.address.toUpperCase()
-    );
-    if (tokenNative) {
-      rs.push(token);
-    }
+
+    //
+    // TODO: Need to load token list by chain
+
+    // let tokenNative = defiverseJson.tokens.find(
+    //   item => item.address?.toUpperCase() === token?.address.toUpperCase()
+    // );
+    // if (tokenNative) {
+    //   rs.push(token);
+    // }
+
+    rs.push(token);
   }
   return rs;
 }
