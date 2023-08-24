@@ -204,13 +204,16 @@ export const tokensProvider = (
       allowanceQuerySuccess.value
   );
 
+  //
+  // 2023-08-24 Hung: Need to review this code
+  //
   const dynamicDataLoading = computed(() => {
     const rs = //priceQueryLoading.value || // TODO NEED PRICE
       //priceQueryRefetching.value || // TODO NEED PRICE
       balanceQueryLoading.value ||
-      balanceQueryRefetching.value || // TODO missing div redender issue
-      allowanceQueryLoading.value ||
-      allowanceQueryRefetching.value; //  TODO missing div redender issue
+      // balanceQueryRefetching.value || // TODO missing div redender issue
+      allowanceQueryLoading.value;
+    // allowanceQueryRefetching.value; //  TODO missing div redender issue
     return rs;
   });
   /**
