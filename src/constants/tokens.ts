@@ -176,41 +176,30 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
 
 export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
   Popular: {
-    Symbols: ['DFV', 'BAL', 'WETH', 'DAI', 'USDC', 'USDT'],
+    Symbols: ['DFV', 'BAL', 'WETH'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    wNativeAsset: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980', // need CONFIRM
-    WETH: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980',
-    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
-    DFV: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    wNativeAsset: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99', // need CONFIRM
+    WETH: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
+    BAL: '0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E',
+    DFV: '0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E',
   },
   PriceChainMap: {
-    '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980':
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    '0x62400c6b2685599d1c1308a72c4cb2f6b86b4867':
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    '0x738cb40a7cfcd770b9972f3e992811c08613f38d':
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    // usdc
-    '0x8299f293ea0de5eda67ed75aad6e9c4a2b063837':
+    // woas
+    '0x6b382742b07aabba58c38d792b5d7cbaab246e99':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     // oas
-    '0x7914aa2d50cc4e9b5a6fb6ac58ec7095927b8897':
+    '0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     // dfv
-    '0xa3496414a9900a9ae5960c1fec30e563213b68be':
+    '0x54ca0c47dd122e6189c7ed11a6258b8a700a5a4e':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-
-    '0x43831636c9cec4c9c9a950b588ac8ec971588754':
+    // gma
+    '0x167f2a85d015c6c7a06ca65230ffaf22d1dcea9f':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    '0xcc90040a931a8147cc2a4411c68348a5a3a363a0':
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    '0x2600f00fb8e1182b1bc101d27682ec7ab7b3bb30':
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8':
-      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    '0xd92e2e3c13c3712af12e4389ee37b67021318812':
+    // gmb
+    '0xbdfd38435cf396083cfbf913a8a49284de70bf6b':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };

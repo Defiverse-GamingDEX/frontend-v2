@@ -1,4 +1,6 @@
 import defiverseJson from './defiverse.listed.tokenlist.json';
+import defiverseTestnetJson from './defiverse.testnet.listed.tokenlist.json';
+
 export interface TokenListMap {
   Balancer: {
     Default: string;
@@ -72,8 +74,8 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
   },
   '17117': {
     Balancer: {
-      Default: JSON.stringify(defiverseJson),
-      Vetted: JSON.stringify(defiverseJson),
+      Default: JSON.stringify(defiverseTestnetJson),
+      Vetted: JSON.stringify(defiverseTestnetJson),
     },
     External: [],
   },
