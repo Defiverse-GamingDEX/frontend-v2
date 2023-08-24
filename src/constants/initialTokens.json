@@ -22,5 +22,9 @@
   "16116": {
     "input": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     "output": "0x8299f293ea0de5eda67ed75aad6e9c4a2b063837"
+  },
+  "17117": {
+    "input": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "output": "0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E"
   }
 }
