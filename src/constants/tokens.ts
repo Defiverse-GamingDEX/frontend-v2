@@ -201,6 +201,10 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
     // gmb
     '0xbdfd38435cf396083cfbf913a8a49284de70bf6b':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    // veDFV
+    '0xd6e13e4670864b084f589927453461303f8286b9':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };
 

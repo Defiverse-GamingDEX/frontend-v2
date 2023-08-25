@@ -18,12 +18,12 @@
       "logoURI": ""
     },
     {
-      "address": "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000",
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "chainId": 17117,
       "name": "OAS",
       "symbol": "OAS",
       "decimals": 18,
-      "logoURI": ""
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
     },
     {
       "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",

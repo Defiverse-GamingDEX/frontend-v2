@@ -261,12 +261,12 @@ async function handleTransaction(
           <div
             :class="{
               'flex grow justify-between items-center':
-                currentAction.isSignAction,
+                currentAction?.isSignAction,
             }"
           >
-            <img v-if="currentAction.isSignAction" :src="signature" />
+            <img v-if="currentAction?.isSignAction" :src="signature" />
             {{ currentAction?.label }}
-            <div v-if="currentAction.isSignAction" class="w-8"></div>
+            <div v-if="currentAction?.isSignAction" class="w-8"></div>
           </div>
         </BalBtn>
       </BalStack>
