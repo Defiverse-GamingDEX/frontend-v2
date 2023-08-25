@@ -4045,5 +4045,63 @@
       "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
       "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
     }
+  },
+  {
+    "address": "0x4EaD934F849ba4a35506917337B60d70e83Fcc51",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.02",
+    "addedTimestamp": 1692923354,
+    "pool": {
+      "id": "0xe11ca3320a633250334baa258bc94f7619aa8ce1000200000000000000000002",
+      "address": "0xe11CA3320A633250334bAa258bc94F7619aa8Ce1",
+      "poolType": "Weighted",
+      "symbol": "70GMA-30DFV",
+      "tokens": [
+        {
+          "address": "0x167F2A85D015C6C7a06CA65230FFaf22d1dceA9f",
+          "weight": "0.7",
+          "symbol": "GMA"
+        },
+        {
+          "address": "0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E",
+          "weight": "0.3",
+          "symbol": "DFV"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
+      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+    }
+  },
+  {
+    "address": "0x90f0f2241d1ac4F7C92CBfff1C8D71A5F6d9105e",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.02",
+    "addedTimestamp": 1692923354,
+    "pool": {
+      "id": "0x1c5c0bc1833e78d0e73ffedc319eae2e00e3a614000200000000000000000000",
+      "address": "0x1c5c0Bc1833e78D0E73ffedc319EAE2E00E3a614",
+      "poolType": "Weighted",
+      "symbol": "50GMA-50GMB",
+      "tokens": [
+        {
+          "address": "0x167F2A85D015C6C7a06CA65230FFaf22d1dceA9f",
+          "weight": "0.5",
+          "symbol": "GMA"
+        },
+        {
+          "address": "0xbDfd38435Cf396083CfBf913a8A49284DE70BF6b",
+          "weight": "0.5",
+          "symbol": "GMB"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
+      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+    }
   }
 ]
