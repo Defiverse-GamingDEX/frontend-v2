@@ -12,7 +12,9 @@ import { usePool } from '@/composables/usePool';
 import useMyWalletTokens from '@/composables/useMyWalletTokens';
 import { useSwapState } from '@/composables/swap/useSwapState';
 import { includesAddress } from '@/lib/utils';
-import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
+
+import tokensUtils from '@/lib/utils/tokens';
+
 type Props = {
   excludedTokens?: string[];
   // If pool prop is provided, Tokens are grouped into:
@@ -88,16 +90,18 @@ function filterNativeToken(tokens) {
     let token = tokens[i];
     //
     // TODO: Need to load token list by chain
+    let tokensByChain = tokensUtils.getTokenListFromNetworkId(
+      configService?.network.chainId
+    );
+    let tokenNative = tokensByChain.find(
+      item => item.address?.toUpperCase() === token?.toUpperCase()
+    );
 
-    // let tokenNative = defiverseJson.tokens.find(
-    //   item => item.address?.toUpperCase() === token?.toUpperCase()
-    // );
-
-    // if (tokenNative) {
-    //   rs.push(tokenNative.address);
-    // }
-    rs.push(token);
+    if (tokenNative) {
+      rs.push(tokenNative.address);
+    }
   }
+  console.log(rs, 'rs=>filterNativeToken');
   return rs;
 }
 

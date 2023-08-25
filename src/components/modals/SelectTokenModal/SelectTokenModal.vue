@@ -11,7 +11,8 @@ import useUrls from '@/composables/useUrls';
 import { TokenInfoMap, TokenList } from '@/types/TokenList';
 import { useMagicKeys } from '@vueuse/core';
 import { configService } from '@/services/config/config.service';
-import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
+
+import tokensUtils from '@/lib/utils/tokens';
 
 interface Props {
   open?: boolean;
@@ -155,16 +156,17 @@ function filterNativeToken(tokens) {
 
     //
     // TODO: Need to load token list by chain
-
-    // let tokenNative = defiverseJson.tokens.find(
-    //   item => item.address?.toUpperCase() === token?.address.toUpperCase()
-    // );
-    // if (tokenNative) {
-    //   rs.push(token);
-    // }
-
-    rs.push(token);
+    let tokensByChain = tokensUtils.getTokenListFromNetworkId(
+      configService?.network.chainId
+    );
+    let tokenNative = tokensByChain.find(
+      item => item.address?.toUpperCase() === token?.address.toUpperCase()
+    );
+    if (tokenNative) {
+      rs.push(token);
+    }
   }
+  console.log(rs, 'rs=>filterNativeTokenSelectToken');
   return rs;
 }
 /**
