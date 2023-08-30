@@ -26,6 +26,9 @@ const networks = [
     networkSlug: 'defiverse',
     key: '16116',
     tokens: defiverseJson.tokens,
+    price: 5000000000000, // 5000 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
   },
 ];
 
@@ -42,6 +45,9 @@ const networksDev = [
     networkSlug: 'defiverse-testnet',
     key: '17117',
     tokens: defiverseTestnetJson.tokens,
+    price: 50000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
   },
 ];
 

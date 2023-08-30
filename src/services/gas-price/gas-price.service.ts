@@ -17,6 +17,8 @@ const USE_BLOCKNATIVE_GAS_PLATFORM =
   import.meta.env.VITE_USE_BLOCKNATIVE_GAS_PLATFORM === 'false' ? false : true;
 export const GAS_LIMIT_BUFFER = 0.1;
 
+import tokensUtils from '@/lib/utils/tokens';
+
 export class GasPriceService {
   constructor(
     private readonly configService = new ConfigService(),
@@ -36,9 +38,11 @@ export class GasPriceService {
       case '42161':
         return await this.arbitrumProvider.getGasPrice();
       case '16116':
-        return await this.defiverseProvider.getGasPrice();
+        //return await this.defiverseProvider.getGasPrice();
+        return tokensUtils.getGasPriceCustom(this.configService.network.key);
       case '17117':
-        return await this.defiverseTestnetProvider.getGasPrice();
+        //return await this.defiverseTestnetProvider.getGasPrice();
+        return tokensUtils.getGasPriceCustom(this.configService.network.key);
       default:
         return null;
     }
