@@ -48,6 +48,22 @@
       "symbol": "GMB",
       "decimals": 18,
       "logoURI": ""
+    },
+    {
+      "address": "0x3Fde6489AA398BcddaB46f971e4BB5364ccCD78B",
+      "chainId": 17117,
+      "name": "CCP",
+      "symbol": "CCP",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0xe5897aA3d9EA01D055E5c928BD0F6eF5778536C3",
+      "chainId": 17117,
+      "name": "USDC",
+      "symbol": "USDC",
+      "decimals": 18,
+      "logoURI": ""
     }
   ]
 }
