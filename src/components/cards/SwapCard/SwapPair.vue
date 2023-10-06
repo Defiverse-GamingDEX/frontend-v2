@@ -268,7 +268,7 @@ onMounted(() => {
       @set-max="emit('update:exactIn', true)"
     />
 
-    <div class="flex items-center my-3">
+    <div class="flex items-center my-5">
       <SwapPairToggle @toggle="handleTokenSwitch" />
       <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
       <div

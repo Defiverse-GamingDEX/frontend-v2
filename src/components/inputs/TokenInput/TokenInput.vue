@@ -356,19 +356,89 @@ watch(_address, async (newAddress, oldAddress) => {
         </div>
         <div
           v-if="tokenInTraderInfo?.isProtectedToken"
-          class="mt-1 leading-none text-right text-gray-600 dark:text-gray-400 text-md"
+          class="mt-1 leading-none text-right text-gray-600 dark:text-gray-400 text-md sellable-component"
         >
-          Sellable amount:
-          <span class="font-medium">
-            {{
-              fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token)
-            }}</span
-          >
+          <div class="sellable-container">
+            <div class="sellable-content">
+              <div class="sellable-label">Sellable amount</div>
+              <div class="font-medium sellable-value">
+                <span class="sellable-amount">
+                  {{
+                    fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token)
+                  }}
+                </span>
+                <span class="total-amount">
+                  /{{
+                    fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token)
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </template>
   </BalTextInput>
 </template>
-<style scoped>
+<style scoped >
+.sellable-component {
+  height: 40px;
+  position: relative;
+}
+.sellable-component .sellable-container {
+  position: absolute;
+  right: 0px;
+  top: 16px;
+}
+.sellable-component .sellable-container .sellable-content {
+  position: relative;
+  background: #f5f9fa 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 3px solid #49baef;
+  border-radius: 32px;
+}
+.sellable-component .sellable-container .sellable-content .sellable-label {
+  position: absolute;
+  left: -10px;
+  top: -13px;
+  padding: 3.5px 12px;
+  background: #49baef 0% 0% no-repeat padding-box;
+  border: 2px solid #49baef;
+  border-radius: 15px;
 
+  font-family: inherit;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: bold;
+  letter-spacing: 0px;
+  color: #ffffff;
+}
+
+.sellable-component .sellable-container .sellable-content .sellable-value {
+  padding: 8px 15px 8px 0px;
+  margin-top: 14px;
+  color: #808080;
+  width: 157px;
+}
+.sellable-component
+  .sellable-container
+  .sellable-content
+  .sellable-value
+  .sellable-amount {
+  font-family: inherit;
+  font-size: 23px;
+  line-height: 19px;
+  font-weight: bold;
+  letter-spacing: 0px;
+}
+.sellable-component
+  .sellable-container
+  .sellable-content
+  .sellable-value
+  .total-amount {
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: bold;
+}
 </style>

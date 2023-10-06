@@ -125,6 +125,8 @@ export default defineComponent({
 <style scoped>
 .bal-card {
   @apply flex flex-col;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 7px 14px #0071a598;
 }
 
 .card-container {

@@ -165,7 +165,11 @@ onMounted(() => {
 .input-container {
   @apply transition-colors;
 }
-
+.input-container {
+  background: #f5f9fa 0% 0% no-repeat padding-box;
+  box-shadow: inset 0px 1px 3px #0000004a;
+  border-radius: 10px;
+}
 .input-group {
   @apply flex;
 }

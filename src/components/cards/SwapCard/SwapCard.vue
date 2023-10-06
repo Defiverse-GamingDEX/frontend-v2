@@ -1,5 +1,9 @@
 <template>
-  <BalCard class="relative card-container" :shadow="swapCardShadow" noBorder>
+  <BalCard
+    class="relative card-container bg-blue"
+    :shadow="swapCardShadow"
+    noBorder
+  >
     <template #header>
       <div class="flex justify-between items-center w-full">
         <h4>{{ title }}</h4>
