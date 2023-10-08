@@ -36,59 +36,39 @@ function closeModal() {
 </script>
 
 <template>
-  <BalModal ref="redirecModal" :show="true" @close="closeModal()">
+  <BalModal
+    ref="redirecModal"
+    className="anti-trader-modal"
+    :show="true"
+    @close="closeModal()"
+  >
     <template #header>
-      <h3 class="anti-modal-title">Attention</h3>
+      <div class="banner-img">
+        <img
+          class="tip-icon"
+          src="@/assets/images/anti-trader-banner/warning.png"
+        />
+      </div>
+      <div class="toturial-info">
+        <span class="toturial-label"> Learn more </span>
+        <BalTooltip
+          iconSize="xs"
+          textAlign="left"
+          class="relative top-px"
+          iconClass="text-white"
+          width="60"
+          iconName="help-circle"
+        >
+          {{ $t('claimPage.tips.BalIncentives') }}
+        </BalTooltip>
+      </div>
     </template>
     <div>
       <div class="anti-modal-description">
-        You've hit the Anti Trader Field's limit. You are unable to make a token
-        swap.
+        <div class="text">AT-Field has been activated.</div>
+        <div class="text">You are not allowed to make a token swap.</div>
       </div>
-      <!-- <div
-        v-if="
-          tokenInTraderInfo?.isProtectedToken &&
-          tokenInAmount > tokenInTraderInfo?.sellableAmount
-        "
-        class="anti-modal-token-info"
-      >
-        <div class="mb-2 text-base font-medium">Token</div>
-        <div class="rounded-lg border border-gray-100 shadow anti-modal-input">
-          <div class="text-base font-medium anti-modal-token-symbol">
-            {{ tokenInTraderInfo?.symbol }}
-          </div>
-          <div class="anti-modal-token-amount">
-            {{ fNum2(tokenInAmount, FNumFormats.token) }}
-          </div>
-        </div>
 
-        <div class="anti-modal-token-limit">
-          Anti trader limit:
-          {{ fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token) }}
-        </div>
-      </div>
-      <div
-        v-if="
-          tokenOutTraderInfo?.isProtectedToken &&
-          tokenOutAmount > tokenOutTraderInfo?.sellableAmount
-        "
-        class="anti-modal-token-info"
-      >
-        <div class="mb-2 text-base font-medium">Token</div>
-        <div class="rounded-lg border border-gray-100 shadow anti-modal-input">
-          <div class="text-base font-medium anti-modal-token-symbol">
-            {{ tokenOutTraderInfo?.symbol }}
-          </div>
-          <div class="anti-modal-token-amount">
-            {{ fNum2(tokenOutAmount, FNumFormats.token) }}
-          </div>
-        </div>
-
-        <div class="anti-modal-token-limit">
-          Anti trader limit:
-          {{ fNum2(tokenOutTraderInfo?.sellableAmount, FNumFormats.token) }}
-        </div>
-      </div> -->
       <div class="mt-4 anti-modal-btn-actions">
         <button
           :class="[
@@ -105,33 +85,86 @@ function closeModal() {
     </div>
   </BalModal>
 </template>
-<style scoped>
-.anti-modal-title {
-  margin: 0 auto;
-}
-.anti-modal-description {
-  margin-bottom: 24px;
-  text-align: center;
-}
-.anti-modal-btn-actions button {
-  color: #fff;
-  background: #ff5a8c 0% 0% no-repeat padding-box;
-  box-shadow: 0px 3px 0px #aa3156cc;
-  border-radius: 10px;
-}
-.anti-modal-input {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-}
-.anti-modal-token-symbol {
-}
-.anti-modal-token-amount {
-  margin-left: auto;
-}
-.anti-modal-token-limit {
-  text-align: right;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
-  font-size: 12px;
+<style  lang="scss">
+.anti-trader-modal {
+  > .content {
+    max-width: 100%;
+    background: transparent
+      linear-gradient(180deg, #8d00145c 0%, #43000aad 43%, #00000074 100%) 0% 0%
+      no-repeat padding-box;
+    .bal-card {
+      background: transparent;
+      margin-top: 8px;
+      border-radius: 0px;
+      border-top: 3px solid #da1231;
+      border-bottom: 3px solid #da1231;
+      &::before {
+        content: '';
+        background-image: url('@/assets/images/anti-trader-banner/pattern.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        height: 18px;
+        top: 16px;
+        position: relative;
+      }
+      &::after {
+        content: '';
+        background-image: url('@/assets/images/anti-trader-banner/pattern.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        height: 18px;
+        bottom: 16px;
+        position: relative;
+      }
+    }
+    .header-content {
+      flex-direction: column;
+      margin-top: 82px;
+      margin-bottom: 160px;
+      .banner-img {
+        max-width: 543px;
+      }
+      .toturial-info {
+        display: flex;
+        align-items: center;
+        margin-top: 3px;
+        .toturial-label {
+          color: #ffa3a3;
+          font-size: 25px;
+          line-height: 30px;
+          font-weight: bold;
+          margin-right: 18px;
+        }
+        .bal-icon {
+          > svg {
+            width: 40px;
+            height: 40px;
+            color: #ffa3a3;
+          }
+        }
+      }
+    }
+  }
+  .anti-modal-description {
+    margin-bottom: 24px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 25px;
+    line-height: 30px;
+    margin-bottom: 46px;
+  }
+  .anti-modal-btn-actions {
+    margin: 0 auto;
+    margin-bottom: 90px;
+    max-width: 348px;
+    display: flex;
+    justify-content: center;
+    button {
+      color: #fff;
+      background: #ff5a8c 0% 0% no-repeat padding-box;
+      box-shadow: 0px 3px 0px #aa3156cc;
+      border-radius: 10px;
+    }
+  }
 }
 </style>

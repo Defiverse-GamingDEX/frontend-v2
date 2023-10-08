@@ -10,6 +10,7 @@ type Props = {
   noPad?: boolean;
   noContentPad?: boolean;
   fireworks?: boolean;
+  className?: string;
 };
 
 /**
@@ -65,7 +66,7 @@ defineExpose({ hide });
         </div>
       </div>
     </transition>
-    <div class="content-container">
+    <div class="content-container" :class="className">
       <Transition name="modal" @after-leave="$emit('close')">
         <div v-if="showContent" class="content">
           <BalCard
