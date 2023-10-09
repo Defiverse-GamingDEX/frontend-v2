@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import SwapCard from '@/components/cards/SwapCard/SwapCard.vue';
+import BridgeCard from '@/components/cards/BridgeCard/BridgeCard.vue';
 </script>
 
 <template>
   <div class="bridge-component">
-    <SwapCard />
+    <BridgeCard />
   </div>
 </template>
 
