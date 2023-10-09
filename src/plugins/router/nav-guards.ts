@@ -80,7 +80,7 @@ function applyNetworkPathRedirects(router: Router): Router {
     } else {
       const networkSlugFromUrl = to.params.networkSlug?.toString() ?? '';
       const networkFromPath = networkFromSlug(networkSlugFromUrl);
-
+      console.log(networkFromPath, 'networkFromPath');
       if (networkFromPath) {
         const noNetworkChangeCallback = () => next();
         const networkChangeCallback = () => {

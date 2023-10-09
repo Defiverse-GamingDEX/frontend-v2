@@ -25,6 +25,7 @@ export const Goals = {
   ClickHeroLearnMore: 'HCF8QUTE',
   ClickNavConnectWallet: 'ZIFARDWY',
   ClickNavSwap: 'JKBUPMVR',
+  ClickNavBridge: 'JKBUPZVR',
   ClickNavPools: 'XDOFAMCI',
   ClickNavLogo: 'OT9IBNCJ',
   ClickNavClaim: 'DQ4RN4GT',

@@ -46,6 +46,10 @@ const SwapPage = () =>
   import(
     /* webpackChunkName: "SwapPage" */ /* webpackPrefetch: true */ '@/pages/swap.vue'
   );
+const BridgePage = () =>
+  import(
+    /* webpackChunkName: "BridgePage" */ /* webpackPrefetch: true */ '@/pages/bridge.vue'
+  );
 const UnlockVeBalPage = () =>
   import(/* webpackChunkName: "UnlockVeBalPage" */ '@/pages/unlock-vebal.vue');
 const VeBalPage = () =>
@@ -96,6 +100,11 @@ const routes: RouteRecordRaw[] = [
     path: '/:networkSlug/swap/:assetIn?/:assetOut?',
     name: 'swap',
     component: SwapPage,
+  },
+  {
+    path: '/:networkSlug/bridge',
+    name: 'bridge',
+    component: BridgePage,
   },
   {
     path: '/:networkSlug/trade/:assetIn?/:assetOut?',
