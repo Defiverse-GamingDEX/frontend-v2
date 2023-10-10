@@ -6,7 +6,7 @@ import SwapSettingsPopover, {
   SwapSettingsContext,
 } from '@/components/popovers/SwapSettingsPopover.vue';
 import BridgePair from './BridgePair.vue';
-
+import BridgePairToggle from './BridgePairToggle.vue';
 // COMPOSABLES
 const { bp } = useBreakpoints();
 const {
@@ -45,6 +45,20 @@ function handleAmountChange() {
   console.log(tokenOutAmount, 'tokenOutAmount');
   console.log(tokenOutAddress, 'tokenOutAddress');
 }
+
+function handleTokenSwitch(): void {
+  // emit('update:exactIn', !props.exactIn);
+  // emit('update:tokenInAmount', _tokenOutAmount.value);
+  // emit('update:tokenInAddress', _tokenOutAddress.value);
+  // emit('update:tokenOutAmount', _tokenInAmount.value);
+  // emit('update:tokenOutAddress', _tokenInAddress.value);
+  // emit('amountChange');
+}
+function handlePreviewButton() {
+  // swapping.resetSubmissionError();
+  // modalSwapPreviewIsOpen.value = true;
+  console.log('show modal preview');
+}
 </script>
 
 <template>
@@ -60,14 +74,49 @@ function handleAmountChange() {
         </div>
       </template>
       <div class="bridge-container">
-        <BridgePair
-          v-model:tokenInAmount="tokenInAmount"
-          v-model:tokenInAddress="tokenInAddress"
-          v-model:tokenOutAmount="tokenOutAmount"
-          v-model:tokenOutAddress="tokenOutAddress"
-          class="mb-4"
-          @amount-change="handleAmountChange"
-        />
+        <div class="bridge-form">
+          <div class="input-from">
+            <div class="label">From</div>
+          </div>
+          <div class="flex items-center my-5">
+            <BridgePairToggle @toggle="handleTokenSwitch" />
+            <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
+          </div>
+          <div class="input-to">
+            <div class="label">To</div>
+          </div>
+          <div class="input-another-wallet">
+            <div class="title">Send to another wallet</div>
+            <div class="wallet-address-input">input address wallet</div>
+          </div>
+          <div class="charge-gas">charge gas here</div>
+        </div>
+        <div class="bridge-info">
+          <div class="info">
+            <div class="title">Bridge Rate</div>
+            <div class="value">1ETH on ? = 1WETH on ?</div>
+          </div>
+          <div class="info">
+            <div class="title">Destination gas fee</div>
+            <div class="value">1ETH on ? = 1WETH on ?</div>
+          </div>
+          <div class="info">
+            <div class="title">Bridge fee</div>
+            <div class="value">1ETH on ? = 1WETH on ?</div>
+          </div>
+          <div class="info">
+            <div class="title">You will receive</div>
+            <div class="value">1ETH on ? = 1WETH on ?</div>
+          </div>
+        </div>
+        <div class="bridge-actions">
+          <BalBtn
+            :label="$t('preview')"
+            classCustom="pink-white-shadow"
+            block
+            @click.prevent="handlePreviewButton"
+          />
+        </div>
       </div>
     </BalCard>
   </div>
