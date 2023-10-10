@@ -85,6 +85,7 @@ import useWeb3 from '@/services/web3/useWeb3';
 export enum SwapSettingsContext {
   swap,
   invest,
+  bridge,
 }
 
 export default defineComponent({
@@ -126,6 +127,8 @@ export default defineComponent({
         trackGoal(Goals.ClickSwapSettings);
       } else if (context.value === SwapSettingsContext.invest) {
         trackGoal(Goals.ClickJoinPoolSettings);
+      } else if (context.value === SwapSettingsContext.bridge) {
+        trackGoal(Goals.ClickBridgeSettings);
       }
     }
 

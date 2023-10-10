@@ -33,6 +33,7 @@ export const Goals = {
   ClickNavVebal: 'IVLEEHDK',
   ClickJoinPoolSettings: 'ZNU2DISP',
   ClickSwapSettings: '1M2HMAYJ',
+  ClickBridgeSettings: '1M2HF2YJ',
   ClickAddLiquidity: 'BRT10IGE',
   ClickWithdraw: 'P5GBF31M',
   LiquidityAdded: 'KN2G0QUT',
