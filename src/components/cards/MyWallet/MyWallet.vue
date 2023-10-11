@@ -67,7 +67,7 @@ const noTokensMessage = computed(() => {
   return t('noTokensInWallet', [networkName]);
 });
 const tokensWithBalanceFilter = computed(() => {
-  return filterNativeToken(tokensWithBalance.value);
+  return tokensWithBalance.value;
 });
 
 const { hasNativeBalance, nativeBalance, nativeCurrency } = useNativeBalance();
@@ -84,26 +84,26 @@ function handleAssetClick(tokenAddress) {
     return;
   }
 }
-function filterNativeToken(tokens) {
-  let rs = [];
-  for (let i = 0; i < tokens?.length; i++) {
-    let token = tokens[i];
-    //
-    // TODO: Need to load token list by chain
-    let tokensByChain = tokensUtils.getTokenListFromNetworkId(
-      configService?.network.chainId
-    );
-    let tokenNative = tokensByChain.find(
-      item => item.address?.toUpperCase() === token?.toUpperCase()
-    );
+// function filterNativeToken(tokens) {
+//   let rs = [];
+//   for (let i = 0; i < tokens?.length; i++) {
+//     let token = tokens[i];
+//     //
+//     // TODO: Need to load token list by chain
+//     let tokensByChain = tokensUtils.getTokenListFromNetworkId(
+//       configService?.network.chainId
+//     );
+//     let tokenNative = tokensByChain.find(
+//       item => item.address?.toUpperCase() === token?.toUpperCase()
+//     );
 
-    if (tokenNative) {
-      rs.push(tokenNative.address);
-    }
-  }
-  console.log(rs, 'rs=>filterNativeToken');
-  return rs;
-}
+//     if (tokenNative) {
+//       rs.push(tokenNative.address);
+//     }
+//   }
+//   console.log(rs, 'rs=>filterNativeToken');
+//   return rs;
+// }
 
 const emit = defineEmits<{
   (e: 'click:asset', tokenAddress: string, isPoolToken: boolean): void;
