@@ -114,7 +114,8 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
     noGrow: true,
   },
   {
-    name: t('composition'),
+    //name: t('composition'),
+    name: t('poolName'),
     id: 'poolName',
     accessor: 'id',
     Cell: 'poolNameCell',
@@ -316,19 +317,20 @@ function iconAddresses(pool: Pool) {
           <div v-if="POOLS.Metadata[pool.id]" class="text-left">
             {{ POOLS.Metadata[pool.id].name }}
           </div>
-          <div v-else>
-            <TokenPills
+          <div v-else class="flex items-center">
+            <span class="mr-2 pool-name"> {{ pool.name }}</span>
+            <!-- <TokenPills
               :tokens="orderedPoolTokens(pool, pool.tokens)"
               :isStablePool="isStableLike(pool.poolType)"
               :selectedTokens="selectedTokens"
-            />
+            /> -->
           </div>
           <BalChip
             v-if="isLiquidityBootstrapping(pool.poolType)"
             label="LBP"
             color="amber"
           />
-          <BalChipNew v-else-if="pool?.isNew" class="mt-1" />
+          <BalChipNew v-else-if="pool?.isNew" />
           <PoolWarningTooltip :pool="pool" />
         </div>
       </template>
