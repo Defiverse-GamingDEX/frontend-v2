@@ -34,7 +34,7 @@ function updateAddress(address) {
   <div class="input-from-component">
     <div class="token-list">
       <TokenSelectInput
-        :modelValue="props?.inputSelect?.tokenAddress"
+        :modelValue="inputSelect?.tokenAddress"
         class="mr-2"
         @update:model-value="updateAddress"
       />

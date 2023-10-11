@@ -395,6 +395,7 @@ export const tokensProvider = (
   function balanceFor(address: string): string {
     if (address) address = getAddress(address);
     try {
+      console.log(balances, 'balancesAAA');
       return balances.value[address] || '0';
     } catch {
       return '0';

@@ -5,8 +5,8 @@ import SelectTokenModal from '../modals/SelectTokenModal.vue';
 import useNumbers from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { isSameAddress } from '@/lib/utils';
-import { TokenInfo } from '@/types/TokenList';
 import { truncateText } from '@/plugins/utils.js';
+import { BRIDGE_TOKENS } from '@/constants/bridge/tokens';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -46,7 +46,6 @@ const openTokenModal = ref(false);
 /**
  * COMPOSABLEs
  */
-const { getToken } = useTokens();
 const { fNum2 } = useNumbers();
 
 /**
@@ -54,7 +53,7 @@ const { fNum2 } = useNumbers();
  */
 const hasToken = computed(() => !!props.modelValue);
 
-const token = computed((): TokenInfo | null => {
+const token = computed((): Object | null => {
   if (!hasToken.value) return null;
   return getToken(props.modelValue);
 });
@@ -64,6 +63,9 @@ const token = computed((): TokenInfo | null => {
  */
 function toggleModal(): void {
   if (!props.fixed) openTokenModal.value = !openTokenModal.value;
+}
+function getToken(tokenAddress) {
+  return BRIDGE_TOKENS.filter(item => item.address === tokenAddress);
 }
 </script>
 
@@ -107,12 +109,7 @@ function toggleModal(): void {
     <teleport to="#modal">
       <SelectTokenModal
         v-if="openTokenModal"
-        :excludedTokens="[...excludedTokens, modelValue]"
-        :subset="subsetTokens"
-        :includeEther="true"
-        :disableInjection="disableInjection"
-        :hideTokenLists="hideTokenLists"
-        :ignoreBalances="ignoreBalances"
+        :tokensList="BRIDGE_TOKENS"
         @close="openTokenModal = false"
         @select="emit('update:modelValue', $event)"
       />
