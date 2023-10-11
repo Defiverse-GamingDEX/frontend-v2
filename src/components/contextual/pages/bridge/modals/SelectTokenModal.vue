@@ -2,18 +2,20 @@
 import { orderBy } from 'lodash';
 import { computed, reactive, toRef, watch, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
-
-import TokenListItem from '@/components/lists/TokenListItem.vue';
-import TokenListsListItem from '@/components/lists/TokenListsListItem.vue';
+import useWeb3 from '@/services/web3/useWeb3';
 import { useTokens } from '@/providers/tokens.provider';
-import useUrls from '@/composables/useUrls';
+import { fromWei } from 'web3-utils';
+import { JsonRpcProvider } from '@ethersproject/providers';
+import { Contract } from '@ethersproject/contracts';
+import { default as ERC20ABI } from '@/lib/abi/ERC20.json';
 
 interface Props {
   open?: boolean;
   tokensList: Array<any>;
   ignoreBalances?: boolean;
 }
-
+const { account, isWalletReady } = useWeb3();
+console.log(account, 'accountAAA');
 const props = withDefaults(defineProps<Props>(), {
   open: false,
   ignoreBalances: false,
@@ -39,36 +41,65 @@ const { t } = useI18n();
 /**
  * DATA
  */
-const loading = ref(false);
-
+const loading = ref(true);
+const tokens = ref([]);
 /**
  * COMPUTED
  */
+/**
+ * WATCHERS
+ */
+watch(account, () => {
+  console.log(account, 'accountBBB');
+  if (account.value) {
+    getTokensBalance();
+  }
+});
+/**
+ * LIFECYCLES
+ */
+onMounted(() => {
+  tokens.value = createTokens();
+  if (account.value) {
+    getTokensBalance();
+  }
+});
 
-const tokens = computed(() => {
+/**
+ * METHODS
+ */
+function createTokens() {
   console.log(props.tokensList, 'props.tokensList');
-  let tokensWithValues = props.tokensList.map(token => {
-    console.log(token, 'token');
-    const balance = balanceFor(token.address);
-    const price = priceFor(token.address);
-    const value = Number(balance) * price;
-    console.log(balance, 'balance');
-    console.log(price, 'price');
-    console.log(value, 'value');
-    return {
+  let tokensWithValues = [];
+  for (let i = 0; i < props.tokensList.length; i++) {
+    let token = props.tokensList[i];
+    const balance = 0;
+    const price = 0;
+    const value = 0;
+    const itemPush = {
       ...token,
       price,
       balance,
       value,
     };
-  });
+    tokensWithValues.push(itemPush);
+  }
+
   if (props.ignoreBalances) return tokensWithValues;
   else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
-});
-console.log(tokens, 'tokens');
-/**
- * METHODS
- */
+}
+async function getTokensBalance() {
+  console.log(tokens, account, 'getTokensBalance');
+  if (tokens.value.length > 0) {
+    for (let i = 0; i < tokens.value.length; i++) {
+      let token = tokens.value[i];
+      const balance = await getBalance(token, account.value);
+      token.balance = balance;
+      // const price = priceFor(token.address);
+      // const value = Number(balance) * price;
+    }
+  }
+}
 async function onSelectToken(token: string): Promise<void> {
   if (!getToken(token)) {
     await injectTokens([token]);
@@ -76,6 +107,19 @@ async function onSelectToken(token: string): Promise<void> {
 
   emit('select', token);
   emit('close');
+}
+async function getBalance(token, walletAddress) {
+  const { address, rpc } = token;
+  const provider = new JsonRpcProvider(rpc);
+  const tokenContract = new Contract(address, ERC20ABI, provider);
+  const tokenBalance = await tokenContract.balanceOf(walletAddress);
+  console.log(provider, address, tokenBalance, 'provider');
+  //let balance = await provider.getBalance(address); //get native balance
+  console.log(tokenBalance, 'balanceBBB');
+  let rs = tokenBalance?.toString();
+
+  console.log(rs, 'rsAAA');
+  return rs;
 }
 </script>
 

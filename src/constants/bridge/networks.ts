@@ -1,3 +1,4 @@
+import { BRIDGE_DEFI_TOKENS } from './defi-tokens';
 export const BRIDGE_NETWORKS = [
   {
     chain_id: '0x1',
@@ -30,7 +31,7 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://scan.defiverse.net',
     rpc: 'https://rpc.defiverse.net',
     type: 'L2',
-    tokens: [], // TODO hard or import
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x736C',

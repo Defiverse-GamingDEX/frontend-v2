@@ -6,7 +6,7 @@ import useNumbers from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { isSameAddress } from '@/lib/utils';
 import { truncateText } from '@/plugins/utils.js';
-import { BRIDGE_TOKENS } from '@/constants/bridge/tokens';
+import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/defi-tokens';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -65,7 +65,7 @@ function toggleModal(): void {
   if (!props.fixed) openTokenModal.value = !openTokenModal.value;
 }
 function getToken(tokenAddress) {
-  return BRIDGE_TOKENS.filter(item => item.address === tokenAddress);
+  return BRIDGE_DEFI_TOKENS.filter(item => item.address === tokenAddress);
 }
 </script>
 
@@ -109,7 +109,7 @@ function getToken(tokenAddress) {
     <teleport to="#modal">
       <SelectTokenModal
         v-if="openTokenModal"
-        :tokensList="BRIDGE_TOKENS"
+        :tokensList="BRIDGE_DEFI_TOKENS"
         @close="openTokenModal = false"
         @select="emit('update:modelValue', $event)"
       />
@@ -137,3 +137,4 @@ function getToken(tokenAddress) {
   @apply bg-gray-50 dark:bg-gray-700 text-black dark:text-white;
 }
 </style>
+@/constants/bridge/defi-tokens

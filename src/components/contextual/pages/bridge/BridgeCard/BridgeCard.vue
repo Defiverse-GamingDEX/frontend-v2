@@ -10,7 +10,7 @@ import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
 
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
-import { BRIDGE_TOKENS } from '@/constants/bridge/tokens';
+import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/defi-tokens';
 // COMPOSABLES
 const { bp } = useBreakpoints();
 const {
@@ -75,7 +75,7 @@ function handleInputFromChange(inputSelect) {
             <div class="label">From</div>
             <InputFrom
               :chainsList="BRIDGE_NETWORKS"
-              :tokensList="BRIDGE_TOKENS"
+              :tokensList="BRIDGE_DEFI_TOKENS"
               :inputSelect="inputFromSelect"
               @update:input-select="handleInputFromChange"
             />
@@ -139,3 +139,4 @@ function handleInputFromChange(inputSelect) {
   }
 }
 </style>
+@/constants/bridge/defi-tokens
