@@ -5,8 +5,12 @@ import { useBridgeState } from '@/composables/bridge/useBridgeState';
 import SwapSettingsPopover, {
   SwapSettingsContext,
 } from '@/components/popovers/SwapSettingsPopover.vue';
-import BridgePair from './BridgePair.vue';
 import BridgePairToggle from './BridgePairToggle.vue';
+import InputFrom from './InputFrom.vue';
+import InputTo from './InputTo.vue';
+
+import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import { BRIDGE_TOKENS } from '@/constants/bridge/tokens';
 // COMPOSABLES
 const { bp } = useBreakpoints();
 const {
@@ -22,7 +26,6 @@ const {
 } = useBridgeState();
 
 // DATA
-const exactIn = ref(true);
 
 // COMPUTED
 const swapCardShadow = computed(() => {
@@ -39,25 +42,9 @@ const swapCardShadow = computed(() => {
 /**
  * FUNCTIONS
  */
-function handleAmountChange() {
-  console.log(tokenInAmount, 'tokenInAmount');
-  console.log(tokenInAddress, 'tokenInAddress');
-  console.log(tokenOutAmount, 'tokenOutAmount');
-  console.log(tokenOutAddress, 'tokenOutAddress');
-}
 
-function handleTokenSwitch(): void {
-  // emit('update:exactIn', !props.exactIn);
-  // emit('update:tokenInAmount', _tokenOutAmount.value);
-  // emit('update:tokenInAddress', _tokenOutAddress.value);
-  // emit('update:tokenOutAmount', _tokenInAmount.value);
-  // emit('update:tokenOutAddress', _tokenInAddress.value);
-  // emit('amountChange');
-}
-function handlePreviewButton() {
-  // swapping.resetSubmissionError();
-  // modalSwapPreviewIsOpen.value = true;
-  console.log('show modal preview');
+function handleTokenSwitch() {
+  console.log('handleTokenSwitch');
 }
 </script>
 
@@ -77,13 +64,17 @@ function handlePreviewButton() {
         <div class="bridge-form">
           <div class="input-from">
             <div class="label">From</div>
+            <InputFrom
+              :chainsList="BRIDGE_NETWORKS"
+              :tokensList="BRIDGE_TOKENS"
+            />
           </div>
-          <div class="flex items-center my-5">
+          <div class="flex justify-center items-center my-5">
             <BridgePairToggle @toggle="handleTokenSwitch" />
-            <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
           </div>
           <div class="input-to">
             <div class="label">To</div>
+            <InputTo />
           </div>
           <div class="input-another-wallet">
             <div class="title">Send to another wallet</div>
@@ -124,5 +115,16 @@ function handlePreviewButton() {
 
 <style scoped lang="scss">
 .bridge-card {
+  .bridge-container {
+    .bridge-form {
+      .label {
+        color: #0a425c;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 22px;
+        margin-bottom: 10px;
+      }
+    }
+  }
 }
 </style>

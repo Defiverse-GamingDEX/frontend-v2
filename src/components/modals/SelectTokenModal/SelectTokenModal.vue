@@ -103,7 +103,7 @@ const tokens = computed(() => {
       value,
     };
   });
-  tokensWithValues = filterNativeToken(tokensWithValues);
+  //tokensWithValues = filterNativeToken(tokensWithValues);
   if (props.ignoreBalances) return tokensWithValues;
   else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
 });

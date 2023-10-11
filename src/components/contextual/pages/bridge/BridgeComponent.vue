@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BridgeCard from '@/components/cards/BridgeCard/BridgeCard.vue';
+import BridgeCard from '../bridge/BridgeCard/BridgeCard.vue';
 </script>
 
 <template>
