@@ -102,7 +102,7 @@ const tokens = computed(() => {
       value,
     };
   });
-  tokensWithValues = filterNativeToken(tokensWithValues);
+  //tokensWithValues = filterNativeToken(tokensWithValues);
   if (props.ignoreBalances) return tokensWithValues;
   else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
 });
@@ -149,26 +149,26 @@ function toggleSelectTokenList(): void {
   state.query = '';
 }
 
-function filterNativeToken(tokens) {
-  let rs = [];
-  for (let i = 0; i < tokens.length; i++) {
-    let token = tokens[i];
+// function filterNativeToken(tokens) {
+//   let rs = [];
+//   for (let i = 0; i < tokens.length; i++) {
+//     let token = tokens[i];
 
-    //
-    // TODO: Need to load token list by chain
-    let tokensByChain = tokensUtils.getTokenListFromNetworkId(
-      configService?.network.chainId
-    );
-    let tokenNative = tokensByChain.find(
-      item => item.address?.toUpperCase() === token?.address.toUpperCase()
-    );
-    if (tokenNative) {
-      rs.push(token);
-    }
-  }
-  console.log(rs, 'rs=>filterNativeTokenSelectToken');
-  return rs;
-}
+//     //
+//     // TODO: Need to load token list by chain
+//     let tokensByChain = tokensUtils.getTokenListFromNetworkId(
+//       configService?.network.chainId
+//     );
+//     let tokenNative = tokensByChain.find(
+//       item => item.address?.toUpperCase() === token?.address.toUpperCase()
+//     );
+//     if (tokenNative) {
+//       rs.push(token);
+//     }
+//   }
+//   console.log(rs, 'rs=>filterNativeTokenSelectToken');
+//   return rs;
+// }
 /**
  * WATCHERS
  */
