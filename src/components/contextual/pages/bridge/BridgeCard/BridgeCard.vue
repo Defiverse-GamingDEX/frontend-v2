@@ -26,7 +26,12 @@ const {
 } = useBridgeState();
 
 // DATA
-
+const inputFromSelect = ref({
+  chainId: '',
+  tokenSymbol: '',
+  tokenAddress: '',
+  balance: null,
+});
 // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -45,6 +50,10 @@ const swapCardShadow = computed(() => {
 
 function handleTokenSwitch() {
   console.log('handleTokenSwitch');
+}
+function handleInputFromChange(inputSelect) {
+  inputFromSelect.value = inputSelect;
+  console.log(inputFromSelect.value, 'inputFromSelect.value');
 }
 </script>
 
@@ -67,6 +76,8 @@ function handleTokenSwitch() {
             <InputFrom
               :chainsList="BRIDGE_NETWORKS"
               :tokensList="BRIDGE_TOKENS"
+              :inputSelect="inputFromSelect"
+              @update:input-select="handleInputFromChange"
             />
           </div>
           <div class="flex justify-center items-center my-5">
