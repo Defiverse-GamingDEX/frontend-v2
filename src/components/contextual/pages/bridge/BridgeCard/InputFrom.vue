@@ -134,9 +134,8 @@ const setMax = () => {
       <BalTextInput
         :modelValue="_amount"
         name="tokenIn"
-        :placeholder="placeholder || '0.0'"
+        :placeholder="'0.0'"
         type="number-dot"
-        :label="label"
         :decimalLimit="decimalLimit"
         :rules="inputRules"
         validateOn="input"
@@ -146,12 +145,8 @@ const setMax = () => {
         spellcheck="false"
         v-bind="$attrs"
         inputAlignRight
-        @blur="emit('blur', $event)"
-        @focus="emit('focus', $event)"
-        @input="emit('input', $event)"
         @update:model-value="handleAmountChange($event)"
         @update:is-valid="emit('update:isValid', $event)"
-        @keydown="emit('keydown', $event)"
       >
         <template #header>
           <NetworkSelectInput
