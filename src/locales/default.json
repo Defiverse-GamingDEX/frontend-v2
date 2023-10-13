@@ -358,6 +358,7 @@
   "errorNoLists": "Sorry, we can't find any lists",
   "errorNoMatch": "Sorry, we can't find any matches",
   "errorNoTokens": "Sorry, we can't find any tokens",
+  "errorNoNetworks": "Sorry, we can't find any networks",
   "ethBufferInstruction": "This pool requires Wrapped Ether (WETH). To maximize your<br>liquidity provision, you could wrap some additional ETH. Make sure to keep<br>enough ETH to cover gas costs.",
   "ethereumTxTypeTooltip": "Most users will want EIP-1559 Transactions, but there are some instances that may require a Legacy Transaction. For example, some Ledger users have had issues using MetaMask with EIP-1559 Transactions.",
   "etherscan": "Etherscan",
@@ -806,6 +807,9 @@
   "seeV1BalancerInvestments": "Want to see your funds on Balancer V1?",
   "select": "Select",
   "selectToken": "Select token",
+  "selectNetwork": "Select network",
+  "selectChain": "Select Chain",
+  "selectCoin": "Select Coin",
   "sell": "Sell",
   "send": "Send",
   "services": {

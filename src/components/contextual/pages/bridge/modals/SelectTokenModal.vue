@@ -3,22 +3,23 @@ import { orderBy } from 'lodash';
 import { computed, reactive, toRef, watch, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useWeb3 from '@/services/web3/useWeb3';
-import { useTokens } from '@/providers/tokens.provider';
-import { fromWei } from 'web3-utils';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
 import { default as ERC20ABI } from '@/lib/abi/ERC20.json';
-
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { bnum, isSameAddress } from '@/lib/utils';
 interface Props {
   open?: boolean;
   tokensList: Array<any>;
   ignoreBalances?: boolean;
+  tokenChoose: object;
 }
 const { account, isWalletReady } = useWeb3();
 console.log(account, 'accountAAA');
 const props = withDefaults(defineProps<Props>(), {
   open: false,
   ignoreBalances: false,
+  tokenChoose: () => {},
 });
 
 const emit = defineEmits(['close', 'select']);
@@ -27,17 +28,8 @@ const emit = defineEmits(['close', 'select']);
  * COMPOSABLES
  */
 
-const {
-  getToken,
-  searchTokens,
-  priceFor,
-  balanceFor,
-  dynamicDataLoading,
-  nativeAsset,
-  injectTokens,
-} = useTokens();
 const { t } = useI18n();
-
+const { fNum2 } = useNumbers();
 /**
  * DATA
  */
@@ -100,11 +92,7 @@ async function getTokensBalance() {
     }
   }
 }
-async function onSelectToken(token: string): Promise<void> {
-  if (!getToken(token)) {
-    await injectTokens([token]);
-  }
-
+async function onSelectToken(token: object): Promise<void> {
   emit('select', token);
   emit('close');
 }
@@ -113,12 +101,11 @@ async function getBalance(token, walletAddress) {
   const provider = new JsonRpcProvider(rpc);
   const tokenContract = new Contract(address, ERC20ABI, provider);
   const tokenBalance = await tokenContract.balanceOf(walletAddress);
-  console.log(provider, address, tokenBalance, 'provider');
   //let balance = await provider.getBalance(address); //get native balance
   console.log(tokenBalance, 'balanceBBB');
-  let rs = tokenBalance?.toString();
+  const weiBalance = tokenBalance?.toString();
+  const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toNumber();
 
-  console.log(rs, 'rsAAA');
   return rs;
 }
 </script>
@@ -127,7 +114,26 @@ async function getBalance(token, walletAddress) {
   <BalModal show noContentPad @close="$emit('close')">
     <div class="overflow-hidden">
       <div v-if="tokens.length > 0" class="token-list">
-        {{ tokens }}
+        <div class="title">{{ $t('selectCoin') }}</div>
+        <div class="list-container">
+          <div
+            v-for="(item, index) in tokens"
+            :key="index"
+            class="item-info"
+            :class="{
+              active: item.address === tokenChoose?.address,
+            }"
+            @click="onSelectToken(item)"
+          >
+            <div class="item-img">
+              <img width="48" height="48" :src="item.logoURI" />
+            </div>
+            <div class="item-label">{{ item.symbol }}</div>
+            <div class="item-balance">
+              {{ fNum2(item?.balance, FNumFormats.token) }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div v-else-if="loading" class="flex justify-center items-center h-96">
@@ -142,9 +148,57 @@ async function getBalance(token, walletAddress) {
   </BalModal>
 </template>
 
-<style scoped>
-.list-height {
-  height: 70vh;
+<style scoped lang='scss'>
+.token-list {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 7px 14px #0071a598;
+  border-radius: 20px;
+  padding: 24px 20px;
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 22px;
+    color: #243f41;
+    margin-bottom: 24px;
+  }
+  .list-container {
+    .item-info {
+      background: #ffffff 0% 0% no-repeat padding-box;
+      box-shadow: 0px 1px 3px #00000029;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      padding: 6px;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
+      &.active {
+        box-shadow: inset 1px 1px 5px #00000072;
+      }
+      &:last-child {
+        margin-bottom: 0px;
+      }
+      .item-img {
+        margin-right: 12px;
+        > img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+      .item-label {
+        font-size: 18px;
+        line-height: 22px;
+        font-weight: bold;
+        letter-spacing: 0px;
+        color: #0a425c;
+      }
+      .item-balance {
+        margin-left: auto;
+      }
+    }
+  }
 }
 </style>
 

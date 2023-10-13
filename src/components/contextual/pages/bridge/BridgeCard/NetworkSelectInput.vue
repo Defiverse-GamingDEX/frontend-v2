@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import SelectTokenModal from '../modals/SelectTokenModal.vue';
+import SelectNetworkModal from '../modals/SelectNetworkModal.vue';
 import useNumbers from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
-import { isSameAddress } from '@/lib/utils';
-import { truncateText } from '@/plugins/utils.js';
+
 export type TokenSelectProps = {
-  modelValue: string;
-  tokensList?: Array<any>;
+  modelValue: string | number;
+  networkList: Array<any>;
 };
 
 /**
  * PROPS & EMITS
  */
 const props = withDefaults(defineProps<TokenSelectProps>(), {
-  modelValue: '',
-  tokensList: () => [],
+  modelValue: null,
+  networkList: () => [],
 });
 
 const emit = defineEmits<{
@@ -26,7 +24,7 @@ const emit = defineEmits<{
 /**
  * STATE
  */
-const openTokenModal = ref(false);
+const openNetworkModal = ref(false);
 
 /**
  * COMPOSABLEs
@@ -36,42 +34,37 @@ const { fNum2 } = useNumbers();
 /**
  * COMPUTED
  */
-const hasToken = computed(() => !!props.modelValue);
+const hasNetwork = computed(() => !!props.modelValue);
 
-const token = computed((): Object | null => {
-  if (!hasToken.value) return null;
-  return getToken(props.modelValue);
+const network = computed((): Object | null => {
+  if (!hasNetwork.value) return null;
+  return getNetwork(props.modelValue);
 });
 
 /**
  * METHODS
  */
 function toggleModal(): void {
-  if (props?.tokensList?.length > 0) {
-    openTokenModal.value = !openTokenModal.value;
-  }
+  openNetworkModal.value = !openNetworkModal.value;
 }
-function getToken(tokenAddress) {
-  return props?.tokensList?.find(item => item.address === tokenAddress);
+function getNetwork(chain_id) {
+  return props?.networkList?.find(item => item.chain_id_decimals === chain_id);
 }
 </script>
 
 <template>
   <div>
     <div
-      v-if="hasToken"
+      v-if="hasNetwork"
       :class="['token-select-input selected group']"
       @click="toggleModal"
     >
       <div class="item-info">
         <div class="item-img">
-          <img width="48" height="48" :src="token.logoURI" />
+          <img width="48" height="48" :src="network.img_url" />
         </div>
-        <div class="item-label">
-          {{ truncateText(token?.symbol, 16, 5, 5) }}
-        </div>
+        <div class="item-label">{{ network.name }}</div>
       </div>
-
       <BalIcon
         name="chevron-down"
         size="sm"
@@ -82,19 +75,18 @@ function getToken(tokenAddress) {
     <div
       v-else
       class="token-select-input unselected selectable"
-      :class="{ disabled: !tokensList || tokensList?.length === 0 }"
       @click="toggleModal"
     >
-      {{ $t('selectToken') }}
+      {{ $t('selectNetwork') }}
       <BalIcon name="chevron-down" size="sm" class="ml-2" />
     </div>
 
     <teleport to="#modal">
-      <SelectTokenModal
-        v-if="openTokenModal"
-        :tokensList="tokensList"
-        :tokenChoose="token"
-        @close="openTokenModal = false"
+      <SelectNetworkModal
+        v-if="openNetworkModal"
+        :networkList="networkList"
+        :networkChoose="network"
+        @close="openNetworkModal = false"
         @select="emit('update:modelValue', $event)"
       />
     </teleport>
@@ -107,10 +99,6 @@ function getToken(tokenAddress) {
   @apply text-sm;
 
   font-variation-settings: 'wght' 700;
-  &.disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
 }
 
 .selectable {

@@ -10,7 +10,6 @@ import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
 
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
-import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/defi-tokens';
 // COMPOSABLES
 const { bp } = useBreakpoints();
 const {
@@ -25,12 +24,15 @@ const {
   setInitialized,
 } = useBridgeState();
 
-// DATA
+// STATES
 const inputFromSelect = ref({
   chainId: '',
   tokenSymbol: '',
   tokenAddress: '',
-  balance: null,
+  balance: 0,
+  amount: 0,
+  decimals: 18,
+  tokensList: [],
 });
 // COMPUTED
 const swapCardShadow = computed(() => {
@@ -75,7 +77,6 @@ function handleInputFromChange(inputSelect) {
             <div class="label">From</div>
             <InputFrom
               :chainsList="BRIDGE_NETWORKS"
-              :tokensList="BRIDGE_DEFI_TOKENS"
               :inputSelect="inputFromSelect"
               @update:input-select="handleInputFromChange"
             />
