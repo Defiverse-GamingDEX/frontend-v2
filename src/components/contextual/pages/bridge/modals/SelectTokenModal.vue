@@ -8,6 +8,7 @@ import { Contract } from '@ethersproject/contracts';
 import { default as ERC20ABI } from '@/lib/abi/ERC20.json';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { bnum, isSameAddress } from '@/lib/utils';
+import { useBridge } from '@/composables/bridge/useBridge';
 interface Props {
   open?: boolean;
   tokensList: Array<any>;
@@ -30,6 +31,7 @@ const emit = defineEmits(['close', 'select']);
 
 const { t } = useI18n();
 const { fNum2 } = useNumbers();
+const { getTokensBalance, getBalance } = useBridge();
 /**
  * DATA
  */
@@ -38,22 +40,22 @@ const tokens = ref([]);
 /**
  * COMPUTED
  */
-/**
- * WATCHERS
- */
-watch(account, () => {
-  console.log(account, 'accountBBB');
-  if (account.value) {
-    getTokensBalance();
-  }
-});
+// /**
+//  * WATCHERS
+//  */
+// watch(account, async () => {
+//   console.log(account, 'accountBBB');
+//   if (account.value) {
+//     tokens.value = await getTokensBalance(tokens.value, account.value);
+//   }
+// });
 /**
  * LIFECYCLES
  */
-onMounted(() => {
+onMounted(async () => {
   tokens.value = createTokens();
   if (account.value) {
-    getTokensBalance();
+    tokens.value = await getTokensBalance(tokens.value, account.value);
   }
 });
 
@@ -80,33 +82,10 @@ function createTokens() {
   if (props.ignoreBalances) return tokensWithValues;
   else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
 }
-async function getTokensBalance() {
-  console.log(tokens, account, 'getTokensBalance');
-  if (tokens.value.length > 0) {
-    for (let i = 0; i < tokens.value.length; i++) {
-      let token = tokens.value[i];
-      const balance = await getBalance(token, account.value);
-      token.balance = balance;
-      // const price = priceFor(token.address);
-      // const value = Number(balance) * price;
-    }
-  }
-}
+
 async function onSelectToken(token: object): Promise<void> {
   emit('select', token);
   emit('close');
-}
-async function getBalance(token, walletAddress) {
-  const { address, rpc } = token;
-  const provider = new JsonRpcProvider(rpc);
-  const tokenContract = new Contract(address, ERC20ABI, provider);
-  const tokenBalance = await tokenContract.balanceOf(walletAddress);
-  //let balance = await provider.getBalance(address); //get native balance
-  console.log(tokenBalance, 'balanceBBB');
-  const weiBalance = tokenBalance?.toString();
-  const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toNumber();
-
-  return rs;
 }
 </script>
 

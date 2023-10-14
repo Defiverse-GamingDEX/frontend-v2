@@ -103,6 +103,7 @@ watchEffect(() => {
 function updateToken(token) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.tokenAddress = token.address;
+  inputSelect.tokenSymbol = token.symbol;
   inputSelect.balance = token.balance;
   emit('update:inputSelect', inputSelect);
 }
