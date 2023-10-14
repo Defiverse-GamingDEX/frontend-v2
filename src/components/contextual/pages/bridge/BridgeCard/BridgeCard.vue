@@ -8,7 +8,7 @@ import SwapSettingsPopover, {
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
-
+import ChargeGasComponent from './ChargeGasComponent.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 // COMPOSABLES
 const { bp } = useBreakpoints();
@@ -25,6 +25,7 @@ const {
 } = useBridgeState();
 
 // STATES
+const chainsList = ref(BRIDGE_NETWORKS);
 const inputFromSelect = ref({
   chainId: '',
   tokenSymbol: '',
@@ -33,7 +34,21 @@ const inputFromSelect = ref({
   amount: 0,
   decimals: 18,
   tokensList: [],
+  isOnlyDefiBridge: false,
 });
+const inputToSelect = ref({
+  chainId: '',
+  tokenSymbol: '',
+  tokenAddress: '',
+  balance: 0,
+  amount: 0,
+  decimals: 18,
+  tokensList: [],
+  chainsList: [],
+  isOnlyDefiBridge: false,
+});
+const anotherWalletAddress = ref('');
+const isChargeGas = ref(false);
 // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -56,6 +71,36 @@ function handleTokenSwitch() {
 function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
   console.log(inputFromSelect.value, 'inputFromSelect.value');
+  if (inputFromSelect.chainId) {
+    checkInputToNetwork();
+  }
+}
+function handleInputToChange(inputSelect) {
+  inputToSelect.value = inputSelect;
+  console.log(inputToSelect.value, 'inputToSelect.value');
+}
+
+function handleWalletAddressChange(address) {
+  anotherWalletAddress.value = address;
+}
+function handleChargeGas(isChecked) {
+  isChargeGas.value = isChecked;
+  console.log(isChargeGas.value, 'isChargeGas.value');
+}
+function checkInputToNetwork() {
+  const inputFrom = inputFromSelect.value;
+  if (inputFrom.isOnlyDefiBridge) {
+    inputToSelect.value.chainsList = chainsList.value.filter(
+      item =>
+        (item.chain_id_decimals === 16116 || item.chain_id_decimals == 17117) &&
+        item.chain_id_decimals !== inputFrom.chainId
+    );
+  } else {
+    inputToSelect.value.chainsList = chainsList.value.filter(
+      item => item.chain_id_decimals !== inputFrom.chainId
+    );
+  }
+  console.log(inputToSelect.value, 'inputToSelect');
 }
 </script>
 
@@ -76,23 +121,49 @@ function handleInputFromChange(inputSelect) {
           <div class="input-from">
             <div class="label">From</div>
             <InputFrom
-              :chainsList="BRIDGE_NETWORKS"
+              :chainsList="chainsList"
               :inputSelect="inputFromSelect"
               @update:input-select="handleInputFromChange"
             />
           </div>
-          <div class="flex justify-center items-center my-5">
+          <div class="flex justify-center items-center my-3">
             <BridgePairToggle @toggle="handleTokenSwitch" />
           </div>
           <div class="input-to">
             <div class="label">To</div>
-            <InputTo />
+            <InputTo
+              :chainsList="inputToSelect?.chainsList"
+              :inputSelect="inputToSelect"
+              @update:input-select="handleInputToChange"
+            />
           </div>
           <div class="input-another-wallet">
             <div class="title">Send to another wallet</div>
-            <div class="wallet-address-input">input address wallet</div>
+            <div class="wallet-address-input">
+              <BalTextInput
+                :modelValue="anotherWalletAddress"
+                name="anotherWallet"
+                placeholder=""
+                type="text"
+                :decimalLimit="decimalLimit"
+                validateOn="input"
+                autocomplete="off"
+                autocorrect="off"
+                step="any"
+                spellcheck="false"
+                v-bind="$attrs"
+                inputAlignRight
+                @update:model-value="handleWalletAddressChange($event)"
+              >
+              </BalTextInput>
+            </div>
           </div>
-          <div class="charge-gas">charge gas here</div>
+          <div class="charge-gas-container">
+            <ChargeGasComponent
+              :isChargeGas="isChargeGas"
+              @update:change-gas="handleChargeGas($event)"
+            />
+          </div>
         </div>
         <div class="bridge-info">
           <div class="info">
@@ -137,7 +208,28 @@ function handleInputFromChange(inputSelect) {
         margin-bottom: 10px;
       }
     }
+    .input-another-wallet {
+      margin-top: 10px;
+      .title {
+        font-size: 14px;
+        line-height: 17px;
+        font-weight: medium;
+        color: #0a425c;
+        margin-bottom: 8px;
+      }
+      :deep() {
+        .input-group {
+          padding: 0px;
+          > input {
+            height: auto;
+            text-align: left;
+          }
+        }
+      }
+    }
+    .charge-gas-container {
+      margin-top: 14px;
+    }
   }
 }
 </style>
-@/constants/bridge/defi-tokens

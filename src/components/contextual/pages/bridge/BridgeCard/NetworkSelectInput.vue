@@ -45,7 +45,9 @@ const network = computed((): Object | null => {
  * METHODS
  */
 function toggleModal(): void {
-  openNetworkModal.value = !openNetworkModal.value;
+  if (props?.networkList?.length > 0) {
+    openNetworkModal.value = !openNetworkModal.value;
+  }
 }
 function getNetwork(chain_id) {
   return props?.networkList?.find(item => item.chain_id_decimals === chain_id);
@@ -74,6 +76,7 @@ function getNetwork(chain_id) {
 
     <div
       v-else
+      :class="{ disabled: !networkList || networkList?.length === 0 }"
       class="token-select-input unselected selectable"
       @click="toggleModal"
     >
@@ -99,6 +102,10 @@ function getNetwork(chain_id) {
   @apply text-sm;
 
   font-variation-settings: 'wght' 700;
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 .selectable {

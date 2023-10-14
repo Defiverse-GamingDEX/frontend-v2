@@ -8,7 +8,14 @@
       :disabled="disabled"
       class="bal-toggle-checkbox"
     />
-    <label :for="name" class="bal-toggle-track" />
+    <slot name="icon">
+      <div class="toggle-icon"></div>
+    </slot>
+    <label :for="name" class="bal-toggle-track">
+      <slot name="track-label">
+        <div class="track-label"></div>
+      </slot>
+    </label>
   </div>
   <label v-if="label" class="ml-2 text-xs dark:text-white">
     {{ label }}

@@ -8,7 +8,7 @@ import { bnum, isSameAddress } from '@/lib/utils';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { Rules } from '@/types';
 import { useI18n } from 'vue-i18n';
-import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+
 // TYPES
 type InputValue = string | number;
 
@@ -108,12 +108,13 @@ function updateToken(token) {
 }
 function updateNetWork(chainId) {
   let inputSelect = cloneDeep(props?.inputSelect);
-  let networkChoose = BRIDGE_NETWORKS.find(
+  let networkChoose = props?.chainsList?.find(
     item => item.chain_id_decimals === chainId
   );
   if (networkChoose) {
     inputSelect.chainId = networkChoose.chain_id_decimals;
     inputSelect.tokensList = cloneDeep(networkChoose.tokens);
+    inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
   }
   emit('update:inputSelect', inputSelect);
 }
@@ -150,7 +151,7 @@ const setMax = () => {
       >
         <template #header>
           <NetworkSelectInput
-            :networkList="BRIDGE_NETWORKS"
+            :networkList="chainsList"
             :modelValue="inputSelect?.chainId"
             class="mb-2"
             @update:model-value="updateNetWork"

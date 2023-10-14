@@ -17,7 +17,8 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://scan.defiverse.net',
     rpc: 'https://etherscan.io',
     type: 'L1',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: false,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x89',
@@ -28,7 +29,8 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://polygonscan.com',
     rpc: 'https://polygon-mainnet.infura.io',
     type: 'L1',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: false,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x3EF4',
@@ -39,6 +41,7 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://scan.defiverse.net',
     rpc: 'https://rpc.defiverse.net',
     type: 'L2',
+    isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
   },
   {
@@ -50,6 +53,7 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://explorer.oasys.mycryptoheroes.net',
     rpc: 'https://rpc.oasys.mycryptoheroes.net',
     type: 'L2',
+    isOnlyDefiBridge: true,
     tokens: [], // TODO hard or import
   },
   {
@@ -61,7 +65,8 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://explorer.tcgverse.xyz',
     rpc: 'https://rpc.tcgverse.xyz',
     type: 'L2',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: true,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x4a43',
@@ -72,7 +77,8 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://explorer.oasys.homeverse.games',
     rpc: 'https://rpc.mainnet.oasys.homeverse.games',
     type: 'L2',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: true,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x15b3',
@@ -83,7 +89,8 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://explorer.chainverse.info',
     rpc: 'https://rpc.chainverse.info',
     type: 'L2',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: true,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x6E4216',
@@ -94,7 +101,8 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://explorer.saakuru.network',
     rpc: 'https://rpc.saakuru.network',
     type: 'L2',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: true,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
   {
     chain_id: '0x42DD',
@@ -105,6 +113,7 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://scan-testnet.defiverse.net',
     rpc: 'https://rpc-testnet.defiverse.net',
     type: 'L2',
-    tokens: [], // TODO hard or import
+    isOnlyDefiBridge: true,
+    tokens: BRIDGE_DEFI_TOKENS,
   },
 ];
