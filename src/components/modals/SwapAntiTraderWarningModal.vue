@@ -164,6 +164,7 @@ function closeModal() {
       background: #ff5a8c 0% 0% no-repeat padding-box;
       box-shadow: 0px 3px 0px #aa3156cc;
       border-radius: 10px;
+      font-family: 'Adobe-AB-countryroad';
     }
   }
 }

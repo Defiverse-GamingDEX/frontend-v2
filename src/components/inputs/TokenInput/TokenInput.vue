@@ -243,6 +243,7 @@ watch(_address, async (newAddress, oldAddress) => {
 <template>
   <BalTextInput
     :modelValue="_amount"
+    :class="{ 'is-protected-token': tokenInTraderInfo?.isProtectedToken }"
     :name="name"
     :placeholder="placeholder || '0.0'"
     type="number-dot"
@@ -363,9 +364,7 @@ watch(_address, async (newAddress, oldAddress) => {
               <div class="sellable-label">Sellable amount</div>
               <div class="font-medium sellable-value">
                 <span class="sellable-amount">
-                  {{
-                    fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token)
-                  }}
+                  {{ _amount || 0 }}
                 </span>
                 <span class="total-amount">
                   /{{
@@ -380,15 +379,17 @@ watch(_address, async (newAddress, oldAddress) => {
     </template>
   </BalTextInput>
 </template>
-<style scoped >
+<style scoped lang="scss">
+.is-protected-token {
+  position: relative;
+}
 .sellable-component {
   height: 40px;
-  position: relative;
 }
 .sellable-component .sellable-container {
   position: absolute;
   right: 0px;
-  top: 16px;
+  bottom: -20px;
 }
 .sellable-component .sellable-container .sellable-content {
   position: relative;
@@ -415,10 +416,12 @@ watch(_address, async (newAddress, oldAddress) => {
 }
 
 .sellable-component .sellable-container .sellable-content .sellable-value {
-  padding: 8px 15px 8px 0px;
+  padding: 8px 15px 8px 15px;
   margin-top: 14px;
   color: #808080;
-  width: 157px;
+  min-width: 157px;
+  display: flex;
+  justify-content: flex-end;
 }
 .sellable-component
   .sellable-container

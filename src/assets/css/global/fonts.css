@@ -11,3 +11,9 @@
   font-style: normal;
   font-weight: 400;
 }
+@font-face {
+  font-family: 'Adobe-AB-countryroad'; 
+  src: url('/fonts/Adobe-AB-countryroad.ttf') format('truetype'); 
+   font-weight: 400;
+  font-style: normal;
+}

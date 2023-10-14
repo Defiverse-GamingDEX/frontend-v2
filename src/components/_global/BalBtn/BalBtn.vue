@@ -61,7 +61,14 @@ export default defineComponent({
       type: String,
       default: '',
       validator: (val: string): boolean =>
-        ['', 'outline-3', 'gray-blue', 'white-blue', 'pink-white-shadow', 'pink-white'].includes(val),
+        [
+          '',
+          'outline-3',
+          'gray-blue',
+          'white-blue',
+          'pink-white-shadow',
+          'pink-white',
+        ].includes(val),
     },
     label: { type: String, default: '' },
     block: { type: Boolean, default: false },
@@ -230,7 +237,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .bal-btn {
   @apply overflow-hidden tracking-tight;
 
@@ -274,8 +281,8 @@ export default defineComponent({
 
 .bal-btn.pink-white-shadow {
   color: #fff;
-  background: #FF5A8C 0% 0% no-repeat padding-box;
-  box-shadow: 0px 3px 0px #AA3156CC;
+  background: #ff5a8c 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 0px #aa3156cc;
   border-radius: 10px;
 }
 .bal-btn.pink-white-shadow:disabled {
@@ -287,7 +294,7 @@ export default defineComponent({
 
 .bal-btn.pink-white {
   color: #fff;
-  background: #FF5A8C 0% 0% no-repeat padding-box;
+  background: #ff5a8c 0% 0% no-repeat padding-box;
 }
 .bal-btn.pink-white:disabled {
   @apply bg-gray-300 text-base shadow-none;
@@ -298,5 +305,8 @@ export default defineComponent({
 
 .content {
   @apply flex justify-center items-center w-full h-full;
+  > span {
+    font-family: 'Adobe-AB-countryroad';
+  }
 }
 </style>
