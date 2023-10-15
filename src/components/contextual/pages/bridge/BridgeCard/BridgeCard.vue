@@ -12,8 +12,9 @@ import InputTo from './InputTo.vue';
 import ChargeGasComponent from './ChargeGasComponent.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { cloneDeep } from 'lodash';
-const { account } = useWeb3();
+
 // COMPOSABLES
+const { account } = useWeb3();
 const { bp } = useBreakpoints();
 const { getTokensBalance, getBalance } = useBridge();
 // STATES
