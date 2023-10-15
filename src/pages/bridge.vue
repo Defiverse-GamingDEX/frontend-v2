@@ -3,10 +3,39 @@ import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import BridgeComponent from '@/components/contextual/pages/bridge/BridgeComponent.vue';
 import RedeemComponent from '@/components/contextual/pages/bridge/RedeemComponent.vue';
 import BridgeAdminComponent from '@/components/contextual/pages/bridge/BridgeAdminComponent.vue';
+import usePoolCreation from '@/composables/pools/usePoolCreation';
+import useWeb3 from '@/services/web3/useWeb3';
 /**
  * STATE
  */
 const tabSelect = ref('bridge'); // bridge, redeem, admin
+const adminAddress = ref(null);
+
+// COMPOSABLES
+const { getAdminAddress } = usePoolCreation();
+const { account } = useWeb3();
+
+// COMPUTED
+const isAdmin = computed(() => {
+  if (!adminAddress.value) {
+    return false;
+  }
+  if (adminAddress.value === account.value) {
+    return true;
+  }
+  return false;
+});
+// WATCHS
+watch(isAdmin, () => {
+  console.log(isAdmin, 'isAdmin');
+  if (isAdmin.value === false) {
+    tabSelect.value = 'bridge';
+  }
+});
+// LIFE CYCLES
+onBeforeMount(async () => {
+  adminAddress.value = await getAdminAddress();
+});
 
 /**
  * METHODS
@@ -37,6 +66,7 @@ function changeTab(tab) {
         Redeem
       </BalBtn>
       <BalBtn
+        v-if="isAdmin"
         classCustom="outline-3"
         class="mr-5 hero-btn"
         :class="{ active: tabSelect === 'admin' }"
