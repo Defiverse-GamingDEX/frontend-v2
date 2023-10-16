@@ -118,15 +118,15 @@ onUnmounted(() => {
     <slot name="activator">
       <BalIcon :name="iconName" :size="iconSize" :class="iconClass" />
     </slot>
-  </button>
-  <div ref="content" class="tooltip" :class="tooltipClasses">
-    <div :class="tooltipPad" class="font-medium tooltip-content">
-      <p v-if="text" class="tooltip-text" v-text="text" />
-      <slot v-else />
+    <div ref="content" class="tooltip" :class="tooltipClasses">
+      <div :class="tooltipPad" class="font-medium tooltip-content">
+        <p v-if="text" class="tooltip-text" v-text="text" />
+        <slot v-else />
+      </div>
     </div>
-  </div>
+  </button>
 </template>
-<style>
+<style lang='scss'>
 .tooltip {
   @apply z-50 hidden relative shadow-sm text-left;
 }
@@ -162,6 +162,13 @@ onUnmounted(() => {
 
 .tooltip-content {
   @apply rounded-md text-xs text-black dark:text-white bg-white dark:bg-gray-900;
+  > a {
+    color: blue;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 .tooltip[data-popper-placement='top'] .tooltip-content {

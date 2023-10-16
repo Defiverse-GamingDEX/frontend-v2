@@ -423,6 +423,13 @@ export default defineComponent({
       populateInitialTokens();
       setInitialized(true);
     });
+    onBeforeUnmount(() => {
+      // reset amount
+      if (modalAntiTraderWarning.value === true) {
+        setTokenInAmount('');
+        setTokenOutAmount('');
+      }
+    });
     return {
       // constants
       TOKENS,

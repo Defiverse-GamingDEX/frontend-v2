@@ -59,7 +59,10 @@ function closeModal() {
           width="60"
           iconName="help-circle"
         >
-          {{ $t('claimPage.tips.BalIncentives') }}
+          The AT-Field is a mechanism that prevents users from selling more
+          tokens on the DEX than they have earned by playing the game. For more
+          details, please read
+          <a href="https://docs.gaming-dex.com/" target="_blank"> here </a>
         </BalTooltip>
       </div>
     </template>
@@ -128,6 +131,11 @@ function closeModal() {
         display: flex;
         align-items: center;
         margin-top: 3px;
+
+        .tooltip::before {
+          top: 16px;
+        }
+
         .toturial-label {
           color: #ffa3a3;
           font-size: 25px;

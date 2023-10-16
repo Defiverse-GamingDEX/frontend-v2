@@ -284,6 +284,11 @@ export default defineComponent({
   background: #ff5a8c 0% 0% no-repeat padding-box;
   box-shadow: 0px 3px 0px #aa3156cc;
   border-radius: 10px;
+  .content {
+    > span {
+      font-family: 'Adobe-AB-countryroad';
+    }
+  }
 }
 .bal-btn.pink-white-shadow:disabled {
   @apply bg-gray-300 text-base shadow-none;
@@ -305,8 +310,5 @@ export default defineComponent({
 
 .content {
   @apply flex justify-center items-center w-full h-full;
-  > span {
-    font-family: 'Adobe-AB-countryroad';
-  }
 }
 </style>
