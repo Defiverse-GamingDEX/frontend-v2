@@ -64,6 +64,70 @@
       "symbol": "USDC",
       "decimals": 18,
       "logoURI": ""
+    },
+    {
+      "address": "0x90D8673A62a663C7c39170f64f26B903aFFcBaFF",
+      "chainId": 17117,
+      "name": "aGEM",
+      "symbol": "aGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0x72BAb75Be4f5252D0a6e9E3E9aC86210A346D10f",
+      "chainId": 17117,
+      "name": "bGEM",
+      "symbol": "bGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0xdc3D8ff59A01957d1228988C64859D4a5C2ad4e2",
+      "chainId": 17117,
+      "name": "cGEM",
+      "symbol": "cGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0x70c7aa9F37C8A4d3890fB10171ea34FFb3573293",
+      "chainId": 17117,
+      "name": "dGEM",
+      "symbol": "dGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0x6f4ed22ECD49aAAF3Cfb73Fb5361fd5a1440c9a5",
+      "chainId": 17117,
+      "name": "eGEM",
+      "symbol": "eGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0xaBD241744d87236ccaD73A3eec128D30c0c8855d",
+      "chainId": 17117,
+      "name": "fGEM",
+      "symbol": "fGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0x872BA06f6F9878D31488680E937A910925Ac729D",
+      "chainId": 17117,
+      "name": "gGEM",
+      "symbol": "gGEM",
+      "decimals": 18,
+      "logoURI": ""
+    },
+    {
+      "address": "0x7aD0039B55B48a70049A0320fD0fc4A3e496e944",
+      "chainId": 17117,
+      "name": "hGEM",
+      "symbol": "hGEM",
+      "decimals": 18,
+      "logoURI": ""
     }
   ]
 }
