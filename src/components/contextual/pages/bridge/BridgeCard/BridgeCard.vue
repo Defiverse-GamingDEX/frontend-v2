@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import { computed, toRef } from 'vue';
-import useBreakpoints from '@/composables/useBreakpoints';
-import { useBridge } from '@/composables/bridge/useBridge';
-import useWeb3 from '@/services/web3/useWeb3';
 import SwapSettingsPopover, {
   SwapSettingsContext,
 } from '@/components/popovers/SwapSettingsPopover.vue';
+import useBreakpoints from '@/composables/useBreakpoints';
+import { useBridge } from '@/composables/bridge/useBridge';
+import useWeb3 from '@/services/web3/useWeb3';
+
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
 import ChargeGasComponent from './ChargeGasComponent.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { cloneDeep } from 'lodash';
-
+import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 // COMPOSABLES
-const { account } = useWeb3();
+const { account, getSigner } = useWeb3();
+const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const { getTokensBalance, getBalance } = useBridge();
+
+const signer = getSigner();
+console.log(signer, 'signerAAA');
 // STATES
 const chainsList = ref(BRIDGE_NETWORKS);
 const bridgeRate = ref(1);
@@ -96,7 +101,9 @@ async function getBridgeRate() {
 function getChainName(chainId) {
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId)?.name;
 }
-
+function getChain(chainId) {
+  return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
+}
 async function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
   console.log(inputFromSelect.value, 'inputFromSelect.value');
@@ -157,6 +164,14 @@ function checkInputToChange() {
 
   console.log(inputToSelect.value, 'inputToSelect');
 }
+function handleNetworkChange(networkId) {
+  console.log(networkId, 'networkId');
+  let network = getChain(networkId);
+  if (network) {
+    console.log(network, 'networkAAA');
+    connectToAppNetwork(network);
+  }
+}
 function handleTransferButton() {
   console.log(inputFromSelect.value, 'inputFromSelect.value');
   console.log(inputToSelect.value, 'inputToSelect');
@@ -185,6 +200,7 @@ function handleTransferButton() {
               :chainsList="chainsList"
               :inputSelect="inputFromSelect"
               @update:input-select="handleInputFromChange"
+              @update:network="handleNetworkChange"
             />
           </div>
           <div class="flex justify-center items-center my-3">

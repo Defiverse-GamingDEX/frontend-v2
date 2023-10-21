@@ -14,11 +14,16 @@ export const BRIDGE_NETWORKS = [
     img_url: ethereumIcon,
     name: 'Ethereum Mainnet',
     gasPrice: null,
-    explorer: 'https://scan.defiverse.net',
-    rpc: 'https://etherscan.io',
+    explorer: 'https://etherscan.io',
+    rpc: 'https://mainnet.infura.io/v3/',
     type: 'L1',
     isOnlyDefiBridge: false,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x89',
@@ -31,6 +36,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L1',
     isOnlyDefiBridge: false,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x3EF4',
@@ -43,6 +53,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'Defiverse',
+      symbol: 'DFV',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x736C',
@@ -55,6 +70,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: [], // TODO hard or import
+    nativeCurrency: {
+      name: 'OASYS',
+      symbol: 'OAS',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x960',
@@ -67,6 +87,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'OASYS',
+      symbol: 'OAS',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x4a43',
@@ -79,6 +104,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'OASYS',
+      symbol: 'OAS',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x15b3',
@@ -91,6 +121,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'OASYS',
+      symbol: 'OAS',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x6E4216',
@@ -115,5 +150,10 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'Defiverse',
+      symbol: 'DFV',
+      decimals: 18,
+    },
   },
 ];

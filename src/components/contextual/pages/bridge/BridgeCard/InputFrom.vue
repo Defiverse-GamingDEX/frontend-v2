@@ -118,6 +118,7 @@ function updateNetWork(chainId) {
     inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
   }
   emit('update:inputSelect', inputSelect);
+  emit('update:network', inputSelect.chainId);
 }
 function handleAmountChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
