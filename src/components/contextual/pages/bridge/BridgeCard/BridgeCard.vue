@@ -15,7 +15,7 @@ import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { cloneDeep } from 'lodash';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 // COMPOSABLES
-const { account, getSigner } = useWeb3();
+const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const { getTokensBalance, getBalance } = useBridge();
@@ -29,7 +29,7 @@ const bridgeFee = ref(0.001);
 const gasFee = ref(0.01);
 
 const inputFromSelect = ref({
-  chainId: '',
+  chainId: chainId,
   tokenSymbol: '',
   tokenAddress: '',
   balance: 0,
