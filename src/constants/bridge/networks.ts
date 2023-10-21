@@ -138,6 +138,11 @@ export const BRIDGE_NETWORKS = [
     type: 'L2',
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
+    nativeCurrency: {
+      name: 'OASYS',
+      symbol: 'OAS',
+      decimals: 18,
+    },
   },
   {
     chain_id: '0x42DD',
