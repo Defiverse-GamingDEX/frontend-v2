@@ -131,7 +131,7 @@
       <div v-text="$t('network')" />
       <div class="flex items-baseline">
         <div :class="['w-2 h-2 mr-1 rounded-full', networkColorClass]" />
-        {{ isUnsupportedNetwork ? $t('unsupportedNetwork') : networkName }}
+        {{ isUnsupportedNetwork ? getBridgeNetworkName() : networkName }}
       </div>
     </div>
   </div>
@@ -153,7 +153,8 @@ import {
   getConnectorName,
 } from '@/services/web3/web3.plugin';
 import { shorten } from '@/lib/utils';
-
+import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import { useI18n } from 'vue-i18n';
 export default defineComponent({
   components: {
     AppSlippageForm,
@@ -175,8 +176,10 @@ export default defineComponent({
       userNetworkConfig,
       appNetworkConfig,
       isUnsupportedNetwork,
+      chainId,
     } = useWeb3();
     const { ethereumTxType, setEthereumTxType } = useEthereumTxType();
+    const { t } = useI18n();
 
     // DATA
     const data = reactive({
@@ -226,6 +229,17 @@ export default defineComponent({
       }, 2 * 1000);
     }
 
+    function getBridgeNetworkName() {
+      console.log(chainId, BRIDGE_NETWORKS, 'getBridgeNetworkName');
+      let network = BRIDGE_NETWORKS.find(
+        item => item.chain_id_decimals === chainId.value
+      );
+      if (network) {
+        return network.name;
+      }
+      return t('unsupportedNetwork');
+    }
+
     return {
       // data
       ...toRefs(data),
@@ -253,6 +267,7 @@ export default defineComponent({
       ethereumTxType,
       setEthereumTxType,
       ethereumTxTypeOptions,
+      getBridgeNetworkName,
     };
   },
 });

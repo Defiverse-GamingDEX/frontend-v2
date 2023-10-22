@@ -30,6 +30,8 @@ export default function useWeb3Watchers() {
   const { refetchBalances, refetchAllowances } = useTokens();
   const { handlePendingTransactions, updateTransaction } = useTransactions();
 
+  const route = useRoute();
+
   function handleTransactionReplacement(
     tx: EthereumTransactionData,
     replacementReason: ReplacementReason

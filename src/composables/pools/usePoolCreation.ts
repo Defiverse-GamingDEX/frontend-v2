@@ -579,10 +579,14 @@ export default function usePoolCreation() {
   }
 
   async function getAdminAddress() {
-    const address = await balancerService.pools.weighted.getAdminAddress(
-      getProvider()
-    );
-    return address;
+    try {
+      const address = await balancerService.pools.weighted.getAdminAddress(
+        getProvider()
+      );
+      return address;
+    } catch (error) {
+      return error;
+    }
   }
   return {
     ...toRefs(poolCreationState),

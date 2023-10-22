@@ -54,8 +54,8 @@ export const BRIDGE_NETWORKS = [
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
     nativeCurrency: {
-      name: 'Defiverse',
-      symbol: 'DFV',
+      name: 'OASYS',
+      symbol: 'OAS',
       decimals: 18,
     },
   },
@@ -156,8 +156,8 @@ export const BRIDGE_NETWORKS = [
     isOnlyDefiBridge: true,
     tokens: BRIDGE_DEFI_TOKENS,
     nativeCurrency: {
-      name: 'Defiverse',
-      symbol: 'DFV',
+      name: 'OASYS',
+      symbol: 'OAS',
       decimals: 18,
     },
   },
