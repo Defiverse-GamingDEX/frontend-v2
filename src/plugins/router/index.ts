@@ -61,7 +61,10 @@ const PortfolioPage = () =>
   import(
     /* webpackChunkName: "PortfolioPage" */ /* webpackPrefetch: true */ '@/pages/portfolio.vue'
   );
-
+const AdditionalRewardPage = () =>
+  import(
+    /* webpackChunkName: "AdditionalRewardPage" */ /* webpackPrefetch: true */ '@/pages/additional-reward-vebal.vue'
+  );
 declare module 'vue-router' {
   interface RouteMeta {
     layout?: string;
@@ -156,6 +159,12 @@ const routes: RouteRecordRaw[] = [
     path: '/:networkSlug/get-vedfv',
     name: 'get-vebal',
     component: GetVeBalPage,
+    meta: { layout: 'FocusedLayout' },
+  },
+  {
+    path: '/:networkSlug/additional-reward-vedfv/:poolId',
+    name: 'additional-reward-vedfv',
+    component: AdditionalRewardPage,
     meta: { layout: 'FocusedLayout' },
   },
   {

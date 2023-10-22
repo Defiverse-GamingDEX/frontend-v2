@@ -126,6 +126,15 @@ const columns = ref<ColumnDefinition<VotingGaugeWithVotes>[]>([
     width: 100,
     hidden: !isWalletReady.value,
   },
+  {
+    name: t('veBAL.liquidityMining.table.additionalReward'),
+    id: 'addotionalReward',
+    accessor: 'addotionalReward',
+    align: 'right',
+    Cell: 'RewardColumnCell',
+    width: 100,
+    hidden: !isWalletReady.value,
+  },
 ]);
 
 const dataKey = computed(() => JSON.stringify(props.data));
@@ -189,6 +198,17 @@ function getPickedTokens(tokens: PoolToken[]) {
         token.symbol?.toLowerCase().includes(props.filterText?.toLowerCase())
     )
     .map(item => item.address);
+}
+function openConfigReward(gauge) {
+  console.log(gauge, 'gauge');
+  router.push({
+    name: 'additional-reward-vedfv',
+    params: {
+      poolId: gauge.pool.id,
+      networkSlug: getNetworkSlug(gauge.network),
+    },
+    query: { returnRoute: 'vebal' },
+  });
 }
 </script>
 
@@ -311,12 +331,27 @@ function getPickedTokens(tokens: PoolToken[]) {
           />
         </div>
       </template>
+      <template #RewardColumnCell="gauge">
+        <BalBtn
+          size="sm"
+          :label="$t('veBAL.liquidityMining.table.additionalReward')"
+          classCustom="pink-white config-reward"
+          block
+          @click.stop.prevent="openConfigReward(gauge)"
+        />
+      </template>
     </BalTable>
   </BalCard>
 </template>
 
-<style>
+<style lang="scss">
 tr.expired-gauge-row {
   @apply bg-red-50  hover:bg-red-100 dark:border-red-600 dark:border;
+}
+.config-reward {
+  &.bal-btn {
+    line-height: normal;
+    font-size: 14px;
+  }
 }
 </style>

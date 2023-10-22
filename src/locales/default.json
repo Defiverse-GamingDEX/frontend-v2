@@ -947,7 +947,8 @@
         "nextPeriodVotes": "Next period votes",
         "myVotes": "My votes",
         "vote": "Vote",
-        "remove": "Remove"
+        "remove": "Remove",
+        "additionalReward":"Additional Reward"
       },
       "votesTooltip": {
         "title": "Voting breakdown",
