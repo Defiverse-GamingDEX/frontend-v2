@@ -11,6 +11,7 @@ import polygon from './polygon.json';
 import test from './test.json';
 
 // network for bridge
+import mchverse from './mchverse.json';
 
 export interface Config {
   key: string;
@@ -106,6 +107,7 @@ const config: Record<Network | number, Config> = {
   12345: test,
   // @ts-ignore
   17: docker,
+  29548: mchverse,
 };
 
 export default config;

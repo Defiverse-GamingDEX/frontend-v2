@@ -41,14 +41,14 @@ const isAdmin = computed(() => {
 });
 // WATCHS
 watch(isAdmin, () => {
-  console.log(isAdmin, 'isAdmin');
-  if (isAdmin.value === false) {
+  if (!isAdmin.value) {
     tabSelect.value = 'bridge';
   }
 });
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
+  console.log(adminAddress.value, tabSelect, 'adminAddress.value');
   removeAlert('network-mismatch'); // remove change network warning in Bridge
 });
 onBeforeUnmount(async () => {

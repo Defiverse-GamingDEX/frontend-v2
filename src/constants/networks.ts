@@ -30,6 +30,17 @@ const networks = [
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },
+  // bridge networks
+  {
+    id: 'mchverse',
+    name: 'MCHVerse',
+    networkSlug: 'mchverse',
+    key: '29548',
+    tokens: defiverseJson.tokens,
+    price: null, // 5000 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
 ];
 
 const networksDev = [

@@ -14,15 +14,15 @@ import ChargeGasComponent from './ChargeGasComponent.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { cloneDeep } from 'lodash';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-// COMPOSABLES
+// // COMPOSABLES
 const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const { getTokensBalance, getBalance } = useBridge();
 
-const signer = getSigner();
-console.log(signer, 'signerAAA');
-// STATES
+// const signer = getSigner();
+// console.log(signer, 'signerAAA');
+// // STATES
 const chainsList = ref(BRIDGE_NETWORKS);
 const bridgeRate = ref(1);
 const bridgeFee = ref(0.001);
@@ -51,7 +51,7 @@ const inputToSelect = ref({
 });
 const anotherWalletAddress = ref('');
 const isChargeGas = ref(false);
-// COMPUTED
+// // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
     case 'xs':
@@ -63,9 +63,9 @@ const swapCardShadow = computed(() => {
   }
 });
 
-/**
- * FUNCTIONS
- */
+// /**
+//  * FUNCTIONS
+//  */
 
 async function handleTokenSwitch() {
   await swapData();

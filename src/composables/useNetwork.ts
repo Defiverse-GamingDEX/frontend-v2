@@ -62,6 +62,7 @@ export const isTestnet = computed(() => isGoerli.value);
  */
 
 export function networkFor(key: string | number): Network {
+  console.log(Network.DEFIVERSE, 'Network.DEFIVERSE');
   switch (key.toString()) {
     case '1':
       return Network.MAINNET;
@@ -75,6 +76,8 @@ export function networkFor(key: string | number): Network {
       return Network.DEFIVERSE;
     case '17117':
       return Network.DEFIVERSE_TESTNET;
+    case '29548':
+      return 29548;
     default:
       throw new Error('Network not supported');
   }
