@@ -234,12 +234,12 @@ function handleTransferButton() {
               </BalTextInput>
             </div>
           </div>
-          <div class="charge-gas-container">
+          <!-- <div class="charge-gas-container">
             <ChargeGasComponent
               :isChargeGas="isChargeGas"
               @update:change-gas="handleChargeGas($event)"
             />
-          </div>
+          </div> -->
         </div>
         <div
           v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"
