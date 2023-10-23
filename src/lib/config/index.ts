@@ -10,6 +10,8 @@ import optimism from './optimism.json';
 import polygon from './polygon.json';
 import test from './test.json';
 
+// network for bridge
+import ethereum from './ethereum.json';
 export interface Config {
   key: string;
   chainId: Network | 12345 | 17;
@@ -104,6 +106,7 @@ const config: Record<Network | number, Config> = {
   12345: test,
   // @ts-ignore
   17: docker,
+  1: ethereum,
 };
 
 export default config;

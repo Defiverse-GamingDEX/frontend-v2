@@ -2,18 +2,18 @@ import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
 
 const networks = [
-  // {
-  //   id: 'ethereum',
-  //   name: 'Ethereum',
-  //   networkSlug: 'ethereum',
-  //   key: '1',
-  // },
-  // {
-  //   id: 'polygon',
-  //   name: 'Polygon',
-  //   networkSlug: 'polygon',
-  //   key: '137',
-  // },
+  {
+    id: 'ethereum',
+    name: 'Ethereum',
+    networkSlug: 'ethereum',
+    key: '1',
+  },
+  {
+    id: 'polygon',
+    name: 'Polygon',
+    networkSlug: 'polygon',
+    key: '137',
+  },
   // {
   //   id: 'arbitrum',
   //   name: 'Arbitrum',
