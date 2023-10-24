@@ -27,6 +27,7 @@
         class="mb-4"
         @amount-change="swapping.handleAmountChange"
         @modal-anti-trader-warning-change="updateModalAntiTraderWarning"
+        @update:token-in-trade-info="updateTokenInTradeInfo"
       />
       <BalAlert
         v-if="error"
@@ -150,6 +151,26 @@
       />
     </div>
   </BalCard>
+  <BalCard
+    v-if="tokenInTraderInfo?.isProtectedToken"
+    class="relative mt-6 card-container bg-blue"
+    :shadow="swapCardShadow"
+    noBorder
+  >
+    <div class="text-sm atf-description">
+      <p class="text-gray-600 dark:text-gray-400">
+        This token is subject to the AT-Field. You cannot sell more tokens than
+        you have acquired in the game.
+      </p>
+      <a
+        class="text-blue-600 hover:text-purple-600 focus:text-purple-600 dark:text-blue-400 dark:hover:text-yellow-500 dark:focus:text-yellow-500 transition-colors"
+        href="https://docs.gaming-dex.com/products/anti-trader-field-at-field"
+        target="_blank"
+      >
+        Learn more about AT-Field
+      </a>
+    </div>
+  </BalCard>
   <teleport to="#modal">
     <SwapPreviewModal
       v-if="modalSwapPreviewIsOpen"
@@ -246,6 +267,7 @@ export default defineComponent({
       tokenOutAddress,
       tokenOutAmount
     );
+    const tokenInTraderInfo = ref<any>(undefined);
     // COMPUTED
     const isHighPriceImpact = computed(
       () =>
@@ -418,6 +440,10 @@ export default defineComponent({
     function updateModalAntiTraderWarning(payload) {
       modalAntiTraderWarning.value = payload;
     }
+    function updateTokenInTradeInfo(info) {
+      console.log(info, 'info');
+      tokenInTraderInfo.value = info;
+    }
     // INIT
     onBeforeMount(() => {
       populateInitialTokens();
@@ -445,6 +471,7 @@ export default defineComponent({
       exactIn,
       swapping,
       modalAntiTraderWarning,
+      tokenInTraderInfo,
       // computed
       pools,
       title,
@@ -461,11 +488,12 @@ export default defineComponent({
       switchToWETH,
       handleErrorButtonClick,
       updateModalAntiTraderWarning,
+      updateTokenInTradeInfo,
     };
   },
 });
 </script>
-<style scoped>
+<style scoped lang="scss">
 /* This is needed because the swap settings popover overflows */
 .card-container {
   overflow: unset;
@@ -485,5 +513,9 @@ export default defineComponent({
 
 .signature-symbol::before {
   content: '✍️';
+}
+.atf-description {
+  > a {
+  }
 }
 </style>

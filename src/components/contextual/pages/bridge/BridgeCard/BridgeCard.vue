@@ -223,6 +223,18 @@ onBeforeMount(() => {
           </div>
           <div class="flex justify-center items-center my-3">
             <BridgePairToggle @toggle="handleTokenSwitch" />
+            <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
+            <div
+              v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"
+              class="flex items-center text-xs text-gray-600 dark:text-gray-400 cursor-pointer"
+            >
+              <!-- <div class="rate">
+                1 {{ inputFromSelect?.tokenSymbol }} on
+                {{ getChainName(inputFromSelect?.chainId) }} = {{ bridgeRate }}
+                {{ inputToSelect?.tokenSymbol }} on
+                {{ getChainName(inputToSelect?.chainId) }}
+              </div> -->
+            </div>
           </div>
           <div class="input-to">
             <div class="label">To</div>

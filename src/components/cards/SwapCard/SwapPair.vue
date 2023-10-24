@@ -37,6 +37,7 @@ const emit = defineEmits<{
   (e: 'update:tokenOutAddress', value: string): void;
   (e: 'update:exactIn', value: boolean): void;
   (e: 'amountChange'): void;
+  (e: 'update:tokenInTradeInfo', value: object): void;
 }>();
 
 /**
@@ -115,6 +116,7 @@ watch(
       tokenIn.value
     );
     console.log(tokenInTraderInfo.value, 'tokenInTraderInfo');
+    emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
   }
 );
 watch(
