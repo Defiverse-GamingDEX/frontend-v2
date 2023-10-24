@@ -15,6 +15,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['close', 'select']);
 
 /**
+ * STATES
+ */
+const search = ref('');
+const networkListShow = ref(props?.networkList || []);
+/**
  * COMPOSABLES
  */
 const { t } = useI18n();
@@ -27,7 +32,18 @@ onMounted(() => {});
 /**
  * METHODS
  */
-
+function handleSearch(text) {
+  console.log(text, 'text');
+  search.value = text;
+  const query = text.toLowerCase();
+  console.log(query, 'query');
+  console.log(props?.networkList, 'props?.networkList');
+  const rs = props?.networkList?.filter(item =>
+    item?.name?.toLowerCase()?.includes(query)
+  );
+  console.log(rs, 'rs');
+  networkListShow.value = rs;
+}
 async function onSelectNetwork(network: number): Promise<void> {
   emit('select', network);
   emit('close');
@@ -37,11 +53,28 @@ async function onSelectNetwork(network: number): Promise<void> {
 <template>
   <BalModal show noContentPad @close="$emit('close')">
     <div class="overflow-hidden">
-      <div v-if="networkList.length > 0" class="network-list">
+      <div class="network-list">
         <div class="title">{{ $t('selectChain') }}</div>
-        <div class="list-container">
+        <div class="search-form-container">
+          <BalTextInput
+            :modelValue="search"
+            name="search"
+            :placeholder="$t('searchByName')"
+            type="text"
+            validateOn="input"
+            autocomplete="off"
+            autocorrect="off"
+            step="any"
+            spellcheck="false"
+            v-bind="$attrs"
+            inputAlignRight
+            @update:model-value="handleSearch($event)"
+          >
+          </BalTextInput>
+        </div>
+        <div v-if="networkListShow.length > 0" class="list-container">
           <div
-            v-for="(item, index) in networkList"
+            v-for="(item, index) in networkListShow"
             :key="index"
             class="item-info"
             :class="{
@@ -56,16 +89,16 @@ async function onSelectNetwork(network: number): Promise<void> {
             <div class="item-label">{{ item.name }}</div>
           </div>
         </div>
+        <div
+          v-else
+          class="p-12 h-96 text-center text-secondary"
+          v-text="$t('errorNoNetworks')"
+        />
       </div>
 
       <!-- <div v-else-if="loading" class="flex justify-center items-center h-96">
         <BalLoadingIcon />
       </div> -->
-      <div
-        v-else
-        class="p-12 h-96 text-center text-secondary"
-        v-text="$t('errorNoNetworks')"
-      />
     </div>
   </BalModal>
 </template>
