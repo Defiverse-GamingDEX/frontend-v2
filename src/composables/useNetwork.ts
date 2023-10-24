@@ -78,6 +78,8 @@ export function networkFor(key: string | number): Network {
       return Network.DEFIVERSE_TESTNET;
     case '29548':
       return 29548;
+    case '2400':
+      return 2400;
     default:
       throw new Error('Network not supported');
   }

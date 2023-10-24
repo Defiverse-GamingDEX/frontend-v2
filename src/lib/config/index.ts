@@ -12,7 +12,7 @@ import test from './test.json';
 
 // network for bridge
 import mchverse from './mchverse.json';
-
+import tcgverse from './tcgverse.json';
 export interface Config {
   key: string;
   chainId: Network | 12345 | 17;
@@ -108,6 +108,7 @@ const config: Record<Network | number, Config> = {
   // @ts-ignore
   17: docker,
   29548: mchverse,
+  2400: tcgverse,
 };
 
 export default config;

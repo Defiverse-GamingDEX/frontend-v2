@@ -36,8 +36,18 @@ const networks = [
     name: 'MCHVerse',
     networkSlug: 'mchverse',
     key: '29548',
-    tokens: defiverseJson.tokens,
-    price: null, // 5000 Gwei
+    tokens: defiverseJson.tokens, // TODO not right
+    price: null,
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
+  {
+    id: 'tcgverse',
+    name: 'TCGVerse',
+    networkSlug: 'tcgverse',
+    key: '2400',
+    tokens: defiverseJson.tokens, // TODO not right
+    price: null,
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },

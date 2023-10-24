@@ -82,8 +82,15 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
   // just add for Bridge network
   '29548': {
     Balancer: {
-      Default: JSON.stringify(defiverseTestnetJson),
-      Vetted: JSON.stringify(defiverseTestnetJson),
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '2400': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
     },
     External: [],
   },
