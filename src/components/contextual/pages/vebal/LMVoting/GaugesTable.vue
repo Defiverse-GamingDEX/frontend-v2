@@ -41,6 +41,7 @@ type Props = {
   noPoolsLabel?: string;
   isPaginated?: boolean;
   filterText?: string;
+  tabSelect?: string;
 };
 
 /**
@@ -52,9 +53,11 @@ const props = withDefaults(defineProps<Props>(), {
   noPoolsLabel: 'No pools',
   filterText: '',
   isPaginated: false,
+  tabSelect: 'gauge',
   data: () => [],
 });
 
+console.log(props.tabSelect, 'props.tabSelect.value');
 const emit = defineEmits<{
   (e: 'clickedVote', value: VotingGaugeWithVotes): void;
 }>();
@@ -70,72 +73,74 @@ const { isWalletReady } = useWeb3();
 /**
  * DATA
  */
-const columns = ref<ColumnDefinition<VotingGaugeWithVotes>[]>([
-  {
-    name: t('veBAL.liquidityMining.table.chain'),
-    id: 'chain',
-    accessor: '',
-    Header: 'chainColumnHeader',
-    Cell: 'networkColumnCell',
-    width: 50,
-    noGrow: true,
-  },
-  {
-    name: t('veBAL.liquidityMining.table.assets'),
-    id: 'icons',
-    accessor: 'uri',
-    Header: 'iconColumnHeader',
-    Cell: 'iconColumnCell',
-    width: 100,
-    noGrow: true,
-  },
-  {
-    name: t('veBAL.liquidityMining.table.composition'),
-    id: 'poolComposition',
-    accessor: 'id',
-    Cell: 'poolCompositionCell',
-    width: 350,
-  },
-  {
-    name: t('veBAL.liquidityMining.table.nextPeriodVotes'),
-    accessor: 'id',
-    align: 'right',
-    id: 'nextPeriodVotes',
-    Cell: 'nextPeriodVotesCell',
-    sortKey: gauge => Number(gauge.votesNextPeriod),
-    width: 160,
-    cellClassName: 'font-numeric',
-  },
-  {
-    name: t('veBAL.liquidityMining.table.myVotes'),
-    accessor: 'myVotes',
-    align: 'right',
-    id: 'myVotes',
-    sortKey: gauge => Number(gauge.userVotes),
-    width: 100,
-    Cell: 'myVotesCell',
-    cellClassName: 'font-numeric',
-    hidden: !isWalletReady.value,
-  },
-  {
-    name: t('veBAL.liquidityMining.table.vote'),
-    id: 'vote',
-    accessor: 'id',
-    align: 'right',
-    Cell: 'voteColumnCell',
-    width: 100,
-    hidden: !isWalletReady.value,
-  },
-  {
-    name: t('veBAL.liquidityMining.table.additionalReward'),
-    id: 'addotionalReward',
-    accessor: 'addotionalReward',
-    align: 'right',
-    Cell: 'RewardColumnCell',
-    width: 100,
-    hidden: !isWalletReady.value,
-  },
-]);
+const columns = computed(() => {
+  return [
+    {
+      name: t('veBAL.liquidityMining.table.chain'),
+      id: 'chain',
+      accessor: '',
+      Header: 'chainColumnHeader',
+      Cell: 'networkColumnCell',
+      width: 50,
+      noGrow: true,
+    },
+    {
+      name: t('veBAL.liquidityMining.table.assets'),
+      id: 'icons',
+      accessor: 'uri',
+      Header: 'iconColumnHeader',
+      Cell: 'iconColumnCell',
+      width: 100,
+      noGrow: true,
+    },
+    {
+      name: t('veBAL.liquidityMining.table.composition'),
+      id: 'poolComposition',
+      accessor: 'id',
+      Cell: 'poolCompositionCell',
+      width: 350,
+    },
+    {
+      name: t('veBAL.liquidityMining.table.nextPeriodVotes'),
+      accessor: 'id',
+      align: 'right',
+      id: 'nextPeriodVotes',
+      Cell: 'nextPeriodVotesCell',
+      sortKey: gauge => Number(gauge.votesNextPeriod),
+      width: 160,
+      cellClassName: 'font-numeric',
+    },
+    {
+      name: t('veBAL.liquidityMining.table.myVotes'),
+      accessor: 'myVotes',
+      align: 'right',
+      id: 'myVotes',
+      sortKey: gauge => Number(gauge.userVotes),
+      width: 100,
+      Cell: 'myVotesCell',
+      cellClassName: 'font-numeric',
+      hidden: !isWalletReady.value,
+    },
+    {
+      name: t('veBAL.liquidityMining.table.vote'),
+      id: 'vote',
+      accessor: 'id',
+      align: 'right',
+      Cell: 'voteColumnCell',
+      width: 100,
+      hidden: !isWalletReady.value || props?.tabSelect !== 'gauge',
+    },
+    {
+      name: t('veBAL.liquidityMining.table.additionalReward'),
+      id: 'gaugeReward',
+      accessor: 'gaugeReward',
+      align: 'right',
+      Cell: 'RewardColumnCell',
+      width: 110,
+      hidden: !isWalletReady.value || props?.tabSelect !== 'gauge-reward',
+    },
+  ];
+});
 
 const dataKey = computed(() => JSON.stringify(props.data));
 
@@ -202,7 +207,7 @@ function getPickedTokens(tokens: PoolToken[]) {
 function openConfigReward(gauge) {
   console.log(gauge, 'gauge');
   router.push({
-    name: 'additional-reward-vedfv',
+    name: 'gauge-reward',
     params: {
       poolId: gauge.pool.id,
       networkSlug: getNetworkSlug(gauge.network),
@@ -210,6 +215,13 @@ function openConfigReward(gauge) {
     query: { returnRoute: 'vebal' },
   });
 }
+/**
+ * WATCHERS
+ */
+// watchEffect(() => {
+//   _amount.value = props?.inputSelect?.amount;
+//   _address.value = props?.inputSelect?.tokenAddress;
+// });
 </script>
 
 <template>
@@ -320,6 +332,7 @@ function openConfigReward(gauge) {
       <template #myVotesCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <GaugesTableMyVotes :gauge="gauge"></GaugesTableMyVotes>
+          {{ tabSelect?.value }}
         </div>
       </template>
       <template #voteColumnCell="gauge">
@@ -352,6 +365,10 @@ tr.expired-gauge-row {
   &.bal-btn {
     line-height: normal;
     font-size: 14px;
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 80%;
+    margin: 0 auto;
   }
 }
 </style>

@@ -61,9 +61,9 @@ const PortfolioPage = () =>
   import(
     /* webpackChunkName: "PortfolioPage" */ /* webpackPrefetch: true */ '@/pages/portfolio.vue'
   );
-const AdditionalRewardPage = () =>
+const GaugeRewardPage = () =>
   import(
-    /* webpackChunkName: "AdditionalRewardPage" */ /* webpackPrefetch: true */ '@/pages/additional-reward-vebal.vue'
+    /* webpackChunkName: "GaugeRewardPage" */ /* webpackPrefetch: true */ '@/pages/gauge-reward.vue'
   );
 declare module 'vue-router' {
   interface RouteMeta {
@@ -162,9 +162,9 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'FocusedLayout' },
   },
   {
-    path: '/:networkSlug/additional-reward-vedfv/:poolId',
-    name: 'additional-reward-vedfv',
-    component: AdditionalRewardPage,
+    path: '/:networkSlug/gauge-reward/:poolId',
+    name: 'gauge-reward',
+    component: GaugeRewardPage,
     meta: { layout: 'FocusedLayout' },
   },
   {

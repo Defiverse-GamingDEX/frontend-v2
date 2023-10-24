@@ -33,6 +33,7 @@ const networkFilters = [
   Network.OPTIMISM,
 ];
 
+const tabSelect = ref('gauge');
 /**
  * COMPOSABLES
  */
@@ -137,6 +138,9 @@ function handleModalClose() {
 function handleVoteSuccess() {
   refetchVotingGauges.value();
 }
+function changeTab(tab) {
+  tabSelect.value = tab;
+}
 </script>
 
 <template>
@@ -226,29 +230,51 @@ function handleVoteSuccess() {
           </p>
         </BalCard>
       </div>
-      <div class="flex mb-3 lg:mb-0">
-        <BalTextInput
-          v-model="tokenFilter"
-          class="mr-5"
-          name="tokenSearch"
-          type="text"
-          :placeholder="$t('filterByToken')"
-          size="sm"
-        >
-          <template #prepend>
-            <div class="flex items-center h-full">
-              <BalIcon name="search" size="md" class="px-2 text-gray-600" />
-            </div>
-          </template>
-        </BalTextInput>
+      <div class="mb-3 lg:mb-0">
+        <div class="mb-4 gauge-tabs">
+          <div class="flex justify-end align-center">
+            <BalBtn
+              color="white"
+              class="mr-5 gauge-tab"
+              :class="{ active: tabSelect === 'gauge' }"
+              @click="changeTab('gauge')"
+            >
+              Gauge
+            </BalBtn>
+            <BalBtn
+              color="white"
+              class="gauge-tab"
+              :class="{ active: tabSelect === 'gauge-reward' }"
+              @click="changeTab('gauge-reward')"
+            >
+              Addition Reward
+            </BalBtn>
+          </div>
+        </div>
+        <div class="flex">
+          <BalTextInput
+            v-model="tokenFilter"
+            class="mr-5"
+            name="tokenSearch"
+            type="text"
+            :placeholder="$t('filterByToken')"
+            size="sm"
+          >
+            <template #prepend>
+              <div class="flex items-center h-full">
+                <BalIcon name="search" size="md" class="px-2 text-gray-600" />
+              </div>
+            </template>
+          </BalTextInput>
 
-        <GaugesFilters
-          :networkFilters="networkFilters"
-          :showExpiredGauges="showExpiredGauges"
-          :activeNetworkFilters="activeNetworkFilters"
-          @update:show-expired-gauges="showExpiredGauges = $event"
-          @update:active-network-filters="activeNetworkFilters = $event"
-        />
+          <GaugesFilters
+            :networkFilters="networkFilters"
+            :showExpiredGauges="showExpiredGauges"
+            :activeNetworkFilters="activeNetworkFilters"
+            @update:show-expired-gauges="showExpiredGauges = $event"
+            @update:active-network-filters="activeNetworkFilters = $event"
+          />
+        </div>
       </div>
     </div>
 
@@ -259,6 +285,7 @@ function handleVoteSuccess() {
       :data="filteredVotingGauges"
       :noPoolsLabel="$t('noInvestments')"
       :filterText="tokenFilter"
+      :tabSelect="tabSelect"
       showPoolShares
       class="mb-8"
       @clicked-vote="setActiveGaugeVote"
@@ -277,3 +304,16 @@ function handleVoteSuccess() {
     />
   </teleport>
 </template>
+<style lang="scss" scoped>
+.gauge-tabs {
+  .gauge-tab {
+    min-width: 160px;
+    height: 36px;
+    &.active {
+      background: rgba(255, 255, 255, 0.6784313725) 0% 0% no-repeat padding-box;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1607843137);
+      color: #1eadee;
+    }
+  }
+}
+</style> 
