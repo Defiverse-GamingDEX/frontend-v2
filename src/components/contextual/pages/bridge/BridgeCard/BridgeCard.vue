@@ -29,7 +29,7 @@ const bridgeFee = ref(0.001);
 const gasFee = ref(0.01);
 
 const inputFromSelect = ref({
-  chainId: chainId,
+  chainId: '',
   tokenSymbol: '',
   tokenAddress: '',
   balance: 0,
@@ -104,6 +104,18 @@ function getChainName(chainId) {
 function getChain(chainId) {
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
 }
+
+function updateNetWorkInputFrom(chainId) {
+  let networkChoose = BRIDGE_NETWORKS.find(
+    item => item.chain_id_decimals === chainId
+  );
+  if (networkChoose) {
+    inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
+    inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
+    inputFromSelect.value.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
+  }
+}
+
 async function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
   console.log(inputFromSelect.value, 'inputFromSelect.value');
@@ -176,6 +188,14 @@ function handleTransferButton() {
   console.log(isChargeGas.value, 'isChargeGas.value');
   console.log(anotherWalletAddress.value, 'anotherWalletAddress.value');
 }
+
+/**
+ * LIFECYCLE
+ */
+onBeforeMount(() => {
+  console.log(chainId.value, 'chainId.value');
+  updateNetWorkInputFrom(chainId.value);
+});
 </script>
 
 <template>
