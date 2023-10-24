@@ -28,9 +28,9 @@ const swapCardShadow = computed(() => {
       <div class="claim-fees-container">
         <ClaimFees />
       </div>
-      <div class="config-gas-container">
+      <!-- <div class="config-gas-container">
         <ConfigGas />
-      </div>
+      </div> -->
     </BalCard>
   </div>
 </template>

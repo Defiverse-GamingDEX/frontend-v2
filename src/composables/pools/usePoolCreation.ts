@@ -585,7 +585,7 @@ export default function usePoolCreation() {
       );
       return address;
     } catch (error) {
-      return error;
+      return '';
     }
   }
   return {

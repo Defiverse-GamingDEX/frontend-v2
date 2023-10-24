@@ -10,6 +10,12 @@ import optimism from './optimism.json';
 import polygon from './polygon.json';
 import test from './test.json';
 
+// network for bridge
+import mchverse from './mchverse.json';
+import tcgverse from './tcgverse.json';
+import homeverse from './homeverse.json';
+import chainverse from './chainverse.json';
+import saakuru from './saakuru.json';
 export interface Config {
   key: string;
   chainId: Network | 12345 | 17;
@@ -104,6 +110,11 @@ const config: Record<Network | number, Config> = {
   12345: test,
   // @ts-ignore
   17: docker,
+  29548: mchverse,
+  2400: tcgverse,
+  19011: homeverse,
+  5555: chainverse,
+  7225878: saakuru,
 };
 
 export default config;

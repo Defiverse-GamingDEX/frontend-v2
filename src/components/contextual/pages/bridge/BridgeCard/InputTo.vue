@@ -108,13 +108,13 @@ function handleAmountChange(value) {
 
     .input-group {
       align-items: center;
+      padding: 0px;
       > .h-10 {
         height: auto;
       }
       .input {
-        font-size: 27px;
-        line-height: 32px;
-        font-weight: bold;
+        font-size: 1.25rem;
+        line-height: 1.75rem;
         color: #808080;
       }
     }

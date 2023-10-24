@@ -18,14 +18,14 @@ const actions = {
       'setInputAsset',
       lsGet(
         `bridge.inputAsset.${networkId.value}`,
-        initialTokens[networkId.value].input
+        initialTokens[networkId.value]?.input
       )
     );
     commit(
       'setOutputAsset',
       lsGet(
         `bridge.outputAsset.${networkId.value}`,
-        initialTokens[networkId.value].output
+        initialTokens[networkId.value]?.output
       )
     );
   },

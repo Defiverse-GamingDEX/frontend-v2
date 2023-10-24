@@ -14,22 +14,22 @@ import ChargeGasComponent from './ChargeGasComponent.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { cloneDeep } from 'lodash';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-// COMPOSABLES
+// // COMPOSABLES
 const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const { getTokensBalance, getBalance } = useBridge();
 
-const signer = getSigner();
-console.log(signer, 'signerAAA');
-// STATES
+// const signer = getSigner();
+// console.log(signer, 'signerAAA');
+// // STATES
 const chainsList = ref(BRIDGE_NETWORKS);
 const bridgeRate = ref(1);
 const bridgeFee = ref(0.001);
 const gasFee = ref(0.01);
 
 const inputFromSelect = ref({
-  chainId: chainId,
+  chainId: '',
   tokenSymbol: '',
   tokenAddress: '',
   balance: 0,
@@ -51,7 +51,7 @@ const inputToSelect = ref({
 });
 const anotherWalletAddress = ref('');
 const isChargeGas = ref(false);
-// COMPUTED
+// // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
     case 'xs':
@@ -63,9 +63,9 @@ const swapCardShadow = computed(() => {
   }
 });
 
-/**
- * FUNCTIONS
- */
+// /**
+//  * FUNCTIONS
+//  */
 
 async function handleTokenSwitch() {
   await swapData();
@@ -104,6 +104,18 @@ function getChainName(chainId) {
 function getChain(chainId) {
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
 }
+
+function updateNetWorkInputFrom(chainId) {
+  let networkChoose = BRIDGE_NETWORKS.find(
+    item => item.chain_id_decimals === chainId
+  );
+  if (networkChoose) {
+    inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
+    inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
+    inputFromSelect.value.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
+  }
+}
+
 async function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
   console.log(inputFromSelect.value, 'inputFromSelect.value');
@@ -165,10 +177,8 @@ function checkInputToChange() {
   console.log(inputToSelect.value, 'inputToSelect');
 }
 function handleNetworkChange(networkId) {
-  console.log(networkId, 'networkId');
   let network = getChain(networkId);
   if (network) {
-    console.log(network, 'networkAAA');
     connectToAppNetwork(network);
   }
 }
@@ -178,6 +188,14 @@ function handleTransferButton() {
   console.log(isChargeGas.value, 'isChargeGas.value');
   console.log(anotherWalletAddress.value, 'anotherWalletAddress.value');
 }
+
+/**
+ * LIFECYCLE
+ */
+onBeforeMount(() => {
+  console.log(chainId.value, 'chainId.value');
+  updateNetWorkInputFrom(chainId.value);
+});
 </script>
 
 <template>
@@ -205,6 +223,18 @@ function handleTransferButton() {
           </div>
           <div class="flex justify-center items-center my-3">
             <BridgePairToggle @toggle="handleTokenSwitch" />
+            <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
+            <div
+              v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"
+              class="flex items-center text-xs text-gray-600 dark:text-gray-400 cursor-pointer"
+            >
+              <!-- <div class="rate">
+                1 {{ inputFromSelect?.tokenSymbol }} on
+                {{ getChainName(inputFromSelect?.chainId) }} = {{ bridgeRate }}
+                {{ inputToSelect?.tokenSymbol }} on
+                {{ getChainName(inputToSelect?.chainId) }}
+              </div> -->
+            </div>
           </div>
           <div class="input-to">
             <div class="label">To</div>
@@ -234,12 +264,12 @@ function handleTransferButton() {
               </BalTextInput>
             </div>
           </div>
-          <div class="charge-gas-container">
+          <!-- <div class="charge-gas-container">
             <ChargeGasComponent
               :isChargeGas="isChargeGas"
               @update:change-gas="handleChargeGas($event)"
             />
-          </div>
+          </div> -->
         </div>
         <div
           v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"

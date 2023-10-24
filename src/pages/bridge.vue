@@ -6,7 +6,6 @@ import BridgeAdminComponent from '@/components/contextual/pages/bridge/BridgeAdm
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useI18n } from 'vue-i18n';
-import useAlerts, { AlertPriority, AlertType } from '@/composables/useAlerts';
 
 /**
  * STATE
@@ -17,18 +16,8 @@ const adminAddress = ref(null);
 // COMPOSABLES
 const { t } = useI18n();
 const { getAdminAddress } = usePoolCreation();
-const { addAlert, removeAlert } = useAlerts();
-const {
-  appNetworkConfig,
-  chainId,
-  account,
-  isMismatchedNetwork,
-  isUnsupportedNetwork,
-  blockNumber,
-  connectToAppNetwork,
-  isWalletReady,
-  disconnectWallet,
-} = useWeb3();
+
+const { account } = useWeb3();
 // COMPUTED
 const isAdmin = computed(() => {
   if (!adminAddress.value) {
@@ -41,33 +30,13 @@ const isAdmin = computed(() => {
 });
 // WATCHS
 watch(isAdmin, () => {
-  console.log(isAdmin, 'isAdmin');
-  if (isAdmin.value === false) {
+  if (!isAdmin.value) {
     tabSelect.value = 'bridge';
   }
 });
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
-  removeAlert('network-mismatch'); // remove change network warning in Bridge
-});
-onBeforeUnmount(async () => {
-  if (
-    chainId.value &&
-    (isUnsupportedNetwork.value || isMismatchedNetwork.value)
-  ) {
-    addAlert({
-      id: 'network-mismatch',
-      label: t('networkMismatch', [appNetworkConfig.name]),
-      type: AlertType.ERROR,
-      persistent: true,
-      action: connectToAppNetwork,
-      actionLabel: t('switchNetwork'),
-      priority: AlertPriority.HIGH,
-    });
-  } else {
-    removeAlert('network-mismatch');
-  }
 });
 
 /**

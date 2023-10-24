@@ -14,14 +14,19 @@ async function getTokensBalance(tokens, account) {
   }
 }
 async function getBalance(token, walletAddress) {
-  const { address, rpc } = token;
-  const provider = new JsonRpcProvider(rpc);
-  const tokenContract = new Contract(address, ERC20ABI, provider);
-  const tokenBalance = await tokenContract.balanceOf(walletAddress);
-  const weiBalance = tokenBalance?.toString();
-  const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toNumber();
+  try {
+    const { address, rpc } = token;
+    const provider = new JsonRpcProvider(rpc);
+    const tokenContract = new Contract(address, ERC20ABI, provider);
+    const tokenBalance = await tokenContract.balanceOf(walletAddress);
+    const weiBalance = tokenBalance?.toString();
+    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toNumber();
 
-  return rs;
+    return rs;
+  } catch (error) {
+    console.log(error, 'error');
+    return error;
+  }
 }
 export function useBridge() {
   return {

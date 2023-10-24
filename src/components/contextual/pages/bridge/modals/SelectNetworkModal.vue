@@ -15,6 +15,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['close', 'select']);
 
 /**
+ * STATES
+ */
+const search = ref('');
+const networkListShow = ref(props?.networkList || []);
+/**
  * COMPOSABLES
  */
 const { t } = useI18n();
@@ -27,7 +32,18 @@ onMounted(() => {});
 /**
  * METHODS
  */
-
+function handleSearch(text) {
+  console.log(text, 'text');
+  search.value = text;
+  const query = text.toLowerCase();
+  console.log(query, 'query');
+  console.log(props?.networkList, 'props?.networkList');
+  const rs = props?.networkList?.filter(item =>
+    item?.name?.toLowerCase()?.includes(query)
+  );
+  console.log(rs, 'rs');
+  networkListShow.value = rs;
+}
 async function onSelectNetwork(network: number): Promise<void> {
   emit('select', network);
   emit('close');
@@ -37,11 +53,28 @@ async function onSelectNetwork(network: number): Promise<void> {
 <template>
   <BalModal show noContentPad @close="$emit('close')">
     <div class="overflow-hidden">
-      <div v-if="networkList.length > 0" class="network-list">
+      <div class="network-list">
         <div class="title">{{ $t('selectChain') }}</div>
-        <div class="list-container">
+        <div class="search-form-container">
+          <BalTextInput
+            :modelValue="search"
+            name="search"
+            :placeholder="$t('searchByName')"
+            type="text"
+            autoFocus
+            size="sm"
+            @update:model-value="handleSearch($event)"
+          >
+            <template #prepend>
+              <div class="flex justify-center items-center w-8 h-full">
+                <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
+              </div>
+            </template>
+          </BalTextInput>
+        </div>
+        <div v-if="networkListShow.length > 0" class="list-container">
           <div
-            v-for="(item, index) in networkList"
+            v-for="(item, index) in networkListShow"
             :key="index"
             class="item-info"
             :class="{
@@ -56,24 +89,22 @@ async function onSelectNetwork(network: number): Promise<void> {
             <div class="item-label">{{ item.name }}</div>
           </div>
         </div>
+        <div
+          v-else
+          class="p-12 h-96 text-center text-secondary"
+          v-text="$t('errorNoNetworks')"
+        />
       </div>
 
       <!-- <div v-else-if="loading" class="flex justify-center items-center h-96">
         <BalLoadingIcon />
       </div> -->
-      <div
-        v-else
-        class="p-12 h-96 text-center text-secondary"
-        v-text="$t('errorNoNetworks')"
-      />
     </div>
   </BalModal>
 </template>
 
 <style scoped lang="scss">
 .network-list {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  box-shadow: 0px 7px 14px #0071a598;
   border-radius: 20px;
   padding: 24px 20px;
   .title {
@@ -81,23 +112,24 @@ async function onSelectNetwork(network: number): Promise<void> {
     font-weight: bold;
     line-height: 22px;
     color: #243f41;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
+  }
+  .search-form-container {
+    margin-bottom: 8px;
   }
   .list-container {
     .item-info {
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 1px 3px #00000029;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      padding: 6px;
+      padding: 0.5rem 0.75rem;
       cursor: pointer;
+      border-radius: 0.5rem;
       &:hover {
-        opacity: 0.8;
+        background: #eff6ff;
       }
       &.active {
-        box-shadow: inset 1px 1px 5px #00000072;
+        background: #eff6ff;
       }
       &:last-child {
         margin-bottom: 0px;
@@ -105,16 +137,9 @@ async function onSelectNetwork(network: number): Promise<void> {
       .item-img {
         margin-right: 12px;
         > img {
-          width: 24px;
-          height: 24px;
+          width: 36px;
+          height: 36px;
         }
-      }
-      .item-label {
-        font-size: 18px;
-        line-height: 22px;
-        font-weight: bold;
-        letter-spacing: 0px;
-        color: #0a425c;
       }
     }
   }

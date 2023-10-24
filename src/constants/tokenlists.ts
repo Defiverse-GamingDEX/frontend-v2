@@ -79,4 +79,40 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
     },
     External: [],
   },
+  // just add for Bridge network
+  '29548': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '2400': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '19011': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '5555': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '7225878': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
 };
