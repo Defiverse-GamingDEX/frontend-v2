@@ -165,10 +165,8 @@ function checkInputToChange() {
   console.log(inputToSelect.value, 'inputToSelect');
 }
 function handleNetworkChange(networkId) {
-  console.log(networkId, 'networkId');
   let network = getChain(networkId);
   if (network) {
-    console.log(network, 'networkAAA');
     connectToAppNetwork(network);
   }
 }

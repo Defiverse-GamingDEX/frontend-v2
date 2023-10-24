@@ -80,6 +80,12 @@ export function networkFor(key: string | number): Network {
       return 29548;
     case '2400':
       return 2400;
+    case '19011':
+      return 19011;
+    case '5555':
+      return 5555;
+    case '7225878':
+      return 7225878;
     default:
       throw new Error('Network not supported');
   }

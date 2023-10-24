@@ -94,4 +94,25 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
     },
     External: [],
   },
+  '19011': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '5555': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '7225878': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
 };

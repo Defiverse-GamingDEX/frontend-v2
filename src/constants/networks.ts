@@ -51,6 +51,36 @@ const networks = [
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },
+  {
+    id: 'homeverse',
+    name: 'HOMEVerse',
+    networkSlug: 'homeverse',
+    key: '19011',
+    tokens: defiverseJson.tokens, // TODO not right
+    price: null,
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
+  {
+    id: 'chainverse',
+    name: 'ChainVerse',
+    networkSlug: 'chainverse',
+    key: '5555',
+    tokens: defiverseJson.tokens, // TODO not right
+    price: null,
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
+  {
+    id: 'saakuru',
+    name: 'SaakuruVerse',
+    networkSlug: 'saakuru',
+    key: '7225878',
+    tokens: defiverseJson.tokens, // TODO not right
+    price: null,
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
 ];
 
 const networksDev = [
