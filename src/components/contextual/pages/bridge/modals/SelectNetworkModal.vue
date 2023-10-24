@@ -61,15 +61,15 @@ async function onSelectNetwork(network: number): Promise<void> {
             name="search"
             :placeholder="$t('searchByName')"
             type="text"
-            validateOn="input"
-            autocomplete="off"
-            autocorrect="off"
-            step="any"
-            spellcheck="false"
-            v-bind="$attrs"
-            inputAlignRight
+            autoFocus
+            size="sm"
             @update:model-value="handleSearch($event)"
           >
+            <template #prepend>
+              <div class="flex justify-center items-center w-8 h-full">
+                <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
+              </div>
+            </template>
           </BalTextInput>
         </div>
         <div v-if="networkListShow.length > 0" class="list-container">
@@ -105,8 +105,6 @@ async function onSelectNetwork(network: number): Promise<void> {
 
 <style scoped lang="scss">
 .network-list {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  box-shadow: 0px 7px 14px #0071a598;
   border-radius: 20px;
   padding: 24px 20px;
   .title {
@@ -114,23 +112,24 @@ async function onSelectNetwork(network: number): Promise<void> {
     font-weight: bold;
     line-height: 22px;
     color: #243f41;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
+  }
+  .search-form-container {
+    margin-bottom: 8px;
   }
   .list-container {
     .item-info {
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 1px 3px #00000029;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      padding: 6px;
+      padding: 0.5rem 0.75rem;
       cursor: pointer;
+      border-radius: 0.5rem;
       &:hover {
-        opacity: 0.8;
+        background: #eff6ff;
       }
       &.active {
-        box-shadow: inset 1px 1px 5px #00000072;
+        background: #eff6ff;
       }
       &:last-child {
         margin-bottom: 0px;
@@ -138,16 +137,9 @@ async function onSelectNetwork(network: number): Promise<void> {
       .item-img {
         margin-right: 12px;
         > img {
-          width: 24px;
-          height: 24px;
+          width: 36px;
+          height: 36px;
         }
-      }
-      .item-label {
-        font-size: 18px;
-        line-height: 22px;
-        font-weight: bold;
-        letter-spacing: 0px;
-        color: #0a425c;
       }
     }
   }

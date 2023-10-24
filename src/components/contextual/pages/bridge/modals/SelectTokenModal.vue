@@ -37,6 +37,8 @@ const { getTokensBalance, getBalance } = useBridge();
  */
 const loading = ref(true);
 const tokens = ref([]);
+const search = ref('');
+const tokensShow = ref([]);
 /**
  * COMPUTED
  */
@@ -54,11 +56,15 @@ const tokens = ref([]);
  */
 onMounted(async () => {
   tokens.value = createTokens();
+  // update token show
+  tokensShow.value = tokens.value;
+  loading.value = false;
+
   if (account.value) {
     tokens.value = await getTokensBalance(tokens.value, account.value);
+    tokensShow.value = tokens.value;
   }
 });
-
 /**
  * METHODS
  */
@@ -87,50 +93,95 @@ async function onSelectToken(token: object): Promise<void> {
   emit('select', token);
   emit('close');
 }
+function handleSearch(text) {
+  console.log(text, 'text');
+  search.value = text;
+  const query = text.toLowerCase();
+  console.log(query, 'query');
+
+  const rs = tokens?.value?.filter(item => {
+    // Check if the item's name, symbol, or address contains the search query
+    return (
+      item.name.toLowerCase().includes(query) ||
+      item.symbol.toLowerCase().includes(query) ||
+      item.address.toLowerCase().includes(query)
+    );
+  });
+  console.log(rs, 'rs');
+  tokensShow.value = rs;
+}
 </script>
 
 <template>
   <BalModal show noContentPad @close="$emit('close')">
     <div class="overflow-hidden">
-      <div v-if="tokens.length > 0" class="token-list">
+      <div class="token-list">
         <div class="title">{{ $t('selectCoin') }}</div>
-        <div class="list-container">
-          <div
-            v-for="(item, index) in tokens"
-            :key="index"
-            class="item-info"
-            :class="{
-              active: item.address === tokenChoose?.address,
-            }"
-            @click="onSelectToken(item)"
+        <div class="search-form-container">
+          <BalTextInput
+            :modelValue="search"
+            name="search"
+            :placeholder="$t('searchBy')"
+            type="text"
+            autoFocus
+            size="sm"
+            @update:model-value="handleSearch($event)"
           >
-            <div class="item-img">
-              <img width="48" height="48" :src="item.logoURI" />
-            </div>
-            <div class="item-label">{{ item.symbol }}</div>
-            <div class="item-balance">
-              {{ fNum2(item?.balance, FNumFormats.token) }}
+            <template #prepend>
+              <div class="flex justify-center items-center w-8 h-full">
+                <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
+              </div>
+            </template>
+          </BalTextInput>
+        </div>
+        <div v-if="loading" class="flex justify-center items-center h-96">
+          <BalLoadingIcon />
+        </div>
+        <div v-else>
+          <div v-if="tokensShow.length > 0" class="list-container">
+            <div
+              v-for="(item, index) in tokensShow"
+              :key="index"
+              class="item-info"
+              :class="{
+                active: item.address === tokenChoose?.address,
+              }"
+              @click="onSelectToken(item)"
+            >
+              <div class="content-left">
+                <div class="item-img">
+                  <img width="48" height="48" :src="item.logoURI" />
+                </div>
+                <div class="item-content">
+                  <div class="item-symbol">{{ item.symbol }}</div>
+                  <div
+                    class="w-40 md:w-60 text-sm truncate item-name text-gray"
+                  >
+                    {{ item.name }}
+                  </div>
+                </div>
+              </div>
+              <div class="content-right">
+                <div class="font-medium item-balance">
+                  {{ fNum2(item?.balance, FNumFormats.token) }}
+                </div>
+              </div>
             </div>
           </div>
+
+          <div
+            v-else
+            class="p-12 h-96 text-center text-secondary"
+            v-text="$t('errorNoTokens')"
+          />
         </div>
       </div>
-
-      <div v-else-if="loading" class="flex justify-center items-center h-96">
-        <BalLoadingIcon />
-      </div>
-      <div
-        v-else
-        class="p-12 h-96 text-center text-secondary"
-        v-text="$t('errorNoTokens')"
-      />
     </div>
   </BalModal>
 </template>
 
 <style scoped lang='scss'>
 .token-list {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  box-shadow: 0px 7px 14px #0071a598;
   border-radius: 20px;
   padding: 24px 20px;
   .title {
@@ -138,43 +189,46 @@ async function onSelectToken(token: object): Promise<void> {
     font-weight: bold;
     line-height: 22px;
     color: #243f41;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
+  }
+  .search-form-container {
+    margin-bottom: 8px;
   }
   .list-container {
     .item-info {
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 1px 3px #00000029;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
-      padding: 6px;
+      padding: 0.5rem 0.75rem;
       cursor: pointer;
+      border-radius: 0.5rem;
       &:hover {
-        opacity: 0.8;
+        background: #eff6ff;
       }
       &.active {
-        box-shadow: inset 1px 1px 5px #00000072;
+        background: #eff6ff;
+        color: rgb(59, 130, 246);
       }
       &:last-child {
         margin-bottom: 0px;
       }
-      .item-img {
-        margin-right: 12px;
-        > img {
-          width: 24px;
-          height: 24px;
+      .content-left {
+        display: flex;
+        align-items: center;
+        .item-img {
+          margin-right: 12px;
+          > img {
+            width: 36px;
+            height: 36px;
+          }
         }
       }
-      .item-label {
-        font-size: 18px;
-        line-height: 22px;
-        font-weight: bold;
-        letter-spacing: 0px;
-        color: #0a425c;
-      }
-      .item-balance {
+      .content-right {
         margin-left: auto;
+        .item-balance {
+          margin-left: auto;
+          color: rgb(10, 66, 92);
+        }
       }
     }
   }
