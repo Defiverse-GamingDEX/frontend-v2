@@ -151,4 +151,5 @@ Analyze and visualize the bundle dependencies by adding these env vars to your `
 # Local .env file
 VITE_BUILD_ANALIZE=true
 VITE_BUILD_VISUALIZE=true
+
 ```
