@@ -14,12 +14,19 @@ import ChargeGasComponent from './ChargeGasComponent.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { cloneDeep } from 'lodash';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
+import BigNumber from 'bignumber.js';
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import useEthers from '@/composables/useEthers';
 // // COMPOSABLES
 const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
-const { getTokensBalance, getBalance } = useBridge();
-
+const { getTokensBalance, getBalance, checkTokenAllowance, approveToken } =
+  useBridge();
+const { addNotification } = useNotifications();
+const { addTransaction } = useTransactions();
+const { txListener } = useEthers();
 // const signer = getSigner();
 // console.log(signer, 'signerAAA');
 // // STATES
@@ -51,6 +58,8 @@ const inputToSelect = ref({
 });
 const anotherWalletAddress = ref('');
 const isChargeGas = ref(false);
+const isAllowance = ref(false);
+const isLoading = ref(false);
 // // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -63,10 +72,44 @@ const swapCardShadow = computed(() => {
   }
 });
 
+watch(
+  () => account.value,
+  async () => {
+    getBalanceInputFrom();
+    checkAllowanceInputFrom();
+  }
+);
 // /**
 //  * FUNCTIONS
 //  */
-
+async function getBalanceInputFrom() {
+  // update balance InputFrom
+  if (account.value && inputFromSelect.value.tokenAddress) {
+    console.log(inputFromSelect.value.tokenAddress, 'inputFromSelect.value');
+    let token = inputFromSelect.value.tokensList.find(
+      item => item.address === inputFromSelect.value.tokenAddress
+    );
+    inputFromSelect.value.balance = await getBalance(token, account.value);
+  }
+}
+async function checkAllowanceInputFrom() {
+  try {
+    if (account.value && inputFromSelect.value.tokenAddress) {
+      console.log(inputFromSelect.value.tokenAddress, 'inputFromSelect.value');
+      let token = inputFromSelect.value.tokensList.find(
+        item => item.address === inputFromSelect.value.tokenAddress
+      );
+      const allowance = await checkTokenAllowance(token, account.value);
+      isAllowance.value = BigNumber(allowance?.toString() || 0).gt(0)
+        ? true
+        : false;
+      console.log(isAllowance.value, ' isAllowance.value');
+    }
+  } catch (error) {
+    console.log(error, 'error=>checkAllowanceInputFrom');
+    throw error;
+  }
+}
 async function handleTokenSwitch() {
   await swapData();
 }
@@ -84,18 +127,15 @@ async function swapData() {
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
-  // update balance InputFrom
-  if (account.value && inputFromSelect.value.tokenAddress) {
-    inputFromSelect.value.balance = await getBalance(
-      inputFromSelect.value.tokenAddress,
-      account.value
-    );
-  }
+  await getBalanceInputFrom();
+  await checkAllowanceInputFrom();
+  // connect network from
+  handleNetworkChange(inputFromSelect.value.chainId);
 }
 async function getBridgeRate() {
   // call contract to getRate here
   return new Promise((resolve, reject) => {
-    resolve(2); // mean  1 From = 2 To
+    resolve(1); // mean  1 From = 1
   });
 }
 function getChainName(chainId) {
@@ -113,6 +153,8 @@ function updateNetWorkInputFrom(chainId) {
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
     inputFromSelect.value.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
+
+    checkInputToChange();
   }
 }
 
@@ -126,6 +168,8 @@ async function handleInputFromChange(inputSelect) {
   bridgeRate.value = await getBridgeRate();
   // update amount InputTo
   inputToSelect.value.amount = inputFromSelect.value.amount * bridgeRate.value;
+  // check allowance
+  await checkAllowanceInputFrom();
 }
 async function handleInputToChange(inputSelect) {
   inputToSelect.value = inputSelect;
@@ -146,7 +190,6 @@ function handleChargeGas(isChecked) {
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
   // update chainsList
-  console.log(inputFrom.isOnlyDefiBridge, 'inputFrom.isOnlyDefiBridge');
   if (inputFrom.isOnlyDefiBridge) {
     inputToSelect.value.chainsList = chainsList.value.filter(
       item =>
@@ -158,6 +201,7 @@ function checkInputToChange() {
       item => item.chain_id_decimals !== inputFrom.chainId
     );
   }
+
   // update token
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
   inputToSelect.value.tokenAddress = inputFrom.tokenAddress;
@@ -171,6 +215,12 @@ function checkInputToChange() {
     );
     if (!avaiChain) {
       inputToSelect.value.chainId = '';
+    }
+  } else {
+    // set default chainId for inputTo
+    if (inputToSelect.value.chainsList.length > 0) {
+      inputToSelect.value.chainId =
+        inputToSelect.value.chainsList[0].chain_id_decimals;
     }
   }
 
@@ -188,12 +238,46 @@ function handleTransferButton() {
   console.log(isChargeGas.value, 'isChargeGas.value');
   console.log(anotherWalletAddress.value, 'anotherWalletAddress.value');
 }
+async function handleApproveButton() {
+  try {
+    isLoading.value = true;
+    const signer = getSigner();
+    let token = inputFromSelect.value.tokensList.find(
+      item => item.address === inputFromSelect.value.tokenAddress
+    );
+    let tx = await approveToken(token, account.value, signer);
+
+    const chainName = getChainName(inputFromSelect.value.chainId);
+    const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'approve',
+      summary,
+    });
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        await checkAllowanceInputFrom();
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error) {
+    console.log(error, 'error=>handleApproveButton');
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
+}
 
 /**
  * LIFECYCLE
  */
 onBeforeMount(() => {
-  console.log(chainId.value, 'chainId.value');
   updateNetWorkInputFrom(chainId.value);
 });
 </script>
@@ -302,7 +386,24 @@ onBeforeMount(() => {
         </div>
         <div class="bridge-actions">
           <BalBtn
-            :label="$t('tranfer')"
+            v-if="!isAllowance"
+            :disabled="!inputFromSelect.tokenAddress || !inputToSelect.chainId"
+            :label="$t('Approve')"
+            :loading="isLoading"
+            classCustom="pink-white-shadow"
+            block
+            @click.prevent="handleApproveButton"
+          />
+          <BalBtn
+            v-else
+            :disabled="
+              !inputFromSelect.tokenAddress ||
+              !inputToSelect.chainId ||
+              inputFromSelect.balance === 0 ||
+              inputFromSelect.balance < inputFromSelect.amount
+            "
+            :label="$t('Tranfer')"
+            :loading="isLoading"
             classCustom="pink-white-shadow"
             block
             @click.prevent="handleTransferButton"

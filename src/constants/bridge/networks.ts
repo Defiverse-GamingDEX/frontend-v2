@@ -1,4 +1,5 @@
 import { BRIDGE_DEFI_TOKENS } from './defi-tokens';
+import { BRIDGE_GOERLI_TOKENS } from './goerli-tokens';
 import ethereumIcon from '@/assets/images/bridge/networks/ethereum.png';
 import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
 import defiIcon from '@/assets/images/bridge/networks/defi.png';
@@ -18,7 +19,24 @@ export const BRIDGE_NETWORKS = [
     rpc: 'https://mainnet.infura.io/v3/',
     type: 'L1',
     isOnlyDefiBridge: false,
-    tokens: BRIDGE_DEFI_TOKENS,
+    tokens: [],
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  },
+  {
+    chain_id: '0x5',
+    chain_id_decimals: 5,
+    img_url: ethereumIcon,
+    name: 'Ethereum Testnet',
+    gasPrice: null,
+    explorer: 'https://goerli.etherscan.io/',
+    rpc: 'https://goerli.blockpi.network/v1/rpc/public',
+    type: 'L1',
+    isOnlyDefiBridge: false,
+    tokens: BRIDGE_GOERLI_TOKENS,
     nativeCurrency: {
       name: 'Ethereum',
       symbol: 'ETH',
@@ -35,11 +53,12 @@ export const BRIDGE_NETWORKS = [
     rpc: 'https://polygon-mainnet.infura.io',
     type: 'L1',
     isOnlyDefiBridge: false,
-    tokens: BRIDGE_DEFI_TOKENS,
+    tokens: [],
     nativeCurrency: {
       name: 'MATIC',
       symbol: 'MATIC',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -51,12 +70,13 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://scan.defiverse.net',
     rpc: 'https://rpc.defiverse.net',
     type: 'L2',
-    isOnlyDefiBridge: true,
-    tokens: BRIDGE_DEFI_TOKENS,
+    isOnlyDefiBridge: false,
+    tokens: [],
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -74,6 +94,7 @@ export const BRIDGE_NETWORKS = [
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -86,11 +107,12 @@ export const BRIDGE_NETWORKS = [
     rpc: 'https://rpc.tcgverse.xyz',
     type: 'L2',
     isOnlyDefiBridge: true,
-    tokens: BRIDGE_DEFI_TOKENS,
+    tokens: [],
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -103,11 +125,12 @@ export const BRIDGE_NETWORKS = [
     rpc: 'https://rpc.mainnet.oasys.homeverse.games',
     type: 'L2',
     isOnlyDefiBridge: true,
-    tokens: BRIDGE_DEFI_TOKENS,
+    tokens: [],
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -120,11 +143,12 @@ export const BRIDGE_NETWORKS = [
     rpc: 'https://rpc.chainverse.info',
     type: 'L2',
     isOnlyDefiBridge: true,
-    tokens: BRIDGE_DEFI_TOKENS,
+    tokens: [],
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -137,11 +161,12 @@ export const BRIDGE_NETWORKS = [
     rpc: 'https://rpc.saakuru.network',
     type: 'L2',
     isOnlyDefiBridge: true,
-    tokens: BRIDGE_DEFI_TOKENS,
+    tokens: [],
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
   {
@@ -153,12 +178,13 @@ export const BRIDGE_NETWORKS = [
     explorer: 'https://scan-testnet.defiverse.net',
     rpc: 'https://rpc-testnet.defiverse.net',
     type: 'L2',
-    isOnlyDefiBridge: true,
-    tokens: BRIDGE_DEFI_TOKENS,
+    isOnlyDefiBridge: false,
+    tokens: [],
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
       decimals: 18,
+      address: '0x4200000000000000000000000000000000000010',
     },
   },
 ];

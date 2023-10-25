@@ -24,7 +24,7 @@ export const BRIDGE_DEFI_TOKENS = [
   },
   {
     name: 'Tether',
-    address: '0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837',
+    address: '0xf4b2cbc3ba04c478f0dc824f4806ac39982dce73',
     logoURI: usdtIcon,
     symbol: 'USDT',
     decimals: 18,
@@ -33,7 +33,7 @@ export const BRIDGE_DEFI_TOKENS = [
   },
   {
     name: 'USD Coin',
-    address: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980',
+    address: '0xcbe56b00d173a26a5978ce90db2e33622fd95a28',
     logoURI: usdcIcon,
     symbol: 'USDC',
     decimals: 18,

@@ -84,12 +84,12 @@ const networks = [
 ];
 
 const networksDev = [
-  // {
-  //   id: 'goerli',
-  //   name: 'Goerli',
-  //   networkSlug: 'goerli',
-  //   key: '5',
-  // },
+  {
+    id: 'goerli',
+    name: 'Goerli',
+    networkSlug: 'goerli',
+    key: '5',
+  },
   {
     id: 'defiverse-testnet',
     name: 'Defiverse-Testnet',
