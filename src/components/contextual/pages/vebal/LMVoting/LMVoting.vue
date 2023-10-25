@@ -309,6 +309,7 @@ function changeTab(tab) {
   .gauge-tab {
     min-width: 160px;
     height: 36px;
+
     &.active {
       background: rgba(255, 255, 255, 0.6784313725) 0% 0% no-repeat padding-box;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1607843137);

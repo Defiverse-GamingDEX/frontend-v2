@@ -8,18 +8,20 @@ type Props = {
   isSelected: boolean;
   isPicked: boolean;
   token: PoolToken;
+  isShowPopup: boolean;
 };
 
 withDefaults(defineProps<Props>(), {
   hasBalance: false,
   isSelected: false,
   isPicked: false,
+  isShowPopup: false,
 });
 </script>
 
 <template>
   <BalTooltip
-    :disabled="!hasBalance"
+    :disabled="!hasBalance && !isShowPopup"
     class="mr-1 last:mr-0 leading-normal cursor-pointer"
     textAlign="left"
     :delayMs="50"

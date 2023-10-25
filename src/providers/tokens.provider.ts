@@ -406,6 +406,7 @@ export const tokensProvider = (
    * Checks if token has a balance
    */
   function hasBalance(address: string): boolean {
+    console.log(address, 'address=>hasBalanceAAA');
     return Number(balances.value[address]) > 0;
   }
 
