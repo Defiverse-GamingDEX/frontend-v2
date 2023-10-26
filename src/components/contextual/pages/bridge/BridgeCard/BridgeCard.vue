@@ -24,6 +24,7 @@ const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
+  getTransferConfigs,
   getTokensBalance,
   getBalance,
   checkTokenAllowance,
@@ -327,6 +328,7 @@ async function handleApproveButton() {
  */
 onBeforeMount(() => {
   updateNetWorkInputFrom(chainId.value);
+  getTransferConfigs();
 });
 </script>
 

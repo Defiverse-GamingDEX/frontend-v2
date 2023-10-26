@@ -7,9 +7,24 @@ import { default as IL2ERC20BridgeABI } from '@/lib/abi/bridge/IL2ERC20Bridge.js
 import { OASYS_TESTNET_NETWORK } from '@/constants/bridge/oasys-testnet-network';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import bridgeService from './bridge.services.js';
-
+import bridgeAPI from './bridge.api.js';
 import { bnum } from '@/lib/utils';
 import { ethers } from 'ethers';
+
+// function from BridgeAPI - START
+async function getTransferConfigs() {
+  try {
+    const rs = bridgeAPI.getTransferConfigs();
+
+    return rs;
+  } catch (error) {
+    console.log(error, 'error');
+    throw error;
+  }
+}
+
+// function from BridgeAPI - END
+
 async function getTokensBalance(tokens, account) {
   if (tokens.length > 0) {
     for (let i = 0; i < tokens.length; i++) {
@@ -169,6 +184,9 @@ async function bridgeSend(
 }
 export function useBridge() {
   return {
+    // SDK start
+    getTransferConfigs,
+    // SDK end
     getTokensBalance,
     getBalance,
     checkTokenAllowance,
