@@ -6,7 +6,7 @@ import SwapSettingsPopover, {
 import useBreakpoints from '@/composables/useBreakpoints';
 import { useBridge } from '@/composables/bridge/useBridge';
 import useWeb3 from '@/services/web3/useWeb3';
-
+import { useUserSettings } from '@/providers/user-settings.provider';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
@@ -18,15 +18,22 @@ import BigNumber from 'bignumber.js';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
+
 // // COMPOSABLES
 const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
-const { getTokensBalance, getBalance, checkTokenAllowance, approveToken } =
-  useBridge();
+const {
+  getTokensBalance,
+  getBalance,
+  checkTokenAllowance,
+  approveToken,
+  bridgeSend,
+} = useBridge();
 const { addNotification } = useNotifications();
 const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
+const { slippage, setSlippage } = useUserSettings();
 // const signer = getSigner();
 // console.log(signer, 'signerAAA');
 // // STATES
@@ -99,7 +106,8 @@ async function checkAllowanceInputFrom() {
       let token = inputFromSelect.value.tokensList.find(
         item => item.address === inputFromSelect.value.tokenAddress
       );
-      const allowance = await checkTokenAllowance(token, account.value);
+      const chain = getChain(inputFromSelect.value.chainId);
+      const allowance = await checkTokenAllowance(chain, token, account.value);
       isAllowance.value = BigNumber(allowance?.toString() || 0).gt(0)
         ? true
         : false;
@@ -143,6 +151,10 @@ function getChainName(chainId) {
 }
 function getChain(chainId) {
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
+}
+
+function getToken(tokenAddress, list) {
+  return list?.find(item => item.address === tokenAddress) || null;
 }
 
 function updateNetWorkInputFrom(chainId) {
@@ -232,11 +244,65 @@ function handleNetworkChange(networkId) {
     connectToAppNetwork(network);
   }
 }
-function handleTransferButton() {
-  console.log(inputFromSelect.value, 'inputFromSelect.value');
-  console.log(inputToSelect.value, 'inputToSelect');
-  console.log(isChargeGas.value, 'isChargeGas.value');
-  console.log(anotherWalletAddress.value, 'anotherWalletAddress.value');
+async function handleTransferButton() {
+  try {
+    console.log(inputFromSelect.value, 'inputFromSelect.value');
+    console.log(inputToSelect.value, 'inputToSelect');
+    console.log(isChargeGas.value, 'isChargeGas.value');
+    console.log(anotherWalletAddress.value, 'anotherWalletAddress.value');
+
+    isLoading.value = true;
+
+    const chain = getChain(inputFromSelect.value.chainId);
+    const tokenInputFrom = getToken(
+      inputFromSelect.value.tokenAddress,
+      inputFromSelect.value.tokensList
+    );
+    const signer = getSigner();
+
+    const params = {
+      contractAddress: chain?.bridgeContract,
+      tokenAddress: inputFromSelect.value.tokenAddress,
+      rpc: chain?.rpc,
+      tokenDecimal: tokenInputFrom?.decimals,
+      value: inputFromSelect.value.amount,
+      account: account.value,
+      desChainId: inputToSelect.value.chainId, // des chain
+      signer: signer,
+      slippage: parseFloat(slippage.value || '0'),
+      gasPrice: chain?.gasPrice,
+      bridgeContract: chain?.bridgeContract,
+    };
+    console.log(params, 'handleTransferButton=>params');
+    let tx = await bridgeSend(params);
+
+    const chainNameInput = getChainName(inputFromSelect.value.chainId);
+    const chainNameOutput = getChainName(inputToSelect.value.chainId);
+    const summary = `tranfer token ${inputFromSelect.value.tokenSymbol} from ${chainNameInput} to ${chainNameOutput}`;
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'approve',
+      summary,
+    });
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        console.log('success');
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error) {
+    console.log(error, 'error=>handleTransferButton');
+    isLoading.value = false;
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
 }
 async function handleApproveButton() {
   try {
@@ -245,7 +311,8 @@ async function handleApproveButton() {
     let token = inputFromSelect.value.tokensList.find(
       item => item.address === inputFromSelect.value.tokenAddress
     );
-    let tx = await approveToken(token, account.value, signer);
+    const chain = getChain(inputFromSelect.value.chainId);
+    let tx = await approveToken(chain, token, account.value, signer);
 
     const chainName = getChainName(inputFromSelect.value.chainId);
     const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
@@ -266,6 +333,7 @@ async function handleApproveButton() {
     });
   } catch (error) {
     console.log(error, 'error=>handleApproveButton');
+    isLoading.value = false;
     addNotification({
       type: 'error',
       title: '',

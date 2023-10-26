@@ -1,16 +1,16 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 
-const _sendRawTx = async ({
-  abi,
+const _sendRawTx = async (
   contractAddress,
   contractProvider,
   action,
   params,
   overwrite,
   signer,
-  gasPrice = null,
-}) => {
+  abi,
+  gasPrice = null
+) => {
   try {
     const myContract = await new ethers.Contract(
       contractAddress,
@@ -33,9 +33,9 @@ const _sendRawTx = async ({
       .connect(signer)
       [action](...params, { gasLimit: gas, gasPrice: gasPrice });
     console.log('--->tx: ', tx); // eslint-disable-line no-console
-    let rs = await tx.wait();
-    console.log('--->rs: ', rs); // eslint-disable-line no-console
-    return rs;
+    //let rs = await tx.wait();
+    //console.log('--->rs: ', rs); // eslint-disable-line no-console
+    return tx;
   } catch (error) {
     let _error = error;
     try {
@@ -52,8 +52,7 @@ const _sendRawTx = async ({
     throw _error;
   }
 };
-const _sendRawTxNative = async ({
-  abi,
+const _sendRawTxNative = async (
   contractAddress,
   contractProvider,
   action,
@@ -61,8 +60,9 @@ const _sendRawTxNative = async ({
   overwrite,
   signer,
   value,
-  gasPrice = null,
-}) => {
+  abi,
+  gasPrice = null
+) => {
   try {
     const myContract = await new ethers.Contract(
       contractAddress,
@@ -88,9 +88,9 @@ const _sendRawTxNative = async ({
       value: value,
     });
     console.log('--->tx: ', tx); // eslint-disable-line no-console
-    let rs = await tx.wait();
-    console.log('--->rs: ', rs); // eslint-disable-line no-console
-    return rs;
+    //let rs = await tx.wait();
+    //console.log('--->rs: ', rs); // eslint-disable-line no-console
+    return tx;
   } catch (error) {
     let _error = error;
     try {
@@ -134,4 +134,42 @@ const _estimateGasNative = async (
   return new BigNumber(estimateGas).times(2).toFixed(0);
 };
 
-export default {};
+const bridgeSend = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    tokenAddress,
+    tokenDecimal,
+    value, // amount
+    account, // account address
+    chainId,
+    signer,
+    slippage,
+    abi,
+    gasPrice,
+  } = params;
+
+  const slippageUse = 780; // TODO hard for test
+  const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  console.log(nonce, 'nonce');
+  let decimals = new BigNumber(10).pow(tokenDecimal).toFixed();
+  let decimals_value = BigNumber(value).times(decimals).toFixed(0);
+  let overwrite = { from: account };
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'send',
+    [account, tokenAddress, decimals_value, chainId, nonce, slippageUse],
+    overwrite,
+    signer,
+    abi,
+    gasPrice
+  );
+
+  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
+  return rs;
+};
+
+export default {
+  bridgeSend,
+};
