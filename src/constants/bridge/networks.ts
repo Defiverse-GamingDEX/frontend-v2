@@ -8,6 +8,7 @@ import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
 import homeIcon from '@/assets/images/bridge/networks/home.png';
 import chainIcon from '@/assets/images/bridge/networks/chain.png';
 import saakuruIcon from '@/assets/images/bridge/networks/saakuru.png';
+import avalancheIcon from '@/assets/images/bridge/networks/avalanche.png';
 export const BRIDGE_NETWORKS = [
   {
     chain_id: '0x1',
@@ -42,6 +43,24 @@ export const BRIDGE_NETWORKS = [
     nativeCurrency: {
       name: 'Ethereum',
       symbol: 'ETH',
+      decimals: 18,
+    },
+  },
+  {
+    chain_id: '0xA869',
+    chain_id_decimals: 43113,
+    img_url: avalancheIcon,
+    name: 'AVAX Testnet',
+    gasPrice: null,
+    explorer: 'https://testnet.snowtrace.io/',
+    rpc: 'https://api.avax-test.network/ext/bc/C/rpc',
+    bridgeContract: '0xe95e3a9f1a45b5eda71781448f6047d7b7e31cbf',
+    type: 'L1',
+    isOnlyDefiBridge: false,
+    tokens: [],
+    nativeCurrency: {
+      name: 'AVAX',
+      symbol: 'AVAX',
       decimals: 18,
     },
   },

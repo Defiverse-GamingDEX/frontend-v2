@@ -91,6 +91,12 @@ const networksDev = [
     key: '5',
   },
   {
+    id: 'avalanche-testnet',
+    name: 'Avalanche Testnet',
+    networkSlug: 'avalanche-testnet',
+    key: '43113',
+  },
+  {
     id: 'defiverse-testnet',
     name: 'Defiverse-Testnet',
     networkSlug: 'defiverse-testnet',

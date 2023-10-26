@@ -1,0 +1,91 @@
+{
+  "key": "43113",
+  "chainId": 43113,
+  "chainName": "avalanche Testnet",
+  "name": "Avalanche Testnet",
+  "shortName": "Avalanche",
+  "slug": "avalanche-testnet",
+  "network": "avalanche-testnet",
+  "unknown": false,
+  "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
+  "ws": "wss://api.avax-test.network/ext/bc/C/rpc",
+  "publicRpc": "https://rpc.chainverse.info",
+  "explorer": "https://testnet.snowtrace.io",
+  "explorerName": "Avalanche Testnet Explorer",
+  "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
+  "poolsUrlV1": "",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [
+      "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse"
+    ],
+    "aave": "",
+    "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse",
+    "blocks": ""
+  },
+  "supportsEIP1559": false,
+  "supportsElementPools": false,
+  "blockTime": 2,
+  "nativeAsset": {
+    "name": "AVAX",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "AVAX",
+    "decimals": 18,
+    "deeplinkId": "avax",
+    "logoURI": "tokens/avax.png",
+    "minTransactionBuffer": "0.05"
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "0xDD99819dDB53fFcc9FF77d8Cda4553b17D27b9a4",
+    "authorizer": "0xC80f988A4ef2e2570C9b077B635fEF895527178D",
+    "vault": "0xef570b45a20e9bDe7855BDF5940Be3ac17B4c610",
+    "weightedPoolFactory": "0x8c96Ab92be9a17F6DB66bB254c31DD0C263eA81A",
+    "stablePoolFactory": "0x42DD917a3C8A14a766712Fabe7B048f0306246F6",
+    "weth": "0xEB7638A7c4eAEb25ECe59F4382b9f06a8056F980",
+    "stMATIC": "",
+    "rETH": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "0x3489417a49Bd0A8420A65B6E1F297C2144E7eE0a",
+    "batchRelayer": "0x7b9B6f094DC2Bd1c12024b0D9CC63d6993Be1888",
+    "batchRelayerV4": "0x00e695aA8000df01B8DC8401B4C34Fba5D56BBb2",
+    "gaugeFactory": "0x8f008aF430d589D9f5F09d5c7f38F45E2EdAb4a9",
+    "balancerMinter": "0x3Eb5271B14c95dC528b4388E2183d6C8f6Ed6ecb",
+    "gaugeController": "0x782896795C815d833D1d25C9cAf418AeE57Aa011",
+    "tokenAdmin": "0x8573EA9770ED41FEB42fFa023AfbDF5c024F6F20",
+    "veBAL": "0x2600f00FB8E1182B1bC101D27682EC7AB7B3BB30",
+    "veDelegationProxy": "0x72437aAdcB3a28487E4d4975F4dE46ABdb946B32",
+    "veBALHelpers": "",
+    "feeDistributor": "0x6154359768818814bfceA0b4f4f8b0780AFa0dF4",
+    "feeDistributorDeprecated": "0x7df7A30016E2825F65DDe5af4059A662926Bd0E8",
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "oracle": "0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01"
+  },
+  "keys": {
+    "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",
+    "alchemy": "VBeQgTCRqqPtuuEPsFzRdwKXzDyN6aFh",
+    "balancerApi": "da2-7a3ukmnw7bexndpx5x522uafui"
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 2,
+    "weight": 100
+  }
+}
