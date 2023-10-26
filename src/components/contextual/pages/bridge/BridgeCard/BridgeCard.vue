@@ -29,6 +29,9 @@ const {
   checkTokenAllowance,
   approveToken,
   bridgeSend,
+  getChainName,
+  getChain,
+  getToken,
 } = useBridge();
 const { addNotification } = useNotifications();
 const { addTransaction } = useTransactions();
@@ -146,16 +149,6 @@ async function getBridgeRate() {
     resolve(1); // mean  1 From = 1
   });
 }
-function getChainName(chainId) {
-  return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId)?.name;
-}
-function getChain(chainId) {
-  return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
-}
-
-function getToken(tokenAddress, list) {
-  return list?.find(item => item.address === tokenAddress) || null;
-}
 
 function updateNetWorkInputFrom(chainId) {
   let networkChoose = BRIDGE_NETWORKS.find(
@@ -253,28 +246,15 @@ async function handleTransferButton() {
 
     isLoading.value = true;
 
-    const chain = getChain(inputFromSelect.value.chainId);
-    const tokenInputFrom = getToken(
-      inputFromSelect.value.tokenAddress,
-      inputFromSelect.value.tokensList
-    );
     const signer = getSigner();
 
-    const params = {
-      contractAddress: chain?.bridgeContract,
-      tokenAddress: inputFromSelect.value.tokenAddress,
-      rpc: chain?.rpc,
-      tokenDecimal: tokenInputFrom?.decimals,
-      value: inputFromSelect.value.amount,
-      account: account.value,
-      desChainId: inputToSelect.value.chainId, // des chain
-      signer: signer,
-      slippage: parseFloat(slippage.value || '0'),
-      gasPrice: chain?.gasPrice,
-      bridgeContract: chain?.bridgeContract,
-    };
-    console.log(params, 'handleTransferButton=>params');
-    let tx = await bridgeSend(params);
+    let tx = await bridgeSend(
+      inputFromSelect.value,
+      inputToSelect.value,
+      slippage.value,
+      account.value,
+      signer
+    );
 
     const chainNameInput = getChainName(inputFromSelect.value.chainId);
     const chainNameOutput = getChainName(inputToSelect.value.chainId);

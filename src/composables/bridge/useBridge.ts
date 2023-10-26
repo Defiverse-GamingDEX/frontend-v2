@@ -5,6 +5,7 @@ import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { default as BridgeABI } from '@/lib/abi/bridge/Bridge.json';
 import { default as IL2ERC20BridgeABI } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
 import { OASYS_TESTNET_NETWORK } from '@/constants/bridge/oasys-testnet-network';
+import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import bridgeService from './bridge.services.js';
 
 import { bnum } from '@/lib/utils';
@@ -74,28 +75,93 @@ async function approveToken(chain, token, walletAddress, signer) {
     throw error;
   }
 }
-function initDesChain(params, type) {
-  if (params.desChainId) return null;
+function getChainName(chainId) {
+  return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId)?.name;
 }
-async function bridgeSend(params, type) {
-  try {
-    const provider = new JsonRpcProvider(OASYS_TESTNET_NETWORK?.rpc);
-    const chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
-    //const proivder = initDesChain(params, type);
-    if (type === 'l1ToVerse') {
-      params.abi = BridgeABI;
-      params.contractProvider = provider;
-      params.chainId = chainId;
-      const tx = await bridgeService.bridgeSend(params);
-      return tx;
+function getChain(chainId) {
+  return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
+}
+
+function getToken(tokenAddress, list) {
+  return list?.find(item => item.address === tokenAddress) || null;
+}
+function getChainTransfer(chainFrom, tokenInputFrom, chainTo, tokenInputTo) {
+  const rs = {};
+  if (chainFrom.type === 'L1') {
+    if (chainTo.type === 'L1') {
+      // L1 to L1 example Goerli to AVAX testnet : sendNative
+      rs.abi = BridgeABI;
+      rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
+      rs.chainId = chainTo.chain_id_decimals;
+      rs.type = 'L1toL1';
     } else {
-      params.abi = BridgeABI;
-      params.contractProvider = provider;
-      params.chainId = chainId;
-      console.log(params, 'params=>bridgeSend=>Compoables');
-      const tx = await bridgeService.bridgeSend(params);
-      return tx;
+      // L1 to L2
+      rs.abi = BridgeABI;
+      rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
+      rs.chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
+      rs.type = 'L1toL2';
     }
+  } else {
+    if (chainTo.type === 'L1') {
+      // L2 to L1
+      rs.type = 'L2toL1';
+    } else {
+      // L2 to L2
+      rs.type = 'L2toL2';
+    }
+  }
+  return rs;
+}
+async function bridgeSend(
+  inputFromSelect,
+  inputToSelect,
+  slippage,
+  account,
+  signer
+) {
+  try {
+    const chainFrom = getChain(inputFromSelect.chainId);
+    const tokenInputFrom = getToken(
+      inputFromSelect.tokenAddress,
+      inputFromSelect.tokensList
+    );
+    const chainTo = getChain(inputToSelect.chainId);
+    const tokenInputTo = getToken(
+      inputToSelect.tokenAddress,
+      inputToSelect.tokensList
+    );
+    const chainTransfer = getChainTransfer(
+      chainFrom,
+      tokenInputFrom,
+      chainTo,
+      tokenInputTo
+    );
+
+    const params = {
+      contractAddress: chainFrom?.bridgeContract,
+      tokenAddress: inputFromSelect.tokenAddress,
+      tokenDecimal: tokenInputFrom?.decimals,
+      value: inputFromSelect.amount,
+      account: account,
+      signer: signer,
+      slippage: parseFloat(slippage || '0'),
+      gasPrice: chainFrom?.gasPrice,
+      abi: chainTransfer?.abi,
+      contractProvider: chainTransfer?.provider,
+      chainId: chainTransfer?.chainId,
+    };
+    console.log(params, 'handleTransferButton=>params');
+    // const provider = new JsonRpcProvider(OASYS_TESTNET_NETWORK?.rpc);
+    // const chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
+    let tx = null;
+    if (chainTransfer.type === 'L1toL1') {
+      //tx = await bridgeService.bridgeSendNative(params);
+      tx = await bridgeService.bridgeSend(params);
+    } else if (chainTransfer.type === 'L1toL2') {
+      tx = await bridgeService.bridgeSend(params);
+    }
+
+    return tx;
   } catch (error) {
     console.log(error, 'error');
     throw error;
@@ -108,5 +174,8 @@ export function useBridge() {
     checkTokenAllowance,
     approveToken,
     bridgeSend,
+    getChainName,
+    getChain,
+    getToken,
   };
 }

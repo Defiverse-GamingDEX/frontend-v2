@@ -1,5 +1,5 @@
 import oasIcon from '@/assets/images/bridge/networks/oas.png';
-
+import { BRIDGE_AOSYS_TESTNET_TOKENS } from './oasys-testnet-tokens';
 export const OASYS_TESTNET_NETWORK = {
   chain_id: '0x249C',
   chain_id_decimals: 9372,
@@ -11,7 +11,7 @@ export const OASYS_TESTNET_NETWORK = {
   bridgeContract: '0x4200000000000000000000000000000000000010',
   type: 'L2',
   isOnlyDefiBridge: false,
-  tokens: [],
+  tokens: BRIDGE_AOSYS_TESTNET_TOKENS,
   nativeCurrency: {
     name: 'OASYS',
     symbol: 'OAS',
