@@ -7,20 +7,20 @@
   "slug": "defiverse-testnet",
   "network": "defiverse-testnet",
   "unknown": false,
-  "rpc": "https://rpc-testnet.defiverse.net",
+  "rpc": "https://rpc-testnet.defi-verse.org",
   "ws": "wss://arb-mainnet.g.alchemy.com/v2/{{ALCHEMY_KEY}}",
-  "publicRpc": "https://rpc-testnet.defiverse.net",
-  "explorer": "https://scan-testnet.defiverse.net",
+  "publicRpc": "https://rpc-testnet.defi-verse.org",
+  "explorer": "https://scan-testnet.defi-verse.org",
   "explorerName": "defiverse-testnet",
-  "subgraph": "https://graphnode-testnet.defiverse.net/subgraphs/name/balancer-labs/defiverse-testnet",
+  "subgraph": "https://graphnode-testnet.defi-verse.org/subgraphs/name/balancer-labs/defiverse-testnet",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
-      "https://graphnode-testnet.defiverse.net/subgraphs/name/balancer-labs/defiverse-testnet"
+      "https://graphnode-testnet.defi-verse.org/subgraphs/name/balancer-labs/defiverse-testnet"
     ],
     "aave": "",
-    "gauge": "https://graphnode-testnet.defiverse.net/subgraphs/name/balancer-labs/gauges-defiverse-testnet",
+    "gauge": "https://graphnode-testnet.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse-testnet",
     "blocks": ""
   },
   "supportsEIP1559": false,

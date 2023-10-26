@@ -11,7 +11,7 @@ export const BRIDGE_DEFI_TOKENS = [
     symbol: 'ETH',
     decimals: 18,
     is_native: true,
-    rpc: 'https://rpc.defiverse.net',
+    rpc: 'https://rpc.defi-verse.org',
   },
   {
     name: 'Wrap BTC',
@@ -20,7 +20,7 @@ export const BRIDGE_DEFI_TOKENS = [
     symbol: 'WBTC',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defiverse.net',
+    rpc: 'https://rpc.defi-verse.org',
   },
   {
     name: 'Tether',
@@ -29,7 +29,7 @@ export const BRIDGE_DEFI_TOKENS = [
     symbol: 'USDT',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defiverse.net',
+    rpc: 'https://rpc.defi-verse.org',
   },
   {
     name: 'USD Coin',
@@ -38,7 +38,7 @@ export const BRIDGE_DEFI_TOKENS = [
     symbol: 'USDC',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defiverse.net',
+    rpc: 'https://rpc.defi-verse.org',
   },
   {
     name: 'OASYS',
@@ -47,6 +47,6 @@ export const BRIDGE_DEFI_TOKENS = [
     symbol: 'OAS',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defiverse.net',
+    rpc: 'https://rpc.defi-verse.org',
   },
 ];

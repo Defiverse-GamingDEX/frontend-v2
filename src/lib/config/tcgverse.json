@@ -12,15 +12,15 @@
   "publicRpc": "https://rpc.tcgverse.xyz",
   "explorer": "https://explorer.tcgverse.xyz",
   "explorerName": "TCG Explorer",
-  "subgraph": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse",
+  "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
-      "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"
+      "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse"
     ],
     "aave": "",
-    "gauge": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/gauges-defiverse",
+    "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse",
     "blocks": ""
   },
   "supportsEIP1559": false,

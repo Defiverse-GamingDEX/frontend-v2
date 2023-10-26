@@ -7,20 +7,20 @@
   "slug": "defiverse",
   "network": "defiverse",
   "unknown": false,
-  "rpc": "https://rpc.defiverse.net",
+  "rpc": "https://rpc.defi-verse.org",
   "ws": "wss://arb-mainnet.g.alchemy.com/v2/{{ALCHEMY_KEY}}",
-  "publicRpc": "https://rpc.defiverse.net",
-  "explorer": "https://scan.defiverse.net",
+  "publicRpc": "https://rpc.defi-verse.org",
+  "explorer": "https://scan.defi-verse.org/",
   "explorerName": "defiverse",
-  "subgraph": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse",
+  "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
-      "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/defiverse"
+      "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse"
     ],
     "aave": "",
-    "gauge": "https://graphnode.defiverse.net/subgraphs/name/balancer-labs/gauges-defiverse",
+    "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse",
     "blocks": ""
   },
   "supportsEIP1559": false,
