@@ -79,13 +79,13 @@
             >
               <IconYoutube />
             </BalLink> -->
-                <BalLink
+                <!-- <BalLink
                   :href="EXTERNAL_LINKS.Balancer.Social.Github"
                   external
                   noStyle
                 >
                   <IconGithub />
-                </BalLink>
+                </BalLink> -->
                 <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Linkedin"
               external
@@ -104,7 +104,7 @@
             </div>
           </div>
 
-          <div
+          <!-- <div
             class="flex flex-wrap md:order-3 gap-x-3 lg:gap-x-4 gap-y-2 md:justify-end"
           >
             <p>
@@ -129,7 +129,7 @@
                 >{{ $t('policies.thirdPartyServices') }}</a
               >
             </p>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

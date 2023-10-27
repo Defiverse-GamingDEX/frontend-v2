@@ -65,13 +65,13 @@
             >
               <IconYoutube />
             </BalLink> -->
-            <BalLink
+            <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Github"
               external
               noStyle
             >
               <IconGithub />
-            </BalLink>
+            </BalLink> -->
             <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Linkedin"
               external
@@ -162,10 +162,10 @@ export default {
               link: 'https://docs.gaming-dex.com/',
             },
 
-            {
-              text: 'Whitepaper',
-              link: 'https://docs.gaming-dex.com/',
-            },
+            // {
+            //   text: 'Whitepaper',
+            //   link: 'https://docs.gaming-dex.com/',
+            // },
           ],
         },
       ],
