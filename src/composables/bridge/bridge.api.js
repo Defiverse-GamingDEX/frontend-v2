@@ -19,7 +19,7 @@ const getTransferStatus = async transfer_id => {
   let data = await axios.post(`${domain}/v2/getTransferStatus`, {
     transfer_id,
   });
-  return data;
+  return data?.data;
 };
 const getTransferHistory = async params => {
   let data = await axios.get(`${domain}/v2/transferHistory`, {

@@ -18,7 +18,7 @@ import BigNumber from 'bignumber.js';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
-
+import { ethers } from 'ethers';
 // // COMPOSABLES
 const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
@@ -49,7 +49,7 @@ const chainsList = ref(BRIDGE_NETWORKS);
 const estimateInfo = ref(null);
 const paging = ref({
   page_size: 5,
-  next_page_token: '1698419022154',
+  next_page_token: null,
 });
 const txHistory = ref([]);
 
@@ -375,7 +375,7 @@ async function handleTransferButton() {
     addTransaction({
       id: tx.hash,
       type: 'tx',
-      action: 'Transfer',
+      action: 'transfer',
       summary,
     });
 
@@ -389,8 +389,8 @@ async function handleTransferButton() {
         );
         setInterval(async () => {
           const transferStatus = await getTransferStatus(transfer_id);
-          console.log(transferStatus, 'transferStatus');
-        }, 5000);
+          console.log(transferStatus,transfer_id, 'transferStatus');
+        }, 15000);
 
         isLoading.value = false;
       },
@@ -453,9 +453,6 @@ async function handleApproveButton() {
 onBeforeMount(async () => {
   updateNetWorkInputFrom(chainId.value);
   try {
-    const transferStatus = await getTransferStatus(
-      '0xcee98febf38ebb0b3a3da3e4db644d395672f8ce56774361cd23da5085a66dcf'
-    );
     await getTransferHistory(account.value, paging.value);
   } catch (error) {
     console.log(error, 'error');

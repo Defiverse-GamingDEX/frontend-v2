@@ -1337,6 +1337,7 @@
     "stake": "Stake",
     "unstake": "Unstake",
     "approve": "Approve",
+    "transfer":"Transfer",
     "claim": "Claim",
     "createPool": "Create pool",
     "drip": "Drip",

@@ -151,6 +151,7 @@ function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
 async function generationTransferId(inputFromSelect, inputToSelect, account) {
+  //TODO not work
   const chainFrom = getChain(inputFromSelect.chainId);
   const tokenInputFrom = getToken(
     inputFromSelect.tokenAddress,
@@ -174,7 +175,8 @@ async function generationTransferId(inputFromSelect, inputToSelect, account) {
     .times(decimals)
     .toFixed(0)
     ?.toString();
-  const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  //const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  const nonce = Date.now(); // nonce is currentTimeStamp
   const transfer_id = ethers.utils.solidityKeccak256(
     ['address', 'address', 'address', 'uint256', 'uint64', 'uint64', 'uint64'],
     [
@@ -182,9 +184,9 @@ async function generationTransferId(inputFromSelect, inputToSelect, account) {
       account, /// User's wallet address,
       inputFromSelect.tokenAddress, /// Wrap token address/ ERC20 token address
       decimals_value, /// Send amount in String
-      chainTransfer.chainId?.toString(), /// Destination chain id
-      nonce?.toString(), /// Nonce
-      inputFromSelect.chainId?.toString(), /// Source chain id
+      `${chainTransfer.chainId}`, /// Destination chain id
+      `${nonce}`, /// Nonce
+      `${inputFromSelect.chainId}`, /// Source chain id
     ]
   );
   return transfer_id;

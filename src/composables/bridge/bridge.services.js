@@ -149,7 +149,8 @@ const bridgeSend = async params => {
     gasPrice,
   } = params;
 
-  const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  //const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  const nonce = Date.now(); // nonce is currentTimeStamp
   console.log(nonce, 'nonce');
   let decimals = new BigNumber(10).pow(tokenDecimal).toFixed();
   let decimals_value = BigNumber(value).times(decimals).toFixed(0);
@@ -184,7 +185,8 @@ const bridgeSendNative = async params => {
     gasPrice,
   } = params;
 
-  const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  //const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  const nonce = Date.now(); // nonce is currentTimeStamp
   console.log(nonce, 'nonce');
   let decimals = new BigNumber(10).pow(tokenDecimal).toFixed();
   let decimals_value = BigNumber(value).times(decimals).toFixed(0);
