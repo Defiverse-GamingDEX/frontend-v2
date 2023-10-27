@@ -100,7 +100,26 @@ watch(
     checkAllowanceInputFrom();
   }
 );
-
+watch(
+  () => chainId.value,
+  async () => {
+    updateNetWorkInputFrom(chainId.value);
+  }
+);
+watch(
+  () => inputFromSelect.value.chainId,
+  async () => {
+    console.log('AAAAA', inputFromSelect.value.chainId, chainId.value);
+    if (inputFromSelect.value.chainId !== chainId.value) {
+      estimateInfo.value = {
+        err: {
+          code: '9999',
+          msg: 'From network selected is different network connected',
+        },
+      };
+    }
+  }
+);
 watchEffect(() => {
   initSelectedData();
 });
@@ -188,8 +207,12 @@ async function swapData() {
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
-  await getBalanceInputFrom();
-  await checkAllowanceInputFrom();
+  // await getBalanceInputFrom();
+  // await checkAllowanceInputFrom();
+
+  // reset amount
+  inputFromSelect.value.amount = 0;
+  inputToSelect.value.amount = 0;
   // connect network from
   handleNetworkChange(inputFromSelect.value.chainId);
 }
@@ -307,6 +330,8 @@ function checkInputToChange() {
   inputToSelect.value.decimals = inputFrom.decimals;
 
   inputToSelect.value.isOnlyDefiBridge = inputFrom.isOnlyDefiBridge;
+
+  inputToSelect.value.tokensList = inputFrom.tokensList;
 
   // check chainId select is avai
   if (inputToSelect.value.chainId) {
@@ -600,7 +625,7 @@ onBeforeMount(() => {
           </div>
         </div>
         <div v-if="estimateInfo?.err?.code" class="mt-8 notification-content">
-          <BalAlert title="No liquidity pool" type="error">
+          <BalAlert title="Error" type="error">
             {{ estimateInfo?.err?.msg }}
           </BalAlert>
         </div>
