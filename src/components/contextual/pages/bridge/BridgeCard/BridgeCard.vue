@@ -18,7 +18,6 @@ import BigNumber from 'bignumber.js';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
-import { ethers } from 'ethers';
 // // COMPOSABLES
 const { account, getSigner, chainId } = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
@@ -389,7 +388,7 @@ async function handleTransferButton() {
         );
         setInterval(async () => {
           const transferStatus = await getTransferStatus(transfer_id);
-          console.log(transferStatus,transfer_id, 'transferStatus');
+          console.log(transferStatus, transfer_id, 'transferStatus');
         }, 15000);
 
         isLoading.value = false;
