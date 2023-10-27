@@ -149,8 +149,6 @@ const bridgeSend = async params => {
     gasPrice,
   } = params;
 
-  let slippageUse = slippage * 1e6;
-  slippageUse = Math.floor(slippageUse);
   const nonce = await contractProvider.getTransactionCount(account, 'latest');
   console.log(nonce, 'nonce');
   let decimals = new BigNumber(10).pow(tokenDecimal).toFixed();
@@ -160,7 +158,7 @@ const bridgeSend = async params => {
     contractAddress,
     contractProvider,
     'send',
-    [account, tokenAddress, decimals_value, chainId, nonce, slippageUse],
+    [account, tokenAddress, decimals_value, chainId, nonce, slippage],
     overwrite,
     signer,
     abi,
@@ -186,8 +184,6 @@ const bridgeSendNative = async params => {
     gasPrice,
   } = params;
 
-  let maxSlippageUse = slippage * 1e6 * 1.5; // TODO for test
-  maxSlippageUse = Math.floor(maxSlippageUse);
   const nonce = await contractProvider.getTransactionCount(account, 'latest');
   console.log(nonce, 'nonce');
   let decimals = new BigNumber(10).pow(tokenDecimal).toFixed();
@@ -197,7 +193,7 @@ const bridgeSendNative = async params => {
     contractAddress,
     contractProvider,
     'sendNative',
-    [account, decimals_value, chainId, nonce, maxSlippageUse],
+    [account, decimals_value, chainId, nonce, slippage],
     overwrite,
     signer,
     abi,

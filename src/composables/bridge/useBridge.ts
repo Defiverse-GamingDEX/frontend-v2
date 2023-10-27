@@ -10,7 +10,7 @@ import bridgeService from './bridge.services.js';
 import bridgeAPI from './bridge.api.js';
 import { bnum } from '@/lib/utils';
 import { ethers } from 'ethers';
-
+import BigNumber from 'bignumber.js';
 // function from BridgeAPI - START
 async function getTransferConfigs() {
   try {
@@ -22,9 +22,32 @@ async function getTransferConfigs() {
     throw error;
   }
 }
-
+async function getEstimateAmt(inputFrom, inputTo, account, slippage) {
+  try {
+    const decimals = new BigNumber(10).pow(inputFrom.decimals).toFixed();
+    const atm = BigNumber(inputFrom.amount).times(decimals).toFixed(0);
+    const params = {
+      src_chain_id: inputFrom.chainId,
+      dst_chain_id: inputTo.chainId,
+      token_symbol: inputFrom.tokenSymbol,
+      usr_addr: account,
+      slippage_tolerance: calcSlippage(slippage),
+      amt: atm,
+    };
+    const rs = await bridgeAPI.getEstimateAmt(params);
+    console.log(rs, 'rs=>getEstimateAmt');
+    return rs;
+  } catch (error) {
+    console.log(error, 'error');
+    throw error;
+  }
+}
 // function from BridgeAPI - END
-
+function calcSlippage(slippage_tolerance) {
+  slippage_tolerance = parseFloat(slippage_tolerance || '0');
+  const slippageUse = (slippage_tolerance / 100) * 1e6 - 1; // please read document about slippage_tolerance
+  return Math.floor(slippageUse);
+}
 async function getTokensBalance(tokens, account) {
   if (tokens.length > 0) {
     for (let i = 0; i < tokens.length; i++) {
@@ -159,7 +182,7 @@ async function bridgeSend(
       value: inputFromSelect.amount,
       account: account,
       signer: signer,
-      slippage: parseFloat(slippage || '0'),
+      slippage: calcSlippage(slippage),
       gasPrice: chainFrom?.gasPrice,
       abi: chainTransfer?.abi,
       contractProvider: chainTransfer?.provider,
@@ -186,6 +209,7 @@ export function useBridge() {
   return {
     // SDK start
     getTransferConfigs,
+    getEstimateAmt,
     // SDK end
     getTokensBalance,
     getBalance,

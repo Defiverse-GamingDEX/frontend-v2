@@ -21,6 +21,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '',
     type: 'L1',
     isOnlyDefiBridge: false,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'Ethereum',
@@ -39,6 +40,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x358234b325ef9ea8115291a8b81b7d33a2fa762d',
     type: 'L1',
     isOnlyDefiBridge: false,
+    isTestnet: true,
     tokens: BRIDGE_GOERLI_TOKENS,
     nativeCurrency: {
       name: 'Ethereum',
@@ -57,6 +59,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0xe95e3a9f1a45b5eda71781448f6047d7b7e31cbf',
     type: 'L1',
     isOnlyDefiBridge: false,
+    isTestnet: true,
     tokens: [],
     nativeCurrency: {
       name: 'AVAX',
@@ -75,6 +78,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x9B36f165baB9ebe611d491180418d8De4b8f3a1f',
     type: 'L1',
     isOnlyDefiBridge: false,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'MATIC',
@@ -94,6 +98,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: false,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'OASYS',
@@ -113,6 +118,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: true,
+    isTestnet: false,
     tokens: [], // TODO hard or import
     nativeCurrency: {
       name: 'OASYS',
@@ -132,6 +138,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: true,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'OASYS',
@@ -151,6 +158,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: true,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'OASYS',
@@ -170,6 +178,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: true,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'OASYS',
@@ -189,6 +198,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: true,
+    isTestnet: false,
     tokens: [],
     nativeCurrency: {
       name: 'OASYS',
@@ -208,6 +218,7 @@ export const BRIDGE_NETWORKS = [
     bridgeContract: '0x4200000000000000000000000000000000000010',
     type: 'L2',
     isOnlyDefiBridge: false,
+    isTestnet: true,
     tokens: [],
     nativeCurrency: {
       name: 'OASYS',

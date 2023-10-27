@@ -105,6 +105,7 @@ function updateToken(token) {
   inputSelect.tokenAddress = token.address;
   inputSelect.tokenSymbol = token.symbol;
   inputSelect.balance = token.balance;
+  inputSelect.decimals = token.decimals;
   emit('update:inputSelect', inputSelect);
 }
 function updateNetWork(chainId) {
@@ -149,7 +150,6 @@ const setMax = () => {
         v-bind="$attrs"
         inputAlignRight
         @update:model-value="handleAmountChange($event)"
-        @update:is-valid="emit('update:isValid', $event)"
       >
         <template #header>
           <NetworkSelectInput

@@ -25,6 +25,7 @@ const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
   getTransferConfigs,
+  getEstimateAmt,
   getTokensBalance,
   getBalance,
   checkTokenAllowance,
@@ -71,6 +72,12 @@ const anotherWalletAddress = ref('');
 const isChargeGas = ref(false);
 const isAllowance = ref(false);
 const isLoading = ref(false);
+
+const chainFrom = ref({});
+const chainTo = ref({});
+const tokenFrom = ref({});
+const tokenTo = ref({});
+
 // // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -83,6 +90,7 @@ const swapCardShadow = computed(() => {
   }
 });
 
+// WATCHS
 watch(
   () => account.value,
   async () => {
@@ -90,28 +98,48 @@ watch(
     checkAllowanceInputFrom();
   }
 );
+
+watchEffect(() => {
+  initSelectedData();
+});
 // /**
 //  * FUNCTIONS
 //  */
+
+function initSelectedData() {
+  chainFrom.value = getChain(inputFromSelect.value.chainId);
+  chainTo.value = getChain(inputToSelect.value.chainId);
+
+  tokenFrom.value = getToken(
+    inputFromSelect.value.tokenAddress,
+    inputFromSelect.value.tokensList
+  );
+  tokenTo.value = getToken(
+    inputToSelect.value.tokenAddress,
+    inputToSelect.value.tokensList
+  );
+  console.log(chainFrom.value, ' chainFrom.value ');
+  console.log(chainTo.value, ' chainTo.value ');
+  console.log(tokenFrom.value, ' tokenFrom.value ');
+  console.log(tokenTo.value, '  tokenTo.value  ');
+}
 async function getBalanceInputFrom() {
   // update balance InputFrom
   if (account.value && inputFromSelect.value.tokenAddress) {
-    console.log(inputFromSelect.value.tokenAddress, 'inputFromSelect.value');
-    let token = inputFromSelect.value.tokensList.find(
-      item => item.address === inputFromSelect.value.tokenAddress
+    inputFromSelect.value.balance = await getBalance(
+      tokenFrom.value,
+      account.value
     );
-    inputFromSelect.value.balance = await getBalance(token, account.value);
   }
 }
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
-      console.log(inputFromSelect.value.tokenAddress, 'inputFromSelect.value');
-      let token = inputFromSelect.value.tokensList.find(
-        item => item.address === inputFromSelect.value.tokenAddress
+      const allowance = await checkTokenAllowance(
+        chainFrom.value,
+        tokenFrom.value,
+        account.value
       );
-      const chain = getChain(inputFromSelect.value.chainId);
-      const allowance = await checkTokenAllowance(chain, token, account.value);
       isAllowance.value = BigNumber(allowance?.toString() || 0).gt(0)
         ? true
         : false;
@@ -151,6 +179,12 @@ async function getBridgeRate() {
   });
 }
 
+async function setTokenInput(input, tokenFromList) {
+  console.log(tokenFromList, 'tokenFromList');
+  input.value.tokenSymbol = tokenFromList.symbol;
+  input.value.tokenAddress = tokenFromList.address;
+  input.value.decimals = tokenFromList.decimals;
+}
 function updateNetWorkInputFrom(chainId) {
   let networkChoose = BRIDGE_NETWORKS.find(
     item => item.chain_id_decimals === chainId
@@ -160,7 +194,19 @@ function updateNetWorkInputFrom(chainId) {
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
     inputFromSelect.value.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
 
+    // set token default
+    if (inputFromSelect.value.tokensList?.length > 0) {
+      setTokenInput(inputFromSelect, inputFromSelect.value.tokensList[0]);
+    }
+    // set data inputTo
     checkInputToChange();
+
+    // set chains and tokens selected
+    initSelectedData();
+
+    // call contract to check data
+    getBalanceInputFrom();
+    checkAllowanceInputFrom();
   }
 }
 
@@ -170,29 +216,49 @@ async function handleInputFromChange(inputSelect) {
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
-  //get BridgeRate
-  bridgeRate.value = await getBridgeRate();
   // update amount InputTo
   inputToSelect.value.amount = inputFromSelect.value.amount * bridgeRate.value;
   // check allowance
-  await checkAllowanceInputFrom();
+  checkAllowanceInputFrom();
+
+  getEstimateAtmData();
+}
+async function getEstimateAtmData() {
+  try {
+    if (
+      inputFromSelect.value.amount > 0 &&
+      inputFromSelect.value.chainId &&
+      inputToSelect.value.chainId &&
+      inputFromSelect.value.tokenSymbol &&
+      account.value
+    ) {
+      let rs = await getEstimateAmt(
+        inputFromSelect.value,
+        inputToSelect.value,
+        account.value,
+        slippage.value
+      );
+      console.log(rs, 'rs=>getEstimateAtmData');
+    }
+  } catch (error) {
+    console.log(error, 'error=>getEstimateAtmData');
+  }
 }
 async function handleInputToChange(inputSelect) {
+  console.log(inputSelect, 'inputSelect=>handleInputToChange');
   inputToSelect.value = inputSelect;
   console.log(inputToSelect.value, 'inputToSelect.value');
-  //get BridgeRate
-  bridgeRate.value = await getBridgeRate();
-  // update amount InputTo
-  inputFromSelect.value.amount = inputToSelect.value.amount / bridgeRate.value;
+
+  getEstimateAtmData();
 }
 
 function handleWalletAddressChange(address) {
   anotherWalletAddress.value = address;
 }
-function handleChargeGas(isChecked) {
-  isChargeGas.value = isChecked;
-  console.log(isChargeGas.value, 'isChargeGas.value');
-}
+// function handleChargeGas(isChecked) {
+//   isChargeGas.value = isChecked;
+//   console.log(isChargeGas.value, 'isChargeGas.value');
+// }
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
   // update chainsList
@@ -212,6 +278,7 @@ function checkInputToChange() {
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
   inputToSelect.value.tokenAddress = inputFrom.tokenAddress;
   inputToSelect.value.decimals = inputFrom.decimals;
+
   inputToSelect.value.isOnlyDefiBridge = inputFrom.isOnlyDefiBridge;
 
   // check chainId select is avai
@@ -240,11 +307,6 @@ function handleNetworkChange(networkId) {
 }
 async function handleTransferButton() {
   try {
-    console.log(inputFromSelect.value, 'inputFromSelect.value');
-    console.log(inputToSelect.value, 'inputToSelect');
-    console.log(isChargeGas.value, 'isChargeGas.value');
-    console.log(anotherWalletAddress.value, 'anotherWalletAddress.value');
-
     isLoading.value = true;
 
     const signer = getSigner();
@@ -257,8 +319,8 @@ async function handleTransferButton() {
       signer
     );
 
-    const chainNameInput = getChainName(inputFromSelect.value.chainId);
-    const chainNameOutput = getChainName(inputToSelect.value.chainId);
+    const chainNameInput = chainFrom.value.name;
+    const chainNameOutput = chainTo.value.name;
     const summary = `tranfer token ${inputFromSelect.value.tokenSymbol} from ${chainNameInput} to ${chainNameOutput}`;
     addTransaction({
       id: tx.hash,
@@ -289,13 +351,14 @@ async function handleApproveButton() {
   try {
     isLoading.value = true;
     const signer = getSigner();
-    let token = inputFromSelect.value.tokensList.find(
-      item => item.address === inputFromSelect.value.tokenAddress
+    let tx = await approveToken(
+      chainFrom.value,
+      tokenFrom.value,
+      account.value,
+      signer
     );
-    const chain = getChain(inputFromSelect.value.chainId);
-    let tx = await approveToken(chain, token, account.value, signer);
 
-    const chainName = getChainName(inputFromSelect.value.chainId);
+    const chainName = chainFrom.value.name;
     const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
     addTransaction({
       id: tx.hash,
@@ -328,7 +391,6 @@ async function handleApproveButton() {
  */
 onBeforeMount(() => {
   updateNetWorkInputFrom(chainId.value);
-  getTransferConfigs();
 });
 </script>
 
@@ -375,6 +437,7 @@ onBeforeMount(() => {
             <InputTo
               :chainsList="inputToSelect?.chainsList"
               :inputSelect="inputToSelect"
+              :disabled="true"
               @update:input-select="handleInputToChange"
             />
           </div>
@@ -450,7 +513,8 @@ onBeforeMount(() => {
               !inputFromSelect.tokenAddress ||
               !inputToSelect.chainId ||
               inputFromSelect.balance === 0 ||
-              inputFromSelect.balance < inputFromSelect.amount
+              inputFromSelect.balance < inputFromSelect.amount ||
+              inputFromSelect.amount <= 0
             "
             :label="$t('Tranfer')"
             :loading="isLoading"
