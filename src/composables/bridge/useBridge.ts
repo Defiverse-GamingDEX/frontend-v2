@@ -14,7 +14,7 @@ import BigNumber from 'bignumber.js';
 // function from BridgeAPI - START
 async function getTransferConfigs() {
   try {
-    const rs = bridgeAPI.getTransferConfigs();
+    const rs = await bridgeAPI.getTransferConfigs();
 
     return rs;
   } catch (error) {
@@ -42,9 +42,36 @@ async function getEstimateAmt(inputFrom, inputTo, account, slippage) {
     throw error;
   }
 }
+async function getTransferStatus(transfer_id) {
+  try {
+    const rs = await bridgeAPI.getTransferStatus(transfer_id);
+
+    return rs;
+  } catch (error) {
+    console.log(error, 'error');
+    throw error;
+  }
+}
+async function getTransferHistory(account, paging) {
+  try {
+    const params = {
+      acct_addr: [account],
+      page_size: paging.page_size,
+      next_page_token: paging.next_page_token,
+    };
+    const rs = await bridgeAPI.getTransferHistory(params);
+
+    return rs;
+  } catch (error) {
+    console.log(error, 'error');
+    throw error;
+  }
+}
+
 // function from BridgeAPI - END
 function calcSlippage(slippage_tolerance) {
   slippage_tolerance = parseFloat(slippage_tolerance || '0');
+  console.log();
   const slippageUse = (slippage_tolerance / 100) * 1e6 - 1; // please read document about slippage_tolerance
   return Math.floor(slippageUse);
 }
@@ -122,6 +149,45 @@ function getChain(chainId) {
 
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
+}
+async function generationTransferId(inputFromSelect, inputToSelect, account) {
+  const chainFrom = getChain(inputFromSelect.chainId);
+  const tokenInputFrom = getToken(
+    inputFromSelect.tokenAddress,
+    inputFromSelect.tokensList
+  );
+  const chainTo = getChain(inputToSelect.chainId);
+  const tokenInputTo = getToken(
+    inputToSelect.tokenAddress,
+    inputToSelect.tokensList
+  );
+  const chainTransfer = getChainTransfer(
+    chainFrom,
+    tokenInputFrom,
+    chainTo,
+    tokenInputTo
+  );
+  const contractProvider = chainTransfer?.provider;
+
+  const decimals = new BigNumber(10).pow(inputFromSelect.decimals).toFixed();
+  const decimals_value = BigNumber(inputFromSelect.amount)
+    .times(decimals)
+    .toFixed(0)
+    ?.toString();
+  const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  const transfer_id = ethers.utils.solidityKeccak256(
+    ['address', 'address', 'address', 'uint256', 'uint64', 'uint64', 'uint64'],
+    [
+      account, /// User's wallet address,
+      account, /// User's wallet address,
+      inputFromSelect.tokenAddress, /// Wrap token address/ ERC20 token address
+      decimals_value, /// Send amount in String
+      chainTransfer.chainId?.toString(), /// Destination chain id
+      nonce?.toString(), /// Nonce
+      inputFromSelect.chainId?.toString(), /// Source chain id
+    ]
+  );
+  return transfer_id;
 }
 function getChainTransfer(chainFrom, tokenInputFrom, chainTo, tokenInputTo) {
   const rs = {};
@@ -210,6 +276,9 @@ export function useBridge() {
     // SDK start
     getTransferConfigs,
     getEstimateAmt,
+    getTransferStatus,
+    generationTransferId,
+    getTransferHistory,
     // SDK end
     getTokensBalance,
     getBalance,

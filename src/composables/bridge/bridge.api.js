@@ -14,7 +14,22 @@ const getEstimateAmt = async params => {
   });
   return data?.data;
 };
+
+const getTransferStatus = async transfer_id => {
+  let data = await axios.post(`${domain}/v2/getTransferStatus`, {
+    transfer_id,
+  });
+  return data;
+};
+const getTransferHistory = async params => {
+  let data = await axios.get(`${domain}/v2/transferHistory`, {
+    params,
+  });
+  return data?.data;
+};
 export default {
   getTransferConfigs,
   getEstimateAmt,
+  getTransferStatus,
+  getTransferHistory,
 };

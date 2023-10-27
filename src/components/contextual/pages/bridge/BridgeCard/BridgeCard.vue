@@ -26,6 +26,9 @@ const { bp } = useBreakpoints();
 const {
   getTransferConfigs,
   getEstimateAmt,
+  getTransferStatus,
+  getTransferHistory,
+  generationTransferId,
   getTokensBalance,
   getBalance,
   checkTokenAllowance,
@@ -43,11 +46,12 @@ const { slippage, setSlippage } = useUserSettings();
 // console.log(signer, 'signerAAA');
 // // STATES
 const chainsList = ref(BRIDGE_NETWORKS);
-const bridgeRate = ref(1);
-const bridgeFee = ref(0.001);
-const gasFee = ref(0.01);
-
 const estimateInfo = ref(null);
+const paging = ref({
+  page_size: 5,
+  next_page_token: '1698419022154',
+});
+const txHistory = ref([]);
 
 const inputFromSelect = ref({
   chainId: '',
@@ -216,12 +220,6 @@ async function swapData() {
   // connect network from
   handleNetworkChange(inputFromSelect.value.chainId);
 }
-async function getBridgeRate() {
-  // call contract to getRate here
-  return new Promise((resolve, reject) => {
-    resolve(1); // mean  1 From = 1
-  });
-}
 
 async function setTokenInput(input, tokenFromList) {
   console.log(tokenFromList, 'tokenFromList');
@@ -260,8 +258,7 @@ async function handleInputFromChange(inputSelect) {
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
-  // update amount InputTo
-  inputToSelect.value.amount = inputFromSelect.value.amount * bridgeRate.value;
+
   // check allowance
   checkAllowanceInputFrom();
 
@@ -370,6 +367,7 @@ async function handleTransferButton() {
       account.value,
       signer
     );
+    console.log(tx, 'tx');
 
     const chainNameInput = chainFrom.value.name;
     const chainNameOutput = chainTo.value.name;
@@ -377,12 +375,23 @@ async function handleTransferButton() {
     addTransaction({
       id: tx.hash,
       type: 'tx',
-      action: 'approve',
+      action: 'Transfer',
       summary,
     });
+
     txListener(tx, {
       onTxConfirmed: async () => {
         console.log('success');
+        const transfer_id = await generationTransferId(
+          inputFromSelect.value,
+          inputToSelect.value,
+          account.value
+        );
+        setInterval(async () => {
+          const transferStatus = await getTransferStatus(transfer_id);
+          console.log(transferStatus, 'transferStatus');
+        }, 5000);
+
         isLoading.value = false;
       },
       onTxFailed: () => {
@@ -441,8 +450,16 @@ async function handleApproveButton() {
 /**
  * LIFECYCLE
  */
-onBeforeMount(() => {
+onBeforeMount(async () => {
   updateNetWorkInputFrom(chainId.value);
+  try {
+    const transferStatus = await getTransferStatus(
+      '0xcee98febf38ebb0b3a3da3e4db644d395672f8ce56774361cd23da5085a66dcf'
+    );
+    await getTransferHistory(account.value, paging.value);
+  } catch (error) {
+    console.log(error, 'error');
+  }
 });
 </script>
 
@@ -475,14 +492,7 @@ onBeforeMount(() => {
             <div
               v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"
               class="flex items-center text-xs text-gray-600 dark:text-gray-400 cursor-pointer"
-            >
-              <!-- <div class="rate">
-                1 {{ inputFromSelect?.tokenSymbol }} on
-                {{ getChainName(inputFromSelect?.chainId) }} = {{ bridgeRate }}
-                {{ inputToSelect?.tokenSymbol }} on
-                {{ getChainName(inputToSelect?.chainId) }}
-              </div> -->
-            </div>
+            ></div>
           </div>
           <div class="input-to">
             <div class="label">To</div>
