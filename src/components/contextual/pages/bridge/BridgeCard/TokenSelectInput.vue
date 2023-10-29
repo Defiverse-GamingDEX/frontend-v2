@@ -52,6 +52,7 @@ function toggleModal(): void {
   }
 }
 function getToken(tokenAddress) {
+  console.log(props?.tokensList, ' props?.tokensList');
   return props?.tokensList?.find(item => item.address === tokenAddress);
 }
 </script>

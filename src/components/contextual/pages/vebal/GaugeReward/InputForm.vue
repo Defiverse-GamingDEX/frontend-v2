@@ -9,6 +9,7 @@ import { Rules } from '@/types';
 import { useI18n } from 'vue-i18n';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import { useBridge } from '@/composables/bridge/useBridge';
+import { GAUGE_REWARD_TOKENS } from '@/constants/gaugeReward/reward-tokens';
 // TYPES
 type InputValue = string | number;
 
@@ -26,9 +27,12 @@ type Props = {
   inputSelect: inputForm;
   index: number;
   input_list: array;
+  rules?: Rules;
 };
-const props = withDefaults(defineProps<Props>(), {});
-
+const props = withDefaults(defineProps<Props>(), {
+  ignoreWalletBalance: false,
+  rules: () => [],
+});
 /**
  * COMPOSABLES
  */
@@ -42,9 +46,11 @@ const { getChain } = useBridge();
 const _amount = ref<InputValue>('');
 const _address = ref<string>('');
 const _periods = ref<number>(0);
+const _token_list = ref<array>(GAUGE_REWARD_TOKENS);
 // EMITS
 const emit = defineEmits<{
-  (e: 'update:inputSelect', inputSelect: inputForm): void;
+  (e: 'update:inputSelect', { inputSelect: inputForm, index: number }): void;
+  (e: 'update:delete', index: number): void;
 }>();
 
 // COMPUTEDS
@@ -96,24 +102,53 @@ watchEffect(() => {
   _amount.value = props?.inputSelect?.amount;
   _address.value = props?.inputSelect?.tokenAddress;
   _periods.value = props?.inputSelect?.periods;
+  console.log(_token_list.value, '_token_list.valuebefore');
+  _token_list.value = getTokenList(props.input_list);
+  console.log(_token_list.value, '_token_list.valueAfter');
 });
 
 // FUNCTIONS
+function getTokenList(listSelected) {
+  let rs = cloneDeep(GAUGE_REWARD_TOKENS);
+  for (let i = rs.length - 1; i >= 0; i--) {
+    const token = rs[i];
+    const tokenSelected = listSelected.find(
+      item =>
+        item.tokenAddress?.toLowerCase() === token.address.toLowerCase() &&
+        item.tokenAddress?.toLowerCase() !==
+          props?.inputSelect?.tokenAddress?.toLowerCase()
+    );
+    if (tokenSelected) {
+      rs.splice(i, 1);
+    }
+  }
+  return rs;
+}
 function updateToken(token) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.tokenAddress = token.address;
   inputSelect.tokenSymbol = token.symbol;
   inputSelect.balance = token.balance;
   inputSelect.decimals = token.decimals;
-  emit('update:inputSelect', inputSelect);
+  emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 }
 
 function handleAmountChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.amount = value;
-  emit('update:inputSelect', inputSelect);
+  console.log('handleAmountChange', inputSelect.amount);
+  emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 }
-
+function handlePeriodsChange(value) {
+  let inputSelect = cloneDeep(props?.inputSelect);
+  inputSelect.periods = value;
+  console.log('handlePeriodsChange', inputSelect.periods);
+  emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
+}
+function deleteInput(index) {
+  console.log(index, 'deleteInput');
+  emit('update:delete', index);
+}
 const setMax = () => {
   const maxAmount = props?.inputSelect?.balance;
   handleAmountChange(maxAmount);
@@ -123,10 +158,18 @@ const setMax = () => {
 <template>
   <div class="input-form-component">
     <div class="input-content">
-      <div class="input-title">{{ index + 2 }} Reward token</div>
+      <div class="input-title">
+        {{ index + 2 }} Reward token
+        <span
+          class="hover:text-red-500 dark:hover:text-red-500 delete-icon ease-color text-secondary"
+          @click.stop.prevent="deleteInput(index)"
+        >
+          <BalIcon name="trash-2" size="md" />
+        </span>
+      </div>
       <BalTextInput
         :modelValue="_amount"
-        name="tokenIn"
+        :name="`token${index}`"
         :placeholder="'0.0'"
         type="number-dot"
         :decimalLimit="decimalLimit"
@@ -143,7 +186,7 @@ const setMax = () => {
         <template #prepend>
           <slot name="tokenSelect">
             <TokenSelectInput
-              :tokensList="inputSelect?.tokensList"
+              :tokensList="_token_list"
               :modelValue="inputSelect?.tokenAddress"
               class="mr-2"
               @update:model-value="updateToken"
@@ -194,8 +237,24 @@ const setMax = () => {
         </template>
       </BalTextInput>
     </div>
-    <div class="input-content">
+    <div class="mt-4 input-content period">
       <div class="input-title">Peroid</div>
+      <BalTextInput
+        :modelValue="_periods"
+        :name="`periods${index}`"
+        :placeholder="'0.0'"
+        type="number-dot"
+        :decimalLimit="decimalLimit"
+        autocomplete="off"
+        autocorrect="off"
+        step="any"
+        spellcheck="false"
+        v-bind="$attrs"
+        inputAlignRight
+        @update:model-value="handlePeriodsChange($event)"
+      >
+        <template #append> Weeks </template>
+      </BalTextInput>
     </div>
   </div>
 </template>
@@ -204,6 +263,26 @@ const setMax = () => {
 .input-form-component {
   :deep() {
     .input-content {
+      &.period {
+        .input-group {
+          padding: 0px;
+          > input {
+            margin: 0px;
+            margin-right: 4px;
+          }
+        }
+      }
+      .input-title {
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 22px;
+        margin-bottom: 2px;
+        display: flex;
+        .delete-icon {
+          margin-left: auto;
+          cursor: pointer;
+        }
+      }
       .header {
         .token-select-input {
           width: fit-content;

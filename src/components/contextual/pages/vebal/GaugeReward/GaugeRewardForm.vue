@@ -30,7 +30,9 @@ import {
  */
 const route = useRoute();
 const poolId = (route.params.poolId as string).toLowerCase();
-
+const input_list = ref([]);
+const isAllowance = ref(false);
+const isLoading = ref(false);
 /**
  * COMPOSABLES
  */
@@ -88,6 +90,20 @@ watch(poolQuery.error, () => {
     removeAlert('pool-fetch-error');
   }
 });
+
+/**
+ * FUNCTIONS
+ */
+function updateInputList(payload) {
+  input_list.value = payload;
+  console.log(input_list.value, 'input_list=>updateInputList');
+}
+function handleApproveButton() {
+  console.log(input_list.value, 'input_list=>updateInputList');
+}
+function handleSubmitButton() {
+  console.log(input_list.value, 'input_list=>updateInputList');
+}
 </script>
 
 <template>
@@ -110,9 +126,29 @@ watch(poolQuery.error, () => {
             <TargetGauge :pool="pool" />
           </div>
           <div class="mt-2 form-container">
-            <GaugeForm />
+            <GaugeForm @update:input-list="updateInputList" />
           </div>
-          <div class="btn-actions">btn action here</div>
+          <div class="btn-actions">
+            <div class="bridge-actions">
+              <BalBtn
+                v-if="!isAllowance"
+                :label="$t('Approve')"
+                :loading="isLoading"
+                classCustom="pink-white-shadow"
+                block
+                @click.prevent="handleApproveButton"
+              />
+              <BalBtn
+                v-else
+                :disabled="input_list.length > 0"
+                :label="$t('Submit')"
+                :loading="isLoading"
+                classCustom="pink-white-shadow"
+                block
+                @click.prevent="handleSubmitButton"
+              />
+            </div>
+          </div>
         </div>
       </BalCard>
     </div>
