@@ -109,7 +109,7 @@ watch(poolQuery.error, () => {
           <div class="target-gauge-container">
             <TargetGauge :pool="pool" />
           </div>
-          <div class="form-container">
+          <div class="mt-2 form-container">
             <GaugeForm />
           </div>
           <div class="btn-actions">btn action here</div>
