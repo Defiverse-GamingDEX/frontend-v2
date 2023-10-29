@@ -128,26 +128,24 @@ function handleSubmitButton() {
           <div class="mt-2 form-container">
             <GaugeForm @update:input-list="updateInputList" />
           </div>
-          <div class="btn-actions">
-            <div class="bridge-actions">
-              <BalBtn
-                v-if="!isAllowance"
-                :label="$t('Approve')"
-                :loading="isLoading"
-                classCustom="pink-white-shadow"
-                block
-                @click.prevent="handleApproveButton"
-              />
-              <BalBtn
-                v-else
-                :disabled="input_list.length > 0"
-                :label="$t('Submit')"
-                :loading="isLoading"
-                classCustom="pink-white-shadow"
-                block
-                @click.prevent="handleSubmitButton"
-              />
-            </div>
+          <div class="mt-8 btn-actions">
+            <BalBtn
+              v-if="!isAllowance"
+              :label="$t('Approve')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click.prevent="handleApproveButton"
+            />
+            <BalBtn
+              v-else
+              :disabled="input_list.length > 0"
+              :label="$t('Deposit')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click.prevent="handleSubmitButton"
+            />
           </div>
         </div>
       </BalCard>
