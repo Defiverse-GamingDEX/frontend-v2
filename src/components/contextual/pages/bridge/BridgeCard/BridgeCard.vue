@@ -118,7 +118,9 @@ watch(
       estimateInfo.value = {
         err: {
           code: '9999',
-          msg: 'From network selected is different network connected',
+          msg: `You must switch to ${getChainName(
+            inputFromSelect.value.chainId
+          )} to begin the transfer`,
         },
       };
     }
