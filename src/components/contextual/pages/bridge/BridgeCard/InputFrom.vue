@@ -8,7 +8,8 @@ import { bnum, isSameAddress } from '@/lib/utils';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { Rules } from '@/types';
 import { useI18n } from 'vue-i18n';
-
+import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
+import { useBridge } from '@/composables/bridge/useBridge';
 // TYPES
 type InputValue = string | number;
 
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { t } = useI18n();
 const { isWalletReady } = useWeb3();
 const { fNum2 } = useNumbers();
+const { getChain } = useBridge();
 /**
  * STATE
  */
@@ -51,6 +53,7 @@ const emit = defineEmits<{
 }>();
 
 // COMPUTEDS
+const { connectToAppNetwork } = useBridgeWeb3();
 const hasToken = computed(() => !!_address.value);
 const amountBN = computed(() => bnum(_amount.value));
 const tokenBalanceBN = computed(() => bnum(props?.inputSelect?.balance));
@@ -105,25 +108,33 @@ function updateToken(token) {
   inputSelect.tokenAddress = token.address;
   inputSelect.tokenSymbol = token.symbol;
   inputSelect.balance = token.balance;
+  inputSelect.decimals = token.decimals;
   emit('update:inputSelect', inputSelect);
 }
 function updateNetWork(chainId) {
-  let inputSelect = cloneDeep(props?.inputSelect);
-  let networkChoose = props?.chainsList?.find(
-    item => item.chain_id_decimals === chainId
-  );
-  if (networkChoose) {
-    inputSelect.chainId = networkChoose.chain_id_decimals;
-    inputSelect.tokensList = cloneDeep(networkChoose.tokens);
-    inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
-  }
-  emit('update:inputSelect', inputSelect);
-  emit('update:network', inputSelect.chainId);
+  handleNetworkChange(chainId);
+  // let inputSelect = cloneDeep(props?.inputSelect);
+  // let networkChoose = props?.chainsList?.find(
+  //   item => item.chain_id_decimals === chainId
+  // );
+  // if (networkChoose) {
+  //   inputSelect.chainId = networkChoose.chain_id_decimals;
+  //   inputSelect.tokensList = cloneDeep(networkChoose.tokens);
+  //   inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
+  // }
+  // emit('update:inputSelect', inputSelect);
+  // emit('update:network', inputSelect.chainId);
 }
 function handleAmountChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.amount = value;
   emit('update:inputSelect', inputSelect);
+}
+function handleNetworkChange(networkId) {
+  let network = getChain(networkId);
+  if (network) {
+    connectToAppNetwork(network);
+  }
 }
 const setMax = () => {
   const maxAmount = props?.inputSelect?.balance;
@@ -149,7 +160,6 @@ const setMax = () => {
         v-bind="$attrs"
         inputAlignRight
         @update:model-value="handleAmountChange($event)"
-        @update:is-valid="emit('update:isValid', $event)"
       >
         <template #header>
           <NetworkSelectInput

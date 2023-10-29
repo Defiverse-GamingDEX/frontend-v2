@@ -34,8 +34,8 @@ function classBody() {
         </router-view>
       </div>
     </div>
-    <FooterHome v-if="route.name === 'home'" />
-    <Footer v-else />
+    <!-- <FooterHome v-if="route.name === 'home'" /> -->
+    <Footer v-if="route.name !== 'home'" />
   </div>
 </template>
 

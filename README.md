@@ -10,7 +10,7 @@ To setup the development environment first clone the repo:
 git clone https://github.com/balancer-labs/frontend-v2.git && cd frontend-v2
 ```
 
-### Local env
+### Local env 
 
 Install dependencies:
 
@@ -151,4 +151,5 @@ Analyze and visualize the bundle dependencies by adding these env vars to your `
 # Local .env file
 VITE_BUILD_ANALIZE=true
 VITE_BUILD_VISUALIZE=true
+
 ```

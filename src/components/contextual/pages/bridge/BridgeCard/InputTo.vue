@@ -18,6 +18,7 @@ type inputSelect = {
 // PROPS
 type Props = {
   inputSelect?: inputSelect;
+  disabled?: boolean;
 };
 const props = withDefaults(defineProps<Props>(), {});
 
@@ -76,6 +77,7 @@ function handleAmountChange(value) {
     />
     <div class="receive-amount">
       <BalTextInput
+        :disabled="disabled"
         :modelValue="_amount"
         name="tokenIn"
         :placeholder="'0.0'"
@@ -89,7 +91,6 @@ function handleAmountChange(value) {
         v-bind="$attrs"
         inputAlignRight
         @update:model-value="handleAmountChange($event)"
-        @update:is-valid="emit('update:isValid', $event)"
       >
         <template #prepend>
           <slot name="tokenSelect"> Receive </slot>

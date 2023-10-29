@@ -7,7 +7,7 @@ import Stats from '@/components/contextual/pages/home/Stats.vue';
 <template>
   <div>
     <HomePageHero />
-    <Study />
-    <Stats />
+    <!-- <Study />
+    <Stats /> -->
   </div>
 </template>

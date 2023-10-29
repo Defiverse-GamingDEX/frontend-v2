@@ -65,13 +65,13 @@
             >
               <IconYoutube />
             </BalLink> -->
-            <BalLink
+            <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Github"
               external
               noStyle
             >
               <IconGithub />
-            </BalLink>
+            </BalLink> -->
             <!-- <BalLink
               :href="EXTERNAL_LINKS.Balancer.Social.Linkedin"
               external
@@ -162,10 +162,10 @@ export default {
               link: 'https://docs.gaming-dex.com/',
             },
 
-            {
-              text: 'Whitepaper',
-              link: 'https://docs.gaming-dex.com/',
-            },
+            // {
+            //   text: 'Whitepaper',
+            //   link: 'https://docs.gaming-dex.com/',
+            // },
           ],
         },
       ],
@@ -174,9 +174,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 footer {
-  @apply bg-primary-800 dark:bg-gray-900;
+  width: 100%;
 }
 
 footer :deep(.logotype) {
@@ -186,6 +186,10 @@ footer :deep(.logotype) {
 }
 
 .link {
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: bold;
+
   @apply text-white font-semibold mb-3 dark:text-white transition-colors flex items-center no-underline hover:text-gray-600;
 }
 
@@ -214,8 +218,11 @@ footer :deep(.logotype) {
 }
 
 .list-footer .item .label {
-  color: #beebff;
+  color: #ffc250;
   @apply mb-4;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: bold;
 }
 @media screen and (max-width: 767px) {
   .list-footer .item {

@@ -932,7 +932,7 @@
     },
     "liquidityMining": {
       "title": "Pools eligible for liquidity mining",
-      "description": "Liquidity incentives are directed by the community of veDFV holders. If you hold veDFV, vote below on any pools across Ethereum and Layer 2’s. Your vote will persist until you change it and editing a pool can only be done once in 10 days.",
+      "description": "Liquidity incentives are directed by the community of veDFV holders. If you hold veDFV, vote below on any pools. Your vote will persist until you change it and editing a pool can only be done once in 10 days.",
       "myUnallocatedVotes": "My unallocated votes:",
       "myUnallocatedVotesTooltip": "veDFV holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any veDFV, your votes will not count.",
       "unallocatedVotes": "My unallocated votes: {0}.",
@@ -1338,6 +1338,7 @@
     "stake": "Stake",
     "unstake": "Unstake",
     "approve": "Approve",
+    "transfer":"Transfer",
     "claim": "Claim",
     "createPool": "Create pool",
     "drip": "Drip",

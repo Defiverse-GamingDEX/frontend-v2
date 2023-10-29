@@ -16,6 +16,7 @@ import tcgverse from './tcgverse.json';
 import homeverse from './homeverse.json';
 import chainverse from './chainverse.json';
 import saakuru from './saakuru.json';
+import avalancheTestnet from './avalanche-testnet.json';
 export interface Config {
   key: string;
   chainId: Network | 12345 | 17;
@@ -115,6 +116,7 @@ const config: Record<Network | number, Config> = {
   19011: homeverse,
   5555: chainverse,
   7225878: saakuru,
+  43113: avalancheTestnet,
 };
 
 export default config;

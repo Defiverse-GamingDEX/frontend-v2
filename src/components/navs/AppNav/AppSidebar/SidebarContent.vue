@@ -77,10 +77,10 @@ const socialLinks = {
   //   url: 'https://www.youtube.com/channel/UCBRHug6Hu3nmbxwVMt8x_Ow',
   // },
 
-  GithubIcon: {
-    url: 'https://github.com/GamingDEX',
-    component: GithubIcon,
-  },
+  // GithubIcon: {
+  //   url: 'https://github.com/GamingDEX',
+  //   component: GithubIcon,
+  // },
 };
 
 /**

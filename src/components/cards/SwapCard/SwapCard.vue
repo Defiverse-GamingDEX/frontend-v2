@@ -49,6 +49,26 @@
         :description="warning.body"
         block
       />
+
+      <BalAlert
+        class="mb-4"
+        v-if="tokenInTraderInfo?.isProtectedToken"
+        title="ATF Warning"
+        type="error"
+      >
+        <p class="text-gray-600 dark:text-gray-400">
+          This token is subject to the AT-Field. You cannot sell more tokens
+          than you have acquired in the game.
+        </p>
+        <a
+          class="text-blue-600 hover:text-purple-600 focus:text-purple-600 dark:text-blue-400 dark:hover:text-yellow-500 dark:focus:text-yellow-500 transition-colors"
+          href="https://docs.gaming-dex.com/product/anti-trader-field-at-field"
+          target="_blank"
+        >
+          Learn more about AT-Field
+        </a>
+      </BalAlert>
+
       <BalBtn
         v-if="swapping.isLoading.value"
         loading
@@ -151,7 +171,7 @@
       />
     </div>
   </BalCard>
-  <BalCard
+  <!-- <BalCard
     v-if="tokenInTraderInfo?.isProtectedToken"
     class="relative mt-6 card-container bg-blue"
     :shadow="swapCardShadow"
@@ -170,7 +190,7 @@
         Learn more about AT-Field
       </a>
     </div>
-  </BalCard>
+  </BalCard> -->
   <teleport to="#modal">
     <SwapPreviewModal
       v-if="modalSwapPreviewIsOpen"
