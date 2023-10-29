@@ -76,7 +76,6 @@ Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX wei
 
 <style>
 .study-home {
-  @apply bg-white;
 }
 
 .study-home-content {

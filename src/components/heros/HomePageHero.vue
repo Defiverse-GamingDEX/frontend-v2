@@ -3,7 +3,8 @@ import AppHero from '@/components/heros/AppHero.vue';
 import useFathom from '@/composables/useFathom';
 import { EXTERNAL_LINKS } from '@/constants/links';
 import useNetwork from '@/composables/useNetwork';
-
+import Feature from '@/components/heros/Feature.vue';
+import FooterHome from '@/components/footer/FooterHome.vue';
 /**
  * COMPOSABLES
  */
@@ -12,10 +13,40 @@ const { trackGoal, Goals } = useFathom();
 const { networkSlug } = useNetwork();
 
 const list_app = [
-  { text: 'Balancer app', link: 'app.balancer.fi' },
-  { text: 'Beethoven X', link: 'op.beets.fi' },
-  { text: 'Aura', link: 'aura.finance' },
-  { text: 'Element', link: 'element.fi' },
+  {
+    text: 'Chain Crossed Phoenix',
+    link: '',
+    iconUrl: '/images/home/pnx_icon.png',
+  },
+  { text: 'Coming soon', link: '' },
+  { text: 'Coming soon', link: '' },
+  { text: 'Coming soon', link: '' },
+];
+const list_features = [
+  {
+    iconUrl: '/images/home/weight-pool.png',
+    title: `Weighted Pools`,
+    description: `The weighted pools are highly versatile and customizable pools. These pools employ a weighted calculation and are best suited for general use with tokens that are not necessarily price correlated. (e.g. USDC/OAS). Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX weighted pools enable users to create pools with varying token counts and weightings, such as 80/20 or 60/20/20 pools.`,
+    href: '#',
+  },
+  {
+    iconUrl: '/images/home/composable-pool.png',
+    title: `Composable Stable Pools`,
+    description: `Designed for assets expected to consistently swap at near parity or at a predetermined exchange rate, Composable Stable Pools employ Stable Math. This system, based on the principles of StableSwap popularized by Curve, allows for substantial swaps without significant price impact, greatly enhancing capital efficiency for similar and correlated asset swaps.`,
+    href: '#',
+  },
+  {
+    iconUrl: '/images/home/atf-field.png',
+    title: `AT-Field`,
+    description: `AT-Field only prevents the sale of traders. This will be done by limiting the sending of utility tokens to the SwapContract in the Gaming DEX so that users cannot swap utility tokens for other tokens in excess of the amount earned by playing the game (obtained by the Oracle).`,
+    href: '#',
+  },
+  {
+    iconUrl: '/images/home/multi-gems-swap.png',
+    title: `MultiGemSwap`,
+    description: `MultiGemSwap” is a system that ensures liquidity for “gems” across blockchain games. While traditional social games allowed gems to be used only within a specific game, this system enables the exchange of gems between different games. Even gems left unused after quitting a game can now be utilized in another, enhancing both the gaming experience and investment efficiency`,
+    href: '#',
+  },
 ];
 </script>
 
@@ -61,53 +92,45 @@ const list_app = [
     <div class="list-app">
       <div v-for="i in list_app" :key="i.link" class="item-app">
         <div class="icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="48.937"
-            height="49.008"
-            viewBox="0 0 48.937 49.008"
-          >
-            <g
-              id="Group_543"
-              data-name="Group 543"
-              transform="translate(-1578.238 -1597.159)"
-            >
-              <path
-                id="Path_89"
-                data-name="Path 89"
-                d="M1602.707,1597.159c-14.178,0-24.469,4.786-24.469,11.378s10.29,11.377,24.469,11.377,24.468-4.784,24.468-11.377S1616.884,1597.159,1602.707,1597.159Zm14.3,15.658a41.4,41.4,0,0,1-14.3,2.3c-11.827,0-19.674-3.962-19.674-6.582,0-1.375,2.057-3.016,5.37-4.281a41.394,41.394,0,0,1,14.3-2.3c11.827,0,19.673,3.962,19.673,6.583C1622.38,1609.912,1620.323,1611.552,1617.011,1612.817Z"
-                transform="translate(0)"
-                fill="currentColor"
-              />
-              <path
-                id="Path_90"
-                data-name="Path 90"
-                d="M1627.025,1630.123a2.375,2.375,0,0,0-3.514-1.526l-.016.01a2.407,2.407,0,0,0-1.144,2.575,1.392,1.392,0,0,1,.03.283c0,1.375-2.058,3.015-5.369,4.28a41.4,41.4,0,0,1-14.3,2.3c-11.827,0-19.674-3.962-19.674-6.582a1.44,1.44,0,0,1,.029-.282,2.417,2.417,0,0,0-1.174-2.594,2.376,2.376,0,0,0-3.5,1.534,6.124,6.124,0,0,0-.15,1.343c0,6.592,10.29,11.377,24.469,11.377s24.468-4.784,24.468-11.377A6.1,6.1,0,0,0,1627.025,1630.123Z"
-                transform="translate(0 -9.802)"
-                fill="currentColor"
-              />
-              <path
-                id="Path_91"
-                data-name="Path 91"
-                d="M1627.025,1649.287a2.375,2.375,0,0,0-3.514-1.526l-.016.01a2.406,2.406,0,0,0-1.144,2.575,1.392,1.392,0,0,1,.03.283c0,1.375-2.058,3.015-5.369,4.28a41.391,41.391,0,0,1-14.3,2.3c-11.827,0-19.674-3.962-19.674-6.583a1.438,1.438,0,0,1,.029-.282,2.417,2.417,0,0,0-1.174-2.594,2.376,2.376,0,0,0-3.5,1.533,6.126,6.126,0,0,0-.15,1.343c0,6.593,10.29,11.377,24.469,11.377s24.468-4.785,24.468-11.377A6.1,6.1,0,0,0,1627.025,1649.287Z"
-                transform="translate(0 -15.84)"
-                fill="currentColor"
-              />
-            </g>
-          </svg>
+          <div v-if="i.iconUrl" class="app-icon">
+            <img alt="" :src="i.iconUrl" />
+          </div>
+          <div v-else class="empty-icon">
+            <img alt="" src="/images/home/coming-soon.png" />
+          </div>
         </div>
         <div class="text">{{ i.text }}</div>
-        <div class="link">
+        <div v-if="i.link" class="link">
           <BalLink :href="`https://${i.link}`" target="_blank" external noStyle>
             {{ i.link }}
           </BalLink>
         </div>
       </div>
     </div>
+    <div class="features-container">
+      <div class="features-title">Key feature</div>
+      <div class="features-items">
+        <Feature :feature="list_features[0]" />
+      </div>
+    </div>
+    <div class="bacnground-ground-map">
+      <Feature :feature="list_features[1]" />
+      <div class="features-title original">Original feature</div>
+    </div>
+    <div class="bacnground-hell-map">
+      <div class="features-items">
+        <Feature :feature="list_features[2]" class="mb-8" />
+        <Feature :feature="list_features[3]" />
+      </div>
+
+      <div class="footer-home">
+        <FooterHome />
+      </div>
+    </div>
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .headline {
   @apply text-white text-center text-4xl md:text-5xl pb-2 font-bold;
 }
@@ -117,14 +140,65 @@ const list_app = [
 }
 
 .home-hero {
-  background-image: url('/images/backgrounds/bg2-min.png');
+  background-image: url('/images/backgrounds/bg-min-new.png');
   background-repeat: no-repeat;
-  background-position: bottom;
-  background-size: 100% 100%;
-  padding-bottom: 12vw;
+  background-position-y: -600px;
+  background-size: 100% 2000px;
   min-height: calc(100vh - 3rem);
 }
 
+.footer-home {
+  width: 100%;
+  margin-top: 260px;
+  background: #2e0704c4;
+  @media (max-width: 1024px) {
+    margin-top: 120px;
+  }
+}
+.features-title {
+  font-size: 44px;
+  line-height: 53px;
+  font-weight: bold;
+  margin-bottom: 80px;
+  color: #fff;
+  &.original {
+    margin-top: 114px;
+  }
+}
+.features-items {
+  @media (max-width: 1024px) {
+    padding: 0px 16px;
+  }
+}
+.bacnground-ground-map {
+  background: #013347;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 36px;
+  @media (max-width: 1024px) {
+    padding: 16px;
+  }
+}
+.bacnground-hell-map {
+  background-image: url('/images/backgrounds/foot-min.png');
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-size: cover;
+  margin-top: -1px;
+}
+.features-container {
+  margin-top: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media (max-width: 1024px) {
+    margin-top: 120px;
+  }
+}
 .list-app {
   @apply m-16 max-w-4xl mx-auto flex flex-wrap;
 }
@@ -143,6 +217,19 @@ const list_app = [
   height: 10rem;
   margin: auto;
   margin-bottom: 1rem;
+  .app-icon {
+    > img {
+      width: 100%;
+    }
+  }
+  .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > img {
+      width: 50%;
+    }
+  }
 }
 
 .item-app .text {
@@ -155,8 +242,7 @@ const list_app = [
 }
 @media (max-width: 1024px) {
   .home-hero {
-    min-height: 0;
-    background-size: contain;
+    background-size: cover;
   }
 
   .item-app .icon {
