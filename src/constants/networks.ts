@@ -1,6 +1,6 @@
 import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
-
+const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 const networks = [
   {
     id: 'ethereum',
@@ -83,19 +83,7 @@ const networks = [
   },
 ];
 
-const networksDev = [
-  {
-    id: 'goerli',
-    name: 'Goerli',
-    networkSlug: 'goerli',
-    key: '5',
-  },
-  {
-    id: 'avalanche-testnet',
-    name: 'Avalanche Testnet',
-    networkSlug: 'avalanche-testnet',
-    key: '43113',
-  },
+let networksDev = [
   {
     id: 'defiverse-testnet',
     name: 'Defiverse-Testnet',
@@ -107,7 +95,27 @@ const networksDev = [
     maxPriorityFee: 0,
   },
 ];
+console.log(IS_TESTNET, 'IS_TESTNETAAAA');
+if (IS_TESTNET == true) {
+  console.log('BBBB');
+  networksDev = [
+    ...networksDev,
+    {
+      id: 'goerli',
+      name: 'Goerli',
+      networkSlug: 'goerli',
+      key: '5',
+    },
+    {
+      id: 'avalanche-testnet',
+      name: 'Avalanche Testnet',
+      networkSlug: 'avalanche-testnet',
+      key: '43113',
+    },
+  ];
+}
 
+console.log(networksDev, 'networksDev');
 export default {
   networks,
   networksDev,

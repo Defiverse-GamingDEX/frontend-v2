@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CheckedIcon from './CheckedIcon.vue';
-import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/defi-tokens';
+import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/tokens/testnet/defi-tokens';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 
 /**
