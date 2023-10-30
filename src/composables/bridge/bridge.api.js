@@ -1,7 +1,7 @@
 import axios from 'axios';
 const MAINNET_API_URL = 'https://cbridge-prod2.celer.app';
 const TESTNET_API_URL = 'https://cbridge-v2-test.celer.network';
-const isTestnet = true;
+const isTestnet = false;
 const domain = isTestnet ? TESTNET_API_URL : MAINNET_API_URL;
 
 const getTransferConfigs = async () => {
