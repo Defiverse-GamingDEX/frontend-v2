@@ -9,6 +9,7 @@ import { truncateText } from '@/plugins/utils.js';
 export type TokenSelectProps = {
   modelValue: string;
   tokensList?: Array<any>;
+  disabled?: boolean;
 };
 
 /**
@@ -47,6 +48,9 @@ const token = computed((): Object | null => {
  * METHODS
  */
 function toggleModal(): void {
+  if (props.disabled) {
+    return;
+  }
   if (props?.tokensList?.length > 0) {
     openTokenModal.value = !openTokenModal.value;
   }
@@ -60,7 +64,7 @@ function getToken(tokenAddress) {
   <div>
     <div
       v-if="hasToken"
-      :class="['token-select-input selected group']"
+      :class="['token-select-input selected group', { disabled: disabled }]"
       @click="toggleModal"
     >
       <div class="item-info">
@@ -82,7 +86,7 @@ function getToken(tokenAddress) {
     <div
       v-else
       class="token-select-input unselected selectable"
-      :class="{ disabled: !tokensList || tokensList?.length === 0 }"
+      :class="{ disabled: !tokensList || tokensList?.length === 0 || disabled }"
       @click="toggleModal"
     >
       {{ $t('selectToken') }}
@@ -110,6 +114,9 @@ function getToken(tokenAddress) {
   &.disabled {
     cursor: not-allowed;
     opacity: 0.5;
+    * {
+      cursor: not-allowed;
+    }
   }
 }
 

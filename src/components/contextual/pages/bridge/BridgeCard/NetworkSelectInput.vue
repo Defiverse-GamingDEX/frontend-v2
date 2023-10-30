@@ -4,15 +4,16 @@ import { computed, ref } from 'vue';
 import SelectNetworkModal from '../modals/SelectNetworkModal.vue';
 import useNumbers from '@/composables/useNumbers';
 
-export type TokenSelectProps = {
+export type NetworkSelectProps = {
   modelValue: string | number;
   networkList: Array<any>;
+  disabled?: boolean;
 };
 
 /**
  * PROPS & EMITS
  */
-const props = withDefaults(defineProps<TokenSelectProps>(), {
+const props = withDefaults(defineProps<NetworkSelectProps>(), {
   modelValue: null,
   networkList: () => [],
 });
@@ -45,6 +46,9 @@ const network = computed((): Object | null => {
  * METHODS
  */
 function toggleModal(): void {
+  if (props.disabled) {
+    return;
+  }
   if (props?.networkList?.length > 0) {
     openNetworkModal.value = !openNetworkModal.value;
   }
@@ -58,7 +62,7 @@ function getNetwork(chain_id) {
   <div>
     <div
       v-if="hasNetwork"
-      :class="['token-select-input selected group']"
+      :class="['token-select-input selected group', { disabled: disabled }]"
       @click="toggleModal"
     >
       <div class="item-info">
@@ -76,7 +80,9 @@ function getNetwork(chain_id) {
 
     <div
       v-else
-      :class="{ disabled: !networkList || networkList?.length === 0 }"
+      :class="{
+        disabled: !networkList || networkList?.length === 0 || disabled,
+      }"
       class="token-select-input unselected selectable"
       @click="toggleModal"
     >
@@ -105,6 +111,9 @@ function getNetwork(chain_id) {
   &.disabled {
     cursor: not-allowed;
     opacity: 0.5;
+    * {
+      cursor: not-allowed;
+    }
   }
 }
 

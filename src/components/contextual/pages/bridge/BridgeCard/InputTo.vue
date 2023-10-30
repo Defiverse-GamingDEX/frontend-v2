@@ -72,12 +72,13 @@ function handleAmountChange(value) {
     <NetworkSelectInput
       :networkList="inputSelect.chainsList"
       :modelValue="inputSelect?.chainId"
+      :disabled="disabled"
       class="mb-2"
       @update:model-value="updateNetWork"
     />
     <div class="receive-amount">
       <BalTextInput
-        :disabled="disabled"
+        :disabled="true"
         :modelValue="_amount"
         name="tokenIn"
         :placeholder="'0.0'"
