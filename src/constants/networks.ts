@@ -95,9 +95,9 @@ let networksDev = [
     maxPriorityFee: 0,
   },
 ];
-console.log(IS_TESTNET, 'IS_TESTNETAAAA');
+
+// add network for bridge testnet
 if (IS_TESTNET == true) {
-  console.log('BBBB');
   networksDev = [
     ...networksDev,
     {
@@ -115,7 +115,6 @@ if (IS_TESTNET == true) {
   ];
 }
 
-console.log(networksDev, 'networksDev');
 export default {
   networks,
   networksDev,
