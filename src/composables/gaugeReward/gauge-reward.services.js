@@ -54,12 +54,16 @@ const _sendRawTx = async (
 };
 
 const _estimateGas = async (myContract, action, params, overwrite, signer) => {
+  // try {
   let estimateGas = await myContract
     .connect(signer)
     .estimateGas[action](...params);
   estimateGas = estimateGas?.toNumber() || 0;
   console.log('--->gas: ', estimateGas, overwrite); // eslint-disable-line no-console
-  return new BigNumber(estimateGas).times(2).toFixed(0);
+  return new BigNumber(estimateGas).times(1.5).toFixed(0);
+  // } catch (error) {
+  //   return 21000;
+  // }
 };
 
 const depositTokens = async params => {
@@ -91,7 +95,33 @@ const depositTokens = async params => {
   console.log(rs, 'depositTokens'); // eslint-disable-line no-console
   return rs;
 };
+const startDistributions = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    signer,
+    abi,
+    gasPrice,
+  } = params;
+
+  let overwrite = { from: account };
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'startDistributions',
+    [],
+    overwrite,
+    signer,
+    abi,
+    gasPrice
+  );
+
+  console.log(rs, 'startDistributions'); // eslint-disable-line no-console
+  return rs;
+};
 
 export default {
   depositTokens,
+  startDistributions,
 };

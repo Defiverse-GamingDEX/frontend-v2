@@ -114,10 +114,36 @@ async function depositTokens(
     throw error;
   }
 }
+async function startDistributions(account, signer, currentProvider, chainId) {
+  try {
+    const provider = currentProvider;
+
+    const gasPrice = getGasPrice(chainId);
+
+    const params = {
+      contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
+      contractProvider: provider, // contract provider
+      account,
+      signer,
+      abi: GaugeRewardABI,
+      gasPrice: gasPrice,
+    };
+    console.log(params, 'startDistributions=>params');
+
+    const tx = await gaugeRewardService.depositTokens(params);
+
+    return tx;
+  } catch (error) {
+    console.log(error, 'error');
+    throw error;
+  }
+}
+
 export function useGaugeReward() {
   return {
     checkTokenAllowance,
     approveToken,
     depositTokens,
+    startDistributions,
   };
 }
