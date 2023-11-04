@@ -160,9 +160,7 @@ function handleSearch(text) {
                 </div>
                 <div class="item-content">
                   <div class="item-symbol">{{ item.symbol }}</div>
-                  <div
-                    class="w-40 md:w-60 text-sm truncate item-name text-gray"
-                  >
+                  <div class="w-40 text-sm truncate item-name text-gray">
                     {{ item.name }}
                   </div>
                 </div>

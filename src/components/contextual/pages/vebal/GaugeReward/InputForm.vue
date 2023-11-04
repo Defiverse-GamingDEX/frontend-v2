@@ -8,11 +8,14 @@ import { bnum, isSameAddress } from '@/lib/utils';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { Rules } from '@/types';
 import { useI18n } from 'vue-i18n';
-import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-import { useBridge } from '@/composables/bridge/useBridge';
-import { GAUGE_REWARD_TOKENS } from '@/constants/gaugeReward/reward-tokens';
+
 import { useTokenLists } from '@/providers/token-lists.provider';
-const { getProvider } = useWeb3();
+import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
+import BigNumber from 'bignumber.js';
+
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import useEthers from '@/composables/useEthers';
 
 // TYPES
 type InputValue = string | number;
@@ -20,10 +23,13 @@ type InputValue = string | number;
 type inputForm = {
   tokenSymbol: string;
   tokenAddress: string;
+  address: string; // it tokenAddress too
   balance: number;
   amount: number;
   decimals: number;
   periods: number; // weeks
+  isAllowance: boolean;
+  isError: boolean;
 };
 
 // PROPS
@@ -43,11 +49,13 @@ const props = withDefaults(defineProps<Props>(), {
 const { t } = useI18n();
 const { isWalletReady } = useWeb3();
 const { fNum2 } = useNumbers();
-const { getChain } = useBridge();
-
+const { getProvider, account, getSigner, chainId } = useWeb3();
 const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
   useTokenLists();
-
+const { checkTokenAllowance, approveToken } = useGaugeReward();
+const { addNotification } = useNotifications();
+const { addTransaction } = useTransactions();
+const { txListener } = useEthers();
 /**
  * STATE
  */
@@ -67,6 +75,7 @@ const _token_list = ref(
     : []
 );
 const provider = getProvider();
+const isLoading = ref(false);
 
 // EMITS
 const emit = defineEmits<{
@@ -75,7 +84,6 @@ const emit = defineEmits<{
 }>();
 
 // COMPUTEDS
-const { connectToAppNetwork } = useBridgeWeb3();
 const hasToken = computed(() => !!_address.value);
 const amountBN = computed(() => bnum(_amount.value));
 const tokenBalanceBN = computed(() => bnum(props?.inputSelect?.balance));
@@ -129,8 +137,25 @@ watchEffect(() => {
 });
 
 // FUNCTIONS
+async function checkAllowanceToken(address) {
+  try {
+    const allowance = await checkTokenAllowance(
+      address,
+      provider,
+      account.value
+    );
+    console.log(
+      allowance?.toString(),
+      BigNumber(allowance?.toString() || 0).gt(0),
+      'checkAllowanceToken'
+    );
+    return BigNumber(allowance?.toString() || 0).gt(0) ? true : false;
+  } catch (error) {
+    console.log(error, 'error=>checkAllowanceToken');
+    throw error;
+  }
+}
 function getTokenList(listSelected) {
-  console.log(_token_list.value, 'native_tokens_origin');
   let rs = cloneDeep(_token_list.value);
   rs = rs.filter(item => item.symbol !== 'OAS');
   for (let i = rs.length - 1; i >= 0; i--) {
@@ -148,12 +173,31 @@ function getTokenList(listSelected) {
   }
   return rs;
 }
-function updateToken(token) {
+function checkTokenSelectError(inputSelect) {
+  if (
+    inputSelect.balance === 0 ||
+    inputSelect.amount === 0 ||
+    inputSelect.periods === 0 ||
+    inputSelect.amount > inputSelect.balance ||
+    !inputSelect.isAllowance
+  ) {
+    return true;
+  }
+  return false;
+}
+async function updateToken(token) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.tokenAddress = token.address;
+
   inputSelect.tokenSymbol = token.symbol;
   inputSelect.balance = token.balance;
   inputSelect.decimals = token.decimals;
+  // check allowance token
+  const isAllowance = await checkAllowanceToken(inputSelect.tokenAddress);
+  inputSelect.isAllowance = isAllowance;
+
+  inputSelect.isError = checkTokenSelectError(inputSelect);
+
   emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 }
 
@@ -161,12 +205,18 @@ function handleAmountChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.amount = value;
   console.log('handleAmountChange', inputSelect.amount);
+
+  inputSelect.isError = checkTokenSelectError(inputSelect);
+
   emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 }
 function handlePeriodsChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.periods = value;
   console.log('handlePeriodsChange', inputSelect.periods);
+
+  inputSelect.isError = checkTokenSelectError(inputSelect);
+
   emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 }
 function deleteInput(index) {
@@ -177,6 +227,49 @@ const setMax = () => {
   const maxAmount = props?.inputSelect?.balance;
   handleAmountChange(maxAmount);
 };
+async function handleApproveButton() {
+  console.log(props?.inputSelect, 'props?.inputSelect');
+  let token = cloneDeep(props?.inputSelect);
+  try {
+    isLoading.value = true;
+    const signer = getSigner();
+    let tx = await approveToken(
+      token.tokenAddress,
+      provider,
+      account.value,
+      signer,
+      chainId.value
+    );
+
+    const summary = `Approve token success!`;
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'approve',
+      summary,
+    });
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        let inputSelect = cloneDeep(props?.inputSelect);
+        const isAllowance = await checkAllowanceToken(inputSelect.tokenAddress);
+        inputSelect.isAllowance = isAllowance;
+        updateToken(inputSelect);
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error) {
+    console.log(error, 'error=>handleApproveButton');
+    isLoading.value = false;
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
+}
 </script>
 
 <template>
@@ -279,6 +372,18 @@ const setMax = () => {
       >
         <template #append> Weeks </template>
       </BalTextInput>
+    </div>
+    <div
+      v-if="!inputSelect.isAllowance && inputSelect.tokenAddress"
+      class="mt-2 mb-4 btn-action"
+    >
+      <BalBtn
+        :label="$t('Approve')"
+        :loading="isLoading"
+        classCustom="pink-white-shadow"
+        block
+        @click.prevent="handleApproveButton"
+      />
     </div>
   </div>
 </template>

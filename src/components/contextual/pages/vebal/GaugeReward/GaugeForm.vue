@@ -9,6 +9,8 @@ type inputForm = {
   amount: number;
   decimals: number;
   periods: number; // weeks
+  isAllowance: boolean;
+  isError: boolean;
 };
 
 // EMITS
@@ -33,6 +35,8 @@ function addInput() {
       amount: 0,
       decimals: 18,
       periods: 0, // weeks
+      isAllowance: false,
+      isError: true,
     };
     input_list.value.push(itemPush);
   }
@@ -49,6 +53,8 @@ function handleUpdateInput(payload) {
   input_list.value[index].balance = inputSelect.balance;
   input_list.value[index].amount = inputSelect.amount;
   input_list.value[index].periods = inputSelect.periods;
+  input_list.value[index].isAllowance = inputSelect.isAllowance;
+  input_list.value[index].isError = inputSelect.isError;
   emit('update:input-list', input_list.value);
   console.log(input_list.value, 'input_list.value=>handleUpdateInput');
 }

@@ -69,6 +69,12 @@ const swapCardShadow = computed(() => {
   }
 });
 
+const isError = computed(() => {
+  const list = input_list.value;
+  const isItemError = list.find(item => item.isError === true);
+  console.log(isItemError, list, 'list');
+  return isItemError ? true : false;
+});
 //#region pool query
 const poolQuery = usePoolQuery(poolId, undefined, undefined);
 const pool = computed(() => poolQuery.data.value);
@@ -105,6 +111,7 @@ watch(poolQuery.error, () => {
 /**
  * FUNCTIONS
  */
+
 function updateInputList(payload) {
   input_list.value = payload;
   console.log(input_list.value, 'input_list=>updateInputList');
@@ -192,7 +199,7 @@ async function handleSubmitButton() {
             />
             <BalBtn
               v-else
-              :disabled="input_list.length === 0"
+              :disabled="input_list.length === 0 || isError"
               :label="$t('Deposit')"
               :loading="isLoading"
               classCustom="pink-white-shadow"
