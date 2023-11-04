@@ -20,7 +20,6 @@ import { getMulticaller } from '@/dependencies/Multicaller';
 import OracleAbi from '@/lib/abi/Oracle.json';
 import configs from '@/lib/config';
 
-
 const WEEK_MS = 86_400_000 * 7;
 // Please update the schema version when making changes to the transaction structure.
 const TRANSACTIONS_SCHEMA_VERSION = '1.1.3';
@@ -37,6 +36,8 @@ export type TransactionAction =
   | 'drip'
   | 'claim'
   | 'approve'
+  | 'transfer'
+  | 'depositTokens'
   | 'swap'
   | 'wrap'
   | 'unwrap'
@@ -96,7 +97,7 @@ export type NewTransaction = Pick<
 >;
 
 const networkId = configService.network.chainId;
-console.log(networkId,"networkIdAAA");
+console.log(networkId, 'networkIdAAA');
 const oracleContractAddress = configs[networkId]?.addresses?.oracle;
 
 export type TransactionsMap = Record<string, Transaction>;
@@ -110,9 +111,7 @@ export const transactionsState = ref<TransactionState>(
   lsGet<TransactionState>(LS_KEYS.Transactions, {}, TRANSACTIONS_SCHEMA_VERSION)
 );
 
-
 const protectedTokens = ref([] as Array<string>);
-
 
 // COMPUTED
 const transactions = computed(() =>
@@ -284,22 +283,22 @@ export default function useTransactions() {
   });
   // METHODS
   async function getProtectedTokens() {
-      const Multicaller = getMulticaller();
-      const multicaller = new Multicaller();
+    const Multicaller = getMulticaller();
+    const multicaller = new Multicaller();
 
-      multicaller.call({
-        key: `getProtectedTokens`,
-        address:
-          oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
-        function: 'getProtectedTokens',
-        abi: OracleAbi,
-        params: [],
-      });
+    multicaller.call({
+      key: `getProtectedTokens`,
+      address:
+        oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
+      function: 'getProtectedTokens',
+      abi: OracleAbi,
+      params: [],
+    });
 
-      const result = await multicaller.execute();
+    const result = await multicaller.execute();
 
-      return result;
-    }
+    return result;
+  }
   // METHODS
   function getSettledOrderSummary(
     transaction: Transaction,
@@ -331,7 +330,7 @@ export default function useTransactions() {
   function addTransaction(newTransaction: NewTransaction) {
     const transactionsMap = getTransactions();
     const txId = getId(newTransaction.id, newTransaction.type);
-    console.log(newTransaction,"newTransaction");
+    console.log(newTransaction, 'newTransaction');
     if (transactionsMap[txId]) {
       throw new Error(`The transaction ${newTransaction.id} already exists.`);
     }
@@ -392,24 +391,22 @@ export default function useTransactions() {
   }
 
   function addNotificationForTransaction(id: string, type: TransactionType) {
-      
-      const transaction = getTransaction(id, type);
-      console.log(transaction, "transactionAAA");
-      console.log(protectedTokens.value, 'protectedTokens.valueBBB');
-      // check protected token to change label action 
-      if (transaction != null) {
-        if (transaction.action === 'swap') {
-          let isAFT = protectedTokens?.value?.getProtectedTokens?.find(
-            item => item === transaction?.details?.tokenInAddress
-          );
-          if (isAFT) {
-            transaction.action = 'atfSwap';
-          }
-          if (transaction.status === 'failed') {
-            transaction.action = 'atfLimit';
-          }
+    const transaction = getTransaction(id, type);
+    console.log(transaction, 'transactionAAA');
+    console.log(protectedTokens.value, 'protectedTokens.valueBBB');
+    // check protected token to change label action
+    if (transaction != null) {
+      if (transaction.action === 'swap') {
+        const isAFT = protectedTokens?.value?.getProtectedTokens?.find(
+          item => item === transaction?.details?.tokenInAddress
+        );
+        if (isAFT) {
+          transaction.action = 'atfSwap';
         }
-      
+        if (transaction.status === 'failed') {
+          transaction.action = 'atfLimit';
+        }
+      }
 
       addNotification({
         type: isFinalizedTransactionStatus(transaction.status)

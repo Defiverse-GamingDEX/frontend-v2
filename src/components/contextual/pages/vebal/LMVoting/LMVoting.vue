@@ -7,7 +7,11 @@ import useVotingEscrowLocks from '@/composables/useVotingEscrowLocks';
 import useDebouncedRef from '@/composables/useDebouncedRed';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { poolURLFor } from '@/composables/usePool';
+
 import useVotingGauges from '@/composables/useVotingGauges';
+import useWeb3 from '@/services/web3/useWeb3';
+import usePoolCreation from '@/composables/pools/usePoolCreation';
+
 import { bnum, isSameAddress, scale } from '@/lib/utils';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
 
@@ -25,6 +29,8 @@ const tokenFilter = useDebouncedRef<string>('', 500);
 const showExpiredGauges = useDebouncedRef<boolean>(false, 500);
 const activeNetworkFilters = useDebouncedRef<Network[]>([], 500);
 const activeVotingGauge = ref<VotingGaugeWithVotes | null>(null);
+
+const adminAddress = ref(null);
 
 const networkFilters = [
   Network.MAINNET,
@@ -50,6 +56,9 @@ const veBalLockInfoQuery = useVeBalLockInfoQuery();
 
 const { shouldResubmitVotes } = useVotingEscrowLocks();
 
+const { isWalletReady, account } = useWeb3();
+const { getAdminAddress } = usePoolCreation();
+
 const votingGaugeAddresses = computed<string[]>(
   () => votingGauges.value?.map(gauge => gauge.address) || []
 );
@@ -58,6 +67,17 @@ const { data: expiredGauges } = useExpiredGaugesQuery(votingGaugeAddresses);
 /**
  * COMPUTED
  */
+
+const isAdmin = computed(() => {
+  if (!adminAddress.value) {
+    return false;
+  }
+  if (adminAddress.value === account.value) {
+    return true;
+  }
+  return false;
+});
+
 const unallocatedVotesFormatted = computed<string>(() =>
   fNum2(scale(bnum(unallocatedVotes.value), -4).toString(), FNumFormats.percent)
 );
@@ -121,6 +141,10 @@ const filteredVotingGauges = computed(() => {
       })
     );
   });
+});
+// LIFE CYCLES
+onBeforeMount(async () => {
+  adminAddress.value = await getAdminAddress();
 });
 
 /**
@@ -234,16 +258,18 @@ function changeTab(tab) {
         <div class="mb-4 gauge-tabs">
           <div class="flex justify-end align-center">
             <BalBtn
+              v-if="isAdmin"
               color="white"
-              class="mr-5 gauge-tab"
+              class="gauge-tab"
               :class="{ active: tabSelect === 'gauge' }"
               @click="changeTab('gauge')"
             >
               Gauge
             </BalBtn>
             <BalBtn
+              v-if="isAdmin"
               color="white"
-              class="gauge-tab"
+              class="ml-5 gauge-tab"
               :class="{ active: tabSelect === 'gauge-reward' }"
               @click="changeTab('gauge-reward')"
             >

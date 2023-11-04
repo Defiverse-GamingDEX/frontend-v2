@@ -20,7 +20,7 @@ import {
 import { isSameAddress } from '@/lib/utils';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
 import useWeb3 from '@/services/web3/useWeb3';
-
+import usePoolCreation from '@/composables/pools/usePoolCreation';
 import GaugesTableVoteBtn from './GaugesTableVoteBtn.vue';
 import GaugeVoteInfo from './GaugeVoteInfo.vue';
 import GaugesTableMyVotes from './GaugesTableMyVotes.vue';
@@ -63,12 +63,19 @@ const emit = defineEmits<{
 }>();
 
 /**
+ * STATE
+ */
+
+const adminAddress = ref(null);
+
+/**
  * COMPOSABLES
  */
 const router = useRouter();
 const { t } = useI18n();
 const { upToLargeBreakpoint } = useBreakpoints();
-const { isWalletReady } = useWeb3();
+const { isWalletReady, account } = useWeb3();
+const { getAdminAddress } = usePoolCreation();
 
 /**
  * DATA
@@ -137,12 +144,26 @@ const columns = computed(() => {
       align: 'right',
       Cell: 'RewardColumnCell',
       width: 110,
-      hidden: !isWalletReady.value || props?.tabSelect !== 'gauge-reward',
+      hidden:
+        !isWalletReady.value ||
+        props?.tabSelect !== 'gauge-reward' ||
+        !isAdmin.value,
     },
   ];
 });
 
 const dataKey = computed(() => JSON.stringify(props.data));
+
+// COMPUTED
+const isAdmin = computed(() => {
+  if (!adminAddress.value) {
+    return false;
+  }
+  if (adminAddress.value === account.value) {
+    return true;
+  }
+  return false;
+});
 
 /**
  * METHODS
@@ -212,7 +233,7 @@ function openConfigReward(gauge) {
       poolId: gauge.pool.id,
       networkSlug: getNetworkSlug(gauge.network),
     },
-    query: { returnRoute: 'vebal' },
+    query: { returnRoute: 'vebal', gaugeAddress: gauge.address },
   });
 }
 /**
@@ -222,6 +243,10 @@ function openConfigReward(gauge) {
 //   _amount.value = props?.inputSelect?.amount;
 //   _address.value = props?.inputSelect?.tokenAddress;
 // });
+// LIFE CYCLES
+onBeforeMount(async () => {
+  adminAddress.value = await getAdminAddress();
+});
 </script>
 
 <template>

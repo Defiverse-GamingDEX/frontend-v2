@@ -10,6 +10,7 @@ import { useTokens } from '@/providers/tokens.provider';
 import useVeBal from '@/composables/useVeBAL';
 import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
+import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -25,13 +26,17 @@ import {
   tokenTreeLeafs,
 } from '@/composables/usePool';
 
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import useEthers from '@/composables/useEthers';
 /**
  * STATE
  */
 const route = useRoute();
 const poolId = (route.params.poolId as string).toLowerCase();
+const gaugeAddress = route.query.gaugeAddress as string;
 const input_list = ref([]);
-const isAllowance = ref(false);
+const isAllowance = ref(true);
 const isLoading = ref(false);
 /**
  * COMPOSABLES
@@ -39,10 +44,16 @@ const isLoading = ref(false);
 const { t } = useI18n();
 
 const { prices, balanceQueryLoading } = useTokens();
-const { isWalletReady } = useWeb3();
+const { isWalletReady, account, getSigner, getProvider, chainId } = useWeb3();
 const { addAlert, removeAlert } = useAlerts();
 const _isVeBalPool = isVeBalPool(poolId);
 const { bp } = useBreakpoints();
+const { depositTokens } = useGaugeReward();
+
+const { addNotification } = useNotifications();
+const { addTransaction } = useTransactions();
+const { txListener } = useEthers();
+
 /**
  * COMPUTED
  */
@@ -101,8 +112,50 @@ function updateInputList(payload) {
 function handleApproveButton() {
   console.log(input_list.value, 'input_list=>updateInputList');
 }
-function handleSubmitButton() {
-  console.log(input_list.value, 'input_list=>updateInputList');
+async function handleSubmitButton() {
+  try {
+    isLoading.value = true;
+
+    const signer = getSigner();
+    const provider = getProvider();
+
+    let tx = await depositTokens(
+      gaugeAddress,
+      input_list.value,
+      account.value,
+      signer,
+      provider,
+      chainId.value
+    );
+    console.log(tx, 'tx');
+
+    const summary = `Deposit tokens success!`;
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'depositTokens',
+      summary,
+    });
+
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        console.log('success');
+
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error) {
+    console.log(error, 'error=>handleTransferButton');
+    isLoading.value = false;
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
 }
 </script>
 
@@ -139,7 +192,7 @@ function handleSubmitButton() {
             />
             <BalBtn
               v-else
-              :disabled="input_list.length > 0"
+              :disabled="input_list.length === 0"
               :label="$t('Deposit')"
               :loading="isLoading"
               classCustom="pink-white-shadow"
