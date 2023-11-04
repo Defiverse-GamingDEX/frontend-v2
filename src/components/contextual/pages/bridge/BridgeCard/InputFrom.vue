@@ -29,6 +29,7 @@ type Props = {
   chainsList: Array<any>;
   ignoreWalletBalance?: boolean;
   rules?: Rules;
+  disabled?: boolean;
 };
 const props = withDefaults(defineProps<Props>(), {
   ignoreWalletBalance: false,
@@ -131,8 +132,11 @@ function handleAmountChange(value) {
   emit('update:inputSelect', inputSelect);
 }
 function handleNetworkChange(networkId) {
+  console.log(networkId, 'networkId');
   let network = getChain(networkId);
+  console.log(network, 'network');
   if (network) {
+    console.log();
     connectToAppNetwork(network);
   }
 }
@@ -147,6 +151,7 @@ const setMax = () => {
     <div class="input-content">
       <BalTextInput
         :modelValue="_amount"
+        :disabled="disabled"
         name="tokenIn"
         :placeholder="'0.0'"
         type="number-dot"
@@ -165,6 +170,7 @@ const setMax = () => {
           <NetworkSelectInput
             :networkList="chainsList"
             :modelValue="inputSelect?.chainId"
+            :disabled="disabled"
             class="mb-2"
             @update:model-value="updateNetWork"
           />
@@ -174,6 +180,7 @@ const setMax = () => {
             <TokenSelectInput
               :tokensList="inputSelect?.tokensList"
               :modelValue="inputSelect?.tokenAddress"
+              :disabled="disabled"
               class="mr-2"
               @update:model-value="updateToken"
             />

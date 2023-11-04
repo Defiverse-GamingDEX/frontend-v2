@@ -20,7 +20,14 @@ import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
 import { ethers } from 'ethers';
 // // COMPOSABLES
-const { account, getSigner, chainId } = useWeb3();
+const {
+  account,
+  getSigner,
+  chainId,
+  isWalletReady,
+  isMismatchedNetwork,
+  startConnectWithInjectedProvider,
+} = useWeb3();
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
@@ -510,6 +517,7 @@ onBeforeMount(async () => {
             <InputFrom
               :chainsList="chainsList"
               :inputSelect="inputFromSelect"
+              :disabled="!isWalletReady || isMismatchedNetwork"
               @update:input-select="handleInputFromChange"
               @update:network="handleNetworkChange"
             />
@@ -527,7 +535,7 @@ onBeforeMount(async () => {
             <InputTo
               :chainsList="inputToSelect?.chainsList"
               :inputSelect="inputToSelect"
-              :disabled="true"
+              :disabled="!isWalletReady || isMismatchedNetwork"
               @update:input-select="handleInputToChange"
             />
           </div>
@@ -536,6 +544,7 @@ onBeforeMount(async () => {
             <div class="wallet-address-input">
               <BalTextInput
                 :modelValue="anotherWalletAddress"
+                :disabled="!isWalletReady"
                 name="anotherWallet"
                 placeholder=""
                 type="text"
@@ -667,7 +676,7 @@ onBeforeMount(async () => {
             {{ estimateInfo?.err?.msg }}
           </BalAlert>
         </div>
-        <div class="bridge-actions">
+        <div v-if="isWalletReady" class="bridge-actions">
           <BalBtn
             v-if="!isAllowance"
             :disabled="!estimateInfo || estimateInfo.err"
@@ -691,6 +700,15 @@ onBeforeMount(async () => {
             classCustom="pink-white-shadow"
             block
             @click.prevent="handleTransferButton"
+          />
+        </div>
+        <div v-else class="bridge-actions wallet-connect">
+          <BalBtn
+            :label="$t('connectWallet')"
+            :loading="isLoading"
+            classCustom="pink-white-shadow"
+            block
+            @click="startConnectWithInjectedProvider"
           />
         </div>
       </div>
