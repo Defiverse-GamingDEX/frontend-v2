@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TokenSelectInput from '@/components/contextual/pages/bridge/BridgeCard/TokenSelectInput.vue';
+
 import useWeb3 from '@/services/web3/useWeb3';
 import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
 import { cloneDeep } from 'lodash';
@@ -10,6 +11,9 @@ import { useI18n } from 'vue-i18n';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import { useBridge } from '@/composables/bridge/useBridge';
 import { GAUGE_REWARD_TOKENS } from '@/constants/gaugeReward/reward-tokens';
+import { useTokenLists } from '@/providers/token-lists.provider';
+const { getProvider } = useWeb3();
+
 // TYPES
 type InputValue = string | number;
 
@@ -40,13 +44,30 @@ const { t } = useI18n();
 const { isWalletReady } = useWeb3();
 const { fNum2 } = useNumbers();
 const { getChain } = useBridge();
+
+const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
+  useTokenLists();
+
 /**
  * STATE
  */
 const _amount = ref<InputValue>('');
 const _address = ref<string>('');
 const _periods = ref<number>(0);
-const _token_list = ref<array>(GAUGE_REWARD_TOKENS);
+const tokenListArray = Object.entries(approvedTokenLists.value) || [];
+const _token_list = ref(
+  tokenListArray
+    ? tokenListArray.length > 0
+      ? tokenListArray[0]
+        ? tokenListArray[0].length >= 2
+          ? tokenListArray[0][1].tokens
+          : []
+        : []
+      : []
+    : []
+);
+const provider = getProvider();
+
 // EMITS
 const emit = defineEmits<{
   (e: 'update:inputSelect', { inputSelect: inputForm, index: number }): void;
@@ -109,9 +130,12 @@ watchEffect(() => {
 
 // FUNCTIONS
 function getTokenList(listSelected) {
-  let rs = cloneDeep(GAUGE_REWARD_TOKENS);
+  console.log(_token_list.value, 'native_tokens_origin');
+  let rs = cloneDeep(_token_list.value);
+  rs = rs.filter(item => item.symbol !== 'OAS');
   for (let i = rs.length - 1; i >= 0; i--) {
     const token = rs[i];
+    token.provider = provider;
     const tokenSelected = listSelected.find(
       item =>
         item.tokenAddress?.toLowerCase() === token.address.toLowerCase() &&

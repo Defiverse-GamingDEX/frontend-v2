@@ -70,7 +70,13 @@ function getToken(tokenAddress) {
     >
       <div class="item-info">
         <div class="item-img">
-          <img width="48" height="48" :src="token?.logoURI" />
+          <BalAsset
+            :address="token?.address || token?.tokenAddress"
+            :iconURI="token?.logoURI"
+            :size="24"
+            class=""
+          />
+          <!-- <img width="48" height="48" :src="token?.logoURI" /> -->
         </div>
         <div class="item-label">
           {{ truncateText(token?.symbol, 16, 5, 5) }}

@@ -150,7 +150,13 @@ function handleSearch(text) {
             >
               <div class="content-left">
                 <div class="item-img">
-                  <img width="48" height="48" :src="item.logoURI" />
+                  <BalAsset
+                    :address="item.address"
+                    :iconURI="item.logoURI"
+                    :size="48"
+                    class=""
+                  />
+                  <!-- <img width="48" height="48" :src="item.logoURI" /> -->
                 </div>
                 <div class="item-content">
                   <div class="item-symbol">{{ item.symbol }}</div>

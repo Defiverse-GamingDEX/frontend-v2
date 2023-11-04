@@ -87,9 +87,12 @@ async function getTokensBalance(tokens, account) {
 }
 async function getBalance(token, walletAddress) {
   try {
-    const { address, rpc } = token;
-    const provider = new JsonRpcProvider(rpc);
-    const tokenContract = new Contract(address, ERC20ABI, provider);
+    const { address, rpc, provider } = token;
+    let currentProvider = provider;
+    if (!provider) {
+      currentProvider = new JsonRpcProvider(rpc);
+    }
+    const tokenContract = new Contract(address, ERC20ABI, currentProvider);
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
     console.log(tokenBalance, 'getBalance=>tokenBalanceAAA');
     const weiBalance = tokenBalance?.toString();
