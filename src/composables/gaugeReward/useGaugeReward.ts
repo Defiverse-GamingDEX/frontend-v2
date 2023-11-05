@@ -138,6 +138,26 @@ async function startDistributions(account, signer, currentProvider, chainId) {
     throw error;
   }
 }
+async function getRewardTokens(gaugeAddress, currentProvider) {
+  try {
+    const provider = currentProvider;
+
+    const params = {
+      contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
+      contractProvider: provider, // contract provider
+      gaugeAddress: gaugeAddress,
+      abi: GaugeRewardABI,
+    };
+    console.log(params, 'getRewardTokens=>params');
+
+    const tx = await gaugeRewardService.getRewardTokens(params);
+
+    return tx;
+  } catch (error) {
+    console.log(error, 'error');
+    throw error;
+  }
+}
 
 export function useGaugeReward() {
   return {
@@ -145,5 +165,6 @@ export function useGaugeReward() {
     approveToken,
     depositTokens,
     startDistributions,
+    getRewardTokens,
   };
 }

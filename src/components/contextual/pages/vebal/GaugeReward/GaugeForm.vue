@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import InputForm from './InputForm.vue';
+import useWeb3 from '@/services/web3/useWeb3';
+import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
+import { useBridge } from '@/composables/bridge/useBridge';
+import { useTokenLists } from '@/providers/token-lists.provider';
+import { GAUGE_REWARD_NUMBER_ADD } from '@/constants/gaugeReward/gauge-tokens-config';
 // TYPES
 
 type inputForm = {
@@ -11,18 +16,44 @@ type inputForm = {
   periods: number; // weeks
   isAllowance: boolean;
   isError: boolean;
+  isDeposited: boolean;
 };
-
+// PROPS
+type Props = {
+  gaugeAddress?: string;
+};
+const props = withDefaults(defineProps<Props>(), {});
 // EMITS
 const emit = defineEmits<{
   (e: 'update:input-list', input_list): void;
 }>();
+
+/**
+ * COMPOSABLES
+ */
+
+const { isWalletReady, account, getSigner, getProvider, chainId } = useWeb3();
+const { getRewardTokens } = useGaugeReward();
+const { getTokensBalance, getBalance } = useBridge();
+const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
+  useTokenLists();
+const tokenListArray = Object.entries(approvedTokenLists.value) || [];
 /**
  * STATES
  */
 const input_list = ref<inputForm>([]);
-const length_conts = ref(3);
-
+const length_conts = ref(GAUGE_REWARD_NUMBER_ADD);
+const _token_list = ref(
+  tokenListArray
+    ? tokenListArray.length > 0
+      ? tokenListArray[0]
+        ? tokenListArray[0].length >= 2
+          ? tokenListArray[0][1].tokens
+          : []
+        : []
+      : []
+    : []
+);
 /**
  * FUNCTIONS
  */
@@ -37,6 +68,7 @@ function addInput() {
       periods: 0, // weeks
       isAllowance: false,
       isError: true,
+      isDeposited: false,
     };
     input_list.value.push(itemPush);
   }
@@ -58,6 +90,64 @@ function handleUpdateInput(payload) {
   emit('update:input-list', input_list.value);
   console.log(input_list.value, 'input_list.value=>handleUpdateInput');
 }
+async function getTokenList() {
+  try {
+    const provider = getProvider();
+    let rs = await getRewardTokens(props.gaugeAddress, provider);
+    if (rs) {
+      initTokenList(rs);
+    }
+    console.log(rs, 'rs=>initTokenList');
+  } catch (error) {
+    console.log('error=>initTokenList');
+  }
+}
+async function initTokenList(depositedList) {
+  // reset list
+  input_list.value = [];
+  const provider = getProvider();
+  for (let i = 0; i < depositedList.length; i++) {
+    let depositedTokenAddress = depositedList[i];
+    if (
+      depositedTokenAddress !== '0x0000000000000000000000000000000000000000'
+    ) {
+      let balance = 0;
+
+      const depositedToken = _token_list.value.find(
+        item => item.address === depositedTokenAddress
+      );
+      if (account.value && depositedToken) {
+        depositedToken.provider = provider;
+        balance = await getBalance(depositedToken, account.value);
+      }
+      console.log(balance, 'balance');
+      const itemPush = {
+        tokenSymbol: '',
+        tokenAddress: depositedTokenAddress,
+        balance: balance,
+        amount: 0,
+        decimals: 18,
+        periods: 0, // weeks
+        isAllowance: true,
+        isError: true,
+        isDeposited: true,
+      };
+      input_list.value.push(itemPush);
+    }
+  }
+  emit('update:input-list', input_list.value);
+  console.log(input_list.value, 'input_list.value=>handleUpdateInput');
+}
+/**
+ * LIFECYCLE
+ */
+onBeforeMount(async () => {
+  getTokenList();
+});
+/**
+ * EXPOSE
+ */
+defineExpose({ getTokenList });
 </script>
 
 <template>

@@ -38,6 +38,7 @@ const gaugeAddress = route.query.gaugeAddress as string;
 const input_list = ref([]);
 const isAllowance = ref(true);
 const isLoading = ref(false);
+const gaugeForm = ref(null);
 /**
  * COMPOSABLES
  */
@@ -147,6 +148,7 @@ async function handleSubmitButton() {
     txListener(tx, {
       onTxConfirmed: async () => {
         console.log('success');
+        await gaugeForm.value.getTokenList();
 
         isLoading.value = false;
       },
@@ -186,7 +188,11 @@ async function handleSubmitButton() {
             <TargetGauge :pool="pool" />
           </div>
           <div class="mt-2 form-container">
-            <GaugeForm @update:input-list="updateInputList" />
+            <GaugeForm
+              ref="gaugeForm"
+              :gaugeAddress="gaugeAddress"
+              @update:input-list="updateInputList"
+            />
           </div>
           <div class="mt-8 btn-actions">
             <BalBtn

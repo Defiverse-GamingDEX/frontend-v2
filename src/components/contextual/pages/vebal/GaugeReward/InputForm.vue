@@ -16,7 +16,7 @@ import BigNumber from 'bignumber.js';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
-
+import { GAUGE_REWARD_MAX_PERIODS } from '@/constants/gaugeReward/gauge-tokens-config';
 // TYPES
 type InputValue = string | number;
 
@@ -30,6 +30,7 @@ type inputForm = {
   periods: number; // weeks
   isAllowance: boolean;
   isError: boolean;
+  isDeposited: boolean;
 };
 
 // PROPS
@@ -63,7 +64,7 @@ const _amount = ref<InputValue>('');
 const _address = ref<string>('');
 const _periods = ref<number>(0);
 const tokenListArray = Object.entries(approvedTokenLists.value) || [];
-const _token_list = ref(
+const _token_list_origin = ref(
   tokenListArray
     ? tokenListArray.length > 0
       ? tokenListArray[0]
@@ -74,8 +75,10 @@ const _token_list = ref(
       : []
     : []
 );
+const _token_list = ref([]);
 const provider = getProvider();
 const isLoading = ref(false);
+const maxPeriods = ref(GAUGE_REWARD_MAX_PERIODS);
 
 // EMITS
 const emit = defineEmits<{
@@ -94,7 +97,6 @@ const inputRules = computed(() => {
   if (!hasToken.value || !isWalletReady.value || props.noRules) {
     return [isPositive()];
   }
-
   const rules = [...props.rules, isPositive()];
   if (!props.ignoreWalletBalance) {
     rules.push(
@@ -103,6 +105,13 @@ const inputRules = computed(() => {
   }
   return rules;
 });
+const periodsRules = computed(() => {
+  const rules = [isPositive()];
+  rules.push(isLessThanOrEqualTo(maxPeriods.value, t('exceedsMaxPeriods')));
+
+  return rules;
+});
+
 const isMaxed = computed(() => {
   return _amount.value === props?.inputSelect?.balance;
 });
@@ -131,9 +140,7 @@ watchEffect(() => {
   _amount.value = props?.inputSelect?.amount;
   _address.value = props?.inputSelect?.tokenAddress;
   _periods.value = props?.inputSelect?.periods;
-  console.log(_token_list.value, '_token_list.valuebefore');
   _token_list.value = getTokenList(props.input_list);
-  console.log(_token_list.value, '_token_list.valueAfter');
 });
 
 // FUNCTIONS
@@ -144,11 +151,7 @@ async function checkAllowanceToken(address) {
       provider,
       account.value
     );
-    console.log(
-      allowance?.toString(),
-      BigNumber(allowance?.toString() || 0).gt(0),
-      'checkAllowanceToken'
-    );
+
     return BigNumber(allowance?.toString() || 0).gt(0) ? true : false;
   } catch (error) {
     console.log(error, 'error=>checkAllowanceToken');
@@ -156,8 +159,9 @@ async function checkAllowanceToken(address) {
   }
 }
 function getTokenList(listSelected) {
-  let rs = cloneDeep(_token_list.value);
+  let rs = cloneDeep(_token_list_origin.value);
   rs = rs.filter(item => item.symbol !== 'OAS');
+  console.log(rs, listSelected, 'rs=>getTokenList');
   for (let i = rs.length - 1; i >= 0; i--) {
     const token = rs[i];
     token.provider = provider;
@@ -178,6 +182,7 @@ function checkTokenSelectError(inputSelect) {
     inputSelect.balance === 0 ||
     inputSelect.amount === 0 ||
     inputSelect.periods === 0 ||
+    inputSelect.periods > maxPeriods.value ||
     inputSelect.amount > inputSelect.balance ||
     !inputSelect.isAllowance
   ) {
@@ -276,7 +281,12 @@ async function handleApproveButton() {
   <div class="input-form-component">
     <div class="input-content">
       <div class="input-title">
-        {{ index + 2 }} Reward token
+        {{ index + 1 }}
+        <span v-if="index === 0" class="mr-1"> st </span>
+        <span v-if="index === 1" class="mr-1"> nd </span>
+        <span v-if="index === 2" class="mr-1"> rd </span>
+        <span v-if="index > 2" class="mr-1"> th </span>
+        Reward token
         <span
           class="hover:text-red-500 dark:hover:text-red-500 delete-icon ease-color text-secondary"
           @click.stop.prevent="deleteInput(index)"
@@ -304,7 +314,7 @@ async function handleApproveButton() {
           <slot name="tokenSelect">
             <TokenSelectInput
               :tokensList="_token_list"
-              :modelValue="inputSelect?.tokenAddress"
+              :modelValue="_address"
               class="mr-2"
               @update:model-value="updateToken"
             />
@@ -359,6 +369,7 @@ async function handleApproveButton() {
       <BalTextInput
         :modelValue="_periods"
         :name="`periods${index}`"
+        :rules="periodsRules"
         :placeholder="'0.0'"
         type="number-dot"
         :decimalLimit="decimalLimit"

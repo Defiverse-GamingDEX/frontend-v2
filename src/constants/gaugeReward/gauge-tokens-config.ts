@@ -1,0 +1,3 @@
+export const GAUGE_REWARD_NUMBER_ADD = 8;
+
+export const GAUGE_REWARD_MAX_PERIODS = 52;

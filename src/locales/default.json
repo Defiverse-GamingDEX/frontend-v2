@@ -363,6 +363,7 @@
   "ethereumTxTypeTooltip": "Most users will want EIP-1559 Transactions, but there are some instances that may require a Legacy Transaction. For example, some Ledger users have had issues using MetaMask with EIP-1559 Transactions.",
   "etherscan": "Etherscan",
   "exceedsBalance": "Exceeds wallet balance",
+  "exceedsMaxPeriods": "Exceeds max periods",
   "exceedsPoolBalance": "Exceeds pool balance for this token",
   "expired": "Expired",
   "expiryDate": "Expiry date",
@@ -948,7 +949,7 @@
         "myVotes": "My votes",
         "vote": "Vote",
         "remove": "Remove",
-        "additionalReward":"Additional Reward"
+        "additionalReward": "Additional Reward"
       },
       "votesTooltip": {
         "title": "Voting breakdown",
@@ -1338,7 +1339,8 @@
     "stake": "Stake",
     "unstake": "Unstake",
     "approve": "Approve",
-    "transfer":"Transfer",
+    "depositTokens": "Deposit tokens",
+    "transfer": "Transfer",
     "claim": "Claim",
     "createPool": "Create pool",
     "drip": "Drip",

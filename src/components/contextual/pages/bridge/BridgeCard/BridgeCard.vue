@@ -461,40 +461,6 @@ async function handleApproveButton() {
  */
 onBeforeMount(async () => {
   updateNetWorkInputFrom(chainId.value);
-  try {
-    await getTransferHistory(account.value, paging.value);
-    const transfer_id = ethers.utils.solidityKeccak256(
-      [
-        'address',
-        'address',
-        'address',
-        'uint256',
-        'uint64',
-        'uint64',
-        'uint64',
-      ],
-      [
-        '0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE', /// User's wallet address,
-        '0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE', /// User's wallet address,
-        '0xCbE56b00d173A26a5978cE90Db2E33622fD95A28', /// Wrap token address/ ERC20 token address
-        '2000000', /// Send amount in String
-        43113, /// Destination chain id
-        `1698426222019`, /// Nonce
-        5, /// Source chain id
-      ]
-    );
-    console.log(
-      transfer_id,
-      'transfer_id',
-      '0x586091f89687381a9809eb4f939b41f97e70d1028e46a491b4016ae5a90b4fd3'
-    );
-    console.log(
-      `0x0688a56efb2c7677969572f1ec66b6cd418b943896f96e1a43b2f9f194cc1a32`,
-      'test'
-    );
-  } catch (error) {
-    console.log(error, 'error');
-  }
 });
 </script>
 
