@@ -949,7 +949,7 @@
         "myVotes": "My votes",
         "vote": "Vote",
         "remove": "Remove",
-        "additionalReward": "Additional Reward"
+        "additionalReward": "Additional Reward "
       },
       "votesTooltip": {
         "title": "Voting breakdown",
@@ -1533,5 +1533,6 @@
     }
   },
   "poolActivity": "Pool activity",
-  "legacyClaims": "Legacy claims"
+  "legacyClaims": "Legacy claims",
+  "distributionReward":"Distribute all rewards"
 }

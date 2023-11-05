@@ -130,7 +130,7 @@ async function startDistributions(account, signer, currentProvider, chainId) {
     };
     console.log(params, 'startDistributions=>params');
 
-    const tx = await gaugeRewardService.depositTokens(params);
+    const tx = await gaugeRewardService.startDistributions(params);
 
     return tx;
   } catch (error) {

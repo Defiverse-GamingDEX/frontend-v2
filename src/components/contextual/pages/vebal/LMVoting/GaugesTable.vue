@@ -24,6 +24,7 @@ import usePoolCreation from '@/composables/pools/usePoolCreation';
 import GaugesTableVoteBtn from './GaugesTableVoteBtn.vue';
 import GaugeVoteInfo from './GaugeVoteInfo.vue';
 import GaugesTableMyVotes from './GaugesTableMyVotes.vue';
+import DistributeRewardsBtn from './DistributeRewardsBtn.vue';
 import BalAssetSet from '@/components/_global/BalAsset/BalAssetSet.vue';
 import { orderedTokenURIs } from '@/composables/useVotingGauges';
 import IconLimit from '@/components/icons/IconLimit.vue';
@@ -380,6 +381,12 @@ onBeforeMount(async () => {
       </template>
     </BalTable>
   </BalCard>
+  <div
+    v-if="isAdmin && tabSelect === 'gauge-reward'"
+    class="mt-4 distribution-btn-container"
+  >
+    <DistributeRewardsBtn />
+  </div>
 </template>
 
 <style lang="scss">
@@ -395,5 +402,9 @@ tr.expired-gauge-row {
     width: 80%;
     margin: 0 auto;
   }
+}
+.distribution-btn-container {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
