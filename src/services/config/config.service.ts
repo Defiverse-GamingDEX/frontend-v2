@@ -23,7 +23,7 @@ export default class ConfigService {
     return {
       APP_ENV: import.meta.env.VITE_ENV || 'development',
       NETWORK: networkId.value,
-      APP_DOMAIN: import.meta.env.VITE_DOMAIN || 'dex.defiverse.net',
+      APP_DOMAIN: import.meta.env.VITE_DOMAIN || 'gaming-dex.com',
       APP_HOST: import.meta.env.VITE_HOST || 'balancer.fi',
       IPFS_NODE: import.meta.env.VITE_IPFS_NODE || 'cloudflare-ipfs.com',
       BLOCKNATIVE_DAPP_ID:
