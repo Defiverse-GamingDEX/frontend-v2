@@ -128,6 +128,14 @@
       "symbol": "hGEM",
       "decimals": 18,
       "logoURI": ""
+    },
+    {
+      "address": "0x5C153f6734781849d21eEfE4f84A8c8872630E13",
+      "chainId": 17117,
+      "name": "Chain Colosseum Phoenix Token Beta",
+      "symbol": "BetaCCP",
+      "decimals": 18,
+      "logoURI": ""
     }
   ]
 }
