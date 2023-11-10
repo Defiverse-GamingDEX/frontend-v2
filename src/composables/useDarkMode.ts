@@ -13,6 +13,8 @@ const darkMode = ref<boolean>(lsDarkMode);
 // MUTATIONS
 function setDarkMode(val: boolean): void {
   darkMode.value = val;
+  console.log(darkMode.value, 'darkMode.value');
+  darkMode.value = false; // remove dark mode
   lsSet(LS_KEYS.App.DarkMode, darkMode.value.toString());
   if (darkMode.value) {
     document.documentElement.classList.add('dark');
