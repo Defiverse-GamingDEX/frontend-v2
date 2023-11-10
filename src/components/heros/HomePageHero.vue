@@ -27,25 +27,25 @@ const list_features = [
     iconUrl: '/images/home/weight-pool.png',
     title: `Weighted Pools`,
     description: `The weighted pools are highly versatile and customizable pools. These pools employ a weighted calculation and are best suited for general use with tokens that are not necessarily price correlated. (e.g. USDC/OAS). Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX weighted pools enable users to create pools with varying token counts and weightings, such as 80/20 or 60/20/20 pools.`,
-    href: '#',
+    href: 'https://docs.gaming-dex.com/product/pools/weight-pools',
   },
   {
     iconUrl: '/images/home/composable-pool.png',
     title: `Composable Stable Pools`,
     description: `Designed for assets expected to consistently swap at near parity or at a predetermined exchange rate, Composable Stable Pools employ Stable Math. This system, based on the principles of StableSwap popularized by Curve, allows for substantial swaps without significant price impact, greatly enhancing capital efficiency for similar and correlated asset swaps.`,
-    href: '#',
+    href: 'https://docs.gaming-dex.com/product/pools/stable-pool',
   },
   {
     iconUrl: '/images/home/atf-field.png',
     title: `AT-Field`,
     description: `AT-Field only prevents the sale of traders. This will be done by limiting the sending of utility tokens to the SwapContract in the Gaming DEX so that users cannot swap utility tokens for other tokens in excess of the amount earned by playing the game (obtained by the Oracle).`,
-    href: '#',
+    href: 'https://docs.gaming-dex.com/product/anti-trader-field-at-field',
   },
   {
     iconUrl: '/images/home/multi-gems-swap.png',
     title: `MultiGemSwap`,
     description: `MultiGemSwap” is a system that ensures liquidity for “gems” across blockchain games. While traditional social games allowed gems to be used only within a specific game, this system enables the exchange of gems between different games. Even gems left unused after quitting a game can now be utilized in another, enhancing both the gaming experience and investment efficiency`,
-    href: '#',
+    href: 'https://docs.gaming-dex.com/product/multigemswap',
   },
 ];
 </script>
