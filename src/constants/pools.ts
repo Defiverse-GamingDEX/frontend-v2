@@ -788,6 +788,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   Stable: {
     AllowList: [
       // '0xfedb19ec000d38d92af4b21436870f115db22725000000000000000000000010', // bb-ag-usd
+      '0xfd330fc06987835dff2d1d0787e81d717ae1acb000000000000000000000000b',
     ],
   },
   Investment: {
