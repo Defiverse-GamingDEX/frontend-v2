@@ -10,15 +10,15 @@
   },
   "tokens": [
     {
-      "address": "0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E",
+      "address": "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587",
       "chainId": 17117,
-      "name": "DFV",
-      "symbol": "DFV",
+      "name": "Gaming DEX Token",
+      "symbol": "GDT",
       "decimals": 18,
       "logoURI": ""
     },
     {
-      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
       "chainId": 17117,
       "name": "OAS",
       "symbol": "OAS",
@@ -34,18 +34,10 @@
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
     },
     {
-      "address": "0x167F2A85D015C6C7a06CA65230FFaf22d1dceA9f",
+      "address": "0xFD470A998604e81048C9F1d2065B6c794359C033",
       "chainId": 17117,
-      "name": "Game Token A",
-      "symbol": "GMA",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0xbDfd38435Cf396083CfBf913a8A49284DE70BF6b",
-      "chainId": 17117,
-      "name": "Game Token B",
-      "symbol": "GMB",
+      "name": "CCP(Mock)",
+      "symbol": "CCP",
       "decimals": 18,
       "logoURI": ""
     },
@@ -58,82 +50,51 @@
       "logoURI": ""
     },
     {
-      "address": "0xe5897aA3d9EA01D055E5c928BD0F6eF5778536C3",
+      "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
       "chainId": 17117,
       "name": "USDC",
       "symbol": "USDC",
       "decimals": 18,
       "logoURI": ""
     },
+
     {
-      "address": "0x90D8673A62a663C7c39170f64f26B903aFFcBaFF",
+      "address": "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb",
       "chainId": 17117,
-      "name": "aGEM",
-      "symbol": "aGEM",
+      "name": "USDT",
+      "symbol": "USDT",
       "decimals": 18,
       "logoURI": ""
     },
     {
-      "address": "0x72BAb75Be4f5252D0a6e9E3E9aC86210A346D10f",
+      "address": "0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c",
       "chainId": 17117,
-      "name": "bGEM",
-      "symbol": "bGEM",
+      "name": "ETH",
+      "symbol": "ETH",
       "decimals": 18,
       "logoURI": ""
     },
     {
-      "address": "0xdc3D8ff59A01957d1228988C64859D4a5C2ad4e2",
+      "address": "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7",
       "chainId": 17117,
-      "name": "cGEM",
-      "symbol": "cGEM",
+      "name": "WBTC",
+      "symbol": "WBTC",
       "decimals": 18,
       "logoURI": ""
     },
     {
-      "address": "0x70c7aa9F37C8A4d3890fB10171ea34FFb3573293",
+      "address": "0xDa615b699920f07474a12168282dF3AC229A8e1E",
       "chainId": 17117,
-      "name": "dGEM",
-      "symbol": "dGEM",
+      "name": "MCHC",
+      "symbol": "MCHC",
       "decimals": 18,
       "logoURI": ""
     },
     {
-      "address": "0x6f4ed22ECD49aAAF3Cfb73Fb5361fd5a1440c9a5",
+      "address": "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD",
       "chainId": 17117,
-      "name": "eGEM",
-      "symbol": "eGEM",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0xaBD241744d87236ccaD73A3eec128D30c0c8855d",
-      "chainId": 17117,
-      "name": "fGEM",
-      "symbol": "fGEM",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0x872BA06f6F9878D31488680E937A910925Ac729D",
-      "chainId": 17117,
-      "name": "gGEM",
-      "symbol": "gGEM",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0x7aD0039B55B48a70049A0320fD0fc4A3e496e944",
-      "chainId": 17117,
-      "name": "hGEM",
-      "symbol": "hGEM",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0x5C153f6734781849d21eEfE4f84A8c8872630E13",
-      "chainId": 17117,
-      "name": "Chain Colosseum Phoenix Token Beta",
-      "symbol": "BetaCCP",
+      "name": "TCGC",
+      "symbol": "TCGC",
       "decimals": 18,
       "logoURI": ""
     }
