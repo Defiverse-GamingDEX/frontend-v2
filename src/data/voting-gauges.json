@@ -4046,62 +4046,266 @@
       "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
     }
   },
+
   {
-    "address": "0x4EaD934F849ba4a35506917337B60d70e83Fcc51",
+    "address": "0x1720471C05711DEa3e552698DEF87BDF24fd5AbF",
     "network": 17117,
     "isKilled": false,
-    "relativeWeightCap": "0.02",
-    "addedTimestamp": 1692923354,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
     "pool": {
-      "id": "0xe11ca3320a633250334baa258bc94f7619aa8ce1000200000000000000000002",
-      "address": "0xe11CA3320A633250334bAa258bc94F7619aa8Ce1",
+      "id": "0xb00b3ea12c3ad4f81cdf585f1ad67f6c81a5fd9c000200000000000000000000",
+      "address": "0xB00b3ea12c3Ad4F81cDF585F1Ad67f6C81a5fd9C",
       "poolType": "Weighted",
-      "symbol": "70GMA-30DFV",
+      "symbol": "80GDT-20OAS",
       "tokens": [
         {
-          "address": "0x167F2A85D015C6C7a06CA65230FFaf22d1dceA9f",
-          "weight": "0.7",
-          "symbol": "GMA"
+          "address": "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587",
+          "weight": "0.8",
+          "symbol": "GDT"
         },
         {
-          "address": "0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E",
-          "weight": "0.3",
-          "symbol": "DFV"
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.2",
+          "symbol": "OAS"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
-      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
     }
   },
   {
-    "address": "0x90f0f2241d1ac4F7C92CBfff1C8D71A5F6d9105e",
+    "address": "0x33ED387238dA5b3AAb1034d9eB5ba2CE75Bbb303",
     "network": 17117,
     "isKilled": false,
-    "relativeWeightCap": "0.02",
-    "addedTimestamp": 1692923354,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
     "pool": {
-      "id": "0x1c5c0bc1833e78d0e73ffedc319eae2e00e3a614000200000000000000000000",
-      "address": "0x1c5c0Bc1833e78D0E73ffedc319EAE2E00E3a614",
+      "id": "0xb14753b418b66b30afe1ff2078fac93d66fe219f000200000000000000000001",
+      "address": "0xB14753B418b66b30aFE1ff2078FaC93d66fE219F",
       "poolType": "Weighted",
-      "symbol": "50GMA-50GMB",
+      "symbol": "50USDC-50OAS",
       "tokens": [
         {
-          "address": "0x167F2A85D015C6C7a06CA65230FFaf22d1dceA9f",
+          "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
           "weight": "0.5",
-          "symbol": "GMA"
+          "symbol": "USDC"
         },
         {
-          "address": "0xbDfd38435Cf396083CfBf913a8A49284DE70BF6b",
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
           "weight": "0.5",
-          "symbol": "GMB"
+          "symbol": "OAS"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
-      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+    }
+  },
+  {
+    "address": "0xD77c861Db1142104c8F5822Fe3A15351d0c704F6",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x49ae791942ac56e66017924994df196189a5bbed000200000000000000000002",
+      "address": "0x49AE791942aC56E66017924994Df196189a5Bbed",
+      "poolType": "Weighted",
+      "symbol": "50USDT-50OAS",
+      "tokens": [
+        {
+          "address": "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb",
+          "weight": "0.5",
+          "symbol": "USDT"
+        },
+        {
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.5",
+          "symbol": "OAS"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb": "",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+    }
+  },
+  {
+    "address": "0x83CA64EfF3513125B19e83bD4d27cF3cB6D2c694",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x4cc04216f2863842e3be0fe22bb763382f26500c000200000000000000000003",
+      "address": "0x4Cc04216f2863842e3BE0fE22bB763382f26500c",
+      "poolType": "Weighted",
+      "symbol": "50ETH-50OAS",
+      "tokens": [
+        {
+          "address": "0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c",
+          "weight": "0.5",
+          "symbol": "ETH"
+        },
+        {
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.5",
+          "symbol": "OAS"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c": "",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+    }
+  },
+  {
+    "address": "0x36a3247b5B68dB78be7c190BE6C6F577818faca2",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x14310f8c12b102f0c9fc699fe344cc2b59608247000200000000000000000004",
+      "address": "0x14310f8c12B102F0c9fc699fE344Cc2b59608247",
+      "poolType": "Weighted",
+      "symbol": "50WBTC-50OAS",
+      "tokens": [
+        {
+          "address": "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7",
+          "weight": "0.5",
+          "symbol": "WBTC"
+        },
+        {
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.5",
+          "symbol": "OAS"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7": "",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+    }
+  },
+  {
+    "address": "0xF56dA2439547B11B099582e93cCC137Ed054560B",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005",
+      "address": "0x5C4143e57A66cfF930098f4699eE538870200D63",
+      "poolType": "Weighted",
+      "symbol": "50GDT-50USDC",
+      "tokens": [
+        {
+          "address": "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587",
+          "weight": "0.5",
+          "symbol": "GDT"
+        },
+        {
+          "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
+          "weight": "0.5",
+          "symbol": "USDC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "",
+      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": ""
+    }
+  },
+  {
+    "address": "0xBe72A765c76dd5d4257bB6bb87FBFfBF37C4a89d",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x80246799ef36dfcb403dc10e29f0cca74350be54000200000000000000000006",
+      "address": "0x80246799eF36DFcB403DC10E29f0CcA74350bE54",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50CCP",
+      "tokens": [
+        {
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0xFD470A998604e81048C9F1d2065B6c794359C033",
+          "weight": "0.5",
+          "symbol": "CCP"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "",
+      "0xFD470A998604e81048C9F1d2065B6c794359C033": ""
+    }
+  },
+  {
+    "address": "0xF7D67762a603210bab83f4333eD44D9C0B736C39",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0xd6f0649118b6a83344d28f798db3192e47c8494e000200000000000000000007",
+      "address": "0xd6F0649118B6a83344d28F798db3192e47C8494E",
+      "poolType": "Weighted",
+      "symbol": "0OAS-50MCHC",
+      "tokens": [
+        {
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0xDa615b699920f07474a12168282dF3AC229A8e1E",
+          "weight": "0.5",
+          "symbol": "MCHC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "",
+      "0xDa615b699920f07474a12168282dF3AC229A8e1E": ""
+    }
+  },
+  {
+    "address": "0x56164D7B1b13A1e52BA415a234B99A1de25473eB",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x35235c062df1e4154e157413d347f4a8a4a93c09000200000000000000000008",
+      "address": "0x35235C062dF1e4154e157413D347F4A8a4A93C09",
+      "poolType": "Weighted",
+      "symbol": "50TCGC-50OAS",
+      "tokens": [
+        {
+          "address": "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD",
+          "weight": "0.5",
+          "symbol": "TCGC"
+        },
+        {
+          "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
+          "weight": "0.5",
+          "symbol": "OAS"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "",
+      "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD": ""
     }
   }
 ]

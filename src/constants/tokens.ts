@@ -182,10 +182,8 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99', // need CONFIRM
     WETH: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
-    BAL: '0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E',
-    DFV: '0x54CA0c47Dd122e6189c7ed11a6258B8a700A5A4E',
-    // CCP: '0x3fde6489aa398bcddab46f971e4bb5364cccd78b',
-    // USDC: '0xe5897aa3d9ea01d055e5c928bd0f6ef5778536c3',
+    BAL: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
+    DFV: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
   },
   PriceChainMap: {
     // woas
@@ -194,6 +192,7 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
     // oas
     '0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
     // dfv
     '0x54ca0c47dd122e6189c7ed11a6258b8a700a5a4e':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
@@ -235,6 +234,25 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
 
     // BetaCCP
     '0x5c153f6734781849d21eefe4f84a8c8872630e13':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0xb2215b7855e4ea1c078f1d235397c7cc32e0bda2':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x668b5cf2f13ae8bfb5619e48f2091040b6985d5c':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x19f01c4794599b36541b6f1f45db1d0bb7f52ff7':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x9c9a2a20e96eaae6df4ae3c7d8cd1a65fe7d0f18':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x66b8e41f428a9a7dbc7595b11d54462be1a454cb':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xda615b699920f07474a12168282df3ac229a8e1e':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x99b88cbf947ce0d75da00f271e52eb82ebfa68dd':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0xfd470a998604e81048c9f1d2065b6c794359c033':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    '0x4e7b1b5b8f8a4dfd920f88a7307b72a76f6ae587':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };
