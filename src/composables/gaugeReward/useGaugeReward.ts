@@ -10,7 +10,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import networksSupport from '@/constants/networks';
 const GAUGE_REWARD_CONTRACT_ADDRESS =
-  '0x17e53678292e675eCb0B73F7a0fB0841f8a294C7';
+  '0x028821fb5DB06557a7883De37D4D4fa08eB7eF2E';
 
 function getGasPrice(chainId) {
   let gasPrice = null;

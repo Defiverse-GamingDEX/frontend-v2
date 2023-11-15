@@ -59,7 +59,7 @@
     "veBAL": "0xB6174344F2Ae206b786A1d9F4dfF4c8128414e83",
     "veDelegationProxy": "0xC93bD2b954D4C8E75D48D40a2d8126e27fDB8A94",
     "veBALHelpers": "",
-    "feeDistributor": "",
+    "feeDistributor": "0xeFA5659B7fa7E3C6C9D9D34402a56feBe46C0A59",
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
