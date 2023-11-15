@@ -254,6 +254,9 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     '0x4e7b1b5b8f8a4dfd920f88a7307b72a76f6ae587':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };
 
