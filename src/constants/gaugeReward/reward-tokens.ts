@@ -6,7 +6,7 @@ import oasIcon from '@/assets/images/bridge/tokens/oas.png';
 export const GAUGE_REWARD_TOKENS = [
   {
     name: 'Ethereum',
-    address: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    address: '0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c',
     logoURI: ethIcon,
     symbol: 'ETH',
     decimals: 18,
@@ -15,7 +15,7 @@ export const GAUGE_REWARD_TOKENS = [
   },
   {
     name: 'Wrap BTC',
-    address: '0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897',
+    address: '0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7',
     logoURI: wbtcIcon,
     symbol: 'WBTC',
     decimals: 18,
@@ -23,8 +23,8 @@ export const GAUGE_REWARD_TOKENS = [
     rpc: 'https://rpc.defi-verse.org',
   },
   {
-    name: 'Tether',
-    address: '0xf4b2cbc3ba04c478f0dc824f4806ac39982dce73',
+    name: 'Tether USD',
+    address: '0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb',
     logoURI: usdtIcon,
     symbol: 'USDT',
     decimals: 18,
@@ -33,7 +33,7 @@ export const GAUGE_REWARD_TOKENS = [
   },
   {
     name: 'USD Coin',
-    address: '0xcbe56b00d173a26a5978ce90db2e33622fd95a28',
+    address: '0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18',
     logoURI: usdcIcon,
     symbol: 'USDC',
     decimals: 18,
@@ -42,7 +42,7 @@ export const GAUGE_REWARD_TOKENS = [
   },
   {
     name: 'OASYS',
-    address: '0xCC90040a931a8147cc2A4411c68348a5a3a363a0',
+    address: '0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2',
     logoURI: oasIcon,
     symbol: 'OAS',
     decimals: 18,
