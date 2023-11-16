@@ -14,9 +14,10 @@ const { networkSlug } = useNetwork();
 
 const list_app = [
   {
-    text: 'Chain Crossed Phoenix',
+    text: 'Chain Colosseum Phoenix',
     link: '',
     iconUrl: '/images/home/pnx_icon.png',
+    href: 'https://phoenix.chaincolosseum.org/',
   },
   { text: 'Coming soon', link: '' },
   { text: 'Coming soon', link: '' },
@@ -91,20 +92,27 @@ const list_features = [
 
     <div class="list-app">
       <div v-for="i in list_app" :key="i.link" class="item-app">
-        <div class="icon">
-          <div v-if="i.iconUrl" class="app-icon">
-            <img alt="" :src="i.iconUrl" />
+        <a :href="i.href" target="_blank">
+          <div class="icon">
+            <div v-if="i.iconUrl" class="app-icon">
+              <img alt="" :src="i.iconUrl" />
+            </div>
+            <div v-else class="empty-icon">
+              <img alt="" src="/images/home/coming-soon.png" />
+            </div>
           </div>
-          <div v-else class="empty-icon">
-            <img alt="" src="/images/home/coming-soon.png" />
+          <div class="text">{{ i.text }}</div>
+          <div v-if="i.link" class="link">
+            <BalLink
+              :href="`https://${i.link}`"
+              target="_blank"
+              external
+              noStyle
+            >
+              {{ i.link }}
+            </BalLink>
           </div>
-        </div>
-        <div class="text">{{ i.text }}</div>
-        <div v-if="i.link" class="link">
-          <BalLink :href="`https://${i.link}`" target="_blank" external noStyle>
-            {{ i.link }}
-          </BalLink>
-        </div>
+        </a>
       </div>
     </div>
     <div class="features-container">
@@ -205,6 +213,9 @@ const list_features = [
 
 .item-app {
   @apply w-1/4 px-6 text-center;
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .item-app .icon {
