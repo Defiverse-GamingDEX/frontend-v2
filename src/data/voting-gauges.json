@@ -4043,7 +4043,7 @@
     },
     "tokenLogoURIs": {
       "0x738cB40a7CFcD770B9972F3e992811c08613f38D": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0x296f55f8fb28e498b858d0bcda06d955b2cb3f97.png",
-      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/assets/0xba7834bb3cd2db888e6a06fb45e82b4225cd0c71.png"
+      "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897": "tokens/OAS_L.png"
     }
   },
 
@@ -4072,8 +4072,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/GDT_L.png",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
     }
   },
   {
@@ -4101,8 +4101,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "tokens/USDC_L.png",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
     }
   },
   {
@@ -4130,8 +4130,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb": "",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+      "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb": "tokens/USDT_L.png",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
     }
   },
   {
@@ -4159,8 +4159,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c": "",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+      "0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c": "tokens/ETH_L.png",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
     }
   },
   {
@@ -4188,8 +4188,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7": "",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": ""
+      "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7": "tokens/WBTC_L.png",
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
     }
   },
   {
@@ -4217,8 +4217,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "",
-      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": ""
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/GDT_L.png",
+      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "tokens/USDC_L.png"
     }
   },
   {
@@ -4246,8 +4246,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "",
-      "0xFD470A998604e81048C9F1d2065B6c794359C033": ""
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
+      "0xFD470A998604e81048C9F1d2065B6c794359C033": "tokens/CCP_L.png"
     }
   },
   {
@@ -4275,8 +4275,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "",
-      "0xDa615b699920f07474a12168282dF3AC229A8e1E": ""
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
+      "0xDa615b699920f07474a12168282dF3AC229A8e1E": "tokens/MCHC_L.png"
     }
   },
   {
@@ -4304,8 +4304,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "",
-      "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD": ""
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
+      "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD": "tokens/TCGC_L.png"
     }
   }
 ]
