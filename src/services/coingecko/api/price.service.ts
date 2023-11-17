@@ -57,8 +57,14 @@ export class PriceService {
       );
       return response[this.nativeAssetId];
     } catch (error) {
-      console.error('Unable to fetch Ether price', error);
-      throw error;
+      //console.error('Unable to fetch Ether price', error);
+      //throw error;
+
+      // Hung turn off gecko api
+      return {
+        usd: 1,
+        eth: 1,
+      };
     }
   }
 
@@ -80,7 +86,6 @@ export class PriceService {
       const pages = Array.from(Array(pageCount).keys());
       const requests: Promise<PriceResponse>[] = [];
 
-      console.log(`===================================================platformId:${this.platformId}`)
       pages.forEach(page => {
         const addressString = addresses.slice(
           addressesPerRequest * page,
@@ -105,8 +110,17 @@ export class PriceService {
 
       return results;
     } catch (error) {
-      console.error('Unable to fetch token prices', addresses, error);
-      throw error;
+      // console.error('Unable to fetch token prices', addresses, error);
+      // throw error;
+
+      const data: any = {};
+      (addresses || []).forEach(addr => {
+        data[addr] = {
+          usd: 1,
+          eth: 1,
+        };
+      });
+      return data;
     }
   }
 
