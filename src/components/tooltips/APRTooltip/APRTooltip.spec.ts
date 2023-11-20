@@ -109,11 +109,11 @@ describe('APRTooltip', () => {
       expect(
         getByTestId('staking-apr').children[0].children[1].children[0]
           .textContent
-      ).toBe('0.44% Min DFV APR');
+      ).toBe('0.44% Min GDT APR');
       expect(
         getByTestId('staking-apr').children[0].children[1].children[1]
           .textContent
-      ).toBe('5.67% Max DFV APR');
+      ).toBe('5.67% Max GDT APR');
     });
 
     it('Should show swap fees and staking rewards', () => {
@@ -145,11 +145,11 @@ describe('APRTooltip', () => {
       expect(
         getByTestId('staking-apr').children[0].children[1].children[0]
           .textContent
-      ).toBe('0.48% Min DFV APR');
+      ).toBe('0.48% Min GDT APR');
       expect(
         getByTestId('staking-apr').children[0].children[1].children[1]
           .textContent
-      ).toBe('5.55% Max DFV APR');
+      ).toBe('5.55% Max GDT APR');
     });
 
     it('Should show staking rewards as a single line item if min and max are the same', () => {
@@ -348,11 +348,11 @@ describe('APRTooltip', () => {
       expect(
         getByTestId('staking-apr').children[0].children[1].children[0]
           .textContent
-      ).toBe('0.30% Min DFV APR');
+      ).toBe('0.30% Min GDT APR');
       expect(
         getByTestId('staking-apr').children[0].children[1].children[1]
           .textContent
-      ).toBe('0.75% Max DFV APR');
+      ).toBe('0.75% Max GDT APR');
     });
 
     it('Should show boosted staking rewards as a line item for pools that contain a boosted pool', () => {
@@ -387,11 +387,11 @@ describe('APRTooltip', () => {
       expect(
         getByTestId('staking-apr').children[0].children[1].children[0]
           .textContent
-      ).toBe('5.67% Min DFV APR');
+      ).toBe('5.67% Min GDT APR');
       expect(
         getByTestId('staking-apr').children[0].children[1].children[1]
           .textContent
-      ).toBe('14.18% Max DFV APR');
+      ).toBe('14.18% Max GDT APR');
     });
 
     it('Should show veBAL staking rewards as a line item for pools that contain the 80/20 veBAL pool', () => {
@@ -453,18 +453,18 @@ describe('APRTooltip', () => {
       expect(
         getByTestId('staking-apr').children[0].children[1].children[0]
           .textContent
-      ).toBe('0.44% Min DFV APR');
+      ).toBe('0.44% Min GDT APR');
       expect(
         getByTestId('staking-apr').children[0].children[1].children[1]
           .textContent
-      ).toBe('5.22% Max DFV APR');
+      ).toBe('5.22% Max GDT APR');
       expect(
         getByTestId('staking-apr').children[0].children[1].children[2]
           .textContent
       ).toBe('1.23% Rewards APR');
     });
 
-    it('Should show DFV + staking rewards as line items if staking APR is the same but there are rewards', () => {
+    it('Should show GDT + staking rewards as line items if staking APR is the same but there are rewards', () => {
       const aprBreakdown: AprBreakdown = {
         ...EmptyAprBreakdownMock,
         stakingApr: {

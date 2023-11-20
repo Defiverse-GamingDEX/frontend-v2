@@ -19,7 +19,7 @@ export class FeeDistributor {
   // ];
   // Hung
   public claimableTokens: string[] = [
-    '0xA3496414a9900A9AE5960C1fEC30e563213b68bE', // DFV
+    '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587', // GDT
   ];
 
   constructor(
