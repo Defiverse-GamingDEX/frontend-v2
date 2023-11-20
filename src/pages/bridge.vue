@@ -3,6 +3,9 @@ import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import BridgeComponent from '@/components/contextual/pages/bridge/BridgeComponent.vue';
 import RedeemComponent from '@/components/contextual/pages/bridge/RedeemComponent.vue';
 import BridgeAdminComponent from '@/components/contextual/pages/bridge/BridgeAdminComponent.vue';
+import HistoryComponent from '@/components/contextual/pages/bridge/HistoryComponent.vue';
+import MiniHistoryComponent from '@/components/contextual/pages/bridge/MiniHistoryComponent.vue';
+import LastTxComponent from '@/components/contextual/pages/bridge/LastTxComponent.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useI18n } from 'vue-i18n';
@@ -62,6 +65,14 @@ function changeTab(tab) {
       <BalBtn
         classCustom="outline-3"
         class="mr-5 hero-btn"
+        :class="{ active: tabSelect === 'history' }"
+        @click="changeTab('history')"
+      >
+        History
+      </BalBtn>
+      <!-- <BalBtn
+        classCustom="outline-3"
+        class="mr-5 hero-btn"
         :class="{ active: tabSelect === 'redeem' }"
         @click="changeTab('redeem')"
       >
@@ -75,18 +86,37 @@ function changeTab(tab) {
         @click="changeTab('admin')"
       >
         Admin
-      </BalBtn>
+      </BalBtn> -->
     </div>
-    <Col3Layout offsetGutters mobileHideGutters class="mt-10">
+    <Col3Layout
+      offsetGutters
+      mobileHideGutters
+      class="mt-10"
+      :class="{ 'bridge-page-layout': tabSelect === 'bridge' }"
+    >
+      <template #gutterLeft>
+        <div v-if="tabSelect === 'bridge'" class="tx-status">
+          <LastTxComponent />
+        </div>
+      </template>
+
       <div v-if="tabSelect === 'bridge'" class="section">
         <BridgeComponent />
       </div>
-      <div v-if="tabSelect === 'redeem'" class="section">
+      <div v-if="tabSelect === 'history'" class="section">
+        <HistoryComponent />
+      </div>
+      <!-- <div v-if="tabSelect === 'redeem'" class="section">
         <RedeemComponent />
       </div>
       <div v-if="tabSelect === 'admin'" class="section">
         <BridgeAdminComponent />
-      </div>
+      </div> -->
+      <template #gutterRight>
+        <div v-if="tabSelect === 'bridge'" class="mini-history">
+          <MiniHistoryComponent />
+        </div>
+      </template>
     </Col3Layout>
   </div>
 </template>
@@ -104,6 +134,15 @@ function changeTab(tab) {
     &.active {
       background: #fafdff 0% 0% no-repeat padding-box;
       color: #048bc9;
+    }
+  }
+}
+.bridge-page-layout {
+  :deep {
+    .gutter-col {
+      &.mt-6 {
+        margin-top: 0px;
+      }
     }
   }
 }
