@@ -12,9 +12,9 @@ Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX wei
     author: 'AT-Field',
   },
   {
-    content: `The native token of both DeFi Verse and Gaming DEX, DFV, encompasses various utilities. DFV serves as the DeFi Verse's gas and base currency, while also being utilized as incentives for providing liquidity. Adjustments to incentives for specific pools are made through a voting system known as veDFV. Protocol revenue distributions are also carried out via veDFV, which is used for various other forms of governance voting. Furthermore, it plays a role in boosting rewards for liquidity providers through something called incentive boosts.`,
+    content: `The native token of both DeFi Verse and Gaming DEX, GDT, encompasses various utilities. GDT serves as the DeFi Verse's gas and base currency, while also being utilized as incentives for providing liquidity. Adjustments to incentives for specific pools are made through a voting system known as veGDT. Protocol revenue distributions are also carried out via veGDT, which is used for various other forms of governance voting. Furthermore, it plays a role in boosting rewards for liquidity providers through something called incentive boosts.`,
     img: '',
-    author: 'DFV Token',
+    author: 'GDT Token',
   },
 ];
 </script>

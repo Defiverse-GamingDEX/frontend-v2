@@ -14,6 +14,7 @@ type CommonTokens = {
   bbaUSD?: string;
   bbaUSDv2?: string;
   DFV?: string;
+  GDT?: string;
 };
 
 type TokenConstants = {
@@ -176,14 +177,14 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
 
 export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
   Popular: {
-    Symbols: ['DFV', 'BAL', 'WETH'],
+    Symbols: ['GDT', 'BAL', 'WETH'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99', // need CONFIRM
     WETH: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
     BAL: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
-    DFV: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
+    GDT: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
   },
   PriceChainMap: {
     // woas

@@ -151,12 +151,12 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'FocusedLayout' },
   },
   {
-    path: '/:networkSlug/vedfv',
+    path: '/:networkSlug/vegdt',
     name: 'vebal',
     component: VeBalPage,
   },
   {
-    path: '/:networkSlug/get-vedfv',
+    path: '/:networkSlug/get-vegdt',
     name: 'get-vebal',
     component: GetVeBalPage,
     meta: { layout: 'FocusedLayout' },
