@@ -89,6 +89,11 @@ function changeTab(tab) {
       </BalBtn> -->
     </div>
     <Col3Layout
+      v-if="
+        tabSelect === 'bridge' ||
+        tabSelect === 'redeem' ||
+        tabSelect === 'admin'
+      "
       offsetGutters
       mobileHideGutters
       class="mt-10"
@@ -103,9 +108,7 @@ function changeTab(tab) {
       <div v-if="tabSelect === 'bridge'" class="section">
         <BridgeComponent />
       </div>
-      <div v-if="tabSelect === 'history'" class="section">
-        <HistoryComponent />
-      </div>
+
       <!-- <div v-if="tabSelect === 'redeem'" class="section">
         <RedeemComponent />
       </div>
@@ -118,6 +121,12 @@ function changeTab(tab) {
         </div>
       </template>
     </Col3Layout>
+    <div
+      v-if="tabSelect === 'history'"
+      class="mt-10 section bridge-page-history-layout"
+    >
+      <HistoryComponent />
+    </div>
   </div>
 </template>
 
@@ -138,12 +147,21 @@ function changeTab(tab) {
   }
 }
 .bridge-page-layout {
+  max-width: 76rem;
   :deep {
     .gutter-col {
       &.mt-6 {
         margin-top: 0px;
       }
     }
+    .card-container {
+      width: 100%;
+    }
   }
+}
+.bridge-page-history-layout {
+  max-width: 80rem;
+  margin: 0 auto;
+  margin-top: 2.5rem;
 }
 </style>

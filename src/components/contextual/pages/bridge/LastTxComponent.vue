@@ -96,7 +96,7 @@ const swapCardShadow = computed(() => {
   .title {
     color: #0a425c;
     font-size: 20px;
-    font-weight: normal;
+    font-weight: bold;
     line-height: 24px;
     margin-bottom: 16px;
   }

@@ -147,6 +147,7 @@ function getChainName(chainId) {
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId)?.name;
 }
 function getChain(chainId) {
+  console.log(chainId, BRIDGE_NETWORKS, 'getChainAA');
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
 }
 
