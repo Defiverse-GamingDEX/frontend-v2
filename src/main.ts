@@ -31,6 +31,12 @@ echarts.use([
   PieChart,
 ]);
 
+// import the package
+import VueAwesomePaginate from 'vue-awesome-paginate';
+
+// import the necessary css file
+import 'vue-awesome-paginate/dist/style.css';
+
 const app = createApp(Root);
 
 app.component('Jazzicon', Jazzicon);
@@ -39,6 +45,6 @@ registerPlugins(app);
 registerDirectives(app);
 initSentry(app);
 
-app.mount('#app');
+app.use(VueAwesomePaginate).mount('#app');
 
 export default app;
