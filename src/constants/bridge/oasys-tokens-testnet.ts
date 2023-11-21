@@ -1,6 +1,6 @@
 import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
 
-export const BRIDGE_AOSYS_TESTNET_TOKENS = [
+export const BRIDGE_OASYS_TOKENS_TESTNET = [
   {
     name: 'Tether',
     address: '0xef1c93a38ea284cdc7f2a0edca7c4ffde4d55cba',

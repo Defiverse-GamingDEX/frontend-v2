@@ -4,8 +4,7 @@ import { Contract } from '@ethersproject/contracts';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { default as BridgeABI } from '@/lib/abi/bridge/Bridge.json';
 import { default as IL2ERC20BridgeABI } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
-import { OASYS_TESTNET_NETWORK } from '@/constants/bridge/oasys-testnet-network';
-import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import { BRIDGE_NETWORKS, OASYS_NETWORK } from '@/constants/bridge/networks';
 import bridgeService from './bridge.services.js';
 import bridgeAPI from './bridge.api.js';
 import { bnum } from '@/lib/utils';
@@ -207,7 +206,7 @@ function getChainTransfer(chainFrom, tokenInputFrom, chainTo, tokenInputTo) {
       // L1 to L2
       rs.abi = BridgeABI;
       rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
-      rs.chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
+      rs.chainId = OASYS_NETWORK.chain_id_decimals;
       rs.type = 'L1toL2';
     }
   } else {

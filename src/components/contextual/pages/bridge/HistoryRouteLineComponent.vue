@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { format, fromUnixTime } from 'date-fns';
+import bridgeAPI from '@/composables/bridge/bridge.api.js';
+import useWeb3 from '@/services/web3/useWeb3';
 // PROPS
 type Props = {
   route_line: Object<any>;
@@ -13,11 +15,34 @@ const props = withDefaults(defineProps<Props>(), {
  * STATES
  */
 const isLoading = ref(false);
+// // COMPOSABLES
+
+const {
+  account,
+  getSigner,
+  chainId,
+  isWalletReady,
+  isMismatchedNetwork,
+  startConnectWithInjectedProvider,
+} = useWeb3();
 /**
  * FUNCTIONS
  */
-const handleRetryButton = () => {
-  console.log(props.tx, 'tx');
+
+const handleRetryButton = async () => {
+  console.log(props.tx, props?.value?.tx, 'tx');
+  // CALL API BE HERE
+  try {
+    const params = {
+      internal_tx_id: props?.tx?.id,
+      public_address: account.value,
+    };
+    const rs = await bridgeAPI.postRetryRequest(params);
+    console.log(rs, 'rs=>handleRetryButton');
+    // add pagination total here
+  } catch (error) {
+    console.log(error, 'error=>handleRetryButton');
+  }
 };
 </script>
 

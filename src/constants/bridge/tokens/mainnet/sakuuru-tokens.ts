@@ -15,13 +15,13 @@ export const BRIDGE_SAKUURU_TOKENS = [
     is_native: false,
     rpc: rpc,
   },
-  {
-    name: 'DFC',
-    address: '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
-    logoURI: defiIcon,
-    symbol: 'DFC',
-    decimals: 18,
-    is_native: false,
-    rpc: rpc,
-  },
+  // {
+  //   name: 'DFC',
+  //   address: '0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3',
+  //   logoURI: defiIcon,
+  //   symbol: 'DFC',
+  //   decimals: 18,
+  //   is_native: false,
+  //   rpc: rpc,
+  // },
 ];

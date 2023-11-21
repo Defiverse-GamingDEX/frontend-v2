@@ -1,15 +1,30 @@
 <script setup lang="ts">
 import useBreakpoints from '@/composables/useBreakpoints';
 import { useBridge } from '@/composables/bridge/useBridge';
+import useWeb3 from '@/services/web3/useWeb3';
 import HistoryCardListComponent from '@/components/contextual/pages/bridge/HistoryCardListComponent.vue';
+import bridgeAPI from '@/composables/bridge/bridge.api.js';
+
 /**
  * STATES
  */
-const currentPage = ref(1);
+const pagination = ref({
+  sizePerPage: 5,
+  currentPage: 1,
+  total: 0,
+});
 const txList = ref([]);
 // // COMPOSABLES
 const { bp } = useBreakpoints();
 const { getChainName, getChain, getToken } = useBridge();
+const {
+  account,
+  getSigner,
+  chainId,
+  isWalletReady,
+  isMismatchedNetwork,
+  startConnectWithInjectedProvider,
+} = useWeb3();
 // // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -24,9 +39,28 @@ const swapCardShadow = computed(() => {
 /**
  * FUNCTIONS
  */
-async function getTxList() {
+const initData = async () => {
+  getTxList();
+};
+const getTxList = async () => {
+  // CALL API BE HERE
+  try {
+    const params = {
+      public_address: account.value,
+      limit: pagination.value.sizePerPage,
+      offset: (pagination.value.currentPage - 1) * pagination.value.sizePerPage,
+    };
+    const rs = await bridgeAPI.getSwapHistory(params);
+
+    txList.value = mapResultData(rs);
+    // add pagination total here
+  } catch (error) {
+    console.log(error, 'error=>getTxList');
+  }
+};
+const mapResultData = list => {
   // TODO FOR TEST ONLY
-  txList.value = [];
+  const rs = [];
   for (let i = 0; i < 10; i++) {
     let itemPush = {
       date: `1700465751`,
@@ -126,10 +160,10 @@ async function getTxList() {
       tokenOut_chain?.tokens
     );
     itemPush.tokenOut.logoURI = tokenOut?.logoURI;
-    txList.value.push(itemPush);
+    rs.push(itemPush);
   }
-  console.log(txList.value, ' txList.value');
-}
+  return rs;
+};
 const getTxUrl = (txId, chainInfo) => {
   if (!txId) {
     return '';
@@ -147,7 +181,7 @@ const getTxUrl = (txId, chainInfo) => {
  * LIFECYCLE
  */
 onBeforeMount(async () => {
-  getTxList();
+  initData();
 });
 const onClickHandler = (page: number) => {
   console.log(page);
@@ -166,10 +200,10 @@ const onClickHandler = (page: number) => {
       </div>
       <div class="paging-container">
         <VueAwesomePaginate
-          v-model="currentPage"
-          :totalItems="50"
-          :itemsPerPage="5"
-          :maxPagesShown="5"
+          v-model="pagination.currentPage"
+          :totalItems="pagination.total"
+          :itemsPerPage="pagination.sizePerPage"
+          :maxPagesShown="pagination.sizePerPage"
           :onClick="onClickHandler"
         />
       </div>
