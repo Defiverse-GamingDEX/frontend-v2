@@ -11,18 +11,24 @@ import BigNumber from 'bignumber.js';
 import networksSupport from '@/constants/networks';
 const GAUGE_REWARD_CONTRACT_ADDRESS =
   '0x028821fb5DB06557a7883De37D4D4fa08eB7eF2E';
+import {
+  GasPriceService,
+  gasPriceService,
+} from '@/services/gas-price/gas-price.service';
 
-function getGasPrice(chainId) {
-  let gasPrice = null;
-  const allNetworks = [
-    ...networksSupport.networks,
-    ...networksSupport.networksDev,
-  ];
-  const currentNetwork = allNetworks.find(network => network.key == chainId);
-  if (currentNetwork) {
-    gasPrice = currentNetwork.price;
+async function getGasPrice(signer: JsonRpcSigner) {
+  let price: number;
+
+  const gasPriceParams = await gasPriceService.getGasPrice();
+  if (gasPriceParams) {
+    price = gasPriceParams.price;
+  } else {
+    price = (await signer.getGasPrice()).toNumber();
   }
-  return gasPrice;
+
+  if (!price) throw new Error('Failed to fetch gas price.');
+
+  return BigNumber(price)?.toFixed();
 }
 async function checkTokenAllowance(address, provider, walletAddress) {
   try {
@@ -46,7 +52,7 @@ async function approveToken(address, provider, walletAddress, signer, chainId) {
   // const { address } = token;
   try {
     const contract = new Contract(address, ERC20ABI, provider);
-    const gasPrice = getGasPrice(chainId);
+    const gasPrice = await getGasPrice(signer);
     console.log('contract=>approveToken', provider, contract, gasPrice);
     const tx = await contract
       .connect(signer)
@@ -90,7 +96,7 @@ async function depositTokens(
         return decimals_value;
       }) || [];
 
-    const gasPrice = getGasPrice(chainId);
+    const gasPrice = await getGasPrice(signer);
 
     const params = {
       contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
@@ -118,7 +124,7 @@ async function startDistributions(account, signer, currentProvider, chainId) {
   try {
     const provider = currentProvider;
 
-    const gasPrice = getGasPrice(chainId);
+    const gasPrice = await getGasPrice(signer);
 
     const params = {
       contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
