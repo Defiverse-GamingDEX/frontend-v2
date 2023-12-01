@@ -19,8 +19,8 @@ export const NAV_LINKS = [
     goal_key: 'ClickNavPortfolio',
   },
   {
-    text: 'veDFV',
-    path: 'vedfv',
+    text: 'veGDT',
+    path: 'vegdt',
     name_link: 'vebal',
     goal_key: 'ClickNavVebal',
   },

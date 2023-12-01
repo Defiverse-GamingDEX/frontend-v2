@@ -42,6 +42,14 @@
       "logoURI": "tokens/CCP_L.png"
     },
     {
+      "address": "0xafC07721d053e6895d0Ce4C5Dd7ff5525EA723d2",
+      "chainId": 17117,
+      "name": "bCCP",
+      "symbol": "bCCP",
+      "decimals": 18,
+      "logoURI": "tokens/CCP_L.png"
+    },
+    {
       "address": "0x3Fde6489AA398BcddaB46f971e4BB5364ccCD78B",
       "chainId": 17117,
       "name": "CCP",

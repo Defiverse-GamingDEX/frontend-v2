@@ -178,7 +178,7 @@ async function handleSubmitButton() {
         noBorder
       >
         <div class="mb-4 navigation">
-          <router-link :to="`/${networkSlug}/vedfv`" class="flex items-center">
+          <router-link :to="`/${networkSlug}/vegdt`" class="flex items-center">
             <BalIcon class="mr-1 text-gray-400" name="chevron-left" />
             <h5>Set Reward</h5>
           </router-link>

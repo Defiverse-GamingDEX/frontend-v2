@@ -38,11 +38,19 @@ export class GasPriceService {
       case '42161':
         return await this.arbitrumProvider.getGasPrice();
       case '16116':
-        //return await this.defiverseProvider.getGasPrice();
-        return tokensUtils.getGasPriceCustom(this.configService.network.key);
+        console.log(
+          await this.defiverseProvider.getGasPrice(),
+          ' await this.defiverseProvider.getGasPrice()'
+        );
+        return await this.defiverseProvider.getGasPrice();
+      //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       case '17117':
-        //return await this.defiverseTestnetProvider.getGasPrice();
-        return tokensUtils.getGasPriceCustom(this.configService.network.key);
+        console.log(
+          await this.defiverseTestnetProvider.getGasPrice(),
+          ' await this.defiverseTestnetProvider.getGasPrice()'
+        );
+        return await this.defiverseTestnetProvider.getGasPrice();
+      //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       default:
         return null;
     }

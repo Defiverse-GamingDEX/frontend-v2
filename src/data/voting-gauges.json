@@ -3998,7 +3998,7 @@
       "id": "0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002",
       "address": "0xD92e2e3C13c3712Af12E4389ee37b67021318812",
       "poolType": "Weighted",
-      "symbol": "50USDC-50DFV",
+      "symbol": "50USDC-50GDT",
       "tokens": [
         {
           "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
@@ -4008,7 +4008,7 @@
         {
           "address": "0xA3496414a9900A9AE5960C1fEC30e563213b68bE",
           "weight": "0.5",
-          "symbol": "DFV"
+          "symbol": "GDT"
         }
       ]
     },
