@@ -4260,7 +4260,7 @@
       "id": "0xd6f0649118b6a83344d28f798db3192e47c8494e000200000000000000000007",
       "address": "0xd6F0649118B6a83344d28F798db3192e47C8494E",
       "poolType": "Weighted",
-      "symbol": "0OAS-50MCHC",
+      "symbol": "50OAS-50MCHC",
       "tokens": [
         {
           "address": "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2",
