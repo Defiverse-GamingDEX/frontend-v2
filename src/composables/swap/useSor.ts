@@ -293,6 +293,14 @@ export default function useSor({
     const amount = exactIn.value
       ? tokenInAmountInput.value
       : tokenOutAmountInput.value;
+    console.log(
+      amount,
+      exactIn.value,
+      tokenInAmountInput.value,
+      tokenOutAmountInput.value,
+      ' exactIn.value'
+    );
+
     // Avoid using SOR if querying a zero value or (un)wrapping swap
     const zeroValueSwap = amount === '' || amount === '0';
     if (zeroValueSwap) {

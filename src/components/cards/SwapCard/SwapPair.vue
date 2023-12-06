@@ -171,7 +171,12 @@ function preventUpdatesOnTyping(callback: () => void) {
 
 function handleInAmountChange(value: string): void {
   emit('update:tokenInAmount', value);
+  console.log(value, 'value');
   preventUpdatesOnTyping(() => {
+    // not calc if amount not done
+    if (value === '0.' || Number(value) === 0) {
+      return;
+    }
     emit('amountChange');
   });
 }
@@ -179,6 +184,10 @@ function handleInAmountChange(value: string): void {
 function handleOutAmountChange(value: string): void {
   emit('update:tokenOutAmount', value);
   preventUpdatesOnTyping(() => {
+    // not calc if amount not done
+    if (value === '0.' || Number(value) === 0) {
+      return;
+    }
     emit('amountChange');
   });
 }
