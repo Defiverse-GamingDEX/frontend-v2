@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ATF_LIST } from '@/constants/atfList';
 import { computed } from 'vue';
+import { useTokens } from '@/providers/tokens.provider';
+import useWeb3 from '@/services/web3/useWeb3';
 /**
  * TYPES
  */
@@ -16,22 +18,33 @@ const props = defineProps<Props>();
 /**
  * STATE
  */
-const isATF = computed((): boolean => {
-  let atf_token = ATF_LIST.find(item => item.address === props.address);
-  if (atf_token) {
-    return true;
-  }
-  return false;
-});
-
+const isATF = ref(false);
+/**
+ * COMPOSABLES
+ */
+const { getAntiTraderInfo } = useTokens();
+const { account } = useWeb3();
 /**
  * METHODS
  */
+async function checkIsAFT() {
+  try {
+    console.log(props?.address, account?.value, 'rops?.value.address');
+    let rs = await getAntiTraderInfo(props?.address, account?.value);
+    console.log(rs, 'checkIsAFT=>rs');
+    isATF.value = rs.isProtectedToken;
+  } catch (error) {
+    console.log(error, 'error=>checkIsAFT');
+  }
+}
+onBeforeMount(() => {
+  checkIsAFT();
+});
 </script>
 
 <template>
   <span
-    v-if="isATF"
+    v-if="isATF === true"
     class="py-0.5 px-2.5 mr-2 ml-1 text-xs font-medium text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900 rounded-full atf-badge"
     >ATF</span
   >

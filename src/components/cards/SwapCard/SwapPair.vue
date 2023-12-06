@@ -155,6 +155,7 @@ watch(
       tokenOutTraderInfo.value,
       tokenOut.value
     );
+    emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
   }
 );
 /**
