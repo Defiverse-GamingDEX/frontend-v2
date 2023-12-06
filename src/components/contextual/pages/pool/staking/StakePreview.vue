@@ -18,7 +18,7 @@ import { fiatValueOf, tokensListExclBpt } from '@/composables/usePool';
 import StakeSummary from './StakeSummary.vue';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 import { ApprovalAction } from '@/composables/approvals/types';
-
+import { useRouter } from 'vue-router';
 export type StakeAction = 'stake' | 'unstake' | 'restake';
 type Props = {
   pool: AnyPool;
@@ -34,7 +34,7 @@ const { balanceFor, getToken, refetchBalances } = useTokens();
 const { fNum2 } = useNumbers();
 const { t } = useI18n();
 const { addTransaction } = useTransactions();
-
+const router = useRouter();
 const {
   stake,
   unstake,
@@ -167,6 +167,10 @@ function handleClose() {
   confirmationReceipt.value = undefined;
   emit('close');
 }
+function handleViewClaims() {
+  handleClose();
+  router.push({ name: 'claim' });
+}
 </script>
 
 <template>
@@ -219,7 +223,7 @@ function handleClose() {
           color="gradient"
           block
           class="mb-2"
-          @click="$router.push({ name: 'claim' })"
+          @click="handleViewClaims"
         >
           {{ $t('viewClaims') }}
         </BalBtn>
