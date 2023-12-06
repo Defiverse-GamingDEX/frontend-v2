@@ -24,6 +24,12 @@ const isATF = ref(false);
  */
 const { getAntiTraderInfo } = useTokens();
 const { account } = useWeb3();
+watch(
+  () => props.address,
+  async () => {
+    checkIsAFT();
+  }
+);
 /**
  * METHODS
  */
