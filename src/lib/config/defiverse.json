@@ -27,12 +27,12 @@
   "supportsElementPools": false,
   "blockTime": 2,
   "nativeAsset": {
-    "name": "Ether",
-    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    "symbol": "ETH",
+    "name": "OASYS",
+    "address": "0x4200000000000000000000000000000000000010",
+    "symbol": "OAS",
     "decimals": 18,
-    "deeplinkId": "ether",
-    "logoURI": "tokens/eth.png",
+    "deeplinkId": "oas",
+    "logoURI": "tokens/oas.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
