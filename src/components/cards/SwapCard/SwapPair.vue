@@ -161,6 +161,23 @@ watch(
 /**
  * METHODS
  */
+async function updateTraderInfo() {
+  tokenInTraderInfo.value = await getAntiTraderInfo(
+    _tokenInAddress.value,
+    account.value
+  );
+
+  tokenInTraderInfo.value = mapDataTraderInfo(
+    tokenInTraderInfo.value,
+    tokenIn.value
+  );
+  console.log(tokenInTraderInfo.value, 'tokenInTraderInfoCCCC');
+  checkAmountAntiTrader();
+  emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
+}
+defineExpose({
+  updateTraderInfo,
+});
 function preventUpdatesOnTyping(callback: () => void) {
   if (typingTimeout.value) {
     clearTimeout(typingTimeout.value);
@@ -316,3 +333,4 @@ onMounted(() => {
     </teleport>
   </div>
 </template>
+ 

@@ -15,6 +15,7 @@
     </template>
     <div>
       <SwapPair
+        ref="refSwapPair"
         v-model:tokenInAmount="tokenInAmount"
         v-model:tokenInAddress="tokenInAddress"
         v-model:tokenOutAmount="tokenOutAmount"
@@ -51,8 +52,8 @@
       />
 
       <BalAlert
-        class="mb-4"
         v-if="tokenInTraderInfo?.isProtectedToken"
+        class="mb-4"
         title="ATF Warning"
         type="error"
       >
@@ -236,6 +237,8 @@ export default defineComponent({
     SwapSettingsPopover,
   },
   setup() {
+    // STATES
+    const refSwapPair = ref(null);
     // COMPOSABLES
     const store = useStore();
     const router = useRouter();
@@ -411,6 +414,10 @@ export default defineComponent({
     // METHODS
     function swap() {
       swapping.swap(() => {
+        setTimeout(() => {
+          refSwapPair.value?.updateTraderInfo();
+        }, 3000);
+
         swapping.resetAmounts();
         modalSwapPreviewIsOpen.value = false;
       });
@@ -461,7 +468,7 @@ export default defineComponent({
       modalAntiTraderWarning.value = payload;
     }
     function updateTokenInTradeInfo(info) {
-      console.log(info, 'info');
+      console.log(info, 'infoAAAA');
       tokenInTraderInfo.value = info;
     }
     // INIT
@@ -477,6 +484,7 @@ export default defineComponent({
       }
     });
     return {
+      refSwapPair,
       // constants
       TOKENS,
       // context
