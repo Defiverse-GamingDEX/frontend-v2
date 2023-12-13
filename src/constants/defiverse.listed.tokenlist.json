@@ -10,52 +10,28 @@
   },
   "tokens": [
     {
-      "address": "0xA3496414a9900A9AE5960C1fEC30e563213b68bE",
+      "address": "0xd08a2917653d4e460893203471f0000826fb4034",
       "chainId": 16116,
-      "name": "GDT",
-      "symbol": "GDT",
+      "name": "USDT",
+      "symbol": "USDT",
       "decimals": 18,
-      "logoURI": ""
+      "logoURI": "tokens/USDT_L.png"
     },
     {
-      "address": "0x7914aA2D50CC4E9B5A6fb6Ac58EC7095927B8897",
-      "chainId": 16116,
-      "name": "OAS",
-      "symbol": "OAS",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0x8299F293Ea0De5EDa67ed75AAD6e9C4A2B063837",
+      "address": "0x7c6b91d9be155a6db01f749217d76ff02a7227f2",
       "chainId": 16116,
       "name": "USD Coin",
       "symbol": "USDC",
-      "decimals": 6,
-      "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+      "decimals": 18,
+      "logoURI": "tokens/USDC_L.png"
     },
     {
-      "address": "0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980",
+      "address": "0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b",
       "chainId": 16116,
-      "name": "Wrapped Ether",
-      "symbol": "WETH",
+      "name": "Wrapped OAS",
+      "symbol": "WOAS",
       "decimals": 18,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
-    },
-    {
-      "address": "0x43831636C9cEc4C9c9A950B588Ac8Ec971588754",
-      "chainId": 16116,
-      "name": "Game Token A",
-      "symbol": "GMA",
-      "decimals": 18,
-      "logoURI": ""
-    },
-    {
-      "address": "0xCC90040a931a8147cc2A4411c68348a5a3a363a0",
-      "chainId": 16116,
-      "name": "Game Token B",
-      "symbol": "GMB",
-      "decimals": 18,
-      "logoURI": ""
+      "logoURI": "tokens/OAS_L.png"
     }
   ]
 }

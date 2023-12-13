@@ -9,12 +9,14 @@ import { configService } from '@/services/config/config.service';
 type CommonTokens = {
   nativeAsset: string;
   wNativeAsset: string;
-  WETH: string;
+  WETH?: string;
+  WOAS?: string;
   BAL: string;
   bbaUSD?: string;
   bbaUSDv2?: string;
   DFV?: string;
   GDT?: string;
+  OAS?: string;
 };
 
 type TokenConstants = {
@@ -136,14 +138,14 @@ export const TOKENS_GENERIC: TokenConstants = {
 
 export const TOKENS_DEFIVERSE: TokenConstants = {
   Popular: {
-    Symbols: ['DFV', 'BAL', 'WETH', 'DAI', 'USDC', 'USDT'],
+    Symbols: ['GDT', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    wNativeAsset: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980', // need CONFIRM
-    WETH: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980',
-    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
-    DFV: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    wNativeAsset: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b', // need CONFIRM
+    WETH: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b',
+    BAL: '',
+    GDT: '',
   },
   PriceChainMap: {
     '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980':
@@ -177,14 +179,15 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
 
 export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
   Popular: {
-    Symbols: ['GDT', 'BAL', 'WETH'],
+    Symbols: ['GDT', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    // nativeAsset: '0x4200000000000000000000000000000000000010', // need CONFIRM
     wNativeAsset: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99', // need CONFIRM
-    WETH: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
-    BAL: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
-    GDT: '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587',
+    WOAS: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
+    BAL: '0xe34Eec955bF457382cE37e1D8371e559cC6518Fb',
+    GDT: '0xe34Eec955bF457382cE37e1D8371e559cC6518Fb',
   },
   PriceChainMap: {
     // woas
@@ -257,6 +260,9 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
 
     '0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0xe34eec955bf457382ce37e1d8371e559cc6518fb':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };
