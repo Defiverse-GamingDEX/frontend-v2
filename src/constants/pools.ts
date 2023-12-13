@@ -774,6 +774,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   },
   BlockList: [
     '0x15c33581b6bd8c1757a04013a765fdb092cba54500020000000000000000000c',
+    '0x80246799ef36dfcb403dc10e29f0cca74350be54000200000000000000000006',
   ],
   ExcludedPoolTypes: [
     'Element',
