@@ -138,14 +138,14 @@ export const TOKENS_GENERIC: TokenConstants = {
 
 export const TOKENS_DEFIVERSE: TokenConstants = {
   Popular: {
-    Symbols: ['DFV', 'BAL', 'WETH', 'DAI', 'USDC', 'USDT'],
+    Symbols: ['GDT', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    wNativeAsset: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980', // need CONFIRM
-    WETH: '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980',
-    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
-    DFV: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    wNativeAsset: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b', // need CONFIRM
+    WETH: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b',
+    BAL: '',
+    GDT: '',
   },
   PriceChainMap: {
     '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980':
