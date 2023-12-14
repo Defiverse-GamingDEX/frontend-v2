@@ -362,8 +362,7 @@ watch(useNativeAsset, shouldUseNativeAsset => {
       type="error"
     >
       <p class="text-gray-600 dark:text-gray-400">
-        This pool has ATF token. Your account must be in whitelist to add
-        liquidity
+        This pool has ATF token. Your wallet must be whitelisted to add liquidity
       </p>
     </BalAlert>
     <WrapStEthLink :pool="pool" class="mt-4" />
