@@ -1,5 +1,6 @@
 import networksSupport from '@/constants/networks';
 import { GasPrice } from './providers/types';
+
 const getTokenListFromNetworkId = networkId => {
   console.log('getTokenListFromNetworkId', networkId, networksSupport);
   const networks = [
@@ -12,6 +13,7 @@ const getTokenListFromNetworkId = networkId => {
   }
   return [];
 };
+
 const getGasPriceCustom: GasPrice = networkId => {
   console.log('getGasPriceCustom', networkId, networksSupport);
   const networks = [
@@ -30,6 +32,7 @@ const getGasPriceCustom: GasPrice = networkId => {
     maxPriorityFee: 0,
   };
 };
+
 export default {
   getTokenListFromNetworkId,
   getGasPriceCustom,
