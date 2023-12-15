@@ -4191,5 +4191,63 @@
       "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
       "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/CCP_L.png"
     }
+  },
+  {
+    "address": "0xc801cBc6ac26c7a97aaEdbaBB941d308C69042e2",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0x3f197d7d1ff1de36c69cea2a2ab326a01612f848000200000000000000000008",
+      "address": "0x3F197D7d1ff1De36C69cea2A2aB326a01612f848",
+      "poolType": "Weighted",
+      "symbol": "G-50MCHC-50OAS",
+      "tokens": [
+        {
+          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
+          "weight": "0.5",
+          "symbol": "WOAS"
+        },
+        {
+          "address": "0xDa615b699920f07474a12168282dF3AC229A8e1E",
+          "weight": "0.5",
+          "symbol": "MCHC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/MCHC_L.png"
+    }
+  },
+  {
+    "address": "0x5eF0a1939B44B186C4BC56EbaC4745d2180cc923",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1700039704,
+    "pool": {
+      "id": "0xa85ae7f245e690ec70867248d246f60a41bace0e000200000000000000000009",
+      "address": "0xA85Ae7F245e690ec70867248D246f60A41BaCe0E",
+      "poolType": "Weighted",
+      "symbol": "G-50TCGC-50OAS",
+      "tokens": [
+        {
+          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
+          "weight": "0.5",
+          "symbol": "WOAS"
+        },
+        {
+          "address": "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD",
+          "weight": "0.5",
+          "symbol": "TCGC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/TCGC_L.png"
+    }
   }
 ]
