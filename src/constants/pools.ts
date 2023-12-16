@@ -772,7 +772,9 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [''],
+  BlockList: [
+    '0xb3a6b8f5d07bae6dd664dbdf45432f78c819ab99000200000000000000000006',
+  ],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',
