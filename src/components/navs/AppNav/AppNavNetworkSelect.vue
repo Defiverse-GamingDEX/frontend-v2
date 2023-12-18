@@ -68,10 +68,10 @@ onMounted(async () => {
     });
     router.replace({ query: {} });
   }
-  // hard for this version 2023/12/04
+  // hard for mainnet
   console.log('networkIdCCC', networkId);
-  if (networkId.value !== 17117) {
-    const newNetwork = allNetworks.value.find(n => Number(n.key) === 17117);
+  if (networkId.value !== 16116) {
+    const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
     if (newNetwork) {
       console.log(newNetwork, 'newNetworkCCC');
       localStorage.setItem('networkId', newNetwork?.key.toString());
