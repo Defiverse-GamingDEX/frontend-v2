@@ -179,15 +179,18 @@ function filterNativeToken(tokens) {
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
 
+    console.log('===token:', token);
     //
     // TODO: Need to load token list by chain
     let tokensByChain = tokensUtils.getTokenListFromNetworkId(
       configService?.network.chainId
     );
-    let tokenNative = tokensByChain.find(
-      item => item.address?.toUpperCase() === token?.address.toUpperCase()
+    let tokenNative = tokensByChain.findIndex(
+      item =>
+        item.address?.toUpperCase() === token?.address.toUpperCase() ||
+        token?.name === 'OASYS'
     );
-    if (tokenNative) {
+    if (tokenNative >= 0) {
       rs.push(token);
     }
   }
