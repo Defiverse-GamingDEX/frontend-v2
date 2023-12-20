@@ -142,8 +142,8 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    wNativeAsset: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b', // need CONFIRM
-    WETH: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b',
+    wNativeAsset: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351', // need CONFIRM
+    WETH: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351',
     BAL: '',
     GDT: '',
   },

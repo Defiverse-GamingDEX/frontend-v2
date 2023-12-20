@@ -12,12 +12,12 @@
   "publicRpc": "https://rpc.defi-verse.org",
   "explorer": "https://scan.defi-verse.org/",
   "explorerName": "defiverse",
-  "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse-v2",
+  "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
-      "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse-v2"
+      "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse"
     ],
     "aave": "",
     "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse-v2",
@@ -39,17 +39,17 @@
     "merkleRedeem": "",
     "merkleOrchard": "",
     "multicall": "0x8633dD7223f76c99bdc5a2D116FCF369d79852C4",
-    "authorizer": "0xe344357cf3708BcD12039CD6148c1f4b9222351e",
-    "vault": "0x6574ce7BCcF4Da7cd0d703049Fa8E14Cb53abD77",
+    "authorizer": "0xA3eC7408FB0A356827bDfAFa89911A16dC0DAfc0",
+    "vault": "0x1268ADAEC5E8390Ef98896a51b95E32dCa07Dc74",
     "weightedPoolFactory": "",
     "stablePoolFactory": "",
-    "weth": "0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b",
+    "weth": "0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351",
     "stMATIC": "",
     "rETH": "",
     "stETH": "",
     "wstETH": "",
     "lidoRelayer": "",
-    "balancerHelpers": "0x72852c8aA252EA1364e901bb892f87cd0201B98C",
+    "balancerHelpers": "0xBE2e1681ad14B2dEd009aD8F70c43621fD8C0AC5",
     "batchRelayer": "0x7b9B6f094DC2Bd1c12024b0D9CC63d6993Be1888",
     "batchRelayerV4": "0x00e695aA8000df01B8DC8401B4C34Fba5D56BBb2",
     "gaugeFactory": "",
@@ -63,7 +63,7 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "oracle": "0xDc985e4806c68c44A6f62C2C3af5A5F404eBfb94"
+    "oracle": "0xFbFf368f9ec96125d9B0B52B68653B18ce7E323f"
   },
   "keys": {
     "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",
