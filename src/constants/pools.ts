@@ -700,7 +700,7 @@ const POOLS_DEFIVERSE: Pools = {
     //   v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
     //   v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
     // },
-    veBAL: '0x8ea93dfbe0c02aafdc8a9e6bfdd7efacdac8cca6000200000000000000000000',
+    // veBAL: '0x8ea93dfbe0c02aafdc8a9e6bfdd7efacdac8cca6000200000000000000000000',
   },
   Pagination: {
     PerPage: 10,
@@ -712,7 +712,7 @@ const POOLS_DEFIVERSE: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [''],
+  BlockList: [],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',
@@ -731,22 +731,14 @@ const POOLS_DEFIVERSE: Pools = {
     ],
   },
   Investment: {
-    AllowList: [
-      '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
-    ],
+    AllowList: [],
   },
   Factories: {
-    '0x42dd917a3c8a14a766712fabe7b048f0306246f6': 'composableStablePool', // ComposableStable V3
-    '0x8c96ab92be9a17f6db66bb254c31dd0c263ea81a': 'weightedPool', // WeightedPool V3
+    '0xe583d137e0aa2924727bc2b490ceac5ce6a9ac8c': 'composableStablePool', // ComposableStable V3
+    '0xc04ce4fe0f4013814ea1a4b0577d3678d5a7c91c': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
-    AllowList: [
-      '0x402e0638b1d990479a2139709f984cd1ae8c6daf000200000000000000000001',
-      '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
-      '0x900e9ae430c8f011ab9250c9d4a3a8055ebd3bb8000200000000000000000003',
-      '0x33b2ae985ecbc95c83b8cfa2fe2f6b8042763151000200000000000000000004',
-      '0xa7b4bee4364a9c161d985ab5a4e17349c868b261000200000000000000000005',
-    ],
+    AllowList: [],
   },
   Metadata: {},
   DisabledJoins: [],

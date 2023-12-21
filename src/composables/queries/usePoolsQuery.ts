@@ -90,7 +90,7 @@ export default function usePoolsQuery(
         const pools = await balancerSubgraphService.pools.get(
           getQueryArgs(options)
         );
-
+        console.log('initializeDecoratedSubgraphRepository=>pools', pools);
         const poolDecorator = new PoolDecorator(pools);
         let decoratedPools = await poolDecorator.decorate(tokenMeta.value);
 
@@ -156,6 +156,7 @@ export default function usePoolsQuery(
     if (options.skip) {
       queryArgs.skip = options.skip;
     }
+    console.log('getQueryArgs', queryArgs);
     return queryArgs;
   }
 

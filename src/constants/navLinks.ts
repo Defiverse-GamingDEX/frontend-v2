@@ -24,10 +24,11 @@ export const NAV_LINKS = [
     name_link: 'vebal',
     goal_key: 'ClickNavVebal',
   },
-  // {
-  //   text: 'Bridge',
-  //   path: 'bridge',
-  //   name_link: 'bridge',
-  //   goal_key: 'ClickNavBridge',
-  // },
+
+  {
+    text: 'Bridge',
+    path: 'bridge',
+    name_link: 'bridge',
+    goal_key: 'ClickNavBridge',
+  },
 ];
