@@ -20,16 +20,16 @@ const networks = [
   // //   networkSlug: 'arbitrum',
   // //   key: '42161',
   // // },
-  {
-    id: 'defiverse',
-    name: 'Defiverse',
-    networkSlug: 'defiverse',
-    key: '16116',
-    tokens: defiverseJson.tokens,
-    // price: 5000000000000, // 5000 Gwei
-    // gasUnit: 'wei',
-    maxPriorityFee: 0,
-  },
+  // {
+  //   id: 'defiverse',
+  //   name: 'Defiverse',
+  //   networkSlug: 'defiverse',
+  //   key: '16116',
+  //   tokens: defiverseJson.tokens,
+  //   // price: 5000000000000, // 5000 Gwei
+  //   // gasUnit: 'wei',
+  //   maxPriorityFee: 0,
+  // },
   // // bridge networks
   // {
   //   id: 'mchverse',
