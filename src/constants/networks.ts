@@ -26,8 +26,8 @@ const networks = [
     networkSlug: 'defiverse',
     key: '16116',
     tokens: defiverseJson.tokens,
-    price: 5000000000000, // 5000 Gwei
-    gasUnit: 'wei',
+    // price: 5000000000000, // 5000 Gwei
+    // gasUnit: 'wei',
     maxPriorityFee: 0,
   },
   // // bridge networks
@@ -90,8 +90,8 @@ let networksDev = [
     networkSlug: 'defiverse-testnet',
     key: '17117',
     tokens: defiverseTestnetJson.tokens,
-    price: 35000000000, // 50 Gwei
-    gasUnit: 'wei',
+    // price: 35000000000, // 50 Gwei
+    // gasUnit: 'wei',
     maxPriorityFee: 0,
   },
 ];

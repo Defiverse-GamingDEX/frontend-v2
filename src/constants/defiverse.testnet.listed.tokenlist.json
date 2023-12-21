@@ -89,6 +89,20 @@
       "symbol": "TCGC",
       "decimals": 18,
       "logoURI": "tokens/TCGC_L.png"
+    },
+    {
+      "address": "0x316cafe8f949378d440A92A65d5C0277b54fD193",
+      "chainId": 17117,
+      "name": "Ragnarok Token",
+      "symbol": "RAG",
+      "decimals": 18
+    },
+    {
+      "address": "0x56e6E92558D753983951b9241b9dB8c797B50A9c",
+      "chainId": 17117,
+      "name": "Wrapped RLP",
+      "symbol": "WRLP",
+      "decimals": 18
     }
   ]
 }

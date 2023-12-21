@@ -18,9 +18,9 @@
       "logoURI": "tokens/OAS_L.png"
     },
     {
-      "address": "0xd08a2917653d4e460893203471f0000826fb4034",
+      "address": "0x4362Be024eFbb8C6fBcF19675224b58dFd2493Ef",
       "chainId": 16116,
-      "name": "Beta ChainColosseumPhoenix Unility Token",
+      "name": "bCCP",
       "symbol": "bCCP",
       "decimals": 18,
       "logoURI": "tokens/bCCP_L.png"

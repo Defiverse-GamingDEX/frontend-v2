@@ -712,7 +712,7 @@ const POOLS_DEFIVERSE: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [''],
+  BlockList: [],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',
@@ -734,8 +734,8 @@ const POOLS_DEFIVERSE: Pools = {
     AllowList: [],
   },
   Factories: {
-    '0x42dd917a3c8a14a766712fabe7b048f0306246f6': 'composableStablePool', // ComposableStable V3
-    '0x8c96ab92be9a17f6db66bb254c31dd0c263ea81a': 'weightedPool', // WeightedPool V3
+    '0xe583d137e0aa2924727bc2b490ceac5ce6a9ac8c': 'composableStablePool', // ComposableStable V3
+    '0xc04ce4fe0f4013814ea1a4b0577d3678d5a7c91c': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
