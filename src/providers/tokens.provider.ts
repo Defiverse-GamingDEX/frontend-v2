@@ -497,8 +497,7 @@ export const tokensProvider = (
     if (userAddress) {
       multicaller.call({
         key: `getSellable`,
-        address:
-          oracleContractAddress || '0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01',
+        address: oracleContractAddress,
         function: 'getSellable',
         abi: OracleAbi,
         params: [userAddress, tokenAddress],
@@ -506,6 +505,22 @@ export const tokensProvider = (
     }
     const result = await multicaller.execute();
     console.log(result, 'getAntiTraderInfo');
+
+    return result;
+  }
+  async function isLiquidityWhitelisted(tokenAddress, userAddress) {
+    const Multicaller = getMulticaller();
+    const multicaller = new Multicaller();
+    multicaller.call({
+      key: `isLiquidityWhitelisted`,
+      address: oracleContractAddress,
+      function: 'isLiquidityWhitelisted',
+      abi: OracleAbi,
+      params: [tokenAddress, userAddress],
+    });
+
+    const result = await multicaller.execute();
+    console.log(result, 'isLiquidityWhitelisted');
 
     return result;
   }
@@ -557,6 +572,7 @@ export const tokensProvider = (
     injectPrices,
     getMaxBalanceFor,
     getAntiTraderInfo,
+    isLiquidityWhitelisted,
     getProtectedTokens,
   };
 };

@@ -10,28 +10,20 @@
   },
   "tokens": [
     {
-      "address": "0xd08a2917653d4e460893203471f0000826fb4034",
-      "chainId": 16116,
-      "name": "USDT",
-      "symbol": "USDT",
-      "decimals": 18,
-      "logoURI": "tokens/USDT_L.png"
-    },
-    {
-      "address": "0x7c6b91d9be155a6db01f749217d76ff02a7227f2",
-      "chainId": 16116,
-      "name": "USD Coin",
-      "symbol": "USDC",
-      "decimals": 18,
-      "logoURI": "tokens/USDC_L.png"
-    },
-    {
-      "address": "0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b",
+      "address": "0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351",
       "chainId": 16116,
       "name": "Wrapped OAS",
       "symbol": "WOAS",
       "decimals": 18,
       "logoURI": "tokens/OAS_L.png"
+    },
+    {
+      "address": "0x4362Be024eFbb8C6fBcF19675224b58dFd2493Ef",
+      "chainId": 16116,
+      "name": "bCCP",
+      "symbol": "bCCP",
+      "decimals": 18,
+      "logoURI": "tokens/bCCP_L.png"
     }
   ]
 }

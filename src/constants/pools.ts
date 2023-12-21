@@ -712,7 +712,7 @@ const POOLS_DEFIVERSE: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [''],
+  BlockList: [],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',
@@ -734,8 +734,8 @@ const POOLS_DEFIVERSE: Pools = {
     AllowList: [],
   },
   Factories: {
-    '0x42dd917a3c8a14a766712fabe7b048f0306246f6': 'composableStablePool', // ComposableStable V3
-    '0x8c96ab92be9a17f6db66bb254c31dd0c263ea81a': 'weightedPool', // WeightedPool V3
+    '0xe583d137e0aa2924727bc2b490ceac5ce6a9ac8c': 'composableStablePool', // ComposableStable V3
+    '0xc04ce4fe0f4013814ea1a4b0577d3678d5a7c91c': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
@@ -765,7 +765,9 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
     Gauntlet: [],
   },
   BlockList: [
-    '0x15c33581b6bd8c1757a04013a765fdb092cba54500020000000000000000000c',
+    '0xb3a6b8f5d07bae6dd664dbdf45432f78c819ab99000200000000000000000006',
+    '0x6660752d8d3be08bf42fd0a9b14d7ff0244f37da00020000000000000000000b',
+    '0x5e71ae56c64dee14fe78e31efcf2ee95f89fac45000200000000000000000007',
   ],
   ExcludedPoolTypes: [
     'Element',

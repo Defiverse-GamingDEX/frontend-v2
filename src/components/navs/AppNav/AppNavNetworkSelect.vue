@@ -69,15 +69,15 @@ onMounted(async () => {
     router.replace({ query: {} });
   }
   // hard for mainnet
-  console.log('networkIdCCC', networkId);
-  if (networkId.value !== 16116) {
-    const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
-    if (newNetwork) {
-      console.log(newNetwork, 'newNetworkCCC');
-      localStorage.setItem('networkId', newNetwork?.key.toString());
-      hardRedirectTo(getNetworkChangeUrl(newNetwork));
-    }
-  }
+  // console.log('networkIdCCC', networkId);
+  // if (networkId.value !== 16116) {
+  //   const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
+  //   if (newNetwork) {
+  //     console.log(newNetwork, 'newNetworkCCC');
+  //     localStorage.setItem('networkId', newNetwork?.key.toString());
+  //     hardRedirectTo(getNetworkChangeUrl(newNetwork));
+  //   }
+  // }
 });
 
 // WATCHERS

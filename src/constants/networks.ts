@@ -26,8 +26,8 @@ const networks = [
     networkSlug: 'defiverse',
     key: '16116',
     tokens: defiverseJson.tokens,
-    price: 5000000000000, // 5000 Gwei
-    gasUnit: 'wei',
+    // price: 5000000000000, // 5000 Gwei
+    // gasUnit: 'wei',
     maxPriorityFee: 0,
   },
   // // bridge networks
@@ -84,16 +84,16 @@ const networks = [
 ];
 
 let networksDev = [
-  // {
-  //   id: 'defiverse-testnet',
-  //   name: 'Defiverse-Testnet',
-  //   networkSlug: 'defiverse-testnet',
-  //   key: '17117',
-  //   tokens: defiverseTestnetJson.tokens,
-  //   price: 50000000000, // 50 Gwei
-  //   gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  // },
+  {
+    id: 'defiverse-testnet',
+    name: 'Defiverse-Testnet',
+    networkSlug: 'defiverse-testnet',
+    key: '17117',
+    tokens: defiverseTestnetJson.tokens,
+    // price: 35000000000, // 50 Gwei
+    // gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
 ];
 
 // add network for bridge testnet

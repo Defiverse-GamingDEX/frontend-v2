@@ -142,10 +142,10 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    wNativeAsset: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b', // need CONFIRM
-    WETH: '0xF492A8449A1b6c8f111AD4e03134818F5bF79d2b',
-    BAL: '',
-    GDT: '',
+    wNativeAsset: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351', // need CONFIRM
+    WETH: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351',
+    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    GDT: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
   },
   PriceChainMap: {
     '0xeb7638a7c4eaeb25ece59f4382b9f06a8056f980':
@@ -174,6 +174,15 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
     '0xd92e2e3c13c3712af12e4389ee37b67021318812':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x4362be024efbb8c6fbcf19675224b58dfd2493ef':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x4362Be024eFbb8C6fBcF19675224b58dFd2493Ef':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x5a89e11cb554e00c2f51c4bb7f05bc7ab0fa6351':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };
 
@@ -183,7 +192,6 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
-    // nativeAsset: '0x4200000000000000000000000000000000000010', // need CONFIRM
     wNativeAsset: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99', // need CONFIRM
     WOAS: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
     BAL: '0xe34Eec955bF457382cE37e1D8371e559cC6518Fb',
@@ -263,6 +271,12 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
 
     '0xe34eec955bf457382ce37e1d8371e559cc6518fb':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x316cafe8f949378d440a92a65d5c0277b54fd193':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+
+    '0x56e6e92558d753983951b9241b9db8c797b50a9c':
       '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   },
 };

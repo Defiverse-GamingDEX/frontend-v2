@@ -10,14 +10,6 @@
   },
   "tokens": [
     {
-      "address": "0xe34Eec955bF457382cE37e1D8371e559cC6518Fb",
-      "chainId": 17117,
-      "name": "Gaming DEX Token",
-      "symbol": "GDT",
-      "decimals": 18,
-      "logoURI": "tokens/GDT_L.png"
-    },
-    {
       "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
       "chainId": 17117,
       "name": "Wrapped OAS",
@@ -26,37 +18,12 @@
       "logoURI": "tokens/OAS_L.png"
     },
     {
-      "address": "0xFD470A998604e81048C9F1d2065B6c794359C033",
+      "address": "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7",
       "chainId": 17117,
-      "name": "CCP(Mock)",
-      "symbol": "CCP",
+      "name": "WBTC",
+      "symbol": "WBTC",
       "decimals": 18,
-      "logoURI": "tokens/CCP_L.png"
-    },
-    {
-      "address": "0x184eaBED803978E847a3D673263bA7e24d3Fa89A",
-      "chainId": 17117,
-      "name": "bCCP(New)",
-      "symbol": "bCCP",
-      "decimals": 18,
-      "logoURI": "tokens/CCP_L.png"
-    },
-    {
-      "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
-      "chainId": 17117,
-      "name": "USDC",
-      "symbol": "USDC",
-      "decimals": 18,
-      "logoURI": "tokens/USDC_L.png"
-    },
-
-    {
-      "address": "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb",
-      "chainId": 17117,
-      "name": "USDT",
-      "symbol": "USDT",
-      "decimals": 18,
-      "logoURI": "tokens/USDT_L.png"
+      "logoURI": "tokens/WBTC_L.png"
     },
     {
       "address": "0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c",
@@ -67,12 +34,45 @@
       "logoURI": "tokens/ETH_L.png"
     },
     {
-      "address": "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7",
+      "address": "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb",
       "chainId": 17117,
-      "name": "WBTC",
-      "symbol": "WBTC",
+      "name": "USDT",
+      "symbol": "USDT",
       "decimals": 18,
-      "logoURI": "tokens/WBTC_L.png"
+      "logoURI": "tokens/USDT_L.png"
+    },
+
+    {
+      "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
+      "chainId": 17117,
+      "name": "USDC",
+      "symbol": "USDC",
+      "decimals": 18,
+      "logoURI": "tokens/USDC_L.png"
+    },
+    {
+      "address": "0xe34Eec955bF457382cE37e1D8371e559cC6518Fb",
+      "chainId": 17117,
+      "name": "Gaming DEX Token",
+      "symbol": "GDT",
+      "decimals": 18,
+      "logoURI": "tokens/GDT_L.png"
+    },
+    {
+      "address": "0x3Fde6489AA398BcddaB46f971e4BB5364ccCD78B",
+      "chainId": 17117,
+      "name": "CCP",
+      "symbol": "CCP",
+      "decimals": 18,
+      "logoURI": "tokens/CCP_L.png"
+    },
+    {
+      "address": "0xDBe41f8c9731D9C473CcA30A203F7dd530D71020",
+      "chainId": 17117,
+      "name": "bCCP(new)",
+      "symbol": "bCCP",
+      "decimals": 18,
+      "logoURI": "tokens/CCP_L.png"
     },
     {
       "address": "0xDa615b699920f07474a12168282dF3AC229A8e1E",

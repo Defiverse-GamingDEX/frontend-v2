@@ -103,9 +103,33 @@ const tokens = computed(() => {
       value,
     };
   });
-  //tokensWithValues = filterNativeToken(tokensWithValues);
-  if (props.ignoreBalances) return tokensWithValues;
-  else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
+
+  /*    
+    2023-12-16: Change request
+    ====================================================================================================
+    Is it currently designed so that all tokens held are loaded and displayed on the Token list?
+    (This makes it difficult to view due to LP Tokens being loaded)
+
+    If this is the case, please deactivate this feature.
+
+    Instead, tokens that need to be displayed will be added to the Token list by directly entering the contract address.
+
+    Please set the following tokens to be displayed fixedly:OAS (Native)
+      wOAS
+      WBTC
+      ETH
+      USDT
+      USDC
+      GDT (Gaming DEX Token)
+      CCP
+      bCCP
+      MCHC
+      TCGC
+  */
+  // if (props.ignoreBalances) return tokensWithValues;
+  // else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
+
+  return filterNativeToken(tokensWithValues);
 });
 
 const excludedTokens = computed(() => [
@@ -150,26 +174,30 @@ function toggleSelectTokenList(): void {
   state.query = '';
 }
 
-// function filterNativeToken(tokens) {
-//   let rs = [];
-//   for (let i = 0; i < tokens.length; i++) {
-//     let token = tokens[i];
+function filterNativeToken(tokens) {
+  let rs = [];
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
 
-//     //
-//     // TODO: Need to load token list by chain
-//     let tokensByChain = tokensUtils.getTokenListFromNetworkId(
-//       configService?.network.chainId
-//     );
-//     let tokenNative = tokensByChain.find(
-//       item => item.address?.toUpperCase() === token?.address.toUpperCase()
-//     );
-//     if (tokenNative) {
-//       rs.push(token);
-//     }
-//   }
-//   console.log(rs, 'rs=>filterNativeTokenSelectToken');
-//   return rs;
-// }
+    console.log('===token:', token);
+    //
+    // TODO: Need to load token list by chain
+    let tokensByChain = tokensUtils.getTokenListFromNetworkId(
+      configService?.network.chainId
+    );
+    let tokenNative = tokensByChain.findIndex(
+      item =>
+        item.address?.toUpperCase() === token?.address.toUpperCase() ||
+        token?.name === 'OASYS'
+    );
+    if (tokenNative >= 0) {
+      rs.push(token);
+    }
+  }
+  console.log(rs, 'rs=>filterNativeTokenSelectToken');
+  return rs;
+}
+
 /**
  * WATCHERS
  */
