@@ -74,8 +74,9 @@ onMounted(async () => {
   if (networkId.value !== 16116) {
     const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
     if (newNetwork) {
-      localStorage.setItem('networkId', newNetwork?.key.toString());
-      hardRedirectTo(getNetworkChangeUrl(newNetwork));
+      // localStorage.setItem('networkId', newNetwork?.key.toString());
+      // hardRedirectTo(getNetworkChangeUrl(newNetwork));
+      window.location.href = 'https://testnet.gaming-dex.com';
     }
   }
 });
