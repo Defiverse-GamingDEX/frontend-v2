@@ -7,6 +7,7 @@ import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
 import { isSoftMigratablePool } from '@/components/forms/pool_actions/MigrateForm/constants';
 import { Goals, trackGoal } from '@/composables/useFathom';
+import { useTokens } from '@/providers/tokens.provider';
 
 /**
  * TYPES
@@ -15,7 +16,10 @@ type Props = {
   pool: Pool;
   missingPrices: boolean;
 };
-
+/**
+ * STATES
+ */
+const isPoolWhiteList = ref(false);
 /**
  * PROPS
  */
@@ -28,7 +32,14 @@ const { hasBpt } = useWithdrawMath(toRef(props, 'pool'));
 const { isMigratablePool, hasNonApprovedRateProviders } = usePool(
   toRef(props, 'pool')
 );
-const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
+const {
+  balanceFor,
+  nativeAsset,
+  wrappedNativeAsset,
+  isLiquidityWhitelisted,
+  getAntiTraderInfo,
+} = useTokens();
+const { isWalletReady, startConnectWithInjectedProvider, account } = useWeb3();
 const { networkSlug } = useNetwork();
 
 /**
@@ -40,6 +51,54 @@ const joinDisabled = computed(
     hasNonApprovedRateProviders.value ||
     (isMigratablePool(props.pool) && !isSoftMigratablePool(props.pool.id))
 );
+/**
+ * WATCHS
+ */
+watch(
+  () => account?.value,
+  newVal => {
+    if (account?.value) {
+      checkIsLiquidityWhitelisted();
+    }
+  }
+);
+/***
+ * FUNCTIONS
+ */
+async function checkIsLiquidityWhitelisted() {
+  try {
+    let multiCall = [];
+    console.log(props.pool, 'props.pool');
+    const tokenAddresses = props.pool?.tokenAddresses;
+    console.log(tokenAddresses, 'tokenAddresses');
+    if (tokenAddresses?.length > 0) {
+      for (let i = 0; i < tokenAddresses?.length; i++) {
+        multiCall.push(
+          isLiquidityWhitelisted(tokenAddresses[i], account?.value)
+        );
+      }
+    }
+    let rs = await Promise.allSettled(multiCall);
+    console.log(rs, 'rs=>checkIsLiquidityWhitelisted');
+    let isExistWhiteList = rs?.find(
+      item => item?.value?.isLiquidityWhitelisted === true
+    );
+    if (isExistWhiteList) {
+      isPoolWhiteList.value = true;
+    } else {
+      isPoolWhiteList.value = false;
+    }
+    console.log(isPoolWhiteList.value, ' isPoolWhiteList.value');
+  } catch (error) {
+    console.log(error, 'error=>checkIsLiquidityWhitelisted');
+  }
+}
+/**
+ * LIFECIRCYES
+ */
+onMounted(() => {
+  checkIsLiquidityWhitelisted();
+});
 </script>
 
 <template>
@@ -55,11 +114,11 @@ const joinDisabled = computed(
     />
     <div v-else class="grid grid-cols-2 gap-2">
       <BalBtn
-        :tag="joinDisabled ? 'div' : 'router-link'"
+        :tag="joinDisabled || !isPoolWhiteList ? 'div' : 'router-link'"
         :to="{ name: 'invest', params: { networkSlug } }"
         :label="$t('addLiquidity')"
         color="gradient"
-        :disabled="joinDisabled"
+        :disabled="joinDisabled || !isPoolWhiteList"
         block
         @click="trackGoal(Goals.ClickAddLiquidity)"
       />
