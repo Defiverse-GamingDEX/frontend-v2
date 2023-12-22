@@ -12,23 +12,23 @@ export const NAV_LINKS = [
     name_link: 'claim',
     goal_key: 'ClickNavClaim',
   },
-  {
-    text: 'portfolio',
-    path: 'portfolio',
-    name_link: 'portfolio',
-    goal_key: 'ClickNavPortfolio',
-  },
-  {
-    text: 'veGDT',
-    path: 'vegdt',
-    name_link: 'vebal',
-    goal_key: 'ClickNavVebal',
-  },
+  // {
+  //   text: 'portfolio',
+  //   path: 'portfolio',
+  //   name_link: 'portfolio',
+  //   goal_key: 'ClickNavPortfolio',
+  // },
+  // {
+  //   text: 'veGDT',
+  //   path: 'vegdt',
+  //   name_link: 'vebal',
+  //   goal_key: 'ClickNavVebal',
+  // },
 
-  {
-    text: 'Bridge',
-    path: 'bridge',
-    name_link: 'bridge',
-    goal_key: 'ClickNavBridge',
-  },
+  // {
+  //   text: 'Bridge',
+  //   path: 'bridge',
+  //   name_link: 'bridge',
+  //   goal_key: 'ClickNavBridge',
+  // },
 ];
