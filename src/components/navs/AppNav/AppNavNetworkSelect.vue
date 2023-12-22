@@ -60,6 +60,15 @@ const activeNetwork = computed((): NetworkOption | undefined =>
 // LIFECYCLE
 onMounted(async () => {
   await router.isReady();
+
+  if (
+    window.location.href &&
+    window.location.href.indexOf('defiverse-testnet') > 0
+  ) {
+    window.location.href = 'https://testnet.gaming-dex.com';
+    return;
+  }
+
   if (router.currentRoute.value.query?.poolNetworkAlert) {
     addNotification({
       type: 'error',
@@ -71,14 +80,14 @@ onMounted(async () => {
 
   // hard for mainnet
   // console.log('networkIdCCC', networkId);
-  if (networkId.value !== 16116) {
-    const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
-    if (newNetwork) {
-      // localStorage.setItem('networkId', newNetwork?.key.toString());
-      // hardRedirectTo(getNetworkChangeUrl(newNetwork));
-      window.location.href = 'https://testnet.gaming-dex.com';
-    }
-  }
+  // if (networkId.value !== 16116) {
+  //   const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
+  //   if (newNetwork) {
+  //     // localStorage.setItem('networkId', newNetwork?.key.toString());
+  //     // hardRedirectTo(getNetworkChangeUrl(newNetwork));
+  //     window.location.href = 'https://testnet.gaming-dex.com';
+  //   }
+  // }
 });
 
 // WATCHERS
