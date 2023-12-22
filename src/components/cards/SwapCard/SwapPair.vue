@@ -184,7 +184,7 @@ function preventUpdatesOnTyping(callback: () => void) {
   }
   typingTimeout.value = setTimeout(() => {
     callback();
-  }, 300);
+  }, 1000);
 }
 
 function handleInAmountChange(value: string): void {
