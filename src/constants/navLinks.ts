@@ -6,12 +6,12 @@ export const NAV_LINKS = [
     goal_key: 'ClickNavPools',
   },
   { text: 'swap', path: 'swap', name_link: 'swap', goal_key: 'ClickNavSwap' },
-  {
-    text: 'claim',
-    path: 'claim',
-    name_link: 'claim',
-    goal_key: 'ClickNavClaim',
-  },
+  // {
+  //   text: 'claim',
+  //   path: 'claim',
+  //   name_link: 'claim',
+  //   goal_key: 'ClickNavClaim',
+  // },
   // {
   //   text: 'portfolio',
   //   path: 'portfolio',
