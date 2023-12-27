@@ -8,6 +8,8 @@ import { useTokens } from '@/providers/tokens.provider';
 import { isSameAddress } from '@/lib/utils';
 import { TokenInfo } from '@/types/TokenList';
 import { truncateText } from '@/plugins/utils.js';
+import useWeb3 from '@/services/web3/useWeb3';
+import metamaskLogo from '@/assets/images/connectors/metamask.svg';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -44,13 +46,22 @@ const emit = defineEmits<{
  */
 const openTokenModal = ref(false);
 const optionTokens = ref<Record<string, TokenInfo>>({});
-
+const currentDomain = ref('');
 /**
  * COMPOSABLEs
  */
 const { getToken } = useTokens();
 const { fNum2 } = useNumbers();
-
+const {
+  isWalletReady,
+  account,
+  getSigner,
+  getProvider,
+  chainId,
+  connector,
+  provider,
+} = useWeb3();
+import { getConnectorName } from '@/services/web3/web3.plugin';
 /**
  * COMPUTED
  */
@@ -60,13 +71,63 @@ const token = computed((): TokenInfo | null => {
   if (!hasToken.value) return null;
   return getToken(props.modelValue);
 });
-
+const connectorName = computed(() =>
+  getConnectorName(connector.value?.id, provider.value)
+);
+console.log(connectorName.value, 'connectorName.value');
 /**
  * METHODS
  */
 function toggleModal(): void {
   if (!props.fixed) openTokenModal.value = !openTokenModal.value;
 }
+const setDomain = () => {
+  currentDomain.value =
+    window.location.protocol + '//' + window.location.hostname;
+  if (currentDomain.value.includes('localhost')) {
+    currentDomain.value = `https://testnet.gaming-dex.com`;
+  }
+};
+const addTokenToMetamask = async () => {
+  console.log(connectorName?.value, 'connectorNameAAA');
+  if (connectorName?.value === 'MetaMask') {
+    console.log(
+      token,
+      token?.value,
+      token.value?.address,
+      'addTokenToMetamask'
+    );
+    try {
+      let imgUrl = null;
+      if (token?.value.logoURI) {
+        imgUrl = `${currentDomain.value}/${token?.value.logoURI}`;
+      }
+      console.log(imgUrl, 'imgUrl');
+      let rs = await provider.value?.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: token?.value.address,
+            symbol: token?.value.symbol,
+            decimals: token?.value.decimals,
+            image: imgUrl,
+          },
+        },
+      });
+      console.log(rs, 'rs');
+    } catch (error) {
+      console.error('Error:=>addTokenToMetamask', error);
+    }
+  }
+};
+
+/**
+ * LIFECIRCLES
+ */
+onMounted(() => {
+  setDomain();
+});
 </script>
 
 <template>
@@ -82,6 +143,9 @@ function toggleModal(): void {
       <span class="flex items-center text-base font-medium">
         {{ truncateText(token?.symbol, 16, 5, 5) }}
         <AtfBadge :address="token?.address"></AtfBadge>
+      </span>
+      <span class="add-metamask-btn" @click.stop="addTokenToMetamask">
+        <img :src="metamaskLogo" alt="metamask-logo" />
       </span>
       <span v-if="Number(weight) > 0" class="ml-2 text-secondary">
         {{
@@ -175,7 +239,7 @@ function toggleModal(): void {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .token-select-input {
   @apply shadow rounded-lg flex items-center h-10 px-2 whitespace-nowrap;
   @apply text-sm;
@@ -193,5 +257,14 @@ function toggleModal(): void {
 
 .selected {
   @apply bg-gray-50 dark:bg-gray-700 text-black dark:text-white;
+}
+.add-metamask-btn {
+  margin-left: 4px;
+  display: inline-block;
+  width: 16px;
+  > img {
+    width: 100%;
+    height: auto;
+  }
 }
 </style>

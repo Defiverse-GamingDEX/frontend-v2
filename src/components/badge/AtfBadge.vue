@@ -51,7 +51,7 @@ onBeforeMount(() => {
 <template>
   <span
     v-if="isATF === true"
-    class="py-0.5 px-2.5 mr-2 ml-1 text-xs font-medium text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900 rounded-full atf-badge"
+    class="py-0.5 px-2.5 mr-0.5 ml-1 text-xs font-medium text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900 rounded-full atf-badge"
     >ATF</span
   >
 </template>
