@@ -60,6 +60,18 @@ const activeNetwork = computed((): NetworkOption | undefined =>
 // LIFECYCLE
 onMounted(async () => {
   await router.isReady();
+
+  // Only enable on mainnet
+  //=================================================
+  //
+  // if (
+  //   window.location.href &&
+  //   window.location.href.indexOf('defiverse-testnet') > 0
+  // ) {
+  //   window.location.href = 'https://testnet.gaming-dex.com';
+  //   return;
+  // }
+
   if (router.currentRoute.value.query?.poolNetworkAlert) {
     addNotification({
       type: 'error',
@@ -68,14 +80,15 @@ onMounted(async () => {
     });
     router.replace({ query: {} });
   }
+
   // hard for mainnet
   // console.log('networkIdCCC', networkId);
   // if (networkId.value !== 16116) {
   //   const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
   //   if (newNetwork) {
-  //     console.log(newNetwork, 'newNetworkCCC');
-  //     localStorage.setItem('networkId', newNetwork?.key.toString());
-  //     hardRedirectTo(getNetworkChangeUrl(newNetwork));
+  //     // localStorage.setItem('networkId', newNetwork?.key.toString());
+  //     // hardRedirectTo(getNetworkChangeUrl(newNetwork));
+  //     window.location.href = 'https://testnet.gaming-dex.com';
   //   }
   // }
 });

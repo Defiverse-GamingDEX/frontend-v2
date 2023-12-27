@@ -9,8 +9,10 @@ import { bnum } from '@/lib/utils';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import networksSupport from '@/constants/networks';
+
 const GAUGE_REWARD_CONTRACT_ADDRESS =
-  '0x028821fb5DB06557a7883De37D4D4fa08eB7eF2E';
+  '0x4e32701fEEF5282151bC02B47E9E13074b701b30';
+
 import {
   GasPriceService,
   gasPriceService,
