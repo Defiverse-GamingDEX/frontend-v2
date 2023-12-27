@@ -90,8 +90,8 @@ let networksDev = [
     networkSlug: 'defiverse-testnet',
     key: '17117',
     tokens: defiverseTestnetJson.tokens,
-    // price: 35000000000, // 50 Gwei
-    // gasUnit: 'wei',
+    price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
     maxPriorityFee: 0,
   },
 ];

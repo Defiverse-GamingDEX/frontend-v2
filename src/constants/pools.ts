@@ -712,7 +712,7 @@ const POOLS_DEFIVERSE: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [],
+  BlockList: [''],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',

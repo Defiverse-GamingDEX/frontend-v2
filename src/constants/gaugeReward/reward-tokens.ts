@@ -3,15 +3,17 @@ import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
 import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
 import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
 import oasIcon from '@/assets/images/bridge/tokens/oas.png';
+import bCCPIcon from '@/assets/images/bridge/tokens/bCCP.png';
+
 export const GAUGE_REWARD_TOKENS = [
   {
-    name: 'Ethereum',
+    name: 'ETH',
     address: '0x668B5Cf2f13AE8bFb5619E48f2091040b6985d5c',
     logoURI: ethIcon,
     symbol: 'ETH',
     decimals: 18,
-    is_native: true,
-    rpc: 'https://rpc.defi-verse.org',
+    is_native: false,
+    rpc: 'https://rpc-testnet.defi-verse.org',
   },
   {
     name: 'Wrap BTC',
@@ -20,7 +22,7 @@ export const GAUGE_REWARD_TOKENS = [
     symbol: 'WBTC',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defi-verse.org',
+    rpc: 'https://rpc-testnet.defi-verse.org',
   },
   {
     name: 'Tether USD',
@@ -29,7 +31,7 @@ export const GAUGE_REWARD_TOKENS = [
     symbol: 'USDT',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defi-verse.org',
+    rpc: 'https://rpc-testnet.defi-verse.org',
   },
   {
     name: 'USD Coin',
@@ -38,15 +40,15 @@ export const GAUGE_REWARD_TOKENS = [
     symbol: 'USDC',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defi-verse.org',
+    rpc: 'https://rpc-testnet.defi-verse.org',
   },
   {
-    name: 'OASYS',
-    address: '0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2',
-    logoURI: oasIcon,
-    symbol: 'OAS',
+    name: 'bCCP',
+    address: '0xafC07721d053e6895d0Ce4C5Dd7ff5525EA723d2',
+    logoURI: bCCPIcon,
+    symbol: 'bCCP',
     decimals: 18,
     is_native: false,
-    rpc: 'https://rpc.defi-verse.org',
+    rpc: 'https://rpc-testnet.defi-verse.org',
   },
 ];
