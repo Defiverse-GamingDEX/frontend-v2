@@ -61,13 +61,16 @@ const activeNetwork = computed((): NetworkOption | undefined =>
 onMounted(async () => {
   await router.isReady();
 
-  if (
-    window.location.href &&
-    window.location.href.indexOf('defiverse-testnet') > 0
-  ) {
-    window.location.href = 'https://testnet.gaming-dex.com';
-    return;
-  }
+  // Only enable on mainnet
+  //=================================================
+  //
+  // if (
+  //   window.location.href &&
+  //   window.location.href.indexOf('defiverse-testnet') > 0
+  // ) {
+  //   window.location.href = 'https://testnet.gaming-dex.com';
+  //   return;
+  // }
 
   if (router.currentRoute.value.query?.poolNetworkAlert) {
     addNotification({
