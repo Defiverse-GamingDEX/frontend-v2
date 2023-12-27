@@ -57,14 +57,14 @@ export class PriceService {
       );
       return response[this.nativeAssetId];
     } catch (error) {
-      //console.error('Unable to fetch Ether price', error);
-      //throw error;
+      console.error('Unable to fetch Ether price', error);
+      throw error;
 
       // Hung turn off gecko api
-      return {
-        usd: 1,
-        eth: 1,
-      };
+      // return {
+      //   usd: 1,
+      //   eth: 1,
+      // };
     }
   }
 
@@ -103,24 +103,29 @@ export class PriceService {
       const paginatedResults = await Promise.all(requests);
       const results = this.parsePaginatedTokens(paginatedResults);
 
+      console.log('==========HUNGHUNGresults:', results);
+
       // Inject native asset price if included in requested addresses
       if (includesAddress(addresses, this.nativeAssetAddress)) {
         results[this.nativeAssetAddress] = await this.getNativeAssetPrice();
+        results['0x5a89e11cb554e00c2f51c4bb7f05bc7ab0fa6351'] =
+          results[this.nativeAssetAddress];
       }
 
+      console.log('==========results:', results);
       return results;
     } catch (error) {
-      // console.error('Unable to fetch token prices', addresses, error);
-      // throw error;
+      console.error('Unable to fetch token prices', addresses, error);
+      throw error;
 
-      const data: any = {};
-      (addresses || []).forEach(addr => {
-        data[addr] = {
-          usd: 1,
-          eth: 1,
-        };
-      });
-      return data;
+      // const data: any = {};
+      // (addresses || []).forEach(addr => {
+      //   data[addr] = {
+      //     usd: 1,
+      //     eth: 1,
+      //   };
+      // });
+      // return data;
     }
   }
 
