@@ -27,7 +27,7 @@
 
           <div class="flex flex-wrap md:order-3 gap-3 md:gap-4">
             <BalLink
-              :href="`https://gaming-dex.com/#/defiverse`"
+              :href="`https://www.gaming-dex.com/#/defiverse`"
               external
               noStyle
               class="group link link--external"

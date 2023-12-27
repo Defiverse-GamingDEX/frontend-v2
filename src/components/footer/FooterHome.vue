@@ -133,7 +133,7 @@ export default {
           childs: [
             {
               text: 'Home',
-              link: 'https://gaming-dex.com/#/',
+              link: 'https://www.gaming-dex.com/#/',
             },
           ],
         },
@@ -142,15 +142,15 @@ export default {
           childs: [
             {
               text: 'Explore pools',
-              link: 'https://gaming-dex.com/#/defiverse/pool',
+              link: 'https://www.gaming-dex.com/#/defiverse/pool',
             },
             {
               text: 'Vote with veGDT',
-              link: 'https://gaming-dex.com/#/defiverse/vegdt',
+              link: 'https://www.gaming-dex.com/#/defiverse/vegdt',
             },
             {
               text: 'Claim incentives',
-              link: 'https://gaming-dex.com/#/defiverse/claim',
+              link: 'https://www.gaming-dex.com/#/defiverse/claim',
             },
           ],
         },
