@@ -4076,35 +4076,6 @@
     }
   },
   {
-    "address": "0x7fD77dAecD0b2bAFA9b7176094A89b425d81d278",
-    "network": 17117,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
-    "pool": {
-      "id": "0x5e71ae56c64dee14fe78e31efcf2ee95f89fac45000200000000000000000007",
-      "address": "0x5E71AE56C64dEE14FE78E31efcF2eE95F89FaC45",
-      "poolType": "Weighted",
-      "symbol": "G-50bCCP-50OAS",
-      "tokens": [
-        {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        },
-        {
-          "address": "0xafC07721d053e6895d0Ce4C5Dd7ff5525EA723d2",
-          "weight": "0.5",
-          "symbol": "bCCP"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/CCP_L.png"
-    }
-  },
-  {
     "address": "0xc801cBc6ac26c7a97aaEdbaBB941d308C69042e2",
     "network": 17117,
     "isKilled": false,
