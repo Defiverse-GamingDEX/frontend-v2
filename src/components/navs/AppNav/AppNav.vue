@@ -64,7 +64,7 @@ onUnmounted(() => {
           @click="trackGoal(Goals.ClickNavLogo)"
         >
           <AppIcon v-if="['xs', 'sm'].includes(bp)" />
-          <AppLogo v-else />
+          <AppLogo v-else class="logo" />
         </router-link>
 
         <DesktopLinks v-if="isDesktop" class="ml-8 font-medium" />
@@ -75,7 +75,7 @@ onUnmounted(() => {
   </nav>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 #app-nav {
   @apply w-full z-30;
   @apply bg-primary-700 dark:bg-gray-900;
@@ -83,5 +83,15 @@ onUnmounted(() => {
   /* @apply overflow-hidden;  can not open popup */
 
   transition: all 0.2s ease-in-out;
+  .logo {
+    :deep() {
+      svg {
+        @media (max-width: 767px) {
+          width: 120px;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
 }
 </style>
