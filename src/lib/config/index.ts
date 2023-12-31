@@ -27,6 +27,7 @@ export interface Config {
   network: string;
   unknown: boolean;
   rpc: string;
+  priceUrl?: string;
   publicRpc?: string;
   ws: string;
   explorer: string;

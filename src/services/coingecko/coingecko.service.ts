@@ -42,6 +42,10 @@ export class CoingeckoService {
     this.supportedFiat = SUPPORTED_FIAT.join(',');
     this.prices = new priceServiceClass(this);
   }
+
+  getPriceService() {
+    return this.prices;
+  }
 }
 
 export const coingeckoService = new CoingeckoService();

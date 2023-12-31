@@ -298,10 +298,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz#2cbcf822bf3764c9658c4d2e568bd0c0cb748016"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
-"@defiverse/balancer-sdk@0.1.136":
-  version "0.1.136"
-  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk/-/balancer-sdk-0.1.136.tgz#9814ed10d147ef647fb23e634c935d23a33161c2"
-  integrity sha512-ZGntY0m9gdTtbA1feUSaQdqXqYE19BuP6BKktZLQZYCPMfhHekYj64E97Z4VnBA6ZCYmVMwiAuwrfolzu2rzJw==
+"@defiverse/balancer-sdk@0.1.145":
+  version "0.1.145"
+  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk/-/balancer-sdk-0.1.145.tgz#449959d8f15db2b50111857b34d1278fc79d7536"
+  integrity sha512-14OCLW4VI0V7p+P1JlJesrEVe1z+TCDj+PpEial1XMHrybxqYzKAH7fnDPpYUdaQx7TYv1Ysvuo7qqt2HJCFvQ==
   dependencies:
     "@balancer-labs/sor" "4.1.1-beta.1"
     "@balancer-labs/typechain" "^1.0.0"
