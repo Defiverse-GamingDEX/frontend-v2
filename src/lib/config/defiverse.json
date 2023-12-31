@@ -11,6 +11,7 @@
   "ws": "wss://arb-mainnet.g.alchemy.com/v2/{{ALCHEMY_KEY}}",
   "publicRpc": "https://rpc.defi-verse.org",
   "explorer": "https://scan.defi-verse.org",
+  "priceUrl": "https://price-api.gaming-dex.com/api/v1",
   "explorerName": "defiverse",
   "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
   "poolsUrlV1": "",
@@ -66,7 +67,7 @@
     "oracle": "0xFbFf368f9ec96125d9B0B52B68653B18ce7E323f"
   },
   "keys": {
-    "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",
+    "infura": "a90d83d72d0c4b7682e2272d61a1f59b",
     "alchemy": "VBeQgTCRqqPtuuEPsFzRdwKXzDyN6aFh",
     "balancerApi": "da2-7a3ukmnw7bexndpx5x522uafui"
   },

@@ -170,7 +170,8 @@ const isAdmin = computed(() => {
  * METHODS
  */
 function isInternalUrl(url: string): boolean {
-  return url.includes('balancer.fi') || url.includes('localhost');
+  //return url.includes('balancer.fi') || url.includes('localhost');
+  return true;
 }
 
 function redirectToPool(gauge: VotingGaugeWithVotes, inNewTab) {

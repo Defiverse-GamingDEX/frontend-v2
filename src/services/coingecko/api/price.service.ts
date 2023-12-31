@@ -1,6 +1,6 @@
 import { fromUnixTime, getUnixTime, startOfHour } from 'date-fns';
 import { groupBy, invert, last } from 'lodash';
-
+import axios from 'axios';
 import { twentyFourHoursInSecs } from '@/composables/useTime';
 import { TOKENS } from '@/constants/tokens';
 import { getAddressFromPoolId, includesAddress } from '@/lib/utils';
@@ -57,15 +57,17 @@ export class PriceService {
       );
       return response[this.nativeAssetId];
     } catch (error) {
-      //console.error('Unable to fetch Ether price', error);
-      //throw error;
-
-      // Hung turn off gecko api
-      return {
-        usd: 1,
-        eth: 1,
-      };
+      console.error('Unable to fetch Ether price', error);
+      throw error;
     }
+  }
+
+  async fetchPrice(addressString): Promise<Price> {
+    const priceUrl = this.configService.network.priceUrl;
+    const endpoint = `${priceUrl}/price?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
+    return axios.get<Price>(endpoint).then(({ data }) => {
+      return data;
+    });
   }
 
   /**
@@ -91,9 +93,16 @@ export class PriceService {
           addressesPerRequest * page,
           addressesPerRequest * (page + 1)
         );
-        const endpoint = `/simple/token_price/ethereum?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
-        const request = retryPromiseWithDelay(
-          this.client.get<PriceResponse>(endpoint),
+        // const endpoint = `/simple/token_price/ethereum?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
+        // const request = retryPromiseWithDelay(
+        //   this.client.get<PriceResponse>(endpoint),
+        //   3,
+        //   2000
+        // );
+        // requests.push(request);
+
+        const request: any = retryPromiseWithDelay(
+          this.fetchPrice(addressString),
           3,
           2000
         );
@@ -104,23 +113,24 @@ export class PriceService {
       const results = this.parsePaginatedTokens(paginatedResults);
 
       // Inject native asset price if included in requested addresses
-      if (includesAddress(addresses, this.nativeAssetAddress)) {
-        results[this.nativeAssetAddress] = await this.getNativeAssetPrice();
-      }
+      // Hung disable
+      // if (includesAddress(addresses, this.nativeAssetAddress)) {
+      //   results[this.nativeAssetAddress] = await this.getNativeAssetPrice();
+      // }
 
       return results;
     } catch (error) {
-      // console.error('Unable to fetch token prices', addresses, error);
-      // throw error;
+      console.error('Unable to fetch token prices', addresses, error);
+      throw error;
 
-      const data: any = {};
-      (addresses || []).forEach(addr => {
-        data[addr] = {
-          usd: 1,
-          eth: 1,
-        };
-      });
-      return data;
+      // const data: any = {};
+      // (addresses || []).forEach(addr => {
+      //   data[addr] = {
+      //     usd: 1,
+      //     eth: 1,
+      //   };
+      // });
+      // return data;
     }
   }
 
@@ -130,7 +140,9 @@ export class PriceService {
     addressesPerRequest = 1,
     aggregateBy: 'hour' | 'day' = 'day'
   ): Promise<HistoricalPrices> {
-    try {
+    return Promise.resolve([]);
+
+    /*try {
       if (addresses.length / addressesPerRequest > 10)
         throw new Error('To many requests for rate limit.');
 
@@ -169,7 +181,7 @@ export class PriceService {
     } catch (error) {
       console.error('Unable to fetch token prices', addresses, error);
       throw error;
-    }
+    }*/
   }
 
   private parsePaginatedTokens(paginatedResults: TokenPrices[]): TokenPrices {

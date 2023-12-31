@@ -4,6 +4,7 @@ import { useQuery } from 'vue-query';
 
 import QUERY_KEYS from '@/constants/queryKeys';
 import { TokenPrices } from '@/services/coingecko/api/price.service';
+import { CoingeckoService } from '@/services/coingecko/coingecko.service';
 
 import useNetwork from '../useNetwork';
 import { getBalancer } from '@/dependencies/balancer-sdk';
@@ -36,17 +37,24 @@ export default function useTokenPricesQuery(
     }
     return prices;
   }
+  const coingeckoService = new CoingeckoService();
+  const priceService = coingeckoService.getPriceService();
 
-  const balancer = getBalancer();
+  // const balancer = getBalancer();
   const queryFn = async () => {
-    const priceData = await Promise.all(
-      addresses.value.map(a => balancer.data.tokenPrices.find(a))
-    );
+    // const priceData = await Promise.all(
+    //   addresses.value.map(a => balancer.data.tokenPrices.find(a))
+    // );
+
+    // Hung
+    const priceData = await priceService.fetchPrice(addresses.value);
 
     let prices = addresses.value.reduce(
       (obj, key, index) => ({
         ...obj,
-        [key]: priceData[index],
+        //[key]: priceData[index],
+        // Hung
+        [key]: priceData[key.toLowerCase()],
       }),
       {}
     );

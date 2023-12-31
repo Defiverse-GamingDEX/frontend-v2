@@ -61,6 +61,9 @@ const activeNetwork = computed((): NetworkOption | undefined =>
 onMounted(async () => {
   await router.isReady();
 
+  // Only enable on mainnet
+  //=================================================
+  //
   if (
     window.location.href &&
     window.location.href.indexOf('defiverse-testnet') > 0
