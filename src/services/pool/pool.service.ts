@@ -103,7 +103,7 @@ export default class PoolService {
   public setVolumeSnapshot(poolSnapshot: Pool | undefined): string {
     let snapshotVolume = '0';
     if (poolSnapshot) snapshotVolume = poolSnapshot.totalSwapVolume || '0';
-    console.log(snapshotVolume, 'snapshotVolume');
+    console.log(poolSnapshot, 'snapshotVolume');
     console.log(this.pool.totalSwapVolume, 'this.pool.totalSwapVolume');
     const volumeSnapshot = bnum(this.pool.totalSwapVolume || 0)
       .minus(snapshotVolume)
@@ -128,12 +128,12 @@ export default class PoolService {
     }
   }
 
-  // public setUnwrappedTokens(): string[] {
-  //   const unwrappedTokens = Object.entries(
-  //     this.pool?.onchain?.linearPools || {}
-  //   ).map(([, linearPool]) => linearPool.unwrappedTokenAddress);
-  //   return (this.pool.unwrappedTokens = unwrappedTokens);
-  // }
+  public setUnwrappedTokens(): string[] {
+    const unwrappedTokens = Object.entries(
+      this.pool?.onchain?.linearPools || {}
+    ).map(([, linearPool]) => linearPool.unwrappedTokenAddress);
+    return (this.pool.unwrappedTokens = unwrappedTokens);
+  }
 
   public get isNew(): boolean {
     if (!this.pool.createTime) return false;
