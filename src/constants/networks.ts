@@ -1,7 +1,6 @@
 import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
-// const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-const IS_TESTNET = false;
+const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 const networks = [
   // {
   //   id: 'ethereum',
@@ -85,16 +84,16 @@ const networks = [
 ];
 
 let networksDev = [
-  {
-    id: 'defiverse-testnet',
-    name: 'Defiverse-Testnet',
-    networkSlug: 'defiverse-testnet',
-    key: '17117',
-    tokens: defiverseTestnetJson.tokens,
-    price: 35000000000, // 50 Gwei
-    gasUnit: 'wei',
-    maxPriorityFee: 0,
-  },
+  // {
+  //   id: 'defiverse-testnet',
+  //   name: 'Defiverse-Testnet',
+  //   networkSlug: 'defiverse-testnet',
+  //   key: '17117',
+  //   tokens: defiverseTestnetJson.tokens,
+  //   price: 35000000000, // 50 Gwei
+  //   gasUnit: 'wei',
+  //   maxPriorityFee: 0,
+  // },
 ];
 
 // add network for bridge testnet
