@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
-import SelectTokenModal from '@/components/modals/SelectTokenModal/SelectTokenModal.vue';
-import AtfBadge from '@/components/badge/AtfBadge.vue';
-import useNumbers from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
-import { isSameAddress } from '@/lib/utils';
-import { TokenInfo } from '@/types/TokenList';
-import { truncateText } from '@/plugins/utils.js';
-import useWeb3 from '@/services/web3/useWeb3';
 import metamaskLogo from '@/assets/images/connectors/metamask.svg';
+import AtfBadge from '@/components/badge/AtfBadge.vue';
+import SelectTokenModal from '@/components/modals/SelectTokenModal/SelectTokenModal.vue';
+import useNotifications from '@/composables/useNotifications';
+import useNumbers from '@/composables/useNumbers';
+import { isSameAddress } from '@/lib/utils';
+import { truncateText } from '@/plugins/utils.js';
+import { useTokens } from '@/providers/tokens.provider';
+import { configService } from '@/services/config/config.service';
+import useWeb3 from '@/services/web3/useWeb3';
+import { getConnectorName } from '@/services/web3/web3.plugin';
+import { TokenInfo } from '@/types/TokenList';
+import { computed, ref } from 'vue';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -61,7 +63,7 @@ const {
   connector,
   provider,
 } = useWeb3();
-import { getConnectorName } from '@/services/web3/web3.plugin';
+const { addNotification } = useNotifications();
 /**
  * COMPUTED
  */
@@ -71,10 +73,17 @@ const token = computed((): TokenInfo | null => {
   if (!hasToken.value) return null;
   return getToken(props.modelValue);
 });
-const connectorName = computed(() =>
-  getConnectorName(connector.value?.id, provider.value)
-);
-console.log(connectorName.value, 'connectorName.value');
+const isTokenNative = computed(() => {
+  console.log('token?.value?.address', token?.value?.address);
+  console.log('configService', configService);
+  if (
+    token?.value?.address?.toUpperCase() ===
+    configService?.network?.nativeAsset?.address?.toUpperCase()
+  ) {
+    return true;
+  }
+  return false;
+});
 /**
  * METHODS
  */
@@ -89,8 +98,11 @@ const setDomain = () => {
   }
 };
 const addTokenToMetamask = async () => {
-  console.log(connectorName?.value, 'connectorNameAAA');
-  if (connectorName?.value === 'MetaMask') {
+  let connectorName = await getConnectorName(
+    connector.value?.id,
+    provider.value
+  );
+  if (connectorName === 'MetaMask') {
     console.log(
       token,
       token?.value,
@@ -119,6 +131,12 @@ const addTokenToMetamask = async () => {
     } catch (error) {
       console.error('Error:=>addTokenToMetamask', error);
     }
+  } else {
+    addNotification({
+      type: 'error',
+      title: 'Error',
+      message: 'please connect Metamask',
+    });
   }
 };
 
@@ -144,7 +162,11 @@ onMounted(() => {
         {{ truncateText(token?.symbol, 16, 5, 5) }}
         <AtfBadge :address="token?.address"></AtfBadge>
       </span>
-      <span class="add-metamask-btn" @click.stop="addTokenToMetamask">
+      <span
+        v-if="account && !isTokenNative"
+        class="add-metamask-btn"
+        @click.stop="addTokenToMetamask"
+      >
         <img :src="metamaskLogo" alt="metamask-logo" />
       </span>
       <span v-if="Number(weight) > 0" class="ml-2 text-secondary">

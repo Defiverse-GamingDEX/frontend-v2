@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+//import { Network } from '@defiverse/balancer-sdk';
 import {
   JsonRpcProvider,
   JsonRpcSigner,
@@ -30,7 +30,8 @@ export default class Web3Service {
     private readonly config: ConfigService = configService
   ) {
     this.appProvider = this.rpcProviderService.jsonProvider;
-    this.ensProvider = this.rpcProviderService.getJsonProvider(Network.MAINNET);
+    //this.ensProvider = this.rpcProviderService.getJsonProvider(Network.MAINNET);
+    this.ensProvider = this.rpcProviderService.jsonProvider;
   }
 
   public setUserProvider(provider: ComputedRef<Web3Provider>) {
