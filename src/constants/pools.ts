@@ -739,7 +739,9 @@ const POOLS_DEFIVERSE: Pools = {
     AllowList: [],
   },
   Metadata: {},
-  DisabledJoins: [],
+  DisabledJoins: [
+    '0x2c2832dc1e613c4fe8cd58de3b89de1759fdf589000200000000000000000003',
+  ],
 };
 
 const POOLS_DEFIVERSE_TESTNET: Pools = {
