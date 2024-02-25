@@ -1,5 +1,10 @@
 [
   {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -104,7 +109,7 @@
       },
       {
         "indexed": true,
-        "internalType": "contract IERC20",
+        "internalType": "address",
         "name": "token",
         "type": "address"
       },
@@ -135,7 +140,7 @@
       },
       {
         "indexed": true,
-        "internalType": "contract IERC20",
+        "internalType": "address",
         "name": "token",
         "type": "address"
       },
@@ -148,6 +153,19 @@
     ],
     "name": "TokenSold",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "BALANCER_POOL_MAX_TOKENS",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -478,7 +496,7 @@
         "type": "address"
       },
       {
-        "internalType": "contract IERC20",
+        "internalType": "address",
         "name": "token_",
         "type": "address"
       },
@@ -524,6 +542,11 @@
         "internalType": "uint256",
         "name": "postJoinExitSupply_",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "userData_",
+        "type": "bytes"
       }
     ],
     "name": "afterJoinExit",
@@ -562,7 +585,7 @@
         "type": "address"
       },
       {
-        "internalType": "contract IERC20",
+        "internalType": "address",
         "name": "token_",
         "type": "address"
       }
@@ -647,53 +670,7 @@
         "type": "address"
       },
       {
-        "internalType": "contract IERC20",
-        "name": "token_",
-        "type": "address"
-      }
-    ],
-    "name": "getLiquidity",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "lpPool",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lpTokenAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "atfToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "atfTokenAmount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct IOracle.Liquidity[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
-        "name": "user_",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IERC20",
         "name": "token_",
         "type": "address"
       }

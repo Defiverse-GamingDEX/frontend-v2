@@ -4,9 +4,7 @@ import { isMainnet, networkId } from '@/composables/useNetwork';
 
 //export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 1; // 100K USD or $1 for other networks
 
-export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value
-  ? 100_000
-  : 100_000; // 100K USD or $1 for other networks
+export const MIN_FIAT_VALUE_POOL_MIGRATION = isMainnet.value ? 100_000 : 1; // 100K USD or $1 for other networks
 
 // Do not display APR values greater than this amount; they are likely to be nonsensical
 // These can arise from pools with extremely low balances (e.g., completed LBPs)
@@ -734,14 +732,16 @@ const POOLS_DEFIVERSE: Pools = {
     AllowList: [],
   },
   Factories: {
-    '0xe583d137e0aa2924727bc2b490ceac5ce6a9ac8c': 'composableStablePool', // ComposableStable V3
-    '0xc04ce4fe0f4013814ea1a4b0577d3678d5a7c91c': 'weightedPool', // WeightedPool V3
+    '0xd01ad3085fb3e1fbb2541b5b3326b1f47b189747': 'composableStablePool', // ComposableStable V3
+    '0xe952b0409e6768e270a671ebbc5b8605a7c5a0b8': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
   },
   Metadata: {},
-  DisabledJoins: [],
+  DisabledJoins: [
+    '0x2c2832dc1e613c4fe8cd58de3b89de1759fdf589000200000000000000000003',
+  ],
 };
 
 const POOLS_DEFIVERSE_TESTNET: Pools = {
