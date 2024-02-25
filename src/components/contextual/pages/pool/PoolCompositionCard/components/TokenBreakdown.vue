@@ -61,7 +61,9 @@ const nestedPaddingClass = computed(() => {
  * METHODS
  */
 function symbolFor(token: PoolToken): string {
-  return getToken(token.address)?.symbol || token.symbol || '---';
+  let symbol = getToken(token.address)?.symbol || token.symbol || '---';
+  if (symbol == 'WOAS') symbol = 'OAS';
+  return symbol;
 }
 </script>
 

@@ -127,7 +127,10 @@ const hasMetadata = computed((): boolean => !!poolMetadata.value);
  */
 function symbolFor(titleTokenIndex: number): string {
   const token = props.titleTokens[titleTokenIndex];
-  return getToken(token.address)?.symbol || token.symbol || '---';
+  let symbol = getToken(token.address)?.symbol || token.symbol || '---';
+  // Hung: Rename WOAS
+  if (symbol == 'WOAS') symbol = 'OAS';
+  return symbol;
 }
 </script>
 
