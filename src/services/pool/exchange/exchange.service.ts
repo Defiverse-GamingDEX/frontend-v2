@@ -123,6 +123,9 @@ export default class ExchangeService {
       return s;
     });
 
+    console.log('exitPool:amountsOut:', amountsOut);
+    console.log('exitPool:tokensOut:', finalTokensOut);
+
     const params = this.exitParams.serialize(
       account,
       amountsOut,
