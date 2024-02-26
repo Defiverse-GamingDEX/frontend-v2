@@ -33,12 +33,8 @@ export const hasFetchedPoolsForSor = ref(false);
 export async function fetchPoolsForSor() {
   if (hasFetchedPoolsForSor.value) return;
 
-  console.time('fetchPoolsForSor=>balancer', balancer);
-  console.time('fetchPoolsForSor=>rpcUrl', configService.rpc);
-  console.time('fetchPoolsForSor=>balancer', configService.network.subgraph);
   await balancer.swaps.fetchPools();
   hasFetchedPoolsForSor.value = true;
-  console.timeEnd('fetchPoolsForSor');
 }
 
 if (!isTestMode()) fetchPoolsForSor();

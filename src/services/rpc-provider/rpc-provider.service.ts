@@ -32,7 +32,6 @@ export default class RpcProviderService {
   }
 
   public getJsonProvider(networkKey: Network): JsonRpcProvider {
-    console.log(networkKey, 'networkKey');
     const rpcUrl = template(this.config.getNetworkConfig(networkKey).rpc, {
       INFURA_KEY: this.config.env.INFURA_PROJECT_ID,
       ALCHEMY_KEY: this.config.env.ALCHEMY_KEY,
