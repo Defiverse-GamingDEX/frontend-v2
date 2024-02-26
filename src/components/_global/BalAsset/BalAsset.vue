@@ -62,7 +62,7 @@ watch(iconSRC, newURL => {
 });
 
 function symbolFor(token: any): string {
-  let symbol = token.symbol || '---';
+  let symbol = token?.symbol || '---';
   if (props.useWOAS) return symbol;
 
   // Hung: Rename WOAS
