@@ -298,8 +298,19 @@ export default defineComponent({
         !dismissedErrors.value.highPriceImpact
     );
     const swapDisabled = computed(() => {
-      console.log(tokenInAmount.value, 'tokenInAmount.value');
-      console.log(tokenOutAmount.value, 'tokenOutAmount.value');
+      console.log(tokenInAddress.value, 'tokenInAddress.value');
+      console.log(tokenOutAddress.value, 'tokenOutAddress.value');
+
+      if (
+        tokenInAddress.value.toLowerCase() ===
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' &&
+        (tokenOutAddress.value.toLowerCase() ===
+          '0x5a89e11cb554e00c2f51c4bb7f05bc7ab0fa6351' ||
+          tokenOutAddress.value.toLowerCase() ===
+            '0x6b382742b07aabba58c38d792b5d7cbaab246e99')
+      ) {
+        return true; // Disable swap in case OAS --> WOAS
+      }
       const hasMismatchedNetwork = isMismatchedNetwork.value;
       const hasAmountsError =
         !tokenInAmount.value ||
