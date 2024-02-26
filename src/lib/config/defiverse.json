@@ -26,7 +26,7 @@
   },
   "supportsEIP1559": false,
   "supportsElementPools": false,
-  "blockTime": 2,
+  "blockTime": 17.28,
   "nativeAsset": {
     "name": "OASYS",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
