@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import { captureException } from '@sentry/browser';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
 import { isGoerli } from '@/composables/useNetwork';
 import { applyNavGuards } from './nav-guards';
@@ -45,6 +45,10 @@ const TermsOfUsePage = () =>
 const SwapPage = () =>
   import(
     /* webpackChunkName: "SwapPage" */ /* webpackPrefetch: true */ '@/pages/swap.vue'
+  );
+const SingularityPage = () =>
+  import(
+    /* webpackChunkName: "SwapPage" */ /* webpackPrefetch: true */ '@/pages/singularity.vue'
   );
 const BridgePage = () =>
   import(
@@ -103,6 +107,11 @@ const routes: RouteRecordRaw[] = [
     path: '/:networkSlug/swap/:assetIn?/:assetOut?',
     name: 'swap',
     component: SwapPage,
+  },
+  {
+    path: '/:networkSlug/singularity',
+    name: 'singularity',
+    component: SingularityPage,
   },
   {
     path: '/:networkSlug/bridge',

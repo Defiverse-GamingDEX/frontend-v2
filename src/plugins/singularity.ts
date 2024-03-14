@@ -2,7 +2,7 @@ import { initializeSingularity } from 'singularity-init';
 initializeSingularity(
   window,
   document,
-  '1.7.24',
+  '1.7.29',
   'production',
   'yPfA6XtgVRV9KUeG1bxOzh0dTDzNpRFq',
   async () => {

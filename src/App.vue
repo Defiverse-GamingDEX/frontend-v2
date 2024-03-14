@@ -52,8 +52,12 @@ export default defineComponent({
     useGnosisSafeApp();
     useExploitWatcher();
     useNavigationGuards();
-    const { isWalletSelectVisible, toggleWalletSelectModal, isBlocked } =
-      useWeb3();
+    const {
+      isWalletSelectVisible,
+      toggleWalletSelectModal,
+      isBlocked,
+      getProvider,
+    } = useWeb3();
     const route = useRoute();
     const store = useStore();
     const { newRouteHandler: updateBgColorFor } = useBackgroundColor();
@@ -69,9 +73,16 @@ export default defineComponent({
     //   actionOnClick: false
     // };
     // addAlert(featureAlert);
+    const connectWalletConnectProvider = () => {
+      const provider = getProvider()?.provider;
+      if (provider) {
+        window.SingularityEvent.loginWithProvider(provider); // here  is the provider instance
+      }
+    };
     const initSingularity = params => {
       window.document.body.addEventListener('Singularity-mounted', () => {
         console.log('----------singularity mounted--------');
+
         // let key;
         // if (searchParams.get('key')) {
         //   console.log('using key through url');
@@ -85,58 +96,53 @@ export default defineComponent({
         // }
         // localStorage.setItem('singularity-key', key);
 
-        window.Singularity.init(
-          'yPfA6XtgVRV9KUeG1bxOzh0dTDzNpRFq',
-          async () => {
-            console.log('----------singularity init callback--------');
-            window.SingularityEvent.subscribe('SingularityEvent-logout', () => {
-              console.log('logout event received');
-              navigate('/');
-              window.SingularityEvent.close();
-            });
+        window.Singularity.init('2', async () => {
+          console.log('----------singularity init callback--------');
+          connectWalletConnectProvider(); // TODO Optional
+          window.SingularityEvent.subscribe('SingularityEvent-logout', () => {
+            console.log('logout event received');
+            navigate('/');
+            window.SingularityEvent.close();
+          });
 
-            window.SingularityEvent.subscribe('SingularityEvent-open', () =>
-              setDrawerOpen(true)
-            );
+          window.SingularityEvent.subscribe('SingularityEvent-open', () =>
+            setDrawerOpen(true)
+          );
 
-            window.SingularityEvent.subscribe('SingularityEvent-close', () => {
-              console.log('subscribe close drawer ');
-              setDrawerOpen(false);
-            });
+          window.SingularityEvent.subscribe('SingularityEvent-close', () => {
+            console.log('subscribe close drawer ');
+            setDrawerOpen(false);
+          });
 
-            window.SingularityEvent.subscribe(
-              'SingularityEvent-onTransactionApproval',
-              data => {
-                console.log('Txn approved', JSON.parse(data));
-              }
-            );
-            window.SingularityEvent.subscribe(
-              'SingularityEvent-onTokenExpired',
-              data => {
-                console.log('Token expired', JSON.parse(data));
-              }
-            );
-            window.SingularityEvent.subscribe(
-              'SingularityEvent-onTransactionSuccess',
-              data => {
-                console.log('Txn Successfull', JSON.parse(data));
-              }
-            );
-            window.SingularityEvent.subscribe(
-              'SingularityEvent-onTransactionFailure',
-              data => {
-                console.log('Txn failed', JSON.parse(data));
-              }
-            );
+          window.SingularityEvent.subscribe(
+            'SingularityEvent-onTransactionApproval',
+            data => {
+              console.log('Txn approved', JSON.parse(data));
+            }
+          );
+          window.SingularityEvent.subscribe(
+            'SingularityEvent-onTokenExpired',
+            data => {
+              console.log('Token expired', JSON.parse(data));
+            }
+          );
+          window.SingularityEvent.subscribe(
+            'SingularityEvent-onTransactionSuccess',
+            data => {
+              console.log('Txn Successfull', JSON.parse(data));
+            }
+          );
+          window.SingularityEvent.subscribe(
+            'SingularityEvent-onTransactionFailure',
+            data => {
+              console.log('Txn failed', JSON.parse(data));
+            }
+          );
 
-            window.SingularityEvent.subscribe(
-              'SingularityEvent-login',
-              data => {
-                console.log('login data --->', data);
-              }
-            );
-          }
-        );
+          window.SingularityEvent.subscribe('SingularityEvent-login', data => {
+            console.log('login data --->', data);
+          });
+        });
       });
     };
     /**

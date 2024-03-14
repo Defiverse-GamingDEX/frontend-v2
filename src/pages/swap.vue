@@ -34,13 +34,6 @@ onMounted(() => {
   // selectedPoolTokens are only persisted between the Home/Pool pages
   setSelectedTokens([]);
 });
-
-/**
- * FUNCTIONS
- */
-const openSingularity = () => {
-  window.SingularityEvent.open();
-};
 </script>
 
 <template>
@@ -67,12 +60,6 @@ const openSingularity = () => {
             <BridgeLink />
           </template>
         </BalAccordion>
-        <button
-          class="hover:text-blue-600 dark:hover:text-blue-400"
-          @click="openSingularity"
-        >
-          Open Singularity
-        </button>
       </div>
 
       <template #gutterRight>
