@@ -1,11 +1,11 @@
-import { App } from 'vue';
-import Web3Plugin from '@/services/web3/web3.plugin';
-import store from '@/store';
+import blocknative from '@/plugins/blocknative';
 import i18n from '@/plugins/i18n';
 import router from '@/plugins/router';
-import blocknative from '@/plugins/blocknative';
-import VueVirtualScroller from 'vue3-virtual-scroller';
 import vueQuery from '@/plugins/vueQuery';
+import Web3Plugin from '@/services/web3/web3.plugin';
+import store from '@/store';
+import { App } from 'vue';
+import VueVirtualScroller from 'vue3-virtual-scroller';
 
 export function registerPlugins(app: App) {
   app

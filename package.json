@@ -155,5 +155,8 @@
     "*.{css,vue}": "stylelint --fix"
   },
   "license": "MIT",
-  "repository": "balancer-labs/frontend-v2"
+  "repository": "balancer-labs/frontend-v2",
+  "dependencies": {
+    "singularity-init": "^1.0.3"
+  }
 }

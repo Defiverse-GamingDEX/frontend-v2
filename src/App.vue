@@ -1,9 +1,4 @@
 <script lang="ts">
-import BigNumber from 'bignumber.js';
-import { VueQueryDevTools } from 'vue-query/devtools';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
-
 import Notifications from '@/components/notifications/Notifications.vue';
 import ThirdPartyServicesModal from '@/components/web3/ThirdPartyServicesModal.vue';
 import WalletSelectModal from '@/components/web3/WalletSelectModal.vue';
@@ -11,6 +6,10 @@ import useWeb3Watchers from '@/composables/watchers/useWeb3Watchers';
 import { DEFAULT_TOKEN_DECIMALS } from '@/constants/tokens';
 import * as Layouts from '@/pages/_layouts';
 import useWeb3 from '@/services/web3/useWeb3';
+import BigNumber from 'bignumber.js';
+import { VueQueryDevTools } from 'vue-query/devtools';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 import GlobalModalContainer from './components/modals/GlobalModalContainer.vue';
 import AppSidebar from './components/navs/AppNav/AppSidebar/AppSidebar.vue';
@@ -70,14 +69,85 @@ export default defineComponent({
     //   actionOnClick: false
     // };
     // addAlert(featureAlert);
+    const initSingularity = params => {
+      window.document.body.addEventListener('Singularity-mounted', () => {
+        console.log('----------singularity mounted--------');
+        // let key;
+        // if (searchParams.get('key')) {
+        //   console.log('using key through url');
+        //   key = searchParams.get('key');
+        // } else if (localStorage.getItem('singularity-key')) {
+        //   console.log('using key through localStorage');
+        //   key = localStorage.getItem('singularity-key');
+        // } else {
+        //   console.log('using default key value');
+        //   key = 2; // default key
+        // }
+        // localStorage.setItem('singularity-key', key);
 
+        window.Singularity.init(
+          'yPfA6XtgVRV9KUeG1bxOzh0dTDzNpRFq',
+          async () => {
+            console.log('----------singularity init callback--------');
+            window.SingularityEvent.subscribe('SingularityEvent-logout', () => {
+              console.log('logout event received');
+              navigate('/');
+              window.SingularityEvent.close();
+            });
+
+            window.SingularityEvent.subscribe('SingularityEvent-open', () =>
+              setDrawerOpen(true)
+            );
+
+            window.SingularityEvent.subscribe('SingularityEvent-close', () => {
+              console.log('subscribe close drawer ');
+              setDrawerOpen(false);
+            });
+
+            window.SingularityEvent.subscribe(
+              'SingularityEvent-onTransactionApproval',
+              data => {
+                console.log('Txn approved', JSON.parse(data));
+              }
+            );
+            window.SingularityEvent.subscribe(
+              'SingularityEvent-onTokenExpired',
+              data => {
+                console.log('Token expired', JSON.parse(data));
+              }
+            );
+            window.SingularityEvent.subscribe(
+              'SingularityEvent-onTransactionSuccess',
+              data => {
+                console.log('Txn Successfull', JSON.parse(data));
+              }
+            );
+            window.SingularityEvent.subscribe(
+              'SingularityEvent-onTransactionFailure',
+              data => {
+                console.log('Txn failed', JSON.parse(data));
+              }
+            );
+
+            window.SingularityEvent.subscribe(
+              'SingularityEvent-login',
+              data => {
+                console.log('login data --->', data);
+              }
+            );
+          }
+        );
+      });
+    };
     /**
      * CALLBACKS
      */
     onBeforeMount(async () => {
       store.dispatch('app/init');
     });
-
+    onMounted(async () => {
+      initSingularity();
+    });
     function handleThirdPartyModalToggle(value: boolean) {
       isThirdPartyServicesModalVisible.value = value;
     }
