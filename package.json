@@ -157,6 +157,7 @@
   "license": "MIT",
   "repository": "balancer-labs/frontend-v2",
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "singularity-init": "^1.0.3"
   }
 }
