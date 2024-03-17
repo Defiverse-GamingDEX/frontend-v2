@@ -36,8 +36,8 @@
     {
       "address": "0x7c6b91d9be155a6db01f749217d76ff02a7227f2",
       "chainId": 16116,
-      "name": "USDC",
-      "symbol": "USDC",
+      "name": "Legacy Bridged USDC (Celer)",
+      "symbol": "USDC.e-legacy",
       "decimals": 18,
       "logoURI": "tokens/USDC_L.png"
     },
