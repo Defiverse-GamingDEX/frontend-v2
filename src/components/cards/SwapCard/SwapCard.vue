@@ -172,26 +172,8 @@
       />
     </div>
   </BalCard>
-  <!-- <BalCard
-    v-if="tokenInTraderInfo?.isProtectedToken"
-    class="relative mt-6 card-container bg-blue"
-    :shadow="swapCardShadow"
-    noBorder
-  >
-    <div class="text-sm atf-description">
-      <p class="text-gray-600 dark:text-gray-400">
-        This token is subject to the AT-Field. You cannot sell more tokens than
-        you have acquired in the game.
-      </p>
-      <a
-        class="text-blue-600 hover:text-purple-600 focus:text-purple-600 dark:text-blue-400 dark:hover:text-yellow-500 dark:focus:text-yellow-500 transition-colors"
-        href="https://docs.gaming-dex.com/products/anti-trader-field-at-field"
-        target="_blank"
-      >
-        Learn more about AT-Field
-      </a>
-    </div>
-  </BalCard> -->
+  <SingularityComponent />
+
   <teleport to="#modal">
     <SwapPreviewModal
       v-if="modalSwapPreviewIsOpen"
@@ -205,12 +187,6 @@
 </template>
 
 <script lang="ts">
-import { SubgraphPoolBase } from '@defiverse/balancer-sdk';
-import { getAddress, isAddress } from '@ethersproject/address';
-import { formatUnits } from '@ethersproject/units';
-import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import SwapPreviewModal from '@/components/modals/SwapPreviewModal.vue';
 import SwapSettingsPopover, {
   SwapSettingsContext,
@@ -220,13 +196,20 @@ import useSwapping from '@/composables/swap/useSwapping';
 import useValidation from '@/composables/swap/useValidation';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
 import { TOKENS } from '@/constants/tokens';
 import { lsGet } from '@/lib/utils';
 import { WrapType } from '@/lib/utils/balancer/wrapper';
 import { isRequired } from '@/lib/utils/validations';
+import { useTokens } from '@/providers/tokens.provider';
 import { ApiErrorCodes } from '@/services/cowswap/errors/OperatorError';
 import useWeb3 from '@/services/web3/useWeb3';
+import { SubgraphPoolBase } from '@defiverse/balancer-sdk';
+import { getAddress, isAddress } from '@ethersproject/address';
+import { formatUnits } from '@ethersproject/units';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import SingularityComponent from '../SingularityCard/SingularityComponent.vue';
 import SwapPair from './SwapPair.vue';
 import SwapRoute from './SwapRoute.vue';
 export default defineComponent({
@@ -235,6 +218,7 @@ export default defineComponent({
     SwapPreviewModal,
     SwapRoute,
     SwapSettingsPopover,
+    SingularityComponent,
   },
   setup() {
     // STATES
