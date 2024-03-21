@@ -14,11 +14,14 @@ import {
 } from 'echarts/components';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
+import mitt from 'mitt';
 import { createApp } from 'vue';
 import Jazzicon from 'vue3-jazzicon/src/components';
 import Root from './Root.vue';
 import { initDependencies } from './dependencies';
-
+const emitter = mitt();
+window.emitter = emitter;
+console.log(window.emitter, 'window.emitter');
 initDependencies();
 
 echarts.use([
@@ -38,7 +41,6 @@ app.component('Jazzicon', Jazzicon);
 registerPlugins(app);
 registerDirectives(app);
 initSentry(app);
-
 app.mount('#app');
 
 export default app;

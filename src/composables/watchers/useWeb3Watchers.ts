@@ -6,9 +6,9 @@ import { BLOCKED_ADDRESSES } from '@/constants/blocked';
 import { includesAddress } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
 
+import { useTokens } from '@/providers/tokens.provider';
 import useAlerts, { AlertPriority, AlertType } from '../useAlerts';
 import useBlocknative from '../useBlocknative';
-import { useTokens } from '@/providers/tokens.provider';
 import useTransactions, { ReplacementReason } from '../useTransactions';
 
 export default function useWeb3Watchers() {

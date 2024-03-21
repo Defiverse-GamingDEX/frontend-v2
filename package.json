@@ -158,6 +158,7 @@
   "repository": "balancer-labs/frontend-v2",
   "dependencies": {
     "crypto-js": "^4.2.0",
+    "mitt": "^3.0.1",
     "singularity-init": "^1.0.3"
   }
 }

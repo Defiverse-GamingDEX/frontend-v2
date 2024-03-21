@@ -11,6 +11,7 @@ const openTokenModal = ref(false);
 const networkChoose = ref(null);
 const tokensList = ref(null);
 const token = ref(null);
+const isLoading = ref(true);
 // // COMPOSABLES
 const {
   account,
@@ -20,6 +21,7 @@ const {
   isMismatchedNetwork,
   startConnectWithInjectedProvider,
 } = useWeb3();
+console.log(chainId, 'chainId=>useWeb3');
 /**
  * COMPUTED
  */
@@ -33,18 +35,33 @@ const swapCardShadow = computed(() => {
       return 'xl';
   }
 });
+
+/**
+ * WATCHS
+ */
+watch(
+  () => chainId.value,
+  () => {
+    console.log('watch=>chainId.value', chainId.value);
+    if (chainId.value) {
+      initTokenList(chainId.value);
+    }
+  }
+);
+
 /**
  * FUNCTIONs
  */
 const openBuyCryptoModal = () => {
   console.log('openBuyCryptoModal');
+
   openTokenModal.value = true;
 };
-const initTokenList = chainId => {
+const initTokenList = chain => {
   console.log(SINGULARITY_NETWORKS, ' SINGULARITY_NETWORKS');
-  console.log(chainId, ' chainId');
+  console.log(chain, ' chain');
   networkChoose.value = SINGULARITY_NETWORKS.find(
-    item => item.chain_id_decimals === chainId
+    item => item.chain_id_decimals === chain
   );
   console.log(networkChoose.value, ' networkChoose.value');
   let tokens =
@@ -58,11 +75,22 @@ const initTokenList = chainId => {
     }) || [];
   tokensList.value = tokens;
 };
+const checkLoginSuccess = payload => {
+  console.log(payload, 'checkLoginSuccess');
+  if (payload) {
+    isLoading.value = false;
+  } else {
+    isLoading.value = true;
+  }
+};
 /**
  * LIFECYCLE
  */
-onBeforeMount(async () => {
-  initTokenList(chainId.value);
+onMounted(async () => {
+  window.emitter?.on('loginSuccess', checkLoginSuccess);
+  if (chainId.value) {
+    initTokenList(chainId.value);
+  }
 });
 </script>
 <template>
@@ -72,8 +100,13 @@ onBeforeMount(async () => {
     noBorder
   >
     <div class="buy-crypto-container">
-      <div class="label">{{ $t('singularity.buyTitle') }}</div>
+      <div class="label">
+        {{ $t('singularity.buyTitle') }}
+      </div>
       <BalBtn
+        :loading="isLoading"
+        :disabled="isLoading"
+        :loadingLabel="$t('loading')"
         :label="$t('singularity.buyBtnLabel')"
         classCustom="pink-white-shadow"
         block
