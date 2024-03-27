@@ -7,12 +7,13 @@ const rpc = 'https://rpc.defi-verse.org';
 export const DEFIVERSE_TOKENS = [
   {
     name: 'WOAS',
-    address: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351',
+    address: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
     logoURI: oasIcon,
     symbol: 'WOAS',
     decimals: 18,
     is_native: false,
     rpc: rpc,
+    singularity_value: 161160,
   },
   {
     name: 'WBTC',
@@ -22,6 +23,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
+    singularity_value: 161160, // TODO
   },
   {
     name: 'WETH',
@@ -31,6 +33,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
+    singularity_value: 161160, // TODO
   },
   {
     name: 'USDC',
@@ -40,6 +43,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
+    singularity_value: 161161,
   },
   {
     name: 'bCCP',
@@ -49,5 +53,6 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
+    singularity_value: 161160, // TODO
   },
 ];

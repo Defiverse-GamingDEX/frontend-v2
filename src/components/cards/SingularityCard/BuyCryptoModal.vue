@@ -130,7 +130,7 @@ function createTokens() {
     let token = props.tokensList[i];
     const balance = 0;
     const price = 0;
-    const value = 431140;
+    const value = token.singularity_value;
     const itemPush = {
       ...token,
       price,
@@ -204,7 +204,7 @@ const initiateTransaction = async token => {
     }
 
     const secret =
-      'SSk49aq1/kQ1eKH7Sg+u4JsisvrycRcLopHdM6lNEMVe/p7lsSVoRiY0neFYNJkHoWVEK30bPAV2pNU2WwOJXQ==';
+      'cCTRcQsQYkHhO6yC1TPwqaj6VyYdlrRhpo70DTwrrwp5B7AKDpBTDCGO9tXJGz1sW0rbzjpBkrdbNPlM9ADge50f';
     // const secret =
     //   'aOMA87BhkaKXUXKy1XJE3WmLqU9Elgmd0875qQvTnxHebECDGqTgQrXZcWGAoURD7Cm36J8tbe7q5YuCgCTsVMPX';
 

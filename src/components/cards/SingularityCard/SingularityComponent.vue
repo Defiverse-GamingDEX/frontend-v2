@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import useBreakpoints from '@/composables/useBreakpoints';
+import useSingularity from '@/composables/useSingularity';
 import { SINGULARITY_NETWORKS } from '@/constants/singularity/networks';
 import useWeb3 from '@/services/web3/useWeb3';
 import BuyCryptoModal from './BuyCryptoModal.vue';
@@ -22,6 +23,8 @@ const {
   startConnectWithInjectedProvider,
 } = useWeb3();
 console.log(chainId, 'chainId=>useWeb3');
+const { initSingularity, connectWalletConnectProvider, singularityLogout } =
+  useSingularity();
 /**
  * COMPUTED
  */
@@ -48,7 +51,16 @@ watch(
     }
   }
 );
-
+watch(
+  () => account.value,
+  async () => {
+    if (account.value) {
+      connectWalletConnectProvider();
+    } else {
+      singularityLogout();
+    }
+  }
+);
 /**
  * FUNCTIONs
  */
@@ -75,19 +87,19 @@ const initTokenList = chain => {
     }) || [];
   tokensList.value = tokens;
 };
-const checkLoginSuccess = payload => {
-  console.log(payload, 'checkLoginSuccess');
-  if (payload) {
-    isLoading.value = false;
-  } else {
-    isLoading.value = true;
-  }
+const checkSingularityLoaded = payload => {
+  console.log(payload, 'checkSingularityLoaded');
+  isLoading.value = false;
 };
 /**
  * LIFECYCLE
  */
 onMounted(async () => {
-  window.emitter?.on('loginSuccess', checkLoginSuccess);
+  console.log('window.Singularity.isMounted', window.Singularity.isMounted);
+  if (window.Singularity?.isMounted) {
+    isLoading.value = false;
+  }
+  window.emitter?.on('SingularityLoaded', checkSingularityLoaded);
   if (chainId.value) {
     initTokenList(chainId.value);
   }
@@ -104,8 +116,8 @@ onMounted(async () => {
         {{ $t('singularity.buyTitle') }}
       </div>
       <BalBtn
+        :disabled="isLoading || !account"
         :loading="isLoading"
-        :disabled="isLoading"
         :loadingLabel="$t('loading')"
         :label="$t('singularity.buyBtnLabel')"
         classCustom="pink-white-shadow"
@@ -136,6 +148,12 @@ onMounted(async () => {
     font-size: 12px;
     width: auto;
     padding: 4px 8px;
+    &:disabled {
+      height: 32px;
+      font-size: 12px;
+      width: auto;
+      padding: 4px 8px;
+    }
   }
 }
 </style>

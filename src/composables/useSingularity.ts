@@ -1,5 +1,6 @@
 import useWeb3 from '@/services/web3/useWeb3';
 import { useRoute } from 'vue-router';
+
 export default function useSingularity() {
   /**
    * STATES
@@ -20,28 +21,30 @@ export default function useSingularity() {
       window.SingularityEvent.loginWithProvider(provider); // here  is the provider instance
     }
   };
+  const singularityLogout = async () => {
+    await window.SingularityEvent.logout();
+  };
   const initSingularity = () => {
     console.log('initSingularity');
     window.document.body.addEventListener('Singularity-mounted', () => {
       console.log('----------singularity mounted--------');
       let key;
-      console.log(route, route?.query?.key, 'routeAAAAA');
       if (route?.query?.key) {
         console.log('using key through url');
-        key = route.query.key;
+        key = route?.query?.key;
       } else if (localStorage.getItem('singularity-key')) {
         console.log('using key through localStorage');
         key = localStorage.getItem('singularity-key');
       } else {
         console.log('using default key value');
-        key = 2; // default key
+        key = 'mm9lVobr1AYSerHa5KK2LvAg1h5f0h9c'; // default key
       }
       localStorage.setItem('singularity-key', key);
-
-      window.Singularity.init(key, async () => {
+      window.Singularity.init('mm9lVobr1AYSerHa5KK2LvAg1h5f0h9c', async () => {
         console.log('----------singularity init callback--------');
+        window.emitter?.emit('SingularityLoaded');
         connectWalletConnectProvider(); // TODO Optional
-
+        //window.SingularityEvent.open();
         window.SingularityEvent.subscribe('SingularityEvent-logout', () => {
           console.log('logout event received');
           //navigate('/');
@@ -83,7 +86,6 @@ export default function useSingularity() {
 
         window.SingularityEvent.subscribe('SingularityEvent-login', data => {
           console.log('login data --->', data);
-          window.emitter?.emit('loginSuccess', data);
         });
       });
     });
@@ -93,5 +95,6 @@ export default function useSingularity() {
     // methods
     connectWalletConnectProvider,
     initSingularity,
+    singularityLogout,
   };
 }

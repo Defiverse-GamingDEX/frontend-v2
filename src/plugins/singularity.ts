@@ -10,7 +10,7 @@ initializeSingularity(
   document,
   '1.7.29',
   'production',
-  'yPfA6XtgVRV9KUeG1bxOzh0dTDzNpRFq',
+  'mm9lVobr1AYSerHa5KK2LvAg1h5f0h9c',
   async () => {
     // Init success callback. All singularity methods are to be called after
     // init success
