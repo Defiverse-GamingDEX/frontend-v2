@@ -2,8 +2,10 @@
 import useBreakpoints from '@/composables/useBreakpoints';
 import useSingularity from '@/composables/useSingularity';
 import { SINGULARITY_NETWORKS } from '@/constants/singularity/networks';
+
 import useWeb3 from '@/services/web3/useWeb3';
 import BuyCryptoModal from './BuyCryptoModal.vue';
+
 /**
  * STATES
  */
@@ -70,10 +72,23 @@ const openBuyCryptoModal = () => {
   openTokenModal.value = true;
 };
 const initTokenList = chain => {
-  console.log(SINGULARITY_NETWORKS, ' SINGULARITY_NETWORKS');
-  console.log(chain, ' chain');
+  // console.log(SINGULARITY_NETWORKS, ' SINGULARITY_NETWORKS');
+  // console.log(chain, ' chain');
+  // networkChoose.value = SINGULARITY_NETWORKS.find(
+  //   item => item.chain_id_decimals === chain
+  // );
+  // console.log(networkChoose.value, ' networkChoose.value');
+  // let tokens =
+  //   networkChoose.value?.tokens?.map(token => {
+  //     return {
+  //       ...token,
+  //       chainInfo: {
+  //         ...networkChoose.value,
+  //       },
+  //     };
+  //   }) || [];
   networkChoose.value = SINGULARITY_NETWORKS.find(
-    item => item.chain_id_decimals === chain
+    item => item.chain_id_decimals === 16116
   );
   console.log(networkChoose.value, ' networkChoose.value');
   let tokens =
@@ -85,6 +100,7 @@ const initTokenList = chain => {
         },
       };
     }) || [];
+
   tokensList.value = tokens;
 };
 const checkSingularityLoaded = payload => {
