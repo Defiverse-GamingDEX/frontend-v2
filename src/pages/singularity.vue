@@ -1,0 +1,168 @@
+<script setup lang="ts">
+import Hex from 'crypto-js/enc-hex';
+import hmacSHA512 from 'crypto-js/hmac-sha512';
+import { v4 as uuidv4 } from 'uuid';
+import { onMounted } from 'vue';
+/**
+ * STATES
+ */
+const gamerAddress = ref('');
+const tokens = ref([
+  { value: 800011, label: 'USDC Mumbai', symbol: 'usdc' },
+  // { value: 800010, label: 'MATIC Mumbai',symbol:'matic' },
+  // { value: 970, label: 'BNB BSC Testnet',symbol: 'bnb' },
+  // { value: 973, label: 'BUSD BSC Testnet', symbol: 'busd' },
+  // { value: 87, label: 'BNB BSC Mainnet', symbol: 'bnb' },
+  // { value: 84, label: 'BUSD BSC Mainnet', symbol: 'busd' },
+  // { value: 86, label: 'RPG BSC Mainnet', symbol: 'rpg' },
+  // { value: 50, label: 'ETH on Goerli',symbol: 'eth'  },
+  // { value: 51, label: 'USDC on Goerli',symbol: 'usdc' },
+  // { value: 4200, label: 'ETH on Optimism Testnet',symbol: 'eth' },
+  // { value: 4201, label: 'USDC on Optimism Testnet',symbol: 'usdc' },
+  // { value: 99810, label: 'ETH on Caldera Goerli Appchain',symbol: 'eth' },
+  // { value: 99811, label: 'USDC on Caldera Goerli Appchain' ,symbol: 'usdc'},
+  // { value: 2220, label: 'ETH on Conduit Goerli Appchain',symbol: 'eth' },
+  // { value: 2221, label: 'USDC on Conduit Goerli Appchain',symbol: 'usdc' },
+  // { value: 93720, label: 'OAS on Oasys Testnet',symbol: 'oas' },
+  // { value: 93721, label: 'USDC on Oasys Testnet',symbol:'usdc' },
+  // { value: 201970, label: 'OAS on SAND Verse', symbol:'oas' },
+  // { value: 201971, label: 'USDC on SAND Verse', symbol:'usdc' },
+  // { value: 408750, label: 'OAS on Home Verse Testnet', symbol:'oas' },
+  // { value: 408751, label: 'USDC on Home Verse Testnet', symbol:'usdc' },
+  // { value: 431130, label: 'Avax on Avalanche Fuji testnet',symbol:'avax' },
+  // { value: 431131, label: 'USDC on Avalanche Fuji testnet', symbol:'usdc' },
+  // { value: 431140, label: 'Avax on Avalanche Mainnet', symbol:'avax' },
+  // { value: 431141, label: 'USDC on Avalanche Mainnet', symbol:'usdc' },
+  // { value: 431147, label: 'LODE on Avalanche Mainnet', symbol:'lode' },
+  // { value: 431148, label: 'AGX on Avalanche Mainnet', symbol:'agx'},
+  // { value: 431149, label: 'AUX on Avalanche Mainnet', symbol:'avax' },
+  // { value: 4311420, label: 'USDT on Avalanche Mainnet', symbol:'usdt' },
+  // { value: 1370, label: 'MATIC Polygon Mainnet', symbol:'matic' },
+  // { value: 1371, label: 'USDC Polygon Mainnet', symbol:'usdc' },
+  // { value: 13720, label: 'USDT on Polygon Mainnet', symbol:'usdt' },
+  // { value: 974, label: 'RPG BSC Testnet',  symbol:'rpg' },
+  // { value: 539350, label: 'JEWEL on DFK Mainnet', symbol:'jewel' },
+  // { value: 539351, label: 'USDC on DFK Mainnet', symbol:'usdc' },
+  // { value: 5393512, label: 'AVAX on DFK Mainnet', symbol:'avax' },
+  // { value: 5393513, label: 'CRYSTAL on DFK Mainnet', symbol:'crystal' },
+  // { value: 5393514, label: 'KLAY on DFK Mainnet', symbol:'klay' },
+  // { value: 5393520, label: 'USDT on DFK Mainnet', symbol:'usdt' },
+  // { value: 2480, label: 'OAS on Oasys Mainnet', symbol: 'oas' },
+  // { value: 2481, label: 'USDC on Oasys Mainnet',symbol:'usdc' },
+  // { value: 24821, label: 'MCHC on Oasys Mainnet', symbol:'mchc' },
+  // { value: 24820, label: 'USDT on Oasys Mainnet', symbol:'usdt' },
+  // { value: 190110, label: 'OAS on Homeverse Mainnet', symbol: 'oas' },
+  // { value: 190111, label: 'USDC on Homeverse Mainnet',symbol:'usdc' },
+  // { value: 13718, label: 'DOGA Mainnet', symbol:'doga' },
+  // { value: 1901119, label: 'MARD on Homeverse', symbol:'mard' },
+  // { value: 24819, label: 'MARD on Oasys', symbol:'mard' },
+  // { value: 4311412, label: 'SHRAP on Avalanche Mainnet', symbol:'shrap' },
+  // { value: 295480, label: 'OAS on MCH Verse', symbol:'oas' },
+  // { value: 295481, label: 'USDC on MCH Verse', symbol:'usdc' },
+  // { value: 2954821, label: 'MCHC on MCH Verse', symbol:'mchc' }
+]);
+const token = ref(tokens.value[0]);
+/**
+ * COMPOSABLES
+ */
+
+/**
+ * COMPUTED
+ */
+
+/**
+ * CALLBACKS
+ */
+onMounted(async () => {});
+
+/**
+ * FUNCTIONS
+ */
+const handleAddressField = async () => {
+  const userInfo = await window.SingularityEvent.getConnectUserInfo();
+  const userAvailabelAddresses =
+    userInfo?.metaData?.wallet?.accounts?.evmPublicAddress || [];
+  const userSelectedAddress = userAvailabelAddresses.length
+    ? userAvailabelAddresses[0]?.publicAddress || ''
+    : '';
+  if (userSelectedAddress) {
+    gamerAddress.value = userSelectedAddress;
+  }
+};
+const initiateTransaction = async () => {
+  try {
+    await handleAddressField();
+    const clientReferenceId = uuidv4();
+
+    let body = {
+      clientReferenceId,
+      singularityTransactionType: 'RECEIVE',
+      transactionLabel: 'test payment token',
+      transactionDescription: 'payment description',
+      transactionIconLink:
+        'https://singularity-icon-assets.s3.ap-south-1.amazonaws.com/currency/ape.svg',
+      clientReceiveObject: {
+        clientRequestedAssetId: token.value.value,
+        clientRequestedAssetQuantity: 2,
+      },
+      optionalAssets: tokens.value.map(token => token.value),
+    };
+    if (gamerAddress.value) {
+      body = {
+        ...body,
+        clientReceiveObject: {
+          ...body.clientReceiveObject,
+          address: gamerAddress.value,
+        },
+      };
+    }
+
+    const secret =
+      'SSk49aq1/kQ1eKH7Sg+u4JsisvrycRcLopHdM6lNEMVe/p7lsSVoRiY0neFYNJkHoWVEK30bPAV2pNU2WwOJXQ==';
+    // const secret =
+    //   'aOMA87BhkaKXUXKy1XJE3WmLqU9Elgmd0875qQvTnxHebECDGqTgQrXZcWGAoURD7Cm36J8tbe7q5YuCgCTsVMPX';
+
+    console.log('Body to generate signature ---->', body);
+    const requestString = JSON.stringify(body);
+    const signature = Hex.stringify(hmacSHA512(requestString, secret));
+    window.SingularityEvent.transactionFlow(requestString, signature);
+    // if (gamerAddress && handleBuyAsset) {
+    //   handleBuyAsset();
+    // }
+  } catch (err) {
+    window.alert('Some error occured');
+    console.error(err);
+  }
+};
+
+const openSingularity = async () => {
+  window.SingularityEvent.open();
+};
+</script>
+
+<template>
+  <div>
+    <button
+      :class="[
+        'ml-2 ease-color mt-1 text-secondary hover:text-blue-800 dark:hover:text-blue-800 flex items-center shadow-sm border dark:border-0 bg-gray-50 dark:bg-gray-850 rounded-full p-1 justify-center',
+      ]"
+      @click="openSingularity"
+    >
+      Open Singularity
+    </button>
+    <button
+      :class="[
+        'ml-2 ease-color mt-1 text-secondary hover:text-blue-800 dark:hover:text-blue-800 flex items-center shadow-sm border dark:border-0 bg-gray-50 dark:bg-gray-850 rounded-full p-1 justify-center',
+      ]"
+      @click="initiateTransaction"
+    >
+      Payment USDC
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.graph-modal {
+  height: 450px;
+}
+</style>

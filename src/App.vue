@@ -1,9 +1,4 @@
 <script lang="ts">
-import BigNumber from 'bignumber.js';
-import { VueQueryDevTools } from 'vue-query/devtools';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
-
 import Notifications from '@/components/notifications/Notifications.vue';
 import ThirdPartyServicesModal from '@/components/web3/ThirdPartyServicesModal.vue';
 import WalletSelectModal from '@/components/web3/WalletSelectModal.vue';
@@ -11,6 +6,10 @@ import useWeb3Watchers from '@/composables/watchers/useWeb3Watchers';
 import { DEFAULT_TOKEN_DECIMALS } from '@/constants/tokens';
 import * as Layouts from '@/pages/_layouts';
 import useWeb3 from '@/services/web3/useWeb3';
+import BigNumber from 'bignumber.js';
+import { VueQueryDevTools } from 'vue-query/devtools';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 import GlobalModalContainer from './components/modals/GlobalModalContainer.vue';
 import AppSidebar from './components/navs/AppNav/AppSidebar/AppSidebar.vue';
@@ -19,10 +18,10 @@ import useBackgroundColor from './composables/useBackgroundColor';
 import useGnosisSafeApp from './composables/useGnosisSafeApp';
 import useNavigationGuards from './composables/useNavigationGuards';
 import { useSidebar } from './composables/useSidebar';
+import useSingularity from './composables/useSingularity';
 import useExploitWatcher from './composables/watchers/useExploitWatcher';
 import useGlobalQueryWatchers from './composables/watchers/useGlobalQueryWatchers';
 import usePoolCreationWatcher from './composables/watchers/usePoolCreationWatcher';
-
 BigNumber.config({ DECIMAL_PLACES: DEFAULT_TOKEN_DECIMALS });
 
 export const isThirdPartyServicesModalVisible = ref(false);
@@ -53,12 +52,17 @@ export default defineComponent({
     useGnosisSafeApp();
     useExploitWatcher();
     useNavigationGuards();
-    const { isWalletSelectVisible, toggleWalletSelectModal, isBlocked } =
-      useWeb3();
+    const {
+      isWalletSelectVisible,
+      toggleWalletSelectModal,
+      isBlocked,
+      getProvider,
+    } = useWeb3();
     const route = useRoute();
     const store = useStore();
     const { newRouteHandler: updateBgColorFor } = useBackgroundColor();
     const { sidebarOpen } = useSidebar();
+    const { initSingularity } = useSingularity();
 
     // ADD FEATURE ALERT HERE
     // const featureAlert: Alert = {
@@ -77,7 +81,9 @@ export default defineComponent({
     onBeforeMount(async () => {
       store.dispatch('app/init');
     });
-
+    onMounted(async () => {
+      initSingularity();
+    });
     function handleThirdPartyModalToggle(value: boolean) {
       isThirdPartyServicesModalVisible.value = value;
     }

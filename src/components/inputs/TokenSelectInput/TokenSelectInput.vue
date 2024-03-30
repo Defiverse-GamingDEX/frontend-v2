@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import SelectTokenModal from '@/components/modals/SelectTokenModal/SelectTokenModal.vue';
-import AtfBadge from '@/components/badge/AtfBadge.vue';
-import useNumbers from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
-import { isSameAddress } from '@/lib/utils';
-import { TokenInfo } from '@/types/TokenList';
-import { truncateText } from '@/plugins/utils.js';
-import useWeb3 from '@/services/web3/useWeb3';
 import metamaskLogo from '@/assets/images/connectors/metamask.svg';
+import AtfBadge from '@/components/badge/AtfBadge.vue';
+import SelectTokenModal from '@/components/modals/SelectTokenModal/SelectTokenModal.vue';
+import useNumbers from '@/composables/useNumbers';
+import { isSameAddress } from '@/lib/utils';
+import { truncateText } from '@/plugins/utils.js';
+import { useTokens } from '@/providers/tokens.provider';
+import useWeb3 from '@/services/web3/useWeb3';
+import { getConnectorName } from '@/services/web3/web3.plugin';
+import { TokenInfo } from '@/types/TokenList';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -61,7 +62,6 @@ const {
   connector,
   provider,
 } = useWeb3();
-import { getConnectorName } from '@/services/web3/web3.plugin';
 /**
  * COMPUTED
  */
@@ -71,9 +71,12 @@ const token = computed((): TokenInfo | null => {
   if (!hasToken.value) return null;
   return getToken(props.modelValue);
 });
-const connectorName = computed(() =>
-  getConnectorName(connector.value?.id, provider.value)
-);
+const connectorName = computed(() => {
+  if (connector.value) {
+    return getConnectorName(connector.value?.id, provider.value);
+  }
+  return '';
+});
 console.log(connectorName.value, 'connectorName.value');
 /**
  * METHODS
