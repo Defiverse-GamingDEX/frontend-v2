@@ -287,7 +287,12 @@ const handleBuy = token => {
               <div class="content-right">
                 <div class="font-medium btn-buy-actions">
                   <BalBtn
-                    :label="$t('singularity.buyTokenBtn')"
+                    :disabled="item?.isComingSoon"
+                    :label="
+                      item?.isComingSoon
+                        ? $t('singularity.comingSoon')
+                        : $t('singularity.buyTokenBtn')
+                    "
                     classCustom="pink-white-shadow"
                     block
                     @click.prevent="handleBuy(item)"

@@ -14,26 +14,7 @@ export const DEFIVERSE_TOKENS = [
     is_native: false,
     rpc: rpc,
     singularity_value: 161160,
-  },
-  {
-    name: 'WBTC',
-    address: '0x50c5725949a6f0c72e6c4a641f24049a917db0cb',
-    logoURI: btcIcon,
-    symbol: 'DFC',
-    decimals: 18,
-    is_native: false,
-    rpc: rpc,
-    singularity_value: 161160, // TODO
-  },
-  {
-    name: 'WETH',
-    address: '0xe7798f023fc62146e8aa1b36da45fb70855a77ea',
-    logoURI: ethIcon,
-    symbol: 'WETH',
-    decimals: 18,
-    is_native: false,
-    rpc: rpc,
-    singularity_value: 161160, // TODO
+    isComingSoon: false,
   },
   {
     name: 'USDC',
@@ -44,6 +25,29 @@ export const DEFIVERSE_TOKENS = [
     is_native: false,
     rpc: rpc,
     singularity_value: 161161,
+    isComingSoon: false,
+  },
+  {
+    name: 'WBTC',
+    address: '0x50c5725949a6f0c72e6c4a641f24049a917db0cb',
+    logoURI: btcIcon,
+    symbol: 'DFC',
+    decimals: 18,
+    is_native: false,
+    rpc: rpc,
+    singularity_value: 161160, // TODO
+    isComingSoon: true,
+  },
+  {
+    name: 'WETH',
+    address: '0xe7798f023fc62146e8aa1b36da45fb70855a77ea',
+    logoURI: ethIcon,
+    symbol: 'WETH',
+    decimals: 18,
+    is_native: false,
+    rpc: rpc,
+    singularity_value: 161160, // TODO
+    isComingSoon: true,
   },
   {
     name: 'bCCP',
@@ -54,5 +58,6 @@ export const DEFIVERSE_TOKENS = [
     is_native: false,
     rpc: rpc,
     singularity_value: 161160, // TODO
+    isComingSoon: true,
   },
 ];
