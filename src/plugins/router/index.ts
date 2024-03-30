@@ -46,10 +46,7 @@ const SwapPage = () =>
   import(
     /* webpackChunkName: "SwapPage" */ /* webpackPrefetch: true */ '@/pages/swap.vue'
   );
-const SingularityPage = () =>
-  import(
-    /* webpackChunkName: "SwapPage" */ /* webpackPrefetch: true */ '@/pages/singularity.vue'
-  );
+
 const BridgePage = () =>
   import(
     /* webpackChunkName: "BridgePage" */ /* webpackPrefetch: true */ '@/pages/bridge.vue'
@@ -107,11 +104,6 @@ const routes: RouteRecordRaw[] = [
     path: '/:networkSlug/swap/:assetIn?/:assetOut?',
     name: 'swap',
     component: SwapPage,
-  },
-  {
-    path: '/:networkSlug/singularity',
-    name: 'singularity',
-    component: SingularityPage,
   },
   {
     path: '/:networkSlug/bridge',
