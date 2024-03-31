@@ -4,7 +4,6 @@ import useNumbers from '@/composables/useNumbers';
 import useWeb3 from '@/services/web3/useWeb3';
 import Hex from 'crypto-js/enc-hex';
 import hmacSHA512 from 'crypto-js/hmac-sha512';
-import { orderBy } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { useI18n } from 'vue-i18n';
 interface Props {
@@ -141,7 +140,8 @@ function createTokens() {
   }
 
   if (props.ignoreBalances) return tokensWithValues;
-  else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
+  else return tokensWithValues;
+  //else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
 }
 
 async function onSelectToken(token: object): Promise<void> {
@@ -191,7 +191,9 @@ const initiateTransaction = async token => {
         clientRequestedAssetId: token.value,
         clientRequestedAssetQuantity: 30,
       },
-      optionalAssets: tokens.value.map(token => token.value),
+      optionalAssets: tokens.value
+        ?.filter(token => token.value)
+        ?.map(token => token.value),
     };
     if (userAddress.value) {
       body = {
