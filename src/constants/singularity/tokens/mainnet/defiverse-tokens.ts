@@ -31,12 +31,12 @@ export const DEFIVERSE_TOKENS = [
     name: 'WBTC',
     address: '0x50c5725949a6f0c72e6c4a641f24049a917db0cb',
     logoURI: btcIcon,
-    symbol: 'DFC',
+    symbol: 'WBTC',
     decimals: 18,
     is_native: false,
     rpc: rpc,
-    singularity_value: null, // TODO
-    isComingSoon: true,
+    singularity_value: 1611626, // TODO
+    isComingSoon: false,
   },
   {
     name: 'WETH',
@@ -46,8 +46,8 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
-    singularity_value: null, // TODO
-    isComingSoon: true,
+    singularity_value: 1611627, // TODO
+    isComingSoon: false,
   },
   {
     name: 'bCCP',
@@ -57,7 +57,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
-    singularity_value: null, // TODO
-    isComingSoon: true,
+    singularity_value: 1611625, // TODO
+    isComingSoon: false,
   },
 ];
