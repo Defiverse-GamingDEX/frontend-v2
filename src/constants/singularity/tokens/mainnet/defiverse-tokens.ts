@@ -35,7 +35,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
-    singularity_value: 1611626, // TODO
+    singularity_value: 1611626,
     isComingSoon: false,
   },
   {
@@ -46,7 +46,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
-    singularity_value: 1611627, // TODO
+    singularity_value: 1611627,
     isComingSoon: false,
   },
   {
@@ -57,7 +57,7 @@ export const DEFIVERSE_TOKENS = [
     decimals: 18,
     is_native: false,
     rpc: rpc,
-    singularity_value: 1611625, // TODO
+    singularity_value: 1611625,
     isComingSoon: false,
   },
 ];
