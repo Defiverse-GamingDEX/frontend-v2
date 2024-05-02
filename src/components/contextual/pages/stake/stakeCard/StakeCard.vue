@@ -107,6 +107,7 @@ watch(
   () => chainId.value,
   async () => {
     updateNetWorkInputFrom(chainId.value);
+    checkToChangeNetwork();
   }
 );
 watch(
@@ -134,6 +135,8 @@ function checkToChangeNetwork(){
           )} to begin the transfer`,
         },
       };
+    }else{
+       estimateInfo.value = null;
     }
 }
 function covertUnitShow(number, token_decimals) {

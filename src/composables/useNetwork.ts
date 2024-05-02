@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import config from '@/lib/config';
 import { configService } from '@/services/config/config.service';
 import { Network } from '@defiverse/balancer-sdk';
-import { RouteParamsRaw } from 'vue-router';
+import { RouteParamsRaw, useRoute } from 'vue-router';
 
 /**
  * STATE
@@ -13,6 +13,7 @@ const localStorageNetworkId: Network | null =
   windowAvailable && localStorage.getItem('networkId')
     ? (Number(localStorage.getItem('networkId')) as Network)
     : null;
+const route = useRoute();
 const routeSlug =
   (windowAvailable && window.location.hash.split(/[/?]/)[1]) ?? '';
 const urlNetworkId: Network | null = routeSlug
@@ -102,6 +103,11 @@ export function getNetworkSlug(network: Network): string {
 
 export function networkFromSlug(networkSlug: string): Network | null {
   console.log("🚀 ~ networkFromSlug ~ networkSlug:", networkSlug)
+  const isExludeNamePaths = ['stake'];
+  if (!isExludeNamePaths.includes(route?.name)) {
+     const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
+    networkSlug = IS_TESTNET == 'false' ? 'defiverse' : 'defiverse-testnet';
+  }
   const networkConf = Object.keys(config).find(
     network => config[network].slug === networkSlug
   );
@@ -141,6 +147,7 @@ export function handleNetworkSlug(
   networkChangeCallback: () => void
 ) {
   const networkFromUrl = networkFromSlug(networkSlug);
+  console.log("🚀 ~ networkFromUrl:", networkFromUrl)
   const localStorageNetwork = networkFor(
     localStorage.getItem('networkId') ?? '1'
   );

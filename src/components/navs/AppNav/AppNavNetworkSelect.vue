@@ -25,7 +25,9 @@ export interface NetworkOption {
 // COMPOSABLES
 const { upToLargeBreakpoint } = useBreakpoints();
 const { networkId, networkConfig } = useNetwork();
+console.log("🚀 AppNavNetworkSelect~ networkId:", networkId)
 const { chainId } = useWeb3();
+console.log("🚀 AppNavNetworkSelect ~ chainId:", chainId)
 const router = useRouter();
 const { addNotification } = useNotifications();
 
@@ -47,7 +49,7 @@ console.log(allNetworks, configService.env.APP_ENV, 'allNetworks');
 const appNetworkSupported = computed((): boolean => {
   return allNetworks.value
     .map(network => network.key)
-    .includes(networkId.value.toString());
+    .includes(chainId.value?.toString());
 });
 
 const activeNetwork = computed((): NetworkOption | undefined =>
@@ -83,7 +85,7 @@ onMounted(async () => {
 
   // hard for mainnet
   // console.log('networkIdCCC', networkId);
-  // if (networkId.value !== 16116) {
+  // if (chainId.value !== 16116) {
   //   const newNetwork = allNetworks.value.find(n => Number(n.key) === 16116);
   //   if (newNetwork) {
   //     // localStorage.setItem('networkId', newNetwork?.key.toString());
@@ -99,7 +101,7 @@ watch(chainId, (newChainId, oldChainId) => {
     newChainId &&
     oldChainId &&
     oldChainId !== newChainId &&
-    networkId.value !== newChainId
+    chainId.value !== newChainId
   ) {
     const newNetwork = allNetworks.value.find(
       n => Number(n.key) === newChainId
@@ -128,7 +130,7 @@ function getNetworkChangeUrl(network: NetworkOption): string {
 
 function isActive(network: NetworkOption): boolean {
   if (!appNetworkSupported.value && network.id === 'ethereum') return true;
-  return networkId.value.toString() === network.key;
+  return chainId.value?.toString() === network.key;
 }
 </script>
 

@@ -99,9 +99,9 @@ export default function useWeb3() {
     console.log('🚀 ~ checkIsUnsupportedNetwork ~isMismatchedNetwork:', isMismatchedNetwork.value);
     console.log('🚀 ~ checkIsUnsupportedNetwork ~ name:',   !isExludeNamePaths.includes(route.name));
     return (
-      (isWalletReady.value &&
-      userNetworkConfig.value?.key !== appNetworkConfig.key) ||
-      (!isExludeNamePaths.includes(route.name) && chainId.value !== MAIN_CHAIN_ID)
+      isWalletReady.value &&
+      userNetworkConfig.value?.key !== appNetworkConfig.key &&
+      !isExludeNamePaths.includes(route.name) && chainId.value !== MAIN_CHAIN_ID
     );
   });
 

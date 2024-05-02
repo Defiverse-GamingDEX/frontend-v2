@@ -18,7 +18,7 @@ const redirecting = ref(false);
  * Navigation guards
  */
 export function applyNavGuards(router: Router): Router {
-  router = applyNetworkSubdomainRedirect(router);
+  //router = applyNetworkSubdomainRedirect(router); // remove for check network follow page
   router = applyNetworkPathRedirects(router);
   router = applyPoolJoinRedirects(router);
 
@@ -51,8 +51,9 @@ function applyNetworkSubdomainRedirect(router: Router): Router {
       to.redirectedFrom?.fullPath ?? to.fullPath,
       to.params
     );
-
-    if (redirectUrl) window.location.href = redirectUrl;
+    if (redirectUrl) { 
+      window.location.href = redirectUrl;
+    } 
     else next();
   });
 

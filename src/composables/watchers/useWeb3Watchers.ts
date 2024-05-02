@@ -47,6 +47,7 @@ export default function useWeb3Watchers() {
   }
 
   function checkIsUnsupportedNetwork() {
+     console.log("🚀 ~ checkIsUnsupportedNetwork ~ isMismatchedNetwork.value:", isMismatchedNetwork.value)
     if (
       chainId.value &&
       (isUnsupportedNetwork.value || isMismatchedNetwork.value)
@@ -65,6 +66,7 @@ export default function useWeb3Watchers() {
       removeAlert('network-mismatch');
     }
   }
+     
     
 
   // Watch for user account change:
