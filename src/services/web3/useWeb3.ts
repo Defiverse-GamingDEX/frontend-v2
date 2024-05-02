@@ -10,7 +10,7 @@ import {
   getInjectedProvider,
   hasInjectedProvider,
 } from '@/services/web3/connectors/metamask/metamask.connector';
-
+import { useRoute } from 'vue-router';
 import { configService } from '../config/config.service';
 import { rpcProviderService } from '../rpc-provider/rpc-provider.service';
 import { switchToAppNetwork } from './utils/helpers';
@@ -88,13 +88,26 @@ export default function useWeb3() {
   const canLoadProfile = computed(
     () => account.value !== '' && userNetworkConfig.value !== null
   );
+    const route = useRoute();
   const isMismatchedNetwork = computed(() => {
+    console.log(chainId.value, 'chainId.value');
+    const isExludeNamePaths = ['stake'];
+    const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
+    const MAIN_CHAIN_ID = IS_TESTNET == 'false' ? Network.DEFIVERSE : Network.DEFIVERSE_TESTNET;
+    console.log('🚀 ~ checkIsUnsupportedNetwork ~ route:', route);
+    console.log('🚀 ~ checkIsUnsupportedNetwork ~ isUnsupportedNetwork.value:', isUnsupportedNetwork.value);
+    console.log('🚀 ~ checkIsUnsupportedNetwork ~isMismatchedNetwork:', isMismatchedNetwork.value);
+    console.log('🚀 ~ checkIsUnsupportedNetwork ~ name:',   !isExludeNamePaths.includes(route.name));
     return (
-      isWalletReady.value &&
-      userNetworkConfig.value?.key !== appNetworkConfig.key
+      (isWalletReady.value &&
+      userNetworkConfig.value?.key !== appNetworkConfig.key) ||
+      (!isExludeNamePaths.includes(route.name) && chainId.value !== MAIN_CHAIN_ID)
     );
   });
+
   const isUnsupportedNetwork = computed(() => {
+    console.log(isWalletReady.value, 'isWalletReady.value')
+    console.log(userNetworkConfig.value,'userNetworkConfig.value')
     return isWalletReady.value && userNetworkConfig.value === null;
   });
   const explorerLinks = {

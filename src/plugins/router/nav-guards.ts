@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 import {
   getRedirectUrlFor,
   handleNetworkSlug,
@@ -8,6 +7,7 @@ import {
 import { isJoinsDisabled } from '@/composables/usePool';
 import config from '@/lib/config';
 import { Network } from '@defiverse/balancer-sdk';
+import { ref } from 'vue';
 import { Router } from 'vue-router';
 /**
  * State
@@ -80,7 +80,6 @@ function applyNetworkPathRedirects(router: Router): Router {
     } else {
       const networkSlugFromUrl = to.params.networkSlug?.toString() ?? '';
       const networkFromPath = networkFromSlug(networkSlugFromUrl);
-      console.log(networkFromPath, 'networkFromPath');
       if (networkFromPath) {
         const noNetworkChangeCallback = () => next();
         const networkChangeCallback = () => {

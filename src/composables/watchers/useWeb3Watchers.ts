@@ -1,10 +1,9 @@
-import { EthereumTransactionData } from 'bnc-sdk/dist/types/src/interfaces';
-import { watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-
 import { BLOCKED_ADDRESSES } from '@/constants/blocked';
 import { includesAddress } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
+import { EthereumTransactionData } from 'bnc-sdk/dist/types/src/interfaces';
+import { watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import { useTokens } from '@/providers/tokens.provider';
 import useAlerts, { AlertPriority, AlertType } from '../useAlerts';
@@ -48,10 +47,10 @@ export default function useWeb3Watchers() {
   }
 
   function checkIsUnsupportedNetwork() {
-    console.log(chainId.value, 'chainId.value');
     if (
       chainId.value &&
       (isUnsupportedNetwork.value || isMismatchedNetwork.value)
+     
     ) {
       addAlert({
         id: 'network-mismatch',
@@ -66,6 +65,7 @@ export default function useWeb3Watchers() {
       removeAlert('network-mismatch');
     }
   }
+    
 
   // Watch for user account change:
   // -> Unsubscribe Blocknative from old account if exits
@@ -109,7 +109,9 @@ export default function useWeb3Watchers() {
   watch(isWalletReady, () => {
     checkIsUnsupportedNetwork();
   });
-
+  watch(route, () => {
+    checkIsUnsupportedNetwork();
+  });
   watch(blockNumber, async () => {
     if (isWalletReady.value) {
       handlePendingTransactions();

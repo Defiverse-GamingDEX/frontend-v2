@@ -1,8 +1,8 @@
 import { Network } from '@defiverse/balancer-sdk';
 
 import arbitrum from './arbitrum.json';
-import defiverse from './defiverse.json';
 import defiverseTestnet from './defiverse-testnet.json';
+import defiverse from './defiverse.json';
 import docker from './docker.json';
 import goerli from './goerli.json';
 import homestead from './homestead.json';
@@ -11,12 +11,14 @@ import polygon from './polygon.json';
 import test from './test.json';
 
 // network for bridge
-import mchverse from './mchverse.json';
-import tcgverse from './tcgverse.json';
-import homeverse from './homeverse.json';
-import chainverse from './chainverse.json';
-import saakuru from './saakuru.json';
 import avalancheTestnet from './avalanche-testnet.json';
+import chainverse from './chainverse.json';
+import homeverse from './homeverse.json';
+import mchverse from './mchverse.json';
+import oasysTestnet from './oasys-testnet.json';
+import oasys from './oasys.json';
+import saakuru from './saakuru.json';
+import tcgverse from './tcgverse.json';
 export interface Config {
   key: string;
   chainId: Network | 12345 | 17;
@@ -118,6 +120,9 @@ const config: Record<Network | number, Config> = {
   5555: chainverse,
   7225878: saakuru,
   43113: avalancheTestnet,
+  248: oasys,
+  9372: oasysTestnet,
+
 };
 
 export default config;

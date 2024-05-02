@@ -1,7 +1,7 @@
-import { BalancerSDK, Network } from '@defiverse/balancer-sdk';
-import { configService } from '@/services/config/config.service';
-import { ref } from 'vue';
 import { isTestMode } from '@/plugins/modes';
+import { configService } from '@/services/config/config.service';
+import { BalancerSDK, Network } from '@defiverse/balancer-sdk';
+import { ref } from 'vue';
 
 const network = ((): Network => {
   switch (configService.network.key) {
@@ -32,9 +32,14 @@ export const hasFetchedPoolsForSor = ref(false);
 
 export async function fetchPoolsForSor() {
   if (hasFetchedPoolsForSor.value) return;
-
-  await balancer.swaps.fetchPools();
-  hasFetchedPoolsForSor.value = true;
+  try {
+    await balancer.swaps.fetchPools();
+    hasFetchedPoolsForSor.value = true;
+  } catch (error) {
+    console.log("🚀 ~ fetchPoolsForSor ~ error:", error)
+    
+  }
+ 
 }
 
 if (!isTestMode()) fetchPoolsForSor();

@@ -18,7 +18,6 @@ const routeSlug =
 const urlNetworkId: Network | null = routeSlug
   ? networkFromSlug(routeSlug)
   : null;
-
 const NETWORK_ID =
   urlNetworkId ||
   localStorageNetworkId ||
@@ -88,6 +87,10 @@ export function networkFor(key: string | number): Network {
       return 7225878;
     case '43113':
       return 43113;
+     case '9372':
+      return 9372; // OASYS testnet
+     case '248':
+      return 248; // OASYS
     default:
       throw new Error('Network not supported');
   }
@@ -98,6 +101,7 @@ export function getNetworkSlug(network: Network): string {
 }
 
 export function networkFromSlug(networkSlug: string): Network | null {
+  console.log("🚀 ~ networkFromSlug ~ networkSlug:", networkSlug)
   const networkConf = Object.keys(config).find(
     network => config[network].slug === networkSlug
   );

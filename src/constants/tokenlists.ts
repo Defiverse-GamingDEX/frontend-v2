@@ -122,4 +122,18 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
     },
     External: [],
   },
+  '248': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
+  '9372': {
+    Balancer: {
+      Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+      Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+    },
+    External: [],
+  },
 };
