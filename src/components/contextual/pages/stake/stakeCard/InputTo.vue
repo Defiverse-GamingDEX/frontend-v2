@@ -1,6 +1,16 @@
 <script setup lang="ts">
-import { cloneDeep } from 'lodash';
 import NetworkSelectInput from './NetworkSelectInput.vue';
+import TokenSelectInput from './TokenSelectInput.vue';
+import useStake from '@/composables/stake/useStake';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { bnum } from '@/lib/utils';
+import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
+import useStakeWeb3 from '@/services/stake/useStakeWeb3';
+import useWeb3 from '@/services/web3/useWeb3';
+import { Rules } from '@/types';
+import { cloneDeep } from 'lodash';
+import { useI18n } from 'vue-i18n';
+
 // TYPES
 type InputValue = string | number;
 
@@ -19,8 +29,13 @@ type InputSelect = {
 type Props = {
   inputSelect?: InputSelect;
   disabled?: boolean;
+  ignoreWalletBalance?: boolean;
+  rules?: Rules;
 };
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {
+  ignoreWalletBalance: false,
+  rules: () => [],
+});
 
 // EMITS
 const emit = defineEmits<{
@@ -28,14 +43,22 @@ const emit = defineEmits<{
 }>();
 
 // COMPUTEDS
-
-const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+const { t } = useI18n();
+const { isWalletReady } = useWeb3();
+const { fNum2 } = useNumbers();
 
 /**
  * STATE
  */
 const _amount = ref<InputValue>('');
 const _address = ref<string>('');
+const amountBN = computed(() => bnum(_amount.value));
+const tokenBalanceBN = computed(() => bnum(props?.inputSelect?.balance));
+
+const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+
+
+
 
 /**
  * WATCHERS
@@ -72,7 +95,7 @@ function handleAmountChange(value) {
     <NetworkSelectInput
       :networkList="inputSelect.chainsList"
       :modelValue="inputSelect?.chainId"
-      :disabled="disabled"
+      :disabled="disabled || inputSelect.chainsList?.length <= 1"
       class="mb-2"
       @update:model-value="updateNetWork"
     />
@@ -93,8 +116,40 @@ function handleAmountChange(value) {
         inputAlignRight
         @update:model-value="handleAmountChange($event)"
       >
-        <template #prepend>
-          <slot name="tokenSelect"> Receive </slot>
+      
+       <template #prepend>
+          <slot name="tokenSelect">
+            <TokenSelectInput
+              :tokensList="inputSelect?.tokensList"
+              :modelValue="inputSelect?.tokenAddress"
+              :disabled="disabled || inputSelect?.tokensList?.length <= 1"
+              class="mr-2"
+              
+            />
+          </slot>
+        </template>
+         <template #footer>
+          <div
+            v-if="isWalletReady"
+            class="flex flex-col pt-1"
+          >
+            <div
+              class="flex justify-between items-center text-sm leading-none text-gray-600 dark:text-gray-400"
+            >
+              <div v-if="!isWalletReady" />
+              <button v-else class="flex items-center">
+                {{ $t('balance') }}:
+
+                <span class="mx-1">
+                  {{ fNum2(inputSelect?.balance, FNumFormats.token) }}
+                </span>
+
+               
+              </button>
+            </div>
+
+          
+          </div>
         </template>
       </BalTextInput>
     </div>

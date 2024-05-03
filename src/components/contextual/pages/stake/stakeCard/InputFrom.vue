@@ -180,7 +180,7 @@ const setMax = () => {
             <TokenSelectInput
               :tokensList="inputSelect?.tokensList"
               :modelValue="inputSelect?.tokenAddress"
-              :disabled="disabled"
+              :disabled="disabled || chainsList?.length <= 1"
               class="mr-2"
               @update:model-value="updateToken"
             />

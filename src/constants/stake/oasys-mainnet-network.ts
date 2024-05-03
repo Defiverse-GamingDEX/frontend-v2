@@ -9,8 +9,6 @@ export const OASYS_MAINNET_NETWORK = {
   explorer: 'https://explorer.oasys.games/',
   rpc: 'https://rpc.mainnet.oasys.games',
   bridgeContract: '0x4200000000000000000000000000000000000010',
-  type: 'L2',
-  isOnlyDefiBridge: false,
   tokens: OASYS_MAINNET_TOKENS,
   nativeCurrency: {
     name: 'OASYS',

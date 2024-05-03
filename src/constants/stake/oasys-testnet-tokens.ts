@@ -6,7 +6,7 @@ export const OASYS_TESTNET_TOKENS = [
     logoURI: oasIcon,
     symbol: 'OAS',
     decimals: 18,
-    is_native: false,
+    is_native: true,
     rpc: 'https://rpc.testnet.oasys.games/',
   },
 ];

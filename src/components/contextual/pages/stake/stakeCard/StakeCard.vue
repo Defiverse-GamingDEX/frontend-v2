@@ -8,6 +8,7 @@ import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import { NETWORKS, DEFAULT_CHAIN_ID } from '@/constants/stake/networks';
+import {NETWORKS_RECEIVE} from '@/constants/stake/networks-receive';
 import { useUserSettings } from '@/providers/user-settings.provider';
 import useStakeWeb3 from '@/services/stake/useStakeWeb3';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -51,7 +52,7 @@ const { slippage, setSlippage } = useUserSettings();
 // // STATES
 const chainsList = ref(NETWORKS);
 const estimateInfo = ref(null);
-
+const isBridge = ref(true);
 
 const inputFromSelect = ref({
   chainId: DEFAULT_CHAIN_ID,
@@ -63,7 +64,7 @@ const inputFromSelect = ref({
   tokensList: []
 });
 const inputToSelect = ref({
-  chainId: '',
+  chainId: DEFAULT_CHAIN_ID,
   tokenSymbol: '',
   tokenAddress: '',
   balance: 0,
@@ -107,6 +108,7 @@ watch(
   () => chainId.value,
   async () => {
     updateNetWorkInputFrom(chainId.value);
+    updateNetworkInputTo();
     checkToChangeNetwork();
   }
 );
@@ -125,7 +127,7 @@ watchEffect(() => {
 //  * FUNCTIONS
 //  */
 function checkToChangeNetwork(){
- console.log('CCCCCC', inputFromSelect.value.chainId, chainId.value);
+ 
     if (inputFromSelect.value.chainId !== chainId.value) {
       estimateInfo.value = {
         err: {
@@ -232,7 +234,26 @@ function updateNetWorkInputFrom(chainId) {
     checkAllowanceInputFrom();
   }
 }
-
+function updateNetworkInputTo(){
+  console.log("🚀 ~ updateNetworkInputTo ~ updateNetworkInputTo:", updateNetworkInputTo)
+  if(!isBridge.value){
+    const networkReceive = NETWORKS_RECEIVE[0];
+    const tokenReceive = networkReceive.tokens[0];
+    setTokenInput(inputToSelect, tokenReceive);
+    inputToSelect.value.chainId = networkReceive.chain_id_decimals;
+    inputToSelect.value.chainsList = [networkReceive];
+    inputToSelect.value.tokensList = [tokenReceive];
+    console.log(inputToSelect.value, 'inputToSelect.valueAAA');
+    return;
+  }
+  const networkReceive = NETWORKS_RECEIVE[1];
+  const tokenReceive = networkReceive.tokens[0];
+  setTokenInput(inputToSelect, tokenReceive);
+  inputToSelect.value.chainId = networkReceive.chain_id_decimals;
+  inputToSelect.value.chainsList = [networkReceive];
+  inputToSelect.value.tokensList = [tokenReceive];
+  console.log(inputToSelect.value, 'inputToSelect.valueAAA');
+}
 async function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
   console.log(inputFromSelect.value, 'inputFromSelect.value');
@@ -241,9 +262,9 @@ async function handleInputFromChange(inputSelect) {
   }
 
   // check allowance
-  checkAllowanceInputFrom();
+  //checkAllowanceInputFrom();
 
-  getEstimateAtmData();
+  //getEstimateAtmData();
 }
 async function getEstimateAtmData() {
   try {
@@ -289,8 +310,8 @@ function handleWalletAddressChange(address) {
 // }
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
-  // calc amount input to here
-  // update token
+ 
+  // update token amount
   inputToSelect.value.amount = inputFromSelect.value.amount
 
   console.log(inputToSelect.value, 'inputToSelect');
@@ -399,6 +420,7 @@ async function handleApproveButton() {
  */
 onBeforeMount(async () => {
   updateNetWorkInputFrom(DEFAULT_CHAIN_ID);
+  updateNetworkInputTo();
 });
 </script>
 
@@ -417,7 +439,7 @@ onBeforeMount(async () => {
       <div class="bridge-container">
         <div class="bridge-form">
           <div class="input-from">
-            <div class="label">Stake{{isWalletReady}}</div>
+            <div class="label">Stake</div>
             <InputFrom
               :chainsList="chainsList"
               :inputSelect="inputFromSelect"
@@ -430,7 +452,7 @@ onBeforeMount(async () => {
           
           </div>
           <div class="input-to">
-            <div class="label">Received</div>
+            <div class="label">Receive</div>
             <InputTo
               :chainsList="inputToSelect?.chainsList"
               :inputSelect="inputToSelect"

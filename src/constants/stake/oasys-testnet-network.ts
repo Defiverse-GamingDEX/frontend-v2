@@ -9,8 +9,6 @@ export const OASYS_TESTNET_NETWORK = {
   explorer: 'https://explorer.testnet.oasys.games/',
   rpc: 'https://rpc.testnet.oasys.games/',
   bridgeContract: '0x4200000000000000000000000000000000000010',
-  type: 'L2',
-  isOnlyDefiBridge: false,
   tokens: OASYS_TESTNET_TOKENS,
   nativeCurrency: {
     name: 'OASYS',

@@ -59,7 +59,7 @@ function getNetwork(chain_id) {
 </script>
 
 <template>
-  <div>
+  <div v-if="network">
     <div
       v-if="hasNetwork"
       :class="['token-select-input selected group', { disabled: disabled }]"
@@ -71,7 +71,7 @@ function getNetwork(chain_id) {
         </div>
         <div class="item-label">{{ network.name }}</div>
       </div>
-      <BalIcon
+      <BalIcon v-if="!disabled"
         name="chevron-down"
         size="sm"
         class="ml-2 text-blue-600 group-hover:text-purple-500 dark:text-blue-400 dark:group-hover:text-yellow-500 transition-colors"
@@ -110,7 +110,9 @@ function getNetwork(chain_id) {
   font-variation-settings: 'wght' 700;
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 1;
+    box-shadow: none;
+    background: transparent;
     * {
       cursor: not-allowed;
     }

@@ -81,6 +81,7 @@ function getToken(tokenAddress) {
       </div>
 
       <BalIcon
+        v-if="!disabled"
         name="chevron-down"
         size="sm"
         class="ml-2 text-blue-600 group-hover:text-purple-500 dark:text-blue-400 dark:group-hover:text-yellow-500 transition-colors"
@@ -117,7 +118,9 @@ function getToken(tokenAddress) {
   font-variation-settings: 'wght' 700;
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 1;
+    box-shadow: none;
+    background: transparent;
     * {
       cursor: not-allowed;
     }
