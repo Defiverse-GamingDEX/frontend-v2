@@ -740,7 +740,7 @@ const POOLS_DEFIVERSE: Pools = {
   },
   Metadata: {},
   DisabledJoins: [
-    '0x2c2832dc1e613c4fe8cd58de3b89de1759fdf589000200000000000000000003',
+    // '0x2c2832dc1e613c4fe8cd58de3b89de1759fdf589000200000000000000000003',
   ],
 };
 
