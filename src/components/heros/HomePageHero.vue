@@ -45,7 +45,7 @@ const list_features = [
   {
     iconUrl: '/images/home/multi-gems-swap.png',
     title: `MultiGemSwap`,
-    description: `MultiGemSwap” is a system that ensures liquidity for “gems” across blockchain games. While traditional social games allowed gems to be used only within a specific game, this system enables the exchange of gems between different games. Even gems left unused after quitting a game can now be utilized in another, enhancing both the gaming experience and investment efficiency`,
+    description: `”MultiGemSwap” is a system that ensures liquidity for “gems” across blockchain games. While traditional social games allowed gems to be used only within a specific game, this system enables the exchange of gems between different games. Even gems left unused after quitting a game can now be utilized in another, enhancing both the gaming experience and investment efficiency`,
     href: 'https://docs.gaming-dex.com/product/multigemswap',
   },
 ];

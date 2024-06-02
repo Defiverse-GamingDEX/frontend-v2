@@ -22,7 +22,7 @@ import { useUserSettings } from '@/providers/user-settings.provider';
 import useCowswap from './useCowswap';
 import useSor from './useSor';
 import useJoinExit from './useJoinExit';
-
+import { sleep } from '@/lib/utils';
 export type SwapRoute = 'wrapUnwrap' | 'balancer' | 'cowswap' | 'joinExit';
 
 export type UseSwapping = ReturnType<typeof useSwapping>;
@@ -294,11 +294,19 @@ export default function useSwapping(
     } else {
       tokenInAmountInput.value = '';
     }
+    console.log(
+      'handleAmountChange',
+      tokenOutAmountInput.value,
+      tokenInAmountInput.value
+    );
 
     cowswap.resetState(false);
     sor.resetState();
     joinExit.resetState();
-
+    // cheat to show loading
+    joinExit.swapInfoLoading.value = true;
+    await sleep(1000);
+    joinExit.swapInfoLoading.value = false;
     if (isCowswapSwap.value) {
       cowswap.handleAmountChange();
     } else {

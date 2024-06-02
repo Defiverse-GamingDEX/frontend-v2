@@ -116,10 +116,20 @@ export default class ExchangeService {
   ): Promise<TransactionResponse> {
     const account = await signer.getAddress();
 
+    // Hung: Withdraw to OAS
+    const finalTokensOut = tokensOut.map(s => {
+      if (s === '0x6b382742b07aabba58c38d792b5d7cbaab246e99')
+        return '0x0000000000000000000000000000000000000000';
+      return s;
+    });
+
+    console.log('exitPool:amountsOut:', amountsOut);
+    console.log('exitPool:tokensOut:', finalTokensOut);
+
     const params = this.exitParams.serialize(
       account,
       amountsOut,
-      tokensOut,
+      finalTokensOut,
       bptIn,
       exitTokenIndex,
       exactOut

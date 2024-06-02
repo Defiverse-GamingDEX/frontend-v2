@@ -155,23 +155,46 @@ watch(
       tokenOutTraderInfo.value,
       tokenOut.value
     );
+    emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
   }
 );
 /**
  * METHODS
  */
+async function updateTraderInfo() {
+  tokenInTraderInfo.value = await getAntiTraderInfo(
+    _tokenInAddress.value,
+    account.value
+  );
+
+  tokenInTraderInfo.value = mapDataTraderInfo(
+    tokenInTraderInfo.value,
+    tokenIn.value
+  );
+  console.log(tokenInTraderInfo.value, 'tokenInTraderInfoCCCC');
+  checkAmountAntiTrader();
+  emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
+}
+defineExpose({
+  updateTraderInfo,
+});
 function preventUpdatesOnTyping(callback: () => void) {
   if (typingTimeout.value) {
     clearTimeout(typingTimeout.value);
   }
   typingTimeout.value = setTimeout(() => {
     callback();
-  }, 300);
+  }, 1000);
 }
 
 function handleInAmountChange(value: string): void {
   emit('update:tokenInAmount', value);
+  console.log(value, 'value');
   preventUpdatesOnTyping(() => {
+    // not calc if amount not done
+    if (value === '0.' || Number(value) === 0) {
+      return;
+    }
     emit('amountChange');
   });
 }
@@ -179,6 +202,10 @@ function handleInAmountChange(value: string): void {
 function handleOutAmountChange(value: string): void {
   emit('update:tokenOutAmount', value);
   preventUpdatesOnTyping(() => {
+    // not calc if amount not done
+    if (value === '0.' || Number(value) === 0) {
+      return;
+    }
     emit('amountChange');
   });
 }
@@ -306,3 +333,4 @@ onMounted(() => {
     </teleport>
   </div>
 </template>
+ 

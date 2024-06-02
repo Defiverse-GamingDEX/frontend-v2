@@ -9,7 +9,7 @@ import LastTxComponent from '@/components/contextual/pages/bridge/LastTxComponen
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useI18n } from 'vue-i18n';
-
+import { useRouter } from 'vue-router';
 /**
  * STATE
  */
@@ -21,6 +21,8 @@ const { t } = useI18n();
 const { getAdminAddress } = usePoolCreation();
 
 const { account } = useWeb3();
+
+const router = useRouter();
 // COMPUTED
 const isAdmin = computed(() => {
   if (!adminAddress.value) {
@@ -39,6 +41,7 @@ watch(isAdmin, () => {
 });
 // LIFE CYCLES
 onBeforeMount(async () => {
+  router.push('/'); // hide bridge in this version 2023/12/04
   adminAddress.value = await getAdminAddress();
 });
 

@@ -63,6 +63,13 @@ const amountsToShow = computed(() =>
 function amountShare(address: string): string {
   return bnum(props.fiatAmountMap[address]).div(props.fiatTotal).toString();
 }
+
+function symbolFor(tokenMap: any, token: any): string {
+  let symbol = tokenMap[token.address]?.symbol;
+  // Hung: Rename WOAS
+  if (symbol == 'WOAS') symbol = 'OAS';
+  return symbol;
+}
 </script>
   
 <template>
@@ -77,7 +84,7 @@ function amountShare(address: string): string {
             <span class="font-numeric">
               {{ fNum2(token.amount, FNumFormats.token) }}
             </span>
-            {{ tokenMap[token.address]?.symbol }}
+            {{ symbolFor(tokenMap, token) }}
           </div>
           <div
             v-if="Number(token.fiatAmount) > 0"

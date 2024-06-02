@@ -15,6 +15,7 @@
     </template>
     <div>
       <SwapPair
+        ref="refSwapPair"
         v-model:tokenInAmount="tokenInAmount"
         v-model:tokenInAddress="tokenInAddress"
         v-model:tokenOutAmount="tokenOutAmount"
@@ -51,8 +52,8 @@
       />
 
       <BalAlert
-        class="mb-4"
         v-if="tokenInTraderInfo?.isProtectedToken"
+        class="mb-4"
         title="ATF Warning"
         type="error"
       >
@@ -236,6 +237,8 @@ export default defineComponent({
     SwapSettingsPopover,
   },
   setup() {
+    // STATES
+    const refSwapPair = ref(null);
     // COMPOSABLES
     const store = useStore();
     const router = useRouter();
@@ -295,8 +298,14 @@ export default defineComponent({
         !dismissedErrors.value.highPriceImpact
     );
     const swapDisabled = computed(() => {
-      console.log(tokenInAmount.value, 'tokenInAmount.value');
-      console.log(tokenOutAmount.value, 'tokenOutAmount.value');
+      if (
+        tokenOutAddress.value.toLowerCase() ===
+          '0x5a89e11cb554e00c2f51c4bb7f05bc7ab0fa6351' ||
+        tokenOutAddress.value.toLowerCase() ===
+          '0x6b382742b07aabba58c38d792b5d7cbaab246e99'
+      ) {
+        return true; // Disable swap in case OAS --> WOAS
+      }
       const hasMismatchedNetwork = isMismatchedNetwork.value;
       const hasAmountsError =
         !tokenInAmount.value ||
@@ -411,6 +420,10 @@ export default defineComponent({
     // METHODS
     function swap() {
       swapping.swap(() => {
+        setTimeout(() => {
+          refSwapPair.value?.updateTraderInfo();
+        }, 3000);
+
         swapping.resetAmounts();
         modalSwapPreviewIsOpen.value = false;
       });
@@ -461,7 +474,7 @@ export default defineComponent({
       modalAntiTraderWarning.value = payload;
     }
     function updateTokenInTradeInfo(info) {
-      console.log(info, 'info');
+      console.log(info, 'infoAAAA');
       tokenInTraderInfo.value = info;
     }
     // INIT
@@ -477,6 +490,7 @@ export default defineComponent({
       }
     });
     return {
+      refSwapPair,
       // constants
       TOKENS,
       // context

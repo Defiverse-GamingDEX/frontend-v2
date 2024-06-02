@@ -58,7 +58,7 @@ export const networkMap = {
   [Network.POLYGON]: 'polygon',
   [Network.ARBITRUM]: 'arbitrum-one',
   [Network.DEFIVERSE]: 'defiverse',
-  [Network.DEFIVERSE]: 'defiverse-testnet',
+  [Network.DEFIVERSE_TESTNET]: 'defiverse-testnet',
 };
 
 export const Web3ProviderSymbol = Symbol('WEB3_PROVIDER');

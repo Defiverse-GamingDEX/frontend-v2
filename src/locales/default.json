@@ -122,9 +122,9 @@
       "claim": "Claim anytime"
     },
     "tips": {
-      "addLiquidity": "To earn liquidity mining incentives, add liquidity to eligible pools across Ethereum Mainnet and supported Layer 2's like Polygon and Arbitrum (see the table on the veGDT page). Note: You'll earn swap fees with or without staking but you don't need to claim these as they are automatically added to your position.",
+      "addLiquidity": "To earn liquidity mining incentives, add liquidity to eligible pools across Defiverse Mainnet and supported Layer 2's like Polygon and Arbitrum (see the table on the veGDT page). Note: You'll earn swap fees with or without staking but you don't need to claim these as they are automatically added to your position.",
       "stake": "If you've provided liquidity in an eligible pool, you'll have an option to stake your Liquidity Provider (LP) tokens from that pool. Stake them to receive liquidity mining incentives in addition to any swap fees.",
-      "boost": "veGDT to boost your liquidity mining incentives by up to 2.5x (on Ethereum Mainnet only). The more veGDT you hold, the larger your boost. veGDT holders also earn protocol fees and can vote to direct future pool emissions. Note, there is no additional boost from holding veGDT on Layer 2 pools like Polygon and Arbitrum.",
+      "boost": "veGDT to boost your liquidity mining incentives by up to 2.5x (on Defiverse Mainnet only). The more veGDT you hold, the larger your boost. veGDT holders also earn protocol fees and can vote to direct future pool emissions. Note, there is no additional boost from holding veGDT on Layer 2 pools like Polygon and Arbitrum.",
       "claim": "Token earnings from liquidity mining accumulate every block and can be claimed at any time. Some pools offer multiple token incentives (not just GDT). Additionally, veGDT holders also get a share of protocol revenue, in both bb-a-USD and GDT."
     }
   },
@@ -540,7 +540,7 @@
   "locked": "Locked",
   "locking": {
     "expiredLockLpTokens": "Expired lock LP tokens",
-    "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any veGDT or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veGDT incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80GDT-20OAS LP tokens and then create a new lock to veGDT.",
+    "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any veGDT or voting power. You will no longer earn protocol fees, boosted yields on staked Defiverse Mainnet pools or veGDT incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80GDT-20OAS LP tokens and then create a new lock to veGDT.",
     "lockBptForVeBal": "Lock LP for veGDT",
     "lockedLpTokensTooltip": "The USD value of your veGDT. These are your locked LP tokens in the GDT 80% / OAS 20% pool.",
     "unlockedLpTokensTooltip": "The USD value of your liquidity provided to the GDT 80% / OAS 20% pool that has not been locked."
@@ -551,7 +551,7 @@
   "lbpAprTooltip": "Only the LBP creator can add liquidity and receive this APR.",
   "managedPool": "Managed pool",
   "manageLists": "Manage lists",
-  "marketConditionsWarning": "Market conditions may change between the time your order is submitted and the time it gets executed on Ethereum. Slippage tolerance is the maximum change in price you are willing to accept. This protects you from front-running bots and miner extractable value (MEV).",
+  "marketConditionsWarning": "Market conditions may change between the time your order is submitted and the time it gets executed on Defiverse. Slippage tolerance is the maximum change in price you are willing to accept. This protects you from front-running bots and miner extractable value (MEV).",
   "max": "Max",
   "maxed": "Maxed",
   "maximum": "Maximum",
@@ -565,7 +565,7 @@
   "modals": {
     "veBalRedirectModal": {
       "title": "Proceed to mainnet",
-      "description": "Getting and using veGDT to vest and vote must be performed on the Ethereum mainnet. \n\n You can still earn liquidity mining incentives on Arbitrum and Polygon and Defiverse by adding liquidity to eligible pools. However to vote to direct emissions to your favored pools and to earn the protocol fees, you will need to use veGDT on Ethereum Mainnet by locking B-80GDT-20OAS."
+      "description": "Getting and using veGDT to vest and vote must be performed on the Defiverse mainnet. \n\n You can still earn liquidity mining incentives on Arbitrum and Polygon and Defiverse by adding liquidity to eligible pools. However to vote to direct emissions to your favored pools and to earn the protocol fees, you will need to use veGDT on Defiverse Mainnet by locking B-80GDT-20OAS."
     }
   },
   "month": "month",
@@ -578,7 +578,7 @@
   "mustBeSame": "must be the same as {0}",
   "mustBeValidEmail": "must be a valid email",
   "mustBeValidNum": "must be a valid number",
-  "mustBeValidAddress": "This is not a valid Ethereum address",
+  "mustBeValidAddress": "This is not a valid Defiverse address",
   "myApr": "My APR",
   "myBalance": "My balance",
   "myBalancerBalance": "My Defiverse balance",
@@ -586,7 +586,7 @@
   "myPortfolio": "My portfolio",
   "myShare": "My share",
   "myLiquidityInBalancerPools": "My liquidity in Defiverse pools",
-  "myWallet": "My Ethereum wallet",
+  "myWallet": "My Defiverse wallet",
   "myWallet2": "My wallet",
   "name": "Name",
   "namePlaceholder": "Name, symbol or contract address",
@@ -597,7 +597,7 @@
   "poolDoesntExist": "Pool doesn't exist on",
   "new": "New",
   "newTotal": "New total",
-  "newToEthereum": "New to Ethereum?",
+  "newToEthereum": "New to Defiverse?",
   "newWithdrawal": "New withdrawal",
   "next": "Next",
   "noContent": "No content",
@@ -822,7 +822,7 @@
     "sentry": "Used for error tracking and performance monitoring."
   },
   "settings": "Settings",
-  "setUpEthereumWallet": "Balancer is a DeFi app on Ethereum. Set up an Ethereum Wallet to swap and provide liquidity here.",
+  "setUpEthereumWallet": "Gaming Dex is a DeFi app on Defiverse. Set up an Defiverse Wallet to swap and provide liquidity here.",
   "singleToken": "Single token",
   "singleTokenMax": "Single token max",
   "slippageTolerance": "Slippage tolerance",
@@ -909,7 +909,7 @@
           "label": "My veGDT",
           "secondaryText": "{0} of all veGDT"
         },
-        "myExpiredLockTooltip": "Your previous lockup period has expired, so you no longer have any veGDT or voting power. You will no longer earn protocol fees, boosted yields on staked Ethereum Mainnet pools or veGDT incentives. However, you’ll still get the minimum 1.0x rate. Tap the minus icon to redeem your expired locked B-80GDT-20OAS LP tokens and then create a new lock to veGDT."
+        "myExpiredLockTooltip": "Your previous lockup period has expired, so you no longer have any veGDT or voting power. You will no longer earn protocol fees, boosted yields on staked Defiverse Mainnet pools or veGDT incentives. However, you’ll still get the minimum 1.0x rate. Tap the minus icon to redeem your expired locked B-80GDT-20OAS LP tokens and then create a new lock to veGDT."
       }
     },
     "communityVeBAL": {
@@ -1031,7 +1031,7 @@
     },
     "notSupported": {
       "title": "Locking is unavailable on this network",
-      "description": "veGDT on Ethereum Mainnet"
+      "description": "veGDT on Defiverse Mainnet"
     },
     "votingTransitionDescription": "Liquidity mining emissions as directed by veGDT holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so veGDT and vote for pools. Your vote will persist until you edit. Editing can only be done once in 10 days."
   },
@@ -1152,7 +1152,7 @@
     },
     "notSupported": {
       "title": "Locking is unavailable on this network",
-      "description": "veGDT on Ethereum Mainnet"
+      "description": "veGDT on Defiverse Mainnet"
     }
   },
   "getVeBALToVote": "veGDT to vote",
@@ -1192,7 +1192,7 @@
     },
     "notSupported": {
       "title": "Unlocking is unavailable on this network",
-      "description": "Unlock on Ethereum Mainnet"
+      "description": "Unlock on Defiverse Mainnet"
     }
   },
   "tableShowsBalancerV2Pools": "This table shows only Balancer V2 pools.",

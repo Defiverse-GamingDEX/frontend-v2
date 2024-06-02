@@ -3,9 +3,9 @@ import { isAddress } from '@ethersproject/address';
 
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useNumbers from '@/composables/useNumbers';
+import { shorten } from '@/lib/utils';
 import { isRequired, isValidAddress } from '@/lib/utils/validations';
 import useWeb3 from '@/services/web3/useWeb3';
-import { shorten } from '@/lib/utils';
 
 const emit = defineEmits(['update:height']);
 
@@ -19,6 +19,7 @@ const FIXED_FEE_OPTIONS = ['0.001', '0.003', '0.01'];
  */
 const isCustomFee = ref(false);
 const checkboxState = ref(false);
+
 const isInvalidFee = ref(false);
 const cardWrapper = ref<HTMLElement>();
 
@@ -43,7 +44,6 @@ const {
 } = usePoolCreation();
 const { account } = useWeb3();
 const { userNetworkConfig } = useWeb3();
-
 /**
  * COMPUTED
  */
@@ -88,6 +88,7 @@ function onFixedInput(val: string): void {
 }
 
 function onCustomInput(val: string): void {
+  console.log('onCustomInput', val);
   initialFee.value = (Number(val) / 100).toString();
   isCustomFee.value = true;
 
@@ -170,14 +171,29 @@ async function onChangeFeeController(val: string) {
             />
             <div>
               <div :class="['custom-input', customInputClasses]">
-                <input
+                <!-- <input
                   v-model="fee"
                   class="w-12 h-full text-right bg-transparent"
                   placeholder="0.1"
                   type="number"
                   step="any"
-                  @update:modelValue="onCustomInput"
-                />
+                  @change="onCustomInput"
+                /> -->
+                <BalTextInput
+                  v-model="fee"
+                  name="amount"
+                  inputContainerClasses="input-val"
+                  inputClasses="w-12 h-full text-right bg-transparent"
+                  placeholder="0.1"
+                  type="number-dot"
+                  autocomplete="off"
+                  autocorrect="off"
+                  step="any"
+                  spellcheck="false"
+                  inputAlignRight
+                  @update:model-value="onCustomInput($event)"
+                >
+                </BalTextInput>
                 <!-- <BalTextInput
               class="w-20"
               v-model="fee"
@@ -315,8 +331,27 @@ async function onChangeFeeController(val: string) {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .custom-input {
   @apply flex items-center px-1 rounded-lg shadow-inner h-full;
+  max-width: 100px;
+  :deep .bal-text-input {
+    box-shadow: none;
+    border-radius: 0px;
+    .input-container {
+      background: transparent;
+      padding: 0px;
+      border: 0px;
+      box-shadow: none;
+      .input-group {
+        padding: 0px;
+        > input {
+          height: auto;
+          font-size: 16px;
+          color: rgb(100, 116, 139);
+        }
+      }
+    }
+  }
 }
 </style>

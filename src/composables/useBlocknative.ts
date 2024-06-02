@@ -5,7 +5,12 @@ import { computed, inject } from 'vue';
 import { bnSdkSymbol } from '@/plugins/blocknative';
 import useWeb3 from '@/services/web3/useWeb3';
 
-const SUPPORTED_NETWORKS = [Network.MAINNET, Network.GOERLI, Network.POLYGON];
+const SUPPORTED_NETWORKS = [
+  Network.DEFIVERSE,
+  Network.MAINNET,
+  Network.GOERLI,
+  Network.POLYGON,
+];
 
 export default function useBlocknative() {
   const { appNetworkConfig } = useWeb3();

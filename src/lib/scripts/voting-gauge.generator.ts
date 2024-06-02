@@ -42,16 +42,31 @@ async function getGaugeRelativeWeight(gaugeAddresses: string[]) {
   const rpcUrl = template(config[Network.MAINNET].rpc, { INFURA_KEY });
   const provider = new JsonRpcProvider(rpcUrl);
 
+  // HUNG
+  // const multicaller = new Multicaller(
+  //   config[Network.MAINNET].key,
+  //   provider,
+  //   VEBalHelpersABI
+  // );
+
   const multicaller = new Multicaller(
-    config[Network.MAINNET].key,
+    config[Network.DEFIVERSE].key,
     provider,
     VEBalHelpersABI
   );
 
   for (const gaugeAddress of gaugeAddresses) {
+    // multicaller.call(
+    //   getAddress(gaugeAddress),
+    //   config[Network.MAINNET].addresses.veBALHelpers,
+    //   'gauge_relative_weight',
+    //   [getAddress(gaugeAddress)]
+    // );
+
+    // Hung
     multicaller.call(
       getAddress(gaugeAddress),
-      config[Network.MAINNET].addresses.veBALHelpers,
+      config[Network.DEFIVERSE].addresses.veBALHelpers,
       'gauge_relative_weight',
       [getAddress(gaugeAddress)]
     );

@@ -15,6 +15,10 @@ export class WalletConnectConnector extends Connector {
         [Network.POLYGON]: configService.getNetworkRpc(Network.POLYGON),
         [Network.ARBITRUM]: configService.getNetworkRpc(Network.ARBITRUM),
         [Network.GOERLI]: configService.getNetworkRpc(Network.GOERLI),
+        [Network.DEFIVERSE]: configService.getNetworkRpc(Network.DEFIVERSE),
+        [Network.DEFIVERSE_TESTNET]: configService.getNetworkRpc(
+          Network.DEFIVERSE_TESTNET
+        ),
       },
     });
     this.provider = provider;

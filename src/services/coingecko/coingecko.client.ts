@@ -8,6 +8,7 @@ export class CoingeckoClient {
   }
 
   async get<T>(endpoint: string): Promise<T> {
+    console.log('DAYNE');
     const { data } = await axios.get(this.baseUrl + endpoint);
     return data;
   }

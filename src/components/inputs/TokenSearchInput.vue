@@ -105,6 +105,13 @@ function addToken(token: string) {
 function onClick() {
   selectTokenModal.value = true;
 }
+
+function symbolFor(tokenAddress: string): string {
+  let symbol = getToken(tokenAddress)?.symbol || '---';
+  // Hung: Rename WOAS
+  if (symbol == 'WOAS') symbol = 'OAS';
+  return symbol;
+}
 </script>
 <template>
   <div>
@@ -128,7 +135,7 @@ function onClick() {
           @closed="emit('remove', token)"
         >
           <BalAsset :address="token" :size="20" class="flex-auto" />
-          <span class="ml-2">{{ getToken(token)?.symbol }}</span>
+          <span class="ml-2">{{ symbolFor(token) }}</span>
         </BalChip>
       </div>
       <TokenSearchInputSelectTokens

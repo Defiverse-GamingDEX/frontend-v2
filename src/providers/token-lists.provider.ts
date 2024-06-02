@@ -110,7 +110,6 @@ function isActiveList(uri: string): boolean {
 export const tokenListsProvider = () => {
   onBeforeMount(async () => {
     const module = await tokensListPromise;
-    console.log(module.default, 'module.default');
     allTokenLists.value = module.default;
   });
 

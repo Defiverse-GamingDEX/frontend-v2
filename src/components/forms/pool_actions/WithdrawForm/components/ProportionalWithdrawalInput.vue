@@ -116,6 +116,14 @@ watch(isWalletReady, () => {
 onBeforeMount(() => {
   propBptIn.value = bptBalance.value;
 });
+
+function symbolFor(token: any): string {
+  let symbol = token?.symbol || '---';
+  if (symbol == 'WOAS') {
+    symbol = 'OAS';
+  }
+  return symbol;
+}
 </script>
 
 <template>
@@ -160,7 +168,7 @@ onBeforeMount(() => {
             <BalAsset :address="address" class="mr-2" />
             <div class="flex flex-col leading-none">
               <span class="text-lg font-medium">
-                {{ token.symbol }}
+                {{ symbolFor(token) }}
                 <span v-if="!isStableLikePool">
                   {{
                     fNum2(seedTokens[i], {

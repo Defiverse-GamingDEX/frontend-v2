@@ -7,6 +7,7 @@ import Avatar from '../../images/Avatar.vue';
 
 type Props = {
   address?: string;
+  useWOAS?: boolean;
   iconURI?: string;
   size?: number;
   button?: boolean;
@@ -17,6 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
   address: '',
   iconURI: '',
   size: 24,
+  useWOAS: false,
   button: false,
   disabled: false,
 });
@@ -58,12 +60,21 @@ const rootElementAttrs = computed(() => ({
 watch(iconSRC, newURL => {
   if (newURL !== '') error.value = false;
 });
+
+function symbolFor(token: any): string {
+  let symbol = token?.symbol || '---';
+  if (props.useWOAS) return symbol;
+
+  // Hung: Rename WOAS
+  if (symbol == 'WOAS') symbol = 'OAS';
+  return symbol;
+}
 </script>
 
 <template>
   <component
     :is="rootElement"
-    :title="token?.symbol"
+    :title="symbolFor(token)"
     class="inline-block leading-none rounded-full shadow-sm bal-asset"
     :style="{
       width: `${size}px`,

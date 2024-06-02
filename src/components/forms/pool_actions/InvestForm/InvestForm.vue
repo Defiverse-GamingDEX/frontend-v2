@@ -54,12 +54,19 @@ const props = defineProps<Props>();
  */
 const showInvestPreview = ref(false);
 const showStakeModal = ref(false);
-
+const isPoolWhiteList = ref(false);
+const isHasProtectedToken = ref(false);
 /**
  * COMPOSABLES
  */
 const { t } = useI18n();
-const { balanceFor, nativeAsset, wrappedNativeAsset } = useTokens();
+const {
+  balanceFor,
+  nativeAsset,
+  wrappedNativeAsset,
+  isLiquidityWhitelisted,
+  getAntiTraderInfo,
+} = useTokens();
 const { useNativeAsset } = usePoolTransfers();
 const {
   tokenAddresses,
@@ -89,12 +96,15 @@ const {
   loadingData,
 } = investMath;
 
-const { isWalletReady, startConnectWithInjectedProvider, isMismatchedNetwork } =
-  useWeb3();
+const {
+  isWalletReady,
+  startConnectWithInjectedProvider,
+  isMismatchedNetwork,
+  account,
+} = useWeb3();
 
 const { managedPoolWithSwappingHalted, isWethPool, isStableLikePool } =
   usePool(pool);
-
 /**
  * COMPUTED
  */
@@ -206,7 +216,59 @@ function setNativeAsset(to: NativeAsset): void {
     tokenAddresses.value[indexOfAsset] = toAddress;
   }
 }
-
+async function checkIsLiquidityWhitelisted() {
+  try {
+    let multiCall = [];
+    console.log(tokenAddresses.value, 'tokenAddresses.value');
+    if (tokenAddresses.value?.length > 0) {
+      for (let i = 0; i < tokenAddresses.value?.length; i++) {
+        multiCall.push(
+          isLiquidityWhitelisted(tokenAddresses.value[i], account?.value)
+        );
+      }
+    }
+    let rs = await Promise.allSettled(multiCall);
+    console.log(rs, 'rs=>checkIsLiquidityWhitelisted');
+    let isExistWhiteList = rs?.find(
+      item => item?.value?.isLiquidityWhitelisted === true
+    );
+    if (isExistWhiteList) {
+      isPoolWhiteList.value = true;
+    } else {
+      isPoolWhiteList.value = false;
+    }
+    console.log(isPoolWhiteList.value, ' isPoolWhiteList.value');
+  } catch (error) {
+    console.log(error, 'error=>checkIsLiquidityWhitelisted');
+  }
+}
+async function checkIsHasProtectedToken() {
+  try {
+    let multiCall = [];
+    console.log(tokenAddresses.value, 'tokenAddresses.value');
+    if (tokenAddresses.value?.length > 0) {
+      for (let i = 0; i < tokenAddresses.value?.length; i++) {
+        multiCall.push(
+          getAntiTraderInfo(tokenAddresses.value[i], account?.value)
+        );
+      }
+    }
+    let rs = await Promise.allSettled(multiCall);
+    console.log(rs, 'rs=>checkIsHasProtectedToken');
+    let isExistWhiteList = rs?.find(
+      item => item?.value?.isProtectedToken === true
+    );
+    if (isExistWhiteList) {
+      isHasProtectedToken.value = true;
+    } else {
+      isHasProtectedToken.value = false;
+    }
+    console.log(isPoolWhiteList.value, ' isPoolWhiteList.value');
+  } catch (error) {
+    console.log(error, 'error=>checkIsLiquidityWhitelisted');
+  }
+}
+isHasProtectedToken;
 /**
  * CALLBACKS
  */
@@ -214,6 +276,10 @@ onBeforeMount(() => {
   resetAmounts();
   tokenAddresses.value = [...investmentTokens.value];
   if (isWethPool.value) setNativeAssetByBalance();
+
+  // check if pool have asset in whiteList
+  checkIsLiquidityWhitelisted();
+  checkIsHasProtectedToken();
 });
 
 /**
@@ -226,6 +292,12 @@ watch(useNativeAsset, shouldUseNativeAsset => {
     setNativeAsset(NativeAsset.wrapped);
   }
 });
+// watch(
+//   () => tokenAddresses.value,
+//   async () => {
+//     checkIsLiquidityWhitelisted();
+//   }
+// );
 </script>
 
 <template>
@@ -283,7 +355,16 @@ watch(useNativeAsset, shouldUseNativeAsset => {
         :label="$t('priceImpactAccept', [$t('depositing')])"
       />
     </div>
-
+    <BalAlert
+      v-if="isHasProtectedToken"
+      class="mt-4 mb-4"
+      title="ATF Warning"
+      type="error"
+    >
+      <p class="text-gray-600 dark:text-gray-400">
+        This pool has ATF token. Your wallet must be whitelisted to add liquidity
+      </p>
+    </BalAlert>
     <WrapStEthLink :pool="pool" class="mt-4" />
 
     <div class="mt-4">
@@ -299,7 +380,11 @@ watch(useNativeAsset, shouldUseNativeAsset => {
         :label="$t('preview')"
         color="gradient"
         :disabled="
-          !hasAmounts || !hasValidInputs || isMismatchedNetwork || loadingData
+          !isPoolWhiteList ||
+          !hasAmounts ||
+          !hasValidInputs ||
+          isMismatchedNetwork ||
+          loadingData
         "
         block
         @click="showInvestPreview = true"
