@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import useBreakpoints from '@/composables/useBreakpoints';
-import { useBridge } from '@/composables/bridge/useBridge';
-import useWeb3 from '@/services/web3/useWeb3';
 import HistoryCardListComponent from '@/components/contextual/pages/bridge/HistoryCardListComponent.vue';
-import bridgeAPI from '@/composables/bridge/bridge.api.js';
+import { useBridge } from '@/composables/bridge/useBridge';
+import useBreakpoints from '@/composables/useBreakpoints';
+import useWeb3 from '@/services/web3/useWeb3';
 
 /**
  * STATES
@@ -50,8 +49,8 @@ const getTxList = async () => {
       limit: pagination.value.sizePerPage,
       offset: (pagination.value.currentPage - 1) * pagination.value.sizePerPage,
     };
-    const rs = await bridgeAPI.getSwapHistory(params);
-
+    //const rs = await bridgeAPI.getSwapHistory(params);
+    const rs = null;
     txList.value = mapResultData(rs);
     // add pagination total here
   } catch (error) {

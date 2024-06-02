@@ -41,7 +41,6 @@ watch(isAdmin, () => {
 });
 // LIFE CYCLES
 onBeforeMount(async () => {
-  router.push('/'); // hide bridge in this version 2023/12/04
   adminAddress.value = await getAdminAddress();
 });
 
