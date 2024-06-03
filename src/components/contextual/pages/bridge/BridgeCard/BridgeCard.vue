@@ -13,12 +13,11 @@ import { useUserSettings } from '@/providers/user-settings.provider';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import useWeb3 from '@/services/web3/useWeb3';
 import BigNumber from 'bignumber.js';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, debounce } from 'lodash';
 import { computed } from 'vue';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
-
 // // COMPOSABLES
 const {
   account,
@@ -31,6 +30,7 @@ const {
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
+  truncateDecimal,
   getTokenURL,
   checkIsNative,
 
@@ -157,15 +157,9 @@ function groupByChainId(arr) {
       acc[chainId] = { chain_id: chainId, tokens: [] };
     }
     const tokenAddress = curr.token_address;
-    console.log('🚀 ~ groupedByChainId ~ tokenAddress:', tokenAddress);
     const tokenExists = acc[chainId].tokens.some(
       token => token.address?.toLowerCase() === tokenAddress?.toLowerCase()
     );
-    console.log(
-      '🚀 ~ groupedByChainId ~ acc[chainId].tokens:',
-      acc[chainId].tokens
-    );
-    console.log('🚀 ~ groupedByChainId ~ tokenExists:', tokenExists);
     if (!tokenExists) {
       acc[chainId].tokens.push({
         name: curr.token_name,
@@ -219,16 +213,7 @@ function covertUnitShow(number, token_decimals) {
     .toString();
   return rs;
 }
-function calcMinimumReceive() {
-  if (estimateInfo.value) {
-    let minimumReceive = BigNumber(estimateInfo.value.estimated_receive_amt)
-      .minus(estimateInfo.value.base_fee)
-      .minus(estimateInfo.value.perc_fee)
-      .toString();
-    return covertUnitShow(minimumReceive, inputFromSelect.value.decimals);
-  }
-  return 0;
-}
+
 function calcFee() {
   if (estimateInfo.value) {
     let fee = BigNumber(estimateInfo.value.base_fee)
@@ -318,6 +303,7 @@ function updateNetWorkInputFrom(chainId) {
   let networkChoose = srcBE.value.find(
     item => item?.chain_id_decimals === chainId
   );
+  console.log('🚀 ~ updateNetWorkInputFrom ~ networkChoose:', networkChoose);
   if (networkChoose) {
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
@@ -341,7 +327,9 @@ function updateNetWorkInputFrom(chainId) {
     checkAllowanceInputFrom();
   }
 }
-
+const delayinputFromChange = debounce(async inputSelect => {
+  handleInputFromChange(inputSelect);
+}, 500);
 async function handleInputFromChange(inputSelect) {
   console.log('🚀 ~ handleInputFromChange ~ inputSelect:', inputSelect);
   inputFromSelect.value = inputSelect;
@@ -352,9 +340,18 @@ async function handleInputFromChange(inputSelect) {
   // check allowance
   checkAllowanceInputFrom();
 
-  getEstimateAtmData();
+  await getEstimateFee();
 }
-async function getEstimateAtmData() {
+function mapEstimateInfo(rs) {
+  return {
+    ...rs,
+    bridge_rate: truncateDecimal(
+      BigNumber(rs.amount_out).div(rs.amount_in).toString(),
+      2
+    ),
+  };
+}
+async function getEstimateFee() {
   try {
     if (
       inputFromSelect.value.amount > 0 &&
@@ -363,22 +360,31 @@ async function getEstimateAtmData() {
       inputFromSelect.value.tokenSymbol &&
       account.value
     ) {
-      let rs = await getEstimateAmt(
-        inputFromSelect.value,
-        inputToSelect.value,
-        account.value,
-        slippage.value
-      );
-      console.log(rs, 'rs=>getEstimateAtmData');
-      estimateInfo.value = rs;
-      // update InputTo amount
-      inputToSelect.value.amount = covertUnitShow(
-        rs.estimated_receive_amt,
-        inputFromSelect.value.decimals
-      );
+      const amount = BigNumber(inputFromSelect.value.amount)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0);
+      const params = {
+        src_token_address: inputFromSelect.value.tokenAddress,
+        src_chain_id: inputFromSelect.value.chainId,
+        dst_chain_id: inputToSelect.value.chainId,
+        amount_in: amount,
+      };
+      const rs = await bridgeApi.getEstimateFee(params);
+      if (rs) {
+        estimateInfo.value = mapEstimateInfo(rs);
+        console.log(
+          '🚀 ~ getEstimateFee ~  estimateInfo.value:',
+          estimateInfo.value
+        );
+        // update InputTo amount
+        inputToSelect.value.amount = covertUnitShow(
+          rs.amount_out,
+          inputToSelect.value.decimals
+        );
+      }
     }
   } catch (error) {
-    console.log(error, 'error=>getEstimateAtmData');
+    console.log(error, 'error=>getEstimateFee');
   }
 }
 async function handleInputToChange(inputSelect) {
@@ -386,7 +392,7 @@ async function handleInputToChange(inputSelect) {
   inputToSelect.value = inputSelect;
   console.log(inputToSelect.value, 'inputToSelect.value');
 
-  getEstimateAtmData();
+  getEstimateFee();
 }
 
 function handleWalletAddressChange(address) {
@@ -583,7 +589,7 @@ onBeforeMount(async () => {
               :chainsList="srcBE"
               :inputSelect="inputFromSelect"
               :disabled="!isWalletReady"
-              @update:input-select="handleInputFromChange"
+              @update:input-select="delayinputFromChange"
               @update:network="handleNetworkChange"
             />
           </div>
@@ -649,7 +655,7 @@ onBeforeMount(async () => {
           </div>
           <div class="info">
             <div class="title">
-              Fee
+              Fee 1
               <BalTooltip width="64">
                 <template #activator>
                   <BalIcon
@@ -659,7 +665,7 @@ onBeforeMount(async () => {
                   />
                 </template>
                 <div class="tooltip-content">
-                  <div class="mb-2">
+                  <!-- <div class="mb-2">
                     <span class="bold"> The Base Fee:</span>
                     {{ estimateInfo.base_fee }}
                     {{ inputFromSelect?.tokenSymbol }}.e
@@ -672,23 +678,21 @@ onBeforeMount(async () => {
                   <div class="mb-4">
                     Base Fee is used to cover the gas cost for sending your
                     transfer on the destination chain.
-                  </div>
-                  <div>
-                    Protocol Fee is charged proportionally to your transfer
-                    amount. Protocol Fee is paid to cBridge LPs and Celer SGN as
-                    economic incentives.
-                  </div>
+                  </div> -->
+                  <div>Balabalaba</div>
                 </div>
               </BalTooltip>
             </div>
             <div class="value">
-              {{ calcFee() }}
-              {{ inputFromSelect?.tokenSymbol }}.e
+              {{
+                covertUnitShow(estimateInfo?.fee1, inputFromSelect?.decimals)
+              }}
+              {{ inputFromSelect?.tokenSymbol }}
             </div>
           </div>
           <div class="info">
             <div class="title">
-              Minimum Received
+              Fee 2
               <BalTooltip width="64">
                 <template #activator>
                   <BalIcon
@@ -697,21 +701,17 @@ onBeforeMount(async () => {
                     class="flex ml-1 text-gray-400"
                   />
                 </template>
-                <div class="tooltip-content">
-                  You will receive at least
-                  {{ calcMinimumReceive() }}
-                  {{ inputFromSelect?.tokenSymbol }}.e on
-                  {{ getChainName(inputToSelect?.chainId) }}
-                  or the transfer won't go through.
-                </div>
+                <div class="tooltip-content">Balabalaba</div>
               </BalTooltip>
             </div>
             <div class="w-40 value">
-              {{ calcMinimumReceive() }}
-              {{ inputFromSelect?.tokenSymbol }}.e
+              {{
+                covertUnitShow(estimateInfo?.fee2, inputFromSelect?.decimals)
+              }}
+              {{ inputFromSelect?.tokenSymbol }}
             </div>
           </div>
-          <div class="info">
+          <!-- <div class="info">
             <div class="title">
               Slippage Tolerance
               <BalTooltip width="64">
@@ -734,7 +734,7 @@ onBeforeMount(async () => {
                 BigNumber(estimateInfo.slippage_tolerance).div(100).toFixed(2)
               }}%
             </div>
-          </div>
+          </div> -->
         </div>
         <div v-if="estimateInfo?.err?.code" class="mt-8 notification-content">
           <BalAlert title="Error" type="error">
@@ -866,8 +866,8 @@ onBeforeMount(async () => {
               margin-right: 0px;
             }
             > img {
-              width: 14px;
-              height: 14px;
+              width: 28px;
+              height: 28px;
             }
           }
         }

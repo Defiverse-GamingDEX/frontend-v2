@@ -55,7 +55,8 @@ function updateNetWork(chainId) {
   if (networkChoose) {
     inputSelect.chainId = networkChoose.chain_id_decimals;
     inputSelect.tokensList = cloneDeep(networkChoose.tokens);
-    inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
+    inputSelect.tokenAddress = networkChoose.tokens[0].address; // TODO
+    //inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
   }
   emit('update:inputSelect', inputSelect);
 }

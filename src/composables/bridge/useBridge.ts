@@ -16,6 +16,15 @@ import { ethers } from 'ethers';
 import bridgeAPI from './bridge.api.js';
 import bridgeService from './bridge.services.js';
 // real function - START - TODO
+function truncateDecimal(number, precision) {
+  const [integerPart, fractionalPart] = number.toString().split('.');
+  const truncatedFractionalPart = fractionalPart
+    ? fractionalPart.slice(0, precision)
+    : '';
+  return (
+    integerPart + (truncatedFractionalPart ? '.' + truncatedFractionalPart : '')
+  );
+}
 function checkIsNative(tokenAddress, chainId) {
   if (chainId === 248) {
     // OASYS
@@ -46,7 +55,7 @@ function getTokenURL(tokenSymbol) {
       return oasIcon;
     case 'DFV':
       return defiIcon;
-    case 'tcgcIcon':
+    case 'TCGC':
       return tcgcIcon;
     default:
       return ethIcon;
@@ -320,6 +329,7 @@ async function bridgeSend(
 }
 export function useBridge() {
   return {
+    truncateDecimal,
     getTokenURL,
     checkIsNative,
     // SDK start

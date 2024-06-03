@@ -11,9 +11,7 @@ const getRoutes = async () => {
   return data?.data;
 };
 const getEstimateFee = async params => {
-  let data = await axios.get(`${domain}/v1/bridge/request/estimate`, {
-    params,
-  });
+  let data = await axios.post(`${domain}/v1/bridge/request/estimate`, params);
   return data?.data;
 };
 const getRequestDetails = async params => {

@@ -7,15 +7,6 @@ import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
 import saakuruIcon from '@/assets/images/bridge/networks/saakuru.png';
 import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
 
-import { BRIDGE_CHAINVERSE_TOKENS } from '../tokens/mainnet/chainverse-tokens';
-import { BRIDGE_DEFIVERSE_TOKENS } from '../tokens/mainnet/defiverse-tokens';
-import { BRIDGE_ETHEREUM_TOKENS } from '../tokens/mainnet/ethereum-tokens';
-import { BRIDGE_HOMEVERSE_TOKENS } from '../tokens/mainnet/homeverse-tokens';
-import { BRIDGE_MCHVERSE_TOKENS } from '../tokens/mainnet/mchverse-tokens';
-import { BRIDGE_POLYGON_TOKENS } from '../tokens/mainnet/polygon-tokens';
-import { BRIDGE_SAKUURU_TOKENS } from '../tokens/mainnet/sakuuru-tokens';
-import { BRIDGE_TCGVERSE_TOKENS } from '../tokens/mainnet/tcgverse-tokens';
-
 export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x1',
@@ -29,7 +20,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'external-chain',
     isOnlyDefiBridge: false,
     isTestnet: false,
-    tokens: BRIDGE_ETHEREUM_TOKENS,
+    //tokens: BRIDGE_ETHEREUM_TOKENS,
     nativeCurrency: {
       name: 'Ethereum',
       symbol: 'ETH',
@@ -49,7 +40,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'external-chain',
     isOnlyDefiBridge: false,
     isTestnet: false,
-    tokens: BRIDGE_POLYGON_TOKENS,
+    //tokens: BRIDGE_POLYGON_TOKENS,
     nativeCurrency: {
       name: 'MATIC',
       symbol: 'MATIC',
@@ -69,7 +60,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'L2',
     isOnlyDefiBridge: false,
     isTestnet: false,
-    tokens: BRIDGE_DEFIVERSE_TOKENS,
+    //tokens: BRIDGE_DEFIVERSE_TOKENS,
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
@@ -89,7 +80,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'L2',
     isOnlyDefiBridge: true,
     isTestnet: false,
-    tokens: BRIDGE_MCHVERSE_TOKENS,
+    //tokens: BRIDGE_MCHVERSE_TOKENS,
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
@@ -109,7 +100,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'L2',
     isOnlyDefiBridge: true,
     isTestnet: false,
-    tokens: BRIDGE_TCGVERSE_TOKENS,
+    //tokens: BRIDGE_TCGVERSE_TOKENS,
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
@@ -129,7 +120,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'L2',
     isOnlyDefiBridge: true,
     isTestnet: false,
-    tokens: BRIDGE_HOMEVERSE_TOKENS,
+    //tokens: BRIDGE_HOMEVERSE_TOKENS,
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
@@ -149,7 +140,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'L2',
     isOnlyDefiBridge: true,
     isTestnet: false,
-    tokens: BRIDGE_CHAINVERSE_TOKENS,
+    //tokens: BRIDGE_CHAINVERSE_TOKENS,
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
@@ -169,7 +160,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     type: 'L2',
     isOnlyDefiBridge: true,
     isTestnet: false,
-    tokens: BRIDGE_SAKUURU_TOKENS,
+    //tokens: BRIDGE_SAKUURU_TOKENS,
     nativeCurrency: {
       name: 'OASYS',
       symbol: 'OAS',
