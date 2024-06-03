@@ -1,15 +1,58 @@
-import { reactive, toRefs } from 'vue';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { Contract } from '@ethersproject/contracts';
+import defiIcon from '@/assets/images/bridge/tokens/defi.png';
+import ethIcon from '@/assets/images/bridge/tokens/eth.png';
+import oasIcon from '@/assets/images/bridge/tokens/oas.png';
+import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
+import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
+import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
+import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
+import { BRIDGE_NETWORKS, OASYS_NETWORK } from '@/constants/bridge/networks';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { default as BridgeABI } from '@/lib/abi/bridge/Bridge.json';
-import { default as IL2ERC20BridgeABI } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
-import { BRIDGE_NETWORKS, OASYS_NETWORK } from '@/constants/bridge/networks';
-import bridgeService from './bridge.services.js';
-import bridgeAPI from './bridge.api.js';
 import { bnum } from '@/lib/utils';
-import { ethers } from 'ethers';
+import { Contract } from '@ethersproject/contracts';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
+import bridgeAPI from './bridge.api.js';
+import bridgeService from './bridge.services.js';
+// real function - START - TODO
+function checkIsNative(tokenAddress, chainId) {
+  if (chainId === 248) {
+    // OASYS
+    if (tokenAddress === '0x0000000000000000000000000000000000000000') {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if (tokenAddress === '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+function getTokenURL(tokenSymbol) {
+  switch (tokenSymbol) {
+    case 'ETH':
+      return ethIcon;
+    case 'WBTC':
+      return wbtcIcon;
+    case 'USDT':
+      return usdtIcon;
+    case 'USDC':
+      return usdcIcon;
+    case 'OAS':
+      return oasIcon;
+    case 'DFV':
+      return defiIcon;
+    case 'tcgcIcon':
+      return tcgcIcon;
+    default:
+      return ethIcon;
+  }
+}
+
 // function from BridgeAPI - START
 async function getTransferConfigs() {
   try {
@@ -277,6 +320,8 @@ async function bridgeSend(
 }
 export function useBridge() {
   return {
+    getTokenURL,
+    checkIsNative,
     // SDK start
     getTransferConfigs,
     getEstimateAmt,

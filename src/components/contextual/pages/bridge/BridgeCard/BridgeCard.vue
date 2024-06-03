@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { computed, toRef } from 'vue';
 import SwapSettingsPopover, {
   SwapSettingsContext,
 } from '@/components/popovers/SwapSettingsPopover.vue';
-import useBreakpoints from '@/composables/useBreakpoints';
+import bridgeApi from '@/composables/bridge/bridge.price.api';
 import { useBridge } from '@/composables/bridge/useBridge';
-import useWeb3 from '@/services/web3/useWeb3';
+import useBreakpoints from '@/composables/useBreakpoints';
+import useEthers from '@/composables/useEthers';
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { useUserSettings } from '@/providers/user-settings.provider';
+import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
+import useWeb3 from '@/services/web3/useWeb3';
+import BigNumber from 'bignumber.js';
+import { cloneDeep } from 'lodash';
+import { computed } from 'vue';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
-import ChargeGasComponent from './ChargeGasComponent.vue';
-import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
-import { cloneDeep } from 'lodash';
-import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-import BigNumber from 'bignumber.js';
-import useNotifications from '@/composables/useNotifications';
-import useTransactions from '@/composables/useTransactions';
-import useEthers from '@/composables/useEthers';
-import { ethers } from 'ethers';
+
 // // COMPOSABLES
 const {
   account,
@@ -31,6 +31,9 @@ const {
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
+  getTokenURL,
+  checkIsNative,
+
   getTransferConfigs,
   getEstimateAmt,
   getTransferStatus,
@@ -52,7 +55,11 @@ const { slippage, setSlippage } = useUserSettings();
 // const signer = getSigner();
 // console.log(signer, 'signerAAA');
 // // STATES
-const chainsList = ref(BRIDGE_NETWORKS);
+
+const srcBE = ref(null);
+const dstBE = ref(null);
+const routesBE = ref(null);
+
 const estimateInfo = ref(null);
 const paging = ref({
   page_size: 5,
@@ -139,7 +146,72 @@ watchEffect(() => {
 // /**
 //  * FUNCTIONS
 //  */
+function groupByChainId(arr) {
+  // group by chainId
+  const groupedByChainId = arr.reduce((acc, curr) => {
+    const chainId = curr.chain_id;
+    let networkStaticInfo = BRIDGE_NETWORKS.find(
+      item => item.chain_id_decimals === chainId
+    );
+    if (!acc[chainId]) {
+      acc[chainId] = { chain_id: chainId, tokens: [] };
+    }
+    const tokenAddress = curr.token_address;
+    console.log('🚀 ~ groupedByChainId ~ tokenAddress:', tokenAddress);
+    const tokenExists = acc[chainId].tokens.some(
+      token => token.address?.toLowerCase() === tokenAddress?.toLowerCase()
+    );
+    console.log(
+      '🚀 ~ groupedByChainId ~ acc[chainId].tokens:',
+      acc[chainId].tokens
+    );
+    console.log('🚀 ~ groupedByChainId ~ tokenExists:', tokenExists);
+    if (!tokenExists) {
+      acc[chainId].tokens.push({
+        name: curr.token_name,
+        address: curr.token_address,
+        logoURI: getTokenURL(curr.token_symbol),
+        symbol: curr.token_symbol,
+        decimals: curr.token_decimals,
+        is_native: checkIsNative(curr.token_address, chainId),
+        rpc: networkStaticInfo?.rpc,
+      });
+    }
+    acc[chainId] = { ...acc[chainId], ...networkStaticInfo };
+    return acc;
+  }, {});
 
+  const result = Object.values(groupedByChainId);
+  console.log('🚀 ~ groupByChainId ~ result:', result);
+  return result;
+}
+function initSrcBE() {
+  if (routesBE.value?.length > 0) {
+    const data = routesBE.value;
+    const srcList = data?.map(item => item.src);
+    const result = groupByChainId(srcList);
+    return result || [];
+  }
+}
+async function getRouters() {
+  try {
+    let rs = await bridgeApi.getRoutes();
+    console.log(rs, 'rs=>getRouters');
+    if (rs.length > 0) {
+      routesBE.value = rs;
+      srcBE.value = initSrcBE();
+      console.log('🚀 ~ getRouters ~  srcBE.value:', srcBE.value);
+      if (srcBE.value?.length > 0) {
+        updateNetWorkInputFrom(chainId.value);
+      }
+    }
+  } catch (error) {
+    console.log(error, 'error=>getRouters');
+  }
+}
+async function initData() {
+  getRouters();
+}
 function covertUnitShow(number, token_decimals) {
   const decimals = new BigNumber(10).pow(token_decimals).toFixed();
   const rs = BigNumber(number || 0)
@@ -174,7 +246,13 @@ function initSelectedData() {
     inputFromSelect.value.tokenAddress,
     inputFromSelect.value.tokensList
   );
-  tokenTo.value = tokenFrom.value;
+
+  tokenTo.value = getToken(
+    inputToSelect.value.tokenAddress,
+    inputToSelect.value.tokensList
+  );
+  console.log('🚀 ~ initSelectedData ~ tokenFrom.value:', tokenFrom.value);
+  console.log('🚀 ~ initSelectedData ~  tokenTo.value:', tokenTo.value);
 }
 async function getBalanceInputFrom() {
   // update balance InputFrom
@@ -204,31 +282,31 @@ async function checkAllowanceInputFrom() {
   }
 }
 async function handleTokenSwitch() {
-  await swapData();
+  // await swapData();
 }
-async function swapData() {
-  const inputFrom = cloneDeep(inputFromSelect.value);
-  const inputTo = cloneDeep(inputToSelect.value);
-  console.log(inputTo, 'inputTo');
+// async function swapData() {
+//   const inputFrom = cloneDeep(inputFromSelect.value);
+//   const inputTo = cloneDeep(inputToSelect.value);
+//   console.log(inputTo, 'inputTo');
 
-  // map InputFrom
-  inputFromSelect.value = inputTo;
-  console.log(inputFromSelect.value, 'inputFromSelect.valueAAA');
-  inputToSelect.value = inputFrom;
+//   // map InputFrom
+//   inputFromSelect.value = inputTo;
+//   console.log(inputFromSelect.value, 'inputFromSelect.valueAAA');
+//   inputToSelect.value = inputFrom;
 
-  // update inputTo chainsList
-  if (inputFromSelect.value.chainId) {
-    checkInputToChange();
-  }
-  // await getBalanceInputFrom();
-  // await checkAllowanceInputFrom();
+//   // update inputTo chainsList
+//   if (inputFromSelect.value.chainId) {
+//     checkInputToChange();
+//   }
+//   // await getBalanceInputFrom();
+//   // await checkAllowanceInputFrom();
 
-  // reset amount
-  inputFromSelect.value.amount = 0;
-  inputToSelect.value.amount = 0;
-  // connect network from
-  handleNetworkChange(inputFromSelect.value.chainId);
-}
+//   // reset amount
+//   inputFromSelect.value.amount = 0;
+//   inputToSelect.value.amount = 0;
+//   // connect network from
+//   handleNetworkChange(inputFromSelect.value.chainId);
+// }
 
 async function setTokenInput(input, tokenFromList) {
   console.log(tokenFromList, 'tokenFromList');
@@ -237,22 +315,25 @@ async function setTokenInput(input, tokenFromList) {
   input.value.decimals = tokenFromList.decimals;
 }
 function updateNetWorkInputFrom(chainId) {
-  let networkChoose = BRIDGE_NETWORKS.find(
-    item => item.chain_id_decimals === chainId
+  let networkChoose = srcBE.value.find(
+    item => item?.chain_id_decimals === chainId
   );
   if (networkChoose) {
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
-    inputFromSelect.value.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
-
     // set token default
     if (inputFromSelect.value.tokensList?.length > 0) {
       setTokenInput(inputFromSelect, inputFromSelect.value.tokensList[0]);
     }
+    console.log(
+      '🚀 ~ updateNetWorkInputFrom ~ inputFromSelect.value:',
+      inputFromSelect.value
+    );
     // set data inputTo
+    inputToSelect.value.chainId = ''; // reset
     checkInputToChange();
 
-    // set chains and tokens selected
+    // set chains and tokens selected to get balance
     initSelectedData();
 
     // call contract to check data
@@ -262,12 +343,12 @@ function updateNetWorkInputFrom(chainId) {
 }
 
 async function handleInputFromChange(inputSelect) {
+  console.log('🚀 ~ handleInputFromChange ~ inputSelect:', inputSelect);
   inputFromSelect.value = inputSelect;
   console.log(inputFromSelect.value, 'inputFromSelect.value');
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
-
   // check allowance
   checkAllowanceInputFrom();
 
@@ -315,29 +396,24 @@ function handleWalletAddressChange(address) {
 //   isChargeGas.value = isChecked;
 //   console.log(isChargeGas.value, 'isChargeGas.value');
 // }
+function getDstByChainId(routes, srcChainId) {
+  const dstList = routes
+    .filter(route => route.src.chain_id === srcChainId)
+    .map(route => route.dst);
+  const result = groupByChainId(dstList);
+  console.log('🚀 ~ getDstByChainId ~ result:', result);
+
+  return result;
+}
+
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
-  // update chainsList
-  if (inputFrom.isOnlyDefiBridge) {
-    inputToSelect.value.chainsList = chainsList.value.filter(
-      item =>
-        (item.chain_id_decimals === 16116 || item.chain_id_decimals == 17117) &&
-        item.chain_id_decimals !== inputFrom.chainId
-    );
-  } else {
-    inputToSelect.value.chainsList = chainsList.value.filter(
-      item => item.chain_id_decimals !== inputFrom.chainId
-    );
-  }
 
+  dstBE.value = getDstByChainId(routesBE.value, inputFrom.chainId);
+  console.log('🚀 ~ checkInputToChange ~ dstBE.value:', dstBE.value);
+  inputToSelect.value.chainsList = dstBE.value;
   // update token
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
-  inputToSelect.value.tokenAddress = inputFrom.tokenAddress;
-  inputToSelect.value.decimals = inputFrom.decimals;
-
-  inputToSelect.value.isOnlyDefiBridge = inputFrom.isOnlyDefiBridge;
-
-  inputToSelect.value.tokensList = inputFrom.tokensList;
 
   // check chainId select is avai
   if (inputToSelect.value.chainId) {
@@ -346,12 +422,35 @@ function checkInputToChange() {
     );
     if (!avaiChain) {
       inputToSelect.value.chainId = '';
+      inputToSelect.value.tokenAddress = '';
+      inputToSelect.value.decimals = 0;
+      inputToSelect.value.tokensList = [];
+    } else {
+      inputToSelect.value.tokenAddress = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.address;
+      inputToSelect.value.decimals = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.decimals;
+      inputToSelect.value.tokensList = avaiChain.tokens;
     }
   } else {
     // set default chainId for inputTo
     if (inputToSelect.value.chainsList.length > 0) {
-      inputToSelect.value.chainId =
-        inputToSelect.value.chainsList[0].chain_id_decimals;
+      const avaiChain = inputToSelect.value.chainsList[0];
+      inputToSelect.value.chainId = avaiChain.chain_id_decimals;
+      inputToSelect.value.tokenAddress = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.address;
+      inputToSelect.value.decimals = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.decimals;
+      inputToSelect.value.tokensList = avaiChain.tokens;
+    } else {
+      inputToSelect.value.chainId = '';
+      inputToSelect.value.tokenAddress = '';
+      inputToSelect.value.decimals = 0;
+      inputToSelect.value.tokensList = [];
     }
   }
 
@@ -460,7 +559,7 @@ async function handleApproveButton() {
  * LIFECYCLE
  */
 onBeforeMount(async () => {
-  updateNetWorkInputFrom(chainId.value);
+  initData();
 });
 </script>
 
@@ -481,9 +580,9 @@ onBeforeMount(async () => {
           <div class="input-from">
             <div class="label">From</div>
             <InputFrom
-              :chainsList="chainsList"
+              :chainsList="srcBE"
               :inputSelect="inputFromSelect"
-              :disabled="!isWalletReady || isMismatchedNetwork"
+              :disabled="!isWalletReady"
               @update:input-select="handleInputFromChange"
               @update:network="handleNetworkChange"
             />
@@ -501,7 +600,7 @@ onBeforeMount(async () => {
             <InputTo
               :chainsList="inputToSelect?.chainsList"
               :inputSelect="inputToSelect"
-              :disabled="!isWalletReady || isMismatchedNetwork"
+              :disabled="!isWalletReady"
               @update:input-select="handleInputToChange"
             />
           </div>

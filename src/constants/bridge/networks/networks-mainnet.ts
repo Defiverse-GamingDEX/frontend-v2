@@ -1,21 +1,20 @@
-import ethereumIcon from '@/assets/images/bridge/networks/ethereum.png';
-import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
-import defiIcon from '@/assets/images/bridge/networks/defi.png';
-import mchIcon from '@/assets/images/bridge/networks/mch.png';
-import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
-import homeIcon from '@/assets/images/bridge/networks/home.png';
 import chainIcon from '@/assets/images/bridge/networks/chain.png';
+import defiIcon from '@/assets/images/bridge/networks/defi.png';
+import ethereumIcon from '@/assets/images/bridge/networks/ethereum.png';
+import homeIcon from '@/assets/images/bridge/networks/home.png';
+import mchIcon from '@/assets/images/bridge/networks/mch.png';
+import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
 import saakuruIcon from '@/assets/images/bridge/networks/saakuru.png';
-import avalancheIcon from '@/assets/images/bridge/networks/avalanche.png';
+import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
 
-import { BRIDGE_ETHEREUM_TOKENS } from '../tokens/mainnet/ethereum-tokens';
-import { BRIDGE_POLYGON_TOKENS } from '../tokens/mainnet/polygon-tokens';
-import { BRIDGE_DEFIVERSE_TOKENS } from '../tokens/mainnet/defiverse-tokens';
-import { BRIDGE_MCHVERSE_TOKENS } from '../tokens/mainnet/mchverse-tokens';
-import { BRIDGE_TCGVERSE_TOKENS } from '../tokens/mainnet/tcgverse-tokens';
-import { BRIDGE_HOMEVERSE_TOKENS } from '../tokens/mainnet/homeverse-tokens';
 import { BRIDGE_CHAINVERSE_TOKENS } from '../tokens/mainnet/chainverse-tokens';
+import { BRIDGE_DEFIVERSE_TOKENS } from '../tokens/mainnet/defiverse-tokens';
+import { BRIDGE_ETHEREUM_TOKENS } from '../tokens/mainnet/ethereum-tokens';
+import { BRIDGE_HOMEVERSE_TOKENS } from '../tokens/mainnet/homeverse-tokens';
+import { BRIDGE_MCHVERSE_TOKENS } from '../tokens/mainnet/mchverse-tokens';
+import { BRIDGE_POLYGON_TOKENS } from '../tokens/mainnet/polygon-tokens';
 import { BRIDGE_SAKUURU_TOKENS } from '../tokens/mainnet/sakuuru-tokens';
+import { BRIDGE_TCGVERSE_TOKENS } from '../tokens/mainnet/tcgverse-tokens';
 
 export const BRIDGE_NETWORKS_MAINNET = [
   {
@@ -25,7 +24,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     name: 'Ethereum',
     gasPrice: null,
     explorer: 'https://etherscan.io',
-    rpc: 'https://mainnet.infura.io/v3/',
+    rpc: 'https://eth.merkle.io',
     bridgeContract: '0x358234b325ef9ea8115291a8b81b7d33a2fa762d',
     type: 'external-chain',
     isOnlyDefiBridge: false,

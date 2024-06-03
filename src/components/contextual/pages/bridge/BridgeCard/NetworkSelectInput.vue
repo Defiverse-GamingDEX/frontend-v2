@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-import SelectNetworkModal from '../modals/SelectNetworkModal.vue';
 import useNumbers from '@/composables/useNumbers';
+import SelectNetworkModal from '../modals/SelectNetworkModal.vue';
 
 export type NetworkSelectProps = {
   modelValue: string | number;
