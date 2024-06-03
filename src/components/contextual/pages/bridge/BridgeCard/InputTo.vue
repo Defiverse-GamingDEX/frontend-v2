@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cloneDeep } from 'lodash';
 import NetworkSelectInput from './NetworkSelectInput.vue';
+import TokenSelectInput from './TokenSelectInput.vue';
 // TYPES
 type InputValue = string | number;
 
@@ -60,7 +61,15 @@ function updateNetWork(chainId) {
   }
   emit('update:inputSelect', inputSelect);
 }
-
+function updateToken(token) {
+  console.log('🚀 ~ updateToken ~ token:', token);
+  let inputSelect = cloneDeep(props?.inputSelect);
+  inputSelect.tokenAddress = token.address;
+  inputSelect.tokenSymbol = token.symbol;
+  inputSelect.balance = token.balance;
+  inputSelect.decimals = token.decimals;
+  emit('update:inputSelect', inputSelect);
+}
 function handleAmountChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.amount = value;
@@ -70,34 +79,49 @@ function handleAmountChange(value) {
 
 <template>
   <div class="input-to-component">
-    <NetworkSelectInput
-      :networkList="inputSelect.chainsList"
-      :modelValue="inputSelect?.chainId"
-      :disabled="disabled"
-      class="mb-2"
-      @update:model-value="updateNetWork"
-    />
-    <div class="receive-amount">
-      <BalTextInput
-        :disabled="true"
-        :modelValue="_amount"
-        name="tokenIn"
-        :placeholder="'0.0'"
-        type="number-dot"
-        :decimalLimit="decimalLimit"
-        validateOn="input"
-        autocomplete="off"
-        autocorrect="off"
-        step="any"
-        spellcheck="false"
-        v-bind="$attrs"
-        inputAlignRight
-        @update:model-value="handleAmountChange($event)"
-      >
-        <template #prepend>
+    <div class="input-content">
+      <div class="receive-amount">
+        <BalTextInput
+          :disabled="true"
+          :modelValue="_amount"
+          name="tokenIn"
+          :placeholder="'0.0'"
+          type="number-dot"
+          :decimalLimit="decimalLimit"
+          validateOn="input"
+          autocomplete="off"
+          autocorrect="off"
+          step="any"
+          spellcheck="false"
+          v-bind="$attrs"
+          inputAlignRight
+          @update:model-value="handleAmountChange($event)"
+        >
+          <template #header>
+            <NetworkSelectInput
+              :networkList="inputSelect.chainsList"
+              :modelValue="inputSelect?.chainId"
+              :disabled="disabled"
+              class="mb-2"
+              @update:model-value="updateNetWork"
+            />
+          </template>
+          <template #prepend>
+            <slot name="tokenSelect">
+              <TokenSelectInput
+                :tokensList="inputSelect?.tokensList"
+                :modelValue="inputSelect?.tokenAddress"
+                :disabled="disabled"
+                class="mr-2"
+                @update:model-value="updateToken"
+              />
+            </slot>
+          </template>
+          <!-- <template #prepend>
           <slot name="tokenSelect"> Receive </slot>
-        </template>
-      </BalTextInput>
+        </template> -->
+        </BalTextInput>
+      </div>
     </div>
   </div>
 </template>

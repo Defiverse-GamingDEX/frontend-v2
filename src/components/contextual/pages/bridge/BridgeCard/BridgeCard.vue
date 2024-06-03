@@ -419,7 +419,7 @@ function checkInputToChange() {
   console.log('🚀 ~ checkInputToChange ~ dstBE.value:', dstBE.value);
   inputToSelect.value.chainsList = dstBE.value;
   // update token
-  inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
+  //inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
 
   // check chainId select is avai
   if (inputToSelect.value.chainId) {
@@ -428,10 +428,12 @@ function checkInputToChange() {
     );
     if (!avaiChain) {
       inputToSelect.value.chainId = '';
+      inputToSelect.value.tokenSymbol = '';
       inputToSelect.value.tokenAddress = '';
       inputToSelect.value.decimals = 0;
       inputToSelect.value.tokensList = [];
     } else {
+      inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(
         token => token.symbol === inputToSelect.value.tokenSymbol
       )?.address;
@@ -445,6 +447,7 @@ function checkInputToChange() {
     if (inputToSelect.value.chainsList.length > 0) {
       const avaiChain = inputToSelect.value.chainsList[0];
       inputToSelect.value.chainId = avaiChain.chain_id_decimals;
+      inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(
         token => token.symbol === inputToSelect.value.tokenSymbol
       )?.address;
@@ -454,6 +457,7 @@ function checkInputToChange() {
       inputToSelect.value.tokensList = avaiChain.tokens;
     } else {
       inputToSelect.value.chainId = '';
+      inputToSelect.value.tokenSymbol = '';
       inputToSelect.value.tokenAddress = '';
       inputToSelect.value.decimals = 0;
       inputToSelect.value.tokensList = [];
@@ -595,11 +599,6 @@ onBeforeMount(async () => {
           </div>
           <div class="flex justify-center items-center my-3">
             <BridgePairToggle @toggle="handleTokenSwitch" />
-            <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
-            <div
-              v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"
-              class="flex items-center text-xs text-gray-600 dark:text-gray-400 cursor-pointer"
-            ></div>
           </div>
           <div class="input-to">
             <div class="label">To</div>
@@ -707,6 +706,18 @@ onBeforeMount(async () => {
             <div class="w-40 value">
               {{
                 covertUnitShow(estimateInfo?.fee2, inputFromSelect?.decimals)
+              }}
+              {{ inputFromSelect?.tokenSymbol }}
+            </div>
+          </div>
+          <div class="info">
+            <div class="title">You will receive</div>
+            <div class="w-40 value">
+              {{
+                covertUnitShow(
+                  estimateInfo?.amount_out,
+                  inputFromSelect?.decimals
+                )
               }}
               {{ inputFromSelect?.tokenSymbol }}
             </div>

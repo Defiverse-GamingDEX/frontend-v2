@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import BridgeComponent from '@/components/contextual/pages/bridge/BridgeComponent.vue';
-import RedeemComponent from '@/components/contextual/pages/bridge/RedeemComponent.vue';
-import BridgeAdminComponent from '@/components/contextual/pages/bridge/BridgeAdminComponent.vue';
 import HistoryComponent from '@/components/contextual/pages/bridge/HistoryComponent.vue';
-import MiniHistoryComponent from '@/components/contextual/pages/bridge/MiniHistoryComponent.vue';
 import LastTxComponent from '@/components/contextual/pages/bridge/LastTxComponent.vue';
+import MiniHistoryComponent from '@/components/contextual/pages/bridge/MiniHistoryComponent.vue';
+import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
+import useAlerts from '@/composables/useAlerts';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 /**
  * STATE
  */
@@ -18,11 +17,13 @@ const adminAddress = ref(null);
 
 // COMPOSABLES
 const { t } = useI18n();
+const { addAlert, removeAlert } = useAlerts();
 const { getAdminAddress } = usePoolCreation();
 
 const { account } = useWeb3();
 
-const router = useRouter();
+const route = useRoute();
+console.log('🚀 ~ route:', route);
 // COMPUTED
 const isAdmin = computed(() => {
   if (!adminAddress.value) {
@@ -33,15 +34,28 @@ const isAdmin = computed(() => {
   }
   return false;
 });
+
 // WATCHS
 watch(isAdmin, () => {
   if (!isAdmin.value) {
     tabSelect.value = 'bridge';
   }
 });
+watch(route?.name, () => {
+  checkMisMatch();
+});
+// FUNCTIONS
+const checkMisMatch = () => {
+  if (route?.name === 'bridge') {
+    // not check mismath in bridge page
+    removeAlert('network-mismatch');
+    return;
+  }
+};
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
+  checkMisMatch();
 });
 
 /**

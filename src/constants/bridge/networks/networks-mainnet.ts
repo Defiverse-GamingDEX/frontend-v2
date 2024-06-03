@@ -35,7 +35,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     name: 'Polygon',
     gasPrice: null,
     explorer: 'https://polygonscan.com',
-    rpc: 'https://polygon-mainnet.infura.io',
+    rpc: 'https://polygon.drpc.org',
     bridgeContract: '0x9B36f165baB9ebe611d491180418d8De4b8f3a1f',
     type: 'external-chain',
     isOnlyDefiBridge: false,

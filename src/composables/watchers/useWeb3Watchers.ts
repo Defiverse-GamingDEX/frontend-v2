@@ -6,9 +6,9 @@ import { BLOCKED_ADDRESSES } from '@/constants/blocked';
 import { includesAddress } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
 
+import { useTokens } from '@/providers/tokens.provider';
 import useAlerts, { AlertPriority, AlertType } from '../useAlerts';
 import useBlocknative from '../useBlocknative';
-import { useTokens } from '@/providers/tokens.provider';
 import useTransactions, { ReplacementReason } from '../useTransactions';
 
 export default function useWeb3Watchers() {
@@ -31,6 +31,7 @@ export default function useWeb3Watchers() {
   const { handlePendingTransactions, updateTransaction } = useTransactions();
 
   const route = useRoute();
+  console.log('🚀 ~ useWeb3Watchers ~ route:', route);
 
   function handleTransactionReplacement(
     tx: EthereumTransactionData,
@@ -48,7 +49,6 @@ export default function useWeb3Watchers() {
   }
 
   function checkIsUnsupportedNetwork() {
-    console.log(chainId.value, 'chainId.value');
     if (
       chainId.value &&
       (isUnsupportedNetwork.value || isMismatchedNetwork.value)
@@ -109,7 +109,6 @@ export default function useWeb3Watchers() {
   watch(isWalletReady, () => {
     checkIsUnsupportedNetwork();
   });
-
   watch(blockNumber, async () => {
     if (isWalletReady.value) {
       handlePendingTransactions();
