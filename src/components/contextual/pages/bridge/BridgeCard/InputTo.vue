@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { cloneDeep } from 'lodash';
 import NetworkSelectInput from './NetworkSelectInput.vue';
-import TokenSelectInput from './TokenSelectInput.vue';
 // TYPES
 type InputValue = string | number;
 
@@ -56,8 +55,10 @@ function updateNetWork(chainId) {
   if (networkChoose) {
     inputSelect.chainId = networkChoose.chain_id_decimals;
     inputSelect.tokensList = cloneDeep(networkChoose.tokens);
-    inputSelect.tokenAddress = networkChoose.tokens[0].address; // TODO
-    //inputSelect.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
+    // get token Address by symbol from tokenInputFrom (tokenInputTo symbol == tokenInputFrom symbol)
+    inputSelect.tokenAddress = networkChoose.tokens.find(
+      item => item.symbol === inputSelect.tokenSymbol
+    )?.address;
   }
   emit('update:inputSelect', inputSelect);
 }
@@ -79,6 +80,13 @@ function handleAmountChange(value) {
 
 <template>
   <div class="input-to-component">
+    <NetworkSelectInput
+      :networkList="inputSelect.chainsList"
+      :modelValue="inputSelect?.chainId"
+      :disabled="disabled"
+      class="mb-2"
+      @update:model-value="updateNetWork"
+    />
     <div class="input-content">
       <div class="receive-amount">
         <BalTextInput
@@ -97,7 +105,7 @@ function handleAmountChange(value) {
           inputAlignRight
           @update:model-value="handleAmountChange($event)"
         >
-          <template #header>
+          <!-- <template #header>
             <NetworkSelectInput
               :networkList="inputSelect.chainsList"
               :modelValue="inputSelect?.chainId"
@@ -105,8 +113,8 @@ function handleAmountChange(value) {
               class="mb-2"
               @update:model-value="updateNetWork"
             />
-          </template>
-          <template #prepend>
+          </template> -->
+          <!-- <template #prepend>
             <slot name="tokenSelect">
               <TokenSelectInput
                 :tokensList="inputSelect?.tokensList"
@@ -116,10 +124,10 @@ function handleAmountChange(value) {
                 @update:model-value="updateToken"
               />
             </slot>
+          </template> -->
+          <template #prepend>
+            <slot name="tokenSelect"> Receive </slot>
           </template>
-          <!-- <template #prepend>
-          <slot name="tokenSelect"> Receive </slot>
-        </template> -->
         </BalTextInput>
       </div>
     </div>
