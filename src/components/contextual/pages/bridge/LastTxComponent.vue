@@ -1,9 +1,25 @@
 <script setup lang="ts">
+import bridgeApi from '@/composables/bridge/bridge.price.api';
+import { useBridge } from '@/composables/bridge/useBridge';
 import useBreakpoints from '@/composables/useBreakpoints';
-import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
-// // COMPOSABLES
+import useWeb3 from '@/services/web3/useWeb3';
+import { format, fromUnixTime } from 'date-fns';
+/**
+ * STATES
+ */
+const pagination = ref({
+  offset: 0,
+  limit: 1,
+});
+
+const lastTx = ref(null);
+
+// COMPOSABLES
 const { bp } = useBreakpoints();
-// // COMPUTED
+const { getChainName, getChain, getToken, getTokenURL, mapTxHistory } =
+  useBridge();
+const { account } = useWeb3();
+// COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
     case 'xs':
@@ -14,77 +30,183 @@ const swapCardShadow = computed(() => {
       return 'xl';
   }
 });
+/**
+ * FUNCTIONS
+ */
+
+const getLastTx = async () => {
+  try {
+    const params = {
+      offset: pagination.value.offset,
+      limit: pagination.value.limit,
+      sender_address: account.value,
+    };
+    const rs = await bridgeApi.getHistoryByAddress(params);
+    console.log('🚀 ~ getLastTx ~ rs:', rs);
+    lastTx.value = mapTxHistory(rs?.items[0] || null);
+  } catch (err) {
+    console.log('🚀 ~ getLastTx ~ err:', err);
+  }
+};
+const initData = async () => {
+  getLastTx();
+};
+/**
+ * LIFECYCLE
+ */
+onBeforeMount(async () => {
+  initData();
+});
 </script>
 
 <template>
-  <div class="last-tx-component">
+  <div v-if="lastTx" class="last-tx-component">
     <BalCard
       class="relative card-container bg-blue"
       :shadow="swapCardShadow"
       noBorder
     >
       <div class="title">State of Progress</div>
-      <div class="status">
+      <div class="status-content">
         Status:
-        <span class="pending"> Pending </span>
+        <span
+          class="status"
+          :class="[
+            { success: lastTx?.status?.toLowerCase() === 'success' },
+            { failed: lastTx?.status?.toLowerCase() === 'failed' },
+            { pending: lastTx?.status?.toLowerCase() === 'pending' },
+            { new: lastTx?.status?.toLowerCase() === 'new' },
+          ]"
+          >{{ lastTx?.status }}
+        </span>
       </div>
-      <div class="date">Date: Oct28, 2023 11:11</div>
+      <div class="date">
+        {{ format(fromUnixTime(lastTx?.date), 'LLLdd, yyyy') }}
+        <span class="time">
+          {{ format(fromUnixTime(lastTx?.date), 'HH:mm') }}</span
+        >
+      </div>
       <div class="tx-router-content">
         <div class="tx-content">
           <div class="token-img">
-            <img width="48" height="48" :src="usdcIcon" />
+            <img width="48" height="48" :src="lastTx?.tokenIn?.logoURI" />
           </div>
-          <div class="token-value">1000 USDC</div>
-          <div class="token-chain">From Ethereum</div>
-        </div>
-        <div class="line-content">
-          <div class="left-line">
-            <img :src="`/images/bridge/success.png`" /> Cbridge
+          <div class="token-value">
+            {{ lastTx?.tokenIn?.amount }} {{ lastTx?.tokenIn?.symbol }}
           </div>
-          <div class="center-line">
-            <img :src="`/images/bridge/arrow-down.png`" />
+          <div class="token-chain">
+            From <span class="bold"> {{ lastTx?.tokenIn?.chainName }} </span>
           </div>
-          <div class="right-line">
-            <div class="tooltip-content">
-              <div class="tooltip-arrow"></div>
-              <div class="tooltip-content">View transaction</div>
-            </div>
-          </div>
-        </div>
-        <div class="tx-content">
-          <div class="token-img">
-            <img width="48" height="48" :src="usdcIcon" />
-          </div>
-          <div class="token-value">1000 USDC</div>
-          <div class="token-chain">On Oasys Hub</div>
         </div>
         <div class="line-content">
           <div class="left-line">
             <img
-              :src="`/images/bridge/pending.png`"
-              class="pending"
-            />oasysverse Bridge
+              :src="`/images/bridge/${
+                lastTx?.router_1?.status || 'unknown'
+              }.png`"
+              :class="[
+                { success: lastTx?.router_1?.status === 'success' },
+                { failed: lastTx?.router_1?.status === 'failed' },
+                { pending: lastTx?.router_1?.status === 'pending' },
+              ]"
+            />
+            {{ lastTx?.router_1?.router_contract_name }}
           </div>
           <div class="center-line">
             <img :src="`/images/bridge/arrow-down.png`" />
           </div>
           <div class="right-line">
-            <div class="tooltip-content">
-              <div class="tooltip-arrow"></div>
-              <div class="tooltip-content">In bound tx</div>
+            <div v-if="lastTx?.router_1?.txId" class="tooltip-content">
+              <div class="tooltip-arrow down"></div>
+              <div class="tooltip-content">
+                <a :href="lastTx?.router_1?.txId_url" target="_blank"
+                  >View transaction
+                </a>
+              </div>
             </div>
-            <div class="tooltip-content">
-              <div class="tooltip-arrow"></div>
-              <div class="tooltip-content">Out bound tx</div>
+            <div v-if="lastTx?.router_1?.inboundTx" class="tooltip-content">
+              <div class="tooltip-arrow down"></div>
+              <div class="tooltip-content">
+                <a :href="lastTx?.router_1?.inboundTx_url" target="_blank"
+                  >Inbound tx
+                </a>
+              </div>
+            </div>
+            <div v-if="lastTx?.router_1?.outboundTx" class="tooltip-content">
+              <div class="tooltip-arrow down"></div>
+              <div class="tooltip-content">
+                <a :href="lastTx?.router_1?.outboundTx_url" target="_blank"
+                  >Outbound tx
+                </a>
+              </div>
             </div>
           </div>
         </div>
         <div class="tx-content">
           <div class="token-img">
-            <img width="48" height="48" :src="usdcIcon" />
+            <img width="48" height="48" :src="lastTx?.tokenReplay?.logoURI" />
           </div>
-          <div class="token-value">1000 USDC</div>
-          <div class="token-chain">On Defiverse</div>
+          <div class="token-value">
+            {{ lastTx?.tokenReplay?.amount }} {{ lastTx?.tokenReplay?.symbol }}
+          </div>
+          <div class="token-chain">
+            On <span class="bold"> {{ lastTx?.tokenReplay?.chainName }} </span>
+          </div>
+        </div>
+        <div class="line-content">
+          <div class="left-line">
+            <img
+              :src="`/images/bridge/${
+                lastTx?.router_2?.status || 'unknown'
+              }.png`"
+              :class="[
+                { success: lastTx?.router_2?.status === 'success' },
+                { failed: lastTx?.router_2?.status === 'failed' },
+                { pending: lastTx?.router_2?.status === 'pending' },
+              ]"
+            />
+            {{ lastTx?.router_2?.router_contract_name }}
+          </div>
+          <div class="center-line">
+            <img :src="`/images/bridge/arrow-down.png`" />
+          </div>
+          <div class="right-line">
+            <div v-if="lastTx?.router_2?.txId" class="tooltip-content">
+              <div class="tooltip-arrow down"></div>
+              <div class="tooltip-content">
+                <a :href="lastTx?.router_2?.txId_url" target="_blank"
+                  >View transaction
+                </a>
+              </div>
+            </div>
+            <div v-if="lastTx?.router_2?.inboundTx" class="tooltip-content">
+              <div class="tooltip-arrow down"></div>
+              <div class="tooltip-content">
+                <a :href="lastTx?.router_2?.inboundTx_url" target="_blank"
+                  >Inbound tx
+                </a>
+              </div>
+            </div>
+            <div v-if="lastTx?.router_2?.outboundTx" class="tooltip-content">
+              <div class="tooltip-arrow down"></div>
+              <div class="tooltip-content">
+                <a :href="lastTx?.router_2?.outboundTx_url" target="_blank"
+                  >Outbound tx
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tx-content">
+          <div class="token-img">
+            <img width="48" height="48" :src="lastTx?.tokenOut?.logoURI" />
+          </div>
+          <div class="token-value">
+            {{ lastTx?.tokenOut?.amount }} {{ lastTx?.tokenOut?.symbol }}
+          </div>
+          <div class="token-chain">
+            On <span class="bold"> {{ lastTx?.tokenOut?.chainName }} </span>
+          </div>
         </div>
       </div>
     </BalCard>
@@ -93,6 +215,9 @@ const swapCardShadow = computed(() => {
 
 <style scoped lang="scss">
 .last-tx-component {
+  .bold {
+    font-weight: bold;
+  }
   .title {
     color: #0a425c;
     font-size: 20px;
@@ -100,16 +225,32 @@ const swapCardShadow = computed(() => {
     line-height: 24px;
     margin-bottom: 16px;
   }
-  .status {
+  .status-content {
     font-size: 14px;
     line-height: 17px;
     margin-bottom: 8px;
     font-weight: 500;
     margin-bottom: 16px;
-    .pending {
-      color: rgb(255, 207, 119);
+    color: #0a425c;
+    .status {
+      text-transform: capitalize;
+      font-size: 14px;
+      font-weight: bold;
+      &.success {
+        color: #16a34a;
+      }
+      &.failed {
+        color: #dc2626;
+      }
+      &.pending {
+        color: #ffc250;
+      }
+      &.new {
+        color: #3751ff;
+      }
     }
   }
+
   .date {
     font-size: 14px;
     line-height: 17px;
@@ -202,6 +343,10 @@ const swapCardShadow = computed(() => {
           line-height: 14px;
           min-width: 90px;
           text-align: center;
+          > a {
+            color: #1e293b;
+            text-decoration: none;
+          }
           &:last-child {
             margin-bottom: 0px;
           }

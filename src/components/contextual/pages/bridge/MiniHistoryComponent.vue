@@ -48,7 +48,7 @@ async function mapTxList(data) {
         symbol: item?.dst_token?.symbol,
         chainId: item?.dst_token?.chain_id,
         amount: BigNumber(item?.amount_out)
-          .div(10 ** item?.src_token?.decimals)
+          .div(10 ** item?.dst_token?.decimals)
           .toFixed(),
       },
     };

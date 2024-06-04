@@ -3,11 +3,12 @@ import defiIcon from '@/assets/images/bridge/networks/defi.png';
 import ethereumIcon from '@/assets/images/bridge/networks/ethereum.png';
 import homeIcon from '@/assets/images/bridge/networks/home.png';
 import mchIcon from '@/assets/images/bridge/networks/mch.png';
+import oasIcon from '@/assets/images/bridge/networks/oas.png';
 import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
 import saakuruIcon from '@/assets/images/bridge/networks/saakuru.png';
 import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
-import { default as cBridgeABI } from '@/lib/abi/bridge/cBridge.json';
 import { default as IL2ERC20Bridge } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
+import { default as cBridgeABI } from '@/lib/abi/bridge/cBridge.json';
 export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x1',
@@ -49,6 +50,25 @@ export const BRIDGE_NETWORKS_MAINNET = [
       symbol: 'MATIC',
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
+    },
+  },
+  {
+    chain_id: '0xf8',
+    chain_id_decimals: 248,
+    img_url: oasIcon,
+    name: 'OASYS Mainnet',
+    gasPrice: null,
+    explorer: 'https://explorer.oasys.games',
+    rpc: 'https://oasys.blockpi.network/v1/rpc/public',
+    bridgeContract: '', // not use
+    bridgeABI: '', // not use
+    type: 'external-chain',
+    isOnlyDefiBridge: false,
+    //tokens: BRIDGE_OASYS_TOKENS_MAINNET,
+    nativeCurrency: {
+      name: 'OASYS',
+      symbol: 'OAS',
+      decimals: 18,
     },
   },
   {

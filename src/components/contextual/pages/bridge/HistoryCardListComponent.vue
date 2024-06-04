@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { format, fromUnixTime } from 'date-fns';
 import HistoryRouteLineComponent from '@/components/contextual/pages/bridge/HistoryRouteLineComponent.vue';
+import { format, fromUnixTime } from 'date-fns';
 // PROPS
 type Props = {
   txList: Array<any>;
@@ -30,9 +30,10 @@ const props = withDefaults(defineProps<Props>(), {
             <span
               class="status"
               :class="[
-                { success: tx.status === 'success' },
-                { failed: tx.status === 'failed' },
-                { pending: tx.status === 'pending' },
+                { success: tx.status?.toLowerCase() === 'success' },
+                { failed: tx.status?.toLowerCase() === 'failed' },
+                { pending: tx.status?.toLowerCase() === 'pending' },
+                { new: tx?.status?.toLowerCase() === 'new' },
               ]"
               >{{ tx.status }}
             </span>
@@ -49,7 +50,9 @@ const props = withDefaults(defineProps<Props>(), {
             <div class="token-value">
               {{ tx?.tokenIn?.amount }} {{ tx?.tokenIn?.symbol }}
             </div>
-            <div class="token-chain">From {{ tx?.tokenIn?.chainName }}</div>
+            <div class="token-chain">
+              From <span class="bold">{{ tx?.tokenIn?.chainName }} </span>
+            </div>
           </div>
         </div>
         <div class="router-1">
@@ -63,7 +66,9 @@ const props = withDefaults(defineProps<Props>(), {
             <div class="token-value">
               {{ tx?.tokenReplay?.amount }} {{ tx?.tokenReplay?.symbol }}
             </div>
-            <div class="token-chain">From {{ tx?.tokenReplay?.chainName }}</div>
+            <div class="token-chain">
+              From <span class="bold"> {{ tx?.tokenReplay?.chainName }} </span>
+            </div>
           </div>
         </div>
         <div class="router-2">
@@ -77,7 +82,9 @@ const props = withDefaults(defineProps<Props>(), {
             <div class="token-value">
               {{ tx?.tokenOut?.amount }} {{ tx?.tokenOut?.symbol }}
             </div>
-            <div class="token-chain">From {{ tx?.tokenOut?.chainName }}</div>
+            <div class="token-chain">
+              <span class="bold"> From {{ tx?.tokenOut?.chainName }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -89,6 +96,9 @@ const props = withDefaults(defineProps<Props>(), {
 .history-card-component {
   min-width: 1000px;
   overflow-y: hidden;
+  .bold {
+    font-weight: bold;
+  }
   .card-header {
     padding: 30px 24px;
     border-bottom: 2px solid #cecece;
@@ -129,6 +139,9 @@ const props = withDefaults(defineProps<Props>(), {
         }
         &.pending {
           color: #ffc250;
+        }
+        &.new {
+          color: #3751ff;
         }
       }
     }
