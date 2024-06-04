@@ -172,18 +172,18 @@ async function bridgeSend(
         // chainTo.type === 'verse-chain'
         // external-chain => verse-chain
         const params = {
-          // contractAddress: chainFrom., // contract token
-          // contractProvider, // contract provider
-          // account,
-          // srcTokenDecimal,
-          // value, // amount
-          // vBridgeAddress,
-          // srcTokenAddress, // account address
-          // desChainId,
-          // signer,
-          // slippage,
-          // abi,
-          // gasPrice,
+          contractAddress: chainFrom?.bridgeContract, // contract token
+          contractProvider: provider, // contract provider
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+          srcTokenAddress: tokenInputFrom?.address,
+          desChainId: chainTo?.chainId,
+          signer,
+          slippage: 10000,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
         };
         tx = await bridgeService.bridgeSend(params);
       }

@@ -14,6 +14,13 @@ const getEstimateFee = async params => {
   let data = await axios.post(`${domain}/v1/bridge/request/estimate`, params);
   return data?.data;
 };
+const getHistoryByAddress = async params => {
+  //const { offset, limit, sender_address } = params;
+  let data = await axios.get(`${domain}/v1/bridge/request/history`, {
+    params,
+  });
+  return data?.data;
+};
 const getRequestDetails = async params => {
   const { txId } = params;
   let data = await axios.get(`${domain}/v1/bridge/request/${txId}`, {
@@ -30,6 +37,7 @@ const postBridgeRequest = async params => {
 export default {
   getRoutes,
   getEstimateFee,
+  getHistoryByAddress,
   getRequestDetails,
   postBridgeRequest,
 };

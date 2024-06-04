@@ -775,7 +775,7 @@ onBeforeMount(async () => {
           <BalBtn
             v-else
             :disabled="
-              !isAddress(anotherWalletAddress) ||
+              (anotherWalletAddress && !isAddress(anotherWalletAddress)) ||
               !estimateInfo ||
               !!estimateInfo.err ||
               inputFromSelect.balance === 0 ||

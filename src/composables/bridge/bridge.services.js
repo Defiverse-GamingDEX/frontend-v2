@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-
 const _sendRawTx = async (
   contractAddress,
   contractProvider,
@@ -195,12 +194,12 @@ const bridgeWithdrawTo = async params => {
   let decimals = new BigNumber(10).pow(srcTokenDecimal).toFixed();
   let decimals_value = BigNumber(value).times(decimals).toFixed(0);
   let overwrite = { from: account };
-  console.log('🚀 ~ bridgeWithdrawTo ~ decimals_value:', decimals_value);
+  const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
     'withdrawTo',
-    [srcTokenAddress, vBridgeAddress, decimals_value, gasLimit, '0x'],
+    [srcTokenAddress, vBridgeAddress, decimals_value, gasLimit, nonce],
     overwrite,
     signer,
     abi,

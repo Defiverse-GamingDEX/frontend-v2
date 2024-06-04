@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import useBreakpoints from '@/composables/useBreakpoints';
-import { useBridge } from '@/composables/bridge/useBridge';
 import MiniHistoryCardComponent from '@/components/contextual/pages/bridge/MiniHistoryCardComponent.vue';
+import bridgeApi from '@/composables/bridge/bridge.price.api';
+import { useBridge } from '@/composables/bridge/useBridge';
+import useBreakpoints from '@/composables/useBreakpoints';
+import useWeb3 from '@/services/web3/useWeb3';
+import BigNumber from 'bignumber.js';
 // STATES
 const txList = ref([]);
+const pagination = ref({
+  offset: 0,
+  limit: 10,
+});
 // // COMPOSABLES
 const { bp } = useBreakpoints();
-const { getChainName, getChain, getToken } = useBridge();
+const { getChainName, getChain, getToken, getTokenURL } = useBridge();
+const { account } = useWeb3();
 // // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -19,53 +27,71 @@ const swapCardShadow = computed(() => {
   }
 });
 /**
- * LIFECYCLE
- */
-onBeforeMount(async () => {
-  getTxList();
-});
-/**
  * FUNCTIONS
  */
-async function getTxList() {
-  // TODO FOR TEST ONLY
+async function mapTxList(data) {
   txList.value = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
     let itemPush = {
-      date: `1700465751`,
+      date: item?.src_timestamp,
       tokenIn: {
-        address: '0x2FFdE077455f81E28bAa675a46B9c085740216d4',
-        symbol: 'TCGC',
-        chainId: 1,
-        amount: 1000,
+        address: item?.src_token?.address,
+        symbol: item?.src_token?.symbol,
+        chainId: item?.src_token?.chain_id,
+        amount: BigNumber(item?.amount_in)
+          .div(10 ** item?.src_token?.decimals)
+          .toFixed(),
       },
       tokenOut: {
-        address: '0x44ACD96620B708162af4A90524F29A6839675533',
-        symbol: 'TCGC',
-        chainId: 137,
-        amount: 1000,
+        address: item?.dst_token?.address,
+        symbol: item?.dst_token?.symbol,
+        chainId: item?.dst_token?.chain_id,
+        amount: BigNumber(item?.amount_out)
+          .div(10 ** item?.src_token?.decimals)
+          .toFixed(),
       },
     };
     // map data to show
     const tokenIn_chain = getChain(itemPush.tokenIn.chainId);
-    console.log(tokenIn_chain, 'tokenIn_chain');
     itemPush.tokenIn.chainName = tokenIn_chain?.name;
     itemPush.tokenIn.chainUrl = tokenIn_chain?.img_url;
-    const tokenIn = getToken(itemPush.tokenIn.address, tokenIn_chain?.tokens);
-    itemPush.tokenIn.logoURI = tokenIn?.logoURI;
-
+    itemPush.tokenIn.logoURI = getTokenURL(itemPush.tokenIn.symbol);
+    console.log('🚀 ~ mapTxList ~ itemPush.tokenOut:', itemPush.tokenOut);
     const tokenOut_chain = getChain(itemPush.tokenOut.chainId);
+
+    console.log('🚀 ~ mapTxList ~ tokenOut_chain:', tokenOut_chain);
     itemPush.tokenOut.chainName = tokenOut_chain?.name;
     itemPush.tokenOut.chainUrl = tokenOut_chain?.img_url;
-    const tokenOut = getToken(
-      itemPush.tokenOut.address,
-      tokenOut_chain?.tokens
-    );
-    itemPush.tokenOut.logoURI = tokenOut?.logoURI;
+    itemPush.tokenOut.logoURI = getTokenURL(itemPush.tokenOut.symbol);
+    console.log('🚀 ~ mapTxList ~ itemPush:', itemPush);
+
     txList.value.push(itemPush);
   }
   console.log(txList.value, ' txList.value');
 }
+const getHistory = async () => {
+  try {
+    const params = {
+      offset: pagination.value.offset,
+      limit: pagination.value.limit,
+      sender_address: account.value,
+    };
+    const rs = await bridgeApi.getHistoryByAddress(params);
+    mapTxList(rs?.items || []);
+  } catch (error) {
+    console.log(error, 'error');
+  }
+};
+const initData = async () => {
+  getHistory();
+};
+/**
+ * LIFECYCLE
+ */
+onBeforeMount(async () => {
+  initData();
+});
 </script>
 
 <template>
@@ -91,7 +117,7 @@ async function getTxList() {
           class="justify-center items-center mt-4 h-40 no-data"
         >
           <BalIcon name="bar-chart" />
-          Nso data
+          No data
         </BalBlankSlate>
         <div v-else class="tx-list">
           <div v-for="(item, index) in txList" :key="index" class="tx-info">
