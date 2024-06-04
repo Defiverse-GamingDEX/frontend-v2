@@ -6,7 +6,8 @@ import mchIcon from '@/assets/images/bridge/networks/mch.png';
 import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
 import saakuruIcon from '@/assets/images/bridge/networks/saakuru.png';
 import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
-
+import { default as cBridgeABI } from '@/lib/abi/bridge/cBridge.json';
+import { default as IL2ERC20Bridge } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
 export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x1',
@@ -16,7 +17,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     gasPrice: null,
     explorer: 'https://etherscan.io',
     rpc: 'https://eth.merkle.io',
-    bridgeContract: '0x358234b325ef9ea8115291a8b81b7d33a2fa762d',
+    bridgeContract: '0x5427FEFA711Eff984124bFBB1AB6fbf5E3DA1820', // cBridge
+    bridgeABI: cBridgeABI,
     type: 'external-chain',
     isOnlyDefiBridge: false,
     isTestnet: false,
@@ -36,7 +38,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     gasPrice: null,
     explorer: 'https://polygonscan.com',
     rpc: 'https://polygon.drpc.org',
-    bridgeContract: '0x9B36f165baB9ebe611d491180418d8De4b8f3a1f',
+    bridgeContract: '0x88DCDC47D2f83a99CF0000FDF667A468bB958a78', //cBridge
+    bridgeABI: cBridgeABI,
     type: 'external-chain',
     isOnlyDefiBridge: false,
     isTestnet: false,
@@ -57,7 +60,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     explorer: 'https://scan.defi-verse.org/',
     rpc: 'https://rpc.defi-verse.org',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge
-    type: 'L2',
+    bridgeABI: IL2ERC20Bridge,
+    type: 'verse-chain',
     isOnlyDefiBridge: false,
     isTestnet: false,
     //tokens: BRIDGE_DEFIVERSE_TOKENS,
@@ -77,7 +81,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     explorer: 'https://explorer.oasys.mycryptoheroes.net',
     rpc: 'https://rpc.oasys.mycryptoheroes.net',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge
-    type: 'L2',
+    bridgeABI: IL2ERC20Bridge,
+    type: 'verse-chain',
     isOnlyDefiBridge: true,
     isTestnet: false,
     //tokens: BRIDGE_MCHVERSE_TOKENS,
@@ -97,7 +102,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     explorer: 'https://explorer.tcgverse.xyz',
     rpc: 'https://rpc.tcgverse.xyz',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge
-    type: 'L2',
+    bridgeABI: IL2ERC20Bridge,
+    type: 'verse-chain',
     isOnlyDefiBridge: true,
     isTestnet: false,
     //tokens: BRIDGE_TCGVERSE_TOKENS,
@@ -117,7 +123,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     explorer: 'https://explorer.oasys.homeverse.games',
     rpc: 'https://rpc.mainnet.oasys.homeverse.games',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge
-    type: 'L2',
+    bridgeABI: IL2ERC20Bridge,
+    type: 'verse-chain',
     isOnlyDefiBridge: true,
     isTestnet: false,
     //tokens: BRIDGE_HOMEVERSE_TOKENS,
@@ -137,7 +144,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     explorer: 'https://explorer.chainverse.info',
     rpc: 'https://rpc.chainverse.info',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge
-    type: 'L2',
+    bridgeABI: IL2ERC20Bridge,
+    type: 'verse-chain',
     isOnlyDefiBridge: true,
     isTestnet: false,
     //tokens: BRIDGE_CHAINVERSE_TOKENS,
@@ -157,7 +165,8 @@ export const BRIDGE_NETWORKS_MAINNET = [
     explorer: 'https://explorer.saakuru.network',
     rpc: 'https://rpc.saakuru.network',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge
-    type: 'L2',
+    bridgeABI: IL2ERC20Bridge,
+    type: 'verse-chain',
     isOnlyDefiBridge: true,
     isTestnet: false,
     //tokens: BRIDGE_SAKUURU_TOKENS,

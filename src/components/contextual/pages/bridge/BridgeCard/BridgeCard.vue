@@ -9,9 +9,11 @@ import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import { isValidAddressV2 } from '@/lib/utils/validations';
 import { useUserSettings } from '@/providers/user-settings.provider';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import useWeb3 from '@/services/web3/useWeb3';
+import { isAddress } from '@ethersproject/address';
 import BigNumber from 'bignumber.js';
 import { cloneDeep, debounce } from 'lodash';
 import { computed } from 'vue';
@@ -22,6 +24,7 @@ import InputTo from './InputTo.vue';
 const {
   account,
   getSigner,
+  getProvider,
   chainId,
   isWalletReady,
   isMismatchedNetwork,
@@ -34,12 +37,6 @@ const {
   getTokenURL,
   checkIsNative,
 
-  getTransferConfigs,
-  getEstimateAmt,
-  getTransferStatus,
-  getTransferHistory,
-  generationTransferId,
-  getTokensBalance,
   getBalance,
   checkTokenAllowance,
   approveToken,
@@ -419,7 +416,7 @@ function checkInputToChange() {
   console.log('🚀 ~ checkInputToChange ~ dstBE.value:', dstBE.value);
   inputToSelect.value.chainsList = dstBE.value;
   // update token
-  //inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
+  inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
 
   // check chainId select is avai
   if (inputToSelect.value.chainId) {
@@ -428,12 +425,12 @@ function checkInputToChange() {
     );
     if (!avaiChain) {
       inputToSelect.value.chainId = '';
-      inputToSelect.value.tokenSymbol = '';
+      //inputToSelect.value.tokenSymbol = '';
       inputToSelect.value.tokenAddress = '';
       inputToSelect.value.decimals = 0;
       inputToSelect.value.tokensList = [];
     } else {
-      inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
+      //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(
         token => token.symbol === inputToSelect.value.tokenSymbol
       )?.address;
@@ -447,7 +444,7 @@ function checkInputToChange() {
     if (inputToSelect.value.chainsList.length > 0) {
       const avaiChain = inputToSelect.value.chainsList[0];
       inputToSelect.value.chainId = avaiChain.chain_id_decimals;
-      inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
+      //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(
         token => token.symbol === inputToSelect.value.tokenSymbol
       )?.address;
@@ -457,7 +454,7 @@ function checkInputToChange() {
       inputToSelect.value.tokensList = avaiChain.tokens;
     } else {
       inputToSelect.value.chainId = '';
-      inputToSelect.value.tokenSymbol = '';
+      //inputToSelect.value.tokenSymbol = '';
       inputToSelect.value.tokenAddress = '';
       inputToSelect.value.decimals = 0;
       inputToSelect.value.tokensList = [];
@@ -477,45 +474,57 @@ async function handleTransferButton() {
     isLoading.value = true;
 
     const signer = getSigner();
+    const provider = getProvider();
 
     let tx = await bridgeSend(
       inputFromSelect.value,
       inputToSelect.value,
-      slippage.value,
       account.value,
-      signer
+      signer,
+      provider
     );
-    console.log(tx, 'tx');
 
-    const chainNameInput = chainFrom.value.name;
-    const chainNameOutput = chainTo.value.name;
-    const summary = `tranfer token ${inputFromSelect.value.tokenSymbol} from ${chainNameInput} to ${chainNameOutput}`;
-    addTransaction({
-      id: tx.hash,
-      type: 'tx',
-      action: 'transfer',
-      summary,
-    });
+    console.log(tx, 'tx=>handleTransferButton');
 
-    txListener(tx, {
-      onTxConfirmed: async () => {
-        console.log('success');
-        const transfer_id = await generationTransferId(
-          inputFromSelect.value,
-          inputToSelect.value,
-          account.value
-        );
-        setInterval(async () => {
-          const transferStatus = await getTransferStatus(transfer_id);
-          console.log(transferStatus, transfer_id, 'transferStatus');
-        }, 15000);
+    // const chainNameInput = chainFrom.value.name;
+    // const chainNameOutput = chainTo.value.name;
+    // const summary = `tranfer token ${inputFromSelect.value.tokenSymbol} from ${chainNameInput} to ${chainNameOutput}`;
+    // addTransaction({
+    //   id: tx.hash,
+    //   type: 'tx',
+    //   action: 'transfer',
+    //   summary,
+    // });
 
-        isLoading.value = false;
-      },
-      onTxFailed: () => {
-        isLoading.value = false;
-      },
-    });
+    tx &&
+      txListener(tx, {
+        onTxConfirmed: async (receipt: any) => {
+          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
+          console.log('success');
+
+          // call API confirm tx to BE
+          const params = {
+            sender_address: account.value,
+            receiver_address: anotherWalletAddress.value
+              ? anotherWalletAddress.value
+              : account.value,
+            src_chain_id: inputFromSelect.value.chainId,
+            dst_chain_id: inputToSelect.value.chainId,
+            src_token_address: inputFromSelect.value.tokenAddress,
+            amount_in: BigNumber(inputFromSelect.value.amount)
+              .times(Math.pow(10, inputFromSelect.value.decimals))
+              .toFixed(0),
+            src_tx_id: receipt?.transactionHash,
+          };
+          const rsBE = await bridgeApi.postBridgeRequest(params);
+          console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
+          await initData();
+          isLoading.value = false;
+        },
+        onTxFailed: () => {
+          isLoading.value = false;
+        },
+      });
   } catch (error) {
     console.log(error, 'error=>handleTransferButton');
     isLoading.value = false;
@@ -614,6 +623,7 @@ onBeforeMount(async () => {
             <div class="wallet-address-input">
               <BalTextInput
                 :modelValue="anotherWalletAddress"
+                :rules="[isValidAddressV2()]"
                 :disabled="!isWalletReady"
                 name="anotherWallet"
                 placeholder=""
@@ -765,6 +775,7 @@ onBeforeMount(async () => {
           <BalBtn
             v-else
             :disabled="
+              !isAddress(anotherWalletAddress) ||
               !estimateInfo ||
               !!estimateInfo.err ||
               inputFromSelect.balance === 0 ||

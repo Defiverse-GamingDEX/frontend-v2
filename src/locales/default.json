@@ -579,6 +579,7 @@
   "mustBeValidEmail": "must be a valid email",
   "mustBeValidNum": "must be a valid number",
   "mustBeValidAddress": "This is not a valid Defiverse address",
+  "mustBeValidAddressV2": "This is not a valid address",
   "myApr": "My APR",
   "myBalance": "My balance",
   "myBalancerBalance": "My Defiverse balance",

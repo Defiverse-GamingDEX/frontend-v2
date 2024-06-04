@@ -55,3 +55,6 @@ export function isGreaterThan(min: number | string, msg = '') {
     bnum(v).isGreaterThan(min) ||
     (msg ? msg : i18n.global.t('mustBeMoreThan', [min]));
 }
+export function isValidAddressV2() {
+  return v => !v || isAddress(v) || i18n.global.t('mustBeValidAddressV2');
+}

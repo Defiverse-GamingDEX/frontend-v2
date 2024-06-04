@@ -20,7 +20,8 @@ const { t } = useI18n();
 const { addAlert, removeAlert } = useAlerts();
 const { getAdminAddress } = usePoolCreation();
 
-const { account } = useWeb3();
+const { account, chainId } = useWeb3();
+console.log('🚀 ~ chainId:', chainId);
 
 const route = useRoute();
 console.log('🚀 ~ route:', route);
@@ -40,6 +41,10 @@ watch(isAdmin, () => {
   if (!isAdmin.value) {
     tabSelect.value = 'bridge';
   }
+});
+watch(chainId, () => {
+  console.log('🚀 ~ watch ~ chainId?.value:', chainId?.value);
+  checkMisMatch();
 });
 watch(route?.name, () => {
   checkMisMatch();

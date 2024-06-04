@@ -5,16 +5,14 @@ import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
 import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
 import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
 import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
-import { BRIDGE_NETWORKS, OASYS_NETWORK } from '@/constants/bridge/networks';
+import bridgeService from '@/composables/bridge/bridge.services';
+import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
-import { default as BridgeABI } from '@/lib/abi/bridge/Bridge.json';
 import { bnum } from '@/lib/utils';
 import { Contract } from '@ethersproject/contracts';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import bridgeAPI from './bridge.api.js';
-import bridgeService from './bridge.services.js';
+const VBRIDGE_CONTRACT_ADDRESS = '0xa5c4db36bd26426c186d170bf46165a937d9cad1';
 // real function - START - TODO
 function truncateDecimal(number, precision) {
   const [integerPart, fractionalPart] = number.toString().split('.');
@@ -62,70 +60,6 @@ function getTokenURL(tokenSymbol) {
   }
 }
 
-// function from BridgeAPI - START
-async function getTransferConfigs() {
-  try {
-    const rs = await bridgeAPI.getTransferConfigs();
-
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
-async function getEstimateAmt(inputFrom, inputTo, account, slippage) {
-  try {
-    const decimals = new BigNumber(10).pow(inputFrom.decimals).toFixed();
-    const atm = BigNumber(inputFrom.amount).times(decimals).toFixed(0);
-    const params = {
-      src_chain_id: inputFrom.chainId,
-      dst_chain_id: inputTo.chainId,
-      token_symbol: inputFrom.tokenSymbol,
-      usr_addr: account,
-      slippage_tolerance: calcSlippage(slippage),
-      amt: atm,
-    };
-    const rs = await bridgeAPI.getEstimateAmt(params);
-    console.log(rs, 'rs=>getEstimateAmt');
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
-async function getTransferStatus(transfer_id) {
-  try {
-    const rs = await bridgeAPI.getTransferStatus(transfer_id);
-
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
-async function getTransferHistory(account, paging) {
-  try {
-    const params = {
-      acct_addr: [account],
-      page_size: paging.page_size,
-      next_page_token: paging.next_page_token,
-    };
-    const rs = await bridgeAPI.getTransferHistory(params);
-
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
-
-// function from BridgeAPI - END
-function calcSlippage(slippage_tolerance) {
-  slippage_tolerance = parseFloat(slippage_tolerance || '0');
-  console.log();
-  const slippageUse = (slippage_tolerance / 100) * 1e6 - 1; // please read document about slippage_tolerance
-  return Math.floor(slippageUse);
-}
 async function getTokensBalance(tokens, account) {
   if (tokens.length > 0) {
     for (let i = 0; i < tokens.length; i++) {
@@ -204,121 +138,78 @@ function getChain(chainId) {
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
-async function generationTransferId(inputFromSelect, inputToSelect, account) {
-  //TODO not work
-  const chainFrom = getChain(inputFromSelect.chainId);
-  const tokenInputFrom = getToken(
-    inputFromSelect.tokenAddress,
-    inputFromSelect.tokensList
-  );
-  const chainTo = getChain(inputToSelect.chainId);
-  const tokenInputTo = getToken(
-    inputToSelect.tokenAddress,
-    inputToSelect.tokensList
-  );
-  const chainTransfer = getChainTransfer(
-    chainFrom,
-    tokenInputFrom,
-    chainTo,
-    tokenInputTo
-  );
-  const contractProvider = chainTransfer?.provider;
 
-  const decimals = new BigNumber(10).pow(inputFromSelect.decimals).toFixed();
-  const decimals_value = BigNumber(inputFromSelect.amount)
-    .times(decimals)
-    .toFixed(0)
-    ?.toString();
-  //const nonce = await contractProvider.getTransactionCount(account, 'latest');
-  const nonce = Date.now(); // nonce is currentTimeStamp
-  const transfer_id = ethers.utils.solidityKeccak256(
-    ['address', 'address', 'address', 'uint256', 'uint64', 'uint64', 'uint64'],
-    [
-      account, /// User's wallet address,
-      account, /// User's wallet address,
-      inputFromSelect.tokenAddress, /// Wrap token address/ ERC20 token address
-      decimals_value, /// Send amount in String
-      `${chainTransfer.chainId}`, /// Destination chain id
-      `${nonce}`, /// Nonce
-      `${inputFromSelect.chainId}`, /// Source chain id
-    ]
-  );
-  return transfer_id;
-}
-function getChainTransfer(chainFrom, tokenInputFrom, chainTo, tokenInputTo) {
-  const rs = {};
-  if (chainFrom.type === 'L1') {
-    if (chainTo.type === 'L1') {
-      // L1 to L1 example Goerli to AVAX testnet : sendNative
-      rs.abi = BridgeABI;
-      rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
-      rs.chainId = chainTo.chain_id_decimals;
-      rs.type = 'L1toL1';
-    } else {
-      // L1 to L2
-      rs.abi = BridgeABI;
-      rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
-      rs.chainId = OASYS_NETWORK.chain_id_decimals;
-      rs.type = 'L1toL2';
-    }
-  } else {
-    if (chainTo.type === 'L1') {
-      // L2 to L1
-      rs.type = 'L2toL1';
-    } else {
-      // L2 to L2
-      rs.type = 'L2toL2';
-    }
-  }
-  return rs;
-}
 async function bridgeSend(
   inputFromSelect,
   inputToSelect,
-  slippage,
   account,
-  signer
+  signer,
+  provider
 ) {
+  console.log('🚀 ~ bridgeSend ~ inputToSelect:', inputToSelect);
+  console.log('🚀 ~ bridgeSend ~ inputFromSelect:', inputFromSelect);
   try {
     const chainFrom = getChain(inputFromSelect.chainId);
+    console.log('🚀 ~ chainFrom:', chainFrom);
     const tokenInputFrom = getToken(
       inputFromSelect.tokenAddress,
       inputFromSelect.tokensList
     );
+    console.log('🚀 ~ tokenInputFrom:', tokenInputFrom);
     const chainTo = getChain(inputToSelect.chainId);
+    console.log('🚀 ~ chainTo:', chainTo);
     const tokenInputTo = getToken(
       inputToSelect.tokenAddress,
       inputToSelect.tokensList
     );
-    const chainTransfer = getChainTransfer(
-      chainFrom,
-      tokenInputFrom,
-      chainTo,
-      tokenInputTo
-    );
 
-    const params = {
-      contractAddress: chainFrom?.bridgeContract,
-      tokenAddress: inputFromSelect.tokenAddress,
-      tokenDecimal: tokenInputFrom?.decimals,
-      value: inputFromSelect.amount,
-      account: account,
-      signer: signer,
-      slippage: calcSlippage(slippage),
-      gasPrice: chainFrom?.gasPrice,
-      abi: chainTransfer?.abi,
-      contractProvider: chainTransfer?.provider,
-      chainId: chainTransfer?.chainId,
-    };
-    console.log(params, 'handleTransferButton=>params');
-    // const provider = new JsonRpcProvider(OASYS_TESTNET_NETWORK?.rpc);
-    // const chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
+    console.log('🚀 ~ tokenInputTo:', tokenInputTo);
     let tx = null;
-    if (chainTransfer.type === 'L1toL1') {
-      //tx = await bridgeService.bridgeSendNative(params);
-      tx = await bridgeService.bridgeSend(params);
-    } else if (chainTransfer.type === 'L1toL2') {
-      tx = await bridgeService.bridgeSend(params);
+    if (chainFrom.type === 'external-chain') {
+      if (chainTo.type === 'external-chain') {
+        throw new Error('Not support');
+      } else {
+        // chainTo.type === 'verse-chain'
+        // external-chain => verse-chain
+        const params = {
+          // contractAddress: chainFrom., // contract token
+          // contractProvider, // contract provider
+          // account,
+          // srcTokenDecimal,
+          // value, // amount
+          // vBridgeAddress,
+          // srcTokenAddress, // account address
+          // desChainId,
+          // signer,
+          // slippage,
+          // abi,
+          // gasPrice,
+        };
+        tx = await bridgeService.bridgeSend(params);
+      }
+    } else {
+      // chainFrom.type === 'verse-chain'
+      if (chainTo.type === 'external-chain') {
+        // verse-chain => external-chain
+        const params = {};
+        tx = await bridgeService.withdrawTo(params);
+      } else {
+        // verse-chain => verse-chain
+        const params = {
+          contractAddress: chainFrom?.bridgeContract,
+          contractProvider: provider,
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+          srcTokenAddress: tokenInputFrom?.address, // account address
+          signer,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
+        };
+        console.log('🚀 ~ params:', params);
+        tx = await bridgeService.bridgeWithdrawTo(params);
+      }
     }
 
     return tx;
@@ -332,13 +223,7 @@ export function useBridge() {
     truncateDecimal,
     getTokenURL,
     checkIsNative,
-    // SDK start
-    getTransferConfigs,
-    getEstimateAmt,
-    getTransferStatus,
-    generationTransferId,
-    getTransferHistory,
-    // SDK end
+
     getTokensBalance,
     getBalance,
     checkTokenAllowance,
