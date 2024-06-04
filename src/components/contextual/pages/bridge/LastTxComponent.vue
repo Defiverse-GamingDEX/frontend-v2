@@ -16,8 +16,7 @@ const lastTx = ref(null);
 
 // COMPOSABLES
 const { bp } = useBreakpoints();
-const { getChainName, getChain, getToken, getTokenURL, mapTxHistory } =
-  useBridge();
+const { mapTxHistory } = useBridge();
 const { account } = useWeb3();
 // COMPUTED
 const swapCardShadow = computed(() => {
