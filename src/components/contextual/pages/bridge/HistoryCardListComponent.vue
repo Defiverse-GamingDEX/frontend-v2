@@ -94,7 +94,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style scoped lang="scss">
 .history-card-component {
-  min-width: 1000px;
+  width: 100%;
   overflow-y: hidden;
   .bold {
     font-weight: bold;
@@ -106,6 +106,7 @@ const props = withDefaults(defineProps<Props>(), {
     font-size: 16px;
     font-weight: bold;
     line-height: 24px;
+    min-width: 1000px;
     .tx-info {
       padding: 0px;
       border-bottom: 0px;
@@ -113,6 +114,7 @@ const props = withDefaults(defineProps<Props>(), {
   }
   .card-body {
     border-bottom: 1px solid #cecece;
+    min-width: 1000px;
   }
   .tx-info {
     display: flex;

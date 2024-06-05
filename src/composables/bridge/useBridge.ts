@@ -274,7 +274,7 @@ async function bridgeSend(
     );
 
     console.log('🚀 ~ tokenInputTo:', tokenInputTo);
-    let tx = null;
+    let rs = null;
     if (chainFrom.type === 'external-chain') {
       if (chainTo.type === 'external-chain') {
         throw new Error('Not support');
@@ -295,14 +295,26 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
-        tx = await bridgeService.bridgeSend(params);
+        rs = await bridgeService.bridgeSend(params);
       }
     } else {
       // chainFrom.type === 'verse-chain'
       if (chainTo.type === 'external-chain') {
         // verse-chain => external-chain
-        const params = {};
-        tx = await bridgeService.withdrawTo(params);
+        const params = {
+          contractAddress: chainFrom?.bridgeContract,
+          contractProvider: provider,
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          srcTokenSymbol: tokenInputFrom?.symbol,
+          value: inputFromSelect?.amount, // amount
+          vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+          srcTokenAddress: tokenInputFrom?.address, // account address
+          signer,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
+        };
+        rs = await bridgeService.withdrawTo(params);
       } else {
         // verse-chain => verse-chain
         const params = {
@@ -319,11 +331,11 @@ async function bridgeSend(
           gasPrice: chainFrom?.gasPrice,
         };
         console.log('🚀 ~ params:', params);
-        tx = await bridgeService.bridgeWithdrawTo(params);
+        rs = await bridgeService.bridgeWithdrawTo(params);
       }
     }
 
-    return tx;
+    return rs;
   } catch (error) {
     console.log(error, 'error');
     throw error;

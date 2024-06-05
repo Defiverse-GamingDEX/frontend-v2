@@ -174,7 +174,7 @@ const bridgeSend = async params => {
   );
 
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
-  return rs;
+  return { tx: rs, nonce };
 };
 
 const bridgeWithdrawTo = async params => {
@@ -212,7 +212,7 @@ const bridgeWithdrawTo = async params => {
   );
 
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
-  return rs;
+  return { tx: rs, nonce };
 };
 
 // const bridgeSendNative = async params => {

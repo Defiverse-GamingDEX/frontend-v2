@@ -116,7 +116,6 @@ function changeTab(tab) {
         tabSelect === 'admin'
       "
       offsetGutters
-      mobileHideGutters
       class="mt-10"
       :class="{ 'bridge-page-layout': tabSelect === 'bridge' }"
     >
@@ -169,6 +168,9 @@ function changeTab(tab) {
 }
 .bridge-page-layout {
   max-width: 76rem;
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
   :deep {
     .gutter-col {
       &.mt-6 {

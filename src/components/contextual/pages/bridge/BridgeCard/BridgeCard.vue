@@ -481,7 +481,7 @@ async function handleTransferButton() {
     const signer = getSigner();
     const provider = getProvider();
 
-    let tx = await bridgeSend(
+    const { tx, nonce } = await bridgeSend(
       inputFromSelect.value,
       inputToSelect.value,
       account.value,
@@ -490,7 +490,7 @@ async function handleTransferButton() {
     );
 
     console.log(tx, 'tx=>handleTransferButton');
-
+    console.log('🚀 ~ handleTransferButton ~ nonce:', nonce);
     // const chainNameInput = chainFrom.value.name;
     // const chainNameOutput = chainTo.value.name;
     const summary = `Bridge success!`;
@@ -519,6 +519,7 @@ async function handleTransferButton() {
             amount_in: BigNumber(inputFromSelect.value.amount)
               .times(Math.pow(10, inputFromSelect.value.decimals))
               .toFixed(0),
+            nonce: nonce,
             src_tx_id: receipt?.transactionHash,
           };
           const rsBE = await bridgeApi.postBridgeRequest(params);
