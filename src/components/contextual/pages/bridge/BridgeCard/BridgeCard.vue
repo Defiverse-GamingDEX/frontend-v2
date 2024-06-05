@@ -211,15 +211,6 @@ function covertUnitShow(number, token_decimals) {
   return rs;
 }
 
-function calcFee() {
-  if (estimateInfo.value) {
-    let fee = BigNumber(estimateInfo.value.base_fee)
-      .plus(estimateInfo.value.perc_fee)
-      .toString();
-    return covertUnitShow(fee, inputFromSelect.value.decimals);
-  }
-  return 0;
-}
 function initSelectedData() {
   chainFrom.value = getChain(inputFromSelect.value.chainId);
   chainTo.value = getChain(inputToSelect.value.chainId);
@@ -248,6 +239,19 @@ async function getBalanceInputFrom() {
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
+      if (
+        inputFromSelect.value?.tokenSymbol === 'OAS' ||
+        inputFromSelect.value?.tokenAddress?.toLowerCase() ===
+          '0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000' ||
+        inputFromSelect.value?.tokenAddress?.toLowerCase() ===
+          '0x0000000000000000000000000000000000000000'
+      ) {
+        return true;
+      }
+      console.log(
+        '🚀 ~ checkAllowanceInputFrom ~ inputFromSelect.value.tokenAddress:',
+        inputFromSelect.value
+      );
       const allowance = await checkTokenAllowance(
         chainFrom.value,
         tokenFrom.value,
@@ -338,6 +342,7 @@ async function handleInputFromChange(inputSelect) {
   checkAllowanceInputFrom();
 
   await getEstimateFee();
+  await getBalanceInputFrom();
 }
 function mapEstimateInfo(rs) {
   return {
@@ -488,13 +493,13 @@ async function handleTransferButton() {
 
     // const chainNameInput = chainFrom.value.name;
     // const chainNameOutput = chainTo.value.name;
-    // const summary = `tranfer token ${inputFromSelect.value.tokenSymbol} from ${chainNameInput} to ${chainNameOutput}`;
-    // addTransaction({
-    //   id: tx.hash,
-    //   type: 'tx',
-    //   action: 'transfer',
-    //   summary,
-    // });
+    const summary = `Bridge success!`;
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'bridge',
+      summary,
+    });
 
     tx &&
       txListener(tx, {
@@ -518,7 +523,8 @@ async function handleTransferButton() {
           };
           const rsBE = await bridgeApi.postBridgeRequest(params);
           console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
-          await initData();
+          //await initData();
+          await getBalanceInputFrom();
           isLoading.value = false;
         },
         onTxFailed: () => {

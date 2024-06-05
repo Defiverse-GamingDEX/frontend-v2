@@ -51,61 +51,61 @@ const _sendRawTx = async (
     throw _error;
   }
 };
-// const _sendRawTxNative = async (
-//   contractAddress,
-//   contractProvider,
-//   action,
-//   params,
-//   overwrite,
-//   signer,
-//   value,
-//   abi,
-//   gasPrice = null
-// ) => {
-//   try {
-//     const myContract = await new ethers.Contract(
-//       contractAddress,
-//       abi,
-//       contractProvider
-//     );
-//     const gas = await _estimateGasNative(
-//       myContract,
-//       action,
-//       params,
-//       overwrite,
-//       signer,
-//       value
-//     );
-//     console.log('--->gas: ', gas); // eslint-disable-line no-console
-//     // overwrite.gasLimit = gas;
-//     overwrite.maxPriorityFeePerGas = null;
-//     overwrite.maxFeePerGas = null;
+const _sendRawTxNative = async (
+  contractAddress,
+  contractProvider,
+  action,
+  params,
+  overwrite,
+  signer,
+  value,
+  abi,
+  gasPrice = null
+) => {
+  try {
+    const myContract = await new ethers.Contract(
+      contractAddress,
+      abi,
+      contractProvider
+    );
+    const gas = await _estimateGasNative(
+      myContract,
+      action,
+      params,
+      overwrite,
+      signer,
+      value
+    );
+    console.log('--->gas: ', gas); // eslint-disable-line no-console
+    // overwrite.gasLimit = gas;
+    overwrite.maxPriorityFeePerGas = null;
+    overwrite.maxFeePerGas = null;
 
-//     const tx = await myContract.connect(signer)[action](...params, {
-//       gasLimit: gas,
-//       gasPrice: gasPrice,
-//       value: value,
-//     });
-//     console.log('--->tx: ', tx); // eslint-disable-line no-console
-//     //let rs = await tx.wait();
-//     //console.log('--->rs: ', rs); // eslint-disable-line no-console
-//     return tx;
-//   } catch (error) {
-//     let _error = error;
-//     try {
-//       let tmp = error.toString().replace('Error: Internal JSON-RPC error.', '');
-//       tmp = tmp.replace('Error: Transaction has been reverted by the EVM:', '');
-//       _error = JSON.parse(tmp);
-//       if (!_error.message && _error.error) {
-//         _error.message = _error.error;
-//       }
-//     } catch (e) {
-//       // console.log("-------------------->_error--------");
-//       _error = error;
-//     }
-//     throw _error;
-//   }
-// };
+    const tx = await myContract.connect(signer)[action](...params, {
+      gasLimit: gas,
+      gasPrice: gasPrice,
+      value: value,
+    });
+    console.log('--->tx: ', tx); // eslint-disable-line no-console
+    //let rs = await tx.wait();
+    //console.log('--->rs: ', rs); // eslint-disable-line no-console
+    return tx;
+  } catch (error) {
+    let _error = error;
+    try {
+      let tmp = error.toString().replace('Error: Internal JSON-RPC error.', '');
+      tmp = tmp.replace('Error: Transaction has been reverted by the EVM:', '');
+      _error = JSON.parse(tmp);
+      if (!_error.message && _error.error) {
+        _error.message = _error.error;
+      }
+    } catch (e) {
+      // console.log("-------------------->_error--------");
+      _error = error;
+    }
+    throw _error;
+  }
+};
 const _estimateGas = async (myContract, action, params, overwrite, signer) => {
   let estimateGas = await myContract
     .connect(signer)
@@ -115,23 +115,23 @@ const _estimateGas = async (myContract, action, params, overwrite, signer) => {
   return new BigNumber(estimateGas).times(2).toFixed(0);
 };
 
-// const _estimateGasNative = async (
-//   myContract,
-//   action,
-//   params,
-//   overwrite,
-//   signer,
-//   value
-// ) => {
-//   let estimateGas = await myContract
-//     .connect(signer)
-//     .estimateGas[action](...params, {
-//       value: value,
-//     });
-//   estimateGas = estimateGas?.toNumber() || 0;
-//   console.log('--->gasBBBB: ', estimateGas, overwrite); // eslint-disable-line no-console
-//   return new BigNumber(estimateGas).times(2).toFixed(0);
-// };
+const _estimateGasNative = async (
+  myContract,
+  action,
+  params,
+  overwrite,
+  signer,
+  value
+) => {
+  let estimateGas = await myContract
+    .connect(signer)
+    .estimateGas[action](...params, {
+      value: value,
+    });
+  estimateGas = estimateGas?.toNumber() || 0;
+  console.log('--->gasBBBB: ', estimateGas, overwrite); // eslint-disable-line no-console
+  return new BigNumber(estimateGas).times(2).toFixed(0);
+};
 
 const bridgeSend = async params => {
   const {
@@ -183,6 +183,7 @@ const bridgeWithdrawTo = async params => {
     contractProvider, // contract provider
     account,
     srcTokenDecimal,
+    srcTokenSymbol,
     value, // amount
     vBridgeAddress,
     srcTokenAddress, // account address
@@ -194,6 +195,10 @@ const bridgeWithdrawTo = async params => {
   let decimals = new BigNumber(10).pow(srcTokenDecimal).toFixed();
   let decimals_value = BigNumber(value).times(decimals).toFixed(0);
   let overwrite = { from: account };
+  // if (srcTokenSymbol === 'OAS') {
+  //   overwrite.value = decimals_value;
+  // }
+  console.log('🚀 ~ bridgeWithdrawTo ~ overwrite:', overwrite);
   const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
   const rs = await _sendRawTx(
     contractAddress,

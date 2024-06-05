@@ -13,7 +13,8 @@ const pagination = ref({
 });
 
 const lastTx = ref(null);
-
+const INTERVAL_TIME = 10000;
+const intervalId = ref();
 // COMPOSABLES
 const { bp } = useBreakpoints();
 const { mapTxHistory } = useBridge();
@@ -55,6 +56,10 @@ const initData = async () => {
  */
 onBeforeMount(async () => {
   initData();
+  intervalId.value = setInterval(initData, INTERVAL_TIME);
+});
+onUnmounted(() => {
+  clearInterval(intervalId.value); // Clear the interval to stop further calls
 });
 </script>
 

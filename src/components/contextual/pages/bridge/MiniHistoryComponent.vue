@@ -11,6 +11,8 @@ const pagination = ref({
   offset: 0,
   limit: 10,
 });
+const INTERVAL_TIME = 10000;
+const intervalId = ref();
 // // COMPOSABLES
 const { bp } = useBreakpoints();
 const { getChainName, getChain, getToken, getTokenURL } = useBridge();
@@ -86,11 +88,16 @@ const getHistory = async () => {
 const initData = async () => {
   getHistory();
 };
+
 /**
  * LIFECYCLE
  */
 onBeforeMount(async () => {
   initData();
+  intervalId.value = setInterval(initData, INTERVAL_TIME);
+});
+onUnmounted(() => {
+  clearInterval(intervalId.value); // Clear the interval to stop further calls
 });
 </script>
 

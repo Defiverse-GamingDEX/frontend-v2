@@ -7,8 +7,8 @@ import { useI18n } from 'vue-i18n';
 import LS_KEYS from '@/constants/local-storage.keys';
 import { lsGet, lsSet } from '@/lib/utils';
 import { configService } from '@/services/config/config.service';
-import { cowswapExplorer } from '@/services/cowswap/explorer.service';
 import { cowswapProtocolService } from '@/services/cowswap/cowswapProtocol.service';
+import { cowswapExplorer } from '@/services/cowswap/explorer.service';
 import { OrderMetaData } from '@/services/cowswap/types';
 import useWeb3 from '@/services/web3/useWeb3';
 import { CowswapTransactionDetails } from './swap/useCowswap';
@@ -55,7 +55,8 @@ export type TransactionAction =
   | 'stake'
   | 'restake'
   | 'atfSwap'
-  | 'atfLimit';
+  | 'atfLimit'
+  | 'bridge';
 
 export type TransactionType = 'order' | 'tx';
 
