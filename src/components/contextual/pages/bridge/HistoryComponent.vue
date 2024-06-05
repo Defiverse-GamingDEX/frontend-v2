@@ -50,7 +50,7 @@ const mapTxList = data => {
 const getHistory = async () => {
   try {
     const params = {
-      offset: pagination.value.currentPage - 1,
+      offset: (pagination.value.currentPage - 1) * pagination.value.sizePerPage,
       limit: pagination.value.sizePerPage,
       sender_address: account.value,
     };
