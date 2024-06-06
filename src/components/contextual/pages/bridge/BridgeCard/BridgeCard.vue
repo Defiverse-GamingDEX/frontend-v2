@@ -785,6 +785,7 @@ onBeforeMount(async () => {
               (anotherWalletAddress && !isAddress(anotherWalletAddress)) ||
               !estimateInfo ||
               !!estimateInfo.err ||
+              estimateInfo.amount_out <= 0 ||
               inputFromSelect.balance === 0 ||
               inputFromSelect.balance < inputFromSelect.amount ||
               inputFromSelect.amount <= 0

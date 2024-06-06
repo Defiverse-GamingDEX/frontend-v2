@@ -289,7 +289,7 @@ async function bridgeSend(
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
           srcTokenAddress: tokenInputFrom?.address,
-          desChainId: chainTo?.chainId,
+          desChainId: chainTo?.chain_id_decimals,
           signer,
           slippage: 10000,
           abi: chainFrom?.bridgeABI,
@@ -314,7 +314,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
-        rs = await bridgeService.withdrawTo(params);
+        rs = await bridgeService.bridgeWithdrawTo(params);
       } else {
         // verse-chain => verse-chain
         const params = {
