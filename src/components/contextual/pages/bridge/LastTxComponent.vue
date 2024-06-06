@@ -76,12 +76,28 @@ onUnmounted(() => {
         <span
           class="status"
           :class="[
-            { success: lastTx?.status?.toLowerCase() === 'success' },
-            { failed: lastTx?.status?.toLowerCase() === 'failed' },
-            { pending: lastTx?.status?.toLowerCase() === 'pending' },
-            { new: lastTx?.status?.toLowerCase() === 'new' },
+            { new: lastTx?.status?.toUpperCase() === 'NEW' },
+            { confirmed: lastTx?.status?.toUpperCase() === 'CONFIRMED' },
+            {
+              relay_processing:
+                lastTx?.status?.toUpperCase() === 'RELAY_PROCESSING',
+            },
+            { relay_error: lastTx?.status?.toUpperCase() === 'RELAY_ERROR' },
+            {
+              relay_completed:
+                lastTx?.status?.toUpperCase() === 'RELAY_COMPLETED',
+            },
+            {
+              dst_error: lastTx?.status?.toUpperCase() === 'DST_ERROR',
+            },
+            {
+              completed: lastTx?.status?.toUpperCase() === 'COMPLETED',
+            },
+            {
+              error: lastTx?.status?.toUpperCase() === 'ERROR',
+            },
           ]"
-          >{{ lastTx?.status }}
+          >{{ lastTx?.statusName }}
         </span>
       </div>
       <div class="date">
@@ -105,6 +121,7 @@ onUnmounted(() => {
         <div class="line-content">
           <div class="left-line">
             <img
+              v-if="lastTx?.router_1?.status"
               :src="`/images/bridge/${
                 lastTx?.router_1?.status || 'unknown'
               }.png`"
@@ -160,6 +177,7 @@ onUnmounted(() => {
         <div class="line-content">
           <div class="left-line">
             <img
+              v-if="lastTx?.router_2?.status"
               :src="`/images/bridge/${
                 lastTx?.router_2?.status || 'unknown'
               }.png`"
@@ -251,6 +269,27 @@ onUnmounted(() => {
       }
       &.new {
         color: #3751ff;
+      }
+      &.confirmed {
+        color: #6c757d;
+      }
+      &.relay_processing {
+        color: #ffcc00;
+      }
+      &.relay_error {
+        color: #dc3545;
+      }
+      &.relay_completed {
+        color: #17a2b8;
+      }
+      &.dst_error {
+        color: #fd7e14;
+      }
+      &.completed {
+        color: #28a745;
+      }
+      &.error {
+        color: #ff0000;
       }
     }
   }

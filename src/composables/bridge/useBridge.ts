@@ -76,13 +76,97 @@ const getTxUrl = (txId, chainInfo) => {
     return `${chainInfo?.explorer}/tx/${txId}`;
   }
 };
+const getRouteContractName = chainId => {
+  const chain = BRIDGE_NETWORKS.find(
+    network => network.chain_id_decimals === chainId
+  );
+  console.log('🚀 ~ getRouteContractName ~ chain:', chain);
+  if (chain?.type === 'external-chain') {
+    return 'cBridge';
+  }
+  return 'OasysBridge';
+};
+const getStatusName = status => {
+  switch (status) {
+    case 'NEW':
+      return 'New';
+    case 'CONFIRMED':
+      return 'Confirmed';
+    case 'RELAY_PROCESSING':
+      return 'Relay Processing';
+    case 'RELAY_ERROR':
+      return 'Relay Error';
+    case 'RELAY_COMPLETED':
+      return 'Relay Completed';
+    case 'DST_ERROR':
+      return 'DST Error';
+    case 'COMPLETED':
+      return 'Completed';
+    case 'ERROR':
+      return 'Error';
+    default:
+      return 'Unknown';
+  }
+};
+const getRouteStatus = status => {
+  switch (status) {
+    case 'NEW':
+      return {
+        status_route_1: 'pending',
+        status_route_2: null,
+      };
+    case 'CONFIRMED':
+      return {
+        status_route_1: 'pending',
+        status_route_2: null,
+      };
+    case 'RELAY_PROCESSING':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'pending',
+      };
+    case 'RELAY_ERROR':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'failed',
+      };
+    case 'RELAY_COMPLETED':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'pending',
+      };
+    case 'DST_ERROR':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'failed',
+      };
+    case 'COMPLETED':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'success',
+      };
+    case 'ERROR':
+      return {
+        status_route_1: 'failed',
+        status_route_2: 'failed',
+      };
+    default:
+      return {
+        status_route_1: null,
+        status_route_2: null,
+      };
+  }
+};
 const mapTxHistory = data => {
   console.log('🚀 ~ mapTxHistory ~ data:', data);
   let rs: any = null;
   if (data) {
     console.log('🚀 ~ mapTxHistory ~ data:', data);
+    const { status_route_1, status_route_2 } = getRouteStatus(data.status);
+
     rs = {
       status: data.status,
+      statusName: getStatusName(data.status),
       date: data.src_timestamp,
       tokenIn: {
         address: data.src_token?.address,
@@ -93,29 +177,27 @@ const mapTxHistory = data => {
           .toFixed(),
       },
       router_1: {
-        status: 'success', // 'failed' : 'pending',  // TODO
-        router_contract_name: 'cBridge', // TODO
-        txId: data.src_tx_id,
-        inboundTx: null, // TODO
-        outboundTx: null, // TODO
-        isRetry: false, // TODO
+        status: status_route_1, // 'failed' : 'pending',  // TODO
+        router_contract_name: getRouteContractName(data.src_token?.chain_id),
+        txId: data.src_tx_id, // route_1 only has txId
+        inboundTx: null,
+        outboundTx: null,
+        isRetry: false,
       },
       tokenReplay: {
         address: data.relay_token?.address,
         symbol: data.relay_token?.symbol,
         chainId: data.relay_token?.chain_id,
-        amount: BigNumber(data?.amount_in)
-          .div(10 ** data?.src_token?.decimals)
-          .toFixed(), //TODO
+        amount: BigNumber(data?.amount_relay || 0)
+          .div(10 ** data?.relay_token?.decimals)
+          .toFixed(),
       },
       router_2: {
-        status: 'pending',
-        router_contract_name: 'Oasysverse Bridge', // TODO
-        txId: null, // TODO
-        inboundTx:
-          '0x648d20c4fbdac3007abd76b30497b159951c235428d4627d21ca645250bf6b8b', // TODO
-        outboundTx:
-          '0x648d20c4fbdac3007abd76b30497b159951c235428d4627d21ca645250bf6b8b', // TODO
+        status: status_route_2,
+        router_contract_name: getRouteContractName(data.dst_token?.chain_id),
+        txId: null,
+        inboundTx: data.relay_tx_id, // route_2  has inboundTx
+        outboundTx: data.dst_tx_id, // route_2  has outboundTx
         isRetry: false, // true : false, // TODO
       },
       tokenOut: {

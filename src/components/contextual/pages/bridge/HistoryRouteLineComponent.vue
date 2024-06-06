@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { format, fromUnixTime } from 'date-fns';
 import bridgeAPI from '@/composables/bridge/bridge.api.js';
 import useWeb3 from '@/services/web3/useWeb3';
 // PROPS
@@ -70,6 +69,7 @@ const handleRetryButton = async () => {
     </div>
     <div class="contract-info">
       <img
+        v-if="route_line.status"
         :src="`/images/bridge/${route_line.status || 'unknown'}.png`"
         :class="[
           { success: route_line.status === 'success' },

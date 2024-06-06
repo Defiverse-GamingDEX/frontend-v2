@@ -30,12 +30,30 @@ const props = withDefaults(defineProps<Props>(), {
             <span
               class="status"
               :class="[
-                { success: tx.status?.toLowerCase() === 'success' },
-                { failed: tx.status?.toLowerCase() === 'failed' },
-                { pending: tx.status?.toLowerCase() === 'pending' },
-                { new: tx?.status?.toLowerCase() === 'new' },
+                { new: tx?.status?.toUpperCase() === 'NEW' },
+                { confirmed: tx?.status?.toUpperCase() === 'CONFIRMED' },
+                {
+                  relay_processing:
+                    tx?.status?.toUpperCase() === 'RELAY_PROCESSING',
+                },
+                {
+                  relay_error: tx?.status?.toUpperCase() === 'RELAY_ERROR',
+                },
+                {
+                  relay_completed:
+                    tx?.status?.toUpperCase() === 'RELAY_COMPLETED',
+                },
+                {
+                  dst_error: tx?.status?.toUpperCase() === 'DST_ERROR',
+                },
+                {
+                  completed: tx?.status?.toUpperCase() === 'COMPLETED',
+                },
+                {
+                  error: tx?.status?.toUpperCase() === 'ERROR',
+                },
               ]"
-              >{{ tx.status }}
+              >{{ tx.statusName }}
             </span>
           </div>
           <div class="time">
@@ -142,8 +160,38 @@ const props = withDefaults(defineProps<Props>(), {
         &.pending {
           color: #ffc250;
         }
+        &.success {
+          color: #16a34a;
+        }
+        &.failed {
+          color: #dc2626;
+        }
+        &.pending {
+          color: #ffc250;
+        }
         &.new {
           color: #3751ff;
+        }
+        &.confirmed {
+          color: #6c757d;
+        }
+        &.relay_processing {
+          color: #ffcc00;
+        }
+        &.relay_error {
+          color: #dc3545;
+        }
+        &.relay_completed {
+          color: #17a2b8;
+        }
+        &.dst_error {
+          color: #fd7e14;
+        }
+        &.completed {
+          color: #28a745;
+        }
+        &.error {
+          color: #ff0000;
         }
       }
     }
