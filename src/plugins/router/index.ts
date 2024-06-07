@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import { captureException } from '@sentry/browser';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
 import { isGoerli } from '@/composables/useNetwork';
 import { applyNavGuards } from './nav-guards';
@@ -105,7 +105,7 @@ const routes: RouteRecordRaw[] = [
     component: SwapPage,
   },
   {
-    path: '/:networkSlug/bridge',
+    path: '/:networkSlug/bridge-202406',
     name: 'bridge',
     component: BridgePage,
   },

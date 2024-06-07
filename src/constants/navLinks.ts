@@ -25,10 +25,10 @@ export const NAV_LINKS = [
   //   goal_key: 'ClickNavVebal',
   // },
 
-  {
-    text: 'Bridge',
-    path: 'bridge',
-    name_link: 'bridge',
-    goal_key: 'ClickNavBridge',
-  },
+  // {
+  //   text: 'Bridge',
+  //   path: 'bridge',
+  //   name_link: 'bridge',
+  //   goal_key: 'ClickNavBridge',
+  // },
 ];

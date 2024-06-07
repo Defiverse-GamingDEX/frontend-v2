@@ -8,7 +8,11 @@ import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useAlerts from '@/composables/useAlerts';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+const WHITELIST_ADDRESSES = [
+  '0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE',
+  '0x343eCF760a020936eEE8D655b43C5cBD40769A05',
+];
 /**
  * STATE
  */
@@ -21,9 +25,11 @@ const { addAlert, removeAlert } = useAlerts();
 const { getAdminAddress } = usePoolCreation();
 
 const { account, chainId } = useWeb3();
+console.log('🚀 ~ account:', account);
 console.log('🚀 ~ chainId:', chainId);
 
 const route = useRoute();
+const router = useRouter();
 console.log('🚀 ~ route:', route);
 // COMPUTED
 const isAdmin = computed(() => {
@@ -45,9 +51,16 @@ watch(isAdmin, () => {
 watch(chainId, () => {
   console.log('🚀 ~ watch ~ chainId?.value:', chainId?.value);
   checkMisMatch();
+  checkWhileList();
 });
 watch(route?.name, () => {
   checkMisMatch();
+});
+
+watch(account, () => {
+  // TODO check whitelist
+  console.log('🚀 ~ watch ~ account.value:', account.value);
+  checkWhileList();
 });
 // FUNCTIONS
 const checkMisMatch = () => {
@@ -57,19 +70,28 @@ const checkMisMatch = () => {
     return;
   }
 };
+const checkWhileList = () => {
+  console.log('🚀 ~ checkWhileList ~ account.value:', account.value);
+  if (!account.value || !chainId.value) {
+    router.push({ name: 'home' });
+  } else {
+    const isIncluded = WHITELIST_ADDRESSES.map(a => a.toLowerCase()).includes(
+      account.value.toLowerCase()
+    );
+    if (!isIncluded) {
+      router.push({ name: 'home' });
+    }
+  }
+};
+function changeTab(tab) {
+  tabSelect.value = tab;
+}
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
   checkMisMatch();
+  checkWhileList();
 });
-
-/**
- * METHODS
- */
-
-function changeTab(tab) {
-  tabSelect.value = tab;
-}
 </script>
 
 <template>

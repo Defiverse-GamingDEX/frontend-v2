@@ -1,22 +1,20 @@
 <script lang="ts" setup>
+import { NAV_LINKS } from '@/constants/navLinks';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { NAV_LINKS } from '@/constants/navLinks';
 
 import AppLogo from '@/components/images/AppLogo.vue';
 import useApp from '@/composables/useApp';
 import useConfig from '@/composables/useConfig';
 // import useDarkMode from '@/composables/useDarkMode';
-import { sleep } from '@/lib/utils';
-import useWeb3 from '@/services/web3/useWeb3';
-import useNetwork from '@/composables/useNetwork';
-import { Goals, trackGoal } from '@/composables/useFathom';
-import TwitterIcon from '@/components/_global/icons/brands/TwitterIcon.vue';
 import DiscordIcon from '@/components/_global/icons/brands/DiscordIcon.vue';
 import MediumIcon from '@/components/_global/icons/brands/MediumIcon.vue';
-import YoutubeIcon from '@/components/_global/icons/brands/YoutubeIcon.vue';
-import GithubIcon from '@/components/_global/icons/brands/GithubIcon.vue';
+import TwitterIcon from '@/components/_global/icons/brands/TwitterIcon.vue';
+import { Goals, trackGoal } from '@/composables/useFathom';
+import useNetwork from '@/composables/useNetwork';
+import { sleep } from '@/lib/utils';
+import useWeb3 from '@/services/web3/useWeb3';
 
 /**
  * PROPS & EMITS
@@ -122,6 +120,14 @@ watch(blockNumber, async () => {
         @click="navTo(link.path, link.goal)"
       >
         {{ link.label }}
+      </div>
+      <div class="side-bar-link">
+        <a
+          href="https://app.tealswap.com/bridge"
+          class="border-white dark:border-gray-900 desktop-link-item-custom"
+          target="_blank"
+          >Bridge</a
+        >
       </div>
     </div>
 
