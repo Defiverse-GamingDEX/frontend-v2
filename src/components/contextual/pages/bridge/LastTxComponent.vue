@@ -64,175 +64,184 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="lastTx" class="last-tx-component">
+  <div class="last-tx-component">
     <BalCard
       class="relative card-container bg-blue"
       :shadow="swapCardShadow"
       noBorder
     >
       <div class="title">State of Progress</div>
-      <div class="status-content">
-        Status:
-        <span
-          class="status"
-          :class="[
-            { new: lastTx?.status?.toUpperCase() === 'NEW' },
-            { confirmed: lastTx?.status?.toUpperCase() === 'CONFIRMED' },
-            {
-              relay_processing:
-                lastTx?.status?.toUpperCase() === 'RELAY_PROCESSING',
-            },
-            { relay_error: lastTx?.status?.toUpperCase() === 'RELAY_ERROR' },
-            {
-              relay_completed:
-                lastTx?.status?.toUpperCase() === 'RELAY_COMPLETED',
-            },
-            {
-              dst_error: lastTx?.status?.toUpperCase() === 'DST_ERROR',
-            },
-            {
-              completed: lastTx?.status?.toUpperCase() === 'COMPLETED',
-            },
-            {
-              error: lastTx?.status?.toUpperCase() === 'ERROR',
-            },
-          ]"
-          >{{ lastTx?.statusName }}
-        </span>
+      <div v-if="lastTx" class="tx-data">
+        <div class="status-content">
+          Status:
+          <span
+            class="status"
+            :class="[
+              { new: lastTx?.status?.toUpperCase() === 'NEW' },
+              { confirmed: lastTx?.status?.toUpperCase() === 'CONFIRMED' },
+              {
+                relay_processing:
+                  lastTx?.status?.toUpperCase() === 'RELAY_PROCESSING',
+              },
+              { relay_error: lastTx?.status?.toUpperCase() === 'RELAY_ERROR' },
+              {
+                relay_completed:
+                  lastTx?.status?.toUpperCase() === 'RELAY_COMPLETED',
+              },
+              {
+                dst_error: lastTx?.status?.toUpperCase() === 'DST_ERROR',
+              },
+              {
+                completed: lastTx?.status?.toUpperCase() === 'COMPLETED',
+              },
+              {
+                error: lastTx?.status?.toUpperCase() === 'ERROR',
+              },
+            ]"
+            >{{ lastTx?.statusName }}
+          </span>
+        </div>
+        <div class="date">
+          {{ format(fromUnixTime(lastTx?.date), 'LLLdd, yyyy') }}
+          <span class="time">
+            {{ format(fromUnixTime(lastTx?.date), 'HH:mm') }}</span
+          >
+        </div>
+        <div class="tx-router-content">
+          <div class="tx-content">
+            <div class="token-img">
+              <img width="48" height="48" :src="lastTx?.tokenIn?.logoURI" />
+            </div>
+            <div class="token-value">
+              {{ truncateDecimal(lastTx?.tokenIn?.amount?.toString(), 6) }}
+              {{ lastTx?.tokenIn?.symbol }}
+            </div>
+            <div class="token-chain">
+              From <span class="bold"> {{ lastTx?.tokenIn?.chainName }} </span>
+            </div>
+          </div>
+          <div class="line-content">
+            <div class="left-line">
+              <img
+                v-if="lastTx?.router_1?.status"
+                :src="`/images/bridge/${
+                  lastTx?.router_1?.status || 'unknown'
+                }.png`"
+                :class="[
+                  { success: lastTx?.router_1?.status === 'success' },
+                  { failed: lastTx?.router_1?.status === 'failed' },
+                  { pending: lastTx?.router_1?.status === 'pending' },
+                ]"
+              />
+              {{ lastTx?.router_1?.router_contract_name }}
+            </div>
+            <div class="center-line">
+              <img :src="`/images/bridge/arrow-down.png`" />
+            </div>
+            <div class="right-line">
+              <div v-if="lastTx?.router_1?.txId" class="tooltip-content">
+                <div class="tooltip-arrow down"></div>
+                <div class="tooltip-content">
+                  <a :href="lastTx?.router_1?.txId_url" target="_blank"
+                    >View transaction
+                  </a>
+                </div>
+              </div>
+              <div v-if="lastTx?.router_1?.inboundTx" class="tooltip-content">
+                <div class="tooltip-arrow down"></div>
+                <div class="tooltip-content">
+                  <a :href="lastTx?.router_1?.inboundTx_url" target="_blank"
+                    >Inbound tx
+                  </a>
+                </div>
+              </div>
+              <div v-if="lastTx?.router_1?.outboundTx" class="tooltip-content">
+                <div class="tooltip-arrow down"></div>
+                <div class="tooltip-content">
+                  <a :href="lastTx?.router_1?.outboundTx_url" target="_blank"
+                    >Outbound tx
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tx-content">
+            <div class="token-img">
+              <img width="48" height="48" :src="lastTx?.tokenReplay?.logoURI" />
+            </div>
+            <div class="token-value">
+              {{ truncateDecimal(lastTx?.tokenReplay?.amount.toString(), 6) }}
+              {{ lastTx?.tokenReplay?.symbol }}
+            </div>
+            <div class="token-chain">
+              On
+              <span class="bold"> {{ lastTx?.tokenReplay?.chainName }} </span>
+            </div>
+          </div>
+          <div class="line-content">
+            <div class="left-line">
+              <img
+                v-if="lastTx?.router_2?.status"
+                :src="`/images/bridge/${
+                  lastTx?.router_2?.status || 'unknown'
+                }.png`"
+                :class="[
+                  { success: lastTx?.router_2?.status === 'success' },
+                  { failed: lastTx?.router_2?.status === 'failed' },
+                  { pending: lastTx?.router_2?.status === 'pending' },
+                ]"
+              />
+              {{ lastTx?.router_2?.router_contract_name }}
+            </div>
+            <div class="center-line">
+              <img :src="`/images/bridge/arrow-down.png`" />
+            </div>
+            <div class="right-line">
+              <div v-if="lastTx?.router_2?.txId" class="tooltip-content">
+                <div class="tooltip-arrow down"></div>
+                <div class="tooltip-content">
+                  <a :href="lastTx?.router_2?.txId_url" target="_blank"
+                    >View transaction
+                  </a>
+                </div>
+              </div>
+              <div v-if="lastTx?.router_2?.inboundTx" class="tooltip-content">
+                <div class="tooltip-arrow down"></div>
+                <div class="tooltip-content">
+                  <a :href="lastTx?.router_2?.inboundTx_url" target="_blank"
+                    >Inbound tx
+                  </a>
+                </div>
+              </div>
+              <div v-if="lastTx?.router_2?.outboundTx" class="tooltip-content">
+                <div class="tooltip-arrow down"></div>
+                <div class="tooltip-content">
+                  <a :href="lastTx?.router_2?.outboundTx_url" target="_blank"
+                    >Outbound tx
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tx-content">
+            <div class="token-img">
+              <img width="48" height="48" :src="lastTx?.tokenOut?.logoURI" />
+            </div>
+            <div class="token-value">
+              {{ truncateDecimal(lastTx?.tokenOut?.amount?.toString(), 6) }}
+              {{ lastTx?.tokenOut?.symbol }}
+            </div>
+            <div class="token-chain">
+              On <span class="bold"> {{ lastTx?.tokenOut?.chainName }} </span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="date">
-        {{ format(fromUnixTime(lastTx?.date), 'LLLdd, yyyy') }}
-        <span class="time">
-          {{ format(fromUnixTime(lastTx?.date), 'HH:mm') }}</span
-        >
-      </div>
-      <div class="tx-router-content">
-        <div class="tx-content">
-          <div class="token-img">
-            <img width="48" height="48" :src="lastTx?.tokenIn?.logoURI" />
-          </div>
-          <div class="token-value">
-            {{ truncateDecimal(lastTx?.tokenIn?.amount?.toString(), 6) }}
-            {{ lastTx?.tokenIn?.symbol }}
-          </div>
-          <div class="token-chain">
-            From <span class="bold"> {{ lastTx?.tokenIn?.chainName }} </span>
-          </div>
-        </div>
-        <div class="line-content">
-          <div class="left-line">
-            <img
-              v-if="lastTx?.router_1?.status"
-              :src="`/images/bridge/${
-                lastTx?.router_1?.status || 'unknown'
-              }.png`"
-              :class="[
-                { success: lastTx?.router_1?.status === 'success' },
-                { failed: lastTx?.router_1?.status === 'failed' },
-                { pending: lastTx?.router_1?.status === 'pending' },
-              ]"
-            />
-            {{ lastTx?.router_1?.router_contract_name }}
-          </div>
-          <div class="center-line">
-            <img :src="`/images/bridge/arrow-down.png`" />
-          </div>
-          <div class="right-line">
-            <div v-if="lastTx?.router_1?.txId" class="tooltip-content">
-              <div class="tooltip-arrow down"></div>
-              <div class="tooltip-content">
-                <a :href="lastTx?.router_1?.txId_url" target="_blank"
-                  >View transaction
-                </a>
-              </div>
-            </div>
-            <div v-if="lastTx?.router_1?.inboundTx" class="tooltip-content">
-              <div class="tooltip-arrow down"></div>
-              <div class="tooltip-content">
-                <a :href="lastTx?.router_1?.inboundTx_url" target="_blank"
-                  >Inbound tx
-                </a>
-              </div>
-            </div>
-            <div v-if="lastTx?.router_1?.outboundTx" class="tooltip-content">
-              <div class="tooltip-arrow down"></div>
-              <div class="tooltip-content">
-                <a :href="lastTx?.router_1?.outboundTx_url" target="_blank"
-                  >Outbound tx
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tx-content">
-          <div class="token-img">
-            <img width="48" height="48" :src="lastTx?.tokenReplay?.logoURI" />
-          </div>
-          <div class="token-value">
-            {{ truncateDecimal(lastTx?.tokenReplay?.amount.toString(), 6) }}
-            {{ lastTx?.tokenReplay?.symbol }}
-          </div>
-          <div class="token-chain">
-            On <span class="bold"> {{ lastTx?.tokenReplay?.chainName }} </span>
-          </div>
-        </div>
-        <div class="line-content">
-          <div class="left-line">
-            <img
-              v-if="lastTx?.router_2?.status"
-              :src="`/images/bridge/${
-                lastTx?.router_2?.status || 'unknown'
-              }.png`"
-              :class="[
-                { success: lastTx?.router_2?.status === 'success' },
-                { failed: lastTx?.router_2?.status === 'failed' },
-                { pending: lastTx?.router_2?.status === 'pending' },
-              ]"
-            />
-            {{ lastTx?.router_2?.router_contract_name }}
-          </div>
-          <div class="center-line">
-            <img :src="`/images/bridge/arrow-down.png`" />
-          </div>
-          <div class="right-line">
-            <div v-if="lastTx?.router_2?.txId" class="tooltip-content">
-              <div class="tooltip-arrow down"></div>
-              <div class="tooltip-content">
-                <a :href="lastTx?.router_2?.txId_url" target="_blank"
-                  >View transaction
-                </a>
-              </div>
-            </div>
-            <div v-if="lastTx?.router_2?.inboundTx" class="tooltip-content">
-              <div class="tooltip-arrow down"></div>
-              <div class="tooltip-content">
-                <a :href="lastTx?.router_2?.inboundTx_url" target="_blank"
-                  >Inbound tx
-                </a>
-              </div>
-            </div>
-            <div v-if="lastTx?.router_2?.outboundTx" class="tooltip-content">
-              <div class="tooltip-arrow down"></div>
-              <div class="tooltip-content">
-                <a :href="lastTx?.router_2?.outboundTx_url" target="_blank"
-                  >Outbound tx
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tx-content">
-          <div class="token-img">
-            <img width="48" height="48" :src="lastTx?.tokenOut?.logoURI" />
-          </div>
-          <div class="token-value">
-            {{ truncateDecimal(lastTx?.tokenOut?.amount?.toString(), 6) }}
-            {{ lastTx?.tokenOut?.symbol }}
-          </div>
-          <div class="token-chain">
-            On <span class="bold"> {{ lastTx?.tokenOut?.chainName }} </span>
-          </div>
-        </div>
+      <div v-else class="no-data">
+        <BalBlankSlate class="justify-center items-center mt-4 h-40 no-data">
+          <BalIcon name="bar-chart" />
+          No data
+        </BalBlankSlate>
       </div>
     </BalCard>
   </div>
@@ -242,6 +251,9 @@ onUnmounted(() => {
 .last-tx-component {
   .bold {
     font-weight: bold;
+  }
+  .no-data {
+    color: #0a425c !important;
   }
   .title {
     color: #0a425c;

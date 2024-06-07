@@ -59,14 +59,11 @@ async function mapTxList(data) {
     itemPush.tokenIn.chainName = tokenIn_chain?.name;
     itemPush.tokenIn.chainUrl = tokenIn_chain?.img_url;
     itemPush.tokenIn.logoURI = getTokenURL(itemPush.tokenIn.symbol);
-    console.log('🚀 ~ mapTxList ~ itemPush.tokenOut:', itemPush.tokenOut);
     const tokenOut_chain = getChain(itemPush.tokenOut.chainId);
 
-    console.log('🚀 ~ mapTxList ~ tokenOut_chain:', tokenOut_chain);
     itemPush.tokenOut.chainName = tokenOut_chain?.name;
     itemPush.tokenOut.chainUrl = tokenOut_chain?.img_url;
     itemPush.tokenOut.logoURI = getTokenURL(itemPush.tokenOut.symbol);
-    console.log('🚀 ~ mapTxList ~ itemPush:', itemPush);
 
     txList.value.push(itemPush);
   }
@@ -110,18 +107,18 @@ onUnmounted(() => {
     >
       <div class="title">
         History
-        <span class="delete-icon">
+        <!-- <span class="delete-icon">
           <BalIcon
             name="trash-2"
             size="md"
             class="flex justify-center items-center mb-2 w-9 h-9 text-lg text-gray-800 hover:text-blue-600 dark:text-gray-100 bg-gray-50 hover:bg-white dark:bg-gray-800 rounded-full border-none shadow hover:shadow-none cursor-pointer bal-btn text-secondary icon-spin-anim"
           />
-        </span>
+        </span> -->
       </div>
       <div class="history-content">
         <BalBlankSlate
           v-if="txList.length === 0"
-          class="justify-center items-center mt-4 h-40 no-data"
+          class="justify-center items-center mt-4 h-40 text-black no-data"
         >
           <BalIcon name="bar-chart" />
           No data

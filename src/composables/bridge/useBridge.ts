@@ -364,7 +364,7 @@ async function bridgeSend(
   signer,
   provider
 ) {
-  
+  try {
     const chainFrom = getChain(inputFromSelect.chainId);
     const tokenInputFrom = getToken(
       inputFromSelect.tokenAddress,
