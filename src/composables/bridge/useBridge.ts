@@ -17,12 +17,20 @@ const VBRIDGE_CONTRACT_ADDRESS = '0xa5c4db36bd26426c186d170bf46165a937d9cad1';
 // real function - START - TODO
 function truncateDecimal(number, precision) {
   const [integerPart, fractionalPart] = number.toString().split('.');
-  const truncatedFractionalPart = fractionalPart
-    ? fractionalPart.slice(0, precision)
-    : '';
-  return (
-    integerPart + (truncatedFractionalPart ? '.' + truncatedFractionalPart : '')
-  );
+
+  if (!fractionalPart) {
+    return integerPart;
+  }
+
+  const truncatedFractionalPart = fractionalPart.slice(0, precision);
+
+  // Combine the integer part and the truncated fractional part
+  const result =
+    integerPart +
+    (truncatedFractionalPart ? '.' + truncatedFractionalPart : '');
+
+  // Convert to a number and back to string to remove trailing zeros
+  return parseFloat(result).toString();
 }
 function checkIsNative(tokenAddress, chainId) {
   if (chainId === 248) {
@@ -172,9 +180,12 @@ const mapTxHistory = data => {
         address: data.src_token?.address,
         symbol: data.src_token?.symbol,
         chainId: data.src_token?.chain_id,
-        amount: BigNumber(data.amount_in)
-          .div(10 ** data?.src_token?.decimals)
-          .toFixed(),
+        amount: truncateDecimal(
+          BigNumber(data.amount_in)
+            .div(10 ** data?.src_token?.decimals)
+            .toFixed(6),
+          6
+        ),
       },
       router_1: {
         status: status_route_1, // 'failed' : 'pending',  // TODO
@@ -188,9 +199,12 @@ const mapTxHistory = data => {
         address: data.relay_token?.address,
         symbol: data.relay_token?.symbol,
         chainId: data.relay_token?.chain_id,
-        amount: BigNumber(data?.amount_relay || 0)
-          .div(10 ** data?.relay_token?.decimals)
-          .toFixed(),
+        amount: truncateDecimal(
+          BigNumber(data?.amount_relay || 0)
+            .div(10 ** data?.relay_token?.decimals)
+            .toFixed(),
+          6
+        ),
       },
       router_2: {
         status: status_route_2,
@@ -204,9 +218,12 @@ const mapTxHistory = data => {
         address: data.dst_token?.address,
         symbol: data.dst_token?.symbol,
         chainId: data.dst_token?.chain_id,
-        amount: BigNumber(data?.amount_out)
-          .div(10 ** data?.dst_token?.decimals)
-          .toFixed(),
+        amount: truncateDecimal(
+          BigNumber(data?.amount_out)
+            .div(10 ** data?.dst_token?.decimals)
+            .toFixed(),
+          6
+        ),
       },
     };
     // map data to show
@@ -220,11 +237,13 @@ const mapTxHistory = data => {
 
     //router_1
     rs.router_1.txId_url = getTxUrl(rs.router_1.txId, tokenIn_chain);
-    rs.router_1.inboundTx_url = getTxUrl(rs.router_1.inboundTx, tokenIn_chain);
-    rs.router_1.outboundTx_url = getTxUrl(
-      rs.router_1.outboundTx,
-      tokenIn_chain
-    );
+    // rs.router_1.inboundTx_url = getTxUrl(rs.router_1.inboundTx, {
+    //   tokenIn_chain,
+    // });
+    // rs.router_1.outboundTx_url = getTxUrl(
+    //   rs.router_1.outboundTx,
+    //   tokenOut
+    // );
 
     //tokenReply
     const tokenReply_chain = getChain(rs.tokenReplay.chainId);
@@ -239,16 +258,17 @@ const mapTxHistory = data => {
       rs.router_2.inboundTx,
       tokenReply_chain
     );
-    rs.router_2.outboundTx_url = getTxUrl(
-      rs.router_2.outboundTx,
-      tokenReply_chain
-    );
 
     //tokenOut
     const tokenOut_chain = getChain(rs.tokenOut.chainId);
     rs.tokenOut.chainName = tokenOut_chain?.name;
     rs.tokenOut.chainUrl = tokenOut_chain?.img_url;
     rs.tokenOut.logoURI = getTokenURL(rs.tokenOut.symbol);
+
+    rs.router_2.outboundTx_url = getTxUrl(
+      rs.router_2.outboundTx,
+      tokenOut_chain
+    );
   }
   return rs;
 };

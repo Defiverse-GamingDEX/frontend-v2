@@ -4,6 +4,7 @@ import { useBridge } from '@/composables/bridge/useBridge';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useWeb3 from '@/services/web3/useWeb3';
 import { format, fromUnixTime } from 'date-fns';
+const { truncateDecimal } = useBridge();
 /**
  * STATES
  */
@@ -112,7 +113,8 @@ onUnmounted(() => {
             <img width="48" height="48" :src="lastTx?.tokenIn?.logoURI" />
           </div>
           <div class="token-value">
-            {{ lastTx?.tokenIn?.amount }} {{ lastTx?.tokenIn?.symbol }}
+            {{ truncateDecimal(lastTx?.tokenIn?.amount?.toString(), 6) }}
+            {{ lastTx?.tokenIn?.symbol }}
           </div>
           <div class="token-chain">
             From <span class="bold"> {{ lastTx?.tokenIn?.chainName }} </span>
@@ -168,7 +170,8 @@ onUnmounted(() => {
             <img width="48" height="48" :src="lastTx?.tokenReplay?.logoURI" />
           </div>
           <div class="token-value">
-            {{ lastTx?.tokenReplay?.amount }} {{ lastTx?.tokenReplay?.symbol }}
+            {{ truncateDecimal(lastTx?.tokenReplay?.amount.toString(), 6) }}
+            {{ lastTx?.tokenReplay?.symbol }}
           </div>
           <div class="token-chain">
             On <span class="bold"> {{ lastTx?.tokenReplay?.chainName }} </span>
@@ -224,7 +227,8 @@ onUnmounted(() => {
             <img width="48" height="48" :src="lastTx?.tokenOut?.logoURI" />
           </div>
           <div class="token-value">
-            {{ lastTx?.tokenOut?.amount }} {{ lastTx?.tokenOut?.symbol }}
+            {{ truncateDecimal(lastTx?.tokenOut?.amount?.toString(), 6) }}
+            {{ lastTx?.tokenOut?.symbol }}
           </div>
           <div class="token-chain">
             On <span class="bold"> {{ lastTx?.tokenOut?.chainName }} </span>

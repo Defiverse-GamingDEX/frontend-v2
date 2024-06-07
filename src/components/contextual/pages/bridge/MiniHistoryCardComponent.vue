@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useBridge } from '@/composables/bridge/useBridge';
 import { format, fromUnixTime } from 'date-fns';
+
 // PROPS
 type Props = {
   tx: Object<any>;
@@ -7,6 +9,10 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
   tx: () => {},
 });
+/**
+ * COMPOSABLES
+ */
+const { truncateDecimal } = useBridge();
 </script>
 
 <template>
@@ -22,7 +28,9 @@ const props = withDefaults(defineProps<Props>(), {
           <img :src="tx.tokenIn.chainUrl" class="chain-img" />
         </div>
         <div class="token-info">
-          <div class="amount">{{ tx?.tokenIn?.amount }}</div>
+          <div class="amount">
+            {{ truncateDecimal(tx?.tokenIn?.amount?.toString(), 6) }}
+          </div>
           <div class="chain">
             {{ tx?.tokenIn?.symbol }} on {{ tx?.tokenIn?.chainName }}
           </div>
@@ -37,7 +45,9 @@ const props = withDefaults(defineProps<Props>(), {
           <img :src="tx.tokenOut.chainUrl" class="chain-img" />
         </div>
         <div class="token-info">
-          <div class="amount">{{ tx?.tokenOut?.amount }}</div>
+          <div class="amount">
+            {{ truncateDecimal(tx?.tokenOut?.amount?.toString(), 6) }}
+          </div>
           <div class="chain">
             {{ tx?.tokenOut?.symbol }} on {{ tx?.tokenOut?.chainName }}
           </div>
