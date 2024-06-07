@@ -371,7 +371,7 @@ async function bridgeSend(
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
           srcTokenAddress: tokenInputFrom?.address,
-          desChainId: chainTo?.chain_id_decimals,
+          //desChainId: chainTo?.chain_id_decimals,
           signer,
           slippage: 10000,
           abi: chainFrom?.bridgeABI,

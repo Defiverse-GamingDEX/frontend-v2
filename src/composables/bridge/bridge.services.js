@@ -142,7 +142,6 @@ const bridgeSend = async params => {
     value, // amount
     vBridgeAddress,
     srcTokenAddress, // account address
-    desChainId,
     signer,
     slippage,
     abi,
@@ -150,7 +149,8 @@ const bridgeSend = async params => {
   } = params;
 
   const nonce = await contractProvider.getTransactionCount(account, 'latest');
-
+  const desChainId = 248;
+  console.log('🚀 ~ bridgeSend ~ desChainId:', desChainId);
   console.log(nonce, 'nonce');
   let decimals = new BigNumber(10).pow(srcTokenDecimal).toFixed();
   let decimals_value = BigNumber(value).times(decimals).toFixed(0);
