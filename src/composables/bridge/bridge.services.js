@@ -198,7 +198,7 @@ const bridgeWithdrawTo = async params => {
   // if (srcTokenSymbol === 'OAS') {
   //   overwrite.value = decimals_value;
   // }
-  console.log('🚀 ~ bridgeWithdrawTo ~ overwrite:', overwrite);
+
   const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
   const rs = await _sendRawTx(
     contractAddress,

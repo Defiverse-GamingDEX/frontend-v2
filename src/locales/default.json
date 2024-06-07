@@ -574,6 +574,7 @@
   "mustBeInt": "must be an integer",
   "mustBeLessThan": "must be less than {0}",
   "mustBeMoreThan": "must be greater than {0}",
+  "mustBeMoreOrEqualTo": "must be greater than or equal to {0}",
   "mustBePositive": "must be a positive number",
   "mustBeSame": "must be the same as {0}",
   "mustBeValidEmail": "must be a valid email",

@@ -88,7 +88,6 @@ const getRouteContractName = chainId => {
   const chain = BRIDGE_NETWORKS.find(
     network => network.chain_id_decimals === chainId
   );
-  console.log('🚀 ~ getRouteContractName ~ chain:', chain);
   if (chain?.type === 'external-chain') {
     return 'cBridge';
   }
@@ -166,10 +165,8 @@ const getRouteStatus = status => {
   }
 };
 const mapTxHistory = data => {
-  console.log('🚀 ~ mapTxHistory ~ data:', data);
   let rs: any = null;
   if (data) {
-    console.log('🚀 ~ mapTxHistory ~ data:', data);
     const { status_route_1, status_route_2 } = getRouteStatus(data.status);
 
     rs = {
@@ -321,15 +318,24 @@ async function checkTokenAllowance(chain, token, walletAddress) {
     return error;
   }
 }
-async function approveToken(chain, token, walletAddress, signer) {
+async function approveToken(
+  chain,
+  token,
+  walletAddress,
+  signer,
+  approveAmount
+) {
   try {
     const { address } = token;
     const { bridgeContract, rpc } = chain;
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
+    if (!approveAmount) {
+      approveAmount = ethers.constants.MaxUint256;
+    }
     const tx = await contract
       .connect(signer)
-      .approve(bridgeContract, ethers.constants.MaxUint256);
+      .approve(bridgeContract, approveAmount);
     console.log('tx', tx);
     // const rs = await tx.wait();
     // console.log('rs', rs);
@@ -358,24 +364,18 @@ async function bridgeSend(
   signer,
   provider
 ) {
-  console.log('🚀 ~ bridgeSend ~ inputToSelect:', inputToSelect);
-  console.log('🚀 ~ bridgeSend ~ inputFromSelect:', inputFromSelect);
-  try {
+  
     const chainFrom = getChain(inputFromSelect.chainId);
-    console.log('🚀 ~ chainFrom:', chainFrom);
     const tokenInputFrom = getToken(
       inputFromSelect.tokenAddress,
       inputFromSelect.tokensList
     );
-    console.log('🚀 ~ tokenInputFrom:', tokenInputFrom);
     const chainTo = getChain(inputToSelect.chainId);
-    console.log('🚀 ~ chainTo:', chainTo);
     const tokenInputTo = getToken(
       inputToSelect.tokenAddress,
       inputToSelect.tokensList
     );
 
-    console.log('🚀 ~ tokenInputTo:', tokenInputTo);
     let rs = null;
     if (chainFrom.type === 'external-chain') {
       if (chainTo.type === 'external-chain') {
@@ -432,7 +432,6 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
-        console.log('🚀 ~ params:', params);
         rs = await bridgeService.bridgeWithdrawTo(params);
       }
     }

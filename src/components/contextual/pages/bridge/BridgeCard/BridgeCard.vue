@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import SwapSettingsPopover, {
-  SwapSettingsContext,
-} from '@/components/popovers/SwapSettingsPopover.vue';
 import bridgeApi from '@/composables/bridge/bridge.price.api';
 import { useBridge } from '@/composables/bridge/useBridge';
 import useBreakpoints from '@/composables/useBreakpoints';
@@ -72,6 +69,7 @@ const inputFromSelect = ref({
   amount: 0,
   decimals: 18,
   tokensList: [],
+  minAmount: 0,
   isOnlyDefiBridge: false,
 });
 const inputToSelect = ref({
@@ -88,13 +86,14 @@ const inputToSelect = ref({
 const anotherWalletAddress = ref('');
 const isChargeGas = ref(false);
 const isAllowance = ref(false);
+const currentAllowance = ref(0);
 const isLoading = ref(false);
 
 const chainFrom = ref({});
 const chainTo = ref({});
 const tokenFrom = ref({});
 const tokenTo = ref({});
-
+const minAmountRoute = ref(0);
 // // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -173,7 +172,6 @@ function groupByChainId(arr) {
   }, {});
 
   const result = Object.values(groupedByChainId);
-  console.log('🚀 ~ groupByChainId ~ result:', result);
   return result;
 }
 function initSrcBE() {
@@ -187,11 +185,9 @@ function initSrcBE() {
 async function getRouters() {
   try {
     let rs = await bridgeApi.getRoutes();
-    console.log(rs, 'rs=>getRouters');
     if (rs.length > 0) {
       routesBE.value = rs;
       srcBE.value = initSrcBE();
-      console.log('🚀 ~ getRouters ~  srcBE.value:', srcBE.value);
       if (srcBE.value?.length > 0) {
         updateNetWorkInputFrom(chainId.value);
       }
@@ -224,8 +220,29 @@ function initSelectedData() {
     inputToSelect.value.tokenAddress,
     inputToSelect.value.tokensList
   );
-  console.log('🚀 ~ initSelectedData ~ tokenFrom.value:', tokenFrom.value);
-  console.log('🚀 ~ initSelectedData ~  tokenTo.value:', tokenTo.value);
+}
+function initMinAmountRoute() {
+  minAmountRoute.value = 0;
+  if (
+    inputFromSelect.value.chainId &&
+    inputToSelect.value.chainId &&
+    routesBE.value?.length > 0
+  ) {
+    for (let i = 0; i < routesBE.value.length; i++) {
+      const item = routesBE.value[i];
+      if (
+        item.src.chain_id === inputFromSelect.value.chainId &&
+        item.dst.chain_id === inputToSelect.value.chainId
+      ) {
+        minAmountRoute.value = item.min_amount;
+        console.log(
+          '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
+          minAmountRoute.value
+        );
+        break;
+      }
+    }
+  }
 }
 async function getBalanceInputFrom() {
   // update balance InputFrom
@@ -248,16 +265,20 @@ async function checkAllowanceInputFrom() {
       ) {
         return true;
       }
-      console.log(
-        '🚀 ~ checkAllowanceInputFrom ~ inputFromSelect.value.tokenAddress:',
-        inputFromSelect.value
-      );
+
       const allowance = await checkTokenAllowance(
         chainFrom.value,
         tokenFrom.value,
         account.value
       );
-      isAllowance.value = BigNumber(allowance?.toString() || 0).gt(0)
+      currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
+      console.log(
+        '🚀 ~ checkAllowanceInputFrom ~ currentAllowance.value:',
+        currentAllowance.value
+      );
+      isAllowance.value = BigNumber(currentAllowance.value || 0).gt(
+        inputFromSelect.value.amount
+      )
         ? true
         : false;
       console.log(isAllowance.value, ' isAllowance.value');
@@ -304,18 +325,15 @@ function updateNetWorkInputFrom(chainId) {
   let networkChoose = srcBE.value.find(
     item => item?.chain_id_decimals === chainId
   );
-  console.log('🚀 ~ updateNetWorkInputFrom ~ networkChoose:', networkChoose);
   if (networkChoose) {
+    inputFromSelect.value.minAmount = networkChoose.min_amount;
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
     // set token default
     if (inputFromSelect.value.tokensList?.length > 0) {
       setTokenInput(inputFromSelect, inputFromSelect.value.tokensList[0]);
     }
-    console.log(
-      '🚀 ~ updateNetWorkInputFrom ~ inputFromSelect.value:',
-      inputFromSelect.value
-    );
+
     // set data inputTo
     inputToSelect.value.chainId = ''; // reset
     checkInputToChange();
@@ -323,6 +341,8 @@ function updateNetWorkInputFrom(chainId) {
     // set chains and tokens selected to get balance
     initSelectedData();
 
+    // set min amount route
+    initMinAmountRoute();
     // call contract to check data
     getBalanceInputFrom();
     checkAllowanceInputFrom();
@@ -332,9 +352,7 @@ const delayinputFromChange = debounce(async inputSelect => {
   handleInputFromChange(inputSelect);
 }, 500);
 async function handleInputFromChange(inputSelect) {
-  console.log('🚀 ~ handleInputFromChange ~ inputSelect:', inputSelect);
   inputFromSelect.value = inputSelect;
-  console.log(inputFromSelect.value, 'inputFromSelect.value');
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
@@ -409,8 +427,6 @@ function getDstByChainId(routes, srcChainId) {
     .filter(route => route.src.chain_id === srcChainId)
     .map(route => route.dst);
   const result = groupByChainId(dstList);
-  console.log('🚀 ~ getDstByChainId ~ result:', result);
-
   return result;
 }
 
@@ -418,7 +434,6 @@ function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
 
   dstBE.value = getDstByChainId(routesBE.value, inputFrom.chainId);
-  console.log('🚀 ~ checkInputToChange ~ dstBE.value:', dstBE.value);
   inputToSelect.value.chainsList = dstBE.value;
   // update token
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
@@ -505,7 +520,6 @@ async function handleTransferButton() {
       txListener(tx, {
         onTxConfirmed: async (receipt: any) => {
           console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
-          console.log('success');
 
           // call API confirm tx to BE
           const params = {
@@ -545,12 +559,18 @@ async function handleTransferButton() {
 async function handleApproveButton() {
   try {
     isLoading.value = true;
+    console.log(inputFromSelect.value, 'inputFromSelect');
+    const approveAmount = BigNumber(inputFromSelect.value.amount || 0)
+      .minus(currentAllowance.value)
+      .toFixed();
+    console.log(approveAmount, 'approveAmount');
     const signer = getSigner();
     let tx = await approveToken(
       chainFrom.value,
       tokenFrom.value,
       account.value,
-      signer
+      signer,
+      approveAmount
     );
 
     const chainName = chainFrom.value.name;
@@ -597,9 +617,9 @@ onBeforeMount(async () => {
       noBorder
     >
       <template #header>
-        <div class="flex justify-end items-center w-full">
+        <!-- <div class="flex justify-end items-center w-full">
           <SwapSettingsPopover :context="SwapSettingsContext.bridge" />
-        </div>
+        </div> -->
       </template>
       <div class="bridge-container">
         <div class="bridge-form">
@@ -609,6 +629,7 @@ onBeforeMount(async () => {
               :chainsList="srcBE"
               :inputSelect="inputFromSelect"
               :disabled="!isWalletReady"
+              :minAmount="minAmountRoute"
               @update:input-select="delayinputFromChange"
               @update:network="handleNetworkChange"
             />
@@ -772,7 +793,11 @@ onBeforeMount(async () => {
         <div v-if="isWalletReady" class="bridge-actions">
           <BalBtn
             v-if="!isAllowance"
-            :disabled="!estimateInfo || estimateInfo.err"
+            :disabled="
+              !estimateInfo ||
+              estimateInfo.err ||
+              inputFromSelect.amount < minAmountRoute
+            "
             :label="$t('Approve')"
             :loading="isLoading"
             classCustom="pink-white-shadow"
@@ -788,7 +813,7 @@ onBeforeMount(async () => {
               estimateInfo.amount_out <= 0 ||
               inputFromSelect.balance === 0 ||
               inputFromSelect.balance < inputFromSelect.amount ||
-              inputFromSelect.amount <= 0
+              inputFromSelect.amount < minAmountRoute
             "
             :label="$t('Tranfer')"
             :loading="isLoading"

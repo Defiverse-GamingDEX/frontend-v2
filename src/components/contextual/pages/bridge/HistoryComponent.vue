@@ -72,7 +72,6 @@ onBeforeMount(async () => {
   initData();
 });
 const onClickHandler = (page: number) => {
-  console.log('🚀 ~ onClickHandler ~ page:', page);
   pagination.value.currentPage = page;
   getHistory();
 };

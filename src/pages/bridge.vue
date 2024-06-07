@@ -12,6 +12,7 @@ import { useRoute, useRouter } from 'vue-router';
 const WHITELIST_ADDRESSES = [
   '0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE',
   '0x343eCF760a020936eEE8D655b43C5cBD40769A05',
+  '0xE026Ec8A3bDaE1b171c162aF556F6dC73917D3D0',
 ];
 /**
  * STATE
@@ -25,12 +26,10 @@ const { addAlert, removeAlert } = useAlerts();
 const { getAdminAddress } = usePoolCreation();
 
 const { account, chainId } = useWeb3();
-console.log('🚀 ~ account:', account);
-console.log('🚀 ~ chainId:', chainId);
 
 const route = useRoute();
 const router = useRouter();
-console.log('🚀 ~ route:', route);
+
 // COMPUTED
 const isAdmin = computed(() => {
   if (!adminAddress.value) {
@@ -49,7 +48,6 @@ watch(isAdmin, () => {
   }
 });
 watch(chainId, () => {
-  console.log('🚀 ~ watch ~ chainId?.value:', chainId?.value);
   checkMisMatch();
   checkWhileList();
 });
@@ -58,8 +56,6 @@ watch(route?.name, () => {
 });
 
 watch(account, () => {
-  // TODO check whitelist
-  console.log('🚀 ~ watch ~ account.value:', account.value);
   checkWhileList();
 });
 // FUNCTIONS
@@ -71,7 +67,6 @@ const checkMisMatch = () => {
   }
 };
 const checkWhileList = () => {
-  console.log('🚀 ~ checkWhileList ~ account.value:', account.value);
   if (!account.value || !chainId.value) {
     router.push({ name: 'home' });
   } else {

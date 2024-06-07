@@ -63,7 +63,6 @@ function updateNetWork(chainId) {
   emit('update:inputSelect', inputSelect);
 }
 function updateToken(token) {
-  console.log('🚀 ~ updateToken ~ token:', token);
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.tokenAddress = token.address;
   inputSelect.tokenSymbol = token.symbol;

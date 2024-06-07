@@ -43,7 +43,6 @@ const getLastTx = async () => {
       sender_address: account.value,
     };
     const rs = await bridgeApi.getHistoryByAddress(params);
-    console.log('🚀 ~ getLastTx ~ rs:', rs);
     lastTx.value = mapTxHistory(rs?.items[0] || null);
   } catch (err) {
     console.log('🚀 ~ getLastTx ~ err:', err);

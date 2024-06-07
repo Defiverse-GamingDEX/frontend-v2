@@ -31,7 +31,6 @@ export default function useWeb3Watchers() {
   const { handlePendingTransactions, updateTransaction } = useTransactions();
 
   const route = useRoute();
-  console.log('🚀 ~ useWeb3Watchers ~ route:', route);
 
   function handleTransactionReplacement(
     tx: EthereumTransactionData,

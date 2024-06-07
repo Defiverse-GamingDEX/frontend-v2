@@ -1,15 +1,19 @@
 <script setup lang="ts">
+import { useBridge } from '@/composables/bridge/useBridge';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { bnum } from '@/lib/utils';
+import {
+  isGreaterThanOrEqualTo,
+  isLessThanOrEqualTo,
+  isPositive,
+} from '@/lib/utils/validations';
+import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
+import useWeb3 from '@/services/web3/useWeb3';
+import { Rules } from '@/types';
+import { cloneDeep } from 'lodash';
+import { useI18n } from 'vue-i18n';
 import NetworkSelectInput from './NetworkSelectInput.vue';
 import TokenSelectInput from './TokenSelectInput.vue';
-import useWeb3 from '@/services/web3/useWeb3';
-import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
-import { cloneDeep } from 'lodash';
-import { bnum, isSameAddress } from '@/lib/utils';
-import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { Rules } from '@/types';
-import { useI18n } from 'vue-i18n';
-import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-import { useBridge } from '@/composables/bridge/useBridge';
 // TYPES
 type InputValue = string | number;
 
@@ -28,11 +32,13 @@ type Props = {
   inputSelect?: inputSelect;
   chainsList: Array<any>;
   ignoreWalletBalance?: boolean;
+  minAmount: number;
   rules?: Rules;
   disabled?: boolean;
 };
 const props = withDefaults(defineProps<Props>(), {
   ignoreWalletBalance: false,
+  minAmount: 0,
   rules: () => [],
 });
 
@@ -68,6 +74,12 @@ const inputRules = computed(() => {
 
   const rules = [...props.rules, isPositive()];
   if (!props.ignoreWalletBalance) {
+    rules.push(
+      isGreaterThanOrEqualTo(
+        props?.minAmount,
+        t('mustBeMoreOrEqualTo', [props?.minAmount])
+      )
+    );
     rules.push(
       isLessThanOrEqualTo(props?.inputSelect?.balance, t('exceedsBalance'))
     );
