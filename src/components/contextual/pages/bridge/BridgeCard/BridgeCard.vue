@@ -696,7 +696,7 @@ onBeforeMount(async () => {
           <div class="info">
             <div class="title">
               Fee 1
-               <!--<BalTooltip width="64">
+              <!--<BalTooltip width="64">
                 <template #activator>
                   <BalIcon
                     name="info"
@@ -706,9 +706,9 @@ onBeforeMount(async () => {
                 </template>
                 <div class="tooltip-content">
                 
-                  <div>Balabalaba</div> -->
+                  <div>Balabalaba</div>
                 </div>
-              </BalTooltip>
+              </BalTooltip>  -->
             </div>
             <div class="value">
               {{
