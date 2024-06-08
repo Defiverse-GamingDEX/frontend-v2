@@ -798,7 +798,8 @@ onBeforeMount(async () => {
             v-if="!isAllowance"
             :disabled="
               !estimateInfo ||
-              estimateInfo.err ||
+              !!estimateInfo.err ||
+              estimateInfo.amount_out <= 0 ||
               inputFromSelect.amount < minAmountRoute
             "
             :label="$t('Approve')"
