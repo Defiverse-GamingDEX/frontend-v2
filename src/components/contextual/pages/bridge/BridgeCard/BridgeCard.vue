@@ -278,7 +278,7 @@ async function checkAllowanceInputFrom() {
         '🚀 ~ checkAllowanceInputFrom ~ currentAllowance.value:',
         currentAllowance.value
       );
-      isAllowance.value = BigNumber(currentAllowance.value || 0).gt(
+      isAllowance.value = BigNumber(currentAllowance.value || 0).gte(
         inputFromSelect.value.amount
       )
         ? true
@@ -564,7 +564,7 @@ async function handleApproveButton() {
     console.log(inputFromSelect.value, 'inputFromSelect');
     let approveAmount = BigNumber(inputFromSelect.value.amount || 0)
       .minus(currentAllowance.value)
-      .toFixed();
+      .toFixed(0);
     approveAmount = BigNumber(approveAmount || 0)
       .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
@@ -586,6 +586,7 @@ async function handleApproveButton() {
       action: 'approve',
       summary,
     });
+    A;
     txListener(tx, {
       onTxConfirmed: async () => {
         await checkAllowanceInputFrom();
