@@ -562,9 +562,7 @@ async function handleApproveButton() {
   try {
     isLoading.value = true;
     console.log(inputFromSelect.value, 'inputFromSelect');
-    let approveAmount = BigNumber(inputFromSelect.value.amount || 0)
-      .minus(currentAllowance.value)
-      .toFixed(0);
+    let approveAmount = BigNumber(inputFromSelect.value.amount || 0).toFixed();
     approveAmount = BigNumber(approveAmount || 0)
       .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
@@ -586,7 +584,6 @@ async function handleApproveButton() {
       action: 'approve',
       summary,
     });
-    A;
     txListener(tx, {
       onTxConfirmed: async () => {
         await checkAllowanceInputFrom();
