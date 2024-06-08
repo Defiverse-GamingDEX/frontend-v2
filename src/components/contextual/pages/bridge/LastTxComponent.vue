@@ -102,7 +102,7 @@ onUnmounted(() => {
           </span>
         </div>
         <div class="date">
-          {{ format(fromUnixTime(lastTx?.date), 'LLLdd, yyyy') }}
+          {{ format(fromUnixTime(lastTx?.date), 'LLL dd, yyyy') }}
           <span class="time">
             {{ format(fromUnixTime(lastTx?.date), 'HH:mm') }}</span
           >

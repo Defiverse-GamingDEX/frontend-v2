@@ -18,7 +18,7 @@ const { truncateDecimal } = useBridge();
 <template>
   <div class="mini-history-card-component">
     <div class="card-time">
-      {{ format(fromUnixTime(tx?.date), 'LLLdd, yyyy') }}
+      {{ format(fromUnixTime(tx?.date), 'LLL dd, yyyy') }}
       <span class="time"> {{ format(fromUnixTime(tx?.date), 'HH:mm') }}</span>
     </div>
     <div class="card-router">

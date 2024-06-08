@@ -696,7 +696,7 @@ onBeforeMount(async () => {
           <div class="info">
             <div class="title">
               Fee 1
-              <BalTooltip width="64">
+               <!--<BalTooltip width="64">
                 <template #activator>
                   <BalIcon
                     name="info"
@@ -705,21 +705,8 @@ onBeforeMount(async () => {
                   />
                 </template>
                 <div class="tooltip-content">
-                  <!-- <div class="mb-2">
-                    <span class="bold"> The Base Fee:</span>
-                    {{ estimateInfo.base_fee }}
-                    {{ inputFromSelect?.tokenSymbol }}.e
-                  </div>
-                  <div class="mb-4">
-                    <span class="bold"> The Protocol Fee:</span>
-                    {{ estimateInfo.perc_fee }}
-                    {{ inputFromSelect?.tokenSymbol }}.e
-                  </div>
-                  <div class="mb-4">
-                    Base Fee is used to cover the gas cost for sending your
-                    transfer on the destination chain.
-                  </div> -->
-                  <div>Balabalaba</div>
+                
+                  <div>Balabalaba</div> -->
                 </div>
               </BalTooltip>
             </div>
@@ -733,7 +720,7 @@ onBeforeMount(async () => {
           <div class="info">
             <div class="title">
               Fee 2
-              <BalTooltip width="64">
+              <!--<BalTooltip width="64">
                 <template #activator>
                   <BalIcon
                     name="info"
@@ -742,7 +729,7 @@ onBeforeMount(async () => {
                   />
                 </template>
                 <div class="tooltip-content">Balabalaba</div>
-              </BalTooltip>
+              </BalTooltip> -->
             </div>
             <div class="w-40 value">
               {{

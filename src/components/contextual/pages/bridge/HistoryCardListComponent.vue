@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
             </span>
           </div>
           <div class="time">
-            {{ format(fromUnixTime(tx?.date), 'LLLdd, yyyy HH:mm') }}
+            {{ format(fromUnixTime(tx?.date), 'LLL dd, yyyy HH:mm') }}
           </div>
         </div>
         <div class="source-chain">
