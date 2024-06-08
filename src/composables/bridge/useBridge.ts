@@ -393,7 +393,7 @@ async function bridgeSend(
           srcTokenAddress: tokenInputFrom?.address,
           //desChainId: chainTo?.chain_id_decimals,
           signer,
-          slippage: 10000,
+          slippage: 100000,
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
