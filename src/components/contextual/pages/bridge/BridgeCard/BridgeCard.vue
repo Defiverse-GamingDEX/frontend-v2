@@ -271,7 +271,9 @@ async function checkAllowanceInputFrom() {
         tokenFrom.value,
         account.value
       );
-      currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
+      currentAllowance.value = BigNumber(allowance?.toString() || 0)
+        .div(10 ** inputFromSelect.value.decimals)
+        .toFixed();
       console.log(
         '🚀 ~ checkAllowanceInputFrom ~ currentAllowance.value:',
         currentAllowance.value
@@ -560,8 +562,11 @@ async function handleApproveButton() {
   try {
     isLoading.value = true;
     console.log(inputFromSelect.value, 'inputFromSelect');
-    const approveAmount = BigNumber(inputFromSelect.value.amount || 0)
+    let approveAmount = BigNumber(inputFromSelect.value.amount || 0)
       .minus(currentAllowance.value)
+      .toFixed();
+    approveAmount = BigNumber(approveAmount || 0)
+      .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
     console.log(approveAmount, 'approveAmount');
     const signer = getSigner();
