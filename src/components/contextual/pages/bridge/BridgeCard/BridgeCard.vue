@@ -224,7 +224,6 @@ function initSelectedData() {
   );
 }
 function initMinAmountRoute() {
-  console.log(
   minAmountRoute.value = 0;
   if (
     inputFromSelect.value.chainId &&
