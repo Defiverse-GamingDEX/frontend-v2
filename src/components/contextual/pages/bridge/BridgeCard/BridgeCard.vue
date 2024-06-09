@@ -178,7 +178,9 @@ function initSrcBE() {
   if (routesBE.value?.length > 0) {
     const data = routesBE.value;
     const srcList = data?.map(item => item.src);
+    console.log('🚀 ~ initSrcBE ~ srcList:', srcList);
     const result = groupByChainId(srcList);
+    console.log('🚀 ~ initSrcBE ~ result:', result);
     return result || [];
   }
 }
@@ -230,6 +232,17 @@ function initMinAmountRoute() {
   ) {
     for (let i = 0; i < routesBE.value.length; i++) {
       const item = routesBE.value[i];
+      // console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+      // console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
+      // console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
+      // console.log(
+      //   inputFromSelect.value.chainId,
+      //   ' inputFromSelect.value.chainId=>initMinAmountRoute'
+      // );
+      // console.log(
+      //   inputToSelect.value.chainId,
+      //   '  inputToSelect.value.chainId=>initMinAmountRoute'
+      // );
       if (
         item.src.chain_id === inputFromSelect.value.chainId &&
         item.dst.chain_id === inputToSelect.value.chainId
@@ -415,6 +428,7 @@ async function handleInputToChange(inputSelect) {
   console.log(inputToSelect.value, 'inputToSelect.value');
 
   getEstimateFee();
+  initMinAmountRoute();
 }
 
 function handleWalletAddressChange(address) {
@@ -424,18 +438,29 @@ function handleWalletAddressChange(address) {
 //   isChargeGas.value = isChecked;
 //   console.log(isChargeGas.value, 'isChargeGas.value');
 // }
-function getDstByChainId(routes, srcChainId) {
+function getDstByChainIdAndTokenAddress(routes, srcChainId, tokenAddress) {
   const dstList = routes
-    .filter(route => route.src.chain_id === srcChainId)
+    .filter(
+      route =>
+        route.src.chain_id === srcChainId &&
+        route.src.token_address === tokenAddress
+    )
     .map(route => route.dst);
+  console.log('🚀 ~ getDstByChainIdAndTokenAddress ~ dstList:', dstList);
   const result = groupByChainId(dstList);
+  console.log('🚀 ~ getDstByChainIdAndTokenAddress ~ result:', result);
   return result;
 }
 
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
+  console.log('🚀 ~ checkInputToChange ~ inputFrom:', inputFrom);
 
-  dstBE.value = getDstByChainId(routesBE.value, inputFrom.chainId);
+  dstBE.value = getDstByChainIdAndTokenAddress(
+    routesBE.value,
+    inputFrom.chainId,
+    inputFrom.tokenAddress
+  );
   inputToSelect.value.chainsList = dstBE.value;
   // update token
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
