@@ -327,7 +327,9 @@ async function approveToken(
 ) {
   try {
     const { address } = token;
+    console.log('🚀 ~ address:', address);
     const { bridgeContract, rpc } = chain;
+    console.log('🚀 ~ bridgeContract:', bridgeContract);
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
     if (!approveAmount) {
@@ -397,6 +399,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
+        console.log('🚀 ~ params:// external-chain => verse-chain', params);
         rs = await bridgeService.bridgeSend(params);
       }
     } else {
@@ -416,6 +419,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
+        console.log('🚀 ~ params:  // verse-chain => external-chain', params);
         rs = await bridgeService.bridgeWithdrawTo(params);
       } else {
         // verse-chain => verse-chain
@@ -432,6 +436,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
         };
+        console.log('🚀 ~ params: // verse-chain => verse-chain', params);
         rs = await bridgeService.bridgeWithdrawTo(params);
       }
     }

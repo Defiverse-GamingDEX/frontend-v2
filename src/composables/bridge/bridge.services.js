@@ -152,8 +152,10 @@ const bridgeSend = async params => {
   const desChainId = 248;
   console.log('🚀 ~ bridgeSend ~ desChainId:', desChainId);
   console.log(nonce, 'nonce');
-  let decimals = new BigNumber(10).pow(srcTokenDecimal).toFixed();
-  let decimals_value = BigNumber(value).times(decimals).toFixed(0);
+  let decimals_value = BigNumber(value)
+    .times(10 ** srcTokenDecimal)
+    .toFixed(0);
+  console.log('🚀 ~ bridgeSend ~ decimals_value:', decimals_value);
   let overwrite = { from: account };
   const rs = await _sendRawTx(
     contractAddress,
@@ -191,10 +193,14 @@ const bridgeWithdrawTo = async params => {
     abi,
     gasPrice,
   } = params;
+  console.log('🚀 ~ bridgeWithdrawTo ~ srcTokenDecimal:', srcTokenDecimal);
   const gasLimit = 2000000;
-  let decimals = new BigNumber(10).pow(srcTokenDecimal).toFixed();
-  let decimals_value = BigNumber(value).times(decimals).toFixed(0);
+
+  let decimals_value = BigNumber(value)
+    .times(10 ** srcTokenDecimal)
+    .toFixed(0);
   let overwrite = { from: account };
+  console.log('🚀 ~ bridgeWithdrawTo ~ decimals_value:', decimals_value);
   // if (srcTokenSymbol === 'OAS') {
   //   overwrite.value = decimals_value;
   // }

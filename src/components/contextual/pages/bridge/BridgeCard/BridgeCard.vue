@@ -284,16 +284,16 @@ async function checkAllowanceInputFrom() {
         tokenFrom.value,
         account.value
       );
-      currentAllowance.value = BigNumber(allowance?.toString() || 0)
-        .div(10 ** inputFromSelect.value.decimals)
-        .toFixed();
+      currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
       console.log(
         '🚀 ~ checkAllowanceInputFrom ~ currentAllowance.value:',
         currentAllowance.value
       );
-      isAllowance.value = BigNumber(currentAllowance.value || 0).gte(
-        inputFromSelect.value.amount
-      )
+      const inputAmount = BigNumber(inputFromSelect.value.amount)
+        .times(10 ** inputFromSelect.value.decimals)
+        .toFixed();
+      console.log('🚀 ~ checkAllowanceInputFrom ~ inputAmount:', inputAmount);
+      isAllowance.value = BigNumber(currentAllowance.value || 0).gt(inputAmount)
         ? true
         : false;
       console.log(isAllowance.value, ' isAllowance.value');
@@ -588,10 +588,16 @@ async function handleApproveButton() {
     isLoading.value = true;
     console.log(inputFromSelect.value, 'inputFromSelect');
     let approveAmount = BigNumber(inputFromSelect.value.amount || 0).toFixed();
+    console.log(
+      '🚀 ~ handleApproveButton ~ approveAmount:BEFORE',
+      approveAmount
+    );
     approveAmount = BigNumber(approveAmount || 0)
       .times(10 ** inputFromSelect.value.decimals)
+      .plus(1) // for transfer
       .toFixed();
     console.log(approveAmount, 'approveAmount');
+    //approveAmount = approveAmount + 1;
     const signer = getSigner();
     let tx = await approveToken(
       chainFrom.value,
