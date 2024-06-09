@@ -224,6 +224,7 @@ function initSelectedData() {
   );
 }
 function initMinAmountRoute() {
+  console.log(
   minAmountRoute.value = 0;
   if (
     inputFromSelect.value.chainId &&
@@ -232,17 +233,17 @@ function initMinAmountRoute() {
   ) {
     for (let i = 0; i < routesBE.value.length; i++) {
       const item = routesBE.value[i];
-      // console.log('🚀 ~ initMinAmountRoute ~ item:', item);
-      // console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
-      // console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
-      // console.log(
-      //   inputFromSelect.value.chainId,
-      //   ' inputFromSelect.value.chainId=>initMinAmountRoute'
-      // );
-      // console.log(
-      //   inputToSelect.value.chainId,
-      //   '  inputToSelect.value.chainId=>initMinAmountRoute'
-      // );
+      console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+      console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
+      console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
+      console.log(
+        inputFromSelect.value.chainId,
+        ' inputFromSelect.value.chainId=>initMinAmountRoute'
+      );
+      console.log(
+        inputToSelect.value.chainId,
+        '  inputToSelect.value.chainId=>initMinAmountRoute'
+      );
       if (
         item.src.chain_id === inputFromSelect.value.chainId &&
         item.dst.chain_id === inputToSelect.value.chainId
@@ -371,6 +372,7 @@ function updateNetWorkInputFrom(chainId) {
 const delayinputFromChange = debounce(async inputSelect => {
   handleInputFromChange(inputSelect);
 }, 500);
+
 async function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
   if (inputFromSelect.value.chainId) {
@@ -378,6 +380,9 @@ async function handleInputFromChange(inputSelect) {
   }
   // check allowance
   checkAllowanceInputFrom();
+
+  // set min amount route
+  initMinAmountRoute();
 
   await getEstimateFee();
   await getBalanceInputFrom();
@@ -391,7 +396,8 @@ function mapEstimateInfo(rs) {
     ),
   };
 }
-async function getEstimateFee() {
+
+async function getEstimateFeeRoutes() {
   try {
     if (
       inputFromSelect.value.amount > 0 &&
@@ -410,10 +416,11 @@ async function getEstimateFee() {
         amount_in: amount,
       };
       const rs = await bridgeApi.getEstimateFee(params);
+
       if (rs) {
         estimateInfo.value = mapEstimateInfo(rs);
         console.log(
-          '🚀 ~ getEstimateFee ~  estimateInfo.value:',
+          '🚀 ~ getEstimateFeeRoutes ~  estimateInfo.value:',
           estimateInfo.value
         );
         // update InputTo amount
@@ -423,6 +430,35 @@ async function getEstimateFee() {
         );
       }
     }
+  } catch (error) {
+    console.log(error, 'error=>getEstimateFeeRoutes');
+  }
+}
+async function getGasFee() {
+  console.log('🚀 ~ getGasFee:', getGasFee);
+  try {
+    const signer = getSigner();
+    const provider = getProvider();
+    const isEstimate = true;
+    const rs = await bridgeSend(
+      inputFromSelect.value,
+      inputToSelect.value,
+      account.value,
+      signer,
+      provider,
+      isEstimate
+    );
+    console.log('🚀 ~ getGasFee ~ rs:', rs);
+  } catch (error) {
+    console.log(error, 'error=>getGasFee');
+  }
+}
+async function getEstimateFee() {
+  try {
+    await getEstimateFeeRoutes();
+    // if (inputFromSelect.value.tokenSymbol === 'OAS') {
+    //   await getGasFee();
+    // }
   } catch (error) {
     console.log(error, 'error=>getEstimateFee');
   }

@@ -10,10 +10,13 @@ import {
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import useWeb3 from '@/services/web3/useWeb3';
 import { Rules } from '@/types';
+import BigNumber from 'bignumber.js';
 import { cloneDeep } from 'lodash';
 import { useI18n } from 'vue-i18n';
 import NetworkSelectInput from './NetworkSelectInput.vue';
 import TokenSelectInput from './TokenSelectInput.vue';
+// CONST
+const MAX_REMOVE_AMOUNT = 1000000;
 // TYPES
 type InputValue = string | number;
 
@@ -87,7 +90,15 @@ const inputRules = computed(() => {
   return rules;
 });
 const isMaxed = computed(() => {
-  return _amount.value === props?.inputSelect?.balance;
+  const remove_amount = BigNumber(MAX_REMOVE_AMOUNT)
+    .div(10 ** decimalLimit.value || 10 ** 18)
+    .toFixed();
+  console.log('🚀 ~ setMax ~ remove_amount:', remove_amount);
+  const maxAmount = BigNumber(props?.inputSelect?.balance)
+    .minus(remove_amount)
+    .toFixed();
+
+  return _amount.value === maxAmount;
 });
 
 const maxPercentage = computed(() => {
@@ -153,7 +164,16 @@ function handleNetworkChange(networkId) {
   }
 }
 const setMax = () => {
-  const maxAmount = props?.inputSelect?.balance;
+  const remove_amount = BigNumber(MAX_REMOVE_AMOUNT)
+    .div(10 ** decimalLimit.value || 10 ** 18)
+    .toFixed();
+  console.log('🚀 ~ setMax ~ remove_amount:', remove_amount);
+  let maxAmount = BigNumber(props?.inputSelect?.balance)
+    .minus(remove_amount)
+    .toFixed();
+  if (Number(maxAmount) < 0) {
+    maxAmount = '0';
+  }
   handleAmountChange(maxAmount);
 };
 </script>

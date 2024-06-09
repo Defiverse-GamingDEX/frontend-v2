@@ -364,7 +364,8 @@ async function bridgeSend(
   inputToSelect,
   account,
   signer,
-  provider
+  provider,
+  isEstimate = false
 ) {
   try {
     const chainFrom = getChain(inputFromSelect.chainId);
@@ -390,7 +391,6 @@ async function bridgeSend(
           contractProvider: provider, // contract provider
           account,
           srcTokenDecimal: tokenInputFrom?.decimals,
-          srcTokenSymbol: tokenInputFrom?.symbol,
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
           srcTokenAddress: tokenInputFrom?.address,
@@ -399,6 +399,7 @@ async function bridgeSend(
           slippage: 100000,
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
+          isEstimate,
         };
         console.log('🚀 ~ params:// external-chain => verse-chain', params);
         rs = await bridgeService.bridgeSend(params);
@@ -419,6 +420,7 @@ async function bridgeSend(
           signer,
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
+          isEstimate,
         };
         console.log('🚀 ~ params:  // verse-chain => external-chain', params);
         rs = await bridgeService.bridgeWithdrawTo(params);
@@ -436,6 +438,7 @@ async function bridgeSend(
           signer,
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
+          isEstimate,
         };
         console.log('🚀 ~ params: // verse-chain => verse-chain', params);
         rs = await bridgeService.bridgeWithdrawTo(params);

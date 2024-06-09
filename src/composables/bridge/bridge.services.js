@@ -8,7 +8,8 @@ const _sendRawTx = async (
   overwrite,
   signer,
   abi,
-  gasPrice = null
+  gasPrice = null,
+  isEstimate = false
 ) => {
   try {
     const myContract = await new ethers.Contract(
@@ -24,6 +25,9 @@ const _sendRawTx = async (
       signer
     );
     console.log('--->gas: ', gas); // eslint-disable-line no-console
+    if (isEstimate) {
+      return gas;
+    }
     // overwrite.gasLimit = gas;
     overwrite.maxPriorityFeePerGas = null;
     overwrite.maxFeePerGas = null;
@@ -147,6 +151,7 @@ const bridgeSend = async params => {
     slippage,
     abi,
     gasPrice,
+    isEstimate,
   } = params;
 
   const nonce = await contractProvider.getTransactionCount(account, 'latest');
@@ -176,7 +181,8 @@ const bridgeSend = async params => {
     overwrite,
     signer,
     abi,
-    gasPrice
+    gasPrice,
+    isEstimate
   );
 
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
@@ -196,6 +202,7 @@ const bridgeWithdrawTo = async params => {
     signer,
     abi,
     gasPrice,
+    isEstimate,
   } = params;
   console.log('🚀 ~ bridgeWithdrawTo ~ srcTokenDecimal:', srcTokenDecimal);
   const gasLimit = 2000000;
@@ -218,7 +225,8 @@ const bridgeWithdrawTo = async params => {
     overwrite,
     signer,
     abi,
-    gasPrice
+    gasPrice,
+    isEstimate
   );
 
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
