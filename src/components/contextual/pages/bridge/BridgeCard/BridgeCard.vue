@@ -287,7 +287,9 @@ async function checkAllowanceInputFrom() {
         .times(10 ** inputFromSelect.value.decimals)
         .toFixed();
 
-      isAllowance.value = BigNumber(currentAllowance.value || 0).gt(inputAmount)
+      isAllowance.value = BigNumber(currentAllowance.value || 0).gte(
+        inputAmount
+      )
         ? true
         : false;
     }
@@ -564,9 +566,6 @@ async function handleTransferButton() {
     tx &&
       txListener(tx, {
         onTxConfirmed: async (receipt: any) => {
-          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
-
-          // call API confirm tx to BE
           const params = {
             sender_address: account.value,
             receiver_address: anotherWalletAddress.value
@@ -582,7 +581,6 @@ async function handleTransferButton() {
             src_tx_id: receipt?.transactionHash,
           };
           const rsBE = await bridgeApi.postBridgeRequest(params);
-          console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
           //await initData();
           await getBalanceInputFrom();
           isLoading.value = false;
@@ -604,14 +602,9 @@ async function handleTransferButton() {
 async function handleApproveButton() {
   try {
     isLoading.value = true;
-    console.log(inputFromSelect.value, 'inputFromSelect');
     let approveAmount = BigNumber(inputFromSelect.value.amount || 0).toFixed();
-    console.log(
-      '🚀 ~ handleApproveButton ~ approveAmount:BEFORE',
-      approveAmount
-    );
     approveAmount = BigNumber(approveAmount || 0)
-      .plus(1)
+      //.plus(1)
       .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
     console.log(approveAmount, 'approveAmount');
