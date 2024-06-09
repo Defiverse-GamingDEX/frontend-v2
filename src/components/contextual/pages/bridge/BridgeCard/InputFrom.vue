@@ -16,7 +16,7 @@ import { useI18n } from 'vue-i18n';
 import NetworkSelectInput from './NetworkSelectInput.vue';
 import TokenSelectInput from './TokenSelectInput.vue';
 // CONST
-const MAX_REMOVE_AMOUNT = 1000000;
+const MAX_REMOVE_AMOUNT = 0;
 // TYPES
 type InputValue = string | number;
 
@@ -155,11 +155,8 @@ function handleAmountChange(value) {
   emit('update:inputSelect', inputSelect);
 }
 function handleNetworkChange(networkId) {
-  console.log(networkId, 'networkId');
   let network = getChain(networkId);
-  console.log(network, 'network');
   if (network) {
-    console.log();
     connectToAppNetwork(network);
   }
 }
@@ -167,7 +164,6 @@ const setMax = () => {
   const remove_amount = BigNumber(MAX_REMOVE_AMOUNT)
     .div(10 ** decimalLimit.value || 10 ** 18)
     .toFixed();
-  console.log('🚀 ~ setMax ~ remove_amount:', remove_amount);
   let maxAmount = BigNumber(props?.inputSelect?.balance)
     .minus(remove_amount)
     .toFixed();

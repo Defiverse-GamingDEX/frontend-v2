@@ -178,9 +178,8 @@ function initSrcBE() {
   if (routesBE.value?.length > 0) {
     const data = routesBE.value;
     const srcList = data?.map(item => item.src);
-    console.log('🚀 ~ initSrcBE ~ srcList:', srcList);
     const result = groupByChainId(srcList);
-    console.log('🚀 ~ initSrcBE ~ result:', result);
+    //console.log('🚀 ~ initSrcBE ~ result:', result);
     return result || [];
   }
 }
@@ -232,26 +231,23 @@ function initMinAmountRoute() {
   ) {
     for (let i = 0; i < routesBE.value.length; i++) {
       const item = routesBE.value[i];
-      console.log('🚀 ~ initMinAmountRoute ~ item:', item);
-      console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
-      console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
-      console.log(
-        inputFromSelect.value.chainId,
-        ' inputFromSelect.value.chainId=>initMinAmountRoute'
-      );
-      console.log(
-        inputToSelect.value.chainId,
-        '  inputToSelect.value.chainId=>initMinAmountRoute'
-      );
+      // console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+      // console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
+      // console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
+      // console.log(
+      //   inputFromSelect.value.chainId,
+      //   ' inputFromSelect.value.chainId=>initMinAmountRoute'
+      // );
+      // console.log(
+      //   inputToSelect.value.chainId,
+      //   '  inputToSelect.value.chainId=>initMinAmountRoute'
+      // );
       if (
         item.src.chain_id === inputFromSelect.value.chainId &&
         item.dst.chain_id === inputToSelect.value.chainId
       ) {
         minAmountRoute.value = item.min_amount;
-        console.log(
-          '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
-          minAmountRoute.value
-        );
+
         break;
       }
     }
@@ -269,10 +265,6 @@ async function getBalanceInputFrom() {
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
-      console.log(
-        'checkAllowanceInputFrom',
-        inputFromSelect.value?.tokenSymbol
-      );
       if (
         inputFromSelect.value?.tokenSymbol === 'OAS' ||
         inputFromSelect.value?.tokenAddress?.toLowerCase() ===
@@ -290,18 +282,14 @@ async function checkAllowanceInputFrom() {
         account.value
       );
       currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
-      console.log(
-        '🚀 ~ checkAllowanceInputFrom ~ currentAllowance.value:',
-        currentAllowance.value
-      );
+
       const inputAmount = BigNumber(inputFromSelect.value.amount)
         .times(10 ** inputFromSelect.value.decimals)
         .toFixed();
-      console.log('🚀 ~ checkAllowanceInputFrom ~ inputAmount:', inputAmount);
+
       isAllowance.value = BigNumber(currentAllowance.value || 0).gt(inputAmount)
         ? true
         : false;
-      console.log(isAllowance.value, ' isAllowance.value');
     }
   } catch (error) {
     console.log(error, 'error=>checkAllowanceInputFrom');
@@ -336,7 +324,6 @@ async function handleTokenSwitch() {
 // }
 
 async function setTokenInput(input, tokenFromList) {
-  console.log(tokenFromList, 'tokenFromList');
   input.value.tokenSymbol = tokenFromList.symbol;
   input.value.tokenAddress = tokenFromList.address;
   input.value.decimals = tokenFromList.decimals;
@@ -418,10 +405,7 @@ async function getEstimateFeeRoutes() {
 
       if (rs) {
         estimateInfo.value = mapEstimateInfo(rs);
-        console.log(
-          '🚀 ~ getEstimateFeeRoutes ~  estimateInfo.value:',
-          estimateInfo.value
-        );
+
         // update InputTo amount
         inputToSelect.value.amount = covertUnitShow(
           rs.amount_out,
@@ -434,7 +418,6 @@ async function getEstimateFeeRoutes() {
   }
 }
 async function getGasFee() {
-  console.log('🚀 ~ getGasFee:', getGasFee);
   try {
     const signer = getSigner();
     const provider = getProvider();
@@ -447,7 +430,6 @@ async function getGasFee() {
       provider,
       isEstimate
     );
-    console.log('🚀 ~ getGasFee ~ rs:', rs);
   } catch (error) {
     console.log(error, 'error=>getGasFee');
   }
@@ -463,9 +445,7 @@ async function getEstimateFee() {
   }
 }
 async function handleInputToChange(inputSelect) {
-  console.log(inputSelect, 'inputSelect=>handleInputToChange');
   inputToSelect.value = inputSelect;
-  console.log(inputToSelect.value, 'inputToSelect.value');
 
   getEstimateFee();
   initMinAmountRoute();
@@ -486,9 +466,7 @@ function getDstByChainIdAndTokenAddress(routes, srcChainId, tokenAddress) {
         route.src.token_address === tokenAddress
     )
     .map(route => route.dst);
-  console.log('🚀 ~ getDstByChainIdAndTokenAddress ~ dstList:', dstList);
   const result = groupByChainId(dstList);
-  console.log('🚀 ~ getDstByChainIdAndTokenAddress ~ result:', result);
   return result;
 }
 

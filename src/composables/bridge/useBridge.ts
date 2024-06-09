@@ -227,7 +227,6 @@ const mapTxHistory = data => {
 
     //tokenIn
     const tokenIn_chain = getChain(rs.tokenIn.chainId);
-    console.log(tokenIn_chain, 'tokenIn_chain');
     rs.tokenIn.chainName = tokenIn_chain?.name;
     rs.tokenIn.chainUrl = tokenIn_chain?.img_url;
     rs.tokenIn.logoURI = getTokenURL(rs.tokenIn.symbol);
@@ -244,7 +243,6 @@ const mapTxHistory = data => {
 
     //tokenReply
     const tokenReply_chain = getChain(rs.tokenReplay.chainId);
-    console.log(tokenReply_chain, 'tokenReply_chain');
     rs.tokenReplay.chainName = tokenReply_chain?.name;
     rs.tokenReplay.chainUrl = tokenReply_chain?.img_url;
     rs.tokenReplay.logoURI = getTokenURL(rs.tokenReplay.symbol);
@@ -288,9 +286,8 @@ async function getBalance(token, walletAddress) {
     }
     const tokenContract = new Contract(address, ERC20ABI, currentProvider);
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
-    console.log(tokenBalance, 'getBalance=>tokenBalanceAAA');
     const weiBalance = tokenBalance?.toString();
-    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toNumber();
+    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toFixed();
 
     return rs;
   } catch (error) {
@@ -308,7 +305,6 @@ async function checkTokenAllowance(chain, token, walletAddress) {
       walletAddress,
       bridgeContract
     );
-    console.log(tokenAllowance, 'checkAllowance=>tokenAllowance');
 
     const rs = tokenAllowance || 0;
 

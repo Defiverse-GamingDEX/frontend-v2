@@ -76,7 +76,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     chain_id_decimals: 16116,
     img_url: defiIcon,
     name: 'Defiverse',
-    gasPrice: 5000000000000,
+    gasPrice: null,
     explorer: 'https://scan.defi-verse.org/',
     rpc: 'https://rpc.defi-verse.org',
     bridgeContract: '0x4200000000000000000000000000000000000010', /// I2ERC20Bridge

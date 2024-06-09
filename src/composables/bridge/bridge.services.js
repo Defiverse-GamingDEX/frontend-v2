@@ -24,7 +24,7 @@ const _sendRawTx = async (
       overwrite,
       signer
     );
-    console.log('--->gas: ', gas); // eslint-disable-line no-console
+
     if (isEstimate) {
       return gas;
     }
@@ -35,7 +35,7 @@ const _sendRawTx = async (
     const tx = await myContract
       .connect(signer)
       [action](...params, { gasLimit: gas, gasPrice: gasPrice });
-    console.log('--->tx: ', tx); // eslint-disable-line no-console
+
     //let rs = await tx.wait();
     //console.log('--->rs: ', rs); // eslint-disable-line no-console
     return tx;
@@ -80,7 +80,7 @@ const _sendRawTxNative = async (
       signer,
       value
     );
-    console.log('--->gas: ', gas); // eslint-disable-line no-console
+
     // overwrite.gasLimit = gas;
     overwrite.maxPriorityFeePerGas = null;
     overwrite.maxFeePerGas = null;
@@ -90,7 +90,7 @@ const _sendRawTxNative = async (
       gasPrice: gasPrice,
       value: value,
     });
-    console.log('--->tx: ', tx); // eslint-disable-line no-console
+
     //let rs = await tx.wait();
     //console.log('--->rs: ', rs); // eslint-disable-line no-console
     return tx;
@@ -156,16 +156,22 @@ const bridgeSend = async params => {
 
   const nonce = await contractProvider.getTransactionCount(account, 'latest');
   const desChainId = 248;
-  console.log('🚀 ~ bridgeSend ~ desChainId:', desChainId);
-  console.log(nonce, 'nonce');
   let decimals_value = BigNumber(value)
     .times(10 ** srcTokenDecimal)
     .toFixed(0);
-  console.log('🚀 ~ bridgeSend ~ decimals_value:', decimals_value);
   let overwrite = { from: account };
   // if (srcTokenSymbol === 'OAS') {
   //   overwrite.value = decimals_value;
   // }
+  console.log(
+    '🚀 ~ bridgeWithdrawTo ~ vBridgeAddress, srcTokenAddress, decimals_value, desChainId, nonce, slippage',
+    vBridgeAddress,
+    srcTokenAddress,
+    decimals_value,
+    desChainId,
+    nonce,
+    slippage
+  );
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
@@ -204,19 +210,27 @@ const bridgeWithdrawTo = async params => {
     gasPrice,
     isEstimate,
   } = params;
-  console.log('🚀 ~ bridgeWithdrawTo ~ srcTokenDecimal:', srcTokenDecimal);
+
   const gasLimit = 2000000;
 
   let decimals_value = BigNumber(value)
     .times(10 ** srcTokenDecimal)
     .toFixed(0);
   let overwrite = { from: account };
-  console.log('🚀 ~ bridgeWithdrawTo ~ decimals_value:', decimals_value);
+
   // if (srcTokenSymbol === 'OAS') {
   //   overwrite.value = decimals_value;
   // }
 
   const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
+  console.log(
+    '🚀 ~ bridgeWithdrawTo ~ srcTokenAddress, vBridgeAddress, decimals_value, gasLimit, nonce:',
+    srcTokenAddress,
+    vBridgeAddress,
+    decimals_value,
+    gasLimit,
+    nonce
+  );
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,

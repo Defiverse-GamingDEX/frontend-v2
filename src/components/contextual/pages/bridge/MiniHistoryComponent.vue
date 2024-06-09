@@ -67,7 +67,6 @@ async function mapTxList(data) {
 
     txList.value.push(itemPush);
   }
-  console.log(txList.value, ' txList.value');
 }
 const getHistory = async () => {
   try {
