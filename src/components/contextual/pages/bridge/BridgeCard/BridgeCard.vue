@@ -269,6 +269,10 @@ async function getBalanceInputFrom() {
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
+      console.log(
+        'checkAllowanceInputFrom',
+        inputFromSelect.value?.tokenSymbol
+      );
       if (
         inputFromSelect.value?.tokenSymbol === 'OAS' ||
         inputFromSelect.value?.tokenAddress?.toLowerCase() ===
@@ -276,7 +280,8 @@ async function checkAllowanceInputFrom() {
         inputFromSelect.value?.tokenAddress?.toLowerCase() ===
           '0x0000000000000000000000000000000000000000'
       ) {
-        return true;
+        isAllowance.value = true;
+        return;
       }
 
       const allowance = await checkTokenAllowance(
@@ -593,8 +598,8 @@ async function handleApproveButton() {
       approveAmount
     );
     approveAmount = BigNumber(approveAmount || 0)
+      .plus(1)
       .times(10 ** inputFromSelect.value.decimals)
-      .plus(1) // for transfer
       .toFixed();
     console.log(approveAmount, 'approveAmount');
     //approveAmount = approveAmount + 1;

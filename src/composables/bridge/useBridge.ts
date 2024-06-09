@@ -390,6 +390,7 @@ async function bridgeSend(
           contractProvider: provider, // contract provider
           account,
           srcTokenDecimal: tokenInputFrom?.decimals,
+          srcTokenSymbol: tokenInputFrom?.symbol,
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
           srcTokenAddress: tokenInputFrom?.address,

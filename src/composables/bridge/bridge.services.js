@@ -138,6 +138,7 @@ const bridgeSend = async params => {
     contractAddress, // contract token
     contractProvider, // contract provider
     account,
+    srcTokenSymbol,
     srcTokenDecimal,
     value, // amount
     vBridgeAddress,
@@ -157,6 +158,9 @@ const bridgeSend = async params => {
     .toFixed(0);
   console.log('🚀 ~ bridgeSend ~ decimals_value:', decimals_value);
   let overwrite = { from: account };
+  // if (srcTokenSymbol === 'OAS') {
+  //   overwrite.value = decimals_value;
+  // }
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
