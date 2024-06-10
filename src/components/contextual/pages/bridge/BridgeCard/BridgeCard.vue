@@ -117,23 +117,14 @@ watch(
 watch(
   () => chainId.value,
   async () => {
+    verifyNetwork();
     updateNetWorkInputFrom(chainId.value);
   }
 );
 watch(
   () => inputFromSelect.value.chainId,
   async () => {
-    console.log('AAAAA', inputFromSelect.value.chainId, chainId.value);
-    if (inputFromSelect.value.chainId !== chainId.value) {
-      estimateInfo.value = {
-        err: {
-          code: '9999',
-          msg: `You must switch to ${getChainName(
-            inputFromSelect.value.chainId
-          )} to begin the transfer`,
-        },
-      };
-    }
+    verifyNetwork();
   }
 );
 watchEffect(() => {
@@ -197,8 +188,28 @@ async function getRouters() {
     console.log(error, 'error=>getRouters');
   }
 }
+function verifyNetwork() {
+  console.log('AAAAA', inputFromSelect.value.chainId, chainId.value);
+  if (
+    inputFromSelect.value.chainId &&
+    chainId.value &&
+    inputFromSelect.value.chainId !== chainId.value
+  ) {
+    estimateInfo.value = {
+      err: {
+        code: '9999',
+        msg: `You must switch to ${getChainName(
+          inputFromSelect.value.chainId
+        )} to begin the transfer`,
+      },
+    };
+  } else {
+    estimateInfo.value = null;
+  }
+}
 async function initData() {
   getRouters();
+  verifyNetwork();
 }
 function covertUnitShow(number, token_decimals) {
   const decimals = new BigNumber(10).pow(token_decimals).toFixed();
@@ -822,47 +833,58 @@ onBeforeMount(async () => {
             {{ estimateInfo?.err?.msg }}
           </BalAlert>
         </div>
-        <div v-if="isWalletReady" class="bridge-actions">
+        <div v-if="estimateInfo?.err?.code === '9999'" class="bridge-actions">
           <BalBtn
-            v-if="!isAllowance"
-            :disabled="
-              !estimateInfo ||
-              !!estimateInfo.err ||
-              estimateInfo.amount_out <= 0 ||
-              inputFromSelect.amount < minAmountRoute
-            "
-            :label="$t('Approve')"
+            :label="$t('Change network ')"
             :loading="isLoading"
             classCustom="pink-white-shadow"
             block
-            @click.prevent="handleApproveButton"
-          />
-          <BalBtn
-            v-else
-            :disabled="
-              (anotherWalletAddress && !isAddress(anotherWalletAddress)) ||
-              !estimateInfo ||
-              !!estimateInfo.err ||
-              estimateInfo.amount_out <= 0 ||
-              inputFromSelect.balance === 0 ||
-              inputFromSelect.balance < inputFromSelect.amount ||
-              inputFromSelect.amount < minAmountRoute
-            "
-            :label="$t('Tranfer')"
-            :loading="isLoading"
-            classCustom="pink-white-shadow"
-            block
-            @click.prevent="handleTransferButton"
+            @click.prevent="handleNetworkChange(inputFromSelect?.chainId)"
           />
         </div>
-        <div v-else class="bridge-actions wallet-connect">
-          <BalBtn
-            :label="$t('connectWallet')"
-            :loading="isLoading"
-            classCustom="pink-white-shadow"
-            block
-            @click="startConnectWithInjectedProvider"
-          />
+        <div v-else>
+          <div v-if="isWalletReady" class="bridge-actions">
+            <BalBtn
+              v-if="!isAllowance"
+              :disabled="
+                !estimateInfo ||
+                !!estimateInfo.err ||
+                estimateInfo.amount_out <= 0 ||
+                inputFromSelect.amount < minAmountRoute
+              "
+              :label="$t('Approve')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click.prevent="handleApproveButton"
+            />
+            <BalBtn
+              v-else
+              :disabled="
+                (anotherWalletAddress && !isAddress(anotherWalletAddress)) ||
+                !estimateInfo ||
+                !!estimateInfo.err ||
+                estimateInfo.amount_out <= 0 ||
+                inputFromSelect.balance === 0 ||
+                inputFromSelect.balance < inputFromSelect.amount ||
+                inputFromSelect.amount < minAmountRoute
+              "
+              :label="$t('Tranfer')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click.prevent="handleTransferButton"
+            />
+          </div>
+          <div v-else class="bridge-actions wallet-connect">
+            <BalBtn
+              :label="$t('connectWallet')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click="startConnectWithInjectedProvider"
+            />
+          </div>
         </div>
       </div>
     </BalCard>
