@@ -849,8 +849,8 @@ onBeforeMount(async () => {
               :disabled="
                 !estimateInfo ||
                 !!estimateInfo.err ||
-                estimateInfo.amount_out <= 0 ||
-                inputFromSelect.amount < minAmountRoute
+                Number(estimateInfo.amount_out) <= 0 ||
+                Number(inputFromSelect.amount) < Number(minAmountRoute)
               "
               :label="$t('Approve')"
               :loading="isLoading"
@@ -864,10 +864,11 @@ onBeforeMount(async () => {
                 (anotherWalletAddress && !isAddress(anotherWalletAddress)) ||
                 !estimateInfo ||
                 !!estimateInfo.err ||
-                estimateInfo.amount_out <= 0 ||
-                inputFromSelect.balance === 0 ||
-                inputFromSelect.balance < inputFromSelect.amount ||
-                inputFromSelect.amount < minAmountRoute
+                Number(estimateInfo.amount_out) <= 0 ||
+                Number(inputFromSelect.balance) === 0 ||
+                Number(inputFromSelect.balance) <
+                  Number(inputFromSelect.amount) ||
+                Number(inputFromSelect.amount) < Number(minAmountRoute)
               "
               :label="$t('Tranfer')"
               :loading="isLoading"
