@@ -59,6 +59,7 @@ const paging = ref({
   page_size: 5,
   next_page_token: null,
 });
+//const networkFee = ref(0);
 const txHistory = ref([]);
 
 const inputFromSelect = ref({
@@ -276,7 +277,9 @@ async function getBalanceInputFrom() {
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
+      console.log(chainFrom.value?.type, ' chainFrom.value?.type');
       if (
+        chainFrom.value?.type === 'verse-chain' ||
         inputFromSelect.value?.tokenSymbol === 'OAS' ||
         inputFromSelect.value?.tokenAddress?.toLowerCase() ===
           '0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000' ||
@@ -443,14 +446,30 @@ async function getGasFee() {
       provider,
       isEstimate
     );
+    console.log('🚀 ~ getGasFee ~ rs:', rs);
+    const gasPrice = 10000000000000;
+    const gasLimit = rs?.tx || 250000;
+    console.log('🚀 ~ getGasFee ~ gasLimit:', gasLimit);
+    networkFee.value = Number(
+      BigNumber(gasPrice)
+        .times(gasLimit)
+        .div(10 ** inputFromSelect.value.decimals)
+        .toFixed()
+    );
+    console.log('🚀 ~ getGasFee ~ networkFee.value:', networkFee.value);
   } catch (error) {
     console.log(error, 'error=>getGasFee');
   }
 }
 async function getEstimateFee() {
   try {
+    //networkFee.value = 0;
     await getEstimateFeeRoutes();
-    // if (inputFromSelect.value.tokenSymbol === 'OAS') {
+    // if (
+    //   inputToSelect.value.chainId &&
+    //   inputFromSelect.value.tokenSymbol === 'OAS' &&
+    //   Number(inputFromSelect.value.chainId) === 16116
+    // ) {
     //   await getGasFee();
     // }
   } catch (error) {

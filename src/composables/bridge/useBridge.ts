@@ -340,7 +340,7 @@ async function approveToken(
 
     return tx;
   } catch (error) {
-    console.log(error, 'error');
+    console.log(error, 'approveToken=>error');
     throw error;
   }
 }
