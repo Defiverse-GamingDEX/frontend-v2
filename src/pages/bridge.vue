@@ -7,19 +7,8 @@ import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useAlerts from '@/composables/useAlerts';
 import useWeb3 from '@/services/web3/useWeb3';
-import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-const WHITELIST_ADDRESSES = [
-  '0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE',
-  '0x343eCF760a020936eEE8D655b43C5cBD40769A05',
-  '0xE026Ec8A3bDaE1b171c162aF556F6dC73917D3D0',
-  '0x36FB86bF34B73cF9B1ebe034DA10D9143Dc46cd6',
-  '0xfF510480dDEa89B8b50DB0B81E1C242a3F225E90',
-  '0xD6071B2f7018a214bc8341aA3469C695b934e4f4',
-  '0x3aEA382171DAc02862C65459c6d404477Ba15277',
-  '0xCe528C79fAD8e650FDeD75fD65e29d28693c7429',
-  '0x44aA61C1E0003E1Bf43A6D7ed40cc945e09e0b7e',
-];
+const WHITELIST_ADDRESSES = [];
 /**
  * STATE
  */
@@ -27,8 +16,8 @@ const tabSelect = ref('bridge'); // bridge, redeem, admin
 const adminAddress = ref(null);
 
 // COMPOSABLES
-const { t } = useI18n();
-const { addAlert, removeAlert } = useAlerts();
+//const { t } = useI18n();
+const { removeAlert } = useAlerts();
 const { getAdminAddress } = usePoolCreation();
 
 const { account, chainId } = useWeb3();
@@ -76,9 +65,9 @@ const checkWhileList = () => {
   if (!account.value || !chainId.value) {
     router.push({ name: 'home' });
   } else {
-    const isIncluded = WHITELIST_ADDRESSES.map(a => a.toLowerCase()).includes(
-      account.value.toLowerCase()
-    );
+    const isIncluded = WHITELIST_ADDRESSES.map((a: any) =>
+      a.toLowerCase()
+    ).includes(account.value.toLowerCase());
     if (!isIncluded) {
       router.push({ name: 'home' });
     }
