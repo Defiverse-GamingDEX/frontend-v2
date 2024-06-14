@@ -62,9 +62,9 @@ const checkMisMatch = () => {
   }
 };
 const checkWhileList = () => {
-  if (!account.value || !chainId.value) {
-    router.push({ name: 'home' });
-  }
+  // if (!account.value || !chainId.value) {
+  //   router.push({ name: 'home' });
+  // }
   // else {
   //   const isIncluded = WHITELIST_ADDRESSES.map((a: any) =>
   //     a.toLowerCase()
