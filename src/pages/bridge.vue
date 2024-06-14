@@ -8,7 +8,7 @@ import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useAlerts from '@/composables/useAlerts';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useRoute, useRouter } from 'vue-router';
-const WHITELIST_ADDRESSES = [];
+//const WHITELIST_ADDRESSES = [];
 /**
  * STATE
  */
@@ -64,14 +64,15 @@ const checkMisMatch = () => {
 const checkWhileList = () => {
   if (!account.value || !chainId.value) {
     router.push({ name: 'home' });
-  } else {
-    const isIncluded = WHITELIST_ADDRESSES.map((a: any) =>
-      a.toLowerCase()
-    ).includes(account.value.toLowerCase());
-    if (!isIncluded) {
-      router.push({ name: 'home' });
-    }
   }
+  // else {
+  //   const isIncluded = WHITELIST_ADDRESSES.map((a: any) =>
+  //     a.toLowerCase()
+  //   ).includes(account.value.toLowerCase());
+  //   if (!isIncluded) {
+  //     router.push({ name: 'home' });
+  //   }
+  // }
 };
 function changeTab(tab) {
   tabSelect.value = tab;
