@@ -1,5 +1,8 @@
+import ccpIcon from '@/assets/images/bridge/tokens/ccp.png';
 import defiIcon from '@/assets/images/bridge/tokens/defi.png';
 import ethIcon from '@/assets/images/bridge/tokens/eth.png';
+import gdtIcon from '@/assets/images/bridge/tokens/gdt.png';
+import mchcIcon from '@/assets/images/bridge/tokens/mchc.png';
 import oasIcon from '@/assets/images/bridge/tokens/oas.png';
 import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
 import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
@@ -64,6 +67,12 @@ function getTokenURL(tokenSymbol) {
       return defiIcon;
     case 'TCGC':
       return tcgcIcon;
+    case 'MCHC':
+      return mchcIcon;
+    case 'GDT':
+      return gdtIcon;
+    case 'CCP':
+      return ccpIcon;
     default:
       return ethIcon;
   }
