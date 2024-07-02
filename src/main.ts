@@ -48,7 +48,7 @@ registerPlugins(app);
 registerDirectives(app);
 initSentry(app);
 
-app.use(VueAwesomePaginate).mount('#app');
+app.use(VueAwesomePaginate);
 app.mount('#app');
 
 export default app;
