@@ -157,6 +157,9 @@
   "license": "MIT",
   "repository": "balancer-labs/frontend-v2",
   "dependencies": {
-    "vue-awesome-paginate": "^1.1.46"
+    "vue-awesome-paginate": "^1.1.46",
+    "crypto-js": "^4.2.0",
+    "mitt": "^3.0.1",
+    "singularity-init": "^1.0.3"
   }
 }

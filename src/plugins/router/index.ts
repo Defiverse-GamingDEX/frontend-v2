@@ -46,6 +46,7 @@ const SwapPage = () =>
   import(
     /* webpackChunkName: "SwapPage" */ /* webpackPrefetch: true */ '@/pages/swap.vue'
   );
+
 const BridgePage = () =>
   import(
     /* webpackChunkName: "BridgePage" */ /* webpackPrefetch: true */ '@/pages/bridge.vue'

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
 import MyWallet from '@/components/cards/MyWallet/MyWallet.vue';
 import PairPriceGraph from '@/components/cards/PairPriceGraph/PairPriceGraph.vue';
 import SwapCard from '@/components/cards/SwapCard/SwapCard.vue';
 import Col3Layout from '@/components/layouts/Col3Layout.vue';
+import BridgeLink from '@/components/links/BridgeLink.vue';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
 import useBreakpoints from '@/composables/useBreakpoints';
-import BridgeLink from '@/components/links/BridgeLink.vue';
 import { isL2 } from '@/composables/useNetwork';
+import { computed, onMounted } from 'vue';
 
 /**
  * COMPOSABLES

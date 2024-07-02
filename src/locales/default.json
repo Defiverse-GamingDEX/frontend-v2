@@ -1537,5 +1537,11 @@
   },
   "poolActivity": "Pool activity",
   "legacyClaims": "Legacy claims",
-  "distributionReward": "Distribute all rewards"
+  "distributionReward": "Distribute all rewards",
+  "singularity": {
+    "buyTitle": "You can buy Crypto in Gaming Dex!",
+    "buyBtnLabel": "Buy Crypto",
+    "buyTokenBtn": "Buy",
+    "comingSoon": "Coming Soon"
+  }
 }
