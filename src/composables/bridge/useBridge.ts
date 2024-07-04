@@ -60,6 +60,7 @@ function getTokenURL(tokenSymbol) {
     case 'USDT':
       return usdtIcon;
     case 'USDC':
+    case 'USDC.e':
       return usdcIcon;
     case 'OAS':
       return oasIcon;

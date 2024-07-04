@@ -243,23 +243,27 @@ function initMinAmountRoute() {
   ) {
     for (let i = 0; i < routesBE.value.length; i++) {
       const item = routesBE.value[i];
-      // console.log('🚀 ~ initMinAmountRoute ~ item:', item);
-      // console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
-      // console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
-      // console.log(
-      //   inputFromSelect.value.chainId,
-      //   ' inputFromSelect.value.chainId=>initMinAmountRoute'
-      // );
-      // console.log(
-      //   inputToSelect.value.chainId,
-      //   '  inputToSelect.value.chainId=>initMinAmountRoute'
-      // );
+      console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+      console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
+      console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
+      console.log(
+        inputFromSelect.value.chainId,
+        ' inputFromSelect.value.chainId=>initMinAmountRoute'
+      );
+      console.log(
+        inputToSelect.value.chainId,
+        '  inputToSelect.value.chainId=>initMinAmountRoute'
+      );
       if (
         item.src.chain_id === inputFromSelect.value.chainId &&
-        item.dst.chain_id === inputToSelect.value.chainId
+        item.dst.chain_id === inputToSelect.value.chainId &&
+        item.src.token_symbol === inputFromSelect.value.tokenSymbol
       ) {
         minAmountRoute.value = item.min_amount;
-
+        console.log(
+          '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
+          minAmountRoute.value
+        );
         break;
       }
     }
