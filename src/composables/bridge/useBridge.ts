@@ -281,10 +281,28 @@ async function getTokensBalance(tokens, account) {
   if (tokens.length > 0) {
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
-      const balance = await getBalance(token, account);
+      let balance = 0;
+      if (token.is_native === true) {
+        // OAS native
+        balance = await getNativeBalance(token, account);
+      } else {
+        balance = await getBalance(token, account);
+      }
       token.balance = balance;
     }
     return tokens;
+  }
+}
+async function getNativeBalance(token, account) {
+  const { address, rpc, provider } = token;
+  let currentProvider = provider;
+  if (!provider) {
+    currentProvider = new JsonRpcProvider(rpc);
+    const nativeBalance = await currentProvider.getBalance(account);
+    console.log('🚀 ~ getNativeBalance ~ nativeBalance:', nativeBalance);
+    const rs = bnum(nativeBalance).div(Math.pow(10, token?.decimals)).toFixed();
+    console.log('🚀 ~ getNativeBalance ~ rs:', rs);
+    return rs;
   }
 }
 async function getBalance(token, walletAddress) {
@@ -305,15 +323,25 @@ async function getBalance(token, walletAddress) {
     return error;
   }
 }
-async function checkTokenAllowance(chain, token, walletAddress) {
+async function checkTokenAllowance(
+  chain,
+  token,
+  walletAddress,
+  l1_bridge_address
+) {
   try {
     const { address } = token;
     const { bridgeContract, rpc } = chain;
+    let contractAddress = bridgeContract;
+    if (l1_bridge_address) {
+      contractAddress = l1_bridge_address;
+    }
+    console.log('🚀 ~ contractAddress:', contractAddress);
     const provider = new JsonRpcProvider(rpc);
     const tokenContract = new Contract(address, ERC20ABI, provider);
     const tokenAllowance = await tokenContract.allowance(
       walletAddress,
-      bridgeContract
+      contractAddress
     );
 
     const rs = tokenAllowance || 0;
@@ -329,13 +357,17 @@ async function approveToken(
   token,
   walletAddress,
   signer,
-  approveAmount
+  approveAmount,
+  l1_bridge_address
 ) {
   try {
     const { address } = token;
     console.log('🚀 ~ address:', address);
     const { bridgeContract, rpc } = chain;
-    console.log('🚀 ~ bridgeContract:', bridgeContract);
+    let contractAddress = bridgeContract;
+    if (l1_bridge_address) {
+      contractAddress = l1_bridge_address;
+    }
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
     if (!approveAmount) {
@@ -343,7 +375,7 @@ async function approveToken(
     }
     const tx = await contract
       .connect(signer)
-      .approve(bridgeContract, approveAmount);
+      .approve(contractAddress, approveAmount);
     console.log('tx', tx);
     // const rs = await tx.wait();
     // console.log('rs', rs);
@@ -389,7 +421,6 @@ async function bridgeSend(
     let rs = null;
     if (oasys_bridge_type === 'verse_to_oasys') {
       // verse => oasys
-      console.log('🚀 ~ bridgeSend ~ oasys_bridge_type:', oasys_bridge_type);
       const params = {
         contractAddress: chainFrom?.bridgeContract,
         contractProvider: provider,
@@ -407,7 +438,42 @@ async function bridgeSend(
       console.log('🚀 ~ params: verse_to_oasys', params);
       rs = await bridgeService.bridgeWithdrawTo(params);
     } else if (oasys_bridge_type === 'oasys_to_verse') {
-      console.log('🚀 ~ bridgeSend ~ oasys_bridge_type:');
+      //oasys_to_verse
+      if (tokenInputFrom.symbol === 'OAS') {
+        // transfer OAS
+        const params = {
+          contractAddress: l1_bridge_address,
+          contractProvider: provider,
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          receiveAddress: account, // address user
+          signer,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
+          isEstimate,
+        };
+        console.log('🚀 ~ params: oasys_to_verse transfer OAS', params);
+        rs = await bridgeService.bridgeDepositETHTo(params);
+      } else {
+        // transfer ERC20
+        const params = {
+          contractAddress: l1_bridge_address,
+          contractProvider: provider,
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          srcTokenAddress: tokenInputFrom?.address, // account address
+          desTokenAddress: tokenInputTo?.address,
+          receiveAddress: account, // address user
+          signer,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
+          isEstimate,
+        };
+        console.log('🚀 ~ params: oasys_to_verse transfer ERC20', params);
+        rs = await bridgeService.bridgeDepositERC20To(params);
+      }
     } else {
       // old logic
       if (chainFrom.type === 'external-chain') {
@@ -491,6 +557,7 @@ export function useBridge() {
 
     getTokensBalance,
     getBalance,
+    getNativeBalance,
     checkTokenAllowance,
     approveToken,
     bridgeSend,

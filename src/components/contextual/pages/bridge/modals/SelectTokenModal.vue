@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { orderBy } from 'lodash';
-import { computed, reactive, toRef, watch, watchEffect } from 'vue';
-import { useI18n } from 'vue-i18n';
-import useWeb3 from '@/services/web3/useWeb3';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { Contract } from '@ethersproject/contracts';
-import { default as ERC20ABI } from '@/lib/abi/ERC20.json';
-import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { bnum, isSameAddress } from '@/lib/utils';
 import { useBridge } from '@/composables/bridge/useBridge';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import useWeb3 from '@/services/web3/useWeb3';
+import { orderBy } from 'lodash';
+import { useI18n } from 'vue-i18n';
 interface Props {
   open?: boolean;
   tokensList: Array<any>;
@@ -56,6 +51,7 @@ const tokensShow = ref([]);
  */
 onMounted(async () => {
   tokens.value = createTokens();
+  console.log('🚀 ~ onMounted ~   tokens.value:', tokens.value);
   // update token show
   tokensShow.value = tokens.value;
   loading.value = false;

@@ -35,6 +35,7 @@ const {
   checkIsNative,
 
   getBalance,
+  getNativeBalance,
   checkTokenAllowance,
   approveToken,
   bridgeSend,
@@ -286,10 +287,17 @@ function initMinAmountRoute() {
 async function getBalanceInputFrom() {
   // update balance InputFrom
   if (account.value && inputFromSelect.value.tokenAddress) {
-    inputFromSelect.value.balance = await getBalance(
-      tokenFrom.value,
-      account.value
-    );
+    if (tokenFrom.value.is_native) {
+      inputFromSelect.value.balance = await getNativeBalance(
+        tokenFrom.value,
+        account.value
+      );
+    } else {
+      inputFromSelect.value.balance = await getBalance(
+        tokenFrom.value,
+        account.value
+      );
+    }
   }
 }
 async function checkAllowanceInputFrom() {
@@ -311,7 +319,8 @@ async function checkAllowanceInputFrom() {
       const allowance = await checkTokenAllowance(
         chainFrom.value,
         tokenFrom.value,
-        account.value
+        account.value,
+        li_bridge_address.value
       );
       currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
 
@@ -370,6 +379,17 @@ function updateNetWorkInputFrom(chainId) {
     inputFromSelect.value.minAmount = networkChoose.min_amount;
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
+    // TODO check token is_native
+    inputFromSelect.value.tokensList = inputFromSelect.value.tokensList.map(
+      item => {
+        const is_native =
+          inputFromSelect.value.chainId === 248 && item.symbol === 'OAS';
+        return {
+          ...item,
+          is_native: is_native,
+        };
+      }
+    );
     // set token default
     if (inputFromSelect.value.tokensList?.length > 0) {
       setTokenInput(inputFromSelect, inputFromSelect.value.tokensList[0]);
@@ -666,7 +686,8 @@ async function handleApproveButton() {
       tokenFrom.value,
       account.value,
       signer,
-      approveAmount
+      approveAmount,
+      li_bridge_address.value
     );
 
     const chainName = chainFrom.value.name;

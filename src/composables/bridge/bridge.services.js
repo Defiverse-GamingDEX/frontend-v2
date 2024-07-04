@@ -32,9 +32,11 @@ const _sendRawTx = async (
     overwrite.maxPriorityFeePerGas = null;
     overwrite.maxFeePerGas = null;
 
-    const tx = await myContract
-      .connect(signer)
-      [action](...params, { gasLimit: gas, gasPrice: gasPrice });
+    const tx = await myContract.connect(signer)[action](...params, {
+      gasLimit: gas,
+      gasPrice: gasPrice,
+      value: overwrite.value,
+    });
 
     //let rs = await tx.wait();
     //console.log('--->rs: ', rs); // eslint-disable-line no-console
@@ -246,7 +248,105 @@ const bridgeWithdrawTo = async params => {
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
+const bridgeDepositERC20To = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    srcTokenDecimal,
+    value, // amount
+    srcTokenAddress,
+    desTokenAddress,
+    receiveAddress,
+    signer,
+    abi,
+    gasPrice,
+    isEstimate,
+  } = params;
 
+  const gasLimit = 2000000;
+
+  let decimals_value = BigNumber(value)
+    .times(10 ** srcTokenDecimal)
+    .toFixed(0);
+  let overwrite = { from: account };
+
+  const nonce = '0x';
+  console.log(
+    '🚀 ~ bridgeDepositERC20To ~ srcTokenAddress, desTokenAddress,receiveAddress, decimals_value, gasLimit, nonce:',
+    srcTokenAddress,
+    desTokenAddress,
+    receiveAddress,
+    decimals_value,
+    gasLimit,
+    nonce
+  );
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'depositERC20To',
+    [
+      srcTokenAddress,
+      desTokenAddress,
+      receiveAddress,
+      decimals_value,
+      gasLimit,
+      nonce,
+    ],
+    overwrite,
+    signer,
+    abi,
+    gasPrice,
+    isEstimate
+  );
+
+  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
+  return { tx: rs, nonce };
+};
+const bridgeDepositETHTo = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    srcTokenDecimal,
+    value, // amount
+    receiveAddress,
+    signer,
+    abi,
+    gasPrice,
+    isEstimate,
+  } = params;
+
+  const gasLimit = 2000000;
+
+  let decimals_value = BigNumber(value)
+    .times(10 ** srcTokenDecimal)
+    .toFixed(0);
+  let overwrite = { from: account, value: decimals_value };
+
+  const nonce = '0x';
+  console.log(
+    '🚀 ~ depositETHTo ~ receiveAddress, decimals_value, gasLimit, nonce:',
+    receiveAddress,
+    decimals_value,
+    gasLimit,
+    nonce
+  );
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'depositETHTo',
+    [receiveAddress, gasLimit, nonce],
+    overwrite,
+    signer,
+    abi,
+    gasPrice,
+    isEstimate
+  );
+
+  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
+  return { tx: rs, nonce };
+};
 // const bridgeSendNative = async params => {
 //   const {
 //     contractAddress, // contract token
@@ -286,4 +386,6 @@ const bridgeWithdrawTo = async params => {
 export default {
   bridgeSend,
   bridgeWithdrawTo,
+  bridgeDepositERC20To,
+  bridgeDepositETHTo,
 };
