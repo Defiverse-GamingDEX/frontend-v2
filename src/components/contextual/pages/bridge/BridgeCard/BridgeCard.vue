@@ -95,6 +95,8 @@ const chainTo = ref({});
 const tokenFrom = ref({});
 const tokenTo = ref({});
 const minAmountRoute = ref(0);
+const oasys_bridge_type = ref(0);
+const li_bridge_address = ref('');
 // // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -236,6 +238,8 @@ function initSelectedData() {
 }
 function initMinAmountRoute() {
   minAmountRoute.value = 0;
+  oasys_bridge_type.value = '';
+  li_bridge_address.value = '';
   if (
     inputFromSelect.value.chainId &&
     inputToSelect.value.chainId &&
@@ -260,6 +264,16 @@ function initMinAmountRoute() {
         item.src.token_symbol === inputFromSelect.value.tokenSymbol
       ) {
         minAmountRoute.value = item.min_amount;
+        oasys_bridge_type.value = item.type;
+        li_bridge_address.value = item.l1_bridge;
+        console.log(
+          '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
+          oasys_bridge_type.value
+        );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~ li_bridge_address.value :',
+          li_bridge_address.value
+        );
         console.log(
           '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
           minAmountRoute.value
@@ -582,7 +596,10 @@ async function handleTransferButton() {
       inputToSelect.value,
       account.value,
       signer,
-      provider
+      provider,
+      false,
+      oasys_bridge_type.value,
+      li_bridge_address.value
     );
 
     console.log(tx, 'tx=>handleTransferButton');

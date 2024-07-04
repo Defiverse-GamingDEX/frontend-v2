@@ -7,6 +7,7 @@ import oasIcon from '@/assets/images/bridge/networks/oas.png';
 import polygonIcon from '@/assets/images/bridge/networks/polygon.png';
 import saakuruIcon from '@/assets/images/bridge/networks/saakuru.png';
 import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
+import { default as IL1StandardBridge } from '@/lib/abi/bridge/IL1StandardBridge.json';
 import { default as IL2ERC20Bridge } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
 import { default as cBridgeABI } from '@/lib/abi/bridge/cBridge.json';
 export const BRIDGE_NETWORKS_MAINNET = [
@@ -60,9 +61,9 @@ export const BRIDGE_NETWORKS_MAINNET = [
     gasPrice: null,
     explorer: 'https://explorer.oasys.games',
     rpc: 'https://oasys.blockpi.network/v1/rpc/public',
-    bridgeContract: '', // not use
-    bridgeABI: '', // not use
-    type: 'external-chain',
+    bridgeContract: '', // get from router data API
+    bridgeABI: IL1StandardBridge,
+    type: 'oasys_to_verse', // will update from router data API
     isOnlyDefiBridge: false,
     //tokens: BRIDGE_OASYS_TOKENS_MAINNET,
     nativeCurrency: {

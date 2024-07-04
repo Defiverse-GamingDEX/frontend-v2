@@ -364,14 +364,15 @@ function getChain(chainId) {
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
-
 async function bridgeSend(
   inputFromSelect,
   inputToSelect,
   account,
   signer,
   provider,
-  isEstimate = false
+  isEstimate = false,
+  oasys_bridge_type,
+  l1_bridge_address
 ) {
   try {
     const chainFrom = getChain(inputFromSelect.chainId);
@@ -386,68 +387,92 @@ async function bridgeSend(
     );
 
     let rs = null;
-    if (chainFrom.type === 'external-chain') {
-      if (chainTo.type === 'external-chain') {
-        throw new Error('Not support');
-      } else {
-        // chainTo.type === 'verse-chain'
-        // external-chain => verse-chain
-        const params = {
-          contractAddress: chainFrom?.bridgeContract, // contract token
-          contractProvider: provider, // contract provider
-          account,
-          srcTokenDecimal: tokenInputFrom?.decimals,
-          value: inputFromSelect?.amount, // amount
-          vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
-          srcTokenAddress: tokenInputFrom?.address,
-          //desChainId: chainTo?.chain_id_decimals,
-          signer,
-          slippage: 100000,
-          abi: chainFrom?.bridgeABI,
-          gasPrice: chainFrom?.gasPrice,
-          isEstimate,
-        };
-        console.log('🚀 ~ params:// external-chain => verse-chain', params);
-        rs = await bridgeService.bridgeSend(params);
-      }
+    if (oasys_bridge_type === 'verse_to_oasys') {
+      // verse => oasys
+      console.log('🚀 ~ bridgeSend ~ oasys_bridge_type:', oasys_bridge_type);
+      const params = {
+        contractAddress: chainFrom?.bridgeContract,
+        contractProvider: provider,
+        account,
+        srcTokenDecimal: tokenInputFrom?.decimals,
+        srcTokenSymbol: tokenInputFrom?.symbol,
+        value: inputFromSelect?.amount, // amount
+        vBridgeAddress: account, // address user
+        srcTokenAddress: tokenInputFrom?.address, // account address
+        signer,
+        abi: chainFrom?.bridgeABI,
+        gasPrice: chainFrom?.gasPrice,
+        isEstimate,
+      };
+      console.log('🚀 ~ params: verse_to_oasys', params);
+      rs = await bridgeService.bridgeWithdrawTo(params);
+    } else if (oasys_bridge_type === 'oasys_to_verse') {
+      console.log('🚀 ~ bridgeSend ~ oasys_bridge_type:');
     } else {
-      // chainFrom.type === 'verse-chain'
-      if (chainTo.type === 'external-chain') {
-        // verse-chain => external-chain
-        const params = {
-          contractAddress: chainFrom?.bridgeContract,
-          contractProvider: provider,
-          account,
-          srcTokenDecimal: tokenInputFrom?.decimals,
-          srcTokenSymbol: tokenInputFrom?.symbol,
-          value: inputFromSelect?.amount, // amount
-          vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
-          srcTokenAddress: tokenInputFrom?.address, // account address
-          signer,
-          abi: chainFrom?.bridgeABI,
-          gasPrice: chainFrom?.gasPrice,
-          isEstimate,
-        };
-        console.log('🚀 ~ params:  // verse-chain => external-chain', params);
-        rs = await bridgeService.bridgeWithdrawTo(params);
+      // old logic
+      if (chainFrom.type === 'external-chain') {
+        if (chainTo.type === 'external-chain') {
+          throw new Error('Not support');
+        } else {
+          // chainTo.type === 'verse-chain'
+          // external-chain => verse-chain
+          const params = {
+            contractAddress: chainFrom?.bridgeContract, // contract token
+            contractProvider: provider, // contract provider
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+            srcTokenAddress: tokenInputFrom?.address,
+            //desChainId: chainTo?.chain_id_decimals,
+            signer,
+            slippage: 100000,
+            abi: chainFrom?.bridgeABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+          };
+          console.log('🚀 ~ params:// external-chain => verse-chain', params);
+          rs = await bridgeService.bridgeSend(params);
+        }
       } else {
-        // verse-chain => verse-chain
-        const params = {
-          contractAddress: chainFrom?.bridgeContract,
-          contractProvider: provider,
-          account,
-          srcTokenDecimal: tokenInputFrom?.decimals,
-          srcTokenSymbol: tokenInputFrom?.symbol,
-          value: inputFromSelect?.amount, // amount
-          vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
-          srcTokenAddress: tokenInputFrom?.address, // account address
-          signer,
-          abi: chainFrom?.bridgeABI,
-          gasPrice: chainFrom?.gasPrice,
-          isEstimate,
-        };
-        console.log('🚀 ~ params: // verse-chain => verse-chain', params);
-        rs = await bridgeService.bridgeWithdrawTo(params);
+        // chainFrom.type === 'verse-chain'
+        if (chainTo.type === 'external-chain') {
+          // verse-chain => external-chain
+          const params = {
+            contractAddress: chainFrom?.bridgeContract,
+            contractProvider: provider,
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            srcTokenSymbol: tokenInputFrom?.symbol,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+            srcTokenAddress: tokenInputFrom?.address, // account address
+            signer,
+            abi: chainFrom?.bridgeABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+          };
+          console.log('🚀 ~ params:  // verse-chain => external-chain', params);
+          rs = await bridgeService.bridgeWithdrawTo(params);
+        } else {
+          // verse-chain => verse-chain
+          const params = {
+            contractAddress: chainFrom?.bridgeContract,
+            contractProvider: provider,
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            srcTokenSymbol: tokenInputFrom?.symbol,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+            srcTokenAddress: tokenInputFrom?.address, // account address
+            signer,
+            abi: chainFrom?.bridgeABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+          };
+          console.log('🚀 ~ params: // verse-chain => verse-chain', params);
+          rs = await bridgeService.bridgeWithdrawTo(params);
+        }
       }
     }
 
