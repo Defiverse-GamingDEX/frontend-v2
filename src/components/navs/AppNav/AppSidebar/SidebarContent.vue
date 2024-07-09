@@ -121,14 +121,14 @@ watch(blockNumber, async () => {
       >
         {{ link.label }}
       </div>
-      <div class="side-bar-link">
+      <!-- <div class="side-bar-link">
         <a
           href="https://app.tealswap.com/bridge"
           class="border-white dark:border-gray-900 desktop-link-item-custom"
           target="_blank"
           >Bridge</a
         >
-      </div>
+      </div> -->
     </div>
 
     <div class="grid mt-5 text-sm grid-col-1">

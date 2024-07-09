@@ -41,12 +41,12 @@ function isActive(page: string): boolean {
     >
       {{ $t(i.text) }}
     </DesktopLinkItem>
-    <a
+    <!-- <a
       href="https://app.tealswap.com/bridge"
       class="border-white dark:border-gray-900 desktop-link-item-custom"
       target="_blank"
       >Bridge</a
-    >
+    > -->
   </div>
 </template>
 
