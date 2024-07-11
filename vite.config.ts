@@ -1,19 +1,19 @@
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+import analyze from 'rollup-plugin-analyzer';
+import rollupPolyfillNode from 'rollup-plugin-polyfill-node';
+import { visualizer } from 'rollup-plugin-visualizer';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
+import { fileURLToPath } from 'url';
 import { loadEnv, Plugin } from 'vite';
-import { defineConfig } from 'vitest/config';
-import { version as pkgVersion } from './package.json';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
-import rollupPolyfillNode from 'rollup-plugin-polyfill-node';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import type { ViteSentryPluginOptions } from 'vite-plugin-sentry';
 import viteSentry from 'vite-plugin-sentry';
-import analyze from 'rollup-plugin-analyzer';
-import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig } from 'vitest/config';
+import { version as pkgVersion } from './package.json';
 
 export default defineConfig(({ mode }) => {
   const envConfig = loadEnv(mode, process.cwd());
@@ -126,7 +126,6 @@ export default defineConfig(({ mode }) => {
         // Allows to import tailwind.config.js from useTailwind.ts
         // Check: https://github.com/tailwindlabs/tailwindcss.com/issues/765
         include: ['tailwind.config.js', 'node_modules/**'],
-        transformMixedEsModules: true, // Enable @walletconnect/web3-provider which has some code in CommonJS
       },
     },
     test: {

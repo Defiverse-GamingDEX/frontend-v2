@@ -1,0 +1,86 @@
+{
+  "key": "248",
+  "chainId": 248,
+  "chainName": "Oasys",
+  "name": "Oasys Mainnet",
+  "shortName": "Oasys",
+  "slug": "oasys",
+  "network": "oasys",
+  "unknown": false,
+  "rpc": "https://oasys.blockpi.network/v1/rpc/public",
+  "ws": "wss://oasys.blockpi.network/v1/rpc/public",
+  "blockTime": 13,
+  "explorer": "https://explorer.oasys.games",
+  "explorerName": "The Oasys Explorer",
+  "subgraph": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [
+      "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse"
+    ],
+    "aave": "",
+    "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/defiverse",
+    "blocks": ""
+  },
+  "supportsEIP1559": false,
+  "supportsElementPools": false,
+  "nativeAsset": {
+    "name": "OASYS",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "OAS",
+    "decimals": 18,
+    "deeplinkId": "oas",
+    "logoURI": "tokens/oas.png",
+    "minTransactionBuffer": "0.05"
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "",
+    "authorizer": "",
+    "vault": "",
+    "weightedPoolFactory": "",
+    "stablePoolFactory": "",
+    "weth": "",
+    "rETH": "",
+    "stMATIC": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "",
+    "batchRelayer": "",
+    "batchRelayerV4": "0x1a58897Ab366082028ced3740900ecBD765Af738",
+    "gaugeFactory": "",
+    "balancerMinter": "",
+    "gaugeController": "",
+    "tokenAdmin": "",
+    "veBAL": "",
+    "veDelegationProxy": "",
+    "veBALHelpers": "",
+    "feeDistributor": "",
+    "feeDistributorDeprecated": "",
+    "faucet": ""
+  },
+  "keys": {
+    "infura": "",
+    "alchemy": ""
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 5,
+    "weight": 0
+  }
+}

@@ -73,7 +73,8 @@
     "@vitest/coverage-c8": "^0.25.3",
     "@vue/test-utils": "^2.2.7",
     "@vueuse/core": "^4.3.4",
-    "@walletconnect/web3-provider": "^1.5.2",
+    "@walletconnect/ethereum-provider": "^2.10.2",
+    "@walletconnect/modal": "^2.6.2",
     "animejs": "^3.2.1",
     "autoprefixer": "^10.4.13",
     "axios": "0.21.2",
@@ -157,9 +158,13 @@
   "license": "MIT",
   "repository": "balancer-labs/frontend-v2",
   "dependencies": {
-    "vue-awesome-paginate": "^1.1.46",
     "crypto-js": "^4.2.0",
     "mitt": "^3.0.1",
-    "singularity-init": "^1.0.3"
+    "singularity-init": "^1.0.3",
+    "uuid": "^10.0.0",
+    "vue-awesome-paginate": "^1.1.46"
+  },
+  "resolutions": {
+    "clipboardy": "3.0.0"
   }
 }

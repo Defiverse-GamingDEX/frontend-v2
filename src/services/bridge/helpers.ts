@@ -7,7 +7,12 @@ export async function switchToAppNetwork(
   networkBridge
 ) {
   const hexChainId = networkBridge?.chain_id;
+  console.log('🚀 ~ hexChainId:', hexChainId);
   try {
+    console.log('🚀 ~ provider:', provider);
+    if (provider?.isWalletConnect) {
+      return importNetworkDetailsToWallet(provider, networkBridge);
+    }
     if (provider.request) {
       await provider.request({
         method: 'wallet_switchEthereumChain',
