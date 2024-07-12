@@ -400,6 +400,7 @@ async function bridgeSend(
   inputFromSelect,
   inputToSelect,
   account,
+  anotherWalletAddress,
   signer,
   provider,
   isEstimate = false,
@@ -428,7 +429,7 @@ async function bridgeSend(
         srcTokenDecimal: tokenInputFrom?.decimals,
         srcTokenSymbol: tokenInputFrom?.symbol,
         value: inputFromSelect?.amount, // amount
-        vBridgeAddress: account, // address user
+        vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // address user
         srcTokenAddress: tokenInputFrom?.address, // account address
         signer,
         abi: chainFrom?.bridgeABI,
@@ -447,7 +448,7 @@ async function bridgeSend(
           account,
           srcTokenDecimal: tokenInputFrom?.decimals,
           value: inputFromSelect?.amount, // amount
-          receiveAddress: account, // address user
+          receiveAddress: anotherWalletAddress ? anotherWalletAddress : account, // address user
           signer,
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
@@ -465,7 +466,7 @@ async function bridgeSend(
           value: inputFromSelect?.amount, // amount
           srcTokenAddress: tokenInputFrom?.address, // account address
           desTokenAddress: tokenInputTo?.address,
-          receiveAddress: account, // address user
+          receiveAddress: anotherWalletAddress ? anotherWalletAddress : account, // address user
           signer,
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,

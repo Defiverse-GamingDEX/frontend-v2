@@ -615,6 +615,7 @@ async function handleTransferButton() {
       inputFromSelect.value,
       inputToSelect.value,
       account.value,
+      anotherWalletAddress.value,
       signer,
       provider,
       false,
