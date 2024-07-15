@@ -39,7 +39,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     name: 'Polygon',
     gasPrice: null,
     explorer: 'https://polygonscan.com',
-    rpc: 'https://polygon.drpc.org',
+    rpc: 'https://polygon.rpc.subquery.network/public',
     bridgeContract: '0x88DCDC47D2f83a99CF0000FDF667A468bB958a78', //cBridge
     bridgeABI: cBridgeABI,
     type: 'external-chain',
@@ -63,6 +63,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     rpc: 'https://oasys.blockpi.network/v1/rpc/public',
     bridgeContract: '', // get from router data API
     bridgeABI: IL1StandardBridge,
+    bridgeABIExternal: cBridgeABI,
     type: 'oasys_to_verse', // will update from router data API
     isOnlyDefiBridge: false,
     //tokens: BRIDGE_OASYS_TOKENS_MAINNET,

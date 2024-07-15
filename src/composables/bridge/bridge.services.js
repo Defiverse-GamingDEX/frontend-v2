@@ -166,7 +166,7 @@ const bridgeSend = async params => {
   //   overwrite.value = decimals_value;
   // }
   console.log(
-    '🚀 ~ bridgeWithdrawTo ~ vBridgeAddress, srcTokenAddress, decimals_value, desChainId, nonce, slippage',
+    '🚀 ~ bridgeSend ~ vBridgeAddress, srcTokenAddress, decimals_value, desChainId, nonce, slippage',
     vBridgeAddress,
     srcTokenAddress,
     decimals_value,
@@ -196,6 +196,57 @@ const bridgeSend = async params => {
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
+
+// const bridgeSendNative = async params => {
+//   const {
+//     contractAddress, // contract token
+//     contractProvider, // contract provider
+//     account,
+//     srcTokenSymbol,
+//     srcTokenDecimal,
+//     value, // amount
+//     vBridgeAddress,
+//     srcTokenAddress, // account address
+//     signer,
+//     slippage,
+//     abi,
+//     gasPrice,
+//     isEstimate,
+//   } = params;
+
+//   const nonce = await contractProvider.getTransactionCount(account, 'latest');
+//   const desChainId = 248;
+//   let decimals_value = BigNumber(value)
+//     .times(10 ** srcTokenDecimal)
+//     .toFixed(0);
+//   let overwrite = { from: account, value: decimals_value };
+//   // if (srcTokenSymbol === 'OAS') {
+//   //   overwrite.value = decimals_value;
+//   // }
+//   console.log(
+//     '🚀 ~ bridgeSendNative ~ vBridgeAddress, srcTokenAddress, decimals_value, desChainId, nonce, slippage',
+//     vBridgeAddress,
+//     srcTokenAddress,
+//     decimals_value,
+//     desChainId,
+//     nonce,
+//     slippage
+//   );
+//   const rs = await _sendRawTx(
+//     contractAddress,
+//     contractProvider,
+//     'sendNative',
+//     [vBridgeAddress, decimals_value, desChainId, nonce, slippage],
+//     overwrite,
+//     signer,
+//     abi,
+//     gasPrice,
+//     isEstimate
+//   );
+
+//   console.log(rs, 'bridgeSendNative'); // eslint-disable-line no-console
+//   return { tx: rs, nonce };
+// };
 
 const bridgeWithdrawTo = async params => {
   const {
@@ -347,44 +398,10 @@ const bridgeDepositETHTo = async params => {
   console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
-// const bridgeSendNative = async params => {
-//   const {
-//     contractAddress, // contract token
-//     contractProvider, // contract provider
-//     tokenAddress,
-//     tokenDecimal,
-//     value, // amount
-//     account, // account address
-//     chainId,
-//     signer,
-//     slippage,
-//     abi,
-//     gasPrice,
-//   } = params;
-
-//   //const nonce = await contractProvider.getTransactionCount(account, 'latest');
-//   const nonce = Date.now(); // nonce is currentTimeStamp
-//   console.log(nonce, 'nonce');
-//   let decimals = new BigNumber(10).pow(tokenDecimal).toFixed();
-//   let decimals_value = BigNumber(value).times(decimals).toFixed(0);
-//   let overwrite = { from: account };
-//   const rs = await _sendRawTx(
-//     contractAddress,
-//     contractProvider,
-//     'sendNative',
-//     [account, decimals_value, chainId, nonce, slippage],
-//     overwrite,
-//     signer,
-//     abi,
-//     gasPrice
-//   );
-
-//   console.log(rs, 'bridgeSendNative'); // eslint-disable-line no-console
-//   return rs;
-// };
 
 export default {
   bridgeSend,
+  //bridgeSendNative,
   bridgeWithdrawTo,
   bridgeDepositERC20To,
   bridgeDepositETHTo,

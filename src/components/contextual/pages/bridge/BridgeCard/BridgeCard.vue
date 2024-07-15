@@ -266,7 +266,7 @@ function initMinAmountRoute() {
       ) {
         minAmountRoute.value = item.min_amount;
         oasys_bridge_type.value = item.type;
-        li_bridge_address.value = item.l1_bridge;
+        li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
         console.log(
           '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
           oasys_bridge_type.value

@@ -420,7 +420,51 @@ async function bridgeSend(
     );
 
     let rs = null;
-    if (oasys_bridge_type === 'verse_to_oasys') {
+    if (oasys_bridge_type === 'external_to_oasys') {
+      // native case => oasys -> NOT NOW
+      // token case only
+      const params = {
+        contractAddress: chainFrom?.bridgeContract, // contract token
+        contractProvider: provider, // contract provider
+        account,
+        srcTokenDecimal: tokenInputFrom?.decimals,
+        value: inputFromSelect?.amount, // amount
+        vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+        srcTokenAddress: tokenInputFrom?.address,
+        //desChainId: chainTo?.chain_id_decimals, // hard in service
+        signer,
+        slippage: 100000,
+        abi: chainFrom?.bridgeABI,
+        gasPrice: chainFrom?.gasPrice,
+        isEstimate,
+      };
+      console.log('🚀 ~ params:// external_to_oasys', params);
+      rs = await bridgeService.bridgeSend(params);
+    } else if (oasys_bridge_type === 'oasys_to_external') {
+      if (tokenInputFrom.symbol === 'OAS') {
+        // native case OAS
+        // NOT support now
+      } else {
+        // token case
+        const params = {
+          contractAddress: l1_bridge_address, // contract token
+          contractProvider: provider, // contract provider
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+          srcTokenAddress: tokenInputFrom?.address,
+          //desChainId: chainTo?.chain_id_decimals, // hard in service
+          signer,
+          slippage: 100000,
+          abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
+          gasPrice: chainFrom?.gasPrice,
+          isEstimate,
+        };
+        console.log('🚀 ~ params:// oasys_to_external - case token', params);
+        rs = await bridgeService.bridgeSend(params);
+      }
+    } else if (oasys_bridge_type === 'verse_to_oasys') {
       // verse => oasys
       const params = {
         contractAddress: chainFrom?.bridgeContract,
