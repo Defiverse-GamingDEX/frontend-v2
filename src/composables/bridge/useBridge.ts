@@ -431,7 +431,7 @@ async function bridgeSend(
         value: inputFromSelect?.amount, // amount
         vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
         srcTokenAddress: tokenInputFrom?.address,
-        //desChainId: chainTo?.chain_id_decimals, // hard in service
+        desChainId: 248, // to OASYS
         signer,
         slippage: 100000,
         abi: chainFrom?.bridgeABI,
@@ -454,7 +454,7 @@ async function bridgeSend(
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
           srcTokenAddress: tokenInputFrom?.address,
-          //desChainId: chainTo?.chain_id_decimals, // hard in service
+          desChainId: chainTo?.chain_id_decimals,
           signer,
           slippage: 100000,
           abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
@@ -535,7 +535,7 @@ async function bridgeSend(
             value: inputFromSelect?.amount, // amount
             vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
             srcTokenAddress: tokenInputFrom?.address,
-            //desChainId: chainTo?.chain_id_decimals,
+            desChainId: 248,
             signer,
             slippage: 100000,
             abi: chainFrom?.bridgeABI,
