@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChargeGasComponent from '@/components/contextual/pages/bridge/BridgeCard/ChargeGasComponent.vue';
 import bridgeApi from '@/composables/bridge/bridge.price.api';
 import { useBridge } from '@/composables/bridge/useBridge';
 import useBreakpoints from '@/composables/useBreakpoints';
@@ -789,12 +790,12 @@ onBeforeMount(async () => {
           <div class="cex-warning error">
             *The exchange's deposit address is invalid. Please be careful.
           </div>
-          <!-- <div class="charge-gas-container">
+          <div class="charge-gas-container">
             <ChargeGasComponent
               :isChargeGas="isChargeGas"
               @update:change-gas="handleChargeGas($event)"
             />
-          </div> -->
+          </div>
         </div>
         <div v-if="estimateInfo && !estimateInfo.err" class="bridge-info">
           <div class="info">
