@@ -786,6 +786,9 @@ onBeforeMount(async () => {
               </BalTextInput>
             </div>
           </div>
+          <div class="cex-warning error">
+            *The exchange's deposit address is invalid. Please be careful.
+          </div>
           <!-- <div class="charge-gas-container">
             <ChargeGasComponent
               :isChargeGas="isChargeGas"
@@ -968,7 +971,13 @@ onBeforeMount(async () => {
       }
     }
   }
-
+  .cex-warning {
+    font-weight: 600;
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    color: rgb(239 68 68);
+  }
   .bridge-form {
     .label {
       color: #0a425c;
