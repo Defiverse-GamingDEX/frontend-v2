@@ -2,12 +2,12 @@
 import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
 import { UseSwapping } from '@/composables/swap/useSwapping';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
 import useVeBal from '@/composables/useVeBAL';
 import { bnum } from '@/lib/utils';
+import { useTokens } from '@/providers/tokens.provider';
 
-import SwapPairToggle from './SwapPairToggle.vue';
 import SwapAntiTraderWarningModal from '@/components/modals/SwapAntiTraderWarningModal.vue';
+import SwapPairToggle from './SwapPairToggle.vue';
 
 import useWeb3 from '@/services/web3/useWeb3';
 
@@ -188,6 +188,7 @@ function preventUpdatesOnTyping(callback: () => void) {
 }
 
 function handleInAmountChange(value: string): void {
+  console.log('🚀 ~ handleInAmountChange ~ value:', value);
   emit('update:tokenInAmount', value);
   console.log(value, 'value');
   preventUpdatesOnTyping(() => {
