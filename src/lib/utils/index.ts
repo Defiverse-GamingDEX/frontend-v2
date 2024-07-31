@@ -198,3 +198,21 @@ export async function trackLoading<T>(
   toggle.value = false;
   return result;
 }
+export function formatNumberToCurrency(number, decimalPlaces = 6) {
+  // Split the integer and fractional parts
+  let [integerPart, fractionalPart] = number.toString().split('.');
+
+  // Format the integer part with commas as thousand separators
+  const formattedInteger = new Intl.NumberFormat('en-US').format(integerPart);
+
+  // If there's no fractional part, return the formatted integer part only
+  if (!fractionalPart) {
+    return formattedInteger;
+  }
+
+  // Limit the fractional part to a maximum of the specified decimal places without trailing zeros
+  fractionalPart = fractionalPart.slice(0, decimalPlaces);
+
+  // Combine the formatted integer part and fractional part, removing any trailing zeros
+  return `${formattedInteger}.${fractionalPart}`;
+}

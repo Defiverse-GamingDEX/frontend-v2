@@ -6,6 +6,7 @@ import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import { formatNumberToCurrency } from '@/lib/utils/index';
 import { isValidAddressV2 } from '@/lib/utils/validations';
 import { useUserSettings } from '@/providers/user-settings.provider';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
@@ -17,7 +18,7 @@ import { computed } from 'vue';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
-// // COMPOSABLES
+// COMPOSABLES
 const {
   account,
   getSigner,
@@ -448,10 +449,25 @@ async function handleInputFromChange(inputSelect) {
   await getBalanceInputFrom();
 }
 function mapEstimateInfo(rs) {
+  console.log('🚀 ~ mapEstimateInfo ~ rs:', rs);
+  const amount_in_show = BigNumber(rs.amount_in)
+    .div(Math.pow(10, rs.src_token_decimals))
+    .toString();
+  const amount_out_show = BigNumber(rs.amount_out)
+    .div(Math.pow(10, rs.dst_token_decimals))
+    .toString();
   return {
     ...rs,
+    amount_in_show: amount_in_show,
+    amount_out_show: amount_out_show,
+    fee1_show: BigNumber(rs.fee1)
+      .div(Math.pow(10, rs.fee1_decimals))
+      .toString(),
+    fee2_show: BigNumber(rs.fee2)
+      .div(Math.pow(10, rs.fee2_decimals))
+      .toString(),
     bridge_rate: truncateDecimal(
-      BigNumber(rs.amount_out).div(rs.amount_in).toString(),
+      BigNumber(amount_out_show).div(amount_in_show).toString(),
       2
     ),
   };
@@ -479,12 +495,13 @@ async function getEstimateFeeRoutes() {
 
       if (rs) {
         estimateInfo.value = mapEstimateInfo(rs);
+        console.log(
+          '🚀 ~ getEstimateFeeRoutes ~ estimateInfo.value:',
+          estimateInfo.value
+        );
 
         // update InputTo amount
-        inputToSelect.value.amount = covertUnitShow(
-          rs.amount_out,
-          inputToSelect.value.decimals
-        );
+        inputToSelect.value.amount = estimateInfo.value?.amount_out_show || 0;
       }
     }
   } catch (error) {
@@ -504,10 +521,8 @@ async function getGasFee() {
       provider,
       isEstimate
     );
-    console.log('🚀 ~ getGasFee ~ rs:', rs);
     const gasPrice = 10000000000000;
     const gasLimit = rs?.tx || 250000;
-    console.log('🚀 ~ getGasFee ~ gasLimit:', gasLimit);
     networkFee.value = Number(
       BigNumber(gasPrice)
         .times(gasLimit)
@@ -562,7 +577,6 @@ function getDstByChainIdAndTokenAddress(routes, srcChainId, tokenAddress) {
 
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
-  console.log('🚀 ~ checkInputToChange ~ inputFrom:', inputFrom);
 
   dstBE.value = getDstByChainIdAndTokenAddress(
     routesBE.value,
@@ -643,8 +657,6 @@ async function handleTransferButton() {
       li_bridge_address.value
     );
 
-    console.log(tx, 'tx=>handleTransferButton');
-    console.log('🚀 ~ handleTransferButton ~ nonce:', nonce);
     // const chainNameInput = chainFrom.value.name;
     // const chainNameOutput = chainTo.value.name;
     const summary = `Bridge success!`;
@@ -849,9 +861,7 @@ onBeforeMount(async () => {
               </BalTooltip>  -->
             </div>
             <div class="value">
-              {{
-                covertUnitShow(estimateInfo?.fee1, inputFromSelect?.decimals)
-              }}
+              {{ formatNumberToCurrency(estimateInfo?.fee1_show) }}
               {{ inputFromSelect?.tokenSymbol }}
             </div>
           </div>
@@ -870,21 +880,14 @@ onBeforeMount(async () => {
               </BalTooltip> -->
             </div>
             <div class="w-40 value">
-              {{
-                covertUnitShow(estimateInfo?.fee2, inputFromSelect?.decimals)
-              }}
+              {{ formatNumberToCurrency(estimateInfo?.fee2_show) }}
               {{ inputFromSelect?.tokenSymbol }}
             </div>
           </div>
           <div class="info">
             <div class="title">You will receive</div>
             <div class="w-40 value">
-              {{
-                covertUnitShow(
-                  estimateInfo?.amount_out,
-                  inputFromSelect?.decimals
-                )
-              }}
+              {{ formatNumberToCurrency(estimateInfo?.amount_out_show) }}
               {{ inputFromSelect?.tokenSymbol }}
             </div>
           </div>
