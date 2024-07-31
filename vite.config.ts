@@ -113,7 +113,13 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       sourcemap: false, // false to fix heap memory issue when build
-      minify: false, // TODO for check bug
+      minify: 'terser', // <-- add
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
       rollupOptions: {
         plugins: [
           envConfig.VITE_BUILD_ANALIZE ? analyze({ summaryOnly: false }) : null,
