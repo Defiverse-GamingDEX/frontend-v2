@@ -169,12 +169,32 @@ function groupByChainId(arr) {
   const result = Object.values(groupedByChainId);
   return result;
 }
+function reorderTokens(tokens, symbolToMove) {
+  const index = tokens.findIndex(token => token.symbol === symbolToMove);
+
+  if (index > 0) {
+    const [token] = tokens.splice(index, 1);
+
+    tokens.unshift(token);
+  }
+
+  return tokens;
+}
+function reOrderTokensList(data) {
+  const result = data?.map(item => {
+    return {
+      ...item,
+      tokens: reorderTokens(item.tokens, 'OAS'),
+    };
+  });
+  return result;
+}
 function initSrcBE() {
   if (routesBE.value?.length > 0) {
     const data = routesBE.value;
     const srcList = data?.map(item => item.src);
-    const result = groupByChainId(srcList);
-    //console.log('🚀 ~ initSrcBE ~ result:', result);
+    let result = groupByChainId(srcList);
+    result = reOrderTokensList(result);
     return result || [];
   }
 }
