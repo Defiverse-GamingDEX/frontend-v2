@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import HistoryRouteLineComponent from '@/components/contextual/pages/bridge/HistoryRouteLineComponent.vue';
+import { useBridge } from '@/composables/bridge/useBridge';
 import { format, fromUnixTime } from 'date-fns';
+import ChargeGasIcon from './ChargeGasIcon.vue';
 // PROPS
 type Props = {
   txList: Array<any>;
 };
+const { truncateDecimal } = useBridge();
 const props = withDefaults(defineProps<Props>(), {
   txList: () => [],
 });
@@ -99,6 +102,13 @@ const props = withDefaults(defineProps<Props>(), {
             </div>
             <div class="token-value">
               {{ tx?.tokenOut?.amount }} {{ tx?.tokenOut?.symbol }}
+              <span v-if="tx?.gas_amount_receive > 0">,</span>
+              <div v-if="tx?.gas_amount_receive > 0" class="gas-container">
+                <div v-if="tx?.gas_option_enabled" class="gas-convert-icon">
+                  <ChargeGasIcon />
+                </div>
+                {{ truncateDecimal(tx?.gas_amount_receive?.toString(), 2) }} OAS
+              </div>
             </div>
             <div class="token-chain">
               <span class="bold"> From {{ tx?.tokenOut?.chainName }}</span>
@@ -240,6 +250,20 @@ const props = withDefaults(defineProps<Props>(), {
       line-height: 22px;
       color: #808080;
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .gas-container {
+        display: flex;
+        align-items: center;
+        margin-left: 16px;
+        :deep() {
+          .gas-convert-icon {
+            color: #16a34a;
+            margin-right: 8px;
+          }
+        }
+      }
     }
     .token-chain {
       font-size: 12px;

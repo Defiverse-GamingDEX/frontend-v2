@@ -4,6 +4,7 @@ import bridgeApi from '@/composables/bridge/bridge.price.api';
 import { useBridge } from '@/composables/bridge/useBridge';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useWeb3 from '@/services/web3/useWeb3';
+
 /**
  * STATES
  */

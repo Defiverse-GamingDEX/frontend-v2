@@ -37,6 +37,13 @@ async function mapTxList(data) {
     const item = data[i];
     let itemPush = {
       date: item?.src_timestamp,
+      convert_gas_amount: BigNumber(item?.convert_gas_amount)
+        .div(10 ** item?.src_token?.decimals)
+        .toFixed(),
+      gas_amount_receive: BigNumber(item?.gas_amount_receive)
+        .div(10 ** 18)
+        .toFixed(), // hard decimals 18
+      gas_option_enabled: item?.gas_option_enabled,
       tokenIn: {
         address: item?.src_token?.address,
         symbol: item?.src_token?.symbol,
@@ -67,6 +74,7 @@ async function mapTxList(data) {
 
     txList.value.push(itemPush);
   }
+  console.log('🚀 ~ mapTxList ~ txList.value:', txList.value);
 }
 const getHistory = async () => {
   try {

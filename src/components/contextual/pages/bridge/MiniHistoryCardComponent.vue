@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useBridge } from '@/composables/bridge/useBridge';
 import { format, fromUnixTime } from 'date-fns';
-
+import ChargeGasIcon from './ChargeGasIcon.vue';
 // PROPS
 type Props = {
   tx: Object<any>;
@@ -52,6 +52,15 @@ const { truncateDecimal } = useBridge();
             {{ tx?.tokenOut?.symbol }} on {{ tx?.tokenOut?.chainName }}
           </div>
         </div>
+        <div v-if="tx?.gas_amount_receive > 0" class="token-info">
+          <div class="amount">
+            <div v-if="tx?.gas_option_enabled" class="gas-convert-icon">
+              <ChargeGasIcon />
+            </div>
+            {{ truncateDecimal(tx?.gas_amount_receive?.toString(), 2) }}
+          </div>
+          <div class="chain">OAS on {{ tx?.tokenOut?.chainName }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -67,7 +76,8 @@ const { truncateDecimal } = useBridge();
     line-height: 17px;
     font-weight: 500;
     display: flex;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
+    align-items: center;
     .time {
       margin-left: auto;
     }
@@ -101,6 +111,14 @@ const { truncateDecimal } = useBridge();
           font-weight: bold;
           line-height: 22px;
           margin-bottom: 2px;
+          display: flex;
+          align-items: center;
+          :deep() {
+            .gas-convert-icon {
+              color: #16a34a;
+              margin-right: 8px;
+            }
+          }
         }
         .chain {
           color: #808080;

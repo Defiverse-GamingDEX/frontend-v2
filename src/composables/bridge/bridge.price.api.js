@@ -32,7 +32,10 @@ const postBridgeRequest = async params => {
   let data = await axios.post(`${domain}/v1/bridge/request/create`, params);
   return data?.data;
 };
-
+const postBridgeRequestV2 = async params => {
+  let data = await axios.post(`${domain}/v1/bridge/request/createv2`, params);
+  return data?.data;
+};
 // INTERNAL API - END
 export default {
   getRoutes,
@@ -40,4 +43,5 @@ export default {
   getHistoryByAddress,
   getRequestDetails,
   postBridgeRequest,
+  postBridgeRequestV2,
 };

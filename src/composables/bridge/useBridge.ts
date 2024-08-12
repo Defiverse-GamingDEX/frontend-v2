@@ -183,6 +183,13 @@ const mapTxHistory = data => {
       status: data.status,
       statusName: getStatusName(data.status),
       date: data.src_timestamp,
+      convert_gas_amount: BigNumber(data?.convert_gas_amount)
+        .div(10 ** data?.src_token?.decimals)
+        .toFixed(),
+      gas_amount_receive: BigNumber(data?.gas_amount_receive)
+        .div(10 ** 18)
+        .toFixed(), // hard decimals 18
+      gas_option_enabled: data.gas_option_enabled,
       tokenIn: {
         address: data.src_token?.address,
         symbol: data.src_token?.symbol,

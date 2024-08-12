@@ -4,6 +4,7 @@ import { useBridge } from '@/composables/bridge/useBridge';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useWeb3 from '@/services/web3/useWeb3';
 import { format, fromUnixTime } from 'date-fns';
+import ChargeGasIcon from './ChargeGasIcon.vue';
 const { truncateDecimal } = useBridge();
 /**
  * STATES
@@ -44,6 +45,7 @@ const getLastTx = async () => {
     };
     const rs = await bridgeApi.getHistoryByAddress(params);
     lastTx.value = mapTxHistory(rs?.items[0] || null);
+    console.log('🚀 ~ getLastTx ~ lastTx.value:', lastTx.value);
   } catch (err) {
     console.log('🚀 ~ getLastTx ~ err:', err);
   }
@@ -98,7 +100,8 @@ onUnmounted(() => {
                 error: lastTx?.status?.toUpperCase() === 'ERROR',
               },
             ]"
-            >{{ lastTx?.statusName }}
+          >
+            {{ lastTx?.statusName }}
           </span>
         </div>
         <div class="date">
@@ -231,12 +234,20 @@ onUnmounted(() => {
               {{ truncateDecimal(lastTx?.tokenOut?.amount?.toString(), 6) }}
               {{ lastTx?.tokenOut?.symbol }}
             </div>
+            <div v-if="lastTx?.gas_amount_receive > 0" class="token-value">
+              <div v-if="lastTx?.gas_option_enabled" class="gas-convert-icon">
+                <ChargeGasIcon></ChargeGasIcon>
+              </div>
+              {{ truncateDecimal(lastTx?.gas_amount_receive?.toString(), 2) }}
+              OAS
+            </div>
             <div class="token-chain">
               On <span class="bold"> {{ lastTx?.tokenOut?.chainName }} </span>
             </div>
           </div>
         </div>
       </div>
+
       <div v-else class="no-data">
         <BalBlankSlate class="justify-center items-center mt-4 h-40 no-data">
           <BalIcon name="bar-chart" />
@@ -269,7 +280,10 @@ onUnmounted(() => {
     font-weight: 500;
     margin-bottom: 16px;
     color: #0a425c;
+    display: flex;
+    align-items: center;
     .status {
+      margin-left: 4px;
       text-transform: capitalize;
       font-size: 14px;
       font-weight: bold;
@@ -308,7 +322,12 @@ onUnmounted(() => {
       }
     }
   }
-
+  :deep() {
+    .gas-convert-icon {
+      color: #16a34a;
+      margin-right: 8px;
+    }
+  }
   .date {
     font-size: 14px;
     line-height: 17px;
@@ -340,6 +359,9 @@ onUnmounted(() => {
         font-weight: bold;
         margin-bottom: 6px;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .token-chain {
         font-size: 12px;

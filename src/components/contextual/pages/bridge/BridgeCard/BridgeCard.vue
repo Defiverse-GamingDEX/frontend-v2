@@ -8,7 +8,12 @@ import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { formatNumberToCurrency } from '@/lib/utils/index';
-import { isValidAddressV2 } from '@/lib/utils/validations';
+import {
+  isGreaterThanOrEqualTo,
+  isLessThanOrEqualTo,
+  isPositive,
+  isValidAddressV2,
+} from '@/lib/utils/validations';
 import { useUserSettings } from '@/providers/user-settings.provider';
 import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -16,10 +21,12 @@ import { isAddress } from '@ethersproject/address';
 import BigNumber from 'bignumber.js';
 import { cloneDeep, debounce } from 'lodash';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
 // COMPOSABLES
+const { t } = useI18n();
 const {
   account,
   getSigner,
@@ -88,7 +95,6 @@ const inputToSelect = ref({
   isOnlyDefiBridge: false,
 });
 const anotherWalletAddress = ref('');
-const isChargeGas = ref(false);
 const isAllowance = ref(false);
 const currentAllowance = ref(0);
 const isLoading = ref(false);
@@ -100,7 +106,11 @@ const tokenTo = ref({});
 const minAmountRoute = ref(0);
 const oasys_bridge_type = ref(0);
 const li_bridge_address = ref('');
-// // COMPUTED
+
+const gas_option_enabled = ref(false);
+const isChargeGas = ref(false);
+const convert_gas_amount = ref(0);
+// COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
     case 'xs':
@@ -111,7 +121,20 @@ const swapCardShadow = computed(() => {
       return 'xl';
   }
 });
+const covertInputRules = computed(() => {
+  const rules = [isPositive()];
+  rules.push(isGreaterThanOrEqualTo(0, t('mustBeMoreOrEqualTo', [0])));
+  rules.push(
+    isLessThanOrEqualTo(
+      inputFromSelect.value.amount,
+      t('mustBeLessOrEqualTo', [
+        `${inputFromSelect.value.tokenSymbol} amount input from`,
+      ])
+    )
+  );
 
+  return rules;
+});
 // WATCHS
 watch(
   () => account.value,
@@ -131,6 +154,16 @@ watch(
   () => inputFromSelect.value.chainId,
   async () => {
     verifyNetwork();
+  }
+);
+watch(
+  () => gas_option_enabled.value,
+  () => {
+    if (!gas_option_enabled.value) {
+      // reset value covert gas
+      isChargeGas.value = false;
+      convert_gas_amount.value = 0;
+    }
   }
 );
 watchEffect(() => {
@@ -270,25 +303,19 @@ function initMinAmountRoute() {
   ) {
     for (let i = 0; i < routesBE.value.length; i++) {
       const item = routesBE.value[i];
-      console.log('🚀 ~ initMinAmountRoute ~ item:', item);
-      console.log(item.src.chain_id, ' item.src.chain_id=>initMinAmountRoute');
-      console.log(item.dst.chain_id, ' item.dst.chain_id=>initMinAmountRoute');
-      console.log(
-        inputFromSelect.value.chainId,
-        ' inputFromSelect.value.chainId=>initMinAmountRoute'
-      );
-      console.log(
-        inputToSelect.value.chainId,
-        '  inputToSelect.value.chainId=>initMinAmountRoute'
-      );
+
       if (
         item.src.chain_id === inputFromSelect.value.chainId &&
         item.dst.chain_id === inputToSelect.value.chainId &&
         item.src.token_symbol === inputFromSelect.value.tokenSymbol
       ) {
+        console.log('🚀 ~ initMinAmountRoute ~ item:', item);
         minAmountRoute.value = item.min_amount;
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
+
+        gas_option_enabled.value = item.gas_option_enabled;
+
         console.log(
           '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
           oasys_bridge_type.value
@@ -467,6 +494,9 @@ function mapEstimateInfo(rs) {
     fee2_show: BigNumber(rs.fee2)
       .div(Math.pow(10, rs.fee2_decimals))
       .toString(),
+    gas_amount_receive_show: BigNumber(rs.gas_amount_receive)
+      .div(Math.pow(10, 18)) // hard decimals now
+      .toString(),
     bridge_rate: truncateDecimal(
       BigNumber(amount_out_show).div(amount_in_show).toString(),
       2
@@ -486,11 +516,15 @@ async function getEstimateFeeRoutes() {
       const amount = BigNumber(inputFromSelect.value.amount)
         .times(Math.pow(10, inputFromSelect.value.decimals))
         .toFixed(0);
+      const convert_amount = BigNumber(convert_gas_amount?.value)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0);
       const params = {
         src_token_address: inputFromSelect.value.tokenAddress,
         src_chain_id: inputFromSelect.value.chainId,
         dst_chain_id: inputToSelect.value.chainId,
         amount_in: amount,
+        convert_gas_amount: convert_amount,
       };
       const rs = await bridgeApi.getEstimateFee(params);
 
@@ -553,17 +587,28 @@ async function getEstimateFee() {
 async function handleInputToChange(inputSelect) {
   inputToSelect.value = inputSelect;
 
-  getEstimateFee();
   initMinAmountRoute();
+  getEstimateFee();
 }
 
 function handleWalletAddressChange(address) {
   anotherWalletAddress.value = address;
 }
-// function handleChargeGas(isChecked) {
-//   isChargeGas.value = isChecked;
-//   console.log(isChargeGas.value, 'isChargeGas.value');
-// }
+function handleChargeGas(isChecked) {
+  isChargeGas.value = isChecked;
+  if (!isChargeGas.value) {
+    convert_gas_amount.value = 0;
+  }
+  getEstimateFee();
+}
+const delayCovertAmountChange = debounce(async amount => {
+  handleCovertAmountChange(amount);
+}, 500);
+
+function handleCovertAmountChange(amount) {
+  convert_gas_amount.value = amount;
+  getEstimateFee();
+}
 function getDstByChainIdAndTokenAddress(routes, srcChainId, tokenAddress) {
   const dstList = routes
     .filter(
@@ -684,8 +729,13 @@ async function handleTransferButton() {
               .toFixed(0),
             nonce: nonce,
             src_tx_id: receipt?.transactionHash,
+            convert_gas_amount: BigNumber(convert_gas_amount.value)
+              .times(Math.pow(10, inputFromSelect.value.decimals))
+              .toFixed(0),
           };
-          const rsBE = await bridgeApi.postBridgeRequest(params);
+          console.log('🚀 ~ onTxConfirmed: ~ params:', params);
+          const rsBE = await bridgeApi.postBridgeRequestV2(params);
+          console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
           //await initData();
           await getBalanceInputFrom();
           isLoading.value = false;
@@ -822,11 +872,30 @@ onBeforeMount(async () => {
           <div class="cex-warning error">
             *The exchange's deposit address is invalid. Please be careful.
           </div>
-          <div class="charge-gas-container">
+          <div v-if="gas_option_enabled" class="charge-gas-container">
             <ChargeGasComponent
               :isChargeGas="isChargeGas"
               @update:change-gas="handleChargeGas($event)"
             />
+            <div v-if="isChargeGas" class="convert-gas-control">
+              <div class="convert-label">Convert gas amount:</div>
+              <BalTextInput
+                :modelValue="convert_gas_amount"
+                name="Covert gas amount"
+                :placeholder="'0.0'"
+                type="number-dot"
+                :decimalLimit="inputToSelect?.decimals"
+                validateOn="input"
+                autocomplete="off"
+                autocorrect="off"
+                step="any"
+                :rules="covertInputRules"
+                spellcheck="false"
+                v-bind="$attrs"
+                inputAlignRight
+                @update:model-value="delayCovertAmountChange($event)"
+              ></BalTextInput>
+            </div>
           </div>
         </div>
         <div v-if="estimateInfo && !estimateInfo.err" class="bridge-info">
@@ -883,6 +952,15 @@ onBeforeMount(async () => {
             <div class="w-40 value">
               {{ formatNumberToCurrency(estimateInfo?.fee2_show) }}
               {{ inputFromSelect?.tokenSymbol }}
+            </div>
+          </div>
+          <div v-if="isChargeGas" class="info">
+            <div class="title">Gas amount receive</div>
+            <div class="w-40 value">
+              {{
+                formatNumberToCurrency(estimateInfo?.gas_amount_receive_show)
+              }}
+              OAS
             </div>
           </div>
           <div class="info">
@@ -1030,8 +1108,31 @@ onBeforeMount(async () => {
       }
     }
   }
-  .charge-gas-container {
-    margin-top: 14px;
+  :deep() {
+    .charge-gas-container {
+      margin: 40px 0px;
+      .convert-gas-control {
+        .convert-label {
+          font-size: 14px;
+          line-height: 17px;
+          font-weight: medium;
+          color: #0a425c;
+          margin-bottom: 8px;
+        }
+        .input-group {
+          align-items: center;
+          padding: 0px;
+          > .h-10 {
+            height: auto;
+          }
+          .input {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            color: #808080;
+          }
+        }
+      }
+    }
   }
   .bridge-info {
     margin-top: 24px;
