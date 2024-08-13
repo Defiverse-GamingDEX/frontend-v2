@@ -16,7 +16,7 @@ import { Contract } from '@ethersproject/contracts';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-const VBRIDGE_CONTRACT_ADDRESS = '0xa5c4db36bd26426c186d170bf46165a937d9cad1';
+const VBRIDGE_CONTRACT_ADDRESS = '0x182663E7E9bDac92E373D660Ea47ddd91518773a';
 // real function - START - TODO
 function truncateDecimal(number, precision) {
   const [integerPart, fractionalPart] = number.toString().split('.');
