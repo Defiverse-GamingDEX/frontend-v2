@@ -34,11 +34,11 @@
       "logoURI": "tokens/WBTC_L.png"
     },
     {
-      "address": "0x9e1028f5f1d5ede59748ffcee5532509976840e0",
+      "address": "0x7275b8dbaf919fdda6ee6b36f12fd25c0f193502",
       "chainId": 16116,
       "name": "Bridged USDC (Celer)",
       "symbol": "USDC.e",
-      "decimals": 18,
+      "decimals": 6,
       "logoURI": "tokens/USDC_L.png"
     },
     {
