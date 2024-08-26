@@ -733,12 +733,39 @@ async function handleTransferButton() {
               .times(Math.pow(10, inputFromSelect.value.decimals))
               .toFixed(0),
           };
-          console.log('🚀 ~ onTxConfirmed: ~ params:', params);
-          const rsBE = await bridgeApi.postBridgeRequestV2(params);
-          console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
-          //await initData();
-          await getBalanceInputFrom();
-          isLoading.value = false;
+          // console.log('🚀 ~ onTxConfirmed: ~ params:', params);
+          // const rsBE = await bridgeApi.postBridgeRequestV2(params);
+          // console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
+          // //await initData();
+          // await getBalanceInputFrom();
+          // isLoading.value = false;
+
+          const maxRetries = 5;
+          let attempt = 0;
+          let retryDelay = 1000;
+          const attemptApiCall = async () => {
+            try {
+              const rsBE = await bridgeApi.postBridgeRequestV2(params);
+              console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
+              await getBalanceInputFrom();
+              isLoading.value = false;
+              return true;
+            } catch (error) {
+              console.error(`try ${attempt + 1} failed:`, error);
+              attempt++;
+              if (attempt < maxRetries) {
+                // delay retry
+                setTimeout(attemptApiCall, retryDelay);
+              } else {
+                console.error('max retries exceeded , failed all attempts');
+                isLoading.value = false;
+              }
+              return false;
+            }
+          };
+
+          // start the first attempt
+          await attemptApiCall();
         },
         onTxFailed: () => {
           isLoading.value = false;
