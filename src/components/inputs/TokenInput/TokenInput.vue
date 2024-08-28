@@ -327,7 +327,8 @@ watch(_address, async (newAddress, oldAddress) => {
           <div class="pl-2 truncate">
             <template v-if="hasAmount && hasToken">
               <span v-if="!hideFiatValue">
-                {{ fNum2(tokenValue, FNumFormats.fiat) }}
+                ${{ tokenValue }}
+                <!-- {{ fNum2(tokenValue, FNumFormats.fiat) }} -->
               </span>
               <span v-if="priceImpact" :class="priceImpactClass">
                 ({{
