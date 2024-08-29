@@ -4,7 +4,7 @@
   >
     <div class="group justify-between">
       <BalLink
-        v-if="notification.transactionMetadata"
+        v-if="notification.transactionMetadata?.explorerLink"
         :href="notification.transactionMetadata.explorerLink"
         external
         noStyle

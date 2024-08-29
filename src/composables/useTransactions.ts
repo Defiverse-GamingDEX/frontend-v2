@@ -168,6 +168,8 @@ function getId(id: string, type: TransactionType) {
 
 function getTransactions(): TransactionsMap {
   const transactionsMap = transactionsState.value[networkId] ?? {};
+  console.log('🚀 ~ getTransactions ~ transactionsState:', transactionsState);
+  console.log('🚀 ~ getTransactions ~ networkId:', networkId);
 
   return transactionsMap;
 }
@@ -393,8 +395,10 @@ export default function useTransactions() {
 
   function addNotificationForTransaction(id: string, type: TransactionType) {
     const transaction = getTransaction(id, type);
-    console.log(transaction, 'transactionAAA');
-    console.log(protectedTokens.value, 'protectedTokens.valueBBB');
+    console.log(
+      '🚀 ~ addNotificationForTransaction ~ transaction:',
+      transaction
+    );
     // check protected token to change label action
     if (transaction != null) {
       if (transaction.action === 'swap') {
@@ -415,6 +419,7 @@ export default function useTransactions() {
             ? 'success'
             : 'error'
           : 'info',
+        action: transaction.action,
         title: `${t(`transactionAction.${transaction.action}`)} ${t(
           `transactionStatus.${transaction.status}`
         )}`,
@@ -422,7 +427,10 @@ export default function useTransactions() {
         transactionMetadata: {
           id: transaction.id,
           status: transaction.status,
-          explorerLink: getExplorerLink(transaction.id, transaction.type),
+          explorerLink:
+            transaction.action === 'bridge'
+              ? ''
+              : getExplorerLink(transaction.id, transaction.type),
         },
       });
     }

@@ -28,6 +28,9 @@ const {
   updateTransaction,
   isPendingTransactionStatus,
 } = useTransactions();
+console.log('🚀 ~ finalizedTransactions:', finalizedTransactions);
+console.log('🚀 ~ pendingTransactions:', pendingTransactions);
+console.log('🚀 ~ transactions:', transactions);
 
 const { addNotification } = useNotifications();
 

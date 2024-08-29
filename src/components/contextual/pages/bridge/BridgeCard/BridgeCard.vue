@@ -805,13 +805,13 @@ async function handleApproveButton() {
     );
 
     const chainName = chainFrom.value.name;
-    const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
-    addTransaction({
-      id: tx.hash,
-      type: 'tx',
-      action: 'approve',
-      summary,
-    });
+    // const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
+    // addTransaction({
+    //   id: tx.hash,
+    //   type: 'tx',
+    //   action: 'approve',
+    //   summary,
+    // });
     txListener(tx, {
       onTxConfirmed: async () => {
         await checkAllowanceInputFrom();
