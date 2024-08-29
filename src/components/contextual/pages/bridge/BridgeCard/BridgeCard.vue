@@ -691,6 +691,24 @@ async function handleTransferButton() {
     const signer = getSigner();
     const provider = getProvider();
     console.log('inputToSelect.value', inputToSelect.value);
+    const params = {
+      sender_address: account.value,
+      receiver_address: anotherWalletAddress.value
+        ? anotherWalletAddress.value
+        : account.value,
+      src_chain_id: inputFromSelect.value.chainId,
+      dst_chain_id: inputToSelect.value.chainId,
+      src_token_address: inputFromSelect.value.tokenAddress,
+      amount_in: BigNumber(inputFromSelect.value.amount)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0),
+      nonce: null,
+      src_tx_id: null,
+      convert_gas_amount: BigNumber(convert_gas_amount.value)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0),
+    };
+
     const { tx, nonce } = await bridgeSend(
       inputFromSelect.value,
       inputToSelect.value,
@@ -716,30 +734,15 @@ async function handleTransferButton() {
     tx &&
       txListener(tx, {
         onTxConfirmed: async (receipt: any) => {
-          const params = {
-            sender_address: account.value,
-            receiver_address: anotherWalletAddress.value
-              ? anotherWalletAddress.value
-              : account.value,
-            src_chain_id: inputFromSelect.value.chainId,
-            dst_chain_id: inputToSelect.value.chainId,
-            src_token_address: inputFromSelect.value.tokenAddress,
-            amount_in: BigNumber(inputFromSelect.value.amount)
-              .times(Math.pow(10, inputFromSelect.value.decimals))
-              .toFixed(0),
-            nonce: nonce,
-            src_tx_id: receipt?.transactionHash,
-            convert_gas_amount: BigNumber(convert_gas_amount.value)
-              .times(Math.pow(10, inputFromSelect.value.decimals))
-              .toFixed(0),
-          };
           // console.log('🚀 ~ onTxConfirmed: ~ params:', params);
           // const rsBE = await bridgeApi.postBridgeRequestV2(params);
           // console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
           // //await initData();
           // await getBalanceInputFrom();
           // isLoading.value = false;
-
+          params.src_tx_id = receipt?.transactionHash;
+          params.nonce = nonce;
+          console.log('🚀 ~ onTxConfirmed: ~ params:', params);
           const maxRetries = 5;
           let attempt = 0;
           let retryDelay = 1000;
