@@ -690,7 +690,7 @@ async function handleTransferButton() {
 
     const signer = getSigner();
     const provider = getProvider();
-
+    console.log('inputToSelect.value', inputToSelect.value);
     const { tx, nonce } = await bridgeSend(
       inputFromSelect.value,
       inputToSelect.value,
@@ -851,6 +851,7 @@ onBeforeMount(async () => {
       </template>
       <div class="bridge-container">
         <div class="bridge-form">
+          <div :class="`disabled-form-bg ${isLoading ? 'disabled' : ''}`"></div>
           <div class="input-from">
             <div class="label">From</div>
             <InputFrom
@@ -1108,6 +1109,20 @@ onBeforeMount(async () => {
     color: rgb(239 68 68);
   }
   .bridge-form {
+    position: relative;
+    .disabled-form-bg {
+      position: absolute;
+      background: #ffffffd1 0% 0% no-repeat padding-box;
+      opacity: 0.5;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      display: none;
+      &.disabled {
+        display: block;
+      }
+    }
     .label {
       color: #0a425c;
       font-size: 18px;
