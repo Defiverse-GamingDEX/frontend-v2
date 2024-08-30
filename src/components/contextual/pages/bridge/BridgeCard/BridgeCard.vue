@@ -6,7 +6,10 @@ import useBreakpoints from '@/composables/useBreakpoints';
 import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
-import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import {
+  BRIDGE_NETWORKS,
+  ORDER_NETWORKS_LIST,
+} from '@/constants/bridge/networks';
 import { formatNumberToCurrency } from '@/lib/utils/index';
 import {
   isGreaterThanOrEqualTo,
@@ -224,11 +227,25 @@ function reOrderTokensList(data) {
   });
   return result;
 }
+function sortArrayByReference(arrayToSort, referenceArray, key) {
+  return arrayToSort.sort((a, b) => {
+    const indexA = referenceArray.findIndex(item => item[key] === a[key]);
+    const indexB = referenceArray.findIndex(item => item[key] === b[key]);
+    return indexA - indexB;
+  });
+}
 function initSrcBE() {
   if (routesBE.value?.length > 0) {
     const data = routesBE.value;
     const srcList = data?.map(item => item.src);
     let result = groupByChainId(srcList);
+
+    // sort order network list
+    result = sortArrayByReference(
+      result,
+      ORDER_NETWORKS_LIST,
+      'chain_id_decimals'
+    );
     result = reOrderTokensList(result);
     return result || [];
   }
@@ -621,6 +638,13 @@ function checkInputToChange() {
     inputFrom.tokenAddress
   );
   inputToSelect.value.chainsList = dstBE.value;
+
+  // sort order
+  inputToSelect.value.chainsList = sortArrayByReference(
+    inputToSelect.value.chainsList,
+    ORDER_NETWORKS_LIST,
+    'chain_id_decimals'
+  );
   // update token
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
 
@@ -648,7 +672,12 @@ function checkInputToChange() {
   } else {
     // set default chainId for inputTo
     if (inputToSelect.value.chainsList.length > 0) {
-      const avaiChain = inputToSelect.value.chainsList[0];
+      let avaiChain: any = inputToSelect.value.chainsList.find(
+        (chain: any) => chain.chain_id_decimals === 16116 // set Defiverse is default
+      );
+      if (!avaiChain) {
+        avaiChain = inputToSelect.value.chainsList[0];
+      }
       inputToSelect.value.chainId = avaiChain.chain_id_decimals;
       //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(

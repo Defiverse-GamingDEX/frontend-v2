@@ -9,3 +9,13 @@ export const BRIDGE_NETWORKS =
 
 export const OASYS_NETWORK =
   IS_TESTNET == 'false' ? OASYS_NETWORK_MAINNET : OASYS_NETWORK_TESTNET;
+
+export const ORDER_NETWORKS_LIST = [
+  { chain_id_decimals: 248, name: 'OASYS Mainnet' },
+  { chain_id_decimals: 16116, name: 'Defiverse' },
+  { chain_id_decimals: 29548, name: 'MCHVerse' },
+  { chain_id_decimals: 1, name: 'Ethereum' },
+  { chain_id_decimals: 137, name: 'Polygon' },
+  { chain_id_decimals: 2400, name: 'TCGVerse' },
+  { chain_id_decimals: 19011, name: 'HOMEVerse' },
+];
