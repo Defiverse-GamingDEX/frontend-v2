@@ -3,7 +3,7 @@ const MAINNET_API_URL = 'https://cbridge-prod2.celer.app';
 const TESTNET_API_URL = 'https://cbridge-v2-test.celer.network';
 
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-console.log(isTestnet, 'isTestnet');
+
 const external_domain =
   isTestnet == 'false' ? TESTNET_API_URL : MAINNET_API_URL;
 

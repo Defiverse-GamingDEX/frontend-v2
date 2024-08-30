@@ -282,7 +282,6 @@ export default function usePoolCreation() {
   }
 
   function updateTokenWeights(weights: PoolSeedToken[]) {
-    console.log(weights, 'weights');
     poolCreationState.seedTokens = weights;
   }
 

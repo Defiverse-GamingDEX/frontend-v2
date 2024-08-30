@@ -38,15 +38,15 @@ import { rpcProviderService } from '@/services/rpc-provider/rpc-provider.service
 import useWeb3 from '@/services/web3/useWeb3';
 import { TokenInfo } from '@/types/TokenList';
 
+import { useTokens } from '@/providers/tokens.provider';
+import { captureException } from '@sentry/browser';
 import useEthers from '../useEthers';
 import useFathom from '../useFathom';
-import useNumbers, { FNumFormats } from '../useNumbers';
 import { isMainnet } from '../useNetwork';
-import { useTokens } from '@/providers/tokens.provider';
+import useNumbers, { FNumFormats } from '../useNumbers';
+import useTranasactionErrors from '../useTransactionErrors';
 import useTransactions, { TransactionAction } from '../useTransactions';
 import { SwapQuote } from './types';
-import { captureException } from '@sentry/browser';
-import useTranasactionErrors from '../useTransactionErrors';
 
 type SorState = {
   validationErrors: {
@@ -293,13 +293,6 @@ export default function useSor({
     const amount = exactIn.value
       ? tokenInAmountInput.value
       : tokenOutAmountInput.value;
-    console.log(
-      amount,
-      exactIn.value,
-      tokenInAmountInput.value,
-      tokenOutAmountInput.value,
-      ' exactIn.value'
-    );
 
     // Avoid using SOR if querying a zero value or (un)wrapping swap
     const zeroValueSwap = amount === '' || amount === '0';

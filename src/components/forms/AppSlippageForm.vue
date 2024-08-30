@@ -2,8 +2,8 @@
 import { computed, reactive, watch } from 'vue';
 
 import useNumbers from '@/composables/useNumbers';
-import { useUserSettings } from '@/providers/user-settings.provider';
 import { bnum } from '@/lib/utils';
+import { useUserSettings } from '@/providers/user-settings.provider';
 
 const FIXED_OPTIONS = ['0.005', '0.01', '0.02'];
 
@@ -51,7 +51,6 @@ const customInputClasses = computed(() => ({
  * METHODS
  */
 function onFixedInput(val: string): void {
-  console.log(val, 'val=>onFixedInput');
   state.isCustomInput = false;
   state.customSlippage = '';
   setSlippage(val);
@@ -59,7 +58,6 @@ function onFixedInput(val: string): void {
 
 function onCustomInput(event) {
   state.isCustomInput = true;
-  console.log(event, 'event=>onCustomInput');
   let value = event.target.value;
   value = bnum(value).div(100).toString();
   setSlippage(value);

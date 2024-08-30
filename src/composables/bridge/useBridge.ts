@@ -306,9 +306,7 @@ async function getNativeBalance(token, account) {
   if (!provider) {
     currentProvider = new JsonRpcProvider(rpc);
     const nativeBalance = await currentProvider.getBalance(account);
-    console.log('🚀 ~ getNativeBalance ~ nativeBalance:', nativeBalance);
     const rs = bnum(nativeBalance).div(Math.pow(10, token?.decimals)).toFixed();
-    console.log('🚀 ~ getNativeBalance ~ rs:', rs);
     return rs;
   }
 }
@@ -343,7 +341,6 @@ async function checkTokenAllowance(
     if (l1_bridge_address) {
       contractAddress = l1_bridge_address;
     }
-    console.log('🚀 ~ contractAddress:', contractAddress);
     const provider = new JsonRpcProvider(rpc);
     const tokenContract = new Contract(address, ERC20ABI, provider);
     const tokenAllowance = await tokenContract.allowance(
@@ -369,7 +366,6 @@ async function approveToken(
 ) {
   try {
     const { address } = token;
-    console.log('🚀 ~ address:', address);
     const { bridgeContract, rpc } = chain;
     let contractAddress = bridgeContract;
     if (l1_bridge_address) {
@@ -383,7 +379,6 @@ async function approveToken(
     const tx = await contract
       .connect(signer)
       .approve(contractAddress, approveAmount);
-    console.log('tx', tx);
     // const rs = await tx.wait();
     // console.log('rs', rs);
 
@@ -445,7 +440,6 @@ async function bridgeSend(
         gasPrice: chainFrom?.gasPrice,
         isEstimate,
       };
-      console.log('🚀 ~ params:// external_to_oasys', params);
       rs = await bridgeService.bridgeSend(params);
     } else if (oasys_bridge_type === 'oasys_to_external') {
       if (tokenInputFrom.symbol === 'OAS') {
@@ -468,7 +462,6 @@ async function bridgeSend(
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
         };
-        console.log('🚀 ~ params:// oasys_to_external - case token', params);
         rs = await bridgeService.bridgeSend(params);
       }
     } else if (oasys_bridge_type === 'verse_to_oasys') {
@@ -487,7 +480,7 @@ async function bridgeSend(
         gasPrice: chainFrom?.gasPrice,
         isEstimate,
       };
-      console.log('🚀 ~ params: verse_to_oasys', params);
+
       rs = await bridgeService.bridgeWithdrawTo(params);
     } else if (oasys_bridge_type === 'oasys_to_verse') {
       //oasys_to_verse
@@ -505,7 +498,6 @@ async function bridgeSend(
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
         };
-        console.log('🚀 ~ params: oasys_to_verse transfer OAS', params);
         rs = await bridgeService.bridgeDepositETHTo(params);
       } else {
         // transfer ERC20
@@ -523,7 +515,6 @@ async function bridgeSend(
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
         };
-        console.log('🚀 ~ params: oasys_to_verse transfer ERC20', params);
         rs = await bridgeService.bridgeDepositERC20To(params);
       }
     } else {
@@ -549,7 +540,6 @@ async function bridgeSend(
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
           };
-          console.log('🚀 ~ params:// external-chain => verse-chain', params);
           rs = await bridgeService.bridgeSend(params);
         }
       } else {
@@ -570,7 +560,6 @@ async function bridgeSend(
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
           };
-          console.log('🚀 ~ params:  // verse-chain => external-chain', params);
           rs = await bridgeService.bridgeWithdrawTo(params);
         } else {
           // verse-chain => verse-chain
@@ -588,7 +577,6 @@ async function bridgeSend(
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
           };
-          console.log('🚀 ~ params: // verse-chain => verse-chain', params);
           rs = await bridgeService.bridgeWithdrawTo(params);
         }
       }

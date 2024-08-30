@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { PoolToken } from '@defiverse/balancer-sdk';
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
-import { ColumnDefinition } from '@/components/_global/BalTable/types';
-
-import BalChipNew from '@/components/chips/BalChipNew.vue';
+import BalAssetSet from '@/components/_global/BalAsset/BalAssetSet.vue';
 import BalChipExpired from '@/components/chips/BalChipExpired.vue';
+import BalChipNew from '@/components/chips/BalChipNew.vue';
+import IconLimit from '@/components/icons/IconLimit.vue';
 import TokenPills from '@/components/tables/PoolsTable/TokenPills/TokenPills.vue';
+import usePoolCreation from '@/composables/pools/usePoolCreation';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { getNetworkSlug } from '@/composables/useNetwork';
 import {
@@ -17,20 +18,17 @@ import {
   orderedPoolTokens,
   poolURLFor,
 } from '@/composables/usePool';
+import { oneSecondInMs } from '@/composables/useTime';
+import { orderedTokenURIs } from '@/composables/useVotingGauges';
 import { isSameAddress } from '@/lib/utils';
+import { buildNetworkIconURL } from '@/lib/utils/urls';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
 import useWeb3 from '@/services/web3/useWeb3';
-import usePoolCreation from '@/composables/pools/usePoolCreation';
+import { differenceInWeeks } from 'date-fns';
+import DistributeRewardsBtn from './DistributeRewardsBtn.vue';
+import GaugesTableMyVotes from './GaugesTableMyVotes.vue';
 import GaugesTableVoteBtn from './GaugesTableVoteBtn.vue';
 import GaugeVoteInfo from './GaugeVoteInfo.vue';
-import GaugesTableMyVotes from './GaugesTableMyVotes.vue';
-import DistributeRewardsBtn from './DistributeRewardsBtn.vue';
-import BalAssetSet from '@/components/_global/BalAsset/BalAssetSet.vue';
-import { orderedTokenURIs } from '@/composables/useVotingGauges';
-import IconLimit from '@/components/icons/IconLimit.vue';
-import { differenceInWeeks } from 'date-fns';
-import { oneSecondInMs } from '@/composables/useTime';
-import { buildNetworkIconURL } from '@/lib/utils/urls';
 
 /**
  * TYPES
@@ -58,7 +56,6 @@ const props = withDefaults(defineProps<Props>(), {
   data: () => [],
 });
 
-console.log(props.tabSelect, 'props.tabSelect.value');
 const emit = defineEmits<{
   (e: 'clickedVote', value: VotingGaugeWithVotes): void;
 }>();
@@ -228,7 +225,6 @@ function getPickedTokens(tokens: PoolToken[]) {
     .map(item => item.address);
 }
 function openConfigReward(gauge) {
-  console.log(gauge, 'gauge');
   router.push({
     name: 'gauge-reward',
     params: {

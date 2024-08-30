@@ -2,9 +2,9 @@ import { getAddress } from '@ethersproject/address';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { formatUnits } from '@ethersproject/units';
 
+import { getMulticall } from '@/dependencies/multicall';
 import { default as erc20Abi } from '@/lib/abi/ERC20.json';
 import { isSameAddress } from '@/lib/utils';
-import { getMulticall } from '@/dependencies/multicall';
 import { TokenInfoMap } from '@/types/TokenList';
 
 import TokenService from '../token.service';
@@ -31,7 +31,6 @@ export default class AllowancesConcern {
       const tokenAddresses = Object.keys(tokens).filter(
         address => !isSameAddress(address, this.nativeAssetAddress)
       );
-      console.log(tokens, 'tokens=>allowances.concerns');
       const allContractAllowances = await Promise.all(
         contractAddresses.map(contractAddress =>
           this.getForContract(account, contractAddress, tokenAddresses, tokens)

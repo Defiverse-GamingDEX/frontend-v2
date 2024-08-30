@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CheckedIcon from './CheckedIcon.vue';
-import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/tokens/testnet/defi-tokens';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { BRIDGE_DEFI_TOKENS } from '@/constants/bridge/tokens/testnet/defi-tokens';
+import CheckedIcon from './CheckedIcon.vue';
 
 /**
  * STATES
@@ -59,13 +59,11 @@ async function getClaimAmount(token) {
   });
 }
 async function initTokensList() {
-  console.log(tokensList.value, 'tokensList?.value');
   for (let i = 0; i < tokensList.value?.length; i++) {
     tokensList.value[i].isChecked = false;
     let claimAmount = await getClaimAmount(tokensList?.value[i]);
     tokensList.value[i].claimAmount = claimAmount;
   }
-  console.log(tokensList.value, 'tokensList?.valueAAA');
 }
 async function handleClaimButton() {
   console.log(tokensList.value, 'tokensList?.value');

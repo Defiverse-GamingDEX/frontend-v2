@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, toRef } from 'vue';
+import { isSoftMigratablePool } from '@/components/forms/pool_actions/MigrateForm/constants';
 import useWithdrawMath from '@/components/forms/pool_actions/WithdrawForm/composables/useWithdrawMath';
-import { isJoinsDisabled, usePool } from '@/composables/usePool';
+import { Goals, trackGoal } from '@/composables/useFathom';
 import useNetwork from '@/composables/useNetwork';
+import { isJoinsDisabled, usePool } from '@/composables/usePool';
+import { useTokens } from '@/providers/tokens.provider';
 import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
-import { isSoftMigratablePool } from '@/components/forms/pool_actions/MigrateForm/constants';
-import { Goals, trackGoal } from '@/composables/useFathom';
-import { useTokens } from '@/providers/tokens.provider';
+import { computed, toRef } from 'vue';
 
 /**
  * TYPES
@@ -68,9 +68,7 @@ watch(
 async function checkIsLiquidityWhitelisted() {
   try {
     let multiCall = [];
-    console.log(props.pool, 'props.pool');
     const tokenAddresses = props.pool?.tokenAddresses;
-    console.log(tokenAddresses, 'tokenAddresses');
     if (tokenAddresses?.length > 0) {
       for (let i = 0; i < tokenAddresses?.length; i++) {
         multiCall.push(
@@ -79,7 +77,6 @@ async function checkIsLiquidityWhitelisted() {
       }
     }
     let rs = await Promise.allSettled(multiCall);
-    console.log(rs, 'rs=>checkIsLiquidityWhitelisted');
     let isExistWhiteList = rs?.find(
       item => item?.value?.isLiquidityWhitelisted === true
     );
@@ -88,7 +85,6 @@ async function checkIsLiquidityWhitelisted() {
     } else {
       isPoolWhiteList.value = false;
     }
-    console.log(isPoolWhiteList.value, ' isPoolWhiteList.value');
   } catch (error) {
     console.log(error, 'error=>checkIsLiquidityWhitelisted');
   }

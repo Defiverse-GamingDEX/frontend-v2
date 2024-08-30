@@ -1,20 +1,20 @@
+import { flatTokenTree } from '@/composables/usePool';
+import { getBalancer } from '@/dependencies/balancer-sdk';
+import { bnum, isSameAddress } from '@/lib/utils';
 import { GasPriceService } from '@/services/gas-price/gas-price.service';
 import { Pool } from '@/services/pool/types';
+import { TransactionBuilder } from '@/services/web3/transactions/transaction.builder';
 import { BalancerSDK } from '@defiverse/balancer-sdk';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import { getAddress } from '@ethersproject/address';
+import { formatFixed, parseFixed } from '@ethersproject/bignumber';
 import { Ref } from 'vue';
 import {
+  AmountsOut,
   ExitParams,
   ExitPoolHandler,
   QueryOutput,
-  AmountsOut,
 } from './exit-pool.handler';
-import { getBalancer } from '@/dependencies/balancer-sdk';
-import { formatFixed, parseFixed } from '@ethersproject/bignumber';
-import { bnum, isSameAddress } from '@/lib/utils';
-import { flatTokenTree } from '@/composables/usePool';
-import { getAddress } from '@ethersproject/address';
-import { TransactionBuilder } from '@/services/web3/transactions/transaction.builder';
 
 const balancer = getBalancer();
 type ExitResponse = Awaited<ReturnType<typeof balancer.pools.generalisedExit>>;
@@ -59,7 +59,6 @@ export class GeneralisedExitHandler implements ExitPoolHandler {
 
     const signerAddress = await signer.getAddress();
     const slippage = slippageBsp.toString();
-    console.log('withdraw');
     this.lastExitRes = await balancer.pools.generalisedExit(
       this.pool.value.id,
       evmAmountIn.toString(),

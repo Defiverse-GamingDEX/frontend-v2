@@ -10,8 +10,8 @@ import {
   TokenListMap,
 } from '@/types/TokenList';
 
-import TokenService from '../token.service';
 import { getOldMulticaller } from '@/dependencies/OldMulticaller';
+import TokenService from '../token.service';
 
 export default class MetadataConcern {
   constructor(private readonly service: TokenService) {}
@@ -28,23 +28,16 @@ export default class MetadataConcern {
     addresses = addresses.map(address => getAddress(address));
     const tokenListTokens = this.tokenListsTokensFrom(tokenLists);
     let metaDict = this.getMetaFromLists(addresses, tokenListTokens);
-    console.log(addresses, 'addresses=>matadata.concern');
-    console.log(tokenListTokens, 'tokenListTokens=>matadata.concern');
-    console.log(metaDict, 'metaDict=>matadata.concern');
     // If token meta can't be found in TokenLists, fetch onchain
     const existingAddresses = Object.keys(metaDict);
     const unknownAddresses = addresses.filter(
       address => !includesAddress(existingAddresses, address)
     );
-    console.log(existingAddresses, 'existingAddresses=>matadata.concern');
-    console.log(unknownAddresses, 'unknownAddresses=>matadata.concern');
 
     if (unknownAddresses.length > 0) {
       const onchainMeta = await this.getMetaOnchain(unknownAddresses);
-      console.log(onchainMeta, 'onchainMeta=>matadata.concern');
       metaDict = { ...metaDict, ...onchainMeta };
     }
-    console.log(metaDict, 'metaDict=>matadata.concern');
     return metaDict;
   }
 

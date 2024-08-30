@@ -14,15 +14,15 @@ import {
   SwapTypes,
 } from '@defiverse/balancer-sdk';
 
+import { sleep } from '@/lib/utils';
+import { useTokens } from '@/providers/tokens.provider';
+import { useUserSettings } from '@/providers/user-settings.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 import { networkId } from '../useNetwork';
 import useNumbers, { FNumFormats } from '../useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
-import { useUserSettings } from '@/providers/user-settings.provider';
 import useCowswap from './useCowswap';
-import useSor from './useSor';
 import useJoinExit from './useJoinExit';
-import { sleep } from '@/lib/utils';
+import useSor from './useSor';
 export type SwapRoute = 'wrapUnwrap' | 'balancer' | 'cowswap' | 'joinExit';
 
 export type UseSwapping = ReturnType<typeof useSwapping>;
@@ -294,11 +294,6 @@ export default function useSwapping(
     } else {
       tokenInAmountInput.value = '';
     }
-    console.log(
-      'handleAmountChange',
-      tokenOutAmountInput.value,
-      tokenInAmountInput.value
-    );
 
     cowswap.resetState(false);
     sor.resetState();

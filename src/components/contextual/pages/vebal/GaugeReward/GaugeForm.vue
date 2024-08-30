@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import InputForm from './InputForm.vue';
-import useWeb3 from '@/services/web3/useWeb3';
-import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 import { useBridge } from '@/composables/bridge/useBridge';
-import { useTokenLists } from '@/providers/token-lists.provider';
+import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 import { GAUGE_REWARD_NUMBER_ADD } from '@/constants/gaugeReward/gauge-tokens-config';
+import { useTokenLists } from '@/providers/token-lists.provider';
+import useWeb3 from '@/services/web3/useWeb3';
+import InputForm from './InputForm.vue';
 // TYPES
 
 type inputForm = {
@@ -88,7 +88,6 @@ function handleUpdateInput(payload) {
   input_list.value[index].isAllowance = inputSelect.isAllowance;
   input_list.value[index].isError = inputSelect.isError;
   emit('update:input-list', input_list.value);
-  console.log(input_list.value, 'input_list.value=>handleUpdateInput');
 }
 async function getTokenList() {
   try {
@@ -97,7 +96,6 @@ async function getTokenList() {
     if (rs) {
       initTokenList(rs);
     }
-    console.log(rs, 'rs=>initTokenList');
   } catch (error) {
     console.log('error=>initTokenList');
   }
@@ -120,7 +118,6 @@ async function initTokenList(depositedList) {
         depositedToken.provider = provider;
         balance = await getBalance(depositedToken, account.value);
       }
-      console.log(balance, 'balance');
       const itemPush = {
         tokenSymbol: '',
         tokenAddress: depositedTokenAddress,
@@ -136,7 +133,6 @@ async function initTokenList(depositedList) {
     }
   }
   emit('update:input-list', input_list.value);
-  console.log(input_list.value, 'input_list.value=>handleUpdateInput');
 }
 /**
  * LIFECYCLE

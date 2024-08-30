@@ -45,12 +45,10 @@ const {
   fullBPTOut,
 } = toRefs(reactive(props.math));
 
-console.log(props.math, 'props.math');
 /**
  * COMPUTED
  */
 const lpToken = computed(() => {
-  console.log(fullBPTOut.value, 'fullBPTOut.value');
   return bnum(fullBPTOut.value).div(parseUnits('1', 18).toString()).toFixed(0);
 });
 

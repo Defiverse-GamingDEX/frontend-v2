@@ -25,8 +25,8 @@ import {
   isSameAddress,
 } from '@/lib/utils';
 import { safeInject } from '@/providers/inject';
-import { UserSettingsResponse } from '@/providers/user-settings.provider';
 import { TokenListsResponse } from '@/providers/token-lists.provider';
+import { UserSettingsResponse } from '@/providers/user-settings.provider';
 import { TokenPrices } from '@/services/coingecko/api/price.service';
 import { configService } from '@/services/config/config.service';
 import { ContractAllowancesMap } from '@/services/token/concerns/allowances.concern';
@@ -41,11 +41,11 @@ import {
 
 import { getMulticaller } from '@/dependencies/Multicaller';
 
+import { networkId } from '@/composables/useNetwork';
 import OracleAbi from '@/lib/abi/Oracle.json';
 import configs from '@/lib/config';
-import { networkId } from '@/composables/useNetwork';
 const oracleContractAddress = configs[networkId.value].addresses.oracle;
-console.log(oracleContractAddress, 'oracleContractAddress');
+
 /**
  * TYPES
  */
@@ -395,7 +395,6 @@ export const tokensProvider = (
   function balanceFor(address: string): string {
     if (address) address = getAddress(address);
     try {
-      console.log(balances, 'balancesAAA');
       return balances.value[address] || '0';
     } catch {
       return '0';
@@ -406,7 +405,6 @@ export const tokensProvider = (
    * Checks if token has a balance
    */
   function hasBalance(address: string): boolean {
-    console.log(address, 'address=>hasBalanceAAA');
     return Number(balances.value[address]) > 0;
   }
 
@@ -478,8 +476,6 @@ export const tokensProvider = (
     });
 
     const result = await multicaller.execute();
-    console.log(result, 'getProtectedTokens');
-
     return result;
   }
   async function getAntiTraderInfo(tokenAddress, userAddress) {
@@ -504,7 +500,6 @@ export const tokensProvider = (
       });
     }
     const result = await multicaller.execute();
-    console.log(result, 'getAntiTraderInfo');
 
     return result;
   }
@@ -520,7 +515,6 @@ export const tokensProvider = (
     });
 
     const result = await multicaller.execute();
-    console.log(result, 'isLiquidityWhitelisted');
 
     return result;
   }

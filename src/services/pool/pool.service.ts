@@ -11,13 +11,12 @@ import {
 } from '@/services/pool/types';
 import { TokenInfoMap } from '@/types/TokenList';
 
-import LiquidityConcern from './concerns/liquidity.concern';
-import { OnchainDataFormater } from './decorators/onchain-data.formater';
-import { AprBreakdown } from '@defiverse/balancer-sdk';
 import { networkId } from '@/composables/useNetwork';
 import { getBalancer } from '@/dependencies/balancer-sdk';
-import { Pool as SDKPool } from '@defiverse/balancer-sdk';
+import { AprBreakdown, Pool as SDKPool } from '@defiverse/balancer-sdk';
 import { captureException } from '@sentry/browser';
+import LiquidityConcern from './concerns/liquidity.concern';
+import { OnchainDataFormater } from './decorators/onchain-data.formater';
 
 export default class PoolService {
   constructor(public pool: Pool, public liquidity = LiquidityConcern) {
@@ -69,8 +68,6 @@ export default class PoolService {
 
     try {
       const sdkApr = await getBalancer().pools.apr(this.pool);
-
-      console.log('=========Hung:setAPR:sdkApr:', sdkApr);
 
       if (sdkApr) apr = sdkApr;
     } catch (error) {

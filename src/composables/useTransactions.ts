@@ -98,7 +98,6 @@ export type NewTransaction = Pick<
 >;
 
 const networkId = configService.network.chainId;
-console.log(networkId, 'networkIdAAA');
 const oracleContractAddress = configs[networkId]?.addresses?.oracle;
 
 export type TransactionsMap = Record<string, Transaction>;
@@ -168,9 +167,6 @@ function getId(id: string, type: TransactionType) {
 
 function getTransactions(): TransactionsMap {
   const transactionsMap = transactionsState.value[networkId] ?? {};
-  console.log('🚀 ~ getTransactions ~ transactionsState:', transactionsState);
-  console.log('🚀 ~ getTransactions ~ networkId:', networkId);
-
   return transactionsMap;
 }
 
@@ -333,7 +329,6 @@ export default function useTransactions() {
   function addTransaction(newTransaction: NewTransaction) {
     const transactionsMap = getTransactions();
     const txId = getId(newTransaction.id, newTransaction.type);
-    console.log(newTransaction, 'newTransaction');
     if (transactionsMap[txId]) {
       throw new Error(`The transaction ${newTransaction.id} already exists.`);
     }
@@ -395,10 +390,7 @@ export default function useTransactions() {
 
   function addNotificationForTransaction(id: string, type: TransactionType) {
     const transaction = getTransaction(id, type);
-    console.log(
-      '🚀 ~ addNotificationForTransaction ~ transaction:',
-      transaction
-    );
+
     // check protected token to change label action
     if (transaction != null) {
       if (transaction.action === 'swap') {
@@ -440,7 +432,6 @@ export default function useTransactions() {
     cowswapProtocolService
       .getOrder(transaction.id)
       .then(order => {
-        console.log(order, 'checkOrderActivity');
         if (order != null && isFinalizedTransactionStatus(order.status)) {
           finalizeTransaction(transaction.id, 'order', order);
         }

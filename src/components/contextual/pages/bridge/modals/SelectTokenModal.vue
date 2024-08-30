@@ -11,7 +11,7 @@ interface Props {
   tokenChoose: object;
 }
 const { account, isWalletReady } = useWeb3();
-console.log(account, 'accountAAA');
+
 const props = withDefaults(defineProps<Props>(), {
   open: false,
   ignoreBalances: false,
@@ -51,7 +51,7 @@ const tokensShow = ref([]);
  */
 onMounted(async () => {
   tokens.value = createTokens();
-  console.log('🚀 ~ onMounted ~   tokens.value:', tokens.value);
+
   // update token show
   tokensShow.value = tokens.value;
   loading.value = false;
@@ -65,7 +65,6 @@ onMounted(async () => {
  * METHODS
  */
 function createTokens() {
-  console.log(props.tokensList, 'props.tokensList');
   let tokensWithValues = [];
   for (let i = 0; i < props.tokensList.length; i++) {
     let token = props.tokensList[i];
@@ -90,10 +89,8 @@ async function onSelectToken(token: object): Promise<void> {
   emit('close');
 }
 function handleSearch(text) {
-  console.log(text, 'text');
   search.value = text;
   const query = text.toLowerCase();
-  console.log(query, 'query');
 
   const rs = tokens?.value?.filter(item => {
     // Check if the item's name, symbol, or address contains the search query
@@ -103,7 +100,7 @@ function handleSearch(text) {
       item.address.toLowerCase().includes(query)
     );
   });
-  console.log(rs, 'rs');
+
   tokensShow.value = rs;
 }
 </script>

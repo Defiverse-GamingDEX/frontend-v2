@@ -55,7 +55,7 @@ const DEFI_NETWORK_FEE = Number(
     .div(10 ** 18)
     .toFixed()
 );
-console.log('🚀 ~ NETWORK_FEE:', DEFI_NETWORK_FEE);
+
 /**
  * COMPOSABLES
  */
@@ -106,7 +106,7 @@ const isMaxed = computed(() => {
   const remove_amount = BigNumber(MAX_REMOVE_AMOUNT)
     .div(10 ** decimalLimit.value || 10 ** 18)
     .toFixed();
-  console.log('🚀 ~ setMax ~ remove_amount:', remove_amount);
+
   let maxAmount = BigNumber(tokenBalanceBN.value)
     .minus(remove_amount)
     .toFixed();

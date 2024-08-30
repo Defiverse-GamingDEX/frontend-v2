@@ -1,9 +1,9 @@
-import { toNormalizedWeights } from '@defiverse/balancer-sdk';
 import {
   Vault__factory,
   WeightedPool__factory,
   WeightedPoolFactory__factory,
 } from '@balancer-labs/typechain';
+import { toNormalizedWeights } from '@defiverse/balancer-sdk';
 import { defaultAbiCoder } from '@ethersproject/abi';
 import { BigNumber as EPBigNumber } from '@ethersproject/bignumber';
 import { AddressZero } from '@ethersproject/constants';
@@ -12,16 +12,16 @@ import {
   TransactionResponse,
   Web3Provider,
 } from '@ethersproject/providers';
-import BigNumber from 'bignumber.js';
 import { formatUnits } from '@ethersproject/units';
+import BigNumber from 'bignumber.js';
 
 import { PoolSeedToken } from '@/composables/pools/usePoolCreation';
+import { POOLS } from '@/constants/pools';
+import { getOldMulticaller } from '@/dependencies/OldMulticaller';
+import WeightedPoolFactoryV3Abi from '@/lib/abi/WeightedPoolFactoryV3.json';
 import { isSameAddress, scale } from '@/lib/utils';
 import { configService } from '@/services/config/config.service';
 import { TransactionBuilder } from '@/services/web3/transactions/transaction.builder';
-import { getOldMulticaller } from '@/dependencies/OldMulticaller';
-import { POOLS } from '@/constants/pools';
-import WeightedPoolFactoryV3Abi from '@/lib/abi/WeightedPoolFactoryV3.json';
 import { Contract } from '@ethersproject/contracts';
 type Address = string;
 
@@ -201,7 +201,6 @@ export default class WeightedPoolService {
     return weightStrings;
   }
   public async getAdminAddress(provider: Web3Provider | JsonRpcProvider) {
-    console.log(WeightedPoolFactoryV3Abi, 'WeightedPoolFactoryV3Abi');
     const contract = new Contract(
       configService.network.addresses.weightedPoolFactory,
       WeightedPoolFactoryV3Abi,

@@ -37,7 +37,6 @@ const notificationsState = ref<NotificationsMap>({});
 // METHODS
 function addNotification(newNotification: NewNotification) {
   const notificationsMap = getNotifications();
-  console.log('🚀 ~ addNotification ~ notificationsMap:', notificationsMap);
   const notificationId = uniqueId('notification');
 
   attemptToRemoveExistingNotification(newNotification);

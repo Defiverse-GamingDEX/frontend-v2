@@ -6,12 +6,12 @@ import PoolPageHero from '@/components/heros/PoolPageHero.vue';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
+import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
+import usePools from '@/composables/pools/usePools';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
-import usePools from '@/composables/pools/usePools';
-import usePoolCreation from '@/composables/pools/usePoolCreation';
 const { account } = useWeb3();
 // STATES
 const adminAddress = ref(null);
@@ -60,7 +60,6 @@ function onColumnSort(columnId: string) {
  */
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
-  console.log(adminAddress.value, 'adminAddress.value');
 });
 </script>
 

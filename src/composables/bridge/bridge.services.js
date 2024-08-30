@@ -117,7 +117,6 @@ const _estimateGas = async (myContract, action, params, overwrite, signer) => {
     .connect(signer)
     .estimateGas[action](...params);
   estimateGas = estimateGas?.toNumber() || 0;
-  console.log('--->gas: ', estimateGas, overwrite); // eslint-disable-line no-console
   return new BigNumber(estimateGas).times(2).toFixed(0);
 };
 
@@ -135,7 +134,6 @@ const _estimateGasNative = async (
       value: value,
     });
   estimateGas = estimateGas?.toNumber() || 0;
-  console.log('--->gasBBBB: ', estimateGas, overwrite); // eslint-disable-line no-console
   return new BigNumber(estimateGas).times(2).toFixed(0);
 };
 
@@ -165,15 +163,7 @@ const bridgeSend = async params => {
   // if (srcTokenSymbol === 'OAS') {
   //   overwrite.value = decimals_value;
   // }
-  console.log(
-    '🚀 ~ bridgeSend ~ vBridgeAddress, srcTokenAddress, decimals_value, desChainId, nonce, slippage',
-    vBridgeAddress,
-    srcTokenAddress,
-    decimals_value,
-    desChainId,
-    nonce,
-    slippage
-  );
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
@@ -193,60 +183,8 @@ const bridgeSend = async params => {
     isEstimate
   );
 
-  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
-
-// const bridgeSendNative = async params => {
-//   const {
-//     contractAddress, // contract token
-//     contractProvider, // contract provider
-//     account,
-//     srcTokenSymbol,
-//     srcTokenDecimal,
-//     value, // amount
-//     vBridgeAddress,
-//     srcTokenAddress, // account address
-//     signer,
-//     slippage,
-//     abi,
-//     gasPrice,
-//     isEstimate,
-//   } = params;
-
-//   const nonce = await contractProvider.getTransactionCount(account, 'latest');
-//   const desChainId = 248;
-//   let decimals_value = BigNumber(value)
-//     .times(10 ** srcTokenDecimal)
-//     .toFixed(0);
-//   let overwrite = { from: account, value: decimals_value };
-//   // if (srcTokenSymbol === 'OAS') {
-//   //   overwrite.value = decimals_value;
-//   // }
-//   console.log(
-//     '🚀 ~ bridgeSendNative ~ vBridgeAddress, srcTokenAddress, decimals_value, desChainId, nonce, slippage',
-//     vBridgeAddress,
-//     srcTokenAddress,
-//     decimals_value,
-//     desChainId,
-//     nonce,
-//     slippage
-//   );
-//   const rs = await _sendRawTx(
-//     contractAddress,
-//     contractProvider,
-//     'sendNative',
-//     [vBridgeAddress, decimals_value, desChainId, nonce, slippage],
-//     overwrite,
-//     signer,
-//     abi,
-//     gasPrice,
-//     isEstimate
-//   );
-
-//   console.log(rs, 'bridgeSendNative'); // eslint-disable-line no-console
-//   return { tx: rs, nonce };
-// };
 
 const bridgeWithdrawTo = async params => {
   const {
@@ -276,14 +214,7 @@ const bridgeWithdrawTo = async params => {
   // }
 
   const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
-  console.log(
-    '🚀 ~ bridgeWithdrawTo ~ srcTokenAddress, vBridgeAddress, decimals_value, gasLimit, nonce:',
-    srcTokenAddress,
-    vBridgeAddress,
-    decimals_value,
-    gasLimit,
-    nonce
-  );
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
@@ -296,7 +227,6 @@ const bridgeWithdrawTo = async params => {
     isEstimate
   );
 
-  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
 const bridgeDepositERC20To = async params => {
@@ -323,15 +253,7 @@ const bridgeDepositERC20To = async params => {
   let overwrite = { from: account };
 
   const nonce = '0x';
-  console.log(
-    '🚀 ~ bridgeDepositERC20To ~ srcTokenAddress, desTokenAddress,receiveAddress, decimals_value, gasLimit, nonce:',
-    srcTokenAddress,
-    desTokenAddress,
-    receiveAddress,
-    decimals_value,
-    gasLimit,
-    nonce
-  );
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
@@ -351,7 +273,6 @@ const bridgeDepositERC20To = async params => {
     isEstimate
   );
 
-  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
 const bridgeDepositETHTo = async params => {
@@ -376,13 +297,7 @@ const bridgeDepositETHTo = async params => {
   let overwrite = { from: account, value: decimals_value };
 
   const nonce = '0x';
-  console.log(
-    '🚀 ~ depositETHTo ~ receiveAddress, decimals_value, gasLimit, nonce:',
-    receiveAddress,
-    decimals_value,
-    gasLimit,
-    nonce
-  );
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
@@ -395,7 +310,6 @@ const bridgeDepositETHTo = async params => {
     isEstimate
   );
 
-  console.log(rs, 'bridgeSend'); // eslint-disable-line no-console
   return { tx: rs, nonce };
 };
 

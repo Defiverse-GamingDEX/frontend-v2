@@ -38,7 +38,6 @@ const mutations = {
   },
 
   setOutputAsset(state: SwapState, asset: string): void {
-    console.log('setOutputAsset=>asset', asset);
     state.outputAsset = asset;
     lsSet(`swap.outputAsset.${networkId.value}`, asset);
   },

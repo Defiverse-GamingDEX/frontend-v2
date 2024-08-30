@@ -145,15 +145,15 @@ import { useStore } from 'vuex';
 import AppSlippageForm from '@/components/forms/AppSlippageForm.vue';
 import Avatar from '@/components/images/Avatar.vue';
 import useEthereumTxType from '@/composables/useEthereumTxType';
+import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { ethereumTxTypeOptions } from '@/constants/options';
+import { shorten } from '@/lib/utils';
 import { COW_SUPPORTED_NETWORKS } from '@/services/cowswap/constants';
 import useWeb3 from '@/services/web3/useWeb3';
 import {
   getConnectorLogo,
   getConnectorName,
 } from '@/services/web3/web3.plugin';
-import { shorten } from '@/lib/utils';
-import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { useI18n } from 'vue-i18n';
 export default defineComponent({
   components: {
@@ -230,7 +230,6 @@ export default defineComponent({
     }
 
     function getBridgeNetworkName() {
-      console.log(chainId, BRIDGE_NETWORKS, 'getBridgeNetworkName');
       let network = BRIDGE_NETWORKS.find(
         item => item.chain_id_decimals === chainId.value
       );

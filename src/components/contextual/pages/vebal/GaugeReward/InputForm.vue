@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import TokenSelectInput from '@/components/contextual/pages/bridge/BridgeCard/TokenSelectInput.vue';
 
-import useWeb3 from '@/services/web3/useWeb3';
-import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
-import { cloneDeep } from 'lodash';
-import { bnum, isSameAddress } from '@/lib/utils';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { bnum } from '@/lib/utils';
+import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
+import useWeb3 from '@/services/web3/useWeb3';
 import { Rules } from '@/types';
+import { cloneDeep } from 'lodash';
 import { useI18n } from 'vue-i18n';
 
-import { useTokenLists } from '@/providers/token-lists.provider';
 import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
+import { useTokenLists } from '@/providers/token-lists.provider';
 import BigNumber from 'bignumber.js';
 
+import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
-import useEthers from '@/composables/useEthers';
 import { GAUGE_REWARD_MAX_PERIODS } from '@/constants/gaugeReward/gauge-tokens-config';
 // TYPES
 type InputValue = string | number;
@@ -161,7 +161,6 @@ async function checkAllowanceToken(address) {
 function getTokenList(listSelected) {
   let rs = cloneDeep(_token_list_origin.value);
   rs = rs.filter(item => item.symbol !== 'OAS');
-  console.log(rs, listSelected, 'rs=>getTokenList');
   for (let i = rs.length - 1; i >= 0; i--) {
     const token = rs[i];
     token.provider = provider;
@@ -209,7 +208,6 @@ async function updateToken(token) {
 function handleAmountChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.amount = value;
-  console.log('handleAmountChange', inputSelect.amount);
 
   inputSelect.isError = checkTokenSelectError(inputSelect);
 
@@ -218,14 +216,12 @@ function handleAmountChange(value) {
 function handlePeriodsChange(value) {
   let inputSelect = cloneDeep(props?.inputSelect);
   inputSelect.periods = value;
-  console.log('handlePeriodsChange', inputSelect.periods);
 
   inputSelect.isError = checkTokenSelectError(inputSelect);
 
   emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 }
 function deleteInput(index) {
-  console.log(index, 'deleteInput');
   emit('update:delete', index);
 }
 const setMax = () => {
@@ -233,7 +229,6 @@ const setMax = () => {
   handleAmountChange(maxAmount);
 };
 async function handleApproveButton() {
-  console.log(props?.inputSelect, 'props?.inputSelect');
   let token = cloneDeep(props?.inputSelect);
   try {
     isLoading.value = true;

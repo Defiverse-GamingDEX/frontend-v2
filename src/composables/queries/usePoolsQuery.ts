@@ -6,22 +6,22 @@ import { POOLS } from '@/constants/pools';
 import QUERY_KEYS from '@/constants/queryKeys';
 import { Pool } from '@/services/pool/types';
 
-import useNetwork from '../useNetwork';
+import { isBalancerApiDefined } from '@/lib/utils/balancer/api';
 import { useTokens } from '@/providers/tokens.provider';
+import { balancerAPIService } from '@/services/balancer/api/balancer-api.service';
+import { balancerSubgraphService } from '@/services/balancer/subgraph/balancer-subgraph.service';
 import { configService } from '@/services/config/config.service';
+import { PoolDecorator } from '@/services/pool/decorators/pool.decorator';
+import { poolsStoreService } from '@/services/pool/pools-store.service';
 import {
   GraphQLArgs,
   PoolsFallbackRepository,
   PoolsRepositoryFetchOptions,
   PoolRepository as SDKPoolRepository,
 } from '@defiverse/balancer-sdk';
-import { PoolDecorator } from '@/services/pool/decorators/pool.decorator';
 import { flatten } from 'lodash';
+import useNetwork from '../useNetwork';
 import { tokenTreeLeafs } from '../usePool';
-import { balancerSubgraphService } from '@/services/balancer/subgraph/balancer-subgraph.service';
-import { balancerAPIService } from '@/services/balancer/api/balancer-api.service';
-import { poolsStoreService } from '@/services/pool/pools-store.service';
-import { isBalancerApiDefined } from '@/lib/utils/balancer/api';
 
 type PoolsQueryResponse = {
   pools: Pool[];
@@ -90,7 +90,6 @@ export default function usePoolsQuery(
         const pools = await balancerSubgraphService.pools.get(
           getQueryArgs(options)
         );
-        console.log('initializeDecoratedSubgraphRepository=>pools', pools);
         const poolDecorator = new PoolDecorator(pools);
         let decoratedPools = await poolDecorator.decorate(tokenMeta.value);
 
@@ -156,7 +155,6 @@ export default function usePoolsQuery(
     if (options.skip) {
       queryArgs.skip = options.skip;
     }
-    console.log('getQueryArgs', queryArgs);
     return queryArgs;
   }
 

@@ -38,7 +38,6 @@ const mutations = {
   },
 
   setOutputAsset(state: BridgeState, asset: string): void {
-    console.log('setOutputAsset=>asset', asset);
     state.outputAsset = asset;
     lsSet(`bridge.outputAsset.${networkId.value}`, asset);
   },

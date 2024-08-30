@@ -62,7 +62,6 @@ export const isTestnet = computed(() => isGoerli.value);
  */
 
 export function networkFor(key: string | number): Network {
-  console.log(Network.DEFIVERSE, 'Network.DEFIVERSE');
   switch (key.toString()) {
     case '1':
       return Network.MAINNET;
@@ -101,7 +100,6 @@ export function networkFromSlug(networkSlug: string): Network | null {
   const networkConf = Object.keys(config).find(
     network => config[network].slug === networkSlug
   );
-  console.log(networkConf, networkSlug, 'networkConf');
   return networkConf ? (Number(networkConf) as Network) : null;
 }
 

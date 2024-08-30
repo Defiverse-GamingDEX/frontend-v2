@@ -3,7 +3,7 @@ const MAINNET_API_URL = 'https://price-api.gaming-dex.com/api';
 const TESTNET_API_URL = 'https://price-api.gaming-dex.com/api'; // not have testnet
 
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-console.log(isTestnet, 'isTestnet');
+
 const domain = isTestnet == 'false' ? TESTNET_API_URL : MAINNET_API_URL;
 
 const getRoutes = async () => {

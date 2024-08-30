@@ -57,8 +57,8 @@ const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
 const { slippage, setSlippage } = useUserSettings();
 // const signer = getSigner();
-// console.log(signer, 'signerAAA');
-// // STATES
+
+// STATES
 
 const srcBE = ref(null);
 const dstBE = ref(null);
@@ -248,7 +248,6 @@ async function getRouters() {
   }
 }
 function verifyNetwork() {
-  console.log('AAAAA', inputFromSelect.value.chainId, chainId.value);
   if (
     inputFromSelect.value.chainId &&
     chainId.value &&
@@ -309,25 +308,25 @@ function initMinAmountRoute() {
         item.dst.chain_id === inputToSelect.value.chainId &&
         item.src.token_symbol === inputFromSelect.value.tokenSymbol
       ) {
-        console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+        //console.log('🚀 ~ initMinAmountRoute ~ item:', item);
         minAmountRoute.value = item.min_amount;
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
 
         gas_option_enabled.value = item.gas_option_enabled;
 
-        console.log(
-          '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
-          oasys_bridge_type.value
-        );
-        console.log(
-          '🚀 ~ initMinAmountRoute ~ li_bridge_address.value :',
-          li_bridge_address.value
-        );
-        console.log(
-          '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
-          minAmountRoute.value
-        );
+        // console.log(
+        //   '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
+        //   oasys_bridge_type.value
+        // );
+        // console.log(
+        //   '🚀 ~ initMinAmountRoute ~ li_bridge_address.value :',
+        //   li_bridge_address.value
+        // );
+        // console.log(
+        //   '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
+        //   minAmountRoute.value
+        // );
         break;
       }
     }
@@ -352,7 +351,6 @@ async function getBalanceInputFrom() {
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
-      console.log(chainFrom.value?.type, ' chainFrom.value?.type');
       if (
         chainFrom.value?.type === 'verse-chain' ||
         inputFromSelect.value?.tokenSymbol === 'OAS' ||
@@ -477,7 +475,6 @@ async function handleInputFromChange(inputSelect) {
   await getBalanceInputFrom();
 }
 function mapEstimateInfo(rs) {
-  console.log('🚀 ~ mapEstimateInfo ~ rs:', rs);
   const amount_in_show = BigNumber(rs.amount_in)
     .div(Math.pow(10, rs.src_token_decimals))
     .toString();
@@ -530,11 +527,6 @@ async function getEstimateFeeRoutes() {
 
       if (rs) {
         estimateInfo.value = mapEstimateInfo(rs);
-        console.log(
-          '🚀 ~ getEstimateFeeRoutes ~ estimateInfo.value:',
-          estimateInfo.value
-        );
-
         // update InputTo amount
         inputToSelect.value.amount = estimateInfo.value?.amount_out_show || 0;
       }
@@ -564,7 +556,6 @@ async function getGasFee() {
         .div(10 ** inputFromSelect.value.decimals)
         .toFixed()
     );
-    console.log('🚀 ~ getGasFee ~ networkFee.value:', networkFee.value);
   } catch (error) {
     console.log(error, 'error=>getGasFee');
   }
@@ -675,8 +666,6 @@ function checkInputToChange() {
       inputToSelect.value.tokensList = [];
     }
   }
-
-  console.log(inputToSelect.value, 'inputToSelect');
 }
 function handleNetworkChange(networkId) {
   let network = getChain(networkId);
@@ -690,7 +679,6 @@ async function handleTransferButton() {
 
     const signer = getSigner();
     const provider = getProvider();
-    console.log('inputToSelect.value', inputToSelect.value);
     const params = {
       sender_address: account.value,
       receiver_address: anotherWalletAddress.value
@@ -734,22 +722,16 @@ async function handleTransferButton() {
     tx &&
       txListener(tx, {
         onTxConfirmed: async (receipt: any) => {
-          // console.log('🚀 ~ onTxConfirmed: ~ params:', params);
-          // const rsBE = await bridgeApi.postBridgeRequestV2(params);
-          // console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
-          // //await initData();
-          // await getBalanceInputFrom();
-          // isLoading.value = false;
           params.src_tx_id = receipt?.transactionHash;
           params.nonce = nonce;
-          console.log('🚀 ~ onTxConfirmed: ~ params:', params);
+
           const maxRetries = 5;
           let attempt = 0;
           let retryDelay = 1000;
           const attemptApiCall = async () => {
             try {
               const rsBE = await bridgeApi.postBridgeRequestV2(params);
-              console.log('🚀 ~ onTxConfirmed: ~ rsBE:', rsBE);
+
               await getBalanceInputFrom();
               isLoading.value = false;
               return true;
@@ -792,7 +774,6 @@ async function handleApproveButton() {
       //.plus(1)
       .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
-    console.log(approveAmount, 'approveAmount');
     //approveAmount = approveAmount + 1;
     const signer = getSigner();
     let tx = await approveToken(

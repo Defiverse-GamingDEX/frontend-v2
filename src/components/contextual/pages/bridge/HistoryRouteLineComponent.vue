@@ -29,7 +29,6 @@ const {
  */
 
 const handleRetryButton = async () => {
-  console.log(props.tx, props?.value?.tx, 'tx');
   // CALL API BE HERE
   try {
     const params = {
@@ -37,7 +36,6 @@ const handleRetryButton = async () => {
       public_address: account.value,
     };
     const rs = await bridgeAPI.postRetryRequest(params);
-    console.log(rs, 'rs=>handleRetryButton');
     // add pagination total here
   } catch (error) {
     console.log(error, 'error=>handleRetryButton');

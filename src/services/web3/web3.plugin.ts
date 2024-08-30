@@ -1,10 +1,10 @@
+import { Network } from '@defiverse/balancer-sdk';
 import { getAddress } from '@ethersproject/address';
 import {
   JsonRpcProvider,
   JsonRpcSigner,
   Web3Provider,
 } from '@ethersproject/providers';
-import { Network } from '@defiverse/balancer-sdk';
 import { setTag } from '@sentry/browser';
 import axios from 'axios';
 import { computed, reactive, Ref, ref, toRefs } from 'vue';
@@ -23,11 +23,11 @@ import useFathom, { Goals, trackGoal } from '@/composables/useFathom';
 import { WALLET_SCREEN_ENDPOINT } from '@/constants/exploits';
 import { lsGet, lsSet } from '@/lib/utils';
 
+import { networkId } from '@/composables/useNetwork';
+import { configService } from '@/services/config/config.service';
 import { rpcProviderService } from '../rpc-provider/rpc-provider.service';
 import { Connector, ConnectorId } from './connectors/connector';
-import { configService } from '@/services/config/config.service';
 import { web3Service } from './web3.service';
-import { networkId } from '@/composables/useNetwork';
 
 export type Wallet =
   | 'metamask'
@@ -62,7 +62,6 @@ export const networkMap = {
 };
 
 export const Web3ProviderSymbol = Symbol('WEB3_PROVIDER');
-console.log(Web3ProviderSymbol, 'Web3ProviderSymbol');
 export type Web3Plugin = {
   connectWallet: (wallet: Wallet) => Promise<void>;
   disconnectWallet: () => Promise<void>;
