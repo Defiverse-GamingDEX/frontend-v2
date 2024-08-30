@@ -53,6 +53,6 @@ onBeforeMount(() => {
 </template>
 <style scoped>
 .atf-badge {
-  //font-size: 12px;
+  font-size: 12px;
 }
 </style>
