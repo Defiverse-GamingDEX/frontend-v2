@@ -141,7 +141,7 @@ function isActive(network: NetworkOption): boolean {
             :alt="activeNetwork.name"
             class="w-6 h-6 rounded-full"
           />
-          <span class="ml-2">
+          <span class="ml-2 lh-20">
             {{ activeNetwork.name }}
           </span>
           <BalIcon name="chevron-down" size="sm" class="ml-2" />
@@ -179,5 +179,11 @@ function isActive(network: NetworkOption): boolean {
     </div>
   </BalPopover>
 </template>
-
+<style scoped lang="scss">
+.lh-20 {
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+</style>
 

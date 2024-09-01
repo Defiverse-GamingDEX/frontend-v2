@@ -136,11 +136,19 @@ const barColor = computed(() =>
 /**
  * WATCHERS
  */
-watchEffect(() => {
+watchEffect(async () => {
   _amount.value = props?.inputSelect?.amount;
   _address.value = props?.inputSelect?.tokenAddress;
   _periods.value = props?.inputSelect?.periods;
   _token_list.value = getTokenList(props.input_list);
+  console.log(_address.value, props.inputSelect, '_address.value');
+  let inputSelect = cloneDeep(props?.inputSelect);
+  const isAllowance = await checkAllowanceToken(inputSelect.tokenAddress);
+  inputSelect.isAllowance = isAllowance;
+
+  inputSelect.isError = checkTokenSelectError(inputSelect);
+
+  emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 });
 
 // FUNCTIONS
@@ -151,7 +159,7 @@ async function checkAllowanceToken(address) {
       provider,
       account.value
     );
-
+    console.log(allowance?.toString(), 'checkAllowanceToken');
     return BigNumber(allowance?.toString() || 0).gt(0) ? true : false;
   } catch (error) {
     console.log(error, 'error=>checkAllowanceToken');

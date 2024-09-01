@@ -59,9 +59,9 @@
       "logoURI": "tokens/GDT_L.png"
     },
     {
-      "address": "0x3Fde6489AA398BcddaB46f971e4BB5364ccCD78B",
+      "address": "0x01Be559EB8d94F6E9166FD09F4A43339112f29b0",
       "chainId": 17117,
-      "name": "CCP",
+      "name": "CCP(new)",
       "symbol": "CCP",
       "decimals": 18,
       "logoURI": "tokens/CCP_L.png"
