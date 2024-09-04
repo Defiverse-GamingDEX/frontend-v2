@@ -552,31 +552,31 @@ async function getEstimateFeeRoutes() {
     console.log(error, 'error=>getEstimateFeeRoutes');
   }
 }
-async function getGasFee() {
-  try {
-    const signer = getSigner();
-    const provider = getProvider();
-    const isEstimate = true;
-    const rs = await bridgeSend(
-      inputFromSelect.value,
-      inputToSelect.value,
-      account.value,
-      signer,
-      provider,
-      isEstimate
-    );
-    const gasPrice = 10000000000000;
-    const gasLimit = rs?.tx || 250000;
-    networkFee.value = Number(
-      BigNumber(gasPrice)
-        .times(gasLimit)
-        .div(10 ** inputFromSelect.value.decimals)
-        .toFixed()
-    );
-  } catch (error) {
-    console.log(error, 'error=>getGasFee');
-  }
-}
+// async function getGasFee() {
+//   try {
+//     const signer = getSigner();
+//     const provider = getProvider();
+//     const isEstimate = true;
+//     const rs = await bridgeSend(
+//       inputFromSelect.value,
+//       inputToSelect.value,
+//       account.value,
+//       signer,
+//       provider,
+//       isEstimate
+//     );
+//     const gasPrice = 10000000000000;
+//     const gasLimit = rs?.tx || 250000;
+//     networkFee.value = Number(
+//       BigNumber(gasPrice)
+//         .times(gasLimit)
+//         .div(10 ** inputFromSelect.value.decimals)
+//         .toFixed()
+//     );
+//   } catch (error) {
+//     console.log(error, 'error=>getGasFee');
+//   }
+// }
 async function getEstimateFee() {
   try {
     //networkFee.value = 0;
@@ -708,6 +708,8 @@ async function handleTransferButton() {
 
     const signer = getSigner();
     const provider = getProvider();
+    const nonce = await provider.getTransactionCount(account.value, 'latest');
+    console.log('🚀 ~ handleTransferButton ~ nonce:', nonce);
     const params = {
       sender_address: account.value,
       receiver_address: anotherWalletAddress.value
@@ -719,14 +721,16 @@ async function handleTransferButton() {
       amount_in: BigNumber(inputFromSelect.value.amount)
         .times(Math.pow(10, inputFromSelect.value.decimals))
         .toFixed(0),
-      nonce: null,
+      nonce: nonce,
       src_tx_id: null,
       convert_gas_amount: BigNumber(convert_gas_amount.value)
         .times(Math.pow(10, inputFromSelect.value.decimals))
         .toFixed(0),
     };
+    const rsBE = await bridgeApi.postBridgeRequestV2(params);
+    console.log('🚀 ~ handleTransferButton ~ rsBE:', rsBE);
 
-    const { tx, nonce } = await bridgeSend(
+    const { tx }: any = await bridgeSend(
       inputFromSelect.value,
       inputToSelect.value,
       account.value,
@@ -735,14 +739,12 @@ async function handleTransferButton() {
       provider,
       false,
       oasys_bridge_type.value,
-      li_bridge_address.value
+      li_bridge_address.value,
+      nonce
     );
-
-    // const chainNameInput = chainFrom.value.name;
-    // const chainNameOutput = chainTo.value.name;
     const summary = `Bridge success!`;
     addTransaction({
-      id: tx.hash,
+      id: tx?.hash,
       type: 'tx',
       action: 'bridge',
       summary,
@@ -752,40 +754,14 @@ async function handleTransferButton() {
       txListener(tx, {
         onTxConfirmed: async (receipt: any) => {
           params.src_tx_id = receipt?.transactionHash;
-          params.nonce = nonce;
-
-          const maxRetries = 5;
-          let attempt = 0;
-          let retryDelay = 1000;
-          const attemptApiCall = async () => {
-            try {
-              const rsBE = await bridgeApi.postBridgeRequestV2(params);
-
-              await getBalanceInputFrom();
-              isLoading.value = false;
-              return true;
-            } catch (error) {
-              console.error(`try ${attempt + 1} failed:`, error);
-              attempt++;
-              if (attempt < maxRetries) {
-                // delay retry
-                setTimeout(attemptApiCall, retryDelay);
-              } else {
-                console.error('max retries exceeded , failed all attempts');
-                isLoading.value = false;
-              }
-              return false;
-            }
-          };
-
-          // start the first attempt
-          await attemptApiCall();
+          await getBalanceInputFrom();
+          isLoading.value = false;
         },
         onTxFailed: () => {
           isLoading.value = false;
         },
       });
-  } catch (error) {
+  } catch (error: any) {
     console.log(error, 'error=>handleTransferButton');
     isLoading.value = false;
     addNotification({

@@ -288,7 +288,7 @@ async function getTokensBalance(tokens, account) {
   if (tokens.length > 0) {
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
-      let balance = 0;
+      let balance: any = 0;
       if (token.is_native === true) {
         // OAS native
         balance = await getNativeBalance(token, account);
@@ -407,21 +407,22 @@ async function bridgeSend(
   provider,
   isEstimate = false,
   oasys_bridge_type,
-  l1_bridge_address
+  l1_bridge_address,
+  nonce
 ) {
   try {
-    const chainFrom = getChain(inputFromSelect.chainId);
+    const chainFrom: any = getChain(inputFromSelect.chainId);
     const tokenInputFrom = getToken(
       inputFromSelect.tokenAddress,
       inputFromSelect.tokensList
     );
-    const chainTo = getChain(inputToSelect.chainId);
+    const chainTo: any = getChain(inputToSelect.chainId);
     const tokenInputTo = getToken(
       inputToSelect.tokenAddress,
       inputToSelect.tokensList
     );
 
-    let rs = null;
+    let rs: any = null;
     if (oasys_bridge_type === 'external_to_oasys') {
       // native case => oasys -> NOT NOW
       // token case only
@@ -439,6 +440,7 @@ async function bridgeSend(
         abi: chainFrom?.bridgeABI,
         gasPrice: chainFrom?.gasPrice,
         isEstimate,
+        nonce,
       };
       rs = await bridgeService.bridgeSend(params);
     } else if (oasys_bridge_type === 'oasys_to_external') {
@@ -461,6 +463,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
+          nonce,
         };
         rs = await bridgeService.bridgeSend(params);
       }
@@ -479,6 +482,7 @@ async function bridgeSend(
         abi: chainFrom?.bridgeABI,
         gasPrice: chainFrom?.gasPrice,
         isEstimate,
+        nonce,
       };
 
       rs = await bridgeService.bridgeWithdrawTo(params);
@@ -497,6 +501,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
+          nonce,
         };
         rs = await bridgeService.bridgeDepositETHTo(params);
       } else {
@@ -514,6 +519,7 @@ async function bridgeSend(
           abi: chainFrom?.bridgeABI,
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
+          nonce,
         };
         rs = await bridgeService.bridgeDepositERC20To(params);
       }
@@ -539,6 +545,7 @@ async function bridgeSend(
             abi: chainFrom?.bridgeABI,
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
+            nonce,
           };
           rs = await bridgeService.bridgeSend(params);
         }
@@ -559,6 +566,7 @@ async function bridgeSend(
             abi: chainFrom?.bridgeABI,
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
+            nonce,
           };
           rs = await bridgeService.bridgeWithdrawTo(params);
         } else {
@@ -576,6 +584,7 @@ async function bridgeSend(
             abi: chainFrom?.bridgeABI,
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
+            nonce,
           };
           rs = await bridgeService.bridgeWithdrawTo(params);
         }

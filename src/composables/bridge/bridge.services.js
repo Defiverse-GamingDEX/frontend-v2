@@ -153,9 +153,11 @@ const bridgeSend = async params => {
     abi,
     gasPrice,
     isEstimate,
+    nonce,
   } = params;
+  console.log('🚀 ~ bridgeSend ~ nonce:', nonce);
 
-  const nonce = await contractProvider.getTransactionCount(account, 'latest');
+  //const nonce = await contractProvider.getTransactionCount(account, 'latest');
   let decimals_value = BigNumber(value)
     .times(10 ** srcTokenDecimal)
     .toFixed(0);
@@ -200,7 +202,9 @@ const bridgeWithdrawTo = async params => {
     abi,
     gasPrice,
     isEstimate,
+    nonce,
   } = params;
+  console.log('🚀 ~ bridgeWithdrawTo ~ nonce:', nonce);
 
   const gasLimit = 2000000;
 
@@ -213,7 +217,7 @@ const bridgeWithdrawTo = async params => {
   //   overwrite.value = decimals_value;
   // }
 
-  const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
+  //const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
 
   const rs = await _sendRawTx(
     contractAddress,
@@ -243,7 +247,9 @@ const bridgeDepositERC20To = async params => {
     abi,
     gasPrice,
     isEstimate,
+    nonce,
   } = params;
+  console.log('🚀 ~ bridgeDepositERC20To ~ nonce:', nonce);
 
   const gasLimit = 2000000;
 
@@ -252,7 +258,7 @@ const bridgeDepositERC20To = async params => {
     .toFixed(0);
   let overwrite = { from: account };
 
-  const nonce = '0x';
+  //const nonce = '0x';
 
   const rs = await _sendRawTx(
     contractAddress,
@@ -287,7 +293,9 @@ const bridgeDepositETHTo = async params => {
     abi,
     gasPrice,
     isEstimate,
+    nonce,
   } = params;
+  console.log('🚀 ~ bridgeDepositETHTo ~ nonce:', nonce);
 
   const gasLimit = 2000000;
 
@@ -295,8 +303,6 @@ const bridgeDepositETHTo = async params => {
     .times(10 ** srcTokenDecimal)
     .toFixed(0);
   let overwrite = { from: account, value: decimals_value };
-
-  const nonce = '0x';
 
   const rs = await _sendRawTx(
     contractAddress,
