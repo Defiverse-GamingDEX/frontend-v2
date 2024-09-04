@@ -22,6 +22,7 @@ import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
 import useWeb3 from '@/services/web3/useWeb3';
 import { isAddress } from '@ethersproject/address';
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 import { cloneDeep, debounce } from 'lodash';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -708,7 +709,19 @@ async function handleTransferButton() {
 
     const signer = getSigner();
     const provider = getProvider();
-    const nonce = await provider.getTransactionCount(account.value, 'latest');
+    let nonce: any = ethers.utils
+      .hexlify(ethers.utils.randomBytes(32))
+      ?.toString();
+    let src_chain_id: any = inputFromSelect.value.chainId;
+    let dst_chain_id: any = inputToSelect.value.chainId;
+    // TODO hotfix
+    if (src_chain_id == 137 || src_chain_id == 1) {
+      // time stamp
+      nonce = Date.now();
+    }
+    if (src_chain_id == 248 && (dst_chain_id == 137 || dst_chain_id == 1)) {
+      nonce = Date.now();
+    }
     console.log('🚀 ~ handleTransferButton ~ nonce:', nonce);
     const params = {
       sender_address: account.value,
