@@ -89,7 +89,7 @@ const networks = [
 let networksDev = [
   {
     id: 'defiverse-testnet',
-    name: 'DefiVerse Testnet',
+    name: 'DefiVerse-Testnet',
     networkSlug: 'defiverse-testnet',
     key: '17117',
     tokens: defiverseTestnetJson.tokens,
@@ -99,7 +99,7 @@ let networksDev = [
   },
   {
     id: 'oasys-testnet',
-    name: 'Oasys Testnet',
+    name: 'Oasys-Testnet',
     networkSlug: 'oasys-testnet',
     key: '9372',
     tokens: oasysTestnetJson.tokens,
