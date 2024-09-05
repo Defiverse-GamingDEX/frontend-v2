@@ -59,6 +59,8 @@ export const networkMap = {
   [Network.ARBITRUM]: 'arbitrum-one',
   [Network.DEFIVERSE]: 'defiverse',
   [Network.DEFIVERSE_TESTNET]: 'defiverse-testnet',
+  [Network.OASYS]: 'oasys',
+  [Network.OASYS_TESTNET]: 'oasys-testnet',
 };
 
 export const Web3ProviderSymbol = Symbol('WEB3_PROVIDER');

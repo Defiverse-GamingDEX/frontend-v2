@@ -81,6 +81,10 @@ export default function useWeb3() {
   const isDefiverseTestnet = computed(
     () => appNetworkConfig.chainId === Network.DEFIVERSE_TESTNET
   );
+  const isOasys = computed(() => appNetworkConfig.chainId === Network.OASYS);
+  const isOasysTestnet = computed(
+    () => appNetworkConfig.chainId === Network.OASYS_TESTNET
+  );
   const isEIP1559SupportedNetwork = computed(
     () => appNetworkConfig.supportsEIP1559
   );
@@ -165,6 +169,10 @@ export default function useWeb3() {
     isArbitrum,
     isDefiverse,
     isDefiverseTestnet,
+
+    isOasys,
+    isOasysTestnet,
+
     isEIP1559SupportedNetwork,
     isWalletConnecting,
     isBlocked,

@@ -72,6 +72,8 @@ const POOL_ISSUES = {
   },
   [Network.DEFIVERSE]: {},
   [Network.DEFIVERSE_TESTNET]: {},
+  [Network.OASYS]: {},
+  [Network.OASYS_TESTNET]: {},
 };
 
 const issues = POOL_ISSUES[networkId.value];

@@ -17,6 +17,10 @@ const network = ((): Network => {
       return Network.DEFIVERSE;
     case '17117':
       return Network.DEFIVERSE_TESTNET;
+    case '248':
+      return Network.OASYS;
+    case '9372':
+      return Network.OASYS_TESTNET;
     default:
       return Network.MAINNET;
   }
