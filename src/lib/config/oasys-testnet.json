@@ -21,7 +21,7 @@
       "https://graphnode-oasys-testnet.defi-verse.org/subgraphs/name/balancer-labs/oasys-testnet"
     ],
     "aave": "",
-    "gauge": "https://graphnode-oasys-testnet.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse-testnet-v2",
+    "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse",
     "blocks": ""
   },
   "supportsEIP1559": false,
