@@ -843,7 +843,7 @@ const POOLS_OASYS_TESTNET: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [],
+  BlockList: [''],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',
