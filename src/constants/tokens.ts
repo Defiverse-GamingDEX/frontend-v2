@@ -241,6 +241,40 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
   },
 };
 
+export const TOKENS_OASYS: TokenConstants = {
+  Popular: {
+    Symbols: ['GDT', 'BAL', 'WOAS'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0x5200000000000000000000000000000000000001', // need CONFIRM
+    WETH: '0x5200000000000000000000000000000000000001',
+    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    GDT: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+  },
+  PriceChainMap: {
+    '0x5200000000000000000000000000000000000001':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+  },
+};
+
+export const TOKENS_OASYS_TESTNET: TokenConstants = {
+  Popular: {
+    Symbols: ['GDT', 'BAL', 'WOAS'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0x5200000000000000000000000000000000000001', // need CONFIRM
+    WETH: '0x5200000000000000000000000000000000000001',
+    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    GDT: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+  },
+  PriceChainMap: {
+    '0x5200000000000000000000000000000000000001':
+      '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+  },
+};
+
 const TOKENS_MAP = {
   [Network.GOERLI]: TOKENS_GOERLI,
   [Network.MAINNET]: TOKENS_MAINNET,
@@ -248,6 +282,8 @@ const TOKENS_MAP = {
   [Network.ARBITRUM]: TOKENS_ARBITRUM,
   [Network.DEFIVERSE]: TOKENS_DEFIVERSE,
   [Network.DEFIVERSE_TESTNET]: TOKENS_DEFIVERSE_TESTNET,
+  [Network.OASYS]: TOKENS_OASYS,
+  [Network.OASYS_TESTNET]: TOKENS_OASYS_TESTNET,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]

@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import BridgeComponent from '@/components/contextual/pages/bridge/BridgeComponent.vue';
-import RedeemComponent from '@/components/contextual/pages/bridge/RedeemComponent.vue';
-import BridgeAdminComponent from '@/components/contextual/pages/bridge/BridgeAdminComponent.vue';
+import HistoryComponent from '@/components/contextual/pages/bridge/HistoryComponent.vue';
+import LastTxComponent from '@/components/contextual/pages/bridge/LastTxComponent.vue';
+import MiniHistoryComponent from '@/components/contextual/pages/bridge/MiniHistoryComponent.vue';
+import Col3Layout from '@/components/layouts/Col3Layout.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
+import useAlerts from '@/composables/useAlerts';
 import useWeb3 from '@/services/web3/useWeb3';
-import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+//const WHITELIST_ADDRESSES = [];
 /**
  * STATE
  */
@@ -14,12 +16,15 @@ const tabSelect = ref('bridge'); // bridge, redeem, admin
 const adminAddress = ref(null);
 
 // COMPOSABLES
-const { t } = useI18n();
+//const { t } = useI18n();
+const { removeAlert } = useAlerts();
 const { getAdminAddress } = usePoolCreation();
 
-const { account } = useWeb3();
+const { account, chainId } = useWeb3();
 
+const route = useRoute();
 const router = useRouter();
+
 // COMPUTED
 const isAdmin = computed(() => {
   if (!adminAddress.value) {
@@ -30,25 +35,54 @@ const isAdmin = computed(() => {
   }
   return false;
 });
+
 // WATCHS
 watch(isAdmin, () => {
   if (!isAdmin.value) {
     tabSelect.value = 'bridge';
   }
 });
-// LIFE CYCLES
-onBeforeMount(async () => {
-  router.push('/'); // hide bridge in this version 2023/12/04
-  adminAddress.value = await getAdminAddress();
+watch(chainId, () => {
+  checkMisMatch();
+  checkWhileList();
+});
+watch(route?.name, () => {
+  checkMisMatch();
 });
 
-/**
- * METHODS
- */
-
+watch(account, () => {
+  checkWhileList();
+});
+// FUNCTIONS
+const checkMisMatch = () => {
+  if (route?.name === 'bridge') {
+    // not check mismath in bridge page
+    removeAlert('network-mismatch');
+    return;
+  }
+};
+const checkWhileList = () => {
+  // if (!account.value || !chainId.value) {
+  //   router.push({ name: 'home' });
+  // }
+  // else {
+  //   const isIncluded = WHITELIST_ADDRESSES.map((a: any) =>
+  //     a.toLowerCase()
+  //   ).includes(account.value.toLowerCase());
+  //   if (!isIncluded) {
+  //     router.push({ name: 'home' });
+  //   }
+  // }
+};
 function changeTab(tab) {
   tabSelect.value = tab;
 }
+// LIFE CYCLES
+onBeforeMount(async () => {
+  adminAddress.value = await getAdminAddress();
+  checkMisMatch();
+  checkWhileList();
+});
 </script>
 
 <template>
@@ -65,6 +99,14 @@ function changeTab(tab) {
       <BalBtn
         classCustom="outline-3"
         class="mr-5 hero-btn"
+        :class="{ active: tabSelect === 'history' }"
+        @click="changeTab('history')"
+      >
+        History
+      </BalBtn>
+      <!-- <BalBtn
+        classCustom="outline-3"
+        class="mr-5 hero-btn"
         :class="{ active: tabSelect === 'redeem' }"
         @click="changeTab('redeem')"
       >
@@ -78,19 +120,46 @@ function changeTab(tab) {
         @click="changeTab('admin')"
       >
         Admin
-      </BalBtn>
+      </BalBtn> -->
     </div>
-    <Col3Layout offsetGutters mobileHideGutters class="mt-10">
+    <Col3Layout
+      v-if="
+        tabSelect === 'bridge' ||
+        tabSelect === 'redeem' ||
+        tabSelect === 'admin'
+      "
+      offsetGutters
+      class="mt-10"
+      :class="{ 'bridge-page-layout': tabSelect === 'bridge' }"
+    >
+      <template #gutterLeft>
+        <div v-if="tabSelect === 'bridge'" class="tx-status">
+          <LastTxComponent />
+        </div>
+      </template>
+
       <div v-if="tabSelect === 'bridge'" class="section">
         <BridgeComponent />
       </div>
-      <div v-if="tabSelect === 'redeem'" class="section">
+
+      <!-- <div v-if="tabSelect === 'redeem'" class="section">
         <RedeemComponent />
       </div>
       <div v-if="tabSelect === 'admin'" class="section">
         <BridgeAdminComponent />
-      </div>
+      </div> -->
+      <template #gutterRight>
+        <div v-if="tabSelect === 'bridge'" class="mini-history">
+          <MiniHistoryComponent />
+        </div>
+      </template>
     </Col3Layout>
+    <div
+      v-if="tabSelect === 'history'"
+      class="mt-10 section bridge-page-history-layout"
+    >
+      <HistoryComponent />
+    </div>
   </div>
 </template>
 
@@ -109,5 +178,26 @@ function changeTab(tab) {
       color: #048bc9;
     }
   }
+}
+.bridge-page-layout {
+  max-width: 76rem;
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  :deep {
+    .gutter-col {
+      &.mt-6 {
+        margin-top: 0px;
+      }
+    }
+    .card-container {
+      width: 100%;
+    }
+  }
+}
+.bridge-page-history-layout {
+  max-width: 80rem;
+  margin: 0 auto;
+  margin-top: 2.5rem;
 }
 </style>

@@ -2,7 +2,6 @@ import networksSupport from '@/constants/networks';
 import { GasPrice } from './providers/types';
 
 const getTokenListFromNetworkId = networkId => {
-  console.log('getTokenListFromNetworkId', networkId, networksSupport);
   const networks = [
     ...networksSupport.networks,
     ...networksSupport.networksDev,
@@ -15,7 +14,6 @@ const getTokenListFromNetworkId = networkId => {
 };
 
 const getGasPriceCustom: GasPrice = networkId => {
-  console.log('getGasPriceCustom', networkId, networksSupport);
   const networks = [
     ...networksSupport.networks,
     ...networksSupport.networksDev,

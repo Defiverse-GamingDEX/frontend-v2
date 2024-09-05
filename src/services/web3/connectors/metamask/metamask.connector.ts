@@ -37,8 +37,11 @@ export class MetamaskConnector extends Connector {
           accounts = await provider.request({
             method: 'eth_requestAccounts',
           });
-
-          chainId = await provider.request({ method: 'eth_chainId' });
+          if (provider.chainId) {
+            chainId = provider.chainId;
+          } else {
+            chainId = await provider.request({ method: 'eth_chainId' });
+          }
         }
       } catch (err) {
         if ((err as WalletError).code === 4001) {

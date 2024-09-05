@@ -13,7 +13,7 @@ interface Props {
   tokenChoose: object;
 }
 const { account, isWalletReady } = useWeb3();
-console.log(account, 'accountAAA');
+
 const props = withDefaults(defineProps<Props>(), {
   open: false,
   ignoreBalances: false,
@@ -117,13 +117,11 @@ onMounted(async () => {
     tokens.value = await getTokensBalance(tokens.value, account.value);
     tokensShow.value = tokens.value;
   }
-  console.log(tokensShow.value, 'okensShow.value');
 });
 /**
  * METHODS
  */
 function createTokens() {
-  console.log(props.tokensList, 'props.tokensList');
   let tokensWithValues = [];
   for (let i = 0; i < props.tokensList?.length; i++) {
     let token = props.tokensList[i];
@@ -149,10 +147,8 @@ async function onSelectToken(token: object): Promise<void> {
   emit('close');
 }
 function handleSearch(text) {
-  console.log(text, 'text');
   search.value = text;
   const query = text.toLowerCase();
-  console.log(query, 'query');
 
   const rs = tokens?.value?.filter(item => {
     // Check if the item's name, symbol, or address contains the search query
@@ -162,7 +158,7 @@ function handleSearch(text) {
       item.address.toLowerCase().includes(query)
     );
   });
-  console.log(rs, 'rs');
+
   tokensShow.value = rs;
 }
 const handleAddressField = async () => {
@@ -210,7 +206,6 @@ const initiateTransaction = async token => {
     // const secret =
     //   'aOMA87BhkaKXUXKy1XJE3WmLqU9Elgmd0875qQvTnxHebECDGqTgQrXZcWGAoURD7Cm36J8tbe7q5YuCgCTsVMPX';
 
-    console.log('Body to generate signature ---->', body);
     const requestString = JSON.stringify(body);
     const signature = Hex.stringify(hmacSHA512(requestString, secret));
     window.SingularityEvent.transactionFlow(requestString, signature);
@@ -223,7 +218,6 @@ const initiateTransaction = async token => {
   }
 };
 const handleBuy = token => {
-  console.log('handleBuy');
   initiateTransaction(token);
 };
 </script>

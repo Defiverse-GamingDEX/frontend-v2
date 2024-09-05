@@ -5,19 +5,17 @@ import {
   ethereumTxType,
 } from '@/composables/useEthereumTxType';
 
+import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers';
 import ConfigService from '../config/config.service';
+import ArbitrumProvider from './providers/arbitrum.provider';
 import BlocknativeProvider from './providers/blocknative.provider';
+import DefiverseTestnetProvider from './providers/defiverse-testnet.provider';
+import DefiverseProvider from './providers/defiverse.provider';
 import PolygonProvider from './providers/polygon.provider';
 import { GasPrice, GasSettings } from './providers/types';
-import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers';
-import ArbitrumProvider from './providers/arbitrum.provider';
-import DefiverseProvider from './providers/defiverse.provider';
-import DefiverseTestnetProvider from './providers/defiverse-testnet.provider';
 const USE_BLOCKNATIVE_GAS_PLATFORM =
   import.meta.env.VITE_USE_BLOCKNATIVE_GAS_PLATFORM === 'false' ? false : true;
 export const GAS_LIMIT_BUFFER = 0.1;
-
-import tokensUtils from '@/lib/utils/tokens';
 
 export class GasPriceService {
   constructor(
@@ -38,17 +36,9 @@ export class GasPriceService {
       case '42161':
         return await this.arbitrumProvider.getGasPrice();
       case '16116':
-        console.log(
-          await this.defiverseProvider.getGasPrice(),
-          ' await this.defiverseProvider.getGasPrice()'
-        );
         return await this.defiverseProvider.getGasPrice();
       //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       case '17117':
-        console.log(
-          await this.defiverseTestnetProvider.getGasPrice(),
-          ' await this.defiverseTestnetProvider.getGasPrice()'
-        );
         return await this.defiverseTestnetProvider.getGasPrice();
       //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       default:

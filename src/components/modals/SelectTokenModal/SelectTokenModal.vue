@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { orderBy } from 'lodash';
 import { computed, reactive, toRef, watch, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TokenListItem from '@/components/lists/TokenListItem.vue';
 import TokenListsListItem from '@/components/lists/TokenListsListItem.vue';
+import useUrls from '@/composables/useUrls';
 import { useTokenLists } from '@/providers/token-lists.provider';
 import { useTokens } from '@/providers/tokens.provider';
-import useUrls from '@/composables/useUrls';
+import { configService } from '@/services/config/config.service';
 import { TokenInfoMap, TokenList } from '@/types/TokenList';
 import { useMagicKeys } from '@vueuse/core';
-import { configService } from '@/services/config/config.service';
 
 import tokensUtils from '@/lib/utils/tokens';
 
@@ -60,8 +59,7 @@ const state: ComponentState = reactive({
  */
 const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
   useTokenLists();
-console.log(activeTokenLists, 'activeTokenListsAAA');
-console.log(approvedTokenLists, 'approvedTokenLists');
+
 const {
   getToken,
   searchTokens,
@@ -179,7 +177,6 @@ function filterNativeToken(tokens) {
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
 
-    console.log('===token:', token);
     //
     // TODO: Need to load token list by chain
     let tokensByChain = tokensUtils.getTokenListFromNetworkId(
@@ -194,7 +191,6 @@ function filterNativeToken(tokens) {
       rs.push(token);
     }
   }
-  console.log(rs, 'rs=>filterNativeTokenSelectToken');
   return rs;
 }
 

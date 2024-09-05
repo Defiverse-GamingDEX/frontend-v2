@@ -33,15 +33,13 @@ onMounted(() => {});
  * METHODS
  */
 function handleSearch(text) {
-  console.log(text, 'text');
   search.value = text;
   const query = text.toLowerCase();
-  console.log(query, 'query');
-  console.log(props?.networkList, 'props?.networkList');
+
   const rs = props?.networkList?.filter(item =>
     item?.name?.toLowerCase()?.includes(query)
   );
-  console.log(rs, 'rs');
+
   networkListShow.value = rs;
 }
 async function onSelectNetwork(network: number): Promise<void> {

@@ -9,20 +9,20 @@ import StakePreviewModal from '@/components/contextual/pages/pool/staking/StakeP
 import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
 import usePoolTransfers from '@/composables/contextual/pool-transfers/usePoolTransfers';
 import {
-  isStableLike,
-  usePool,
   isDeep,
+  isStableLike,
   tokensListExclBpt,
+  usePool,
 } from '@/composables/usePool';
-import { useTokens } from '@/providers/tokens.provider';
 import { LOW_LIQUIDITY_THRESHOLD } from '@/constants/poolLiquidity';
 import {
   bnum,
-  selectByAddress,
   indexOfAddress,
   isSameAddress,
+  selectByAddress,
 } from '@/lib/utils';
 import { isRequired } from '@/lib/utils/validations';
+import { useTokens } from '@/providers/tokens.provider';
 // Types
 import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -219,7 +219,6 @@ function setNativeAsset(to: NativeAsset): void {
 async function checkIsLiquidityWhitelisted() {
   try {
     let multiCall = [];
-    console.log(tokenAddresses.value, 'tokenAddresses.value');
     if (tokenAddresses.value?.length > 0) {
       for (let i = 0; i < tokenAddresses.value?.length; i++) {
         multiCall.push(
@@ -228,7 +227,6 @@ async function checkIsLiquidityWhitelisted() {
       }
     }
     let rs = await Promise.allSettled(multiCall);
-    console.log(rs, 'rs=>checkIsLiquidityWhitelisted');
     let isExistWhiteList = rs?.find(
       item => item?.value?.isLiquidityWhitelisted === true
     );
@@ -237,7 +235,6 @@ async function checkIsLiquidityWhitelisted() {
     } else {
       isPoolWhiteList.value = false;
     }
-    console.log(isPoolWhiteList.value, ' isPoolWhiteList.value');
   } catch (error) {
     console.log(error, 'error=>checkIsLiquidityWhitelisted');
   }
@@ -245,7 +242,6 @@ async function checkIsLiquidityWhitelisted() {
 async function checkIsHasProtectedToken() {
   try {
     let multiCall = [];
-    console.log(tokenAddresses.value, 'tokenAddresses.value');
     if (tokenAddresses.value?.length > 0) {
       for (let i = 0; i < tokenAddresses.value?.length; i++) {
         multiCall.push(
@@ -254,7 +250,6 @@ async function checkIsHasProtectedToken() {
       }
     }
     let rs = await Promise.allSettled(multiCall);
-    console.log(rs, 'rs=>checkIsHasProtectedToken');
     let isExistWhiteList = rs?.find(
       item => item?.value?.isProtectedToken === true
     );
@@ -263,7 +258,6 @@ async function checkIsHasProtectedToken() {
     } else {
       isHasProtectedToken.value = false;
     }
-    console.log(isPoolWhiteList.value, ' isPoolWhiteList.value');
   } catch (error) {
     console.log(error, 'error=>checkIsLiquidityWhitelisted');
   }
@@ -362,7 +356,8 @@ watch(useNativeAsset, shouldUseNativeAsset => {
       type="error"
     >
       <p class="text-gray-600 dark:text-gray-400">
-        This pool has ATF token. Your wallet must be whitelisted to add liquidity
+        This pool has ATF token. Your wallet must be whitelisted to add
+        liquidity
       </p>
     </BalAlert>
     <WrapStEthLink :pool="pool" class="mt-4" />

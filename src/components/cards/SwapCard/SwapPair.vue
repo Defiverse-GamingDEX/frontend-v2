@@ -2,12 +2,12 @@
 import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
 import { UseSwapping } from '@/composables/swap/useSwapping';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
 import useVeBal from '@/composables/useVeBAL';
 import { bnum } from '@/lib/utils';
+import { useTokens } from '@/providers/tokens.provider';
 
-import SwapPairToggle from './SwapPairToggle.vue';
 import SwapAntiTraderWarningModal from '@/components/modals/SwapAntiTraderWarningModal.vue';
+import SwapPairToggle from './SwapPairToggle.vue';
 
 import useWeb3 from '@/services/web3/useWeb3';
 
@@ -115,7 +115,6 @@ watch(
       tokenInTraderInfo.value,
       tokenIn.value
     );
-    console.log(tokenInTraderInfo.value, 'tokenInTraderInfo');
     emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
   }
 );
@@ -131,7 +130,6 @@ watch(
       tokenOutTraderInfo.value,
       tokenOut.value
     );
-    console.log(tokenOutTraderInfo.value, 'tokenOutTraderInfo');
   }
 );
 watch(
@@ -171,7 +169,6 @@ async function updateTraderInfo() {
     tokenInTraderInfo.value,
     tokenIn.value
   );
-  console.log(tokenInTraderInfo.value, 'tokenInTraderInfoCCCC');
   checkAmountAntiTrader();
   emit('update:tokenInTradeInfo', tokenInTraderInfo.value);
 }
@@ -189,7 +186,6 @@ function preventUpdatesOnTyping(callback: () => void) {
 
 function handleInAmountChange(value: string): void {
   emit('update:tokenInAmount', value);
-  console.log(value, 'value');
   preventUpdatesOnTyping(() => {
     // not calc if amount not done
     if (value === '0.' || Number(value) === 0) {
@@ -256,7 +252,6 @@ function mapDataTraderInfo(tokenTraderInfo, tokenInfo) {
   rs.sellableAmount = bnum(tokenTraderInfo.getSellable)
     .div(Math.pow(10, tokenInfo.decimals))
     .toNumber();
-  console.log(rs.sellableAmount, 'rs.sellableAmount');
   return rs;
 }
 function handleModalAntiTraderClose() {

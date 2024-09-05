@@ -77,7 +77,7 @@ const connectorName = computed(() => {
   }
   return '';
 });
-console.log(connectorName.value, 'connectorName.value');
+
 /**
  * METHODS
  */
@@ -92,20 +92,12 @@ const setDomain = () => {
   }
 };
 const addTokenToMetamask = async () => {
-  console.log(connectorName?.value, 'connectorNameAAA');
   if (connectorName?.value === 'MetaMask') {
-    console.log(
-      token,
-      token?.value,
-      token.value?.address,
-      'addTokenToMetamask'
-    );
     try {
       let imgUrl = null;
       if (token?.value.logoURI) {
         imgUrl = `${currentDomain.value}/${token?.value.logoURI}`;
       }
-      console.log(imgUrl, 'imgUrl');
       let rs = await provider.value?.request({
         method: 'wallet_watchAsset',
         params: {
@@ -118,7 +110,6 @@ const addTokenToMetamask = async () => {
           },
         },
       });
-      console.log(rs, 'rs');
     } catch (error) {
       console.error('Error:=>addTokenToMetamask', error);
     }

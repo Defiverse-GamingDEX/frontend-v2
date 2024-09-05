@@ -88,7 +88,6 @@ function onFixedInput(val: string): void {
 }
 
 function onCustomInput(val: string): void {
-  console.log('onCustomInput', val);
   initialFee.value = (Number(val) / 100).toString();
   isCustomFee.value = true;
 

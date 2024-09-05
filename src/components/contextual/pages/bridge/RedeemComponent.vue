@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import useBreakpoints from '@/composables/useBreakpoints';
-import useWeb3 from '@/services/web3/useWeb3';
-import InputRedeem from './redeem/InputRedeem.vue';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
+import useWeb3 from '@/services/web3/useWeb3';
+import { computed } from 'vue';
+import InputRedeem from './redeem/InputRedeem.vue';
 
 // COMPOSABLES
 const { bp } = useBreakpoints();
@@ -29,7 +29,6 @@ const swapCardShadow = computed(() => {
 
 async function handleInputToChange(inputSelect) {
   inputToSelect.value = inputSelect;
-  console.log(inputToSelect.value, 'inputToSelect.value');
 }
 async function handleRecoverButton() {
   console.log(inputToSelect.value, 'inputToSelect.value');

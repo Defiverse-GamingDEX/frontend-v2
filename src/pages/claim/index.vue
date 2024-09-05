@@ -85,6 +85,16 @@ const networks: NetworkMetadata[] = [
     name: 'Defiverse-Testnet',
     key: Network.DEFIVERSE_TESTNET,
   },
+  {
+    id: 'oasys',
+    name: 'Oasys',
+    key: Network.OASYS,
+  },
+  {
+    id: 'oasys-testnet',
+    name: 'Oasys-Testnet',
+    key: Network.OASYS_TESTNET,
+  },
 ];
 
 /**

@@ -55,3 +55,12 @@ export function isGreaterThan(min: number | string, msg = '') {
     bnum(v).isGreaterThan(min) ||
     (msg ? msg : i18n.global.t('mustBeMoreThan', [min]));
 }
+export function isGreaterThanOrEqualTo(min: number | string, msg = '') {
+  return v =>
+    !v ||
+    bnum(v).isGreaterThanOrEqualTo(min) ||
+    (msg ? msg : i18n.global.t('mustBeMoreOrEqualTo', [min]));
+}
+export function isValidAddressV2() {
+  return v => !v || isAddress(v) || i18n.global.t('mustBeValidAddressV2');
+}

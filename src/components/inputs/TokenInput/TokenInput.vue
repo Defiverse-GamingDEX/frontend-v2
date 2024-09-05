@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch, watchEffect } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { BalRangeInputProps } from '@/components/_global/BalRangeInput/BalRangeInput.vue';
 import { overflowProtected } from '@/components/_global/BalTextInput/helpers';
-import { Rules } from '@/types';
 import TokenSelectInput from '@/components/inputs/TokenSelectInput/TokenSelectInput.vue';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { useTokens } from '@/providers/tokens.provider';
 import { bnum, isSameAddress } from '@/lib/utils';
 import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
+import { useTokens } from '@/providers/tokens.provider';
 import useWeb3 from '@/services/web3/useWeb3';
+import { Rules } from '@/types';
 import { TokenInfo } from '@/types/TokenList';
+import BigNumber from 'bignumber.js';
+import { computed, nextTick, ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { TokenSelectProps } from '../TokenSelectInput/TokenSelectInput.vue';
-import { BalRangeInputProps } from '@/components/_global/BalRangeInput/BalRangeInput.vue';
-
 /**
  * TYPES
  */
@@ -222,6 +222,20 @@ const setMax = () => {
   handleAmountChange(maxAmount);
 };
 
+const onSellableClick = () => {
+  let maxAmount = props.customBalance
+    ? props.customBalance
+    : getMaxBalanceFor(_address.value, props.disableNativeAssetBuffer);
+  let sellableAmount = props.tokenInTraderInfo?.sellableAmount;
+  maxAmount = BigNumber(maxAmount).toFixed();
+  sellableAmount = BigNumber(sellableAmount).toFixed();
+  if (BigNumber(maxAmount).lte(sellableAmount)) {
+    emit('setMax', maxAmount);
+    handleAmountChange(maxAmount);
+  } else {
+    handleAmountChange(sellableAmount);
+  }
+};
 /**
  * WATCHERS
  */
@@ -313,7 +327,8 @@ watch(_address, async (newAddress, oldAddress) => {
           <div class="pl-2 truncate">
             <template v-if="hasAmount && hasToken">
               <span v-if="!hideFiatValue">
-                {{ fNum2(tokenValue, FNumFormats.fiat) }}
+                ${{ tokenValue }}
+                <!-- {{ fNum2(tokenValue, FNumFormats.fiat) }} -->
               </span>
               <span v-if="priceImpact" :class="priceImpactClass">
                 ({{
@@ -366,7 +381,7 @@ watch(_address, async (newAddress, oldAddress) => {
                 <span class="sellable-amount">
                   {{ _amount || 0 }}
                 </span>
-                <span class="total-amount">
+                <span class="total-amount clickable" @click="onSellableClick">
                   /{{
                     fNum2(tokenInTraderInfo?.sellableAmount, FNumFormats.token)
                   }}
@@ -443,5 +458,12 @@ watch(_address, async (newAddress, oldAddress) => {
   font-size: 16px;
   line-height: 19px;
   font-weight: bold;
+  &.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 </style>

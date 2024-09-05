@@ -24,7 +24,7 @@ const {
   isMismatchedNetwork,
   startConnectWithInjectedProvider,
 } = useWeb3();
-console.log(chainId, 'chainId=>useWeb3');
+
 const { initSingularity, connectWalletConnectProvider, singularityLogout } =
   useSingularity();
 /**
@@ -47,7 +47,6 @@ const swapCardShadow = computed(() => {
 watch(
   () => chainId.value,
   () => {
-    console.log('watch=>chainId.value', chainId.value);
     if (chainId.value) {
       initTokenList(chainId.value);
     }
@@ -67,30 +66,13 @@ watch(
  * FUNCTIONs
  */
 const openBuyCryptoModal = () => {
-  console.log('openBuyCryptoModal');
-
   openTokenModal.value = true;
 };
 const initTokenList = chain => {
-  // console.log(SINGULARITY_NETWORKS, ' SINGULARITY_NETWORKS');
-  // console.log(chain, ' chain');
-  // networkChoose.value = SINGULARITY_NETWORKS.find(
-  //   item => item.chain_id_decimals === chain
-  // );
-  // console.log(networkChoose.value, ' networkChoose.value');
-  // let tokens =
-  //   networkChoose.value?.tokens?.map(token => {
-  //     return {
-  //       ...token,
-  //       chainInfo: {
-  //         ...networkChoose.value,
-  //       },
-  //     };
-  //   }) || [];
   networkChoose.value = SINGULARITY_NETWORKS.find(
     item => item.chain_id_decimals === 16116
   );
-  console.log(networkChoose.value, ' networkChoose.value');
+
   let tokens =
     networkChoose.value?.tokens?.map(token => {
       return {
@@ -104,14 +86,12 @@ const initTokenList = chain => {
   tokensList.value = tokens;
 };
 const checkSingularityLoaded = payload => {
-  console.log(payload, 'checkSingularityLoaded');
   isLoading.value = false;
 };
 /**
  * LIFECYCLE
  */
 onMounted(async () => {
-  console.log('window.Singularity.isMounted', window.Singularity.isMounted);
   if (window.Singularity?.isMounted) {
     isLoading.value = false;
   }

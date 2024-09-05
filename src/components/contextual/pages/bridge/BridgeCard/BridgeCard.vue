@@ -1,28 +1,39 @@
 <script setup lang="ts">
-import { computed, toRef } from 'vue';
-import SwapSettingsPopover, {
-  SwapSettingsContext,
-} from '@/components/popovers/SwapSettingsPopover.vue';
-import useBreakpoints from '@/composables/useBreakpoints';
+import ChargeGasComponent from '@/components/contextual/pages/bridge/BridgeCard/ChargeGasComponent.vue';
+import bridgeApi from '@/composables/bridge/bridge.price.api';
 import { useBridge } from '@/composables/bridge/useBridge';
-import useWeb3 from '@/services/web3/useWeb3';
+import useBreakpoints from '@/composables/useBreakpoints';
+import useEthers from '@/composables/useEthers';
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import {
+  BRIDGE_NETWORKS,
+  ORDER_NETWORKS_LIST,
+} from '@/constants/bridge/networks';
+import { formatNumberToCurrency } from '@/lib/utils/index';
+import {
+  isGreaterThanOrEqualTo,
+  isLessThanOrEqualTo,
+  isPositive,
+  isValidAddressV2,
+} from '@/lib/utils/validations';
 import { useUserSettings } from '@/providers/user-settings.provider';
+import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
+import useWeb3 from '@/services/web3/useWeb3';
+import { isAddress } from '@ethersproject/address';
+import BigNumber from 'bignumber.js';
+import { cloneDeep, debounce } from 'lodash';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
-import ChargeGasComponent from './ChargeGasComponent.vue';
-import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
-import { cloneDeep } from 'lodash';
-import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-import BigNumber from 'bignumber.js';
-import useNotifications from '@/composables/useNotifications';
-import useTransactions from '@/composables/useTransactions';
-import useEthers from '@/composables/useEthers';
-import { ethers } from 'ethers';
-// // COMPOSABLES
+// COMPOSABLES
+const { t } = useI18n();
 const {
   account,
   getSigner,
+  getProvider,
   chainId,
   isWalletReady,
   isMismatchedNetwork,
@@ -31,13 +42,12 @@ const {
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
-  getTransferConfigs,
-  getEstimateAmt,
-  getTransferStatus,
-  getTransferHistory,
-  generationTransferId,
-  getTokensBalance,
+  truncateDecimal,
+  getTokenURL,
+  checkIsNative,
+
   getBalance,
+  getNativeBalance,
   checkTokenAllowance,
   approveToken,
   bridgeSend,
@@ -50,14 +60,19 @@ const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
 const { slippage, setSlippage } = useUserSettings();
 // const signer = getSigner();
-// console.log(signer, 'signerAAA');
-// // STATES
-const chainsList = ref(BRIDGE_NETWORKS);
+
+// STATES
+
+const srcBE = ref(null);
+const dstBE = ref(null);
+const routesBE = ref(null);
+
 const estimateInfo = ref(null);
 const paging = ref({
   page_size: 5,
   next_page_token: null,
 });
+//const networkFee = ref(0);
 const txHistory = ref([]);
 
 const inputFromSelect = ref({
@@ -68,6 +83,7 @@ const inputFromSelect = ref({
   amount: 0,
   decimals: 18,
   tokensList: [],
+  minAmount: 0,
   isOnlyDefiBridge: false,
 });
 const inputToSelect = ref({
@@ -82,16 +98,22 @@ const inputToSelect = ref({
   isOnlyDefiBridge: false,
 });
 const anotherWalletAddress = ref('');
-const isChargeGas = ref(false);
 const isAllowance = ref(false);
+const currentAllowance = ref(0);
 const isLoading = ref(false);
 
 const chainFrom = ref({});
 const chainTo = ref({});
 const tokenFrom = ref({});
 const tokenTo = ref({});
+const minAmountRoute = ref(0);
+const oasys_bridge_type = ref(0);
+const li_bridge_address = ref('');
 
-// // COMPUTED
+const gas_option_enabled = ref(false);
+const isChargeGas = ref(false);
+const convert_gas_amount = ref(0);
+// COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
     case 'xs':
@@ -102,7 +124,20 @@ const swapCardShadow = computed(() => {
       return 'xl';
   }
 });
+const covertInputRules = computed(() => {
+  const rules = [isPositive()];
+  rules.push(isGreaterThanOrEqualTo(0, t('mustBeMoreOrEqualTo', [0])));
+  rules.push(
+    isLessThanOrEqualTo(
+      inputFromSelect.value.amount,
+      t('mustBeLessOrEqualTo', [
+        `${inputFromSelect.value.tokenSymbol} amount input from`,
+      ])
+    )
+  );
 
+  return rules;
+});
 // WATCHS
 watch(
   () => account.value,
@@ -114,22 +149,23 @@ watch(
 watch(
   () => chainId.value,
   async () => {
+    verifyNetwork();
     updateNetWorkInputFrom(chainId.value);
   }
 );
 watch(
   () => inputFromSelect.value.chainId,
   async () => {
-    console.log('AAAAA', inputFromSelect.value.chainId, chainId.value);
-    if (inputFromSelect.value.chainId !== chainId.value) {
-      estimateInfo.value = {
-        err: {
-          code: '9999',
-          msg: `You must switch to ${getChainName(
-            inputFromSelect.value.chainId
-          )} to begin the transfer`,
-        },
-      };
+    verifyNetwork();
+  }
+);
+watch(
+  () => gas_option_enabled.value,
+  () => {
+    if (!gas_option_enabled.value) {
+      // reset value covert gas
+      isChargeGas.value = false;
+      convert_gas_amount.value = 0;
     }
   }
 );
@@ -139,7 +175,117 @@ watchEffect(() => {
 // /**
 //  * FUNCTIONS
 //  */
+function groupByChainId(arr) {
+  // group by chainId
+  const groupedByChainId = arr.reduce((acc, curr) => {
+    const chainId = curr.chain_id;
+    let networkStaticInfo = BRIDGE_NETWORKS.find(
+      item => item.chain_id_decimals === chainId
+    );
+    if (!acc[chainId]) {
+      acc[chainId] = { chain_id: chainId, tokens: [] };
+    }
+    const tokenAddress = curr.token_address;
+    const tokenExists = acc[chainId].tokens.some(
+      token => token.address?.toLowerCase() === tokenAddress?.toLowerCase()
+    );
+    if (!tokenExists) {
+      acc[chainId].tokens.push({
+        name: curr.token_name,
+        address: curr.token_address,
+        logoURI: getTokenURL(curr.token_symbol),
+        symbol: curr.token_symbol,
+        decimals: curr.token_decimals,
+        is_native: checkIsNative(curr.token_address, chainId),
+        rpc: networkStaticInfo?.rpc,
+      });
+    }
+    acc[chainId] = { ...acc[chainId], ...networkStaticInfo };
+    return acc;
+  }, {});
 
+  const result = Object.values(groupedByChainId);
+  return result;
+}
+function reorderTokens(tokens, symbolToMove) {
+  const index = tokens.findIndex(token => token.symbol === symbolToMove);
+
+  if (index > 0) {
+    const [token] = tokens.splice(index, 1);
+
+    tokens.unshift(token);
+  }
+
+  return tokens;
+}
+function reOrderTokensList(data) {
+  const result = data?.map(item => {
+    return {
+      ...item,
+      tokens: reorderTokens(item.tokens, 'OAS'),
+    };
+  });
+  return result;
+}
+function sortArrayByReference(arrayToSort, referenceArray, key) {
+  return arrayToSort.sort((a, b) => {
+    const indexA = referenceArray.findIndex(item => item[key] === a[key]);
+    const indexB = referenceArray.findIndex(item => item[key] === b[key]);
+    return indexA - indexB;
+  });
+}
+function initSrcBE() {
+  if (routesBE.value?.length > 0) {
+    const data = routesBE.value;
+    const srcList = data?.map(item => item.src);
+    let result = groupByChainId(srcList);
+
+    // sort order network list
+    result = sortArrayByReference(
+      result,
+      ORDER_NETWORKS_LIST,
+      'chain_id_decimals'
+    );
+    result = reOrderTokensList(result);
+    return result || [];
+  }
+}
+async function getRouters() {
+  try {
+    let rs = await bridgeApi.getRoutes();
+    if (rs.length > 0) {
+      routesBE.value = rs;
+      srcBE.value = initSrcBE();
+      if (srcBE.value?.length > 0) {
+        updateNetWorkInputFrom(chainId.value);
+      }
+    }
+  } catch (error) {
+    console.log(error, 'error=>getRouters');
+  }
+}
+function verifyNetwork() {
+  if (
+    inputFromSelect.value.chainId &&
+    chainId.value &&
+    inputFromSelect.value.chainId !== chainId.value
+  ) {
+    estimateInfo.value = {
+      err: {
+        code: '9999',
+        msg: `You must switch to ${getChainName(
+          inputFromSelect.value.chainId
+        )} to begin the transfer`,
+      },
+    };
+  } else {
+    estimateInfo.value = null;
+  }
+}
+async function initData() {
+  getRouters();
+  verifyNetwork();
+}
 function covertUnitShow(number, token_decimals) {
   const decimals = new BigNumber(10).pow(token_decimals).toFixed();
   const rs = BigNumber(number || 0)
@@ -147,25 +293,7 @@ function covertUnitShow(number, token_decimals) {
     .toString();
   return rs;
 }
-function calcMinimumReceive() {
-  if (estimateInfo.value) {
-    let minimumReceive = BigNumber(estimateInfo.value.estimated_receive_amt)
-      .minus(estimateInfo.value.base_fee)
-      .minus(estimateInfo.value.perc_fee)
-      .toString();
-    return covertUnitShow(minimumReceive, inputFromSelect.value.decimals);
-  }
-  return 0;
-}
-function calcFee() {
-  if (estimateInfo.value) {
-    let fee = BigNumber(estimateInfo.value.base_fee)
-      .plus(estimateInfo.value.perc_fee)
-      .toString();
-    return covertUnitShow(fee, inputFromSelect.value.decimals);
-  }
-  return 0;
-}
+
 function initSelectedData() {
   chainFrom.value = getChain(inputFromSelect.value.chainId);
   chainTo.value = getChain(inputToSelect.value.chainId);
@@ -174,29 +302,101 @@ function initSelectedData() {
     inputFromSelect.value.tokenAddress,
     inputFromSelect.value.tokensList
   );
-  tokenTo.value = tokenFrom.value;
+
+  tokenTo.value = getToken(
+    inputToSelect.value.tokenAddress,
+    inputToSelect.value.tokensList
+  );
+}
+function initMinAmountRoute() {
+  minAmountRoute.value = 0;
+  oasys_bridge_type.value = '';
+  li_bridge_address.value = '';
+  if (
+    inputFromSelect.value.chainId &&
+    inputToSelect.value.chainId &&
+    routesBE.value?.length > 0
+  ) {
+    for (let i = 0; i < routesBE.value.length; i++) {
+      const item = routesBE.value[i];
+
+      if (
+        item.src.chain_id === inputFromSelect.value.chainId &&
+        item.dst.chain_id === inputToSelect.value.chainId &&
+        item.src.token_symbol === inputFromSelect.value.tokenSymbol
+      ) {
+        //console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+        minAmountRoute.value = item.min_amount;
+        oasys_bridge_type.value = item.type;
+        li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
+
+        gas_option_enabled.value = item.gas_option_enabled;
+
+        // console.log(
+        //   '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
+        //   oasys_bridge_type.value
+        // );
+        // console.log(
+        //   '🚀 ~ initMinAmountRoute ~ li_bridge_address.value :',
+        //   li_bridge_address.value
+        // );
+        // console.log(
+        //   '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
+        //   minAmountRoute.value
+        // );
+        break;
+      }
+    }
+  }
 }
 async function getBalanceInputFrom() {
   // update balance InputFrom
   if (account.value && inputFromSelect.value.tokenAddress) {
-    inputFromSelect.value.balance = await getBalance(
-      tokenFrom.value,
-      account.value
-    );
+    if (tokenFrom.value.is_native) {
+      inputFromSelect.value.balance = await getNativeBalance(
+        tokenFrom.value,
+        account.value
+      );
+    } else {
+      inputFromSelect.value.balance = await getBalance(
+        tokenFrom.value,
+        account.value
+      );
+    }
   }
 }
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
+      if (
+        chainFrom.value?.type === 'verse-chain' ||
+        inputFromSelect.value?.tokenSymbol === 'OAS' ||
+        inputFromSelect.value?.tokenAddress?.toLowerCase() ===
+          '0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000' ||
+        inputFromSelect.value?.tokenAddress?.toLowerCase() ===
+          '0x0000000000000000000000000000000000000000'
+      ) {
+        isAllowance.value = true;
+        return;
+      }
+
       const allowance = await checkTokenAllowance(
         chainFrom.value,
         tokenFrom.value,
-        account.value
+        account.value,
+        li_bridge_address.value
       );
-      isAllowance.value = BigNumber(allowance?.toString() || 0).gt(0)
+      currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
+
+      const inputAmount = BigNumber(inputFromSelect.value.amount)
+        .times(10 ** inputFromSelect.value.decimals)
+        .toFixed();
+
+      isAllowance.value = BigNumber(currentAllowance.value || 0).gte(
+        inputAmount
+      )
         ? true
         : false;
-      console.log(isAllowance.value, ' isAllowance.value');
     }
   } catch (error) {
     console.log(error, 'error=>checkAllowanceInputFrom');
@@ -204,76 +404,121 @@ async function checkAllowanceInputFrom() {
   }
 }
 async function handleTokenSwitch() {
-  await swapData();
+  // await swapData();
 }
-async function swapData() {
-  const inputFrom = cloneDeep(inputFromSelect.value);
-  const inputTo = cloneDeep(inputToSelect.value);
-  console.log(inputTo, 'inputTo');
+// async function swapData() {
+//   const inputFrom = cloneDeep(inputFromSelect.value);
+//   const inputTo = cloneDeep(inputToSelect.value);
+//   console.log(inputTo, 'inputTo');
 
-  // map InputFrom
-  inputFromSelect.value = inputTo;
-  console.log(inputFromSelect.value, 'inputFromSelect.valueAAA');
-  inputToSelect.value = inputFrom;
+//   // map InputFrom
+//   inputFromSelect.value = inputTo;
+//   console.log(inputFromSelect.value, 'inputFromSelect.valueAAA');
+//   inputToSelect.value = inputFrom;
 
-  // update inputTo chainsList
-  if (inputFromSelect.value.chainId) {
-    checkInputToChange();
-  }
-  // await getBalanceInputFrom();
-  // await checkAllowanceInputFrom();
+//   // update inputTo chainsList
+//   if (inputFromSelect.value.chainId) {
+//     checkInputToChange();
+//   }
+//   // await getBalanceInputFrom();
+//   // await checkAllowanceInputFrom();
 
-  // reset amount
-  inputFromSelect.value.amount = 0;
-  inputToSelect.value.amount = 0;
-  // connect network from
-  handleNetworkChange(inputFromSelect.value.chainId);
-}
+//   // reset amount
+//   inputFromSelect.value.amount = 0;
+//   inputToSelect.value.amount = 0;
+//   // connect network from
+//   handleNetworkChange(inputFromSelect.value.chainId);
+// }
 
 async function setTokenInput(input, tokenFromList) {
-  console.log(tokenFromList, 'tokenFromList');
   input.value.tokenSymbol = tokenFromList.symbol;
   input.value.tokenAddress = tokenFromList.address;
   input.value.decimals = tokenFromList.decimals;
 }
 function updateNetWorkInputFrom(chainId) {
-  let networkChoose = BRIDGE_NETWORKS.find(
-    item => item.chain_id_decimals === chainId
+  let networkChoose = srcBE.value.find(
+    item => item?.chain_id_decimals === chainId
   );
   if (networkChoose) {
+    inputFromSelect.value.minAmount = networkChoose.min_amount;
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
-    inputFromSelect.value.isOnlyDefiBridge = networkChoose.isOnlyDefiBridge;
-
+    // TODO check token is_native
+    inputFromSelect.value.tokensList = inputFromSelect.value.tokensList.map(
+      item => {
+        const is_native =
+          inputFromSelect.value.chainId === 248 && item.symbol === 'OAS';
+        return {
+          ...item,
+          is_native: is_native,
+        };
+      }
+    );
     // set token default
     if (inputFromSelect.value.tokensList?.length > 0) {
       setTokenInput(inputFromSelect, inputFromSelect.value.tokensList[0]);
     }
+
     // set data inputTo
+    inputToSelect.value.chainId = ''; // reset
     checkInputToChange();
 
-    // set chains and tokens selected
+    // set chains and tokens selected to get balance
     initSelectedData();
 
+    // set min amount route
+    initMinAmountRoute();
     // call contract to check data
     getBalanceInputFrom();
     checkAllowanceInputFrom();
   }
 }
+const delayinputFromChange = debounce(async inputSelect => {
+  handleInputFromChange(inputSelect);
+}, 500);
 
 async function handleInputFromChange(inputSelect) {
   inputFromSelect.value = inputSelect;
-  console.log(inputFromSelect.value, 'inputFromSelect.value');
   if (inputFromSelect.value.chainId) {
     checkInputToChange();
   }
-
   // check allowance
   checkAllowanceInputFrom();
 
-  getEstimateAtmData();
+  // set min amount route
+  initMinAmountRoute();
+
+  await getEstimateFee();
+  await getBalanceInputFrom();
 }
-async function getEstimateAtmData() {
+function mapEstimateInfo(rs) {
+  const amount_in_show = BigNumber(rs.amount_in)
+    .div(Math.pow(10, rs.src_token_decimals))
+    .toString();
+  const amount_out_show = BigNumber(rs.amount_out)
+    .div(Math.pow(10, rs.dst_token_decimals))
+    .toString();
+  return {
+    ...rs,
+    amount_in_show: amount_in_show,
+    amount_out_show: amount_out_show,
+    fee1_show: BigNumber(rs.fee1)
+      .div(Math.pow(10, rs.fee1_decimals))
+      .toString(),
+    fee2_show: BigNumber(rs.fee2)
+      .div(Math.pow(10, rs.fee2_decimals))
+      .toString(),
+    gas_amount_receive_show: BigNumber(rs.gas_amount_receive)
+      .div(Math.pow(10, 18)) // hard decimals now
+      .toString(),
+    bridge_rate: truncateDecimal(
+      BigNumber(amount_out_show).div(amount_in_show).toString(),
+      2
+    ),
+  };
+}
+
+async function getEstimateFeeRoutes() {
   try {
     if (
       inputFromSelect.value.amount > 0 &&
@@ -282,62 +527,126 @@ async function getEstimateAtmData() {
       inputFromSelect.value.tokenSymbol &&
       account.value
     ) {
-      let rs = await getEstimateAmt(
-        inputFromSelect.value,
-        inputToSelect.value,
-        account.value,
-        slippage.value
-      );
-      console.log(rs, 'rs=>getEstimateAtmData');
-      estimateInfo.value = rs;
-      // update InputTo amount
-      inputToSelect.value.amount = covertUnitShow(
-        rs.estimated_receive_amt,
-        inputFromSelect.value.decimals
-      );
+      const amount = BigNumber(inputFromSelect.value.amount)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0);
+      const convert_amount = BigNumber(convert_gas_amount?.value)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0);
+      const params = {
+        src_token_address: inputFromSelect.value.tokenAddress,
+        src_chain_id: inputFromSelect.value.chainId,
+        dst_chain_id: inputToSelect.value.chainId,
+        amount_in: amount,
+        convert_gas_amount: convert_amount,
+      };
+      const rs = await bridgeApi.getEstimateFee(params);
+
+      if (rs) {
+        estimateInfo.value = mapEstimateInfo(rs);
+        // update InputTo amount
+        inputToSelect.value.amount = estimateInfo.value?.amount_out_show || 0;
+      }
     }
   } catch (error) {
-    console.log(error, 'error=>getEstimateAtmData');
+    console.log(error, 'error=>getEstimateFeeRoutes');
+  }
+}
+async function getGasFee() {
+  try {
+    const signer = getSigner();
+    const provider = getProvider();
+    const isEstimate = true;
+    const rs = await bridgeSend(
+      inputFromSelect.value,
+      inputToSelect.value,
+      account.value,
+      signer,
+      provider,
+      isEstimate
+    );
+    const gasPrice = 10000000000000;
+    const gasLimit = rs?.tx || 250000;
+    networkFee.value = Number(
+      BigNumber(gasPrice)
+        .times(gasLimit)
+        .div(10 ** inputFromSelect.value.decimals)
+        .toFixed()
+    );
+  } catch (error) {
+    console.log(error, 'error=>getGasFee');
+  }
+}
+async function getEstimateFee() {
+  try {
+    //networkFee.value = 0;
+    await getEstimateFeeRoutes();
+    // if (
+    //   inputToSelect.value.chainId &&
+    //   inputFromSelect.value.tokenSymbol === 'OAS' &&
+    //   Number(inputFromSelect.value.chainId) === 16116
+    // ) {
+    //   await getGasFee();
+    // }
+  } catch (error) {
+    console.log(error, 'error=>getEstimateFee');
   }
 }
 async function handleInputToChange(inputSelect) {
-  console.log(inputSelect, 'inputSelect=>handleInputToChange');
   inputToSelect.value = inputSelect;
-  console.log(inputToSelect.value, 'inputToSelect.value');
 
-  getEstimateAtmData();
+  initMinAmountRoute();
+  getEstimateFee();
 }
 
 function handleWalletAddressChange(address) {
   anotherWalletAddress.value = address;
 }
-// function handleChargeGas(isChecked) {
-//   isChargeGas.value = isChecked;
-//   console.log(isChargeGas.value, 'isChargeGas.value');
-// }
+function handleChargeGas(isChecked) {
+  isChargeGas.value = isChecked;
+  if (!isChargeGas.value) {
+    convert_gas_amount.value = 0;
+  }
+  getEstimateFee();
+}
+const delayCovertAmountChange = debounce(async amount => {
+  handleCovertAmountChange(amount);
+}, 500);
+
+function handleCovertAmountChange(amount) {
+  convert_gas_amount.value = amount;
+  getEstimateFee();
+}
+function getDstByChainIdAndTokenAddress(routes, srcChainId, tokenAddress) {
+  const dstList = routes
+    .filter(
+      route =>
+        route.src.chain_id === srcChainId &&
+        route.src.token_address === tokenAddress
+    )
+    .map(route => route.dst);
+  const result = groupByChainId(dstList);
+  return result;
+}
+
 function checkInputToChange() {
   const inputFrom = inputFromSelect.value;
-  // update chainsList
-  if (inputFrom.isOnlyDefiBridge) {
-    inputToSelect.value.chainsList = chainsList.value.filter(
-      item =>
-        (item.chain_id_decimals === 16116 || item.chain_id_decimals == 17117) &&
-        item.chain_id_decimals !== inputFrom.chainId
-    );
-  } else {
-    inputToSelect.value.chainsList = chainsList.value.filter(
-      item => item.chain_id_decimals !== inputFrom.chainId
-    );
-  }
 
+  dstBE.value = getDstByChainIdAndTokenAddress(
+    routesBE.value,
+    inputFrom.chainId,
+    inputFrom.tokenAddress
+  );
+  inputToSelect.value.chainsList = dstBE.value;
+
+  // sort order
+  inputToSelect.value.chainsList = sortArrayByReference(
+    inputToSelect.value.chainsList,
+    ORDER_NETWORKS_LIST,
+    'chain_id_decimals'
+  );
   // update token
   inputToSelect.value.tokenSymbol = inputFrom.tokenSymbol;
-  inputToSelect.value.tokenAddress = inputFrom.tokenAddress;
-  inputToSelect.value.decimals = inputFrom.decimals;
-
-  inputToSelect.value.isOnlyDefiBridge = inputFrom.isOnlyDefiBridge;
-
-  inputToSelect.value.tokensList = inputFrom.tokensList;
 
   // check chainId select is avai
   if (inputToSelect.value.chainId) {
@@ -346,16 +655,46 @@ function checkInputToChange() {
     );
     if (!avaiChain) {
       inputToSelect.value.chainId = '';
+      //inputToSelect.value.tokenSymbol = '';
+      inputToSelect.value.tokenAddress = '';
+      inputToSelect.value.decimals = 0;
+      inputToSelect.value.tokensList = [];
+    } else {
+      //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
+      inputToSelect.value.tokenAddress = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.address;
+      inputToSelect.value.decimals = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.decimals;
+      inputToSelect.value.tokensList = avaiChain.tokens;
     }
   } else {
     // set default chainId for inputTo
     if (inputToSelect.value.chainsList.length > 0) {
-      inputToSelect.value.chainId =
-        inputToSelect.value.chainsList[0].chain_id_decimals;
+      let avaiChain: any = inputToSelect.value.chainsList.find(
+        (chain: any) => chain.chain_id_decimals === 16116 // set Defiverse is default
+      );
+      if (!avaiChain) {
+        avaiChain = inputToSelect.value.chainsList[0];
+      }
+      inputToSelect.value.chainId = avaiChain.chain_id_decimals;
+      //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
+      inputToSelect.value.tokenAddress = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.address;
+      inputToSelect.value.decimals = avaiChain.tokens.find(
+        token => token.symbol === inputToSelect.value.tokenSymbol
+      )?.decimals;
+      inputToSelect.value.tokensList = avaiChain.tokens;
+    } else {
+      inputToSelect.value.chainId = '';
+      //inputToSelect.value.tokenSymbol = '';
+      inputToSelect.value.tokenAddress = '';
+      inputToSelect.value.decimals = 0;
+      inputToSelect.value.tokensList = [];
     }
   }
-
-  console.log(inputToSelect.value, 'inputToSelect');
 }
 function handleNetworkChange(networkId) {
   let network = getChain(networkId);
@@ -368,45 +707,84 @@ async function handleTransferButton() {
     isLoading.value = true;
 
     const signer = getSigner();
+    const provider = getProvider();
+    const params = {
+      sender_address: account.value,
+      receiver_address: anotherWalletAddress.value
+        ? anotherWalletAddress.value
+        : account.value,
+      src_chain_id: inputFromSelect.value.chainId,
+      dst_chain_id: inputToSelect.value.chainId,
+      src_token_address: inputFromSelect.value.tokenAddress,
+      amount_in: BigNumber(inputFromSelect.value.amount)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0),
+      nonce: null,
+      src_tx_id: null,
+      convert_gas_amount: BigNumber(convert_gas_amount.value)
+        .times(Math.pow(10, inputFromSelect.value.decimals))
+        .toFixed(0),
+    };
 
-    let tx = await bridgeSend(
+    const { tx, nonce } = await bridgeSend(
       inputFromSelect.value,
       inputToSelect.value,
-      slippage.value,
       account.value,
-      signer
+      anotherWalletAddress.value,
+      signer,
+      provider,
+      false,
+      oasys_bridge_type.value,
+      li_bridge_address.value
     );
-    console.log(tx, 'tx');
 
-    const chainNameInput = chainFrom.value.name;
-    const chainNameOutput = chainTo.value.name;
-    const summary = `tranfer token ${inputFromSelect.value.tokenSymbol} from ${chainNameInput} to ${chainNameOutput}`;
+    // const chainNameInput = chainFrom.value.name;
+    // const chainNameOutput = chainTo.value.name;
+    const summary = `Bridge success!`;
     addTransaction({
       id: tx.hash,
       type: 'tx',
-      action: 'transfer',
+      action: 'bridge',
       summary,
     });
 
-    txListener(tx, {
-      onTxConfirmed: async () => {
-        console.log('success');
-        const transfer_id = await generationTransferId(
-          inputFromSelect.value,
-          inputToSelect.value,
-          account.value
-        );
-        setInterval(async () => {
-          const transferStatus = await getTransferStatus(transfer_id);
-          console.log(transferStatus, transfer_id, 'transferStatus');
-        }, 15000);
+    tx &&
+      txListener(tx, {
+        onTxConfirmed: async (receipt: any) => {
+          params.src_tx_id = receipt?.transactionHash;
+          params.nonce = nonce;
 
-        isLoading.value = false;
-      },
-      onTxFailed: () => {
-        isLoading.value = false;
-      },
-    });
+          const maxRetries = 5;
+          let attempt = 0;
+          let retryDelay = 1000;
+          const attemptApiCall = async () => {
+            try {
+              const rsBE = await bridgeApi.postBridgeRequestV2(params);
+
+              await getBalanceInputFrom();
+              isLoading.value = false;
+              return true;
+            } catch (error) {
+              console.error(`try ${attempt + 1} failed:`, error);
+              attempt++;
+              if (attempt < maxRetries) {
+                // delay retry
+                setTimeout(attemptApiCall, retryDelay);
+              } else {
+                console.error('max retries exceeded , failed all attempts');
+                isLoading.value = false;
+              }
+              return false;
+            }
+          };
+
+          // start the first attempt
+          await attemptApiCall();
+        },
+        onTxFailed: () => {
+          isLoading.value = false;
+        },
+      });
   } catch (error) {
     console.log(error, 'error=>handleTransferButton');
     isLoading.value = false;
@@ -420,22 +798,30 @@ async function handleTransferButton() {
 async function handleApproveButton() {
   try {
     isLoading.value = true;
+    let approveAmount = BigNumber(inputFromSelect.value.amount || 0).toFixed();
+    approveAmount = BigNumber(approveAmount || 0)
+      //.plus(1)
+      .times(10 ** inputFromSelect.value.decimals)
+      .toFixed();
+    //approveAmount = approveAmount + 1;
     const signer = getSigner();
     let tx = await approveToken(
       chainFrom.value,
       tokenFrom.value,
       account.value,
-      signer
+      signer,
+      approveAmount,
+      li_bridge_address.value
     );
 
     const chainName = chainFrom.value.name;
-    const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
-    addTransaction({
-      id: tx.hash,
-      type: 'tx',
-      action: 'approve',
-      summary,
-    });
+    // const summary = `Approve token ${inputFromSelect.value.tokenSymbol} on ${chainName}`;
+    // addTransaction({
+    //   id: tx.hash,
+    //   type: 'tx',
+    //   action: 'approve',
+    //   summary,
+    // });
     txListener(tx, {
       onTxConfirmed: async () => {
         await checkAllowanceInputFrom();
@@ -460,7 +846,7 @@ async function handleApproveButton() {
  * LIFECYCLE
  */
 onBeforeMount(async () => {
-  updateNetWorkInputFrom(chainId.value);
+  initData();
 });
 </script>
 
@@ -472,36 +858,33 @@ onBeforeMount(async () => {
       noBorder
     >
       <template #header>
-        <div class="flex justify-end items-center w-full">
+        <!-- <div class="flex justify-end items-center w-full">
           <SwapSettingsPopover :context="SwapSettingsContext.bridge" />
-        </div>
+        </div> -->
       </template>
       <div class="bridge-container">
         <div class="bridge-form">
+          <div :class="`disabled-form-bg ${isLoading ? 'disabled' : ''}`"></div>
           <div class="input-from">
             <div class="label">From</div>
             <InputFrom
-              :chainsList="chainsList"
+              :chainsList="srcBE"
               :inputSelect="inputFromSelect"
-              :disabled="!isWalletReady || isMismatchedNetwork"
-              @update:input-select="handleInputFromChange"
+              :disabled="!isWalletReady"
+              :minAmount="minAmountRoute"
+              @update:input-select="delayinputFromChange"
               @update:network="handleNetworkChange"
             />
           </div>
           <div class="flex justify-center items-center my-3">
             <BridgePairToggle @toggle="handleTokenSwitch" />
-            <div class="mx-2 h-px bg-gray-100 dark:bg-gray-700 grow" />
-            <div
-              v-if="inputFromSelect.tokenAddress && inputToSelect.chainId"
-              class="flex items-center text-xs text-gray-600 dark:text-gray-400 cursor-pointer"
-            ></div>
           </div>
           <div class="input-to">
             <div class="label">To</div>
             <InputTo
               :chainsList="inputToSelect?.chainsList"
               :inputSelect="inputToSelect"
-              :disabled="!isWalletReady || isMismatchedNetwork"
+              :disabled="!isWalletReady"
               @update:input-select="handleInputToChange"
             />
           </div>
@@ -510,6 +893,7 @@ onBeforeMount(async () => {
             <div class="wallet-address-input">
               <BalTextInput
                 :modelValue="anotherWalletAddress"
+                :rules="[isValidAddressV2()]"
                 :disabled="!isWalletReady"
                 name="anotherWallet"
                 placeholder=""
@@ -526,12 +910,34 @@ onBeforeMount(async () => {
               </BalTextInput>
             </div>
           </div>
-          <!-- <div class="charge-gas-container">
+          <div class="cex-warning error">
+            *The exchange's deposit address is invalid. Please be careful.
+          </div>
+          <div v-if="gas_option_enabled" class="charge-gas-container">
             <ChargeGasComponent
               :isChargeGas="isChargeGas"
               @update:change-gas="handleChargeGas($event)"
             />
-          </div> -->
+            <div v-if="isChargeGas" class="convert-gas-control">
+              <div class="convert-label">Convert gas amount:</div>
+              <BalTextInput
+                :modelValue="convert_gas_amount"
+                name="Covert gas amount"
+                :placeholder="'0.0'"
+                type="number-dot"
+                :decimalLimit="inputToSelect?.decimals"
+                validateOn="input"
+                autocomplete="off"
+                autocorrect="off"
+                step="any"
+                :rules="covertInputRules"
+                spellcheck="false"
+                v-bind="$attrs"
+                inputAlignRight
+                @update:model-value="delayCovertAmountChange($event)"
+              ></BalTextInput>
+            </div>
+          </div>
         </div>
         <div v-if="estimateInfo && !estimateInfo.err" class="bridge-info">
           <div class="info">
@@ -550,8 +956,8 @@ onBeforeMount(async () => {
           </div>
           <div class="info">
             <div class="title">
-              Fee
-              <BalTooltip width="64">
+              Fee 1
+              <!--<BalTooltip width="64">
                 <template #activator>
                   <BalIcon
                     name="info"
@@ -560,37 +966,20 @@ onBeforeMount(async () => {
                   />
                 </template>
                 <div class="tooltip-content">
-                  <div class="mb-2">
-                    <span class="bold"> The Base Fee:</span>
-                    {{ estimateInfo.base_fee }}
-                    {{ inputFromSelect?.tokenSymbol }}.e
-                  </div>
-                  <div class="mb-4">
-                    <span class="bold"> The Protocol Fee:</span>
-                    {{ estimateInfo.perc_fee }}
-                    {{ inputFromSelect?.tokenSymbol }}.e
-                  </div>
-                  <div class="mb-4">
-                    Base Fee is used to cover the gas cost for sending your
-                    transfer on the destination chain.
-                  </div>
-                  <div>
-                    Protocol Fee is charged proportionally to your transfer
-                    amount. Protocol Fee is paid to cBridge LPs and Celer SGN as
-                    economic incentives.
-                  </div>
+                
+                  <div>Balabalaba</div>
                 </div>
-              </BalTooltip>
+              </BalTooltip>  -->
             </div>
             <div class="value">
-              {{ calcFee() }}
-              {{ inputFromSelect?.tokenSymbol }}.e
+              {{ formatNumberToCurrency(estimateInfo?.fee1_show) }}
+              {{ inputFromSelect?.tokenSymbol }}
             </div>
           </div>
           <div class="info">
             <div class="title">
-              Minimum Received
-              <BalTooltip width="64">
+              Fee 2
+              <!--<BalTooltip width="64">
                 <template #activator>
                   <BalIcon
                     name="info"
@@ -598,21 +987,31 @@ onBeforeMount(async () => {
                     class="flex ml-1 text-gray-400"
                   />
                 </template>
-                <div class="tooltip-content">
-                  You will receive at least
-                  {{ calcMinimumReceive() }}
-                  {{ inputFromSelect?.tokenSymbol }}.e on
-                  {{ getChainName(inputToSelect?.chainId) }}
-                  or the transfer won't go through.
-                </div>
-              </BalTooltip>
+                <div class="tooltip-content">Balabalaba</div>
+              </BalTooltip> -->
             </div>
             <div class="w-40 value">
-              {{ calcMinimumReceive() }}
-              {{ inputFromSelect?.tokenSymbol }}.e
+              {{ formatNumberToCurrency(estimateInfo?.fee2_show) }}
+              {{ inputFromSelect?.tokenSymbol }}
+            </div>
+          </div>
+          <div v-if="isChargeGas" class="info">
+            <div class="title">Gas amount receive</div>
+            <div class="w-40 value">
+              {{
+                formatNumberToCurrency(estimateInfo?.gas_amount_receive_show)
+              }}
+              OAS
             </div>
           </div>
           <div class="info">
+            <div class="title">You will receive</div>
+            <div class="w-40 value">
+              {{ formatNumberToCurrency(estimateInfo?.amount_out_show) }}
+              {{ inputFromSelect?.tokenSymbol }}
+            </div>
+          </div>
+          <!-- <div class="info">
             <div class="title">
               Slippage Tolerance
               <BalTooltip width="64">
@@ -635,47 +1034,66 @@ onBeforeMount(async () => {
                 BigNumber(estimateInfo.slippage_tolerance).div(100).toFixed(2)
               }}%
             </div>
-          </div>
+          </div> -->
         </div>
         <div v-if="estimateInfo?.err?.code" class="mt-8 notification-content">
           <BalAlert title="Error" type="error">
             {{ estimateInfo?.err?.msg }}
           </BalAlert>
         </div>
-        <div v-if="isWalletReady" class="bridge-actions">
+        <div v-if="estimateInfo?.err?.code === '9999'" class="bridge-actions">
           <BalBtn
-            v-if="!isAllowance"
-            :disabled="!estimateInfo || estimateInfo.err"
-            :label="$t('Approve')"
+            :label="$t('Change network ')"
             :loading="isLoading"
             classCustom="pink-white-shadow"
             block
-            @click.prevent="handleApproveButton"
-          />
-          <BalBtn
-            v-else
-            :disabled="
-              !estimateInfo ||
-              !!estimateInfo.err ||
-              inputFromSelect.balance === 0 ||
-              inputFromSelect.balance < inputFromSelect.amount ||
-              inputFromSelect.amount <= 0
-            "
-            :label="$t('Tranfer')"
-            :loading="isLoading"
-            classCustom="pink-white-shadow"
-            block
-            @click.prevent="handleTransferButton"
+            @click.prevent="handleNetworkChange(inputFromSelect?.chainId)"
           />
         </div>
-        <div v-else class="bridge-actions wallet-connect">
-          <BalBtn
-            :label="$t('connectWallet')"
-            :loading="isLoading"
-            classCustom="pink-white-shadow"
-            block
-            @click="startConnectWithInjectedProvider"
-          />
+        <div v-else>
+          <div v-if="isWalletReady" class="bridge-actions">
+            <BalBtn
+              v-if="!isAllowance"
+              :disabled="
+                !estimateInfo ||
+                !!estimateInfo.err ||
+                Number(estimateInfo.amount_out) <= 0 ||
+                Number(inputFromSelect.amount) < Number(minAmountRoute)
+              "
+              :label="$t('Approve')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click.prevent="handleApproveButton"
+            />
+            <BalBtn
+              v-else
+              :disabled="
+                (anotherWalletAddress && !isAddress(anotherWalletAddress)) ||
+                !estimateInfo ||
+                !!estimateInfo.err ||
+                Number(estimateInfo.amount_out) <= 0 ||
+                Number(inputFromSelect.balance) === 0 ||
+                Number(inputFromSelect.balance) <
+                  Number(inputFromSelect.amount) ||
+                Number(inputFromSelect.amount) < Number(minAmountRoute)
+              "
+              :label="$t('Tranfer')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click.prevent="handleTransferButton"
+            />
+          </div>
+          <div v-else class="bridge-actions wallet-connect">
+            <BalBtn
+              :label="$t('connectWallet')"
+              :loading="isLoading"
+              classCustom="pink-white-shadow"
+              block
+              @click="startConnectWithInjectedProvider"
+            />
+          </div>
         </div>
       </div>
     </BalCard>
@@ -696,8 +1114,28 @@ onBeforeMount(async () => {
       }
     }
   }
-
+  .cex-warning {
+    font-weight: 600;
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    color: rgb(239 68 68);
+  }
   .bridge-form {
+    position: relative;
+    .disabled-form-bg {
+      position: absolute;
+      background: #ffffffd1 0% 0% no-repeat padding-box;
+      opacity: 0.5;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      display: none;
+      &.disabled {
+        display: block;
+      }
+    }
     .label {
       color: #0a425c;
       font-size: 18px;
@@ -725,8 +1163,31 @@ onBeforeMount(async () => {
       }
     }
   }
-  .charge-gas-container {
-    margin-top: 14px;
+  :deep() {
+    .charge-gas-container {
+      margin: 40px 0px;
+      .convert-gas-control {
+        .convert-label {
+          font-size: 14px;
+          line-height: 17px;
+          font-weight: medium;
+          color: #0a425c;
+          margin-bottom: 8px;
+        }
+        .input-group {
+          align-items: center;
+          padding: 0px;
+          > .h-10 {
+            height: auto;
+          }
+          .input {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            color: #808080;
+          }
+        }
+      }
+    }
   }
   .bridge-info {
     margin-top: 24px;
@@ -767,8 +1228,8 @@ onBeforeMount(async () => {
               margin-right: 0px;
             }
             > img {
-              width: 14px;
-              height: 14px;
+              width: 28px;
+              height: 28px;
             }
           }
         }

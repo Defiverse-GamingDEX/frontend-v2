@@ -1,22 +1,15 @@
-import { reactive, toRefs } from 'vue';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { Contract } from '@ethersproject/contracts';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { default as GaugeRewardABI } from '@/lib/abi/gaugeReward/GaugeRewardDistributor.json';
+import { Contract } from '@ethersproject/contracts';
 import gaugeRewardService from './gauge-reward.services.js';
 
-import { bnum } from '@/lib/utils';
-import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import networksSupport from '@/constants/networks';
+import { ethers } from 'ethers';
 
 const GAUGE_REWARD_CONTRACT_ADDRESS =
   '0x4e32701fEEF5282151bC02B47E9E13074b701b30';
 
-import {
-  GasPriceService,
-  gasPriceService,
-} from '@/services/gas-price/gas-price.service';
+import { gasPriceService } from '@/services/gas-price/gas-price.service';
 
 async function getGasPrice(signer: JsonRpcSigner) {
   let price: number;
@@ -40,7 +33,6 @@ async function checkTokenAllowance(address, provider, walletAddress) {
       walletAddress,
       GAUGE_REWARD_CONTRACT_ADDRESS
     );
-    console.log(tokenAllowance, 'checkAllowance=>tokenAllowance');
 
     const rs = tokenAllowance || 0;
 
@@ -55,13 +47,11 @@ async function approveToken(address, provider, walletAddress, signer, chainId) {
   try {
     const contract = new Contract(address, ERC20ABI, provider);
     const gasPrice = await getGasPrice(signer);
-    console.log('contract=>approveToken', provider, contract, gasPrice);
     const tx = await contract
       .connect(signer)
       .approve(GAUGE_REWARD_CONTRACT_ADDRESS, ethers.constants.MaxUint256, {
         gasPrice: gasPrice,
       });
-    console.log('tx', tx);
 
     return tx;
   } catch (error) {
@@ -79,15 +69,7 @@ async function depositTokens(
 ) {
   try {
     const provider = currentProvider;
-    console.log(
-      input_list,
-      account,
-      signer,
-      provider,
-      chainId,
-      networksSupport,
-      'depositTokens=>params'
-    );
+
     const tokens = input_list?.map(item => item.tokenAddress) || [];
     const periods = input_list?.map(item => item.periods) || [];
     const amounts =
@@ -112,7 +94,6 @@ async function depositTokens(
       abi: GaugeRewardABI,
       gasPrice: gasPrice,
     };
-    console.log(params, 'handleTransferButton=>params');
 
     const tx = await gaugeRewardService.depositTokens(params);
 
@@ -136,7 +117,6 @@ async function startDistributions(account, signer, currentProvider, chainId) {
       abi: GaugeRewardABI,
       gasPrice: gasPrice,
     };
-    console.log(params, 'startDistributions=>params');
 
     const tx = await gaugeRewardService.startDistributions(params);
 
@@ -156,7 +136,6 @@ async function getRewardTokens(gaugeAddress, currentProvider) {
       gaugeAddress: gaugeAddress,
       abi: GaugeRewardABI,
     };
-    console.log(params, 'getRewardTokens=>params');
 
     const tx = await gaugeRewardService.getRewardTokens(params);
 

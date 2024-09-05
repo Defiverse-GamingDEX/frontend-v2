@@ -2,33 +2,24 @@
 import { computed } from 'vue';
 
 import Col3Layout from '@/components/layouts/Col3Layout.vue';
-import TargetGauge from './TargetGauge.vue';
 import GaugeForm from './GaugeForm.vue';
+import TargetGauge from './TargetGauge.vue';
 
+import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 import usePoolQuery from '@/composables/queries/usePoolQuery';
 import { useTokens } from '@/providers/tokens.provider';
-import useVeBal from '@/composables/useVeBAL';
-import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
-import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 
-import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
 import useAlerts, { AlertPriority, AlertType } from '@/composables/useAlerts';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { networkSlug } from '@/composables/useNetwork';
-import {
-  isVeBalPool,
-  preMintedBptIndex,
-  removeBptFrom,
-  usePool,
-  tokensListExclBpt,
-  tokenTreeLeafs,
-} from '@/composables/usePool';
+import { isVeBalPool } from '@/composables/usePool';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
+import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
-import useEthers from '@/composables/useEthers';
 /**
  * STATE
  */
@@ -73,7 +64,6 @@ const swapCardShadow = computed(() => {
 const isError = computed(() => {
   const list = input_list.value;
   const isItemError = list.find(item => item.isError === true);
-  console.log(isItemError, list, 'list');
   return isItemError ? true : false;
 });
 //#region pool query
@@ -86,8 +76,6 @@ const poolQueryLoading = computed(
     Boolean(poolQuery.error.value)
 );
 const loadingPool = computed(() => poolQueryLoading.value || !pool.value);
-
-console.log(pool, balanceQueryLoading, 'poolAAA');
 
 /**
  * WATCHERS
@@ -115,7 +103,6 @@ watch(poolQuery.error, () => {
 
 function updateInputList(payload) {
   input_list.value = payload;
-  console.log(input_list.value, 'input_list=>updateInputList');
 }
 function handleApproveButton() {
   console.log(input_list.value, 'input_list=>updateInputList');
@@ -135,7 +122,6 @@ async function handleSubmitButton() {
       provider,
       chainId.value
     );
-    console.log(tx, 'tx');
 
     const summary = `Deposit tokens success!`;
     addTransaction({
@@ -147,7 +133,6 @@ async function handleSubmitButton() {
 
     txListener(tx, {
       onTxConfirmed: async () => {
-        console.log('success');
         await gaugeForm.value.getTokenList();
 
         isLoading.value = false;

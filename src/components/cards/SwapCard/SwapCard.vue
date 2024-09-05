@@ -296,7 +296,7 @@ export default defineComponent({
         !tokenOutAmount.value ||
         Number(tokenInAmount.value) === 0 ||
         Number(tokenOutAmount.value) === 0;
-      console.log(hasAmountsError, 'hasAmountsError');
+
       const hasCowswapErrors =
         swapping.isCowswapSwap.value &&
         swapping.cowswap.hasValidationError.value;
@@ -458,7 +458,6 @@ export default defineComponent({
       modalAntiTraderWarning.value = payload;
     }
     function updateTokenInTradeInfo(info) {
-      console.log(info, 'infoAAAA');
       tokenInTraderInfo.value = info;
     }
     // INIT

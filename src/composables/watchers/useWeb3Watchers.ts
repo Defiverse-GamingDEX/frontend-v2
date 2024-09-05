@@ -48,7 +48,6 @@ export default function useWeb3Watchers() {
   }
 
   function checkIsUnsupportedNetwork() {
-    console.log(chainId.value, 'chainId.value');
     if (
       chainId.value &&
       (isUnsupportedNetwork.value || isMismatchedNetwork.value)
@@ -109,7 +108,6 @@ export default function useWeb3Watchers() {
   watch(isWalletReady, () => {
     checkIsUnsupportedNetwork();
   });
-
   watch(blockNumber, async () => {
     if (isWalletReady.value) {
       handlePendingTransactions();

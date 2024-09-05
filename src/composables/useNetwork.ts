@@ -35,6 +35,8 @@ export const networkLabelMap = {
   [Network.OPTIMISM]: 'Optimism',
   [Network.DEFIVERSE]: 'defiverse',
   [Network.DEFIVERSE_TESTNET]: 'defiverse-testnet',
+  [Network.OASYS]: 'oasys',
+  [Network.OASYS_TESTNET]: 'oasys-testnet',
 };
 
 /**
@@ -54,6 +56,11 @@ export const isDefiverseTestnet = computed(
   () => networkId.value === Network.DEFIVERSE_TESTNET
 );
 
+export const isOasys = computed(() => networkId.value === Network.OASYS);
+export const isOasysTestnet = computed(
+  () => networkId.value === Network.OASYS_TESTNET
+);
+
 export const isL2 = computed(() => isPolygon.value || isArbitrum.value);
 export const isTestnet = computed(() => isGoerli.value);
 
@@ -62,7 +69,6 @@ export const isTestnet = computed(() => isGoerli.value);
  */
 
 export function networkFor(key: string | number): Network {
-  console.log(Network.DEFIVERSE, 'Network.DEFIVERSE');
   switch (key.toString()) {
     case '1':
       return Network.MAINNET;
@@ -76,6 +82,10 @@ export function networkFor(key: string | number): Network {
       return Network.DEFIVERSE;
     case '17117':
       return Network.DEFIVERSE_TESTNET;
+    case '248':
+      return Network.OASYS;
+    case '9372':
+      return Network.OASYS_TESTNET;
     case '29548':
       return 29548;
     case '2400':
@@ -101,7 +111,6 @@ export function networkFromSlug(networkSlug: string): Network | null {
   const networkConf = Object.keys(config).find(
     network => config[network].slug === networkSlug
   );
-  console.log(networkConf, networkSlug, 'networkConf');
   return networkConf ? (Number(networkConf) as Network) : null;
 }
 

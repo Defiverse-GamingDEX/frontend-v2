@@ -1,5 +1,8 @@
 import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
+
+import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
+
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 const networks = [
   // {
@@ -86,11 +89,21 @@ const networks = [
 let networksDev = [
   {
     id: 'defiverse-testnet',
-    name: 'Defiverse-Testnet',
+    name: 'DefiVerse Testnet',
     networkSlug: 'defiverse-testnet',
     key: '17117',
     tokens: defiverseTestnetJson.tokens,
     price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
+  {
+    id: 'oasys-testnet',
+    name: 'Oasys Testnet',
+    networkSlug: 'oasys-testnet',
+    key: '9372',
+    tokens: oasysTestnetJson.tokens,
+    // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },

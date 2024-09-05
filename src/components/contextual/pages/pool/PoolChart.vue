@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { format, addMinutes } from 'date-fns';
+import { addMinutes, format } from 'date-fns';
 import * as echarts from 'echarts/core';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -10,9 +10,9 @@ import useBreakpoints from '@/composables/useBreakpoints';
 import useDarkMode from '@/composables/useDarkMode';
 import useNumbers from '@/composables/useNumbers';
 import useTailwind from '@/composables/useTailwind';
+import { twentyFourHoursInSecs } from '@/composables/useTime';
 import { HistoricalPrices } from '@/services/coingecko/api/price.service';
 import { PoolSnapshot, PoolSnapshots, PoolType } from '@/services/pool/types';
-import { twentyFourHoursInSecs } from '@/composables/useTime';
 
 /**
  * TYPES
@@ -341,8 +341,6 @@ function getVolumeData(
 }
 
 const chartData = computed((): PoolChartData => {
-  console.log(currentPeriod.value.days, 'currentPeriod.value.days');
-  console.log(snapshotValues.value.length, 'snapshotValues.value.length');
   const periodSnapshots =
     currentPeriod.value.days === snapshotValues.value.length
       ? snapshotValues.value
@@ -350,7 +348,6 @@ const chartData = computed((): PoolChartData => {
   const isAllTimeSelected =
     periodSnapshots.length === snapshotValues.value.length;
   const pariodLastSnapshotIdx = periodSnapshots.length - 1;
-  console.log(periodSnapshots, 'periodSnapshot.length');
   if (activeTab.value === PoolChartTab.TVL) {
     return getTVLData(periodSnapshots);
   }

@@ -34,10 +34,18 @@
       "logoURI": "tokens/WBTC_L.png"
     },
     {
+      "address": "0x7275b8dbaf919fdda6ee6b36f12fd25c0f193502",
+      "chainId": 16116,
+      "name": "Bridged USDC (Celer)",
+      "symbol": "USDC.e",
+      "decimals": 6,
+      "logoURI": "tokens/USDC_L.png"
+    },
+    {
       "address": "0x7c6b91d9be155a6db01f749217d76ff02a7227f2",
       "chainId": 16116,
-      "name": "USDC",
-      "symbol": "USDC",
+      "name": "Legacy Bridged USDC (Celer)",
+      "symbol": "USDC.e-legacy",
       "decimals": 18,
       "logoURI": "tokens/USDC_L.png"
     },
@@ -56,6 +64,14 @@
       "symbol": "bCCP",
       "decimals": 18,
       "logoURI": "tokens/bCCP_L.png"
+    },
+    {
+      "address": "0x1Bd5Fc212cC1c881C67076694C134aE8cAEce3bd",
+      "chainId": 16116,
+      "name": "CCP",
+      "symbol": "CCP",
+      "decimals": 18,
+      "logoURI": "tokens/CCP_L.png"
     }
   ]
 }

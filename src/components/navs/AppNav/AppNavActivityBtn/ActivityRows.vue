@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import useTransactions from '@/composables/useTransactions';
-import { Transaction } from '@/composables/useTransactions';
+import useTransactions, { Transaction } from '@/composables/useTransactions';
 import useWeb3 from '@/services/web3/useWeb3';
 import { cloneDeep } from 'lodash';
+import { computed } from 'vue';
 interface Props {
   transactions: Transaction[];
   getExplorerLink: (id: string, type: Transaction['type']) => void;
@@ -19,7 +18,7 @@ const props = defineProps<Props>();
  */
 const { connector } = useWeb3();
 const { getProtectedTokens } = useTransactions();
-console.log(props.transactions, 'transactions');
+
 const transactionsShow = ref([] as Transaction[]);
 const protectedTokens = ref([] as Array<string>);
 /**
@@ -73,7 +72,18 @@ onBeforeMount(async () => {
       class="mb-3"
     >
       <div class="row">
+        <div v-if="transaction.action === 'bridge'" class="label">
+          <div class="flex items-center font-semibold">
+            {{ $t(`transactionAction.${transaction.action}`) }}
+          </div>
+          <div
+            class="text-sm group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white transition-colors text-secondary summary"
+          >
+            {{ transaction.summary }}
+          </div>
+        </div>
         <BalLink
+          v-else
           :href="getExplorerLink(transaction.id, transaction.type)"
           :disabled="
             disablePending && isPendingTransactionStatus(transaction.status)

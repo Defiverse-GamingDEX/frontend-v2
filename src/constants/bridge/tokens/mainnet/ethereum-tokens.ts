@@ -1,10 +1,5 @@
-import ethIcon from '@/assets/images/bridge/tokens/eth.png';
-import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
-import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
-import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
-import oasIcon from '@/assets/images/bridge/tokens/oas.png';
 import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
-const rpc = 'https://eth.drpc.org';
+const rpc = 'https://eth.merkle.io';
 export const BRIDGE_ETHEREUM_TOKENS = [
   {
     name: 'TCGC',

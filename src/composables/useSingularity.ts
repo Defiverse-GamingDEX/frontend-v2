@@ -25,23 +25,17 @@ export default function useSingularity() {
     await window.SingularityEvent.logout();
   };
   const initSingularity = () => {
-    console.log('initSingularity');
     window.document.body.addEventListener('Singularity-mounted', () => {
-      console.log('----------singularity mounted--------');
       let key;
       if (route?.query?.key) {
-        console.log('using key through url');
         key = route?.query?.key;
       } else if (localStorage.getItem('singularity-key')) {
-        console.log('using key through localStorage');
         key = localStorage.getItem('singularity-key');
       } else {
-        console.log('using default key value');
         key = 'mm9lVobr1AYSerHa5KK2LvAg1h5f0h9c'; // default key
       }
       localStorage.setItem('singularity-key', key);
       window.Singularity.init('mm9lVobr1AYSerHa5KK2LvAg1h5f0h9c', async () => {
-        console.log('----------singularity init callback--------');
         window.emitter?.emit('SingularityLoaded');
         connectWalletConnectProvider(); // TODO Optional
         //window.SingularityEvent.open();

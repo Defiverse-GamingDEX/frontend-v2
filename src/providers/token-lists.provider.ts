@@ -1,13 +1,13 @@
 import { safeInject } from '@/providers/inject';
 import { pick } from 'lodash';
 import {
-  ref,
   computed,
   InjectionKey,
+  onBeforeMount,
   provide,
   reactive,
+  ref,
   toRefs,
-  onBeforeMount,
 } from 'vue';
 
 import useNetwork from '@/composables/useNetwork';
@@ -31,7 +31,6 @@ const { networkId } = useNetwork();
 const state: TokenListsState = reactive({
   activeListKeys: [uris.Balancer.Default],
 });
-console.log('state.activeListKeys', state.activeListKeys);
 const allTokenLists = ref({});
 
 const tokensListPromise =
@@ -46,11 +45,9 @@ const tokensListPromise =
  */
 
 const activeTokenLists = computed((): TokenListMap => {
-  console.log(allTokenLists.value, 'allTokenLists');
-  console.log(state.activeListKeys, ' state.activeListKeysAAAAA');
   return pick(allTokenLists.value, state.activeListKeys);
 });
-console.log(activeTokenLists, 'activeTokenListsBBBB');
+
 /**
  * The default Balancer token list.
  */

@@ -7,6 +7,7 @@ const DEFAULT_NOTIFICATION_TIMEOUT = 15 * 1_000; // 15s
 
 export type Notification = {
   id: string;
+  action?: string;
   type?: 'success' | 'error' | 'warning' | 'info';
   transactionMetadata?: {
     id: string;
@@ -21,7 +22,12 @@ export type Notification = {
 
 export type NewNotification = Pick<
   Notification,
-  'type' | 'message' | 'title' | 'autoCloseAfterMs' | 'transactionMetadata'
+  | 'type'
+  | 'message'
+  | 'title'
+  | 'autoCloseAfterMs'
+  | 'transactionMetadata'
+  | 'action'
 >;
 
 type NotificationsMap = Record<string, Notification>;

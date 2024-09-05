@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import i18n from '@/plugins/i18n';
@@ -7,10 +7,10 @@ import i18n from '@/plugins/i18n';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
 import useNotifications from '@/composables/useNotifications';
-import useWeb3 from '@/services/web3/useWeb3';
-import { configService } from '@/services/config/config.service';
 import { buildNetworkIconURL } from '@/lib/utils/urls';
 import { hardRedirectTo } from '@/plugins/router/nav-guards';
+import { configService } from '@/services/config/config.service';
+import useWeb3 from '@/services/web3/useWeb3';
 
 import networksSupport from '@/constants/networks';
 
@@ -35,7 +35,6 @@ const networksDev = ref(networksSupport.networksDev);
 
 // COMPUTED
 const allNetworks = computed(() => {
-  console.log(networks.value, 'networks');
   return networks.value.concat(
     configService.env.APP_ENV === 'development' ||
       configService.env.APP_ENV === 'staging'
@@ -43,7 +42,7 @@ const allNetworks = computed(() => {
       : []
   );
 });
-console.log(allNetworks, configService.env.APP_ENV, 'allNetworks');
+
 const appNetworkSupported = computed((): boolean => {
   return allNetworks.value
     .map(network => network.key)

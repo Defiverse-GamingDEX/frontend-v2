@@ -1,88 +1,313 @@
-import { reactive, toRefs } from 'vue';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { Contract } from '@ethersproject/contracts';
-import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
-import { default as BridgeABI } from '@/lib/abi/bridge/Bridge.json';
-import { default as IL2ERC20BridgeABI } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
-import { OASYS_TESTNET_NETWORK } from '@/constants/bridge/oasys-testnet-network';
+import ccpIcon from '@/assets/images/bridge/tokens/ccp.png';
+import defiIcon from '@/assets/images/bridge/tokens/defi.png';
+import ethIcon from '@/assets/images/bridge/tokens/eth.png';
+import gdtIcon from '@/assets/images/bridge/tokens/gdt.png';
+import mchcIcon from '@/assets/images/bridge/tokens/mchc.png';
+import oasIcon from '@/assets/images/bridge/tokens/oas.png';
+import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
+import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
+import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
+import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
+import bridgeService from '@/composables/bridge/bridge.services';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
-import bridgeService from './bridge.services.js';
-import bridgeAPI from './bridge.api.js';
+import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { bnum } from '@/lib/utils';
-import { ethers } from 'ethers';
+import { Contract } from '@ethersproject/contracts';
+import { JsonRpcProvider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
-// function from BridgeAPI - START
-async function getTransferConfigs() {
-  try {
-    const rs = await bridgeAPI.getTransferConfigs();
+import { ethers } from 'ethers';
+const VBRIDGE_CONTRACT_ADDRESS = '0x182663E7E9bDac92E373D660Ea47ddd91518773a';
+// real function - START - TODO
+function truncateDecimal(number, precision) {
+  const [integerPart, fractionalPart] = number.toString().split('.');
 
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
+  if (!fractionalPart) {
+    return integerPart;
+  }
+
+  const truncatedFractionalPart = fractionalPart.slice(0, precision);
+
+  // Combine the integer part and the truncated fractional part
+  const result =
+    integerPart +
+    (truncatedFractionalPart ? '.' + truncatedFractionalPart : '');
+
+  // Convert to a number and back to string to remove trailing zeros
+  return parseFloat(result).toString();
+}
+function checkIsNative(tokenAddress, chainId) {
+  if (chainId === 248) {
+    // OASYS
+    if (tokenAddress === '0x0000000000000000000000000000000000000000') {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if (tokenAddress === '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
-async function getEstimateAmt(inputFrom, inputTo, account, slippage) {
-  try {
-    const decimals = new BigNumber(10).pow(inputFrom.decimals).toFixed();
-    const atm = BigNumber(inputFrom.amount).times(decimals).toFixed(0);
-    const params = {
-      src_chain_id: inputFrom.chainId,
-      dst_chain_id: inputTo.chainId,
-      token_symbol: inputFrom.tokenSymbol,
-      usr_addr: account,
-      slippage_tolerance: calcSlippage(slippage),
-      amt: atm,
+function getTokenURL(tokenSymbol) {
+  switch (tokenSymbol) {
+    case 'ETH':
+      return ethIcon;
+    case 'WBTC':
+      return wbtcIcon;
+    case 'USDT':
+      return usdtIcon;
+    case 'USDC':
+    case 'USDC.e':
+      return usdcIcon;
+    case 'OAS':
+      return oasIcon;
+    case 'DFV':
+      return defiIcon;
+    case 'TCGC':
+      return tcgcIcon;
+    case 'MCHC':
+      return mchcIcon;
+    case 'GDT':
+      return gdtIcon;
+    case 'CCP':
+      return ccpIcon;
+    default:
+      return ethIcon;
+  }
+}
+const getTxUrl = (txId, chainInfo) => {
+  if (!txId) {
+    return '';
+  }
+  if (chainInfo?.chain_id_decimals === 1) {
+    // ethereum
+    return `${chainInfo?.explorer}/tx/${txId}`;
+  }
+  if (chainInfo?.chain_id_decimals === 137) {
+    // polygon mainnet
+    return `${chainInfo?.explorer}/tx/${txId}`;
+  } else {
+    // Verse explorer
+    return `${chainInfo?.explorer}/tx/${txId}`;
+  }
+};
+const getRouteContractName = chainId => {
+  const chain = BRIDGE_NETWORKS.find(
+    network => network.chain_id_decimals === chainId
+  );
+  if (chain?.type === 'external-chain') {
+    return 'cBridge';
+  }
+  return 'OasysBridge';
+};
+const getStatusName = status => {
+  switch (status) {
+    case 'NEW':
+      return 'New';
+    case 'CONFIRMED':
+      return 'Confirmed';
+    case 'RELAY_PROCESSING':
+      return 'Relay Processing';
+    case 'RELAY_ERROR':
+      return 'Relay Error';
+    case 'RELAY_COMPLETED':
+      return 'Relay Completed';
+    case 'DST_ERROR':
+      return 'DST Error';
+    case 'COMPLETED':
+      return 'Completed';
+    case 'ERROR':
+      return 'Error';
+    default:
+      return 'Unknown';
+  }
+};
+const getRouteStatus = status => {
+  switch (status) {
+    case 'NEW':
+      return {
+        status_route_1: 'pending',
+        status_route_2: null,
+      };
+    case 'CONFIRMED':
+      return {
+        status_route_1: 'pending',
+        status_route_2: null,
+      };
+    case 'RELAY_PROCESSING':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'pending',
+      };
+    case 'RELAY_ERROR':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'failed',
+      };
+    case 'RELAY_COMPLETED':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'pending',
+      };
+    case 'DST_ERROR':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'failed',
+      };
+    case 'COMPLETED':
+      return {
+        status_route_1: 'success',
+        status_route_2: 'success',
+      };
+    case 'ERROR':
+      return {
+        status_route_1: 'failed',
+        status_route_2: 'failed',
+      };
+    default:
+      return {
+        status_route_1: null,
+        status_route_2: null,
+      };
+  }
+};
+const mapTxHistory = data => {
+  let rs: any = null;
+  if (data) {
+    const { status_route_1, status_route_2 } = getRouteStatus(data.status);
+
+    rs = {
+      status: data.status,
+      statusName: getStatusName(data.status),
+      date: data.src_timestamp,
+      convert_gas_amount: BigNumber(data?.convert_gas_amount)
+        .div(10 ** data?.src_token?.decimals)
+        .toFixed(),
+      gas_amount_receive: BigNumber(data?.gas_amount_receive)
+        .div(10 ** 18)
+        .toFixed(), // hard decimals 18
+      gas_option_enabled: data.gas_option_enabled,
+      tokenIn: {
+        address: data.src_token?.address,
+        symbol: data.src_token?.symbol,
+        chainId: data.src_token?.chain_id,
+        amount: truncateDecimal(
+          BigNumber(data.amount_in)
+            .div(10 ** data?.src_token?.decimals)
+            .toFixed(6),
+          6
+        ),
+      },
+      router_1: {
+        status: status_route_1, // 'failed' : 'pending',  // TODO
+        router_contract_name: getRouteContractName(data.src_token?.chain_id),
+        txId: data.src_tx_id, // route_1 only has txId
+        inboundTx: null,
+        outboundTx: null,
+        isRetry: false,
+      },
+      tokenReplay: {
+        address: data.relay_token?.address,
+        symbol: data.relay_token?.symbol,
+        chainId: data.relay_token?.chain_id,
+        amount: truncateDecimal(
+          BigNumber(data?.amount_relay || 0)
+            .div(10 ** data?.relay_token?.decimals)
+            .toFixed(),
+          6
+        ),
+      },
+      router_2: {
+        status: status_route_2,
+        router_contract_name: getRouteContractName(data.dst_token?.chain_id),
+        txId: null,
+        inboundTx: data.relay_tx_id, // route_2  has inboundTx
+        outboundTx: data.dst_tx_id, // route_2  has outboundTx
+        isRetry: false, // true : false, // TODO
+      },
+      tokenOut: {
+        address: data.dst_token?.address,
+        symbol: data.dst_token?.symbol,
+        chainId: data.dst_token?.chain_id,
+        amount: truncateDecimal(
+          BigNumber(data?.amount_out)
+            .div(10 ** data?.dst_token?.decimals)
+            .toFixed(),
+          6
+        ),
+      },
     };
-    const rs = await bridgeAPI.getEstimateAmt(params);
-    console.log(rs, 'rs=>getEstimateAmt');
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
-async function getTransferStatus(transfer_id) {
-  try {
-    const rs = await bridgeAPI.getTransferStatus(transfer_id);
+    // map data to show
 
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
-async function getTransferHistory(account, paging) {
-  try {
-    const params = {
-      acct_addr: [account],
-      page_size: paging.page_size,
-      next_page_token: paging.next_page_token,
-    };
-    const rs = await bridgeAPI.getTransferHistory(params);
+    //tokenIn
+    const tokenIn_chain = getChain(rs.tokenIn.chainId);
+    rs.tokenIn.chainName = tokenIn_chain?.name;
+    rs.tokenIn.chainUrl = tokenIn_chain?.img_url;
+    rs.tokenIn.logoURI = getTokenURL(rs.tokenIn.symbol);
 
-    return rs;
-  } catch (error) {
-    console.log(error, 'error');
-    throw error;
-  }
-}
+    //router_1
+    rs.router_1.txId_url = getTxUrl(rs.router_1.txId, tokenIn_chain);
+    // rs.router_1.inboundTx_url = getTxUrl(rs.router_1.inboundTx, {
+    //   tokenIn_chain,
+    // });
+    // rs.router_1.outboundTx_url = getTxUrl(
+    //   rs.router_1.outboundTx,
+    //   tokenOut
+    // );
 
-// function from BridgeAPI - END
-function calcSlippage(slippage_tolerance) {
-  slippage_tolerance = parseFloat(slippage_tolerance || '0');
-  console.log();
-  const slippageUse = (slippage_tolerance / 100) * 1e6 - 1; // please read document about slippage_tolerance
-  return Math.floor(slippageUse);
-}
+    //tokenReply
+    const tokenReply_chain = getChain(rs.tokenReplay.chainId);
+    rs.tokenReplay.chainName = tokenReply_chain?.name;
+    rs.tokenReplay.chainUrl = tokenReply_chain?.img_url;
+    rs.tokenReplay.logoURI = getTokenURL(rs.tokenReplay.symbol);
+
+    //router_2
+    rs.router_2.txId_url = getTxUrl(rs.router_2.txId, tokenReply_chain);
+    rs.router_2.inboundTx_url = getTxUrl(
+      rs.router_2.inboundTx,
+      tokenReply_chain
+    );
+
+    //tokenOut
+    const tokenOut_chain = getChain(rs.tokenOut.chainId);
+    rs.tokenOut.chainName = tokenOut_chain?.name;
+    rs.tokenOut.chainUrl = tokenOut_chain?.img_url;
+    rs.tokenOut.logoURI = getTokenURL(rs.tokenOut.symbol);
+
+    rs.router_2.outboundTx_url = getTxUrl(
+      rs.router_2.outboundTx,
+      tokenOut_chain
+    );
+  }
+  return rs;
+};
 async function getTokensBalance(tokens, account) {
   if (tokens.length > 0) {
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
-      const balance = await getBalance(token, account);
+      let balance = 0;
+      if (token.is_native === true) {
+        // OAS native
+        balance = await getNativeBalance(token, account);
+      } else {
+        balance = await getBalance(token, account);
+      }
       token.balance = balance;
     }
     return tokens;
+  }
+}
+async function getNativeBalance(token, account) {
+  const { address, rpc, provider } = token;
+  let currentProvider = provider;
+  if (!provider) {
+    currentProvider = new JsonRpcProvider(rpc);
+    const nativeBalance = await currentProvider.getBalance(account);
+    const rs = bnum(nativeBalance).div(Math.pow(10, token?.decimals)).toFixed();
+    return rs;
   }
 }
 async function getBalance(token, walletAddress) {
@@ -94,9 +319,8 @@ async function getBalance(token, walletAddress) {
     }
     const tokenContract = new Contract(address, ERC20ABI, currentProvider);
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
-    console.log(tokenBalance, 'getBalance=>tokenBalanceAAA');
     const weiBalance = tokenBalance?.toString();
-    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toNumber();
+    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toFixed();
 
     return rs;
   } catch (error) {
@@ -104,17 +328,25 @@ async function getBalance(token, walletAddress) {
     return error;
   }
 }
-async function checkTokenAllowance(chain, token, walletAddress) {
+async function checkTokenAllowance(
+  chain,
+  token,
+  walletAddress,
+  l1_bridge_address
+) {
   try {
     const { address } = token;
     const { bridgeContract, rpc } = chain;
+    let contractAddress = bridgeContract;
+    if (l1_bridge_address) {
+      contractAddress = l1_bridge_address;
+    }
     const provider = new JsonRpcProvider(rpc);
     const tokenContract = new Contract(address, ERC20ABI, provider);
     const tokenAllowance = await tokenContract.allowance(
       walletAddress,
-      bridgeContract
+      contractAddress
     );
-    console.log(tokenAllowance, 'checkAllowance=>tokenAllowance');
 
     const rs = tokenAllowance || 0;
 
@@ -124,22 +356,35 @@ async function checkTokenAllowance(chain, token, walletAddress) {
     return error;
   }
 }
-async function approveToken(chain, token, walletAddress, signer) {
+async function approveToken(
+  chain,
+  token,
+  walletAddress,
+  signer,
+  approveAmount,
+  l1_bridge_address
+) {
   try {
     const { address } = token;
     const { bridgeContract, rpc } = chain;
+    let contractAddress = bridgeContract;
+    if (l1_bridge_address) {
+      contractAddress = l1_bridge_address;
+    }
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
+    if (!approveAmount) {
+      approveAmount = ethers.constants.MaxUint256;
+    }
     const tx = await contract
       .connect(signer)
-      .approve(bridgeContract, ethers.constants.MaxUint256);
-    console.log('tx', tx);
+      .approve(contractAddress, approveAmount);
     // const rs = await tx.wait();
     // console.log('rs', rs);
 
     return tx;
   } catch (error) {
-    console.log(error, 'error');
+    console.log(error, 'approveToken=>error');
     throw error;
   }
 }
@@ -153,80 +398,16 @@ function getChain(chainId) {
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
-async function generationTransferId(inputFromSelect, inputToSelect, account) {
-  //TODO not work
-  const chainFrom = getChain(inputFromSelect.chainId);
-  const tokenInputFrom = getToken(
-    inputFromSelect.tokenAddress,
-    inputFromSelect.tokensList
-  );
-  const chainTo = getChain(inputToSelect.chainId);
-  const tokenInputTo = getToken(
-    inputToSelect.tokenAddress,
-    inputToSelect.tokensList
-  );
-  const chainTransfer = getChainTransfer(
-    chainFrom,
-    tokenInputFrom,
-    chainTo,
-    tokenInputTo
-  );
-  const contractProvider = chainTransfer?.provider;
-
-  const decimals = new BigNumber(10).pow(inputFromSelect.decimals).toFixed();
-  const decimals_value = BigNumber(inputFromSelect.amount)
-    .times(decimals)
-    .toFixed(0)
-    ?.toString();
-  //const nonce = await contractProvider.getTransactionCount(account, 'latest');
-  const nonce = Date.now(); // nonce is currentTimeStamp
-  const transfer_id = ethers.utils.solidityKeccak256(
-    ['address', 'address', 'address', 'uint256', 'uint64', 'uint64', 'uint64'],
-    [
-      account, /// User's wallet address,
-      account, /// User's wallet address,
-      inputFromSelect.tokenAddress, /// Wrap token address/ ERC20 token address
-      decimals_value, /// Send amount in String
-      `${chainTransfer.chainId}`, /// Destination chain id
-      `${nonce}`, /// Nonce
-      `${inputFromSelect.chainId}`, /// Source chain id
-    ]
-  );
-  return transfer_id;
-}
-function getChainTransfer(chainFrom, tokenInputFrom, chainTo, tokenInputTo) {
-  const rs = {};
-  if (chainFrom.type === 'L1') {
-    if (chainTo.type === 'L1') {
-      // L1 to L1 example Goerli to AVAX testnet : sendNative
-      rs.abi = BridgeABI;
-      rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
-      rs.chainId = chainTo.chain_id_decimals;
-      rs.type = 'L1toL1';
-    } else {
-      // L1 to L2
-      rs.abi = BridgeABI;
-      rs.provider = new JsonRpcProvider(chainFrom?.rpc); // TODO
-      rs.chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
-      rs.type = 'L1toL2';
-    }
-  } else {
-    if (chainTo.type === 'L1') {
-      // L2 to L1
-      rs.type = 'L2toL1';
-    } else {
-      // L2 to L2
-      rs.type = 'L2toL2';
-    }
-  }
-  return rs;
-}
 async function bridgeSend(
   inputFromSelect,
   inputToSelect,
-  slippage,
   account,
-  signer
+  anotherWalletAddress,
+  signer,
+  provider,
+  isEstimate = false,
+  oasys_bridge_type,
+  l1_bridge_address
 ) {
   try {
     const chainFrom = getChain(inputFromSelect.chainId);
@@ -239,38 +420,169 @@ async function bridgeSend(
       inputToSelect.tokenAddress,
       inputToSelect.tokensList
     );
-    const chainTransfer = getChainTransfer(
-      chainFrom,
-      tokenInputFrom,
-      chainTo,
-      tokenInputTo
-    );
 
-    const params = {
-      contractAddress: chainFrom?.bridgeContract,
-      tokenAddress: inputFromSelect.tokenAddress,
-      tokenDecimal: tokenInputFrom?.decimals,
-      value: inputFromSelect.amount,
-      account: account,
-      signer: signer,
-      slippage: calcSlippage(slippage),
-      gasPrice: chainFrom?.gasPrice,
-      abi: chainTransfer?.abi,
-      contractProvider: chainTransfer?.provider,
-      chainId: chainTransfer?.chainId,
-    };
-    console.log(params, 'handleTransferButton=>params');
-    // const provider = new JsonRpcProvider(OASYS_TESTNET_NETWORK?.rpc);
-    // const chainId = OASYS_TESTNET_NETWORK.chain_id_decimals;
-    let tx = null;
-    if (chainTransfer.type === 'L1toL1') {
-      //tx = await bridgeService.bridgeSendNative(params);
-      tx = await bridgeService.bridgeSend(params);
-    } else if (chainTransfer.type === 'L1toL2') {
-      tx = await bridgeService.bridgeSend(params);
+    let rs = null;
+    if (oasys_bridge_type === 'external_to_oasys') {
+      // native case => oasys -> NOT NOW
+      // token case only
+      const params = {
+        contractAddress: chainFrom?.bridgeContract, // contract token
+        contractProvider: provider, // contract provider
+        account,
+        srcTokenDecimal: tokenInputFrom?.decimals,
+        value: inputFromSelect?.amount, // amount
+        vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+        srcTokenAddress: tokenInputFrom?.address,
+        desChainId: 248, // to OASYS
+        signer,
+        slippage: 100000,
+        abi: chainFrom?.bridgeABI,
+        gasPrice: chainFrom?.gasPrice,
+        isEstimate,
+      };
+      rs = await bridgeService.bridgeSend(params);
+    } else if (oasys_bridge_type === 'oasys_to_external') {
+      if (tokenInputFrom.symbol === 'OAS') {
+        // native case OAS
+        // NOT support now
+      } else {
+        // token case
+        const params = {
+          contractAddress: l1_bridge_address, // contract token
+          contractProvider: provider, // contract provider
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+          srcTokenAddress: tokenInputFrom?.address,
+          desChainId: chainTo?.chain_id_decimals,
+          signer,
+          slippage: 100000,
+          abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
+          gasPrice: chainFrom?.gasPrice,
+          isEstimate,
+        };
+        rs = await bridgeService.bridgeSend(params);
+      }
+    } else if (oasys_bridge_type === 'verse_to_oasys') {
+      // verse => oasys
+      const params = {
+        contractAddress: chainFrom?.bridgeContract,
+        contractProvider: provider,
+        account,
+        srcTokenDecimal: tokenInputFrom?.decimals,
+        srcTokenSymbol: tokenInputFrom?.symbol,
+        value: inputFromSelect?.amount, // amount
+        vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // address user
+        srcTokenAddress: tokenInputFrom?.address, // account address
+        signer,
+        abi: chainFrom?.bridgeABI,
+        gasPrice: chainFrom?.gasPrice,
+        isEstimate,
+      };
+
+      rs = await bridgeService.bridgeWithdrawTo(params);
+    } else if (oasys_bridge_type === 'oasys_to_verse') {
+      //oasys_to_verse
+      if (tokenInputFrom.symbol === 'OAS') {
+        // transfer OAS
+        const params = {
+          contractAddress: l1_bridge_address,
+          contractProvider: provider,
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          receiveAddress: anotherWalletAddress ? anotherWalletAddress : account, // address user
+          signer,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
+          isEstimate,
+        };
+        rs = await bridgeService.bridgeDepositETHTo(params);
+      } else {
+        // transfer ERC20
+        const params = {
+          contractAddress: l1_bridge_address,
+          contractProvider: provider,
+          account,
+          srcTokenDecimal: tokenInputFrom?.decimals,
+          value: inputFromSelect?.amount, // amount
+          srcTokenAddress: tokenInputFrom?.address, // account address
+          desTokenAddress: tokenInputTo?.address,
+          receiveAddress: anotherWalletAddress ? anotherWalletAddress : account, // address user
+          signer,
+          abi: chainFrom?.bridgeABI,
+          gasPrice: chainFrom?.gasPrice,
+          isEstimate,
+        };
+        rs = await bridgeService.bridgeDepositERC20To(params);
+      }
+    } else {
+      // old logic
+      if (chainFrom.type === 'external-chain') {
+        if (chainTo.type === 'external-chain') {
+          throw new Error('Not support');
+        } else {
+          // chainTo.type === 'verse-chain'
+          // external-chain => verse-chain
+          const params = {
+            contractAddress: chainFrom?.bridgeContract, // contract token
+            contractProvider: provider, // contract provider
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+            srcTokenAddress: tokenInputFrom?.address,
+            desChainId: 248,
+            signer,
+            slippage: 100000,
+            abi: chainFrom?.bridgeABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+          };
+          rs = await bridgeService.bridgeSend(params);
+        }
+      } else {
+        // chainFrom.type === 'verse-chain'
+        if (chainTo.type === 'external-chain') {
+          // verse-chain => external-chain
+          const params = {
+            contractAddress: chainFrom?.bridgeContract,
+            contractProvider: provider,
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            srcTokenSymbol: tokenInputFrom?.symbol,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+            srcTokenAddress: tokenInputFrom?.address, // account address
+            signer,
+            abi: chainFrom?.bridgeABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+          };
+          rs = await bridgeService.bridgeWithdrawTo(params);
+        } else {
+          // verse-chain => verse-chain
+          const params = {
+            contractAddress: chainFrom?.bridgeContract,
+            contractProvider: provider,
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            srcTokenSymbol: tokenInputFrom?.symbol,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS,
+            srcTokenAddress: tokenInputFrom?.address, // account address
+            signer,
+            abi: chainFrom?.bridgeABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+          };
+          rs = await bridgeService.bridgeWithdrawTo(params);
+        }
+      }
     }
 
-    return tx;
+    return rs;
   } catch (error) {
     console.log(error, 'error');
     throw error;
@@ -278,15 +590,14 @@ async function bridgeSend(
 }
 export function useBridge() {
   return {
-    // SDK start
-    getTransferConfigs,
-    getEstimateAmt,
-    getTransferStatus,
-    generationTransferId,
-    getTransferHistory,
-    // SDK end
+    truncateDecimal,
+    getTokenURL,
+    checkIsNative,
+    mapTxHistory,
+
     getTokensBalance,
     getBalance,
+    getNativeBalance,
     checkTokenAllowance,
     approveToken,
     bridgeSend,

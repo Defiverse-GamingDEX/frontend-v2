@@ -10,9 +10,7 @@ export default class BalancerSubgraphClient {
   public async get(query) {
     try {
       const payload = this.toPayload(query);
-      console.log(payload, 'payload');
       const response = await subgraphFallbackService.get(payload);
-      console.log(response, 'response');
       if (!response) {
         return;
       }

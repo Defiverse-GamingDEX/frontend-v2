@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { ATF_LIST } from '@/constants/atfList';
-import { computed } from 'vue';
 import { useTokens } from '@/providers/tokens.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 /**
@@ -35,9 +33,7 @@ watch(
  */
 async function checkIsAFT() {
   try {
-    console.log(props?.address, account?.value, 'rops?.value.address');
     let rs = await getAntiTraderInfo(props?.address, account?.value);
-    console.log(rs, 'checkIsAFT=>rs');
     isATF.value = rs.isProtectedToken;
   } catch (error) {
     console.log(error, 'error=>checkIsAFT');
@@ -57,6 +53,6 @@ onBeforeMount(() => {
 </template>
 <style scoped>
 .atf-badge {
-  //font-size: 12px;
+  font-size: 12px;
 }
 </style>

@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
+import { useSwapState } from '@/composables/swap/useSwapState';
 import useBreakpoints from '@/composables/useBreakpoints';
-import { isMainnet } from '@/composables/useNetwork';
-import { configService } from '@/services/config/config.service';
-import useWeb3 from '@/services/web3/useWeb3';
-import { AnyPool } from '@/services/pool/types';
-import MyWalletSubheader from './MyWalletSubheader.vue';
+import useMyWalletTokens from '@/composables/useMyWalletTokens';
 import useNativeBalance from '@/composables/useNativeBalance';
 import { usePool } from '@/composables/usePool';
-import useMyWalletTokens from '@/composables/useMyWalletTokens';
-import { useSwapState } from '@/composables/swap/useSwapState';
 import { includesAddress } from '@/lib/utils';
-
-import tokensUtils from '@/lib/utils/tokens';
+import { configService } from '@/services/config/config.service';
+import { AnyPool } from '@/services/pool/types';
+import useWeb3 from '@/services/web3/useWeb3';
+import MyWalletSubheader from './MyWalletSubheader.vue';
 
 type Props = {
   excludedTokens?: string[];
@@ -76,8 +73,6 @@ function handleAssetClick(tokenAddress) {
   setTokenInAddress(tokenAddress);
   const isPoolToken = includesAddress(poolTokenAddresses.value, tokenAddress);
   emit('click:asset', tokenAddress, isPoolToken);
-  console.log(tokenAddress, 'tokenAddress');
-  console.log(tokenOutAddress, 'tokenOutAddress');
   if (tokenAddress === tokenOutAddress.value) {
     setTokenOutAddress('');
     setTokenOutAmount('');

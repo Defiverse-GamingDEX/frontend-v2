@@ -1,15 +1,22 @@
 <script setup lang="ts">
+import { useBridge } from '@/composables/bridge/useBridge';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { bnum } from '@/lib/utils';
+import {
+  isGreaterThanOrEqualTo,
+  isLessThanOrEqualTo,
+  isPositive,
+} from '@/lib/utils/validations';
+import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
+import useWeb3 from '@/services/web3/useWeb3';
+import { Rules } from '@/types';
+import BigNumber from 'bignumber.js';
+import { cloneDeep } from 'lodash';
+import { useI18n } from 'vue-i18n';
 import NetworkSelectInput from './NetworkSelectInput.vue';
 import TokenSelectInput from './TokenSelectInput.vue';
-import useWeb3 from '@/services/web3/useWeb3';
-import { isLessThanOrEqualTo, isPositive } from '@/lib/utils/validations';
-import { cloneDeep } from 'lodash';
-import { bnum, isSameAddress } from '@/lib/utils';
-import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { Rules } from '@/types';
-import { useI18n } from 'vue-i18n';
-import useBridgeWeb3 from '@/services/bridge/useBridgeWeb3';
-import { useBridge } from '@/composables/bridge/useBridge';
+// CONST
+const MAX_REMOVE_AMOUNT = 0;
 // TYPES
 type InputValue = string | number;
 
@@ -28,13 +35,26 @@ type Props = {
   inputSelect?: inputSelect;
   chainsList: Array<any>;
   ignoreWalletBalance?: boolean;
+  minAmount: number;
+  //networkFee: number;
   rules?: Rules;
   disabled?: boolean;
 };
 const props = withDefaults(defineProps<Props>(), {
   ignoreWalletBalance: false,
+  minAmount: 0,
+  //networkFee: 0,
   rules: () => [],
 });
+
+const DEFI_GAS_LIMIT = 400000;
+const DEFI_GAS_PRICE = 10000000000000;
+const DEFI_NETWORK_FEE = Number(
+  BigNumber(DEFI_GAS_LIMIT)
+    .times(DEFI_GAS_PRICE)
+    .div(10 ** 18)
+    .toFixed()
+);
 
 /**
  * COMPOSABLES
@@ -61,6 +81,8 @@ const tokenBalanceBN = computed(() => bnum(props?.inputSelect?.balance));
 const hasAmount = computed(() => amountBN.value.gt(0));
 const hasBalance = computed(() => tokenBalanceBN.value.gt(0));
 const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+const inputChainId = computed(() => props?.inputSelect?.chainId);
+const inputSymbol = computed(() => props?.inputSelect?.tokenSymbol);
 const inputRules = computed(() => {
   if (!hasToken.value || !isWalletReady.value || props.noRules) {
     return [isPositive()];
@@ -69,13 +91,31 @@ const inputRules = computed(() => {
   const rules = [...props.rules, isPositive()];
   if (!props.ignoreWalletBalance) {
     rules.push(
+      isGreaterThanOrEqualTo(
+        props?.minAmount,
+        t('mustBeMoreOrEqualTo', [props?.minAmount])
+      )
+    );
+    rules.push(
       isLessThanOrEqualTo(props?.inputSelect?.balance, t('exceedsBalance'))
     );
   }
   return rules;
 });
 const isMaxed = computed(() => {
-  return _amount.value === props?.inputSelect?.balance;
+  const remove_amount = BigNumber(MAX_REMOVE_AMOUNT)
+    .div(10 ** decimalLimit.value || 10 ** 18)
+    .toFixed();
+
+  let maxAmount = BigNumber(tokenBalanceBN.value)
+    .minus(remove_amount)
+    .toFixed();
+  if (Number(inputChainId.value) === 16116 && inputSymbol.value === 'OAS') {
+    maxAmount = BigNumber(tokenBalanceBN.value)
+      .minus(DEFI_NETWORK_FEE)
+      .toFixed();
+  }
+  return _amount.value === maxAmount;
 });
 
 const maxPercentage = computed(() => {
@@ -132,16 +172,26 @@ function handleAmountChange(value) {
   emit('update:inputSelect', inputSelect);
 }
 function handleNetworkChange(networkId) {
-  console.log(networkId, 'networkId');
   let network = getChain(networkId);
-  console.log(network, 'network');
   if (network) {
-    console.log();
     connectToAppNetwork(network);
   }
 }
 const setMax = () => {
-  const maxAmount = props?.inputSelect?.balance;
+  const remove_amount = BigNumber(MAX_REMOVE_AMOUNT)
+    .div(10 ** decimalLimit.value || 10 ** 18)
+    .toFixed();
+  let maxAmount = BigNumber(tokenBalanceBN.value)
+    .minus(remove_amount)
+    .toFixed();
+  if (Number(inputChainId.value) === 16116 && inputSymbol.value === 'OAS') {
+    maxAmount = BigNumber(tokenBalanceBN.value)
+      .minus(DEFI_NETWORK_FEE)
+      .toFixed();
+  }
+  if (Number(maxAmount) < 0) {
+    maxAmount = '0';
+  }
   handleAmountChange(maxAmount);
 };
 </script>
@@ -217,6 +267,14 @@ const setMax = () => {
                   </span>
                 </template>
               </button>
+              <div
+                v-if="inputChainId === 16116 && inputSymbol === 'OAS'"
+                class="ml-auto network-fee"
+              >
+                Estimate network fee ~
+                {{ fNum2(DEFI_NETWORK_FEE, FNumFormats.token) }}
+                {{ inputSymbol }}
+              </div>
             </div>
 
             <BalProgressBar
@@ -236,6 +294,11 @@ const setMax = () => {
 <style scoped lang="scss">
 .input-from-component {
   :deep() {
+    .network-fee {
+      font-size: 12px;
+      line-height: 16px;
+      color: #f45353;
+    }
     .input-content {
       .header {
         .token-select-input {

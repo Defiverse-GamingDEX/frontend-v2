@@ -1,8 +1,8 @@
 
 
 <script setup lang="ts">
-import ChargeGasIcon from './ChargeGasIcon.vue';
 import { useI18n } from 'vue-i18n';
+import ChargeGasIcon from './ChargeGasIcon.vue';
 // PROPS
 type Props = {
   isChargeGas?: boolean;
