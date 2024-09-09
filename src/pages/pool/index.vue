@@ -138,7 +138,7 @@ onBeforeMount(async () => {
 }
 .pools-page {
   .statistic-wrapper {
-    max-width: 64rem;
+    max-width: 67rem;
     padding: 48px 0px 0px 0px;
     margin: 0 auto;
     @media screen and (max-width: 767px) {
