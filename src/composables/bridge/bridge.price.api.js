@@ -1,6 +1,7 @@
 import axios from 'axios';
 const MAINNET_API_URL = 'https://price-api.gaming-dex.com/api';
-const TESTNET_API_URL = 'https://price-api.gaming-dex.com/api'; // not have testnet
+const TESTNET_API_URL =
+  'https://price-api-testnet.gaming-dex.com/api/v1/market/info';
 
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 
