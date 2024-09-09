@@ -16,7 +16,7 @@
   }
   /* background-image: url('/images/backgrounds/bg-header.svg'); */
   .max-w-lg {
-    max-width: 56rem;
+    max-width: 67rem;
   }
 }
 </style>
