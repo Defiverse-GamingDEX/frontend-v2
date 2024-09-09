@@ -152,6 +152,10 @@ onBeforeMount(async () => {
         font-weight: bold;
         font-size: 55px;
         line-height: 66px;
+        @media screen and (max-width: 768px) {
+          font-size: 42px;
+          line-height: 50px;
+        }
       }
     }
   }
