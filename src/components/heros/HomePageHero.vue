@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import AppHero from '@/components/heros/AppHero.vue';
-import useFathom from '@/composables/useFathom';
-import { EXTERNAL_LINKS } from '@/constants/links';
-import useNetwork from '@/composables/useNetwork';
-import Feature from '@/components/heros/Feature.vue';
 import FooterHome from '@/components/footer/FooterHome.vue';
+import AppHero from '@/components/heros/AppHero.vue';
+import Feature from '@/components/heros/Feature.vue';
+import StatisticInfo from '@/components/statistic/StatisticInfo.vue';
+import useFathom from '@/composables/useFathom';
+import useNetwork from '@/composables/useNetwork';
 /**
  * COMPOSABLES
  */
@@ -53,10 +53,12 @@ const list_features = [
 
 <template>
   <div class="home-hero">
-    <AppHero class="h-64">
+    <AppHero>
       <h1 class="headline" v-text="$t('defiLiquidityHome')" />
       <p class="headline headline-next" v-text="$t('applications')" />
-
+      <div class="statistic-wrapper">
+        <StatisticInfo />
+      </div>
       <div class="flex justify-center mt-6">
         <BalBtn
           class="mr-4"
@@ -199,7 +201,7 @@ const list_features = [
   margin-top: -1px;
 }
 .features-container {
-  margin-top: 440px;
+  margin-top: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -269,5 +271,8 @@ const list_features = [
   .item-app {
     @apply w-1/2 py-3;
   }
+}
+.statistic-wrapper {
+  margin: 42px 0px 36px 0px;
 }
 </style>

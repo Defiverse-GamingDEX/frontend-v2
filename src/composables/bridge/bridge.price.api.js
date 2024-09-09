@@ -36,6 +36,11 @@ const postBridgeRequestV2 = async params => {
   let data = await axios.post(`${domain}/v1/bridge/request/createv2`, params);
   return data?.data;
 };
+
+const getMarketInfo = async () => {
+  let data = await axios.get(`${domain}/v1/market/info`, {});
+  return data?.data;
+};
 // INTERNAL API - END
 export default {
   getRoutes,
@@ -44,4 +49,5 @@ export default {
   getRequestDetails,
   postBridgeRequest,
   postBridgeRequestV2,
+  getMarketInfo,
 };
