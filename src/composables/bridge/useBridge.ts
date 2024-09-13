@@ -436,7 +436,7 @@ async function bridgeSend(
         srcTokenAddress: tokenInputFrom?.address,
         desChainId: 248, // to OASYS
         signer,
-        slippage: 100000,
+        slippage: 50000,
         abi: chainFrom?.bridgeABI,
         gasPrice: chainFrom?.gasPrice,
         isEstimate,
@@ -459,7 +459,7 @@ async function bridgeSend(
           srcTokenAddress: tokenInputFrom?.address,
           desChainId: chainTo?.chain_id_decimals,
           signer,
-          slippage: 100000,
+          slippage: 50000,
           abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
@@ -541,7 +541,7 @@ async function bridgeSend(
             srcTokenAddress: tokenInputFrom?.address,
             desChainId: 248,
             signer,
-            slippage: 100000,
+            slippage: 50000,
             abi: chainFrom?.bridgeABI,
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
