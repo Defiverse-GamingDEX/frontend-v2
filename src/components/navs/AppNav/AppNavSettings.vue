@@ -206,7 +206,7 @@ export default defineComponent({
     const appLocale = computed(() => store.state.app.locale);
     const appDarkMode = computed(() => store.state.app.darkMode);
     const connectorName = computed(() =>
-      getConnectorName(connector.value?.id, provider.value)
+      getConnectorName(connector.value?.id, provider.value, t)
     );
     const connectorLogo = computed(() =>
       getConnectorLogo(connector.value?.id, provider.value)
