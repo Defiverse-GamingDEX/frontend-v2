@@ -56,7 +56,7 @@ const lastUpdated = async () => {
     return data;
   });
 
-  if (data) return format(new Date(data.last_update), 'yyyy-MM-dd hh:mm:ss');
+  if (data) return format(new Date(data.last_update), 'yyyy-MM-dd HH:mm:ss');
 
   return '';
 };
