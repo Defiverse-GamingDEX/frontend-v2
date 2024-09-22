@@ -13,9 +13,14 @@ import usePools from '@/composables/pools/usePools';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
+import { configService } from '@/services/config/config.service';
+import axios from 'axios';
+import { format } from 'date-fns';
+
 const { account } = useWeb3();
 // STATES
 const adminAddress = ref(null);
+const priceLastUpdated = ref('');
 // COMPOSABLES
 const { getAdminAddress } = usePoolCreation();
 const router = useRouter();
@@ -45,6 +50,18 @@ const isCreatePool = computed(() => {
   return false;
 });
 
+const lastUpdated = async () => {
+  const priceUrl = configService.network.priceUrl;
+  const endpoint = `${priceUrl}/price/last-update`;
+  const data: any = await axios.get<any>(endpoint).then(({ data }) => {
+    return data;
+  });
+
+  if (data) return format(new Date(data.last_update), 'yyyy-MM-dd hh:mm:ss');
+
+  return '';
+};
+
 /**
  * METHODS
  */
@@ -61,6 +78,7 @@ function onColumnSort(columnId: string) {
  */
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
+  priceLastUpdated.value = await lastUpdated();
 });
 </script>
 
@@ -78,6 +96,12 @@ onBeforeMount(async () => {
               {{ networkConfig.chainName }}
               <span class="lowercase">{{ $t('pools') }}</span>
             </h3>
+
+            <div v-if="priceLastUpdated">
+              <span style="font-size: 14px">Token price last updated: </span>
+              <span style="font-size: 14px">{{ priceLastUpdated }}</span>
+            </div>
+
             <BalBtn
               v-if="upToMediumBreakpoint && isCreatePool"
               color="blue"
