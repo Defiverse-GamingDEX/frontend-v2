@@ -5,7 +5,7 @@ import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
 
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-let networks: any = [
+const networks: any = [
   // {
   //   id: 'ethereum',
   //   name: 'Ethereum',
@@ -95,29 +95,49 @@ let networks: any = [
   //   gasUnit: 'wei',
   //   maxPriorityFee: 0,
   // },
-];
-
-let networksDev = [
   {
-    id: 'defiverse-testnet',
-    name: 'DefiVerse-Testnet',
-    networkSlug: 'defiverse-testnet',
-    key: '17117',
-    tokens: defiverseTestnetJson.tokens,
-    price: 35000000000, // 50 Gwei
-    gasUnit: 'wei',
+    id: 'defiverse',
+    name: 'Defiverse',
+    networkSlug: 'defiverse',
+    key: '16116',
+    tokens: defiverseJson.tokens,
+    // price: 5000000000000, // 5000 Gwei
+    // gasUnit: 'wei',
     maxPriorityFee: 0,
   },
   {
-    id: 'oasys-testnet',
-    name: 'Oasys-Testnet',
-    networkSlug: 'oasys-testnet',
-    key: '9372',
-    tokens: oasysTestnetJson.tokens,
+    id: 'oasys',
+    name: 'Oasys',
+    networkSlug: 'oasys',
+    key: '248',
+    tokens: oasysJson.tokens,
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },
+];
+
+let networksDev = [
+  // {
+  //   id: 'defiverse-testnet',
+  //   name: 'DefiVerse-Testnet',
+  //   networkSlug: 'defiverse-testnet',
+  //   key: '17117',
+  //   tokens: defiverseTestnetJson.tokens,
+  //   price: 35000000000, // 50 Gwei
+  //   gasUnit: 'wei',
+  //   maxPriorityFee: 0,
+  // },
+  // {
+  //   id: 'oasys-testnet',
+  //   name: 'Oasys-Testnet',
+  //   networkSlug: 'oasys-testnet',
+  //   key: '9372',
+  //   tokens: oasysTestnetJson.tokens,
+  //   // price: 35000000000, // 50 Gwei
+  //   gasUnit: 'wei',
+  //   maxPriorityFee: 0,
+  // },
 ];
 
 // add network for bridge testnet
@@ -136,30 +156,6 @@ if (IS_TESTNET == true) {
     //   networkSlug: 'avalanche-testnet',
     //   key: '43113',
     // },
-  ];
-} else {
-  networks = [
-    ...networks,
-    {
-      id: 'defiverse',
-      name: 'Defiverse',
-      networkSlug: 'defiverse',
-      key: '16116',
-      tokens: defiverseJson.tokens,
-      // price: 5000000000000, // 5000 Gwei
-      // gasUnit: 'wei',
-      maxPriorityFee: 0,
-    },
-    {
-      id: 'oasys',
-      name: 'Oasys',
-      networkSlug: 'oasys',
-      key: '248',
-      tokens: oasysJson.tokens,
-      // price: 35000000000, // 50 Gwei
-      gasUnit: 'wei',
-      maxPriorityFee: 0,
-    },
   ];
 }
 
