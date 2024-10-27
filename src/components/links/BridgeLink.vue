@@ -14,10 +14,14 @@ const bridgeUrl = computed((): string => {
     case Network.ARBITRUM:
       return 'https://bridge.arbitrum.io/';
     case Network.DEFIVERSE:
-      return 'https://www.portalbridge.com/#/transfer'; // from https://docs.oasis.io/general/manage-tokens/how-to-transfer-eth-erc20-to-emerald-paratime/  
+      return 'https://www.portalbridge.com/#/transfer'; // from https://docs.oasis.io/general/manage-tokens/how-to-transfer-eth-erc20-to-emerald-paratime/
     case Network.DEFIVERSE_TESTNET:
-        return 'https://www.portalbridge.com/#/transfer';
-      default:
+      return 'https://www.portalbridge.com/#/transfer';
+    case Network.OASYS:
+      return 'https://www.portalbridge.com/#/transfer'; // from https://docs.oasis.io/general/manage-tokens/how-to-transfer-eth-erc20-to-emerald-paratime/
+    case Network.OASYS_TESTNET:
+      return 'https://www.portalbridge.com/#/transfer';
+    default:
       return '';
   }
 });
@@ -32,7 +36,7 @@ const label = computed((): string => {
     :href="bridgeUrl"
     external
     noStyle
-    class="flex items-center p-4 text-sm bg-white shadow-xl dark:bg-gray-850 rounded-lg border dark:border-0"
+    class="flex items-center p-4 text-sm bg-white dark:bg-gray-850 rounded-lg border dark:border-0 shadow-xl"
   >
     <img
       :src="buildNetworkIconURL(networkId)"

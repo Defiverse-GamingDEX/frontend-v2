@@ -11,6 +11,10 @@ import ArbitrumProvider from './providers/arbitrum.provider';
 import BlocknativeProvider from './providers/blocknative.provider';
 import DefiverseTestnetProvider from './providers/defiverse-testnet.provider';
 import DefiverseProvider from './providers/defiverse.provider';
+
+import OasysTestnetProvider from './providers/oasys-testnet.provider';
+import OasysProvider from './providers/oasys-testnet.provider';
+
 import PolygonProvider from './providers/polygon.provider';
 import { GasPrice, GasSettings } from './providers/types';
 const USE_BLOCKNATIVE_GAS_PLATFORM =
@@ -24,7 +28,9 @@ export class GasPriceService {
     private readonly polygonProvider = new PolygonProvider(),
     private readonly arbitrumProvider = new ArbitrumProvider(),
     private readonly defiverseProvider = new DefiverseProvider(),
-    private readonly defiverseTestnetProvider = new DefiverseTestnetProvider()
+    private readonly defiverseTestnetProvider = new DefiverseTestnetProvider(),
+    private readonly oasysProvider = new OasysProvider(),
+    private readonly oasysTestnetProvider = new OasysTestnetProvider()
   ) {}
 
   public async getGasPrice(): Promise<GasPrice | null> {
@@ -40,6 +46,10 @@ export class GasPriceService {
       //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       case '17117':
         return await this.defiverseTestnetProvider.getGasPrice();
+      case '248':
+        return await this.oasysProvider.getGasPrice();
+      case '9372':
+        return await this.oasysTestnetProvider.getGasPrice();
       //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       default:
         return null;

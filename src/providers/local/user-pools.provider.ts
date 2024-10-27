@@ -42,6 +42,7 @@ export const provider = (userStaking: UserStakingResponse) => {
   );
 
   // Fetch pools that the user hasn't staked.
+
   const unstakedPoolsQuery = usePoolsQuery(
     ref([]),
     reactive({
@@ -86,13 +87,15 @@ export const provider = (userStaking: UserStakingResponse) => {
     ]).toString()
   );
 
-  const isLoading = computed(
-    (): boolean =>
+  const isLoading = computed((): boolean => {
+    return (
       isStakedDataLoading.value ||
       isQueryLoading(userPoolSharesQuery) ||
-      isQueryLoading(unstakedPoolsQuery) ||
+      (isPoolsQueryEnabled.value === true &&
+        isQueryLoading(unstakedPoolsQuery)) ||
       (isVeBalSupported.value && isQueryLoading(lockQuery))
-  );
+    );
+  });
 
   // Trigger refetch of queries for staked and unstaked pools.
   async function refetchAllUserPools() {
