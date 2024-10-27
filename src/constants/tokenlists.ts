@@ -1,5 +1,7 @@
 import defiverseJson from './defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from './defiverse.testnet.listed.tokenlist.json';
+import oasysJson from './oasys.listed.tokenlist.json';
+import oasysTestnetJson from './oasys.testnet.listed.tokenlist.json';
 
 export interface TokenListMap {
   Balancer: {
@@ -76,6 +78,20 @@ export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
     Balancer: {
       Default: JSON.stringify(defiverseTestnetJson),
       Vetted: JSON.stringify(defiverseTestnetJson),
+    },
+    External: [],
+  },
+  '248': {
+    Balancer: {
+      Default: JSON.stringify(oasysJson),
+      Vetted: JSON.stringify(oasysJson),
+    },
+    External: [],
+  },
+  '9372': {
+    Balancer: {
+      Default: JSON.stringify(oasysTestnetJson),
+      Vetted: JSON.stringify(oasysTestnetJson),
     },
     External: [],
   },

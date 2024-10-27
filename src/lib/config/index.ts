@@ -16,6 +16,7 @@ import chainverse from './chainverse.json';
 import homeverse from './homeverse.json';
 import mchverse from './mchverse.json';
 import oasys from './oasys.json';
+import oasysTestnet from './oasys-testnet.json';
 import saakuru from './saakuru.json';
 import tcgverse from './tcgverse.json';
 export interface Config {
@@ -110,6 +111,8 @@ const config: Record<Network | number, Config> = {
   [Network.OPTIMISM]: optimism,
   [Network.DEFIVERSE]: defiverse,
   [Network.DEFIVERSE_TESTNET]: defiverseTestnet,
+  [Network.OASYS]: oasys,
+  [Network.OASYS_TESTNET]: oasysTestnet,
   12345: test,
   // @ts-ignore
   17: docker,
@@ -119,7 +122,6 @@ const config: Record<Network | number, Config> = {
   5555: chainverse,
   7225878: saakuru,
   43113: avalancheTestnet,
-  248: oasys,
 };
 
 export default config;
