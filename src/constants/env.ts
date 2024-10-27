@@ -1,4 +1,4 @@
-const ENV = import.meta.env.VITE_ENV || 'production';
+const ENV = import.meta.env.VITE_ENV || 'development';
 
 const IS_DEV = ENV === 'development';
 const IS_STAGING = ENV === 'staging';
