@@ -5,7 +5,7 @@ import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
 
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-let networks = [
+let networks: any = [
   // {
   //   id: 'ethereum',
   //   name: 'Ethereum',
@@ -97,32 +97,6 @@ let networks = [
   // },
 ];
 
-if (!IS_TESTNET) {
-  networks = [
-    ...networks,
-    {
-      id: 'defiverse',
-      name: 'Defiverse',
-      networkSlug: 'defiverse',
-      key: '16116',
-      tokens: defiverseJson.tokens,
-      // price: 5000000000000, // 5000 Gwei
-      // gasUnit: 'wei',
-      maxPriorityFee: 0,
-    },
-    {
-      id: 'oasys',
-      name: 'Oasys',
-      networkSlug: 'oasys',
-      key: '248',
-      tokens: oasysJson.tokens,
-      // price: 35000000000, // 50 Gwei
-      gasUnit: 'wei',
-      maxPriorityFee: 0,
-    },
-  ];
-}
-
 let networksDev = [
   {
     id: 'defiverse-testnet',
@@ -162,6 +136,30 @@ if (IS_TESTNET == true) {
     //   networkSlug: 'avalanche-testnet',
     //   key: '43113',
     // },
+  ];
+} else {
+  networks = [
+    ...networks,
+    {
+      id: 'defiverse',
+      name: 'Defiverse',
+      networkSlug: 'defiverse',
+      key: '16116',
+      tokens: defiverseJson.tokens,
+      // price: 5000000000000, // 5000 Gwei
+      // gasUnit: 'wei',
+      maxPriorityFee: 0,
+    },
+    {
+      id: 'oasys',
+      name: 'Oasys',
+      networkSlug: 'oasys',
+      key: '248',
+      tokens: oasysJson.tokens,
+      // price: 35000000000, // 50 Gwei
+      gasUnit: 'wei',
+      maxPriorityFee: 0,
+    },
   ];
 }
 
