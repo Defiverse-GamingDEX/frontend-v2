@@ -126,6 +126,7 @@ const routeParams = ref({
   toChain: '',
   toToken: '',
 });
+const isRouteParamsUpdateNetwork = ref(false);
 // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -151,30 +152,7 @@ const covertInputRules = computed(() => {
 
   return rules;
 });
-const resetFormData = () => {
-  inputFromSelect.value = {
-    chainId: '',
-    tokenSymbol: '',
-    tokenAddress: '',
-    balance: 0,
-    amount: 0,
-    decimals: 18,
-    tokensList: [],
-    minAmount: 0,
-    isOnlyDefiBridge: false,
-  };
-  inputToSelect.value = {
-    chainId: '',
-    tokenSymbol: '',
-    tokenAddress: '',
-    balance: 0,
-    amount: 0,
-    decimals: 18,
-    tokensList: [],
-    chainsList: [],
-    isOnlyDefiBridge: false,
-  };
-};
+
 // WATCHS
 watch(
   () => account.value,
@@ -187,7 +165,11 @@ watch(
   () => chainId.value,
   async () => {
     verifyNetwork();
-    updateNetWorkInputFrom(chainId.value);
+    await updateNetWorkInputFrom(chainId.value);
+    if (isRouteParamsUpdateNetwork.value) {
+      await getRouteParams();
+      isRouteParamsUpdateNetwork.value = false;
+    }
   }
 );
 watch(
@@ -514,6 +496,7 @@ async function updateNetWorkInputFrom(chainId) {
   }
 }
 const delayinputFromChange = debounce(async inputSelect => {
+  isRouteParamsUpdateNetwork.value = false; // reset update from router
   handleInputFromChange(inputSelect);
 }, 500);
 
@@ -745,7 +728,8 @@ async function handleNetworkChange(networkId) {
   let network = getChain(networkId);
   console.log('🚀 ~ handleNetworkChange ~ network:', network);
   if (network) {
-    await connectToAppNetwork(network);
+    const rs = await connectToAppNetwork(network);
+    console.log('🚀 ~ handleNetworkChange ~ rs:', rs);
   }
 }
 async function handleTransferButton() {
@@ -881,22 +865,60 @@ const getRouteParams = async () => {
     const routeChainFrom = getChainByChainName(route.query.fromChain);
     if (routeChainFrom) {
       await updateNetWorkInputFrom(routeChainFrom?.chain_id_decimals);
+      if (inputFromSelect.value.chainId !== chainId.value) {
+        isRouteParamsUpdateNetwork.value = true;
+      }
+    } else {
+      addNotification({
+        type: 'error',
+        title: 'URL params error',
+        message: 'From chain is wrong chain',
+      });
+      return; // not map when wrong chain
     }
   }
   if (route.query.fromToken) {
-    inputFromSelect.value.tokenAddress = route.query.fromToken;
-
-    await handleInputFromChange(inputFromSelect.value);
-    console.log(
-      '🚀 ~ getRouteParams ~ handleInputFromChange:',
-      handleInputFromChange
+    let token = inputFromSelect.value.tokensList.find(
+      item => item.address === route.query.fromToken
     );
+    if (token) {
+      inputFromSelect.value.tokenAddress = route.query.fromToken;
+      inputFromSelect.value.tokenSymbol = token?.symbol;
+      inputFromSelect.value.decimals = token?.decimals;
+      await handleInputFromChange(inputFromSelect.value);
+    } else {
+      addNotification({
+        type: 'error',
+        title: 'URL params error',
+        message: 'From token is wrong address',
+      });
+      return; // not map when wrong address
+    }
   }
   if (route.query.toChain) {
     const routeChainTo = getChainByChainName(route.query.toChain);
     if (routeChainTo) {
       inputToSelect.value.chainId = routeChainTo?.chain_id_decimals;
-      await handleInputToChange(inputToSelect.value);
+      inputToSelect.value.tokenSymbol = inputFromSelect.value.tokenSymbol;
+      const tokensList = inputToSelect.value.chainsList.find(
+        item => item.chain_id_decimals === inputToSelect.value.chainId
+      )?.tokens;
+      if (tokensList) {
+        let token = tokensList.find(
+          item => item.symbol === inputToSelect.value.tokenSymbol
+        );
+        console.log('🚀 ~ getRouteParams ~ token:', token);
+        inputToSelect.value.tokenAddress = token?.address;
+        if (inputToSelect.value.tokenAddress) {
+          await handleInputToChange(inputToSelect.value);
+        }
+      }
+    } else {
+      addNotification({
+        type: 'error',
+        title: 'URL params error',
+        message: 'ToChain is wrong chain',
+      });
     }
   }
 };

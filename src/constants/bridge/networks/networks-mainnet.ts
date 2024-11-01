@@ -102,6 +102,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x736C',
     chain_id_decimals: 29548,
+    chain_name: 'mchverse',
     name: 'MCHVerse',
     img_url: mchIcon,
     gasPrice: null,
