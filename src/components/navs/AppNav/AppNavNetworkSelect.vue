@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 import i18n from '@/plugins/i18n';
 
@@ -27,6 +27,7 @@ const { upToLargeBreakpoint } = useBreakpoints();
 const { networkId, networkConfig } = useNetwork();
 const { chainId } = useWeb3();
 const router = useRouter();
+const route = useRoute();
 const { addNotification } = useNotifications();
 
 const networks = ref(networksSupport.networks);
@@ -105,7 +106,9 @@ watch(chainId, (newChainId, oldChainId) => {
     );
     if (newNetwork) {
       localStorage.setItem('networkId', newChainId.toString());
-      hardRedirectTo(getNetworkChangeUrl(newNetwork));
+      if (route.name !== 'bridge') {
+        hardRedirectTo(getNetworkChangeUrl(newNetwork));
+      }
     }
   }
 });

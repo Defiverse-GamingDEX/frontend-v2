@@ -29,7 +29,7 @@ import { useI18n } from 'vue-i18n';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 // COMPOSABLES
 const { t } = useI18n();
 const {
@@ -56,6 +56,7 @@ const {
   bridgeSend,
   getChainName,
   getChain,
+  getChainByChainName,
   getToken,
 } = useBridge();
 const { addNotification } = useNotifications();
@@ -63,6 +64,7 @@ const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
 const { slippage, setSlippage } = useUserSettings();
 const route = useRoute();
+const router = useRouter();
 // const signer = getSigner();
 
 // STATES
@@ -72,6 +74,7 @@ const dstBE = ref(null);
 const routesBE = ref(null);
 
 const estimateInfo = ref(null);
+console.log('🚀 ~ estimateInfo:', estimateInfo);
 const paging = ref({
   page_size: 5,
   next_page_token: null,
@@ -148,12 +151,36 @@ const covertInputRules = computed(() => {
 
   return rules;
 });
+const resetFormData = () => {
+  inputFromSelect.value = {
+    chainId: '',
+    tokenSymbol: '',
+    tokenAddress: '',
+    balance: 0,
+    amount: 0,
+    decimals: 18,
+    tokensList: [],
+    minAmount: 0,
+    isOnlyDefiBridge: false,
+  };
+  inputToSelect.value = {
+    chainId: '',
+    tokenSymbol: '',
+    tokenAddress: '',
+    balance: 0,
+    amount: 0,
+    decimals: 18,
+    tokensList: [],
+    chainsList: [],
+    isOnlyDefiBridge: false,
+  };
+};
 // WATCHS
 watch(
   () => account.value,
   async () => {
-    getBalanceInputFrom();
-    checkAllowanceInputFrom();
+    await getBalanceInputFrom();
+    await checkAllowanceInputFrom();
   }
 );
 watch(
@@ -267,7 +294,7 @@ async function getRouters() {
       routesBE.value = rs;
       srcBE.value = initSrcBE();
       if (srcBE.value?.length > 0) {
-        updateNetWorkInputFrom(chainId.value);
+        await updateNetWorkInputFrom(chainId.value);
       }
     }
   } catch (error) {
@@ -288,13 +315,16 @@ function verifyNetwork() {
         )} to begin the transfer`,
       },
     };
+    console.log(
+      '🚀 ~ verifyNetwork ~  estimateInfo.value:',
+      estimateInfo.value
+    );
   } else {
     estimateInfo.value = null;
   }
 }
 async function initData() {
-  getRouters();
-  verifyNetwork();
+  await getRouters();
 }
 function covertUnitShow(number, token_decimals) {
   const decimals = new BigNumber(10).pow(token_decimals).toFixed();
@@ -335,7 +365,7 @@ function initMinAmountRoute() {
         item.dst.chain_id === inputToSelect.value.chainId &&
         item.src.token_symbol === inputFromSelect.value.tokenSymbol
       ) {
-        //console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+        console.log('🚀 ~ initMinAmountRoute ~ item:', item);
         minAmountRoute.value = item.min_amount;
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
@@ -362,7 +392,7 @@ function initMinAmountRoute() {
 async function getBalanceInputFrom() {
   // update balance InputFrom
   if (account.value && inputFromSelect.value.tokenAddress) {
-    if (tokenFrom.value.is_native) {
+    if (tokenFrom.value?.is_native) {
       inputFromSelect.value.balance = await getNativeBalance(
         tokenFrom.value,
         account.value
@@ -445,7 +475,7 @@ async function setTokenInput(input, tokenFromList) {
   input.value.tokenAddress = tokenFromList.address;
   input.value.decimals = tokenFromList.decimals;
 }
-function updateNetWorkInputFrom(chainId) {
+async function updateNetWorkInputFrom(chainId) {
   let networkChoose = srcBE.value.find(
     item => item?.chain_id_decimals === chainId
   );
@@ -479,8 +509,8 @@ function updateNetWorkInputFrom(chainId) {
     // set min amount route
     initMinAmountRoute();
     // call contract to check data
-    getBalanceInputFrom();
-    checkAllowanceInputFrom();
+    await getBalanceInputFrom();
+    await checkAllowanceInputFrom();
   }
 }
 const delayinputFromChange = debounce(async inputSelect => {
@@ -493,7 +523,7 @@ async function handleInputFromChange(inputSelect) {
     checkInputToChange();
   }
   // check allowance
-  checkAllowanceInputFrom();
+  await checkAllowanceInputFrom();
 
   // set min amount route
   initMinAmountRoute();
@@ -554,6 +584,10 @@ async function getEstimateFeeRoutes() {
 
       if (rs) {
         estimateInfo.value = mapEstimateInfo(rs);
+        console.log(
+          '🚀 ~ getEstimateFeeRoutes ~ mapEstimateInfo:',
+          mapEstimateInfo
+        );
         // update InputTo amount
         inputToSelect.value.amount = estimateInfo.value?.amount_out_show || 0;
       }
@@ -603,6 +637,7 @@ async function getEstimateFee() {
   }
 }
 async function handleInputToChange(inputSelect) {
+  console.log('🚀 ~ handleInputToChange ~ inputSelect:', inputSelect);
   inputToSelect.value = inputSelect;
 
   initMinAmountRoute();
@@ -706,10 +741,11 @@ function checkInputToChange() {
     }
   }
 }
-function handleNetworkChange(networkId) {
+async function handleNetworkChange(networkId) {
   let network = getChain(networkId);
+  console.log('🚀 ~ handleNetworkChange ~ network:', network);
   if (network) {
-    connectToAppNetwork(network);
+    await connectToAppNetwork(network);
   }
 }
 async function handleTransferButton() {
@@ -839,16 +875,39 @@ async function handleApproveButton() {
     });
   }
 }
-const getRouteParams = () => {
-  console.log('route.params', route.params);
+const getRouteParams = async () => {
+  console.log('route.query', route.query);
+  if (route.query.fromChain) {
+    const routeChainFrom = getChainByChainName(route.query.fromChain);
+    if (routeChainFrom) {
+      await updateNetWorkInputFrom(routeChainFrom?.chain_id_decimals);
+    }
+  }
+  if (route.query.fromToken) {
+    inputFromSelect.value.tokenAddress = route.query.fromToken;
+
+    await handleInputFromChange(inputFromSelect.value);
+    console.log(
+      '🚀 ~ getRouteParams ~ handleInputFromChange:',
+      handleInputFromChange
+    );
+  }
+  if (route.query.toChain) {
+    const routeChainTo = getChainByChainName(route.query.toChain);
+    if (routeChainTo) {
+      inputToSelect.value.chainId = routeChainTo?.chain_id_decimals;
+      await handleInputToChange(inputToSelect.value);
+    }
+  }
 };
 /**
  * LIFECYCLE
  */
 onBeforeMount(async () => {
   console.log('🚀 ~ onBeforeMount ~ onBeforeMount');
-  getRouteParams();
-  initData();
+  await initData();
+  console.log('🚀 ~ onBeforeMount ~ initData:', initData);
+  await getRouteParams();
 });
 </script>
 
