@@ -29,6 +29,7 @@ import { useI18n } from 'vue-i18n';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
+import { useRoute } from 'vue-router';
 // COMPOSABLES
 const { t } = useI18n();
 const {
@@ -40,6 +41,7 @@ const {
   isMismatchedNetwork,
   startConnectWithInjectedProvider,
 } = useWeb3();
+console.log('🚀 ~ chainId:', chainId);
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
@@ -60,6 +62,7 @@ const { addNotification } = useNotifications();
 const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
 const { slippage, setSlippage } = useUserSettings();
+const route = useRoute();
 // const signer = getSigner();
 
 // STATES
@@ -114,6 +117,12 @@ const li_bridge_address = ref('');
 const gas_option_enabled = ref(false);
 const isChargeGas = ref(false);
 const convert_gas_amount = ref(0);
+const routeParams = ref({
+  fromChain: '',
+  fromToken: '',
+  toChain: '',
+  toToken: '',
+});
 // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -830,11 +839,15 @@ async function handleApproveButton() {
     });
   }
 }
-
+const getRouteParams = () => {
+  console.log('route.params', route.params);
+};
 /**
  * LIFECYCLE
  */
 onBeforeMount(async () => {
+  console.log('🚀 ~ onBeforeMount ~ onBeforeMount');
+  getRouteParams();
   initData();
 });
 </script>

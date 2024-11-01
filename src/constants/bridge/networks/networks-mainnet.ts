@@ -10,10 +10,12 @@ import tcgIcon from '@/assets/images/bridge/networks/tcg.png';
 import { default as IL1StandardBridge } from '@/lib/abi/bridge/IL1StandardBridge.json';
 import { default as IL2ERC20Bridge } from '@/lib/abi/bridge/IL2ERC20Bridge.json';
 import { default as cBridgeABI } from '@/lib/abi/bridge/cBridge.json';
+import { chain } from 'lodash';
 export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x1',
     chain_id_decimals: 1,
+    chain_name: 'ethereum',
     img_url: ethereumIcon,
     name: 'Ethereum',
     gasPrice: null,
@@ -35,6 +37,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x89',
     chain_id_decimals: 137,
+    chain_name: 'polygon',
     img_url: polygonIcon,
     name: 'Polygon',
     gasPrice: null,
@@ -56,6 +59,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0xf8',
     chain_id_decimals: 248,
+    chain_name: 'oasys',
     img_url: oasIcon,
     name: 'OASYS Mainnet',
     gasPrice: null,
@@ -76,6 +80,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x3EF4',
     chain_id_decimals: 16116,
+    chain_name: 'defiverse',
     img_url: defiIcon,
     name: 'Defiverse',
     gasPrice: null,
@@ -118,6 +123,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x960',
     chain_id_decimals: 2400,
+    chain_name: 'tcgverse',
     name: 'TCGVerse',
     img_url: tcgIcon,
     gasPrice: null,
@@ -139,6 +145,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x4a43',
     chain_id_decimals: 19011,
+    chain_name: 'homeverse',
     name: 'HOMEVerse',
     img_url: homeIcon,
     gasPrice: null,
@@ -160,6 +167,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x15b3',
     chain_id_decimals: 5555,
+    chain_name: 'chainverse',
     name: 'ChainVerse',
     img_url: chainIcon,
     gasPrice: null,
@@ -181,6 +189,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
   {
     chain_id: '0x6E4216',
     chain_id_decimals: 7225878,
+    chain_name: 'saakuruverse',
     name: 'SaakuruVerse',
     img_url: saakuruIcon,
     gasPrice: null,
