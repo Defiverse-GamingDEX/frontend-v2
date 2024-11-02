@@ -923,8 +923,8 @@ const POOLS_OASYS: Pools = {
     ],
   },
   Factories: {
-    '0x061e05853fb45d3d41ec227459ec98bb25580ad3': 'composableStablePool', // ComposableStable V3
-    '0xdc45428c1be5de6f09e1545e8730f7385adfcad0': 'weightedPool', // WeightedPool V3
+    '0x0a7a98c9553192755f22b282278f0fa26f4de742': 'composableStablePool', // ComposableStable V3
+    '0x5737600b98e7f1cf98daca2a36bca22c974370b0': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
