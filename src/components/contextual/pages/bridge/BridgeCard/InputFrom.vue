@@ -15,6 +15,7 @@ import { cloneDeep } from 'lodash';
 import { useI18n } from 'vue-i18n';
 import NetworkSelectInput from './NetworkSelectInput.vue';
 import TokenSelectInput from './TokenSelectInput.vue';
+import { useRouter } from 'vue-router';
 // CONST
 const MAX_REMOVE_AMOUNT = 0;
 // TYPES
@@ -63,6 +64,7 @@ const { t } = useI18n();
 const { isWalletReady } = useWeb3();
 const { fNum2 } = useNumbers();
 const { getChain } = useBridge();
+const router = useRouter();
 /**
  * STATE
  */
@@ -171,10 +173,10 @@ function handleAmountChange(value) {
   inputSelect.amount = value;
   emit('update:inputSelect', inputSelect);
 }
-function handleNetworkChange(networkId) {
+async function handleNetworkChange(networkId) {
   let network = getChain(networkId);
   if (network) {
-    connectToAppNetwork(network);
+    await connectToAppNetwork(network);
   }
 }
 const setMax = () => {

@@ -394,7 +394,9 @@ function getChainName(chainId) {
 function getChain(chainId) {
   return BRIDGE_NETWORKS.find(item => item.chain_id_decimals === chainId);
 }
-
+function getChainByChainName(chain_name) {
+  return BRIDGE_NETWORKS.find(item => item.chain_name === chain_name);
+}
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
@@ -612,6 +614,7 @@ export function useBridge() {
     bridgeSend,
     getChainName,
     getChain,
+    getChainByChainName,
     getToken,
   };
 }
