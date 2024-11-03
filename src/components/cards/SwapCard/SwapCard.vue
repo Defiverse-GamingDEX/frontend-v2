@@ -207,7 +207,7 @@ import { SubgraphPoolBase } from '@defiverse/balancer-sdk';
 import { getAddress, isAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import SingularityComponent from '../SingularityCard/SingularityComponent.vue';
 import SwapPair from './SwapPair.vue';
@@ -226,6 +226,7 @@ export default defineComponent({
     // COMPOSABLES
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
     const { t } = useI18n();
     const { bp } = useBreakpoints();
     const { fNum2 } = useNumbers();
@@ -419,6 +420,7 @@ export default defineComponent({
       }
     }
     async function populateInitialTokens(): Promise<void> {
+      console.log('Populating initial tokens', route, route.query);
       let assetIn = router.currentRoute.value.params.assetIn as string;
       if (assetIn === nativeAsset.deeplinkId) {
         assetIn = nativeAsset.address;
