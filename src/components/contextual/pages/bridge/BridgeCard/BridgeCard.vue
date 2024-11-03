@@ -29,6 +29,7 @@ import { useI18n } from 'vue-i18n';
 import BridgePairToggle from './BridgePairToggle.vue';
 import InputFrom from './InputFrom.vue';
 import InputTo from './InputTo.vue';
+import { useRoute, useRouter } from 'vue-router';
 // COMPOSABLES
 const { t } = useI18n();
 const {
@@ -40,6 +41,7 @@ const {
   isMismatchedNetwork,
   startConnectWithInjectedProvider,
 } = useWeb3();
+console.log('🚀 ~ chainId:', chainId);
 const { connectToAppNetwork } = useBridgeWeb3();
 const { bp } = useBreakpoints();
 const {
@@ -54,12 +56,15 @@ const {
   bridgeSend,
   getChainName,
   getChain,
+  getChainByChainName,
   getToken,
 } = useBridge();
 const { addNotification } = useNotifications();
 const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
 const { slippage, setSlippage } = useUserSettings();
+const route = useRoute();
+const router = useRouter();
 // const signer = getSigner();
 
 // STATES
@@ -69,6 +74,7 @@ const dstBE = ref(null);
 const routesBE = ref(null);
 
 const estimateInfo = ref(null);
+console.log('🚀 ~ estimateInfo:', estimateInfo);
 const paging = ref({
   page_size: 5,
   next_page_token: null,
@@ -114,6 +120,13 @@ const li_bridge_address = ref('');
 const gas_option_enabled = ref(false);
 const isChargeGas = ref(false);
 const convert_gas_amount = ref(0);
+const routeParams = ref({
+  fromChain: '',
+  fromToken: '',
+  toChain: '',
+  toToken: '',
+});
+const isRouteParamsUpdateNetwork = ref(false);
 // COMPUTED
 const swapCardShadow = computed(() => {
   switch (bp.value) {
@@ -139,19 +152,24 @@ const covertInputRules = computed(() => {
 
   return rules;
 });
+
 // WATCHS
 watch(
   () => account.value,
   async () => {
-    getBalanceInputFrom();
-    checkAllowanceInputFrom();
+    await getBalanceInputFrom();
+    await checkAllowanceInputFrom();
   }
 );
 watch(
   () => chainId.value,
   async () => {
     verifyNetwork();
-    updateNetWorkInputFrom(chainId.value);
+    await updateNetWorkInputFrom(chainId.value);
+    if (isRouteParamsUpdateNetwork.value) {
+      await getRouteParams();
+      isRouteParamsUpdateNetwork.value = false;
+    }
   }
 );
 watch(
@@ -258,7 +276,7 @@ async function getRouters() {
       routesBE.value = rs;
       srcBE.value = initSrcBE();
       if (srcBE.value?.length > 0) {
-        updateNetWorkInputFrom(chainId.value);
+        await updateNetWorkInputFrom(chainId.value);
       }
     }
   } catch (error) {
@@ -279,13 +297,16 @@ function verifyNetwork() {
         )} to begin the transfer`,
       },
     };
+    console.log(
+      '🚀 ~ verifyNetwork ~  estimateInfo.value:',
+      estimateInfo.value
+    );
   } else {
     estimateInfo.value = null;
   }
 }
 async function initData() {
-  getRouters();
-  verifyNetwork();
+  await getRouters();
 }
 function covertUnitShow(number, token_decimals) {
   const decimals = new BigNumber(10).pow(token_decimals).toFixed();
@@ -326,7 +347,7 @@ function initMinAmountRoute() {
         item.dst.chain_id === inputToSelect.value.chainId &&
         item.src.token_symbol === inputFromSelect.value.tokenSymbol
       ) {
-        //console.log('🚀 ~ initMinAmountRoute ~ item:', item);
+        console.log('🚀 ~ initMinAmountRoute ~ item:', item);
         minAmountRoute.value = item.min_amount;
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
@@ -353,7 +374,7 @@ function initMinAmountRoute() {
 async function getBalanceInputFrom() {
   // update balance InputFrom
   if (account.value && inputFromSelect.value.tokenAddress) {
-    if (tokenFrom.value.is_native) {
+    if (tokenFrom.value?.is_native) {
       inputFromSelect.value.balance = await getNativeBalance(
         tokenFrom.value,
         account.value
@@ -436,7 +457,7 @@ async function setTokenInput(input, tokenFromList) {
   input.value.tokenAddress = tokenFromList.address;
   input.value.decimals = tokenFromList.decimals;
 }
-function updateNetWorkInputFrom(chainId) {
+async function updateNetWorkInputFrom(chainId) {
   let networkChoose = srcBE.value.find(
     item => item?.chain_id_decimals === chainId
   );
@@ -470,11 +491,12 @@ function updateNetWorkInputFrom(chainId) {
     // set min amount route
     initMinAmountRoute();
     // call contract to check data
-    getBalanceInputFrom();
-    checkAllowanceInputFrom();
+    await getBalanceInputFrom();
+    await checkAllowanceInputFrom();
   }
 }
 const delayinputFromChange = debounce(async inputSelect => {
+  isRouteParamsUpdateNetwork.value = false; // reset update from router
   handleInputFromChange(inputSelect);
 }, 500);
 
@@ -484,7 +506,7 @@ async function handleInputFromChange(inputSelect) {
     checkInputToChange();
   }
   // check allowance
-  checkAllowanceInputFrom();
+  await checkAllowanceInputFrom();
 
   // set min amount route
   initMinAmountRoute();
@@ -545,6 +567,10 @@ async function getEstimateFeeRoutes() {
 
       if (rs) {
         estimateInfo.value = mapEstimateInfo(rs);
+        console.log(
+          '🚀 ~ getEstimateFeeRoutes ~ mapEstimateInfo:',
+          mapEstimateInfo
+        );
         // update InputTo amount
         inputToSelect.value.amount = estimateInfo.value?.amount_out_show || 0;
       }
@@ -594,6 +620,7 @@ async function getEstimateFee() {
   }
 }
 async function handleInputToChange(inputSelect) {
+  console.log('🚀 ~ handleInputToChange ~ inputSelect:', inputSelect);
   inputToSelect.value = inputSelect;
 
   initMinAmountRoute();
@@ -697,10 +724,12 @@ function checkInputToChange() {
     }
   }
 }
-function handleNetworkChange(networkId) {
+async function handleNetworkChange(networkId) {
   let network = getChain(networkId);
+  console.log('🚀 ~ handleNetworkChange ~ network:', network);
   if (network) {
-    connectToAppNetwork(network);
+    const rs = await connectToAppNetwork(network);
+    console.log('🚀 ~ handleNetworkChange ~ rs:', rs);
   }
 }
 async function handleTransferButton() {
@@ -830,12 +859,77 @@ async function handleApproveButton() {
     });
   }
 }
-
+const getRouteParams = async () => {
+  console.log('route.query', route.query);
+  if (route.query.fromChain) {
+    const routeChainFrom = getChainByChainName(route.query.fromChain);
+    if (routeChainFrom) {
+      await updateNetWorkInputFrom(routeChainFrom?.chain_id_decimals);
+      if (inputFromSelect.value.chainId !== chainId.value) {
+        isRouteParamsUpdateNetwork.value = true;
+      }
+    } else {
+      addNotification({
+        type: 'error',
+        title: 'URL params error',
+        message: 'From chain is wrong chain',
+      });
+      return; // not map when wrong chain
+    }
+  }
+  if (route.query.fromToken) {
+    let token = inputFromSelect.value.tokensList.find(
+      item => item.address === route.query.fromToken
+    );
+    if (token) {
+      inputFromSelect.value.tokenAddress = route.query.fromToken;
+      inputFromSelect.value.tokenSymbol = token?.symbol;
+      inputFromSelect.value.decimals = token?.decimals;
+      await handleInputFromChange(inputFromSelect.value);
+    } else {
+      addNotification({
+        type: 'error',
+        title: 'URL params error',
+        message: 'From token is wrong address',
+      });
+      return; // not map when wrong address
+    }
+  }
+  if (route.query.toChain) {
+    const routeChainTo = getChainByChainName(route.query.toChain);
+    if (routeChainTo) {
+      inputToSelect.value.chainId = routeChainTo?.chain_id_decimals;
+      inputToSelect.value.tokenSymbol = inputFromSelect.value.tokenSymbol;
+      const tokensList = inputToSelect.value.chainsList.find(
+        item => item.chain_id_decimals === inputToSelect.value.chainId
+      )?.tokens;
+      if (tokensList) {
+        let token = tokensList.find(
+          item => item.symbol === inputToSelect.value.tokenSymbol
+        );
+        console.log('🚀 ~ getRouteParams ~ token:', token);
+        inputToSelect.value.tokenAddress = token?.address;
+        if (inputToSelect.value.tokenAddress) {
+          await handleInputToChange(inputToSelect.value);
+        }
+      }
+    } else {
+      addNotification({
+        type: 'error',
+        title: 'URL params error',
+        message: 'ToChain is wrong chain',
+      });
+    }
+  }
+};
 /**
  * LIFECYCLE
  */
 onBeforeMount(async () => {
-  initData();
+  console.log('🚀 ~ onBeforeMount ~ onBeforeMount');
+  await initData();
+  console.log('🚀 ~ onBeforeMount ~ initData:', initData);
+  await getRouteParams();
 });
 </script>
 

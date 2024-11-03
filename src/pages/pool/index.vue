@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router';
 import PoolPageHero from '@/components/heros/PoolPageHero.vue';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
-import StatisticInfo from '@/components/statistic/StatisticInfo.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
@@ -57,7 +56,7 @@ const lastUpdated = async () => {
     return data;
   });
 
-  if (data) return format(new Date(data.last_update), 'yyyy-MM-dd hh:mm:ss');
+  if (data) return format(new Date(data.last_update), 'yyyy-MM-dd HH:mm:ss');
 
   return '';
 };
@@ -83,11 +82,8 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="pools-page">
+  <div>
     <PoolPageHero />
-    <div class="statistic-wrapper">
-      <StatisticInfo />
-    </div>
     <div class="xl:container xl:px-4 pt-10 md:pt-8 xl:mx-auto">
       <BalStack vertical>
         <div class="px-4 xl:px-0">
@@ -156,18 +152,8 @@ onBeforeMount(async () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style>
 .pools-table-loading-height {
   height: 40rem;
-}
-.pools-page {
-  .statistic-wrapper {
-    max-width: 67rem;
-    padding: 48px 0px 0px 0px;
-    margin: 0 auto;
-    @media screen and (max-width: 767px) {
-      padding: 16px;
-    }
-  }
 }
 </style>

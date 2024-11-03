@@ -8,7 +8,6 @@ import {
 import { setTag } from '@sentry/browser';
 import axios from 'axios';
 import { computed, reactive, Ref, ref, toRefs } from 'vue';
-import { useI18n } from 'vue-i18n';
 
 import defaultLogo from '@/assets/images/connectors/default.svg';
 import frameLogo from '@/assets/images/connectors/frame.svg';
@@ -287,9 +286,10 @@ export default {
 
 export function getConnectorName(
   connectorId: ConnectorId,
-  provider: any
+  provider: any,
+  t: any // i-18n
 ): string {
-  const { t } = useI18n();
+  // const { t } = useI18n();
 
   if (!provider) {
     return t('unknown');

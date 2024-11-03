@@ -118,7 +118,10 @@ export default class ExchangeService {
 
     // Hung: Withdraw to OAS
     const finalTokensOut = tokensOut.map(s => {
-      if (s === '0x6b382742b07aabba58c38d792b5d7cbaab246e99')
+      if (
+        s === '0x6b382742b07aabba58c38d792b5d7cbaab246e99' ||
+        s === '0x5a89e11cb554e00c2f51c4bb7f05bc7ab0fa6351'
+      )
         return '0x0000000000000000000000000000000000000000';
       return s;
     });

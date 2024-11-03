@@ -7,18 +7,18 @@
   "slug": "oasys",
   "network": "oasys",
   "unknown": false,
-  "rpc": "https://rpc.oasys.games",
+  "rpc": "https://rpc.mainnet.oasys.games",
   "ws": "wss://ws.oasys.games/",
-  "publicRpc": "https://rpc.oasys.games",
+  "publicRpc": "https://rpc.mainnet.oasys.games",
   "explorer": "https://explorer.oasys.games",
   "priceUrl": "https://price-api.gaming-dex.com/api/v1",
   "explorerName": "oasys",
-  "subgraph": "https://graphnode-oasys.defi-verse.org/subgraphs/name/balancer-labs/oasys-testnet",
+  "subgraph": "https://graphnode-oasys.defi-verse.org/subgraphs/name/balancer-labs/oasys",
   "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
-      "https://graphnode-oasys.defi-verse.org/subgraphs/name/balancer-labs/oasys-testnet"
+      "https://graphnode-oasys.defi-verse.org/subgraphs/name/balancer-labs/oasys"
     ],
     "aave": "",
     "gauge": "https://graphnode.defi-verse.org/subgraphs/name/balancer-labs/gauges-defiverse",
@@ -39,18 +39,18 @@
   "addresses": {
     "merkleRedeem": "",
     "merkleOrchard": "",
-    "multicall": "0xe5Fce05D922e3961F053bD2BF1F29F92d2a0a94B",
-    "authorizer": "0xd44Ce77363729d2c9657459c393fE2082Db68f1E",
-    "vault": "0x1f7a0Bea1CB70FaA0f6b7B1126eCbd01Ef4E5BC8",
-    "weightedPoolFactory": "0x900c1Bc6a6915Ed153c18763e4B8aE8133E839f1",
-    "stablePoolFactory": "0xfDA8fa80dd77A99BF71BeCFce47077859e689898",
+    "multicall": "0xc52dc4a7dad06BEAB9230D482AcBEcFFc3aB009B",
+    "authorizer": "0xd16eb8Eb3453dFe4702222dD0F016aDa73b3829D",
+    "vault": "0xfb6f8FEdE0Cb63674Ab964affB93D65a4a7D55eA",
+    "weightedPoolFactory": "0x5737600b98E7F1cf98dAca2a36bCa22C974370b0",
+    "stablePoolFactory": "0x0A7A98c9553192755f22b282278f0FA26f4de742",
     "weth": "0x5200000000000000000000000000000000000001",
     "stMATIC": "",
     "rETH": "",
     "stETH": "",
     "wstETH": "",
     "lidoRelayer": "",
-    "balancerHelpers": "0x3B847f3Fa5585Dc3aeDB40780fF47e31B0fF14C0",
+    "balancerHelpers": "0xf199DDb57d75225e13Fe13eb8BDDE8b16e188374",
     "batchRelayer": "0x7b9B6f094DC2Bd1c12024b0D9CC63d6993Be1888",
     "batchRelayerV4": "0x00e695aA8000df01B8DC8401B4C34Fba5D56BBb2",
     "gaugeFactory": "",
@@ -64,7 +64,7 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "oracle": "0xB5c387708CF3634738686492e9dDFC8f6CF22713"
+    "oracle": "0xA7E726E19573f492f39eedF6B709d4cbCA26f86D"
   },
   "keys": {
     "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",

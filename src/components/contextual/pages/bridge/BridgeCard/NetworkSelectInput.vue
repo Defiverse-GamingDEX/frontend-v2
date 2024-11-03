@@ -67,9 +67,9 @@ function getNetwork(chain_id) {
     >
       <div class="item-info">
         <div class="item-img">
-          <img width="48" height="48" :src="network.img_url" />
+          <img width="48" height="48" :src="network?.img_url" />
         </div>
-        <div class="item-label">{{ network.name }}</div>
+        <div class="item-label">{{ network?.name }}</div>
       </div>
       <BalIcon
         name="chevron-down"

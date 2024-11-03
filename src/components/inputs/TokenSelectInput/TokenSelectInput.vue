@@ -11,6 +11,7 @@ import { useTokens } from '@/providers/tokens.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 import { getConnectorName } from '@/services/web3/web3.plugin';
 import { TokenInfo } from '@/types/TokenList';
+import { useI18n } from 'vue-i18n';
 export type TokenSelectProps = {
   modelValue: string;
   fixed?: boolean;
@@ -62,6 +63,7 @@ const {
   connector,
   provider,
 } = useWeb3();
+const { t } = useI18n();
 /**
  * COMPUTED
  */
@@ -73,7 +75,7 @@ const token = computed((): TokenInfo | null => {
 });
 const connectorName = computed(() => {
   if (connector.value) {
-    return getConnectorName(connector.value?.id, provider.value);
+    return getConnectorName(connector.value?.id, provider.value, t);
   }
   return '';
 });
