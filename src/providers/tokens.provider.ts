@@ -418,12 +418,17 @@ export const tokensProvider = (
   /**
    * Get single token from state
    */
-  function getToken(address: string): TokenInfo {
-    address = getAddressFromPoolId(address); // In case pool ID has been passed
+  function getToken(address: string): TokenInfo | null {
+    try {
+      address = getAddressFromPoolId(address); // In case pool ID has been passed
 
-    if (address) address = getAddress(address);
+      if (address) address = getAddress(address);
 
-    return tokens.value[address];
+      return tokens.value[address];
+    } catch (error) {
+      console.log('🚀 ~ getToken ~ error:', error);
+      return null;
+    }
   }
 
   /**
@@ -585,6 +590,11 @@ export function provideTokens(
   return tokensResponse;
 }
 
-export const useTokens = (): TokensResponse => {
-  return safeInject(TokensProviderSymbol);
+export const useTokens = (): TokensResponse | any => {
+  try {
+    return safeInject(TokensProviderSymbol);
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };

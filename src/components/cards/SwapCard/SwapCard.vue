@@ -420,23 +420,29 @@ export default defineComponent({
       }
     }
     async function populateInitialTokens(): Promise<void> {
-      console.log('Populating initial tokens', route, route.query);
-      let assetIn = router.currentRoute.value.params.assetIn as string;
+      // let assetIn = router.currentRoute.value.params.assetIn as string;
+      let assetIn = route.query?.inputToken as string;
       if (assetIn === nativeAsset.deeplinkId) {
         assetIn = nativeAsset.address;
       } else if (isAddress(assetIn)) {
         assetIn = getAddress(assetIn);
+      } else {
+        assetIn = '';
       }
-      let assetOut = router.currentRoute.value.params.assetOut as string;
+      //let assetOut = router.currentRoute.value.params.assetOut as string;
+      let assetOut = route.query?.outputToken as string;
       if (assetOut === nativeAsset.deeplinkId) {
         assetOut = nativeAsset.address;
       } else if (isAddress(assetOut)) {
         assetOut = getAddress(assetOut);
+      } else {
+        assetOut = '';
       }
       setTokenInAddress(assetIn || store.state.swap.inputAsset);
       setTokenOutAddress(assetOut || store.state.swap.outputAsset);
 
-      let assetInAmount = router.currentRoute.value.query?.inAmount as string;
+      //let assetInAmount = router.currentRoute.value.query?.inAmount as string;
+      let assetInAmount = route.query?.amountIn as string;
       let assetOutAmount = router.currentRoute.value.query?.outAmount as string;
       if (assetInAmount) {
         setTokenInAmount(assetInAmount);
