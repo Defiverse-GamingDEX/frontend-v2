@@ -207,7 +207,7 @@ import { SubgraphPoolBase } from '@defiverse/balancer-sdk';
 import { getAddress, isAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import SingularityComponent from '../SingularityCard/SingularityComponent.vue';
 import SwapPair from './SwapPair.vue';
@@ -226,6 +226,7 @@ export default defineComponent({
     // COMPOSABLES
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
     const { t } = useI18n();
     const { bp } = useBreakpoints();
     const { fNum2 } = useNumbers();
@@ -419,22 +420,29 @@ export default defineComponent({
       }
     }
     async function populateInitialTokens(): Promise<void> {
-      let assetIn = router.currentRoute.value.params.assetIn as string;
+      // let assetIn = router.currentRoute.value.params.assetIn as string;
+      let assetIn = route.query?.inputToken as string;
       if (assetIn === nativeAsset.deeplinkId) {
         assetIn = nativeAsset.address;
       } else if (isAddress(assetIn)) {
         assetIn = getAddress(assetIn);
+      } else {
+        assetIn = '';
       }
-      let assetOut = router.currentRoute.value.params.assetOut as string;
+      //let assetOut = router.currentRoute.value.params.assetOut as string;
+      let assetOut = route.query?.outputToken as string;
       if (assetOut === nativeAsset.deeplinkId) {
         assetOut = nativeAsset.address;
       } else if (isAddress(assetOut)) {
         assetOut = getAddress(assetOut);
+      } else {
+        assetOut = '';
       }
       setTokenInAddress(assetIn || store.state.swap.inputAsset);
       setTokenOutAddress(assetOut || store.state.swap.outputAsset);
 
-      let assetInAmount = router.currentRoute.value.query?.inAmount as string;
+      //let assetInAmount = router.currentRoute.value.query?.inAmount as string;
+      let assetInAmount = route.query?.amountIn as string;
       let assetOutAmount = router.currentRoute.value.query?.outAmount as string;
       if (assetInAmount) {
         setTokenInAmount(assetInAmount);
