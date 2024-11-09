@@ -318,11 +318,51 @@ const bridgeDepositETHTo = async params => {
 
   return { tx: rs, nonce };
 };
+const tokenVaultDeposit = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    srcTokenDecimal,
+    value, // amount
+    srcTokenAddress,
+    vBridgeAddress,
+    desChainId,
+    signer,
+    abi,
+    gasPrice,
+    isEstimate,
+    nonce,
+  } = params;
+  let decimals_value = BigNumber(value)
+    .times(10 ** srcTokenDecimal)
+    .toFixed(0);
+  let overwrite = { from: account };
+  console.log(`
+    address _token: ${srcTokenAddress},
+    uint256 _amount: ${decimals_value},
+    uint64 _mintChainId: ${desChainId},
+    address _mintAccount: ${vBridgeAddress},
+    uint64 _nonce: ${nonce},`);
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'deposit',
+    [srcTokenAddress, decimals_value, desChainId, vBridgeAddress, nonce],
+    overwrite,
+    signer,
+    abi,
+    gasPrice,
+    isEstimate
+  );
 
+  return { tx: rs, nonce };
+};
 export default {
   bridgeSend,
   //bridgeSendNative,
   bridgeWithdrawTo,
   bridgeDepositERC20To,
   bridgeDepositETHTo,
+  tokenVaultDeposit,
 };

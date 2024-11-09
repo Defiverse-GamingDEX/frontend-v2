@@ -113,9 +113,13 @@ const chainFrom = ref({});
 const chainTo = ref({});
 const tokenFrom = ref({});
 const tokenTo = ref({});
+
+// params from current route
 const minAmountRoute = ref(0);
 const oasys_bridge_type = ref(0);
 const li_bridge_address = ref('');
+const is_pegged = ref(false);
+const cbridge_token_vault = ref('');
 
 const gas_option_enabled = ref(false);
 const isChargeGas = ref(false);
@@ -334,6 +338,8 @@ function initMinAmountRoute() {
   minAmountRoute.value = 0;
   oasys_bridge_type.value = '';
   li_bridge_address.value = '';
+  is_pegged.value = false;
+  cbridge_token_vault.value = '';
   if (
     inputFromSelect.value.chainId &&
     inputToSelect.value.chainId &&
@@ -351,6 +357,8 @@ function initMinAmountRoute() {
         minAmountRoute.value = item.min_amount;
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
+        is_pegged.value = item.is_pegged;
+        cbridge_token_vault.value = item.cbridge_token_vault;
 
         gas_option_enabled.value = item.gas_option_enabled;
 
@@ -769,8 +777,12 @@ async function handleTransferButton() {
         .times(Math.pow(10, inputFromSelect.value.decimals))
         .toFixed(0),
     };
+    if (is_pegged.value) {
+      params.is_pegged = is_pegged.value;
+    }
+    console.log('🚀 ~ Params call BE:', params);
     const rsBE = await bridgeApi.postBridgeRequestV2(params);
-    console.log('🚀 ~ handleTransferButton ~ rsBE:', rsBE);
+    console.log('🚀 ~ result ~ rsBE:', rsBE);
 
     const { tx }: any = await bridgeSend(
       inputFromSelect.value,
@@ -782,7 +794,9 @@ async function handleTransferButton() {
       false,
       oasys_bridge_type.value,
       li_bridge_address.value,
-      nonce
+      nonce,
+      is_pegged.value,
+      cbridge_token_vault.value
     );
     const summary = `Bridge success!`;
     addTransaction({
