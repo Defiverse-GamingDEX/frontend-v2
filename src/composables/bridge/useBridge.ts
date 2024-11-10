@@ -17,6 +17,8 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import CBRIDGE_TOKEN_VAULT_ABI from '@/lib/abi/bridge/cBridgeTokenVault.json';
+import CBRIDGE_PEG_ABI from '@/lib/abi/bridge/cBridgePeg.json';
+console.log("🚀 ~ CBRIDGE_PEG_ABI:", CBRIDGE_PEG_ABI)
 console.log("🚀 ~ CBRIDGE_TOKEN_VAULT_ABI:", CBRIDGE_TOKEN_VAULT_ABI)
 const VBRIDGE_CONTRACT_ADDRESS = '0x323D29986BCA00AEF8C2cb0f93e6F55F18eb3E67';
 
@@ -484,23 +486,48 @@ async function bridgeSend(
         // NOT support now
       } else {
         // token case
-        const params = {
-          contractAddress: l1_bridge_address, // contract token
-          contractProvider: provider, // contract provider
-          account,
-          srcTokenDecimal: tokenInputFrom?.decimals,
-          value: inputFromSelect?.amount, // amount
-          vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
-          srcTokenAddress: tokenInputFrom?.address,
-          desChainId: chainTo?.chain_id_decimals,
-          signer,
-          slippage: 50000,
-          abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
-          gasPrice: chainFrom?.gasPrice,
-          isEstimate,
-          nonce,
-        };
-        rs = await bridgeService.bridgeSend(params);
+        // TODO 2024/09/11
+        console.log(`oasys ${inputFromSelect.chainId} to external ${inputToSelect.chainId}`);
+        if (is_pegged) {
+            console.log(`is_pegged=${is_pegged})=> call burn function `);
+            const params = {
+              contractAddress: chainFrom?.bridgeContract, // contract token
+              contractProvider: provider, // contract provider
+              account,
+              srcTokenDecimal: tokenInputFrom?.decimals,
+              value: inputFromSelect?.amount, // amount
+              vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+              srcTokenAddress: tokenInputFrom?.address,
+              desChainId: 248, // to OASYS
+              signer,
+              slippage: 50000, // not use
+              abi: CBRIDGE_PEG_ABI,
+              gasPrice: chainFrom?.gasPrice,
+              isEstimate,
+              nonce
+            };
+            rs = await bridgeService.burn(params);
+        } else { 
+           console.log(`is_pegged=${is_pegged})=> call old function `);
+           const params = {
+            contractAddress: l1_bridge_address, // contract token
+            contractProvider: provider, // contract provider
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+            srcTokenAddress: tokenInputFrom?.address,
+            desChainId: chainTo?.chain_id_decimals,
+            signer,
+            slippage: 50000,
+            abi: chainFrom?.bridgeABIExternal, // For AOS bridge external chain use  bridgeABIExternal
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+            nonce,
+          };
+          rs = await bridgeService.bridgeSend(params);
+        }
+       
       }
     } else if (oasys_bridge_type === 'verse_to_oasys') {
       // verse => oasys
