@@ -120,6 +120,7 @@ const oasys_bridge_type = ref(0);
 const li_bridge_address = ref('');
 const is_pegged = ref(false);
 const cbridge_token_vault = ref('');
+const cbridge_peg = ref('');
 
 const gas_option_enabled = ref(false);
 const isChargeGas = ref(false);
@@ -340,6 +341,7 @@ function initMinAmountRoute() {
   li_bridge_address.value = '';
   is_pegged.value = false;
   cbridge_token_vault.value = '';
+  cbridge_peg.value = '';
   if (
     inputFromSelect.value.chainId &&
     inputToSelect.value.chainId &&
@@ -359,6 +361,7 @@ function initMinAmountRoute() {
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
         is_pegged.value = item.is_pegged;
         cbridge_token_vault.value = item.cbridge_token_vault;
+        cbridge_peg.value = item.cbridge_peg;
 
         gas_option_enabled.value = item.gas_option_enabled;
 
@@ -796,7 +799,8 @@ async function handleTransferButton() {
       li_bridge_address.value,
       nonce,
       is_pegged.value,
-      cbridge_token_vault.value
+      cbridge_token_vault.value,
+      cbridge_peg.value
     );
     const summary = `Bridge success!`;
     addTransaction({
