@@ -116,7 +116,7 @@ export default defineConfig(({ mode }) => {
       minify: 'terser', // <-- add
       terserOptions: {
         compress: {
-          drop_console: true,
+          drop_console: false,
           drop_debugger: true,
         },
       },
