@@ -140,9 +140,9 @@ export class PriceService {
     addressesPerRequest = 1,
     aggregateBy: 'hour' | 'day' = 'day'
   ): Promise<HistoricalPrices> {
-    return Promise.resolve([]);
+    // return Promise.resolve([]);
 
-    /*try {
+    try {
       if (addresses.length / addressesPerRequest > 10)
         throw new Error('To many requests for rate limit.');
 
@@ -180,8 +180,9 @@ export class PriceService {
       return results;
     } catch (error) {
       console.error('Unable to fetch token prices', addresses, error);
-      throw error;
-    }*/
+      // throw error;
+      return [];
+    }
   }
 
   private parsePaginatedTokens(paginatedResults: TokenPrices[]): TokenPrices {
