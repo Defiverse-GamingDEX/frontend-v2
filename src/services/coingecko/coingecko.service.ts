@@ -24,8 +24,8 @@ export const getPlatformId = (chainId: string): string => {
     '42': 'ethereum',
     '137': 'polygon-pos',
     '42161': 'arbitrum-one',
-    '16116': 'ethereum',
-    '17117': 'ethereum',
+    '16116': 'oasys-ecosystem',
+    '17117': 'oasys-ecosystem',
   };
 
   return mapping[chainId] || 'ethereum';
