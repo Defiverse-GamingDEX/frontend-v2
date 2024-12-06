@@ -372,9 +372,9 @@ function initMinAmountRoute() {
             li_bridge_address.value = item.cbridge_peg;
           }
         } else if (
-          // external (ethereum or polygon) to oasys
+          // external (ethereum or polygon) to oasys or Defiverse
           (item.src.chain_id == 1 || item.src.chain_id == 137) &&
-          item.dst.chain_id == 248
+          (item.dst.chain_id == 248 || item.dst.chain_id == 16116)
         ) {
           if (is_pegged.value) {
             li_bridge_address.value = item.cbridge_token_vault;
