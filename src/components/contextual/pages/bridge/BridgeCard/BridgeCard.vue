@@ -363,25 +363,29 @@ function initMinAmountRoute() {
 
         // check if is pegged
         if (is_pegged.value) {
-          li_bridge_address.value = item.l1_cbridge;
+          li_bridge_address.value = item.cbridge_peg;
         }
         cbridge_token_vault.value = item.cbridge_token_vault;
         cbridge_peg.value = item.cbridge_peg;
+        console.log(
+          '🚀 ~ initMinAmountRoute ~ cbridge_peg.value:',
+          cbridge_peg.value
+        );
 
         gas_option_enabled.value = item.gas_option_enabled;
 
-        // console.log(
-        //   '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
-        //   oasys_bridge_type.value
-        // );
-        // console.log(
-        //   '🚀 ~ initMinAmountRoute ~ li_bridge_address.value :',
-        //   li_bridge_address.value
-        // );
-        // console.log(
-        //   '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
-        //   minAmountRoute.value
-        // );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~ oasys_bridge_type.value:',
+          oasys_bridge_type.value
+        );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~ li_bridge_address.value :',
+          li_bridge_address.value
+        );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
+          minAmountRoute.value
+        );
         break;
       }
     }
