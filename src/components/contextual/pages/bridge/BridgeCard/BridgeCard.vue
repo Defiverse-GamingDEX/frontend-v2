@@ -362,9 +362,25 @@ function initMinAmountRoute() {
         is_pegged.value = item.is_pegged;
 
         // check if is pegged
-        if (is_pegged.value) {
-          li_bridge_address.value = item.cbridge_peg;
+
+        // oasys to external (ethereum or polygon)
+        if (
+          item.src.chain_id == 248 &&
+          (item.dst.chain_id == 1 || item.dst.chain_id == 137)
+        ) {
+          if (is_pegged.value) {
+            li_bridge_address.value = item.cbridge_peg;
+          }
+        } else if (
+          // external (ethereum or polygon) to oasys
+          (item.src.chain_id == 1 || item.src.chain_id == 137) &&
+          item.dst.chain_id == 248
+        ) {
+          if (is_pegged.value) {
+            li_bridge_address.value = item.cbridge_token_vault;
+          }
         }
+
         cbridge_token_vault.value = item.cbridge_token_vault;
         cbridge_peg.value = item.cbridge_peg;
         console.log(
