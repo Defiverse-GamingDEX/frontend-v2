@@ -360,6 +360,11 @@ function initMinAmountRoute() {
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
         is_pegged.value = item.is_pegged;
+
+        // check if is pegged
+        if (is_pegged.value) {
+          li_bridge_address.value = item.l1_cbridge;
+        }
         cbridge_token_vault.value = item.cbridge_token_vault;
         cbridge_peg.value = item.cbridge_peg;
 
