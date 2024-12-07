@@ -376,6 +376,7 @@ async function approveToken(
     if (l1_bridge_address) {
       contractAddress = l1_bridge_address;
     }
+    console.log('🚀 approveToken ~ contractAddress:', contractAddress);
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
     if (!approveAmount) {
@@ -445,14 +446,16 @@ async function bridgeSend(
         console.log(
           `is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`
         );
+        const org_token = l1_bridge_address; // from initMinAmountRoute
+        console.log('🚀 ~ org_token:', org_token);
         const params = {
-          contractAddress: chainFrom?.bridgeContract, // contract token
+          contractAddress: cbridge_token_vault, // contract token
           contractProvider: provider, // contract provider
           account,
           srcTokenDecimal: tokenInputFrom?.decimals,
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
-          srcTokenAddress: tokenInputFrom?.address,
+          srcTokenAddress: org_token,
           desChainId: 248, // to OASYS
           signer,
           slippage: 50000,
@@ -612,6 +615,8 @@ async function bridgeSend(
             console.log(
               `is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`
             );
+            const org_token = l1_bridge_address; // from initMinAmountRoute
+            console.log('🚀 ~ org_token:', org_token);
             const params = {
               contractAddress: cbridge_token_vault, // contract token
               contractProvider: provider, // contract provider
@@ -619,7 +624,7 @@ async function bridgeSend(
               srcTokenDecimal: tokenInputFrom?.decimals,
               value: inputFromSelect?.amount, // amount
               vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS, // receiver address
-              srcTokenAddress: tokenInputFrom?.address,
+              srcTokenAddress: org_token, // TODO get onriginal address token
               desChainId: 248, // to OASYS
               signer,
               slippage: 50000,

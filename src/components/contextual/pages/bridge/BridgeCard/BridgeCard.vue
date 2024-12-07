@@ -377,7 +377,7 @@ function initMinAmountRoute() {
           (item.dst.chain_id == 248 || item.dst.chain_id == 16116)
         ) {
           if (is_pegged.value) {
-            li_bridge_address.value = item.cbridge_token_vault;
+            li_bridge_address.value = item.token?.org_token;
           }
         }
 
@@ -437,12 +437,12 @@ async function checkAllowanceInputFrom() {
         isAllowance.value = true;
         return;
       }
-
+      const contractAddress = li_bridge_address.value;
       const allowance = await checkTokenAllowance(
         chainFrom.value,
         tokenFrom.value,
         account.value,
-        li_bridge_address.value
+        contractAddress
       );
       currentAllowance.value = BigNumber(allowance?.toString() || 0).toFixed();
 
@@ -865,6 +865,7 @@ async function handleApproveButton() {
       .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
     //approveAmount = approveAmount + 1;
+    const contractAddress = li_bridge_address.value;
     const signer = getSigner();
     let tx = await approveToken(
       chainFrom.value,
@@ -872,7 +873,7 @@ async function handleApproveButton() {
       account.value,
       signer,
       approveAmount,
-      li_bridge_address.value
+      contractAddress
     );
 
     const chainName = chainFrom.value.name;
