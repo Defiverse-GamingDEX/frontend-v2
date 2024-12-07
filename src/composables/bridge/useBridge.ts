@@ -500,6 +500,8 @@ async function bridgeSend(
           console.log(
             `is_pegged=${is_pegged})=> call burn function from ${cbridge_peg}`
           );
+          const pegged_token = l1_bridge_address; // from initMinAmountRoute
+          console.log('🚀 ~ pegged_token:', pegged_token);
           const params = {
             contractAddress: cbridge_peg, // contract token
             contractProvider: provider, // contract provider
@@ -509,7 +511,7 @@ async function bridgeSend(
             vBridgeAddress: anotherWalletAddress
               ? anotherWalletAddress
               : account, // receiver address
-            srcTokenAddress: tokenInputFrom?.address,
+            srcTokenAddress: pegged_token, // pegged_token
             desChainId: 248, // to OASYS
             signer,
             slippage: 50000, // not use

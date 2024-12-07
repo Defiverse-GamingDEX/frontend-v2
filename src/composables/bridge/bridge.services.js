@@ -374,6 +374,7 @@ const burn = async params => {
     isEstimate,
     nonce,
   } = params;
+  console.log('🚀 ~ burn ~ contractAddress:', contractAddress);
   let decimals_value = BigNumber(value)
     .times(10 ** srcTokenDecimal)
     .toFixed(0);

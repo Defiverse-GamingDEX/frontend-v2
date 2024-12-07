@@ -369,7 +369,7 @@ function initMinAmountRoute() {
           (item.dst.chain_id == 1 || item.dst.chain_id == 137)
         ) {
           if (is_pegged.value) {
-            li_bridge_address.value = item.cbridge_peg;
+            li_bridge_address.value = item.token?.pegged_token; // pegged token for this case
           }
         } else if (
           // external (ethereum or polygon) to oasys or Defiverse
@@ -377,7 +377,7 @@ function initMinAmountRoute() {
           (item.dst.chain_id == 248 || item.dst.chain_id == 16116)
         ) {
           if (is_pegged.value) {
-            li_bridge_address.value = item.token?.org_token;
+            li_bridge_address.value = item.token?.org_token; // org token for this case
           }
         }
 
