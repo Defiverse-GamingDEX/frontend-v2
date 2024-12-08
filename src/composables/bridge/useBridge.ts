@@ -529,7 +529,7 @@ async function bridgeSend({
               ? anotherWalletAddress
               : account, // receiver address
             srcTokenAddress: srcTokenAddress,
-            desChainId: 248, // to OASYS
+            desChainId: chainTo?.chain_id_decimals, 
             signer,
             slippage: 50000, // not use
             abi: CBRIDGE_PEG_ABI,
