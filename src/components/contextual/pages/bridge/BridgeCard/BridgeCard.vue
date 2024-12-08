@@ -121,6 +121,9 @@ const li_bridge_address = ref('');
 const is_pegged = ref(false);
 const cbridge_token_vault = ref('');
 const cbridge_peg = ref('');
+const route_org_token = ref('');
+const route_pegged_token = ref('');
+const special_route_case = ref(''); // 1/ external-to-verse-pegged (L1: oasys, L2: verse), // verse-to-external-pegged (L1: verse, L2: oasys),2/ oasys-to-external-pegged
 
 const gas_option_enabled = ref(false);
 const isChargeGas = ref(false);
@@ -342,6 +345,9 @@ function initMinAmountRoute() {
   is_pegged.value = false;
   cbridge_token_vault.value = '';
   cbridge_peg.value = '';
+  route_org_token.value = '';
+  route_pegged_token.value = '';
+  special_route_case.value = '';
   if (
     inputFromSelect.value.chainId &&
     inputToSelect.value.chainId &&
@@ -360,16 +366,15 @@ function initMinAmountRoute() {
         oasys_bridge_type.value = item.type;
         li_bridge_address.value = item.l1_bridge || item.l1_cbridge;
         is_pegged.value = item.is_pegged;
-
+        route_org_token.value = item.token?.org_token;
+        route_pegged_token.value = item.token?.pegged_token;
         // check if is pegged
-
-        // oasys to external (ethereum or polygon)
         if (
           item.src.chain_id == 248 &&
           (item.dst.chain_id == 1 || item.dst.chain_id == 137)
         ) {
           if (is_pegged.value) {
-            li_bridge_address.value = item.token?.pegged_token; // pegged token for this case
+            special_route_case.value = 'oasys-to-external-pegged';
           }
         } else if (
           // external (ethereum or polygon) to oasys or Defiverse
@@ -377,7 +382,7 @@ function initMinAmountRoute() {
           (item.dst.chain_id == 248 || item.dst.chain_id == 16116)
         ) {
           if (is_pegged.value) {
-            li_bridge_address.value = item.token?.org_token; // org token for this case
+            special_route_case.value = 'external-to-verse-pegged';
           }
         }
 
@@ -402,6 +407,18 @@ function initMinAmountRoute() {
           '🚀 ~ initMinAmountRoute ~  minAmountRoute.value:',
           minAmountRoute.value
         );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~  route_org_token.value:',
+          route_org_token.value
+        );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~  route_pegged_token.value:',
+          route_pegged_token.value
+        );
+        console.log(
+          '🚀 ~ initMinAmountRoute ~  special_route_case.value:',
+          special_route_case.value
+        );
         break;
       }
     }
@@ -423,6 +440,19 @@ async function getBalanceInputFrom() {
     }
   }
 }
+function getContractAddressFromSpecialRoute() {
+  if (special_route_case.value === 'external-to-verse-pegged') {
+    return route_org_token.value
+      ? route_org_token.value
+      : cbridge_token_vault.value;
+  } else if (special_route_case.value === 'oasys-to-external-pegged') {
+    return route_pegged_token.value
+      ? route_pegged_token.value
+      : cbridge_peg.value;
+  } else {
+    return null;
+  }
+}
 async function checkAllowanceInputFrom() {
   try {
     if (account.value && inputFromSelect.value.tokenAddress) {
@@ -437,7 +467,16 @@ async function checkAllowanceInputFrom() {
         isAllowance.value = true;
         return;
       }
-      const contractAddress = li_bridge_address.value;
+
+      let contractAddress = li_bridge_address.value;
+      const addressSpecialRoute = getContractAddressFromSpecialRoute();
+      if (addressSpecialRoute) {
+        contractAddress = addressSpecialRoute;
+      }
+      console.log(
+        '🚀 ~ checkAllowanceInputFrom ~ contractAddress:',
+        contractAddress
+      );
       const allowance = await checkTokenAllowance(
         chainFrom.value,
         tokenFrom.value,
@@ -811,22 +850,23 @@ async function handleTransferButton() {
     console.log('🚀 ~ Params call BE:', params);
     const rsBE = await bridgeApi.postBridgeRequestV2(params);
     console.log('🚀 ~ result ~ rsBE:', rsBE);
-
-    const { tx }: any = await bridgeSend(
-      inputFromSelect.value,
-      inputToSelect.value,
-      account.value,
-      anotherWalletAddress.value,
+    const { tx }: any = await bridgeSend({
+      inputFromSelect: inputFromSelect.value,
+      inputToSelect: inputToSelect.value,
+      account: account.value,
+      anotherWalletAddress: anotherWalletAddress.value,
       signer,
       provider,
-      false,
-      oasys_bridge_type.value,
-      li_bridge_address.value,
+      isEstimate: false,
+      oasys_bridge_type: oasys_bridge_type.value,
+      l1_bridge_address: li_bridge_address.value,
       nonce,
-      is_pegged.value,
-      cbridge_token_vault.value,
-      cbridge_peg.value
-    );
+      is_pegged: is_pegged.value,
+      cbridge_token_vault: cbridge_token_vault.value,
+      cbridge_peg: cbridge_peg.value,
+      route_org_token: route_org_token.value,
+      route_pegged_token: route_pegged_token.value,
+    });
     const summary = `Bridge success!`;
     addTransaction({
       id: tx?.hash,
@@ -865,7 +905,15 @@ async function handleApproveButton() {
       .times(10 ** inputFromSelect.value.decimals)
       .toFixed();
     //approveAmount = approveAmount + 1;
-    const contractAddress = li_bridge_address.value;
+    let contractAddress = li_bridge_address.value;
+    const addressSpecialRoute = getContractAddressFromSpecialRoute();
+    if (addressSpecialRoute) {
+      contractAddress = addressSpecialRoute;
+    }
+    console.log(
+      '🚀 ~ checkAllowanceInputFrom ~ contractAddress:',
+      contractAddress
+    );
     const signer = getSigner();
     let tx = await approveToken(
       chainFrom.value,
