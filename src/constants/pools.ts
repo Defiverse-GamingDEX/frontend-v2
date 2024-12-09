@@ -898,7 +898,9 @@ const POOLS_OASYS: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [''],
+  BlockList: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',
