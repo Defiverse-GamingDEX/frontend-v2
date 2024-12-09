@@ -388,7 +388,7 @@ const burn = async params => {
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
-    'burn',
+    'burnFrom',
     [srcTokenAddress, decimals_value, desChainId, vBridgeAddress, nonce],
     overwrite,
     signer,
