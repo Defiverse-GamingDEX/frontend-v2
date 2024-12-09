@@ -151,7 +151,7 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
     accessor: pool =>
       fNum2(pool.totalLiquidity || 0, {
         style: 'currency',
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 3,
       }),
     align: 'right',
     id: 'totalLiquidity',
@@ -344,7 +344,7 @@ function iconAddresses(pool: Pool) {
             {{
               fNum2(pool?.volumeSnapshot, {
                 style: 'currency',
-                maximumFractionDigits: 0,
+                maximumFractionDigits: 3,
               })
             }}
           </span>
