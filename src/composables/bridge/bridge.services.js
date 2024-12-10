@@ -363,6 +363,7 @@ const BURN_METHOD_TOKENS = [
   '0x92cd9aa44dad9fe20b9e3205a896a15bccb221fe', // USDC.e
   '0x4d17c0609b77e456fb98ea99a62bcef09adae32d', // USDC.e
 ];
+
 const burn = async params => {
   const {
     contractAddress, // contract token
@@ -384,6 +385,7 @@ const burn = async params => {
     fn = 'burn';
   }
 
+  console.log('🚀 ~ burn ~ contractAddress:', contractAddress);
   let decimals_value = BigNumber(value)
     .times(10 ** srcTokenDecimal)
     .toFixed(0);

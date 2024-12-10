@@ -376,6 +376,7 @@ async function approveToken(
     if (l1_bridge_address) {
       contractAddress = l1_bridge_address;
     }
+    console.log('🚀 approveToken ~ contractAddress:', contractAddress);
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
     if (!approveAmount) {
@@ -405,7 +406,7 @@ function getChainByChainName(chain_name) {
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
-async function bridgeSend(
+async function bridgeSend({
   inputFromSelect,
   inputToSelect,
   account,
@@ -418,8 +419,10 @@ async function bridgeSend(
   nonce,
   is_pegged,
   cbridge_token_vault,
-  cbridge_peg
-) {
+  cbridge_peg,
+  route_org_token,
+  route_pegged_token,
+}) {
   try {
     const chainFrom: any = getChain(inputFromSelect.chainId);
     const tokenInputFrom = getToken(
@@ -434,6 +437,7 @@ async function bridgeSend(
     console.log('Submit Button-> is_pegged', is_pegged);
     console.log('Submit Button-> cbridge_token_vault', cbridge_token_vault);
     console.log('Submit Button-> cbridge_peg', cbridge_peg);
+    console.log('Submit Button-> route_org_token', route_org_token);
     let rs: any = null;
     if (oasys_bridge_type === 'external_to_oasys') {
       // native case => oasys -> NOT NOW
@@ -445,14 +449,23 @@ async function bridgeSend(
         console.log(
           `is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`
         );
+        console.log('🚀 ~ route_org_token:', route_org_token);
+        console.log('🚀 ~ tokenInputFrom?.address:', tokenInputFrom?.address);
+        let srcTokenAddress = l1_bridge_address; // from initMinAmountRoute
+        if (route_org_token) {
+          srcTokenAddress = route_org_token;
+        } else {
+          srcTokenAddress = tokenInputFrom?.address;
+        }
+        console.log('🚀 ~ srcTokenAddress:', srcTokenAddress);
         const params = {
-          contractAddress: chainFrom?.bridgeContract, // contract token
+          contractAddress: cbridge_token_vault, // contract token
           contractProvider: provider, // contract provider
           account,
           srcTokenDecimal: tokenInputFrom?.decimals,
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
-          srcTokenAddress: tokenInputFrom?.address,
+          srcTokenAddress: srcTokenAddress,
           desChainId: 248, // to OASYS
           signer,
           slippage: 50000,
@@ -497,6 +510,15 @@ async function bridgeSend(
           console.log(
             `is_pegged=${is_pegged})=> call burn function from ${cbridge_peg}`
           );
+          console.log('🚀 ~ route_pegged_token:', route_pegged_token);
+          console.log('🚀 ~ tokenInputFrom?.address:', tokenInputFrom?.address);
+          let srcTokenAddress = l1_bridge_address; // from initMinAmountRoute
+          if (route_pegged_token) {
+            srcTokenAddress = route_pegged_token;
+          } else {
+            srcTokenAddress = tokenInputFrom?.address;
+          }
+          console.log('🚀 ~ srcTokenAddress:', srcTokenAddress);
           const params = {
             contractAddress: cbridge_peg, // contract token
             contractProvider: provider, // contract provider
@@ -506,8 +528,8 @@ async function bridgeSend(
             vBridgeAddress: anotherWalletAddress
               ? anotherWalletAddress
               : account, // receiver address
-            srcTokenAddress: tokenInputFrom?.address,
-            desChainId: 248, // to OASYS
+            srcTokenAddress: srcTokenAddress,
+            desChainId: chainTo?.chain_id_decimals, 
             signer,
             slippage: 50000, // not use
             abi: CBRIDGE_PEG_ABI,
@@ -609,9 +631,19 @@ async function bridgeSend(
           );
           if (is_pegged && cbridge_token_vault) {
             // call new contract deposit
+            console.log('🚀 ~ route_org_token:', route_org_token);
             console.log(
-              `is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`
+              '🚀 ~ tokenInputFrom?.address:',
+              tokenInputFrom?.address
             );
+            let srcTokenAddress = l1_bridge_address; // from initMinAmountRoute
+            if (route_org_token) {
+              srcTokenAddress = route_org_token;
+            } else {
+              srcTokenAddress = tokenInputFrom?.address;
+            }
+            console.log('🚀 ~ srcTokenAddress:', srcTokenAddress);
+
             const params = {
               contractAddress: cbridge_token_vault, // contract token
               contractProvider: provider, // contract provider
@@ -619,7 +651,7 @@ async function bridgeSend(
               srcTokenDecimal: tokenInputFrom?.decimals,
               value: inputFromSelect?.amount, // amount
               vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS, // receiver address
-              srcTokenAddress: tokenInputFrom?.address,
+              srcTokenAddress: srcTokenAddress,
               desChainId: 248, // to OASYS
               signer,
               slippage: 50000,
