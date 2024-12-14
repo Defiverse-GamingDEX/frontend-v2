@@ -99,6 +99,7 @@ onBeforeMount(async () => {
             </div>
 
             <BalBtn
+              v-if="upToMediumBreakpoint && isCreatePool"
               color="blue"
               size="sm"
               outline
