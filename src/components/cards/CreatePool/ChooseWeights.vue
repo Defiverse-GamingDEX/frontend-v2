@@ -8,6 +8,7 @@ import AnimatePresence from '@/components/animate/AnimatePresence.vue';
 import TokenWeightInput from '@/components/inputs/TokenInput/TokenWeightInput.vue';
 import usePoolCreation, {
   PoolSeedToken,
+  poolCreationState,
 } from '@/composables/pools/usePoolCreation';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useDarkMode from '@/composables/useDarkMode';
@@ -189,6 +190,9 @@ function handleWeightChange(weight: string, id: number) {
 function handleAddressChange(address: string, id: number) {
   const tokenWeight = seedTokens.value[id];
   tokenWeight.tokenAddress = address;
+  // Reset name and symbol edit flags when token changes
+  poolCreationState.isEditName = false;
+  poolCreationState.isEditSymbol = false;
 }
 
 function handleLockedWeight(isLocked: boolean, id: number) {

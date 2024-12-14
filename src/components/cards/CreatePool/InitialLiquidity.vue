@@ -361,12 +361,7 @@ function saveAndProceed() {
             {{ t('createAPool.arbReason') }}
           </BalAlert>
         </AnimatePresence>
-        <BalBtn
-          :disabled="isExceedingWalletBalance || hasZeroAmount"
-          block
-          color="gradient"
-          @click="saveAndProceed"
-        >
+        <BalBtn block color="gradient" @click="saveAndProceed">
           {{ t('preview') }}
         </BalBtn>
       </BalStack>

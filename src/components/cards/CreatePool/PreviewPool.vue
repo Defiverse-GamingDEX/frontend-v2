@@ -9,7 +9,7 @@ import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { bnum, isSameAddress, shortenLabel } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
-
+import { poolCreationState } from '@/composables/pools/usePoolCreation';
 /**
  * PROPS & EMITS
  */
@@ -58,8 +58,16 @@ const { userNetworkConfig, account } = useWeb3();
  */
 onBeforeMount(() => {
   sortSeedTokens();
-  poolName.value = poolName.value || getPoolSymbol();
-  poolSymbol.value = poolSymbol.value || getPoolSymbol();
+  if (poolCreationState.isEditName) {
+    poolName.value = poolCreationState.name;
+  } else {
+    poolName.value = getPoolSymbol();
+  }
+  if (poolCreationState.isEditSymbol) {
+    poolSymbol.value = poolCreationState.symbol;
+  } else {
+    poolSymbol.value = getPoolSymbol();
+  }
 });
 
 /**
@@ -277,7 +285,12 @@ function getInitialWeightHighlightClass(tokenAddress: string) {
                 name="poolName"
                 size="xs"
                 inputAlignRight
-                @save="saveState"
+                @save="
+                  () => {
+                    poolCreationState.isEditName = true;
+                    saveState();
+                  }
+                "
               />
             </BalStack>
             <BalStack horizontal justify="between">
@@ -287,7 +300,12 @@ function getInitialWeightHighlightClass(tokenAddress: string) {
                 name="poolSymbol"
                 size="xs"
                 inputAlignRight
-                @save="saveState"
+                @save="
+                  () => {
+                    poolCreationState.isEditSymbol = true;
+                    saveState();
+                  }
+                "
               />
             </BalStack>
             <BalStack horizontal justify="between">
