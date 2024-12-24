@@ -72,6 +72,14 @@
       "symbol": "CCP",
       "decimals": 18,
       "logoURI": "tokens/CCP_L.png"
+    },
+    {
+      "address": "0x35D48A789904E9b15705977192e5d95e2aF7f1D3",
+      "chainId": 16116,
+      "name": "PLANZ token",
+      "symbol": "Z",
+      "decimals": 18,
+      "logoURI": "tokens/Z_L.png"
     }
   ]
 }
