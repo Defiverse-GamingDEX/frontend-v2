@@ -56,6 +56,14 @@
       "symbol": "TCGC",
       "decimals": 18,
       "logoURI": "tokens/TCGC_L.png"
+    },
+    {
+      "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+      "chainId": 248,
+      "name": "PLANZ token",
+      "symbol": "Z",
+      "decimals": 18,
+      "logoURI": "tokens/Z_L.png"
     }
   ]
 }
