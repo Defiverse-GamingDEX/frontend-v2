@@ -20,7 +20,9 @@ import CBRIDGE_TOKEN_VAULT_ABI from '@/lib/abi/bridge/cBridgeTokenVault.json';
 import CBRIDGE_PEG_ABI from '@/lib/abi/bridge/cBridgePeg.json';
 console.log('🚀 ~ CBRIDGE_PEG_ABI:', CBRIDGE_PEG_ABI);
 console.log('🚀 ~ CBRIDGE_TOKEN_VAULT_ABI:', CBRIDGE_TOKEN_VAULT_ABI);
-const VBRIDGE_CONTRACT_ADDRESS = '0x323D29986BCA00AEF8C2cb0f93e6F55F18eb3E67';
+
+// const VBRIDGE_CONTRACT_ADDRESS = '0x323D29986BCA00AEF8C2cb0f93e6F55F18eb3E67'; // Bridge version 1.2
+const VBRIDGE_CONTRACT_ADDRESS = '0x57946c046CFb51cE30586b54Dd150ca32fB7c012'; // Bridge version 1.3
 
 // real function - START - TODO
 function truncateDecimal(number, precision) {
@@ -529,7 +531,7 @@ async function bridgeSend({
               ? anotherWalletAddress
               : account, // receiver address
             srcTokenAddress: srcTokenAddress,
-            desChainId: chainTo?.chain_id_decimals, 
+            desChainId: chainTo?.chain_id_decimals,
             signer,
             slippage: 50000, // not use
             abi: CBRIDGE_PEG_ABI,
