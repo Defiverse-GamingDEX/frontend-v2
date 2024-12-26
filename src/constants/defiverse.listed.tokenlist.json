@@ -79,7 +79,15 @@
       "name": "PLANZ token",
       "symbol": "Z",
       "decimals": 18,
-      "logoURI": "tokens/Z_L.png"
+      "logoURI": "tokens/Z.png"
+    },
+    {
+      "address": "0xc8058960a9d7E7d81143BDBA38d19e6824165932",
+      "chainId": 16116,
+      "name": "stOAS",
+      "symbol": "stOAS",
+      "decimals": 18,
+      "logoURI": "tokens/stOAS.png"
     }
   ]
 }
