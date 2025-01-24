@@ -5,7 +5,7 @@ const TESTNET_API_URL = 'https://cbridge-v2-test.celer.network';
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 
 const external_domain =
-  isTestnet == 'false' ? TESTNET_API_URL : MAINNET_API_URL;
+  isTestnet == 'false' ? MAINNET_API_URL : TESTNET_API_URL;
 
 const MAINNET_INTERNAL_BRIDGE_API_URL = 'https://gaming-dex.com';
 const TESTNET_INTERNAL_BRIDGE_API_URL = 'https://dex-testnet.defi-verse.org';

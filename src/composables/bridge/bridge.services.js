@@ -358,6 +358,12 @@ const tokenVaultDeposit = async params => {
 
   return { tx: rs, nonce };
 };
+
+const BURN_METHOD_TOKENS = [
+  '0x92cd9aa44dad9fe20b9e3205a896a15bccb221fe', // USDC.e
+  '0x4d17c0609b77e456fb98ea99a62bcef09adae32d', // USDC.e
+];
+
 const burn = async params => {
   const {
     contractAddress, // contract token
@@ -374,11 +380,18 @@ const burn = async params => {
     isEstimate,
     nonce,
   } = params;
+  let fn = 'burnFrom';
+  if (BURN_METHOD_TOKENS.includes(srcTokenAddress.toLowerCase())) {
+    fn = 'burn';
+  }
+
+  console.log('🚀 ~ burn ~ contractAddress:', contractAddress);
   let decimals_value = BigNumber(value)
     .times(10 ** srcTokenDecimal)
     .toFixed(0);
   let overwrite = { from: account };
   console.log(`
+    method: ${fn}
     address _token: ${srcTokenAddress},
     uint256 _amount: ${decimals_value},
     uint64 _toChainId: ${desChainId},
@@ -387,7 +400,7 @@ const burn = async params => {
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
-    'burn',
+    fn,
     [srcTokenAddress, decimals_value, desChainId, vBridgeAddress, nonce],
     overwrite,
     signer,

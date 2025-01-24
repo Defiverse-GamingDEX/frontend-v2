@@ -5,7 +5,7 @@ import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
 
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-const networks: any = [
+let networks: any = [
   // {
   //   id: 'ethereum',
   //   name: 'Ethereum',
@@ -24,16 +24,16 @@ const networks: any = [
   // //   networkSlug: 'arbitrum',
   // //   key: '42161',
   // // },
-  // {
-  //   id: 'defiverse',
-  //   name: 'Defiverse',
-  //   networkSlug: 'defiverse',
-  //   key: '16116',
-  //   tokens: defiverseJson.tokens,
-  //   // price: 5000000000000, // 5000 Gwei
-  //   // gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  //},
+  {
+    id: 'defiverse',
+    name: 'Defiverse',
+    networkSlug: 'defiverse',
+    key: '16116',
+    tokens: defiverseJson.tokens,
+    // price: 5000000000000, // 5000 Gwei
+    // gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
   // // bridge networks
   // {
   //   id: 'mchverse',
@@ -85,16 +85,16 @@ const networks: any = [
   //   gasUnit: 'wei',
   //   maxPriorityFee: 0,
   // },
-  // {
-  //   id: 'oasys',
-  //   name: 'Oasys',
-  //   networkSlug: 'oasys',
-  //   key: '248',
-  //   tokens: oasysJson.tokens,
-  //   // price: 35000000000, // 50 Gwei
-  //   gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  // },
+  {
+    id: 'oasys',
+    name: 'Oasys',
+    networkSlug: 'oasys',
+    key: '248',
+    tokens: oasysJson.tokens,
+    // price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
 ];
 
 let networksDev = [
@@ -137,6 +137,7 @@ if (IS_TESTNET == true) {
     //   key: '43113',
     // },
   ];
+  networks = [];
 }
 
 export default {

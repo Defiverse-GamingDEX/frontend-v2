@@ -18,10 +18,11 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import CBRIDGE_TOKEN_VAULT_ABI from '@/lib/abi/bridge/cBridgeTokenVault.json';
 import CBRIDGE_PEG_ABI from '@/lib/abi/bridge/cBridgePeg.json';
-console.log("🚀 ~ CBRIDGE_PEG_ABI:", CBRIDGE_PEG_ABI)
-console.log("🚀 ~ CBRIDGE_TOKEN_VAULT_ABI:", CBRIDGE_TOKEN_VAULT_ABI)
-const VBRIDGE_CONTRACT_ADDRESS = '0x323D29986BCA00AEF8C2cb0f93e6F55F18eb3E67';
+console.log('🚀 ~ CBRIDGE_PEG_ABI:', CBRIDGE_PEG_ABI);
+console.log('🚀 ~ CBRIDGE_TOKEN_VAULT_ABI:', CBRIDGE_TOKEN_VAULT_ABI);
 
+// const VBRIDGE_CONTRACT_ADDRESS = '0x323D29986BCA00AEF8C2cb0f93e6F55F18eb3E67'; // Bridge version 1.2
+const VBRIDGE_CONTRACT_ADDRESS = '0x57946c046CFb51cE30586b54Dd150ca32fB7c012'; // Bridge version 1.3
 
 // real function - START - TODO
 function truncateDecimal(number, precision) {
@@ -377,6 +378,7 @@ async function approveToken(
     if (l1_bridge_address) {
       contractAddress = l1_bridge_address;
     }
+    console.log('🚀 approveToken ~ contractAddress:', contractAddress);
     const provider = new JsonRpcProvider(rpc);
     const contract = new Contract(address, ERC20ABI, provider);
     if (!approveAmount) {
@@ -406,7 +408,7 @@ function getChainByChainName(chain_name) {
 function getToken(tokenAddress, list) {
   return list?.find(item => item.address === tokenAddress) || null;
 }
-async function bridgeSend(
+async function bridgeSend({
   inputFromSelect,
   inputToSelect,
   account,
@@ -419,8 +421,10 @@ async function bridgeSend(
   nonce,
   is_pegged,
   cbridge_token_vault,
-  cbridge_peg
-) {
+  cbridge_peg,
+  route_org_token,
+  route_pegged_token,
+}) {
   try {
     const chainFrom: any = getChain(inputFromSelect.chainId);
     const tokenInputFrom = getToken(
@@ -435,6 +439,7 @@ async function bridgeSend(
     console.log('Submit Button-> is_pegged', is_pegged);
     console.log('Submit Button-> cbridge_token_vault', cbridge_token_vault);
     console.log('Submit Button-> cbridge_peg', cbridge_peg);
+    console.log('Submit Button-> route_org_token', route_org_token);
     let rs: any = null;
     if (oasys_bridge_type === 'external_to_oasys') {
       // native case => oasys -> NOT NOW
@@ -442,29 +447,40 @@ async function bridgeSend(
       // TODO 2024/09/11
       console.log(`external ${inputFromSelect.chainId} to oasys`);
       if (is_pegged && cbridge_token_vault) {
-        // call new contract deposit 
-        console.log(`is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`);
+        // call new contract deposit
+        console.log(
+          `is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`
+        );
+        console.log('🚀 ~ route_org_token:', route_org_token);
+        console.log('🚀 ~ tokenInputFrom?.address:', tokenInputFrom?.address);
+        let srcTokenAddress = l1_bridge_address; // from initMinAmountRoute
+        if (route_org_token) {
+          srcTokenAddress = route_org_token;
+        } else {
+          srcTokenAddress = tokenInputFrom?.address;
+        }
+        console.log('🚀 ~ srcTokenAddress:', srcTokenAddress);
         const params = {
-          contractAddress: chainFrom?.bridgeContract, // contract token
+          contractAddress: cbridge_token_vault, // contract token
           contractProvider: provider, // contract provider
           account,
           srcTokenDecimal: tokenInputFrom?.decimals,
           value: inputFromSelect?.amount, // amount
           vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
-          srcTokenAddress: tokenInputFrom?.address,
+          srcTokenAddress: srcTokenAddress,
           desChainId: 248, // to OASYS
           signer,
           slippage: 50000,
           abi: CBRIDGE_TOKEN_VAULT_ABI,
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
-          nonce
+          nonce,
         };
         rs = await bridgeService.tokenVaultDeposit(params);
-
-      } { 
-         console.log(`is_pegged=${is_pegged})=> call old function`);
-         const params = {
+      }
+      {
+        console.log(`is_pegged=${is_pegged})=> call old function`);
+        const params = {
           contractAddress: chainFrom?.bridgeContract, // contract token
           contractProvider: provider, // contract provider
           account,
@@ -482,7 +498,6 @@ async function bridgeSend(
         };
         rs = await bridgeService.bridgeSend(params);
       }
-     
     } else if (oasys_bridge_type === 'oasys_to_external') {
       if (tokenInputFrom.symbol === 'OAS') {
         // native case OAS
@@ -490,35 +505,52 @@ async function bridgeSend(
       } else {
         // token case
         // TODO 2024/09/11
-        console.log(`oasys ${inputFromSelect.chainId} to external ${inputToSelect.chainId}`);
+        console.log(
+          `oasys ${inputFromSelect.chainId} to external ${inputToSelect.chainId}`
+        );
         if (is_pegged) {
-            console.log(`is_pegged=${is_pegged})=> call burn function from ${cbridge_peg}`);
-            const params = {
-              contractAddress: cbridge_peg, // contract token
-              contractProvider: provider, // contract provider
-              account,
-              srcTokenDecimal: tokenInputFrom?.decimals,
-              value: inputFromSelect?.amount, // amount
-              vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
-              srcTokenAddress: tokenInputFrom?.address,
-              desChainId: 248, // to OASYS
-              signer,
-              slippage: 50000, // not use
-              abi: CBRIDGE_PEG_ABI,
-              gasPrice: chainFrom?.gasPrice,
-              isEstimate,
-              nonce
-            };
-            rs = await bridgeService.burn(params);
-        } else { 
-           console.log(`is_pegged=${is_pegged})=> call old function `);
-           const params = {
+          console.log(
+            `is_pegged=${is_pegged})=> call burn function from ${cbridge_peg}`
+          );
+          console.log('🚀 ~ route_pegged_token:', route_pegged_token);
+          console.log('🚀 ~ tokenInputFrom?.address:', tokenInputFrom?.address);
+          let srcTokenAddress = l1_bridge_address; // from initMinAmountRoute
+          if (route_pegged_token) {
+            srcTokenAddress = route_pegged_token;
+          } else {
+            srcTokenAddress = tokenInputFrom?.address;
+          }
+          console.log('🚀 ~ srcTokenAddress:', srcTokenAddress);
+          const params = {
+            contractAddress: cbridge_peg, // contract token
+            contractProvider: provider, // contract provider
+            account,
+            srcTokenDecimal: tokenInputFrom?.decimals,
+            value: inputFromSelect?.amount, // amount
+            vBridgeAddress: anotherWalletAddress
+              ? anotherWalletAddress
+              : account, // receiver address
+            srcTokenAddress: srcTokenAddress,
+            desChainId: chainTo?.chain_id_decimals,
+            signer,
+            slippage: 50000, // not use
+            abi: CBRIDGE_PEG_ABI,
+            gasPrice: chainFrom?.gasPrice,
+            isEstimate,
+            nonce,
+          };
+          rs = await bridgeService.burn(params);
+        } else {
+          console.log(`is_pegged=${is_pegged})=> call old function `);
+          const params = {
             contractAddress: l1_bridge_address, // contract token
             contractProvider: provider, // contract provider
             account,
             srcTokenDecimal: tokenInputFrom?.decimals,
             value: inputFromSelect?.amount, // amount
-            vBridgeAddress: anotherWalletAddress ? anotherWalletAddress : account, // receiver address
+            vBridgeAddress: anotherWalletAddress
+              ? anotherWalletAddress
+              : account, // receiver address
             srcTokenAddress: tokenInputFrom?.address,
             desChainId: chainTo?.chain_id_decimals,
             signer,
@@ -530,7 +562,6 @@ async function bridgeSend(
           };
           rs = await bridgeService.bridgeSend(params);
         }
-       
       }
     } else if (oasys_bridge_type === 'verse_to_oasys') {
       // verse => oasys
@@ -596,28 +627,42 @@ async function bridgeSend(
         } else {
           // chainTo.type === 'verse-chain'
           // external-chain => verse-chain
-         // TODO 2024/09/11
-          console.log(`external ${inputFromSelect.chainId} to verse ${inputToSelect.chainId}`);
-           if (is_pegged && cbridge_token_vault) {
-             // call new contract deposit 
-              console.log(`is_pegged=${is_pegged})=> call deposit function from ${cbridge_token_vault}`);
-              const params = {
-                contractAddress: cbridge_token_vault, // contract token
-                contractProvider: provider, // contract provider
-                account,
-                srcTokenDecimal: tokenInputFrom?.decimals,
-                value: inputFromSelect?.amount, // amount
-                vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS, // receiver address
-                srcTokenAddress: tokenInputFrom?.address,
-                desChainId: 248, // to OASYS
-                signer,
-                slippage: 50000,
-                abi: CBRIDGE_TOKEN_VAULT_ABI,
-                gasPrice: chainFrom?.gasPrice,
-                isEstimate,
-                nonce
-              };
-              rs = await bridgeService.tokenVaultDeposit(params);
+          // TODO 2024/09/11
+          console.log(
+            `external ${inputFromSelect.chainId} to verse ${inputToSelect.chainId}`
+          );
+          if (is_pegged && cbridge_token_vault) {
+            // call new contract deposit
+            console.log('🚀 ~ route_org_token:', route_org_token);
+            console.log(
+              '🚀 ~ tokenInputFrom?.address:',
+              tokenInputFrom?.address
+            );
+            let srcTokenAddress = l1_bridge_address; // from initMinAmountRoute
+            if (route_org_token) {
+              srcTokenAddress = route_org_token;
+            } else {
+              srcTokenAddress = tokenInputFrom?.address;
+            }
+            console.log('🚀 ~ srcTokenAddress:', srcTokenAddress);
+
+            const params = {
+              contractAddress: cbridge_token_vault, // contract token
+              contractProvider: provider, // contract provider
+              account,
+              srcTokenDecimal: tokenInputFrom?.decimals,
+              value: inputFromSelect?.amount, // amount
+              vBridgeAddress: VBRIDGE_CONTRACT_ADDRESS, // receiver address
+              srcTokenAddress: srcTokenAddress,
+              desChainId: 248, // to OASYS
+              signer,
+              slippage: 50000,
+              abi: CBRIDGE_TOKEN_VAULT_ABI,
+              gasPrice: chainFrom?.gasPrice,
+              isEstimate,
+              nonce,
+            };
+            rs = await bridgeService.tokenVaultDeposit(params);
           } else {
             const params = {
               contractAddress: chainFrom?.bridgeContract, // contract token
@@ -637,7 +682,6 @@ async function bridgeSend(
             };
             rs = await bridgeService.bridgeSend(params);
           }
-        
         }
       } else {
         // chainFrom.type === 'verse-chain'
