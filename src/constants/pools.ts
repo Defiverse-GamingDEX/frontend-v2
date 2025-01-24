@@ -794,7 +794,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   },
   Factories: {
     '0x58e6f99bb65378f47a520fc9630bd711f2cf3dc7': 'composableStablePool', // ComposableStable V3
-    '0xab6bac0f5f4c7c166c5234b528a1cd46fbcb9f4b': 'weightedPool', // WeightedPool V3
+    '0xf6b5ff30ecdf0f6ae318d8787729b1aaf9ebdaea': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [
@@ -869,7 +869,7 @@ const POOLS_OASYS_TESTNET: Pools = {
   },
   Factories: {
     '0xfda8fa80dd77a99bf71becfce47077859e689898': 'composableStablePool', // ComposableStable V3
-    '0x900c1bc6a6915ed153c18763e4b8ae8133e839f1': 'weightedPool', // WeightedPool V3
+    '0xd2d7f457b9749b6a0a637685a65681f03116125c': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
