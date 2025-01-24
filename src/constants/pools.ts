@@ -794,7 +794,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   },
   Factories: {
     '0x58e6f99bb65378f47a520fc9630bd711f2cf3dc7': 'composableStablePool', // ComposableStable V3
-    '0xf6b5ff30ecdf0f6ae318d8787729b1aaf9ebdaea': 'weightedPool', // WeightedPool V3
+    '0x48494fa9ead46ee8e3fcb66487a6dbbd34dcafe3': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [
