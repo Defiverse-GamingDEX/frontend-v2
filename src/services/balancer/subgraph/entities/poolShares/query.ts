@@ -3,7 +3,7 @@ import { merge } from 'lodash';
 const defaultArgs = {
   first: 1000,
   where: {
-    balance_gt: 1e-6, // To exclude dust shares
+    //balance_gt: 1e-6, // To exclude dust shares
   },
 };
 
