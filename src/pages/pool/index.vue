@@ -40,13 +40,14 @@ const { networkSlug, networkConfig } = useNetwork();
 const isPaginated = computed(() => pools.value.length >= 10);
 
 const isCreatePool = computed(() => {
-  if (!adminAddress.value) {
-    return false;
-  }
-  if (adminAddress.value === account.value) {
-    return true;
-  }
-  return false;
+  // if (!adminAddress.value) {
+  //   return false;
+  // }
+  // if (adminAddress.value === account.value) {
+  //   return true;
+  // }
+  // return false;
+  return true;
 });
 
 const lastUpdated = async () => {

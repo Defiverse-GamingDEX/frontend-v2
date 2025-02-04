@@ -5,7 +5,7 @@ import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
 
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-const networks: any = [
+let networks: any = [
   // {
   //   id: 'ethereum',
   //   name: 'Ethereum',
@@ -98,26 +98,26 @@ const networks: any = [
 ];
 
 let networksDev = [
-  // {
-  //   id: 'defiverse-testnet',
-  //   name: 'DefiVerse-Testnet',
-  //   networkSlug: 'defiverse-testnet',
-  //   key: '17117',
-  //   tokens: defiverseTestnetJson.tokens,
-  //   price: 35000000000, // 50 Gwei
-  //   gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  // },
-  // {
-  //   id: 'oasys-testnet',
-  //   name: 'Oasys-Testnet',
-  //   networkSlug: 'oasys-testnet',
-  //   key: '9372',
-  //   tokens: oasysTestnetJson.tokens,
-  //   // price: 35000000000, // 50 Gwei
-  //   gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  // },
+  {
+    id: 'defiverse-testnet',
+    name: 'DefiVerse-Testnet',
+    networkSlug: 'defiverse-testnet',
+    key: '17117',
+    tokens: defiverseTestnetJson.tokens,
+    price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
+  {
+    id: 'oasys-testnet',
+    name: 'Oasys-Testnet',
+    networkSlug: 'oasys-testnet',
+    key: '9372',
+    tokens: oasysTestnetJson.tokens,
+    // price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
 ];
 
 // add network for bridge testnet
@@ -137,6 +137,7 @@ if (IS_TESTNET == true) {
     //   key: '43113',
     // },
   ];
+  networks = [];
 }
 
 export default {

@@ -7,9 +7,9 @@ const defaultArgs: GraphQLArgs = {
   orderBy: 'totalLiquidity',
   orderDirection: 'desc',
   where: {
-    totalShares: {
-      gt: 0.01,
-    },
+    // totalShares: {
+    //   gt: 0.01,
+    // },
     id: {
       not_in: POOLS.BlockList,
     },
