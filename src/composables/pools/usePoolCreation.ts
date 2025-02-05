@@ -27,10 +27,7 @@ import { PoolType } from '@defiverse/balancer-sdk';
 export const POOL_CREATION_STATE_VERSION = '1.0';
 export const POOL_CREATION_STATE_KEY = 'poolCreationState';
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-console.log(
-  '🚀 ~ import.meta.env.VITE_IS_TESTNET:',
-  import.meta.env.VITE_IS_TESTNET
-);
+
 export type PoolSeedToken = {
   tokenAddress: string;
   weight: number;
