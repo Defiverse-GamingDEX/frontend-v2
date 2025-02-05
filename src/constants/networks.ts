@@ -4,7 +4,7 @@ import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist
 import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
 
-const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
+const IS_TESTNET = false; // import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 let networks: any = [
   // {
   //   id: 'ethereum',
