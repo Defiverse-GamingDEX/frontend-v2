@@ -33,7 +33,7 @@ let NAV_LINKS_MAINNET = [
   //   goal_key: 'ClickNavBridge',
   // },
 ];
-if (isTestnet) {
+if (isTestnet == true) {
   NAV_LINKS_MAINNET = [
     ...NAV_LINKS_MAINNET,
     {
