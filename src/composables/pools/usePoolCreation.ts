@@ -584,7 +584,9 @@ export default function usePoolCreation() {
       // const address = await balancerService.pools.weighted.getAdminAddress(
       //   getProvider()
       // );
-      if (isTestnet) address = '0x68C297EDdd953961E81532202e48b048e459c7c3';
+      if (isTestnet == true) {
+        address = '0x68C297EDdd953961E81532202e48b048e459c7c3';
+      }
       console.log('🚀 ~ getAdminAddress ~ address:', address);
       return address;
     } catch (error) {
