@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import StakedPoolsTable from '@/components/contextual/pages/pools/StakedPoolsTable.vue';
 import UnstakedPoolsTable from '@/components/contextual/pages/pools/UnstakedPoolsTable.vue';
-import VeBalPoolTable from '@/components/contextual/pages/pools/VeBalPoolTable.vue';
+import SZManagementTable from '@/components/contextual/pages/pools/SZManagementTable.vue';
 import PortfolioPageHero from '@/components/heros/PortfolioPageHero.vue';
 import { useLock } from '@/composables/useLock';
 import { providerUserPools } from '@/providers/local/user-pools.provider';
@@ -32,11 +32,12 @@ const { lockPool, lock } = useLock();
         <BalStack vertical spacing="2xl">
           <UnstakedPoolsTable />
           <StakedPoolsTable />
-          <VeBalPoolTable
+          <!-- <VeBalPoolTable
             v-if="lockPool && Number(lock?.lockedAmount) > 0"
             :lock="lock"
             :lockPool="lockPool"
-          />
+          /> -->
+          <SZManagementTable />
         </BalStack>
       </BalStack>
     </div>

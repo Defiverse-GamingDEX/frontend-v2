@@ -20,8 +20,8 @@ let NAV_LINKS_MAINNET = [
   //   goal_key: 'ClickNavPortfolio',
   // },
   // {
-  //   text: 'veGDT',
-  //   path: 'vegdt',
+  //   text: 'sZ',
+  //   path: 'sZ',
   //   name_link: 'vebal',
   //   goal_key: 'ClickNavVebal',
   // },
@@ -49,8 +49,8 @@ if (isTestnet == true) {
       goal_key: 'ClickNavPortfolio',
     },
     {
-      text: 'veGDT',
-      path: 'vegdt',
+      text: 'sZ',
+      path: 'sZ',
       name_link: 'vebal',
       goal_key: 'ClickNavVebal',
     },

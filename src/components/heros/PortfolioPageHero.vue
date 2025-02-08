@@ -39,7 +39,7 @@ const totalVeBalLabel = computed((): string =>
 
 const isLoadingTotalValue = computed((): boolean => isLoadingPools.value);
 
-const veGDT_amount = computed(() => {
+const sZ_amount = computed(() => {
   return fNum2(lock?.value?.lockedAmount, FNumFormats.token);
 });
 </script>
@@ -77,7 +77,7 @@ const veGDT_amount = computed(() => {
               >{{ totalLockedValue }} {{ $t('veBAL.hero.tokens.veBAL') }}</span
             >
             <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span> -->
-            <span>{{ veGDT_amount }} {{ $t('veBAL.hero.tokens.veBAL') }}</span>
+            <span>{{ sZ_amount }} {{ $t('veBAL.hero.tokens.veBAL') }}</span>
           </div>
         </div>
       </template>

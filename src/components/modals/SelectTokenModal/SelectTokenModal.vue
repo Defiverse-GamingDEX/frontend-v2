@@ -118,7 +118,7 @@ const tokens = computed(() => {
       ETH
       USDT
       USDC
-      GDT (Gaming DEX Token)
+      Z (Gaming DEX Token)
       CCP
       bCCP
       MCHC
