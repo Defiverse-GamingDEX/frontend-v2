@@ -36,6 +36,7 @@ import TokenPills from './TokenPills/TokenPills.vue';
 import PoolWarningTooltip from '@/components/pool/PoolWarningTooltip.vue';
 import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
+import VerifiedIcon from '@/assets/images/pools/verified.png';
 
 /**
  * TYPES
@@ -314,16 +315,31 @@ function iconAddresses(pool: Pool) {
       </template>
       <template #poolNameCell="pool">
         <div v-if="!isLoading" class="flex items-center py-4 px-6">
-          <div v-if="POOLS.Metadata[pool.id]" class="text-left">
+          <div
+            v-if="POOLS.Metadata[pool.id]"
+            class="flex items-center text-left"
+          >
+            <img
+              v-if="pool.isVerified"
+              :src="VerifiedIcon"
+              alt="Verified Pool"
+              class="ml-1 w-4 h-4"
+            />
             {{ POOLS.Metadata[pool.id].name }}
           </div>
           <div v-else class="flex items-center">
-            <span class="mr-2 pool-name"> {{ pool.name }}</span>
-            <!-- <TokenPills
+            <img
+              v-if="pool.isVerified"
+              :src="VerifiedIcon"
+              alt="Verified Pool"
+              class="ml-1 w-4 h-4"
+            />
+            <span class="mr-2 pool-name">{{ pool.name }}</span>
+            <TokenPills
               :tokens="orderedPoolTokens(pool, pool.tokens)"
               :isStablePool="isStableLike(pool.poolType)"
               :selectedTokens="selectedTokens"
-            /> -->
+            />
           </div>
           <BalChip
             v-if="isLiquidityBootstrapping(pool.poolType)"
