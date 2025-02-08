@@ -6,10 +6,13 @@ import ZIcon from '@/assets/images/bridge/tokens/Z.png';
 import useDarkMode from '@/composables/useDarkMode';
 import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
+import RedeemModal from '@/components/modals/RedeemModal/RedeemModal.vue';
 
 const { t } = useI18n();
 
 const isLoading = ref(false);
+const showRedeemModal = ref(false);
+const selectedPool = ref();
 
 // Pagination
 const pagination = ref({
@@ -24,8 +27,8 @@ const data = [
     id: 'sz-token-1',
     name: 'sZ',
     myBalance: '$xxxx',
-    amountSZ: '100 sZ',
-    amountZ: '105 Z',
+    amountSZ: '100',
+    amountZ: '105',
     lockedDate: '5 Dec 2024',
     maturity: '4 Dec 2025',
     isVerified: true,
@@ -34,8 +37,8 @@ const data = [
     id: 'sz-token-2',
     name: 'sZ',
     myBalance: '$500',
-    amountSZ: '200 sZ',
-    amountZ: '210 Z',
+    amountSZ: '200',
+    amountZ: '210',
     lockedDate: '6 Dec 2024',
     maturity: '5 Dec 2025',
     isVerified: true,
@@ -44,8 +47,8 @@ const data = [
     id: 'sz-token-3',
     name: 'sZ',
     myBalance: '$750',
-    amountSZ: '300 sZ',
-    amountZ: '315 Z',
+    amountSZ: '300',
+    amountZ: '315',
     lockedDate: '7 Dec 2024',
     maturity: '6 Dec 2025',
     isVerified: true,
@@ -54,8 +57,8 @@ const data = [
     id: 'sz-token-4',
     name: 'sZ',
     myBalance: '$1000',
-    amountSZ: '400 sZ',
-    amountZ: '420 Z',
+    amountSZ: '400',
+    amountZ: '420',
     lockedDate: '8 Dec 2024',
     maturity: '7 Dec 2025',
     isVerified: true,
@@ -64,8 +67,8 @@ const data = [
     id: 'sz-token-5',
     name: 'sZ',
     myBalance: '$1250',
-    amountSZ: '500 sZ',
-    amountZ: '525 Z',
+    amountSZ: '500',
+    amountZ: '525',
     lockedDate: '9 Dec 2024',
     maturity: '8 Dec 2025',
     isVerified: true,
@@ -169,7 +172,11 @@ const handleRedeemAll = () => {
   console.log('Redeem All');
 };
 const handleRedeem = pool => {
-  console.log('Redeem', pool);
+  selectedPool.value = pool;
+  showRedeemModal.value = true;
+};
+const handleRedeemSubmit = ({ amount, pool }) => {
+  console.log('Redeem', { amount, pool });
 };
 </script>
 
@@ -235,6 +242,16 @@ const handleRedeem = pool => {
         :textColorClass="'text-white'"
       />
     </div>
+
+    <!-- Redeem Modal -->
+    <teleport to="#modal">
+      <RedeemModal
+        :show="showRedeemModal"
+        :pool="selectedPool"
+        @close="showRedeemModal = false"
+        @redeem="handleRedeemSubmit"
+      />
+    </teleport>
   </div>
 </template>
 
