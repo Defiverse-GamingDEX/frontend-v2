@@ -79,8 +79,6 @@ function changeTab(tab) {
 }
 // LIFE CYCLES
 onBeforeMount(async () => {
-  //TODO hide bridge temp 01/02/2025
-  router.push('/');
   adminAddress.value = await getAdminAddress();
   checkMisMatch();
   checkWhileList();
