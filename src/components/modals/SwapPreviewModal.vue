@@ -277,16 +277,23 @@ const poolSwapFees = computed(() => {
     .map(poolId => {
       const pool = pools.value.find(p => p.id === poolId);
       console.log('🚀 ~ poolSwapFees ~ pool:', pool);
+      console.log(
+        '🚀 ~ props.swapping.tokenInAmountInput.value:',
+        props.swapping.tokenInAmountInput.value
+      );
       if (!pool) return null;
+      const swapFeePercent = BigNumber(pool.swapFee)
+        .times(100)
+        .toFixed(2)
+        .toString();
+      const totalSwapFee = BigNumber(props.swapping.tokenInAmountInput.value)
+        .times(pool.swapFee)
+        .toString();
       return {
         id: pool.id,
-        totalSwapFee: parseFloat(
-          BigNumber(pool?.totalSwapFee || '0').toFixed(6)
-        ).toString(),
-        swapFeePercent: parseFloat(
-          BigNumber(pool.swapFee).times(100).toFixed(2)
-        ).toString(),
-        symbol: pool.symbol,
+        totalSwapFee: totalSwapFee,
+        swapFeePercent: swapFeePercent,
+        symbol: props.swapping.tokenIn.value.symbol,
       };
     })
     .filter(Boolean);
@@ -294,7 +301,6 @@ const poolSwapFees = computed(() => {
   return fees[0];
 });
 
-console.log('🚀 ~ poolSwapFees ~ poolSwapFees:', poolSwapFees);
 const wrapType = computed(() =>
   getWrapAction(
     props.swapping.tokenIn.value.address,
