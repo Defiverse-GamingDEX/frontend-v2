@@ -5,7 +5,7 @@ import fs from 'fs';
 import fetch from 'isomorphic-fetch';
 import path from 'path';
 
-import { TOKEN_LIST_MAP } from '@/constants/tokenlists';
+import { initializeTokenListMap } from '@/constants/tokenlists';
 import { POOLS } from '@/constants/voting-gauge-pools';
 import { VotingGauge } from '@/constants/voting-gauges';
 import { getPlatformId } from '@/services/coingecko/coingecko.service';
@@ -101,6 +101,7 @@ async function getAssetURIFromTokenlists(
   log(
     `getAssetURIFromTokenlists network: ${network} tokenAddress: ${tokenAddress}`
   );
+  const TOKEN_LIST_MAP = await initializeTokenListMap();
   const tokenListURIs = TOKEN_LIST_MAP[network.toString()];
   const allURIs = [
     ...Object.values(tokenListURIs.Balancer),
