@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { TOKEN_LIST_MAP } from '@/constants/tokenlists';
+import { initializeTokenListMap } from '@/constants/tokenlists';
 import { rpcProviderService } from '@/services/rpc-provider/rpc-provider.service';
 import { TokenList, TokenListMap } from '@/types/TokenList';
 
@@ -21,17 +21,23 @@ interface TokenListUris {
 }
 
 export default class TokenListService {
+  private tokenListMap: any | null = null;
   constructor(
     private readonly appNetwork = configService.network.key,
     private readonly provider = rpcProviderService.jsonProvider,
     private readonly ipfs = ipfsService
-  ) {}
-
+  ) {
+    this.initialize();
+  }
+  private async initialize() {
+    this.tokenListMap = await initializeTokenListMap();
+  }
   /**
    * Return all token list URIs for the app network in
    * a structured object.
    */
   public get uris(): TokenListUris {
+    const TOKEN_LIST_MAP = this.tokenListMap;
     const { Balancer, External } = TOKEN_LIST_MAP[this.appNetwork];
 
     const balancerLists = [Balancer.Default, Balancer.Vetted];
@@ -48,7 +54,28 @@ export default class TokenListService {
       External,
     };
   }
+  public async getUris(): Promise<TokenListUris> {
+    if (!this.tokenListMap) {
+      await this.initialize();
+    }
 
+    const TOKEN_LIST_MAP = this.tokenListMap;
+    const { Balancer, External } = TOKEN_LIST_MAP[this.appNetwork];
+
+    const balancerLists = [Balancer.Default, Balancer.Vetted];
+    const All = [...balancerLists, ...External];
+    const Approved = [Balancer.Default, ...External];
+
+    return {
+      All,
+      Balancer: {
+        All: balancerLists,
+        ...Balancer,
+      },
+      Approved,
+      External,
+    };
+  }
   /**
    * Fetch all token list json and return mapped to URI
    */

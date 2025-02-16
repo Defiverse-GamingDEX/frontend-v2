@@ -42,7 +42,7 @@
     "multicall": "0xc52dc4a7dad06BEAB9230D482AcBEcFFc3aB009B",
     "authorizer": "0xd16eb8Eb3453dFe4702222dD0F016aDa73b3829D",
     "vault": "0xfb6f8FEdE0Cb63674Ab964affB93D65a4a7D55eA",
-    "weightedPoolFactory": "0x5737600b98E7F1cf98dAca2a36bCa22C974370b0",
+    "weightedPoolFactory": "0x4EF0b4827cE3D5FEcBc2C6ab80Ee81dBF9631D37",
     "stablePoolFactory": "0x0A7A98c9553192755f22b282278f0FA26f4de742",
     "weth": "0x5200000000000000000000000000000000000001",
     "stMATIC": "",

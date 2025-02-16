@@ -47,6 +47,7 @@ type FeeController = 'self' | 'other';
 
 const emptyPoolCreationState = {
   name: '',
+  isEditName: false,
   seedTokens: [] as PoolSeedToken[],
   activeStep: 0,
   initialFee: '0.003',
@@ -60,6 +61,7 @@ const emptyPoolCreationState = {
   poolId: '' as string,
   poolAddress: '',
   symbol: '',
+  isEditSymbol: false,
   manuallySetToken: '' as string,
   autoOptimiseBalances: false,
   useNativeAsset: false,
@@ -402,7 +404,6 @@ export default function usePoolCreation() {
 
   function getPoolSymbol() {
     let valid = true;
-
     const tokenSymbols = poolCreationState.seedTokens.map(
       (token: PoolSeedToken) => {
         const weightRounded = Math.round(token.weight);
@@ -415,7 +416,6 @@ export default function usePoolCreation() {
           : '';
       }
     );
-
     return valid ? tokenSymbols.join('-') : '';
   }
 
@@ -430,6 +430,7 @@ export default function usePoolCreation() {
         poolCreationState.seedTokens,
         poolOwner.value
       );
+
       poolCreationState.createPoolTxHash = tx.hash;
       saveState();
 

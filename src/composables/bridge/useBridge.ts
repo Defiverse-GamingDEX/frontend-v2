@@ -8,6 +8,8 @@ import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
 import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
 import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
 import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
+import ZIcon from '@/assets/images/bridge/tokens/Z.png';
+import stOASIcon from '@/assets/images/bridge/tokens/stOAS.png';
 import bridgeService from '@/composables/bridge/bridge.services';
 import { BRIDGE_NETWORKS } from '@/constants/bridge/networks';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
@@ -81,6 +83,10 @@ function getTokenURL(tokenSymbol) {
       return gdtIcon;
     case 'CCP':
       return ccpIcon;
+    case 'stOAS':
+      return stOASIcon;
+    case 'Z':
+      return ZIcon;
     default:
       return ethIcon;
   }

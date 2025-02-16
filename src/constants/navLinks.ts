@@ -25,7 +25,6 @@ let NAV_LINKS_MAINNET = [
   //   name_link: 'vebal',
   //   goal_key: 'ClickNavVebal',
   // },
-
   {
     text: 'Bridge',
     path: 'bridge',
