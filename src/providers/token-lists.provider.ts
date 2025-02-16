@@ -16,7 +16,7 @@ import symbolKeys from '@/constants/symbol.keys';
 import { lsSet } from '@/lib/utils';
 import { tokenListService } from '@/services/token-list/token-list.service';
 import { TokenList, TokenListMap } from '@/types/TokenList';
-
+import { fetchTokenListsByChainId } from '@/constants/tokenlists';
 /** TYPES */
 export interface TokenListsState {
   activeListKeys: string[];
@@ -32,7 +32,6 @@ const { networkId } = useNetwork();
 const state: TokenListsState = reactive({
   activeListKeys: [uris?.value?.Balancer?.Default],
 });
-console.log('🚀 ~ state:', state);
 const allTokenLists = ref({});
 
 const tokensListPromise =
@@ -109,9 +108,20 @@ function isActiveList(uri: string): boolean {
 export const tokenListsProvider = () => {
   onBeforeMount(async () => {
     uris.value = await tokenListService.getUris();
-    const module = await tokensListPromise;
-    allTokenLists.value = module.default;
+    // const module = await tokensListPromise;
+    // console.log('🚀 ~ onBeforeMount ~ module:', module.default);
+    const tokensListRs = await fetchTokenListsByChainId(networkId.value);
+    const tokenListInfo = tokensListRs && tokensListRs[networkId.value];
+    let rs = {};
+    if (tokenListInfo) {
+      rs = {
+        [JSON.stringify(tokenListInfo)]: tokenListInfo,
+      };
+    }
+
+    allTokenLists.value = rs;
   });
+
   // Cập nhật `activeListKeys` khi `uris` có giá trị
   watchEffect(() => {
     if (uris.value) {

@@ -49,6 +49,17 @@ interface TokenListMapByNetwork {
 //     };
 //   }
 // }
+export const fetchTokenListsByChainId = async (chain_id: number) => {
+  try {
+    const response = await axios.get(
+      `${BASE_API_URL}/api/v1/tokens/search?chain_id=${chain_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching token lists:', error);
+    return null;
+  }
+};
 async function fetchTokenLists() {
   try {
     const oasysChainId = IS_TESTNET ? 9372 : 248;
