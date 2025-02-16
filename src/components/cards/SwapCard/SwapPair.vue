@@ -249,8 +249,8 @@ function mapDataTraderInfo(tokenTraderInfo, tokenInfo) {
     ...tokenTraderInfo,
     ...tokenInfo,
   };
-  rs.sellableAmount = bnum(tokenTraderInfo.getSellable)
-    .div(Math.pow(10, tokenInfo.decimals))
+  rs.sellableAmount = bnum(tokenTraderInfo?.getSellable)
+    .div(Math.pow(10, tokenInfo?.decimals))
     .toNumber();
   return rs;
 }
