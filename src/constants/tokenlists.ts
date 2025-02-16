@@ -2,7 +2,12 @@ import defiverseJson from './defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from './defiverse.testnet.listed.tokenlist.json';
 import oasysJson from './oasys.listed.tokenlist.json';
 import oasysTestnetJson from './oasys.testnet.listed.tokenlist.json';
-
+import axios from 'axios';
+const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
+//const chain_ids = IS_TESTNET ? '9372,17117' : '248,16116';
+const BASE_API_URL = IS_TESTNET
+  ? 'https://price-api-testnet.gaming-dex.com'
+  : 'https://price-api.gaming-dex.com';
 export interface TokenListMap {
   Balancer: {
     Default: string;
@@ -15,52 +20,66 @@ interface TokenListMapByNetwork {
   [networkKey: string]: TokenListMap;
 }
 
-// Hàm để fetch JSON từ API
+// async function fetchTokenLists() {
+//   try {
+//     const oasysChainId = IS_TESTNET ? 9372 : 248;
+//     const defiverseChainId = IS_TESTNET ? 17117 : 16116;
+//     const [oasysResponse, defiverseResponse] = await Promise.all([
+//       axios.get(
+//         `${BASE_API_URL}/api/v1/tokens/search?chain_id=${oasysChainId}`
+//       ),
+//       axios.get(
+//         `${BASE_API_URL}/api/v1/tokens/search?chain_id=${defiverseChainId}`
+//       ),
+//     ]);
+
+//     const oasysJsonFromApi = await oasysResponse.data;
+//     const defiverseJsonFromApi = await defiverseResponse.data;
+
+//     return {
+//       oasysJsonBE: oasysJsonFromApi,
+//       defiverseJsonBE: defiverseJsonFromApi,
+//     };
+//   } catch (error) {
+//     console.error('Error fetching token lists:', error);
+
+//     return {
+//       oasysJson,
+//       defiverseJson,
+//     };
+//   }
+// }
 async function fetchTokenLists() {
-  console.log('🚀 ~ fetchTokenLists ~ fetchTokenLists:', fetchTokenLists);
   try {
-    const [defiverseResponse, defiverseTestnetResponse] = await Promise.all([
-      fetch(
-        'https://moccasin-raw-lemming-987.mypinata.cloud/ipfs/bafkreicdvv7s2ret62ssob4twrcqkbooww2je4hspjos3uken77emjrjla'
-      ),
-      fetch(
-        'https://moccasin-raw-lemming-987.mypinata.cloud/ipfs/bafkreieopw3gng3r7ydxsr4a27ki7inen32to6vinrlho65oiemiwb45eu'
+    const oasysChainId = IS_TESTNET ? 9372 : 248;
+    const defiverseChainId = IS_TESTNET ? 17117 : 16116;
+    const [response] = await Promise.all([
+      axios.get(
+        `${BASE_API_URL}/api/v1/tokens/search?chain_id=${oasysChainId},${defiverseChainId}`
       ),
     ]);
 
-    const defiverseJsonFromApi = await defiverseResponse.json();
-    console.log(
-      '🚀 ~ fetchTokenLists ~ defiverseJsonFromApi:',
-      defiverseJsonFromApi
-    );
-    const defiverseTestnetJsonFromApi = await defiverseTestnetResponse.json();
-    console.log(
-      '🚀 ~ fetchTokenLists ~ defiverseTestnetJsonFromApi:',
-      defiverseTestnetJsonFromApi
-    );
+    const jsonFromApi = await response.data;
+    const oasysJsonFromApi = jsonFromApi[oasysChainId];
+    const defiverseJsonFromApi = jsonFromApi[defiverseChainId];
 
-    // Cập nhật TOKEN_LIST_MAP với dữ liệu từ API
     return {
-      defiverseJson: defiverseJsonFromApi,
-      defiverseTestnetJson: defiverseTestnetJsonFromApi,
+      oasysJsonBE: oasysJsonFromApi,
+      defiverseJsonBE: defiverseJsonFromApi,
     };
   } catch (error) {
     console.error('Error fetching token lists:', error);
-    // Fallback về JSON local nếu API fail
+
     return {
+      oasysJson,
       defiverseJson,
-      defiverseTestnetJson,
     };
   }
 }
-
-// Khởi tạo TOKEN_LIST_MAP với promise
+// init TOKEN_LIST_MAP
 export const initializeTokenListMap = async () => {
-  const {
-    defiverseJson: fetchedDefiverse,
-    defiverseTestnetJson: fetchedDefiverseTestnet,
-  } = await fetchTokenLists();
-
+  const { oasysJsonBE: oasysJsonBE, defiverseJsonBE: defiverseJsonBE } =
+    await fetchTokenLists();
   return {
     '1': {
       Balancer: {
@@ -112,72 +131,72 @@ export const initializeTokenListMap = async () => {
     },
     '16116': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverse),
-        Vetted: JSON.stringify(fetchedDefiverse),
+        Default: JSON.stringify(defiverseJsonBE),
+        Vetted: JSON.stringify(defiverseJsonBE),
       },
       External: [],
     },
     '17117': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet),
-        Vetted: JSON.stringify(fetchedDefiverseTestnet),
+        Default: JSON.stringify(defiverseJsonBE),
+        Vetted: JSON.stringify(defiverseJsonBE),
       },
       External: [],
     },
     '248': {
       Balancer: {
-        Default: JSON.stringify(oasysJson),
-        Vetted: JSON.stringify(oasysJson),
+        Default: JSON.stringify(oasysJsonBE),
+        Vetted: JSON.stringify(oasysJsonBE),
       },
       External: [],
     },
     '9372': {
       Balancer: {
-        Default: JSON.stringify(oasysTestnetJson),
-        Vetted: JSON.stringify(oasysTestnetJson),
+        Default: JSON.stringify(oasysJsonBE),
+        Vetted: JSON.stringify(oasysJsonBE),
       },
       External: [],
     },
     // just add for Bridge network
     '29548': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
-        Vetted: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
+        Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+        Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
       },
       External: [],
     },
     '2400': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
-        Vetted: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
+        Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+        Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
       },
       External: [],
     },
     '19011': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
-        Vetted: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
+        Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+        Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
       },
       External: [],
     },
     '5555': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
-        Vetted: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
+        Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+        Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
       },
       External: [],
     },
     '7225878': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
-        Vetted: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
+        Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+        Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
       },
       External: [],
     },
     '43113': {
       Balancer: {
-        Default: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
-        Vetted: JSON.stringify(fetchedDefiverseTestnet), //TODO NOT USE
+        Default: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
+        Vetted: JSON.stringify(defiverseTestnetJson), //TODO NOT USE
       },
       External: [],
     },

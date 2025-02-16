@@ -14,6 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 
 async function generate() {
   const TOKEN_LIST_MAP = await initializeTokenListMap();
+  console.log('🚀 ~ generate ~ TOKEN_LIST_MAP:', TOKEN_LIST_MAP);
   Object.keys(TOKEN_LIST_MAP).forEach(async networkId => {
     console.log(`Generating tokenlist for network ${networkId}...`);
     const tokenListService = new TokenListService(networkId);
