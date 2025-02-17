@@ -59,6 +59,18 @@ const state: ComponentState = reactive({
  */
 const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
   useTokenLists();
+const tokenListArray = Object.entries(activeTokenLists.value) || [];
+const _token_list_origin = ref(
+  tokenListArray
+    ? tokenListArray.length > 0
+      ? tokenListArray[0]
+        ? tokenListArray[0].length >= 2
+          ? tokenListArray[0][1].tokens
+          : []
+        : []
+      : []
+    : []
+);
 
 const {
   getToken,
@@ -179,10 +191,12 @@ function filterNativeToken(tokens) {
 
     //
     // TODO: Need to load token list by chain
-    let tokensByChain = tokensUtils.getTokenListFromNetworkId(
-      configService?.network.chainId
-    );
-    let tokenNative = tokensByChain.findIndex(
+    // let tokensByChain = tokensUtils.getTokenListFromNetworkId(
+    //   configService?.network.chainId
+    // );
+    let tokensByChain = _token_list_origin.value || [];
+
+    let tokenNative = tokensByChain?.findIndex(
       item =>
         item.address?.toUpperCase() === token?.address.toUpperCase() ||
         token?.name === 'OASYS'
