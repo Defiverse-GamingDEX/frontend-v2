@@ -127,7 +127,8 @@ const tokens = computed(() => {
   // if (props.ignoreBalances) return tokensWithValues;
   // else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
 
-  return filterNativeToken(tokensWithValues);
+  //return filterNativeToken(tokensWithValues);
+  return tokensWithValues;
 });
 
 const excludedTokens = computed(() => [
