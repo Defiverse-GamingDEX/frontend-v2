@@ -16,20 +16,21 @@ import symbolKeys from '@/constants/symbol.keys';
 import { lsSet } from '@/lib/utils';
 import { tokenListService } from '@/services/token-list/token-list.service';
 import { TokenList, TokenListMap } from '@/types/TokenList';
-
+import { fetchTokenListsByChainId } from '@/constants/tokenlists';
 /** TYPES */
 export interface TokenListsState {
   activeListKeys: string[];
 }
 
-const { uris } = tokenListService;
+//const { uris } = tokenListService;
+const uris = ref<any | null>(null);
 const { networkId } = useNetwork();
 
 /**
  * STATE
  */
 const state: TokenListsState = reactive({
-  activeListKeys: [uris.Balancer.Default],
+  activeListKeys: [uris?.value?.Balancer?.Default],
 });
 const allTokenLists = ref({});
 
@@ -52,21 +53,21 @@ const activeTokenLists = computed((): TokenListMap => {
  * The default Balancer token list.
  */
 const defaultTokenList = computed(
-  (): TokenList => allTokenLists.value[uris.Balancer.Default]
+  (): TokenList => allTokenLists.value[uris.value.Balancer.Default]
 );
 
 /**
  * The Balancer vetted token list, contains LBP tokens.
  */
 const vettedTokenList = computed(
-  (): TokenList => allTokenLists.value[uris.Balancer.Vetted]
+  (): TokenList => allTokenLists.value[uris.value.Balancer.Vetted]
 );
 
 /**
  * All Balancer token lists mapped by URI.
  */
 const balancerTokenLists = computed(
-  (): TokenListMap => pick(allTokenLists.value, uris.Balancer.All)
+  (): TokenListMap => pick(allTokenLists.value, uris.value.Balancer.All)
 );
 
 /**
@@ -75,7 +76,7 @@ const balancerTokenLists = computed(
  * This excludes lists like the Balancer vetted list.
  */
 const approvedTokenLists = computed(
-  (): TokenListMap => pick(allTokenLists.value, uris.Approved)
+  (): TokenListMap => pick(allTokenLists.value, uris.value.Approved)
 );
 
 /**
@@ -83,7 +84,7 @@ const approvedTokenLists = computed(
  * makes additonal tokens available in the token search modal.
  */
 function toggleTokenList(uri: string): void {
-  if (!uris.Approved.includes(uri)) return;
+  if (!uris.value.Approved.includes(uri)) return;
 
   if (state.activeListKeys.includes(uri)) {
     // Deactivate token list
@@ -106,10 +107,27 @@ function isActiveList(uri: string): boolean {
 
 export const tokenListsProvider = () => {
   onBeforeMount(async () => {
-    const module = await tokensListPromise;
-    allTokenLists.value = module.default;
+    uris.value = await tokenListService.getUris();
+    // const module = await tokensListPromise;
+    // console.log('🚀 ~ onBeforeMount ~ module:', module.default);
+    const tokensListRs = await fetchTokenListsByChainId(networkId.value);
+    const tokenListInfo = tokensListRs && tokensListRs[networkId.value];
+    let rs = {};
+    if (tokenListInfo) {
+      rs = {
+        [JSON.stringify(tokenListInfo)]: tokenListInfo,
+      };
+    }
+
+    allTokenLists.value = rs;
   });
 
+  // Cập nhật `activeListKeys` khi `uris` có giá trị
+  watchEffect(() => {
+    if (uris.value) {
+      state.activeListKeys = [uris?.value?.Balancer?.Default];
+    }
+  });
   return {
     // state
     ...toRefs(state),
