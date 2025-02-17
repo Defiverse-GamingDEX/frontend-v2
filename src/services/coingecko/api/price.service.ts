@@ -159,7 +159,7 @@ export class PriceService {
       addresses.forEach(address => {
         const endpoint = `/coins/${
           this.platformId
-        }/contract/${address.toLowerCase()}/market_chart/range?vs_currency=${
+        }/contract/${address?.toLowerCase()}/market_chart/range?vs_currency=${
           this.fiatParam
         }&from=${start}&to=${end}`;
         const request = retryPromiseWithDelay(
@@ -246,9 +246,15 @@ export class PriceService {
    * Map address to mainnet address if app network is a testnet
    */
   public addressMapIn(address: string): string {
-    const addressMap = TOKENS?.PriceChainMap;
-    if (!addressMap) return address;
-    return getAddress(addressMap[address.toLowerCase()] || address);
+    try {
+      const addressMap = TOKENS?.PriceChainMap;
+      if (!addressMap) return address;
+      const rs = getAddress(addressMap[address?.toLowerCase()] || address);
+      return rs;
+    } catch (error) {
+      console.error('Unable to map address', address, error);
+      return address;
+    }
   }
 
   /**
