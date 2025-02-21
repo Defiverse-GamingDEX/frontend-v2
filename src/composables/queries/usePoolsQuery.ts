@@ -195,7 +195,7 @@ export default function usePoolsQuery(
       fetchArgs.first = filterOptions?.pageSize || POOLS.Pagination.PerPage;
     }
     if (pageParam && pageParam > 0) {
-      fetchArgs.skip = pageParam;
+      fetchArgs.skip = pageParam * POOLS.Pagination.PerPage;
     }
     return fetchArgs;
   }
@@ -209,12 +209,16 @@ export default function usePoolsQuery(
   watch(
     () => [filterTokens.value, poolsSortField?.value, filterOptions?.value],
     async (newValues, oldValues) => {
+      console.log('🚀 ~ filterOptions?.value:', filterOptions?.value);
       if (filterOptions?.value) {
         currentFilterOptions.value = filterOptions.value;
         isReady.value = true;
 
         try {
-          poolsRepository = initializePoolsRepository();
+          if (!poolsRepository) {
+            poolsRepository = initializePoolsRepository();
+          }
+
           await nextTick();
           const result = await queryFn({ pageParam: 0 });
           currentData.value = result; // Lưu kết quả mới
@@ -238,6 +242,22 @@ export default function usePoolsQuery(
   );
 
   const queryFn = async ({ pageParam = 0 }) => {
+    // Nếu là merge (pageParam > 0),
+    if (pageParam > 0) {
+      isReady.value = true;
+    } else {
+      // Nếu là filter reset data
+      if (query.data?.value) {
+        // Instead of directly modifying query.data, use query methods
+        await query.remove.value();
+        await nextTick();
+        // Force a fresh fetch
+        await query.refetch.value({
+          refetchPage: (page, index) => index === 0,
+        });
+      }
+    }
+
     if (!isReady.value) {
       const savedPools = poolsStoreService.pools.value;
       return { pools: savedPools || [], skip: 0 };
@@ -276,7 +296,9 @@ export default function usePoolsQuery(
 
   const infiniteQueryOptions: UseInfiniteQueryOptions<PoolsQueryResponse> = {
     ...options,
-    getNextPageParam: (lastPage: PoolsQueryResponse) => lastPage.skip,
+    getNextPageParam: (lastPage: PoolsQueryResponse) => {
+      return lastPage.skip / POOLS.Pagination.PerPage + 1;
+    },
     onSuccess: data => {
       // Cập nhật currentData khi có data mới
       if (data.pages?.length) {

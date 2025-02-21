@@ -48,6 +48,7 @@ const {
   pools: rawPools,
   isLoading,
   poolsIsFetchingNextPage,
+  poolsHasNextPage,
   loadMorePools,
 } = usePools(selectedTokens, poolsSortField, filterOptions);
 
@@ -58,7 +59,7 @@ const pools = computed(() => {
 const { upToMediumBreakpoint } = useBreakpoints();
 const { networkSlug, networkConfig } = useNetwork();
 
-const isPaginated = computed(() => pools.value.length >= 10);
+const isPaginated = computed(() => poolsHasNextPage?.value);
 
 const isCreatePool = computed(() => {
   // if (!adminAddress.value) {

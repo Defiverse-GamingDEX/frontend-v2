@@ -32,15 +32,20 @@ export default function usePools(
    * COMPUTED
    */
   const pools = computed<Pool[]>(() => {
-    if (poolsQuery.currentData?.value?.pools) {
-      return poolsQuery.currentData.value.pools;
+    const allPages = poolsQuery?.data?.value?.pages || [];
+    if (allPages.length === 1) {
+      console.log('🚀 ~ filter case');
+      return poolsQuery.currentData?.value?.pools || [];
     }
+    // merge case
+    // Lấy tất cả pools từ tất cả pages và merge lại
 
-    const paginatedPools = poolsQuery?.data?.value;
-    console.log('🚀 ~ paginatedPools:', paginatedPools);
-    return paginatedPools
-      ? flatten(paginatedPools.pages.map(page => page.pools))
-      : [];
+    console.log('🚀 ~ merge case:', allPages);
+
+    // Merge tất cả pools từ các pages
+    return allPages.reduce((acc, page) => {
+      return [...acc, ...(page.pools || [])];
+    }, [] as Pool[]);
   });
   console.log('🚀 ~ pools:', pools);
   const isLoading = computed(() => isQueryLoading(poolsQuery));
