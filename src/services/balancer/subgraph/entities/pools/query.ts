@@ -2,6 +2,7 @@ import { merge } from 'lodash';
 
 import { POOLS } from '@/constants/pools';
 import { GraphQLArgs } from '@defiverse/balancer-sdk';
+import { ownerAddress } from '@cowprotocol/contracts';
 
 const defaultArgs: GraphQLArgs = {
   first: 1000,

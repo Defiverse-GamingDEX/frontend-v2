@@ -6,18 +6,28 @@ import { isQueryLoading } from '@/composables/queries/useQueryHelpers';
 import { useTokens } from '@/providers/tokens.provider';
 import { Pool } from '@/services/pool/types';
 import { tokenTreeLeafs } from '../usePool';
+import { ownerAddress } from '@cowprotocol/contracts';
+import { GAMING_DEX_OWNER_ADDRESS } from '@/constants/pools';
 
 export default function usePools(
   filterTokens: Ref<string[]> = ref([]),
-  poolsSortField: Ref<string>
+  poolsSortField: Ref<string>,
+  filterOptions:
+    | ComputedRef<{
+        isVerified: boolean;
+        isPermissionless: boolean;
+        isYukichi: boolean;
+      }>
+    | any = {}
 ) {
   /**
    * COMPOSABLES
    */
+
   const poolsQuery = usePoolsQuery(
     filterTokens,
     undefined,
-    undefined,
+    filterOptions,
     poolsSortField
   );
 
@@ -27,7 +37,7 @@ export default function usePools(
    * COMPUTED
    */
   const pools = computed<Pool[]>(() => {
-    const paginatedPools = poolsQuery.data.value;
+    const paginatedPools = poolsQuery?.data?.value;
 
     return paginatedPools
       ? flatten(paginatedPools.pages.map(page => page.pools))

@@ -1,11 +1,9 @@
 import { UseInfiniteQueryOptions } from 'react-query/types';
-import { Ref, ref, watch } from 'vue';
+import { Ref, ref, watch, nextTick } from 'vue';
 import { useInfiniteQuery } from 'vue-query';
-
-import { POOLS } from '@/constants/pools';
+import { POOLS, GAMING_DEX_OWNER_ADDRESS } from '@/constants/pools';
 import QUERY_KEYS from '@/constants/queryKeys';
 import { Pool } from '@/services/pool/types';
-
 import { isBalancerApiDefined } from '@/lib/utils/balancer/api';
 import { useTokens } from '@/providers/tokens.provider';
 import { balancerAPIService } from '@/services/balancer/api/balancer-api.service';
@@ -33,25 +31,24 @@ type FilterOptions = {
   poolAddresses?: Ref<string[]>;
   isExactTokensList?: boolean;
   pageSize?: number;
+  gamingDexOwnerAddress?: string;
+  isYukichi?: ComputedRef<boolean>;
+  isPermissionless?: ComputedRef<boolean>;
+  isVerified?: ComputedRef<boolean>;
 };
 
 export default function usePoolsQuery(
   filterTokens: Ref<string[]> = ref([]),
   options: UseInfiniteQueryOptions<PoolsQueryResponse> = {},
-  filterOptions?: FilterOptions,
+  filterOptions?: Ref<FilterOptions>,
   poolsSortField?: Ref<string>
 ) {
-  /**
-   * COMPOSABLES
-   */
+  const currentFilterOptions = ref(filterOptions);
   const { injectTokens, tokens: tokenMeta } = useTokens();
   const { networkId } = useNetwork();
-  let poolsRepository = initializePoolsRepository();
+  let poolsRepository: PoolsFallbackRepository | null = null;
 
-  /**
-   * METHODS
-   */
-
+  // Khởi tạo poolsRepository ngay lập tức
   function initializePoolsRepository(): PoolsFallbackRepository {
     const fallbackRepository = new PoolsFallbackRepository(
       buildRepositories(),
@@ -65,8 +62,7 @@ export default function usePoolsQuery(
   function initializeDecoratedAPIRepository() {
     return {
       fetch: async (options: PoolsRepositoryFetchOptions): Promise<Pool[]> => {
-        const pools = await balancerAPIService.pools.get(getQueryArgs(options));
-
+        const pools = await balancerAPIService.pools.get(getQueryArgs(params));
         const tokens = flatten(
           pools.map(pool => [
             ...pool.tokensList,
@@ -75,7 +71,6 @@ export default function usePoolsQuery(
           ])
         );
         injectTokens(tokens);
-
         return pools;
       },
       get skip(): number {
@@ -87,12 +82,11 @@ export default function usePoolsQuery(
   function initializeDecoratedSubgraphRepository() {
     return {
       fetch: async (options: PoolsRepositoryFetchOptions): Promise<Pool[]> => {
-        const pools = await balancerSubgraphService.pools.get(
-          getQueryArgs(options)
-        );
+        const params = getQueryArgs(options);
+        console.log('🚀 ~ fetch: ~ params:', params);
+        const pools = await balancerSubgraphService.pools.get(params);
         const poolDecorator = new PoolDecorator(pools);
         let decoratedPools = await poolDecorator.decorate(tokenMeta.value);
-
         const tokens = flatten(
           pools.map(pool => [
             ...pool.tokensList,
@@ -101,9 +95,7 @@ export default function usePoolsQuery(
           ])
         );
         await injectTokens(tokens);
-
         decoratedPools = await poolDecorator.reCalculateTotalLiquidities();
-
         return decoratedPools;
       },
       get skip(): number {
@@ -115,23 +107,34 @@ export default function usePoolsQuery(
   function buildRepositories() {
     const repositories: SDKPoolRepository[] = [];
     if (isBalancerApiDefined) {
-      const balancerApiRepository = initializeDecoratedAPIRepository();
-      repositories.push(balancerApiRepository);
+      repositories.push(initializeDecoratedAPIRepository());
     }
-    const subgraphRepository = initializeDecoratedSubgraphRepository();
-    repositories.push(subgraphRepository);
-
+    repositories.push(initializeDecoratedSubgraphRepository());
     return repositories;
   }
 
   function getQueryArgs(options: PoolsRepositoryFetchOptions): GraphQLArgs {
+    const isVerified = currentFilterOptions.value?.isVerified ?? false;
+    const isPermissionless =
+      currentFilterOptions.value?.isPermissionless ?? false;
+    const isYukichi = currentFilterOptions.value?.isYukichi ?? false;
+
+    console.log(
+      '🚀 ~ getQueryArgs ~  isVerified, isPermissionless, isYukichi:',
+      isVerified,
+      isPermissionless,
+      isYukichi
+    );
+
+    const gameDexOwnerAddress = GAMING_DEX_OWNER_ADDRESS;
+    const verifiedPools = POOLS.VerifiedPools || [];
     const tokensListFilterOperation = filterOptions?.isExactTokensList
       ? 'eq'
       : 'contains';
-
     const tokenListFormatted = filterTokens.value.map(address =>
       address.toLowerCase()
     );
+
     const queryArgs: GraphQLArgs = {
       chainId: configService.network.chainId,
       orderBy: poolsSortField?.value || 'totalLiquidity',
@@ -139,13 +142,27 @@ export default function usePoolsQuery(
       where: {
         tokensList: { [tokensListFilterOperation]: tokenListFormatted },
         poolType: { not_in: POOLS.ExcludedPoolTypes },
-        // totalShares: { gt: 0.0001 },
         id: { not_in: POOLS.BlockList },
       },
     };
-    if (queryArgs.where && filterOptions?.poolIds?.value) {
-      queryArgs.where.id = { in: filterOptions.poolIds.value };
+
+    if (queryArgs.where) {
+      if (isVerified && isPermissionless) {
+        delete queryArgs.where.id;
+      } else if (isVerified) {
+        queryArgs.where.id = { in: verifiedPools };
+      } else if (isPermissionless) {
+        queryArgs.where.id = { not_in: verifiedPools };
+      }
+
+      if (isYukichi) {
+        queryArgs.where.owner = { not_in: [gameDexOwnerAddress] };
+      }
     }
+
+    // if (queryArgs.where && filterOptions?.poolIds?.value) {
+    //   queryArgs.where.id = { in: filterOptions.poolIds.value };
+    // }
     if (queryArgs.where && filterOptions?.poolAddresses?.value) {
       queryArgs.where.address = { in: filterOptions.poolAddresses.value };
     }
@@ -155,39 +172,61 @@ export default function usePoolsQuery(
     if (options.skip) {
       queryArgs.skip = options.skip;
     }
+    if (queryArgs.where) {
+      if (isVerified && isPermissionless) {
+        delete queryArgs.where.id;
+      } else if (isVerified) {
+        queryArgs.where.id = { in: verifiedPools };
+      } else if (isPermissionless) {
+        queryArgs.where.id = { not_in: verifiedPools };
+      }
+
+      if (isYukichi) {
+        queryArgs.where.owner = { not_in: [gameDexOwnerAddress] };
+      }
+    }
+    console.log('🚀 ~ getQueryArgs ~ queryArgs:', queryArgs);
     return queryArgs;
   }
 
   function getFetchOptions(pageParam = 0): PoolsRepositoryFetchOptions {
     const fetchArgs: PoolsRepositoryFetchOptions = {};
-
-    // Don't use a limit if there is a token list because the limit is applied pre-filter
     if (!filterTokens.value.length) {
       fetchArgs.first = filterOptions?.pageSize || POOLS.Pagination.PerPage;
     }
-
     if (pageParam && pageParam > 0) {
       fetchArgs.skip = pageParam;
     }
-
     return fetchArgs;
   }
-
-  /**
-   *  When filterTokens changes, re-initialize the repositories as their queries
-   *  need to change to filter for those tokens
-   */
+  const isReady = ref(false);
+  // Đồng bộ hóa currentFilterOptions trước khi khởi tạo poolsRepository
   watch(
-    () => [filterTokens, poolsSortField],
-    () => {
-      poolsRepository = initializePoolsRepository();
+    () => [filterTokens.value, poolsSortField?.value, filterOptions?.value],
+    async (newValues, oldValues) => {
+      if (filterOptions?.value) {
+        currentFilterOptions.value = filterOptions.value;
+        console.log(
+          '🚀 ~ currentFilterOptions.value :',
+          currentFilterOptions.value
+        );
+        isReady.value = true;
+        try {
+          // Khởi tạo repository trước
+          poolsRepository = initializePoolsRepository();
+          await nextTick();
+          // Sau đó mới set isCalling và gọi query
+          await queryFn({ pageParam: 0 });
+          isReady.value = false;
+        } catch (e) {
+          console.error('Error fetching pools', e);
+          isReady.value = false;
+        }
+      }
     },
-    { deep: true }
+    { deep: true, immediate: true }
   );
 
-  /**
-   * QUERY KEY
-   */
   const queryKey = QUERY_KEYS.Pools.All(
     networkId,
     filterTokens,
@@ -196,29 +235,28 @@ export default function usePoolsQuery(
     filterOptions?.poolAddresses
   );
 
-  /**
-   * QUERY FUNCTION
-   */
   const queryFn = async ({ pageParam = 0 }) => {
+    if (!isReady.value) {
+      const savedPools = poolsStoreService.pools.value;
+      return { pools: savedPools || [], skip: 0 };
+    }
+    // Bỏ check isCalling ở đây
+    if (!poolsRepository) {
+      poolsRepository = initializePoolsRepository();
+    }
+
     const fetchOptions = getFetchOptions(pageParam);
     let skip = 0;
     try {
       const pools: Pool[] = await poolsRepository.fetch(fetchOptions);
-
-      skip = poolsRepository.currentProvider?.skip
-        ? poolsRepository.currentProvider.skip
-        : 0;
-
+      console.log('🚀 ~ queryFn ~ pools:', pools);
+      skip = poolsRepository.currentProvider?.skip || 0;
       poolsStoreService.setPools(pools);
-
-      return {
-        pools,
-        skip,
-      };
+      return { pools, skip };
     } catch (e) {
       const savedPools = poolsStoreService.pools.value;
       if (savedPools && savedPools.length > 0) {
-        return { pools: savedPools, skip };
+        return { pools: savedPools || [], skip };
       }
       throw e;
     }

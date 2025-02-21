@@ -82,6 +82,7 @@ export type Pools = {
   Metadata: Record<string, PoolMetadata>;
   DisabledJoins: string[];
   BrandedRedirect?: Record<string, string>;
+  VerifiedPools?: string[];
 };
 
 const POOLS_GOERLI: Pools = {
@@ -742,6 +743,9 @@ const POOLS_DEFIVERSE: Pools = {
   DisabledJoins: [
     // '0x2c2832dc1e613c4fe8cd58de3b89de1759fdf589000200000000000000000003',
   ],
+  VerifiedPools: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
 };
 
 const POOLS_DEFIVERSE_TESTNET: Pools = {
@@ -821,6 +825,9 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   },
   Metadata: {},
   DisabledJoins: [],
+  VerifiedPools: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
 };
 
 const POOLS_OASYS_TESTNET: Pools = {
@@ -876,6 +883,9 @@ const POOLS_OASYS_TESTNET: Pools = {
   },
   Metadata: {},
   DisabledJoins: [],
+  VerifiedPools: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
 };
 
 const POOLS_OASYS: Pools = {
@@ -933,6 +943,9 @@ const POOLS_OASYS: Pools = {
   },
   Metadata: {},
   DisabledJoins: [],
+  VerifiedPools: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
 };
 
 const POOLS_MAP = {
@@ -949,3 +962,5 @@ const POOLS_MAP = {
 export const POOLS: Pools = POOLS_MAP[networkId.value]
   ? POOLS_MAP[networkId.value]
   : POOLS_GENERIC;
+
+export const GAMING_DEX_OWNER_ADDRESS = `0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b`;
