@@ -108,6 +108,10 @@ function onYukichiChange(value: boolean) {
   filterState.isYukichi = value;
 }
 
+function loadMore() {
+  loadMorePools();
+}
+
 /**
  * LIFECYCLE
  */
@@ -219,7 +223,7 @@ onBeforeMount(async () => {
           :isPaginated="isPaginated"
           skeletonClass="pools-table-loading-height"
           @on-column-sort="onColumnSort"
-          @load-more="loadMorePools"
+          @load-more="loadMore"
         />
         <div v-if="isElementSupported" class="p-4 xl:p-0 mt-16">
           <FeaturedProtocols />

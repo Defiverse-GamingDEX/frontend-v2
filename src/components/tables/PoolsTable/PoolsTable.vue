@@ -314,7 +314,10 @@ function iconAddresses(pool: Pool) {
         </div>
       </template>
       <template #poolNameCell="pool">
-        <div v-if="!isLoading" class="flex items-center py-4 px-6">
+        <div
+          v-if="!isLoading"
+          class="flex justify-between items-center py-4 px-6"
+        >
           <div
             v-if="POOLS.Metadata[pool.id]"
             class="flex items-center text-left"
@@ -327,7 +330,7 @@ function iconAddresses(pool: Pool) {
             />
             {{ POOLS.Metadata[pool.id].name }}
           </div>
-          <div v-else class="flex items-center">
+          <div v-else class="flex justify-between items-center w-full">
             <img
               v-if="pool.isVerified"
               :src="VerifiedIcon"
@@ -336,6 +339,7 @@ function iconAddresses(pool: Pool) {
             />
             <span class="mr-2 pool-name">{{ pool.name }}</span>
             <TokenPills
+              class="pool-pills"
               :tokens="orderedPoolTokens(pool, pool.tokens)"
               :isStablePool="isStableLike(pool.poolType)"
               :selectedTokens="selectedTokens"
@@ -346,7 +350,7 @@ function iconAddresses(pool: Pool) {
             label="LBP"
             color="amber"
           />
-          <BalChipNew v-else-if="pool?.isNew" />
+          <BalChipNew v-else-if="pool?.isNew" class="ml-2" />
           <PoolWarningTooltip :pool="pool" />
         </div>
       </template>
@@ -421,3 +425,15 @@ function iconAddresses(pool: Pool) {
     </BalTable>
   </BalCard>
 </template>
+<style lang="scss" scoped>
+.pool-name {
+  max-width: 400px;
+  word-break: break-word;
+  text-align: left;
+}
+.pool-pills {
+  min-width: 180px;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+</style>

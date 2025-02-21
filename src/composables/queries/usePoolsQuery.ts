@@ -137,7 +137,8 @@ export default function usePoolsQuery(
 
     const queryArgs: GraphQLArgs = {
       chainId: configService.network.chainId,
-      orderBy: poolsSortField?.value || 'totalLiquidity',
+      //orderBy: poolsSortField?.value || 'totalLiquidity',
+      orderBy: 'totalLiquidity', // hard because volumne and apr not have in subgraph
       orderDirection: 'desc',
       where: {
         tokensList: { [tokensListFilterOperation]: tokenListFormatted },
@@ -196,38 +197,37 @@ export default function usePoolsQuery(
     }
     if (pageParam && pageParam > 0) {
       fetchArgs.skip = pageParam * POOLS.Pagination.PerPage;
+      console.log('🚀 ~ getFetchOptions ~  fetchArgs.skip:', fetchArgs.skip);
     }
     return fetchArgs;
   }
   const isReady = ref(false);
   const isInitialLoad = ref(true);
 
-  // Tạo ref để track query result
+  // Create ref to track result
   const currentData = ref<PoolsQueryResponse | null>(null);
 
-  // Đồng bộ hóa currentFilterOptions trước khi khởi tạo poolsRepository
   watch(
-    () => [filterTokens.value, poolsSortField?.value, filterOptions?.value],
+    () => [filterOptions?.value],
     async (newValues, oldValues) => {
       console.log('🚀 ~ filterOptions?.value:', filterOptions?.value);
-      if (filterOptions?.value) {
-        currentFilterOptions.value = filterOptions.value;
-        isReady.value = true;
 
-        try {
-          if (!poolsRepository) {
-            poolsRepository = initializePoolsRepository();
-          }
+      currentFilterOptions.value = filterOptions.value;
+      isReady.value = true;
 
-          await nextTick();
-          const result = await queryFn({ pageParam: 0 });
-          currentData.value = result; // Lưu kết quả mới
-          isInitialLoad.value = false;
-          isReady.value = false;
-        } catch (e) {
-          console.error('Error fetching pools', e);
-          isReady.value = false;
+      try {
+        if (!poolsRepository) {
+          poolsRepository = initializePoolsRepository();
         }
+
+        await nextTick();
+        const result = await queryFn({ pageParam: 0 });
+        currentData.value = result; // save result to current data
+        isInitialLoad.value = false;
+        isReady.value = false;
+      } catch (e) {
+        console.error('Error fetching pools', e);
+        isReady.value = false;
       }
     },
     { deep: true, immediate: true }
@@ -242,11 +242,12 @@ export default function usePoolsQuery(
   );
 
   const queryFn = async ({ pageParam = 0 }) => {
-    // Nếu là merge (pageParam > 0),
+    console.log('🚀 ~ queryFn ~ pageParam:', pageParam);
+    // if it is merge (pageParam > 0),
     if (pageParam > 0) {
       isReady.value = true;
     } else {
-      // Nếu là filter reset data
+      // if it is filter reset data
       if (query.data?.value) {
         // Instead of directly modifying query.data, use query methods
         await query.remove.value();
@@ -271,7 +272,7 @@ export default function usePoolsQuery(
     let skip = 0;
 
     try {
-      // Clear store trước khi fetch nếu không phải lần đầu
+      // Clear store before fetch first time
       if (!isInitialLoad.value) {
         await nextTick();
         poolsStoreService.setPools([]);
@@ -280,7 +281,8 @@ export default function usePoolsQuery(
       const pools: Pool[] = await poolsRepository.fetch(fetchOptions);
       console.log('🚀 ~ queryFn ~ pools:', pools);
 
-      skip = poolsRepository.currentProvider?.skip || 0;
+      skip = fetchOptions?.skip || 0;
+      console.log('🚀 ~ queryFn ~ skipReturn:', skip);
       await nextTick(); // Đợi Vue update DOM
       poolsStoreService.setPools(pools);
 
@@ -297,15 +299,20 @@ export default function usePoolsQuery(
   const infiniteQueryOptions: UseInfiniteQueryOptions<PoolsQueryResponse> = {
     ...options,
     getNextPageParam: (lastPage: PoolsQueryResponse) => {
+      console.log('🚀 ~ lastPage:', lastPage);
       return lastPage.skip / POOLS.Pagination.PerPage + 1;
     },
     onSuccess: data => {
-      // Cập nhật currentData khi có data mới
+      // update currentData
       if (data.pages?.length) {
         const latestPage = data.pages[data.pages.length - 1];
         currentData.value = latestPage;
       }
     },
+    // Add these options to control query behavior
+    refetchOnWindowFocus: false, // Prevent refetch when window gains focus
+    refetchOnMount: false, // Prevent refetch when component mounts
+    refetchOnReconnect: false, // Prevent refetch on reconnection
   };
 
   const query = useInfiniteQuery<PoolsQueryResponse>(

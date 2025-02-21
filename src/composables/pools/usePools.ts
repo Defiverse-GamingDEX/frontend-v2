@@ -38,36 +38,37 @@ export default function usePools(
       return poolsQuery.currentData?.value?.pools || [];
     }
     // merge case
-    // Lấy tất cả pools từ tất cả pages và merge lại
+    // get all pools and merge
 
     console.log('🚀 ~ merge case:', allPages);
 
-    // Merge tất cả pools từ các pages
-    return allPages.reduce((acc, page) => {
+    // merge all pools from pages
+    const poolsRs = allPages.reduce((acc, page) => {
       return [...acc, ...(page.pools || [])];
     }, [] as Pool[]);
+    console.log('🚀 ~ poolsRs:', poolsRs);
+    const poolList = poolsRs.map(pool => {
+      return {
+        id: pool.id,
+        name: pool.name,
+        address: pool.address,
+      };
+    });
+    console.log('🚀 ~ poolList:', poolList);
+    return poolsRs;
   });
-  console.log('🚀 ~ pools:', pools);
+
   const isLoading = computed(() => isQueryLoading(poolsQuery));
-  console.log(
-    '🚀 ~   poolsQuery?.data?.value?.pages',
-    poolsQuery?.data?.value?.pages
-  );
-  console.log(
-    '🚀 ~   poolsQuery?.data?.value?.pages[poolsQuery?.data?.value?.pages?.length - 1]:',
-    poolsQuery?.data?.value?.pages[poolsQuery?.data?.value?.pages?.length - 1]
-  );
+
   const poolsHasNextPage = computed(() => {
     const lastPage =
       poolsQuery?.data?.value?.pages?.[
         poolsQuery?.data?.value?.pages?.length - 1
       ];
-    console.log('🚀 ~ Last page:', lastPage);
 
     if (!lastPage) return false;
 
     const lastPagePools = lastPage.pools || [];
-    console.log('🚀 ~ Last page pools length:', lastPagePools.length);
 
     return pools.value.length > 0 && lastPagePools.length >= 10;
   });
