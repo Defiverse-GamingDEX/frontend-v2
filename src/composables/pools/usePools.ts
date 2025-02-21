@@ -49,8 +49,28 @@ export default function usePools(
   });
   console.log('🚀 ~ pools:', pools);
   const isLoading = computed(() => isQueryLoading(poolsQuery));
+  console.log(
+    '🚀 ~   poolsQuery?.data?.value?.pages',
+    poolsQuery?.data?.value?.pages
+  );
+  console.log(
+    '🚀 ~   poolsQuery?.data?.value?.pages[poolsQuery?.data?.value?.pages?.length - 1]:',
+    poolsQuery?.data?.value?.pages[poolsQuery?.data?.value?.pages?.length - 1]
+  );
+  const poolsHasNextPage = computed(() => {
+    const lastPage =
+      poolsQuery?.data?.value?.pages?.[
+        poolsQuery?.data?.value?.pages?.length - 1
+      ];
+    console.log('🚀 ~ Last page:', lastPage);
 
-  const poolsHasNextPage = computed(() => poolsQuery.hasNextPage?.value);
+    if (!lastPage) return false;
+
+    const lastPagePools = lastPage.pools || [];
+    console.log('🚀 ~ Last page pools length:', lastPagePools.length);
+
+    return pools.value.length > 0 && lastPagePools.length >= 10;
+  });
   const poolsIsFetchingNextPage = computed(
     () => poolsQuery.isFetchingNextPage?.value
   );
