@@ -12,13 +12,7 @@ import { GAMING_DEX_OWNER_ADDRESS } from '@/constants/pools';
 export default function usePools(
   filterTokens: Ref<string[]> = ref([]),
   poolsSortField: Ref<string>,
-  filterOptions:
-    | ComputedRef<{
-        isVerified: boolean;
-        isPermissionless: boolean;
-        isYukichi: boolean;
-      }>
-    | any = {}
+  filterOptions: ComputedRef<FilterOptions> | any = {}
 ) {
   /**
    * COMPOSABLES
@@ -30,6 +24,7 @@ export default function usePools(
     filterOptions,
     poolsSortField
   );
+  console.log('🚀 ~ poolsQuery:', poolsQuery);
 
   const { injectTokens } = useTokens();
 
@@ -37,13 +32,17 @@ export default function usePools(
    * COMPUTED
    */
   const pools = computed<Pool[]>(() => {
-    const paginatedPools = poolsQuery?.data?.value;
+    if (poolsQuery.currentData?.value?.pools) {
+      return poolsQuery.currentData.value.pools;
+    }
 
+    const paginatedPools = poolsQuery?.data?.value;
+    console.log('🚀 ~ paginatedPools:', paginatedPools);
     return paginatedPools
       ? flatten(paginatedPools.pages.map(page => page.pools))
       : [];
   });
-
+  console.log('🚀 ~ pools:', pools);
   const isLoading = computed(() => isQueryLoading(poolsQuery));
 
   const poolsHasNextPage = computed(() => poolsQuery.hasNextPage?.value);

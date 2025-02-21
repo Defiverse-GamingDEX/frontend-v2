@@ -200,23 +200,25 @@ export default function usePoolsQuery(
     return fetchArgs;
   }
   const isReady = ref(false);
+  const isInitialLoad = ref(true);
+
+  // Tạo ref để track query result
+  const currentData = ref<PoolsQueryResponse | null>(null);
+
   // Đồng bộ hóa currentFilterOptions trước khi khởi tạo poolsRepository
   watch(
     () => [filterTokens.value, poolsSortField?.value, filterOptions?.value],
     async (newValues, oldValues) => {
       if (filterOptions?.value) {
         currentFilterOptions.value = filterOptions.value;
-        console.log(
-          '🚀 ~ currentFilterOptions.value :',
-          currentFilterOptions.value
-        );
         isReady.value = true;
+
         try {
-          // Khởi tạo repository trước
           poolsRepository = initializePoolsRepository();
           await nextTick();
-          // Sau đó mới set isCalling và gọi query
-          await queryFn({ pageParam: 0 });
+          const result = await queryFn({ pageParam: 0 });
+          currentData.value = result; // Lưu kết quả mới
+          isInitialLoad.value = false;
           isReady.value = false;
         } catch (e) {
           console.error('Error fetching pools', e);
@@ -240,18 +242,28 @@ export default function usePoolsQuery(
       const savedPools = poolsStoreService.pools.value;
       return { pools: savedPools || [], skip: 0 };
     }
-    // Bỏ check isCalling ở đây
+
     if (!poolsRepository) {
       poolsRepository = initializePoolsRepository();
     }
 
     const fetchOptions = getFetchOptions(pageParam);
     let skip = 0;
+
     try {
+      // Clear store trước khi fetch nếu không phải lần đầu
+      if (!isInitialLoad.value) {
+        await nextTick();
+        poolsStoreService.setPools([]);
+      }
+
       const pools: Pool[] = await poolsRepository.fetch(fetchOptions);
       console.log('🚀 ~ queryFn ~ pools:', pools);
+
       skip = poolsRepository.currentProvider?.skip || 0;
+      await nextTick(); // Đợi Vue update DOM
       poolsStoreService.setPools(pools);
+
       return { pools, skip };
     } catch (e) {
       const savedPools = poolsStoreService.pools.value;
@@ -262,7 +274,27 @@ export default function usePoolsQuery(
     }
   };
 
-  options.getNextPageParam = (lastPage: PoolsQueryResponse) => lastPage.skip;
+  const infiniteQueryOptions: UseInfiniteQueryOptions<PoolsQueryResponse> = {
+    ...options,
+    getNextPageParam: (lastPage: PoolsQueryResponse) => lastPage.skip,
+    onSuccess: data => {
+      // Cập nhật currentData khi có data mới
+      if (data.pages?.length) {
+        const latestPage = data.pages[data.pages.length - 1];
+        currentData.value = latestPage;
+      }
+    },
+  };
 
-  return useInfiniteQuery<PoolsQueryResponse>(queryKey, queryFn, options);
+  const query = useInfiniteQuery<PoolsQueryResponse>(
+    queryKey,
+    queryFn,
+    infiniteQueryOptions
+  );
+
+  // Thêm currentData vào return value
+  return {
+    ...query,
+    currentData,
+  };
 }
