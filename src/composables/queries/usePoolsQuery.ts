@@ -278,12 +278,19 @@ export default function usePoolsQuery(
         poolsStoreService.setPools([]);
       }
 
-      const pools: Pool[] = await poolsRepository.fetch(fetchOptions);
-      console.log('🚀 ~ queryFn ~ pools:', pools);
+      const poolsRs: Pool[] = await poolsRepository.fetch(fetchOptions);
+      const pools = poolsRs.map(pool => {
+        const verifiedPools = POOLS.VerifiedPools || [];
+        const isVerifiedPool = verifiedPools.includes(pool.id);
+        return {
+          ...pool,
+          isVerified: isVerifiedPool || false,
+        };
+      });
 
       skip = fetchOptions?.skip || 0;
-      console.log('🚀 ~ queryFn ~ skipReturn:', skip);
-      await nextTick(); // Đợi Vue update DOM
+
+      await nextTick(); // wait Vue update DOM
       poolsStoreService.setPools(pools);
 
       return { pools, skip };
