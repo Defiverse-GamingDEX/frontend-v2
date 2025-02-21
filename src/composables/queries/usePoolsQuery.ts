@@ -161,9 +161,9 @@ export default function usePoolsQuery(
       }
     }
 
-    // if (queryArgs.where && filterOptions?.poolIds?.value) {
-    //   queryArgs.where.id = { in: filterOptions.poolIds.value };
-    // }
+    if (queryArgs.where && filterOptions?.poolIds?.value) {
+      queryArgs.where.id = { in: filterOptions.poolIds.value };
+    }
     if (queryArgs.where && filterOptions?.poolAddresses?.value) {
       queryArgs.where.address = { in: filterOptions.poolAddresses.value };
     }
@@ -208,7 +208,7 @@ export default function usePoolsQuery(
   const currentData = ref<PoolsQueryResponse | null>(null);
 
   watch(
-    () => [filterOptions?.value],
+    () => [filterOptions?.value, filterTokens?.value, poolsSortField?.value],
     async (newValues, oldValues) => {
       console.log('🚀 ~ filterOptions?.value:', filterOptions?.value);
 
@@ -223,6 +223,7 @@ export default function usePoolsQuery(
         await nextTick();
         const result = await queryFn({ pageParam: 0 });
         currentData.value = result; // save result to current data
+        console.log('🚀 ~ result:', result);
         isInitialLoad.value = false;
         isReady.value = false;
       } catch (e) {
