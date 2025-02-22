@@ -27,10 +27,7 @@ import { PoolType } from '@defiverse/balancer-sdk';
 export const POOL_CREATION_STATE_VERSION = '1.0';
 export const POOL_CREATION_STATE_KEY = 'poolCreationState';
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
-console.log(
-  '🚀 ~ import.meta.env.VITE_IS_TESTNET:',
-  import.meta.env.VITE_IS_TESTNET
-);
+
 export type PoolSeedToken = {
   tokenAddress: string;
   weight: number;
@@ -588,7 +585,10 @@ export default function usePoolCreation() {
       // const address = await balancerService.pools.weighted.getAdminAddress(
       //   getProvider()
       // );
-      if (isTestnet) address = '0x68C297EDdd953961E81532202e48b048e459c7c3';
+      if (isTestnet == true) {
+        address = '0x68C297EDdd953961E81532202e48b048e459c7c3';
+      }
+
       console.log('🚀 ~ getAdminAddress ~ address:', address);
       return address;
     } catch (error) {
