@@ -82,6 +82,7 @@ export type Pools = {
   Metadata: Record<string, PoolMetadata>;
   DisabledJoins: string[];
   BrandedRedirect?: Record<string, string>;
+  VerifiedPools?: string[];
 };
 
 const POOLS_GOERLI: Pools = {
@@ -742,6 +743,9 @@ const POOLS_DEFIVERSE: Pools = {
   DisabledJoins: [
     // '0x2c2832dc1e613c4fe8cd58de3b89de1759fdf589000200000000000000000003',
   ],
+  VerifiedPools: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
 };
 
 const POOLS_DEFIVERSE_TESTNET: Pools = {
@@ -820,6 +824,10 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   },
   Metadata: {},
   DisabledJoins: [],
+  VerifiedPools: [
+    '0x0ba7fd4626bf60dceb29d5abf224e744e5ec16e8000200000000000000000019',
+    '0xa7dbc709bb7e86ded763dff68b8c73c283ebd636000200000000000000000018',
+  ],
 };
 
 const POOLS_OASYS_TESTNET: Pools = {
@@ -875,6 +883,10 @@ const POOLS_OASYS_TESTNET: Pools = {
   },
   Metadata: {},
   DisabledJoins: [],
+  VerifiedPools: [
+    '0x4a54649fb507ee0bf3ad2e1661516b5700c520ab000100000000000000000005',
+    '0x66180966de2a4180183d7e5dffd76e13b364efe2000200000000000000000001',
+  ],
 };
 
 const POOLS_OASYS: Pools = {
@@ -932,6 +944,9 @@ const POOLS_OASYS: Pools = {
   },
   Metadata: {},
   DisabledJoins: [],
+  VerifiedPools: [
+    '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+  ],
 };
 
 const POOLS_MAP = {
@@ -948,3 +963,5 @@ const POOLS_MAP = {
 export const POOLS: Pools = POOLS_MAP[networkId.value]
   ? POOLS_MAP[networkId.value]
   : POOLS_GENERIC;
+
+export const GAMING_DEX_OWNER_ADDRESS = `0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b`;

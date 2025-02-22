@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-
+import VerifiedIcon from '@/assets/images/pools/verified.png';
 import PoolPageHero from '@/components/heros/PoolPageHero.vue';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
+
 import usePools from '@/composables/pools/usePools';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
@@ -20,6 +21,11 @@ const { account } = useWeb3();
 // STATES
 const adminAddress = ref(null);
 const priceLastUpdated = ref('');
+const filterState = reactive({
+  isVerified: false,
+  isPermissionless: false,
+  isYukichi: false,
+});
 // COMPOSABLES
 const { getAdminAddress } = usePoolCreation();
 const router = useRouter();
@@ -30,14 +36,30 @@ const { selectedTokens, addSelectedToken, removeSelectedToken } =
 
 const poolsSortField = ref('totalLiquidity');
 
-const { pools, isLoading, poolsIsFetchingNextPage, loadMorePools } = usePools(
-  selectedTokens,
-  poolsSortField
-);
+const filterOptions = computed(() => {
+  return {
+    isVerified: filterState.isVerified,
+    isPermissionless: filterState.isPermissionless,
+    isYukichi: filterState.isYukichi,
+  };
+});
+
+const {
+  pools: rawPools,
+  isLoading,
+  poolsIsFetchingNextPage,
+  poolsHasNextPage,
+  loadMorePools,
+} = usePools(selectedTokens, poolsSortField, filterOptions);
+
+const pools = computed(() => {
+  return rawPools.value;
+});
+
 const { upToMediumBreakpoint } = useBreakpoints();
 const { networkSlug, networkConfig } = useNetwork();
 
-const isPaginated = computed(() => pools.value.length >= 10);
+const isPaginated = computed(() => poolsHasNextPage?.value);
 
 const isCreatePool = computed(() => {
   // if (!adminAddress.value) {
@@ -71,6 +93,23 @@ function navigateToCreatePool() {
 
 function onColumnSort(columnId: string) {
   poolsSortField.value = columnId;
+}
+
+// Handlers cho các toggle events
+function onVerifiedChange(value: boolean) {
+  filterState.isVerified = value;
+}
+
+function onPermissionlessChange(value: boolean) {
+  filterState.isPermissionless = value;
+}
+
+function onYukichiChange(value: boolean) {
+  filterState.isYukichi = value;
+}
+
+function loadMore() {
+  loadMorePools();
 }
 
 /**
@@ -114,22 +153,63 @@ onBeforeMount(async () => {
           <div
             class="flex flex-col md:flex-row justify-between items-end lg:items-center w-full"
           >
-            <TokenSearchInput
-              v-model="selectedTokens"
-              class="w-full md:w-2/3"
-              @add="addSelectedToken"
-              @remove="removeSelectedToken"
-            />
-            <BalBtn
-              v-if="!upToMediumBreakpoint && isCreatePool"
-              classCustom="white-blue"
-              size="sm"
-              :class="{ 'mt-4': upToMediumBreakpoint }"
-              :block="upToMediumBreakpoint"
-              @click="navigateToCreatePool"
-            >
-              {{ $t('createAPool.title') }}
-            </BalBtn>
+            <div class="flex flex-col md:flex-row gap-4 w-full">
+              <TokenSearchInput
+                v-model="selectedTokens"
+                @add="addSelectedToken"
+                @remove="removeSelectedToken"
+              />
+
+              <div class="flex gap-6 items-center">
+                <div class="flex gap-2 items-center toggle-custom">
+                  <BalToggle
+                    :modelValue="filterState.isVerified"
+                    name="verified"
+                    :showLabel="false"
+                    @update:model-value="onVerifiedChange"
+                  />
+                  <span class="flex items-center text-sm text-white">
+                    <img
+                      :src="VerifiedIcon"
+                      alt="Verified Pool"
+                      class="w-4 h-4"
+                    />Verified</span
+                  >
+                </div>
+
+                <div class="flex gap-2 items-center toggle-custom">
+                  <BalToggle
+                    :modelValue="filterState.isPermissionless"
+                    name="permissionless"
+                    :showLabel="false"
+                    @update:model-value="onPermissionlessChange"
+                  />
+                  <span class="text-sm text-white">Permissionless</span>
+                </div>
+
+                <div class="flex gap-2 items-center toggle-custom">
+                  <BalToggle
+                    :modelValue="filterState.isYukichi"
+                    name="yukichi"
+                    :showLabel="false"
+                    @update:model-value="onYukichiChange"
+                  />
+                  <span class="text-sm text-white">Yukichi</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-4 items-center">
+              <BalBtn
+                v-if="!upToMediumBreakpoint && isCreatePool"
+                classCustom="white-blue w-max"
+                size="sm"
+                :class="{ 'mt-4': upToMediumBreakpoint }"
+                :block="upToMediumBreakpoint"
+                @click="navigateToCreatePool"
+              >
+                {{ $t('createAPool.title') }}
+              </BalBtn>
+            </div>
           </div>
         </div>
         <PoolsTable
@@ -143,7 +223,7 @@ onBeforeMount(async () => {
           :isPaginated="isPaginated"
           skeletonClass="pools-table-loading-height"
           @on-column-sort="onColumnSort"
-          @load-more="loadMorePools"
+          @load-more="loadMore"
         />
         <div v-if="isElementSupported" class="p-4 xl:p-0 mt-16">
           <FeaturedProtocols />
@@ -153,8 +233,26 @@ onBeforeMount(async () => {
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .pools-table-loading-height {
   height: 40rem;
+}
+.toggle-custom {
+  :deep(.bal-toggle) {
+    width: initial;
+  }
+  :deep(.bal-toggle-track) {
+    background: #003852;
+    width: 48px;
+  }
+  :deep(.bal-toggle-checkbox) {
+    border-color: #fff;
+  }
+  :deep(.bal-toggle-checkbox:checked) {
+    border-color: #fff;
+  }
+  :deep(.bal-toggle-checkbox:checked + .toggle-icon + .bal-toggle-track) {
+    background: orange;
+  }
 }
 </style>

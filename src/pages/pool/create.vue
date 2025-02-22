@@ -212,6 +212,7 @@ function setWrapperHeight(dimensions?: { width: number; height: number }) {
 }
 
 function handleNavigate(stepIndex: number) {
+  console.log('🚀 ~ handleNavigate ~ handleNavigate:', handleNavigate);
   if (hasRestoredFromSavedState.value) {
     setRestoredState(false);
   }
@@ -346,6 +347,7 @@ onMounted(() => {
         >
           <SimilarPools />
         </AnimatePresence>
+        {{ activeStep }} {{ isLoading }}
         <AnimatePresence
           :isVisible="!isLoading && activeStep === 3"
           :initial="initialAnimateProps"

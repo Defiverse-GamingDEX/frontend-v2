@@ -19,7 +19,8 @@ const QUERY_KEYS = {
       tokens: Ref<string[]>,
       poolsSortField: Ref<string> | undefined,
       poolIds: Ref<string[]> | undefined,
-      poolAddresses: Ref<string[]> | undefined
+      poolAddresses: Ref<string[]> | undefined,
+      filters?: any
     ) => [
       POOLS_ROOT_KEY,
       'all',
@@ -29,6 +30,7 @@ const QUERY_KEYS = {
         poolsSortField,
         poolIds,
         poolAddresses,
+        filters,
       },
     ],
     User: (

@@ -6,20 +6,25 @@ import { isQueryLoading } from '@/composables/queries/useQueryHelpers';
 import { useTokens } from '@/providers/tokens.provider';
 import { Pool } from '@/services/pool/types';
 import { tokenTreeLeafs } from '../usePool';
+import { ownerAddress } from '@cowprotocol/contracts';
+import { GAMING_DEX_OWNER_ADDRESS } from '@/constants/pools';
 
 export default function usePools(
   filterTokens: Ref<string[]> = ref([]),
-  poolsSortField: Ref<string>
+  poolsSortField: Ref<string>,
+  filterOptions: ComputedRef<FilterOptions> | any = {}
 ) {
   /**
    * COMPOSABLES
    */
+
   const poolsQuery = usePoolsQuery(
     filterTokens,
     undefined,
-    undefined,
+    filterOptions,
     poolsSortField
   );
+  console.log('🚀 ~ poolsQuery:', poolsQuery);
 
   const { injectTokens } = useTokens();
 
@@ -27,16 +32,46 @@ export default function usePools(
    * COMPUTED
    */
   const pools = computed<Pool[]>(() => {
-    const paginatedPools = poolsQuery.data.value;
+    const allPages = poolsQuery?.data?.value?.pages || [];
+    if (allPages.length === 1) {
+      console.log('🚀 ~ filter case');
+      return poolsQuery.currentData?.value?.pools || [];
+    }
+    // merge case
+    // get all pools and merge
 
-    return paginatedPools
-      ? flatten(paginatedPools.pages.map(page => page.pools))
-      : [];
+    console.log('🚀 ~ merge case:', allPages);
+
+    // merge all pools from pages
+    const poolsRs = allPages.reduce((acc, page) => {
+      return [...acc, ...(page.pools || [])];
+    }, [] as Pool[]);
+    console.log('🚀 ~ poolsRs:', poolsRs);
+    const poolList = poolsRs.map(pool => {
+      return {
+        id: pool.id,
+        name: pool.name,
+        address: pool.address,
+      };
+    });
+    console.log('🚀 ~ poolList:', poolList);
+    return poolsRs;
   });
 
   const isLoading = computed(() => isQueryLoading(poolsQuery));
 
-  const poolsHasNextPage = computed(() => poolsQuery.hasNextPage?.value);
+  const poolsHasNextPage = computed(() => {
+    const lastPage =
+      poolsQuery?.data?.value?.pages?.[
+        poolsQuery?.data?.value?.pages?.length - 1
+      ];
+
+    if (!lastPage) return false;
+
+    const lastPagePools = lastPage.pools || [];
+
+    return pools.value.length > 0 && lastPagePools.length >= 10;
+  });
   const poolsIsFetchingNextPage = computed(
     () => poolsQuery.isFetchingNextPage?.value
   );
