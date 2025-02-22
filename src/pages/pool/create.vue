@@ -347,7 +347,7 @@ onMounted(() => {
         >
           <SimilarPools />
         </AnimatePresence>
-        {{ activeStep }} {{ isLoading }}
+
         <AnimatePresence
           :isVisible="!isLoading && activeStep === 3"
           :initial="initialAnimateProps"

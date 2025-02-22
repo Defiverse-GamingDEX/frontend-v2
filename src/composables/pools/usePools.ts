@@ -6,7 +6,6 @@ import { isQueryLoading } from '@/composables/queries/useQueryHelpers';
 import { useTokens } from '@/providers/tokens.provider';
 import { Pool } from '@/services/pool/types';
 import { tokenTreeLeafs } from '../usePool';
-import { ownerAddress } from '@cowprotocol/contracts';
 import { GAMING_DEX_OWNER_ADDRESS } from '@/constants/pools';
 
 export default function usePools(
