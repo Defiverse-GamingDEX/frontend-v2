@@ -2,8 +2,9 @@ import { getAddress } from '@ethersproject/address';
 import { TransactionResponse } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
 import { flatten, sumBy } from 'lodash';
-import { computed, reactive, ref, toRefs } from 'vue';
+import { computed, reactive, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { isRef, isReactive } from 'vue';
 
 import usePoolsQuery from '@/composables/queries/usePoolsQuery';
 import useEthers from '@/composables/useEthers';
@@ -106,6 +107,68 @@ export default function usePoolCreation() {
     return tokensList.value.some(
       token => injectedTokens.value[token]?.symbol !== undefined
     );
+  });
+
+  // Move usePoolsQuery call before computed
+  const { data: similarPoolsResponse, isLoading: isLoadingSimilarPools } =
+    usePoolsQuery(
+      tokensList,
+      {
+        // Add these options to ensure query updates when dependencies change
+        enabled: computed(() => tokensList.value.length > 0),
+        refetchOnMount: true,
+        refetchOnWindowFocus: false,
+      },
+      { isExactTokensList: true }
+    );
+
+  // Now we can use similarPoolsResponse in computed
+  const similarPools = computed(() => {
+    return flatten(similarPoolsResponse.value?.pages.map(p => p.pools)) || [];
+  });
+
+  const existingPool = computed(() => {
+    if (!similarPools.value?.length) return null;
+
+    const similarPool = similarPools.value.find(pool => {
+      if (pool.swapFee === poolCreationState.initialFee) {
+        let weightsMatch = true;
+        for (const token of pool.tokens) {
+          const relevantToken = poolCreationState.seedTokens.find(t =>
+            isSameAddress(t.tokenAddress, token.address)
+          );
+          const similarPoolWeight = Number(token.weight).toFixed(2);
+          const seedTokenWeight = ((relevantToken?.weight || 0) / 100).toFixed(
+            2
+          );
+          if (similarPoolWeight !== seedTokenWeight) {
+            weightsMatch = false;
+          }
+        }
+        return weightsMatch;
+      }
+      return false;
+    });
+    return similarPool;
+  });
+
+  const isWethPool = computed((): boolean => {
+    return includesAddress(
+      tokensList.value,
+      configService.network.addresses.weth
+    );
+  });
+
+  const poolOwner = computed(() => {
+    if (poolCreationState.feeManagementType === 'governance') {
+      return POOLS.DelegateOwner;
+    } else {
+      if (poolCreationState.feeController === 'self') {
+        return account.value;
+      } else {
+        return poolCreationState.thirdPartyFeeController;
+      }
+    }
   });
 
   function getOptimisedLiquidity(): Record<string, OptimisedLiquidity> {
@@ -222,60 +285,9 @@ export default function usePoolCreation() {
     return validTokens.filter(token => priceFor(token) === 0);
   });
 
-  const similarPools = computed(() => {
-    return flatten(similarPoolsResponse.value?.pages.map(p => p.pools));
-  });
-
-  const existingPool = computed(() => {
-    if (!similarPools.value?.length) return null;
-
-    const similarPool = similarPools.value.find(pool => {
-      if (pool.swapFee === poolCreationState.initialFee) {
-        let weightsMatch = true;
-        for (const token of pool.tokens) {
-          const relevantToken = poolCreationState.seedTokens.find(t =>
-            isSameAddress(t.tokenAddress, token.address)
-          );
-          const similarPoolWeight = Number(token.weight).toFixed(2);
-          const seedTokenWeight = ((relevantToken?.weight || 0) / 100).toFixed(
-            2
-          );
-          if (similarPoolWeight !== seedTokenWeight) {
-            weightsMatch = false;
-          }
-        }
-        return weightsMatch;
-      }
-      return false;
-    });
-    return similarPool;
-  });
-
-  const isWethPool = computed((): boolean => {
-    return includesAddress(
-      tokensList.value,
-      configService.network.addresses.weth
-    );
-  });
-
-  const poolOwner = computed(() => {
-    if (poolCreationState.feeManagementType === 'governance') {
-      return POOLS.DelegateOwner;
-    } else {
-      if (poolCreationState.feeController === 'self') {
-        return account.value;
-      } else {
-        return poolCreationState.thirdPartyFeeController;
-      }
-    }
-  });
-
   /**
    * FUNCTIONS
    */
-  const { data: similarPoolsResponse, isLoading: isLoadingSimilarPools } =
-    usePoolsQuery(tokensList, {}, { isExactTokensList: true });
-
   function resetPoolCreationState() {
     for (const key of Object.keys(poolCreationState)) {
       poolCreationState[key] = emptyPoolCreationState[key];
@@ -588,13 +600,12 @@ export default function usePoolCreation() {
       if (isTestnet == true) {
         address = '0x68C297EDdd953961E81532202e48b048e459c7c3';
       }
-
-      console.log('🚀 ~ getAdminAddress ~ address:', address);
       return address;
     } catch (error) {
       return '';
     }
   }
+
   return {
     ...toRefs(poolCreationState),
     updateTokenWeights,
