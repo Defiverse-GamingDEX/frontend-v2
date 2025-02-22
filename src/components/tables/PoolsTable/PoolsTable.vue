@@ -430,9 +430,10 @@ function iconAddresses(pool: Pool) {
   max-width: 400px;
   word-break: break-word;
   text-align: left;
+  min-width: 200px;
 }
 .pool-pills {
-  min-width: 180px;
+  max-width: 180px;
   margin-left: auto;
   justify-content: flex-end;
 }
