@@ -326,7 +326,7 @@ function iconAddresses(pool: Pool) {
               v-if="pool.isVerified"
               :src="VerifiedIcon"
               alt="Verified Pool"
-              class="ml-1 w-4 h-4"
+              class="verified-icon"
             />
             {{ POOLS.Metadata[pool.id].name }}
           </div>
@@ -335,7 +335,7 @@ function iconAddresses(pool: Pool) {
               v-if="pool.isVerified"
               :src="VerifiedIcon"
               alt="Verified Pool"
-              class="ml-1 w-4 h-4"
+              class="verified-icon"
             />
             <span class="mr-2 pool-name">{{ pool.name }}</span>
             <TokenPills
