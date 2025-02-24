@@ -4,7 +4,7 @@ import { formatUnits } from '@ethersproject/units';
 import { mapValues } from 'lodash';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-
+import BigNumber from 'bignumber.js';
 import SwapRoute from '@/components/cards/SwapCard/SwapRoute.vue';
 import { SwapQuote } from '@/composables/swap/types';
 import useRelayerApproval, {
@@ -116,7 +116,6 @@ const summary = computed(() => {
     totalWithoutSlippage: '',
     totalWithSlippage: '',
   };
-
   const exactIn = props.swapping.exactIn.value;
 
   const tokenIn = props.swapping.tokenIn.value;
@@ -183,7 +182,6 @@ const summary = computed(() => {
     );
   }
 });
-
 const labels = computed(() => {
   if (props.swapping.isWrap.value) {
     return {
@@ -261,6 +259,46 @@ const cowswapRelayerApproval = useRelayerApprovalTx(
 
 const pools = computed<SubgraphPoolBase[]>(() => {
   return props.swapping.sor.pools.value;
+});
+const poolSwapFees = computed(() => {
+  if (
+    !props.swapping.isBalancerSwap.value ||
+    !pools.value?.length ||
+    !props.swapping.sor.sorReturn.value?.result?.swaps
+  )
+    return [];
+
+  // Get unique pools used in the swap route
+  const swaps = props.swapping.sor.sorReturn.value.result.swaps;
+  const uniquePoolIds = new Set(swaps.map(swap => swap.poolId));
+
+  // Find pools and their swap fees
+  const fees = Array.from(uniquePoolIds)
+    .map(poolId => {
+      const pool = pools.value.find(p => p.id === poolId);
+      console.log('🚀 ~ poolSwapFees ~ pool:', pool);
+      console.log(
+        '🚀 ~ props.swapping.tokenInAmountInput.value:',
+        props.swapping.tokenInAmountInput.value
+      );
+      if (!pool) return null;
+      const swapFeePercent = BigNumber(pool.swapFee)
+        .times(100)
+        .toFixed(2)
+        .toString();
+      const totalSwapFee = BigNumber(props.swapping.tokenInAmountInput.value)
+        .times(pool.swapFee)
+        .toString();
+      return {
+        id: pool.id,
+        totalSwapFee: totalSwapFee,
+        swapFeePercent: swapFeePercent,
+        symbol: props.swapping.tokenIn.value.symbol,
+      };
+    })
+    .filter(Boolean);
+  console.log('🚀 ~ poolSwapFees ~ fees:', fees);
+  return fees[0];
 });
 
 const wrapType = computed(() =>
@@ -508,7 +546,6 @@ async function approveToken(): Promise<TransactionResponse> {
   }
 }
 
-// WATCHERS
 watch(blockNumber, () => {
   handlePriceUpdate();
 });
@@ -705,6 +742,18 @@ watch(blockNumber, () => {
                 {{ labels.swapSummary.totalAfterFees }}
               </div>
               <div v-html="summary.totalWithoutSlippage" />
+            </div>
+            <div class="font-medium summary-item-row">
+              <div class="flex items-center">
+                <span
+                  class="relative -top-0.5 px-1 text-xs text-gray-500 rounded border-gray-300"
+                  >L</span
+                >
+                Trading Fee({{ poolSwapFees?.swapFeePercent }}%)
+              </div>
+              <div>
+                {{ poolSwapFees?.totalSwapFee }} {{ poolSwapFees?.symbol }}
+              </div>
             </div>
             <div class="summary-item-row text-secondary">
               <div class="w-64">

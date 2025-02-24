@@ -55,6 +55,7 @@ const hiddenColumns = ['poolVolume', 'migrate', 'actions', 'myBoost'];
       </h5>
       <PoolsTable
         :key="poolsToRenderKey"
+        class="ve-pools"
         :data="lockPools"
         :shares="poolShares"
         :hiddenColumns="hiddenColumns"
@@ -64,3 +65,11 @@ const hiddenColumns = ['poolVolume', 'migrate', 'actions', 'myBoost'];
     </BalStack>
   </div>
 </template>
+<style>
+.ve-pools .content .max-w-full .overflow-hidden .table-fixed {
+  min-width: 1440px;
+}
+.ve-pools .content .max-w-full .overflow-auto .table-fixed {
+  min-width: 1440px;
+}
+</style> 
