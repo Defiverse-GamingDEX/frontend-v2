@@ -147,20 +147,6 @@ export default function usePoolsQuery(
       },
     };
 
-    if (queryArgs.where) {
-      if (isVerified && isPermissionless) {
-        delete queryArgs.where.id;
-      } else if (isVerified) {
-        queryArgs.where.id = { in: verifiedPools };
-      } else if (isPermissionless) {
-        queryArgs.where.id = { not_in: verifiedPools };
-      }
-
-      if (isYukichi) {
-        queryArgs.where.owner = { not_in: [gameDexOwnerAddress] };
-      }
-    }
-
     if (queryArgs.where && filterOptions?.poolIds?.value) {
       queryArgs.where.id = { in: filterOptions.poolIds.value };
     }
@@ -174,15 +160,26 @@ export default function usePoolsQuery(
       queryArgs.skip = options.skip;
     }
     if (queryArgs.where) {
-      if (isVerified && isPermissionless) {
-        delete queryArgs.where.id;
+      if (isVerified && isPermissionless && isYukichi) {
+        // no thing to do
       } else if (isVerified) {
-        queryArgs.where.id = { in: verifiedPools };
+        // Combine with poolIds if they exist
+        let idConditions = [...verifiedPools];
+        if (filterOptions?.poolIds?.value) {
+          // Only keep IDs that are both in verifiedPools and poolIds
+          idConditions = idConditions.filter(id =>
+            filterOptions.poolIds.value.includes(id)
+          );
+        }
+        queryArgs.where.id = { in: idConditions };
       } else if (isPermissionless) {
-        queryArgs.where.id = { not_in: verifiedPools };
-      }
-
-      if (isYukichi) {
+        // Combine not_in conditions
+        const notInConditions = [...verifiedPools];
+        if (POOLS.BlockList) {
+          notInConditions.push(...POOLS.BlockList);
+        }
+        queryArgs.where.id = { not_in: notInConditions };
+      } else if (isYukichi) {
         queryArgs.where.owner = { not_in: [gameDexOwnerAddress] };
       }
     }

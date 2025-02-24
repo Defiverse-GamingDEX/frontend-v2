@@ -17,6 +17,7 @@ import { version as pkgVersion } from './package.json';
 
 export default defineConfig(({ mode }) => {
   const envConfig = loadEnv(mode, process.cwd());
+  console.log('🚀 ~ defineConfig ~ envConfig:', envConfig);
 
   const plugins = [
     vue(),
@@ -116,7 +117,7 @@ export default defineConfig(({ mode }) => {
       minify: 'terser', // <-- add
       terserOptions: {
         compress: {
-          drop_console: false,
+          drop_console: envConfig.VITE_ENV === 'production',
           drop_debugger: true,
         },
       },
