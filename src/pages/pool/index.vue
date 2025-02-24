@@ -172,7 +172,7 @@ onBeforeMount(async () => {
                     <img
                       :src="VerifiedIcon"
                       alt="Verified Pool"
-                      class="w-4 h-4"
+                      class="verified-icon"
                     />Verified</span
                   >
                 </div>
