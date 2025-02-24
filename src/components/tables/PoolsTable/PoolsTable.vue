@@ -427,13 +427,13 @@ function iconAddresses(pool: Pool) {
 </template>
 <style lang="scss" scoped>
 .pool-name {
-  max-width: 400px;
+  max-width: 280px;
   word-break: break-word;
   text-align: left;
   min-width: 200px;
 }
 .pool-pills {
-  max-width: 180px;
+  max-width: 220px;
   margin-left: auto;
   justify-content: flex-end;
 }
