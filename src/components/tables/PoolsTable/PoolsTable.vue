@@ -328,7 +328,13 @@ function iconAddresses(pool: Pool) {
               alt="Verified Pool"
               class="verified-icon"
             />
-            {{ POOLS.Metadata[pool.id].name }}
+            {{
+              POOLS.Metadata[pool.id].name?.includes(
+                '50CREAMSODA by Yukichi Fun_50WOAS_POOL'
+              )
+                ? '50CREAMSODA_50WOAS'
+                : POOLS.Metadata[pool.id].name
+            }}
           </div>
           <div v-else class="flex justify-between items-center w-full">
             <img
@@ -337,7 +343,11 @@ function iconAddresses(pool: Pool) {
               alt="Verified Pool"
               class="verified-icon"
             />
-            <span class="mr-2 pool-name">{{ pool.name }}</span>
+            <span class="mr-2 pool-name">{{
+              pool.name?.includes('50CREAMSODA by Yukichi Fun_50WOAS_POOL')
+                ? '50CREAMSODA_50WOAS'
+                : pool.name
+            }}</span>
             <TokenPills
               class="pool-pills"
               :tokens="orderedPoolTokens(pool, pool.tokens)"

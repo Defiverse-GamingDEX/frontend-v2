@@ -58,7 +58,9 @@ const data = computed(() => {
     },
     {
       title: t('poolName'),
-      value: name,
+      value: name?.includes('50CREAMSODA by Yukichi Fun_50WOAS_POOL')
+        ? '50CREAMSODA_50WOAS'
+        : name,
     },
     {
       title: t('poolSymbol'),
