@@ -10,7 +10,7 @@ import useTokenApprovalActions from '@/composables/approvals/useTokenApprovalAct
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
 import { TransactionActionInfo } from '@/types/transactions';
-
+import { dateTimeLabelFor } from '@/composables/useTime';
 /**
  * TYPES
  */
@@ -54,7 +54,7 @@ const createState = reactive<CreateState>({
 const { t } = useI18n();
 const { explorerLinks } = useWeb3();
 const { networkConfig } = useConfig();
-const { isTxConfirmed } = useEthers();
+const { isTxConfirmed, getTxConfirmedAt } = useEthers();
 const { tokenApprovalActions } = useTokenApprovalActions(
   props.tokenAddresses,
   ref(props.amounts)
@@ -67,7 +67,10 @@ const {
   hasRestoredFromSavedState,
   needsSeeding,
   createPoolTxHash,
+  resetPoolCreationState,
+  setActiveStep,
 } = usePoolCreation();
+console.log('🚀 ~ poolId:', poolId);
 const { networkSlug } = useNetwork();
 
 /**
@@ -113,6 +116,14 @@ onBeforeMount(async () => {
     const isConfirmed = await isTxConfirmed(createPoolTxHash.value);
     createState.isLoadingRestoredTx = false;
     createState.isRestoredTxConfirmed = isConfirmed;
+    if (
+      createState.isRestoredTxConfirmed &&
+      needsSeeding.value &&
+      poolId.value
+    ) {
+      resetPoolCreationState();
+      setActiveStep(0);
+    }
   }
 });
 
