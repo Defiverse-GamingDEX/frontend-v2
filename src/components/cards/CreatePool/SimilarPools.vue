@@ -150,12 +150,7 @@ function cancel() {
           </BalStack>
         </BalCard>
       </BalStack>
-      <BalAlert
-        v-if="!existingPool"
-        block
-        type="warning"
-        title="Are you sure you want to continue?"
-      >
+      <BalAlert block type="warning" title="Are you sure you want to continue?">
         You can continue to create your pool anyway, but you’ll have to pay pool
         creation gas costs and liquidity will be fractured which is likely to
         result in your new pool being less profitable.
@@ -164,7 +159,7 @@ function cancel() {
         <BalBtn block outline color="black" @click="cancel">
           {{ $t('cancel') }}
         </BalBtn>
-        <BalBtn v-if="!existingPool" block color="gradient" @click="proceed">
+        <BalBtn block color="gradient" @click="proceed">
           Continue anyway
         </BalBtn>
       </BalStack>
