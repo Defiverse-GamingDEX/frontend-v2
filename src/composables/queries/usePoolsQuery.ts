@@ -162,6 +162,12 @@ export default function usePoolsQuery(
     if (queryArgs.where) {
       if (isVerified && isPermissionless && isYukichi) {
         // no thing to do
+      } else if (isVerified && isPermissionless) {
+        // no thing to do filter after have data because graphQL not support
+      } else if (isVerified && isYukichi) {
+        // no thing to do filter after have data because graphQL not support
+      } else if (isPermissionless && isYukichi) {
+        // no thing to do filter after have data because graphQL not support
       } else if (isVerified) {
         // Combine with poolIds if they exist
         let idConditions = [...verifiedPools];
@@ -275,14 +281,16 @@ export default function usePoolsQuery(
         await nextTick();
         poolsStoreService.setPools([]);
       }
-
+      const gameDexOwnerAddress = GAMING_DEX_OWNER_ADDRESS;
       const poolsRs: Pool[] = await poolsRepository.fetch(fetchOptions);
       const pools = poolsRs.map(pool => {
         const verifiedPools = POOLS.VerifiedPools || [];
         const isVerifiedPool = verifiedPools.includes(pool.id);
+        const isYukichiPool = pool.owner !== gameDexOwnerAddress;
         return {
           ...pool,
           isVerified: isVerifiedPool || false,
+          isYukichi: isYukichiPool || false,
         };
       });
 
