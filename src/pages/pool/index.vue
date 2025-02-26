@@ -2,6 +2,7 @@
 import { computed, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
+import YukichiIcon from '@/assets/images/pools/yukichi.png';
 import PoolPageHero from '@/components/heros/PoolPageHero.vue';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
@@ -194,7 +195,13 @@ onBeforeMount(async () => {
                     :showLabel="false"
                     @update:model-value="onYukichiChange"
                   />
-                  <span class="text-sm text-white">Yukichi</span>
+                  <span class="flex items-center text-sm text-white">
+                    <img
+                      :src="YukichiIcon"
+                      alt="yukichi Pool"
+                      class="mr-1 verified-icon"
+                    />Yukichi</span
+                  >
                 </div>
               </div>
             </div>

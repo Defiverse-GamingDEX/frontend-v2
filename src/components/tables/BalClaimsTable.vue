@@ -147,7 +147,13 @@ function redirectToPool({ pool }: { pool: GaugePool }) {
       <template #pillsColumnCell="{ pool }">
         <div class="flex items-center py-4 px-6">
           <div v-if="POOLS.Metadata[pool.id]" class="text-left">
-            {{ POOLS.Metadata[pool.id].name }}
+            {{
+              POOLS.Metadata[pool.id].name?.includes(
+                '50CREAMSODA by Yukichi Fun_50WOAS_POOL'
+              )
+                ? '50CREAMSODA_50WOAS'
+                : POOLS.Metadata[pool.id].name
+            }}
           </div>
 
           <TokenPills
