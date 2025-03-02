@@ -103,9 +103,17 @@ export default class JoinParams {
       const token = tokensIn[i];
       // In WETH pools, tokenIn can include ETH so we need to check for this
       // and return the correct decimals.
+
+      // const decimals = isSameAddress(nativeAsset.address, token)
+      //   ? nativeAsset.decimals
+      //   : this.pool.value?.onchain?.tokens?.[token]?.decimals || 18; // Error if decimals = 0
+
+      const tokenData = this.pool.value?.onchain?.tokens?.[token];
       const decimals = isSameAddress(nativeAsset.address, token)
         ? nativeAsset.decimals
-        : this.pool.value?.onchain?.tokens?.[token]?.decimals || 18;
+        : tokenData
+        ? tokenData.decimals
+        : 18;
 
       return parseUnits(amount, decimals);
     });
