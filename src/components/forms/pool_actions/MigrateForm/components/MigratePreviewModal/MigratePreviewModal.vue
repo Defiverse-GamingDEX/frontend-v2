@@ -136,7 +136,8 @@ const evmUnstakedBptBalance = computed((): string => {
 
 // Computes fiat value of expected BPT out.
 const toFiatTotal = computed((): string => {
-  const bpt = formatUnits(bptOut.value, toPool.value.onchain?.decimals || 18);
+  // const bpt = formatUnits(bptOut.value, toPool.value.onchain?.decimals || 18);
+  const bpt = formatUnits(bptOut.value, toPool.value.onchain?.decimals);
   return fiatValueOf(toPool.value, bpt);
 });
 

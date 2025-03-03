@@ -92,7 +92,8 @@ function handleSliderChange(newVal: number): void {
   propBptIn.value = bnum(bptBalance.value)
     .times(fractionBasisPoints)
     .div(10000)
-    .toFixed(props.pool?.onchain?.decimals || 18);
+    // .toFixed(props.pool?.onchain?.decimals || 18);
+    .toFixed(props.pool?.onchain?.decimals);
 
   if (shouldFetchBatchSwap.value) {
     delayedExitDataFetch();

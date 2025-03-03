@@ -47,7 +47,8 @@ export default class ExitParams {
     const parsedAmountsOut = this.parseAmounts(amountsOut);
     const parsedBptIn = parseUnits(
       bptIn,
-      this.pool.value?.onchain?.decimals || 18
+      //this.pool.value?.onchain?.decimals || 18
+      this.pool.value?.onchain?.decimals
     );
 
     const assets = this.parseTokensOut(tokensOut);
@@ -72,7 +73,8 @@ export default class ExitParams {
       minAmountsOut.splice(
         poolTokenItselfIndex,
         0,
-        parseUnits('0', this.pool.value.onchain?.decimals || 18)
+        //parseUnits('0', this.pool.value.onchain?.decimals || 18)
+        parseUnits('0', this.pool.value.onchain?.decimals)
       );
     }
 

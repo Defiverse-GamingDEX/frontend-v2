@@ -87,7 +87,8 @@ export class SwapJoinHandler implements JoinPoolHandler {
 
     const bptOut = formatFixed(
       this.lastSwapRoute.returnAmount,
-      this.pool.value.onchain?.decimals || 18
+      //this.pool.value.onchain?.decimals || 18
+      this.pool.value.onchain?.decimals
     );
     if (bnum(bptOut).eq(0)) throw new Error('Not enough liquidity.');
 

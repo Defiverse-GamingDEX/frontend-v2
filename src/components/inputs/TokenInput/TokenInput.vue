@@ -201,7 +201,8 @@ const priceImpactClass = computed(() =>
   props.priceImpact >= 0.01 ? 'text-red-500' : ''
 );
 
-const decimalLimit = computed<number>(() => token.value?.decimals || 18);
+// const decimalLimit = computed<number>(() => token.value?.decimals || 18);
+const decimalLimit = computed<number>(() => token.value?.decimals);
 
 /**
  * METHODS
