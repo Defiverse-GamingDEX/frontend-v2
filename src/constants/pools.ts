@@ -922,6 +922,7 @@ const POOLS_OASYS: Pools = {
   },
   BlockList: [
     '0x2622ccccb6561509e60410c16c377aaf10ab952a000200000000000000000005',
+    '0x9600393a5a3f3040bf440e1548211acd8b047b9b00020000000000000000000a',
   ],
   ExcludedPoolTypes: [
     'Element',

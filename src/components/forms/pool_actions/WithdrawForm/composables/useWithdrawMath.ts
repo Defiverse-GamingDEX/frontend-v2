@@ -130,7 +130,8 @@ export default function useWithdrawMath(
   );
 
   const poolDecimals = computed(
-    (): number => pool.value?.onchain?.decimals || 18
+    // (): number => pool.value?.onchain?.decimals || 18
+    (): number => pool.value?.onchain?.decimals
   );
 
   /**

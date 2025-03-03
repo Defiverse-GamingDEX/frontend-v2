@@ -50,7 +50,8 @@ export default class JoinParams {
     const parsedAmountsIn = this.parseAmounts(amountsIn, tokensIn);
     const parsedBptOut = parseUnits(
       bptOut,
-      this.pool.value?.onchain?.decimals || 18
+      //this.pool.value?.onchain?.decimals || 18
+      this.pool.value?.onchain?.decimals
     );
 
     const txData = this.txData(parsedAmountsIn, parsedBptOut);
@@ -66,7 +67,8 @@ export default class JoinParams {
       maxAmountsIn.splice(
         poolTokenItselfIndex,
         0,
-        parseUnits('0', this.pool.value.onchain?.decimals || 18)
+        //parseUnits('0', this.pool.value.onchain?.decimals || 18)
+        parseUnits('0', this.pool.value.onchain?.decimals)
       );
     }
 
@@ -103,9 +105,17 @@ export default class JoinParams {
       const token = tokensIn[i];
       // In WETH pools, tokenIn can include ETH so we need to check for this
       // and return the correct decimals.
+
+      // const decimals = isSameAddress(nativeAsset.address, token)
+      //   ? nativeAsset.decimals
+      //   : this.pool.value?.onchain?.tokens?.[token]?.decimals || 18; // Error if decimals = 0
+
+      const tokenData = this.pool.value?.onchain?.tokens?.[token];
       const decimals = isSameAddress(nativeAsset.address, token)
         ? nativeAsset.decimals
-        : this.pool.value?.onchain?.tokens?.[token]?.decimals || 18;
+        : tokenData
+        ? tokenData.decimals
+        : 18;
 
       return parseUnits(amount, decimals);
     });
