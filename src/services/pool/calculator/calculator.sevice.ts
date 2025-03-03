@@ -258,7 +258,8 @@ export default class CalculatorService {
   }
 
   public get poolDecimals(): number {
-    return this.pool.value?.onchain?.decimals || 18;
+    //return this.pool.value?.onchain?.decimals || 18;
+    return this.pool.value?.onchain?.decimals;
   }
 
   public get bptBalance(): string {

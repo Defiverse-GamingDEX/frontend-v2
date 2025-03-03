@@ -82,7 +82,10 @@ const amountBN = computed(() => bnum(_amount.value));
 const tokenBalanceBN = computed(() => bnum(props?.inputSelect?.balance));
 const hasAmount = computed(() => amountBN.value.gt(0));
 const hasBalance = computed(() => tokenBalanceBN.value.gt(0));
-const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+const decimalLimit = computed<number>(() => {
+  //props?.inputSelect?.decimals || 18
+  return props?.inputSelect?.decimals;
+});
 const inputChainId = computed(() => props?.inputSelect?.chainId);
 const inputSymbol = computed(() => props?.inputSelect?.tokenSymbol);
 const inputRules = computed(() => {

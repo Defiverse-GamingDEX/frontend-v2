@@ -72,7 +72,8 @@ function handleSliderChange(newVal: number): void {
   bptIn.value = bnum(bptBalance.value)
     .times(fractionBasisPoints)
     .div(10000)
-    .toFixed(props.pool.onchain?.decimals || 18);
+    // .toFixed(props.pool.onchain?.decimals || 18);
+    .toFixed(props.pool.onchain?.decimals);
 }
 
 function handleAmountChange(value: string): void {

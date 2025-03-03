@@ -50,7 +50,8 @@ export default class JoinParams {
     const parsedAmountsIn = this.parseAmounts(amountsIn, tokensIn);
     const parsedBptOut = parseUnits(
       bptOut,
-      this.pool.value?.onchain?.decimals || 18
+      //this.pool.value?.onchain?.decimals || 18
+      this.pool.value?.onchain?.decimals
     );
 
     const txData = this.txData(parsedAmountsIn, parsedBptOut);
@@ -66,7 +67,8 @@ export default class JoinParams {
       maxAmountsIn.splice(
         poolTokenItselfIndex,
         0,
-        parseUnits('0', this.pool.value.onchain?.decimals || 18)
+        //parseUnits('0', this.pool.value.onchain?.decimals || 18)
+        parseUnits('0', this.pool.value.onchain?.decimals)
       );
     }
 
