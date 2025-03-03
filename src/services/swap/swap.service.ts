@@ -46,6 +46,7 @@ export default class SwapService {
     if (isStETH(tokenIn.address, tokenOut.address)) {
       return this.lidoBatchSwap(tokenIn, tokenOut, swaps, tokenAddresses);
     }
+
     console.log('[Swap Service] batchSwapV2');
     const overrides: any = {};
 
@@ -83,7 +84,9 @@ export default class SwapService {
             ? tokenOut.amount.toString()
             : tokenIn.amount.toString();
 
-        return vaultService.swap(single, funds, limit, overrides);
+        console.log('HUNG:limit', limit);
+        // TODO: Hung - Check limit again
+        return vaultService.swap(single, funds, 0, overrides);
       }
 
       const limits: string[] = this.calculateLimits(
@@ -284,7 +287,7 @@ export default class SwapService {
       }
     });
 
-    console.log('Limits', limits);
+    console.log('HUNG:Limits', limits);
     return limits;
   }
 }
