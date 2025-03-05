@@ -121,6 +121,16 @@ const totalClaimValue = computed((): string =>
 function redirectToPool({ pool }: { pool: GaugePool }) {
   router.push({ name: 'pool', params: { id: pool.id, networkSlug } });
 }
+
+function formatPoolName(name: string): string {
+  if (!name) return '';
+
+  if (name.includes('by Yukichi')) {
+    return name.replace(/(\d+\w+) by .*?_(\d+\w+)_POOL.*?/g, '$1_$2');
+  }
+
+  return name;
+}
 </script>
 
 <template>
@@ -147,13 +157,7 @@ function redirectToPool({ pool }: { pool: GaugePool }) {
       <template #pillsColumnCell="{ pool }">
         <div class="flex items-center py-4 px-6">
           <div v-if="POOLS.Metadata[pool.id]" class="text-left">
-            {{
-              POOLS.Metadata[pool.id].name?.includes(
-                '50CREAMSODA by Yukichi Fun_50WOAS_POOL'
-              )
-                ? '50CREAMSODA_50WOAS'
-                : POOLS.Metadata[pool.id].name
-            }}
+            {{ formatPoolName(POOLS.Metadata[pool.id].name) }}
           </div>
 
           <TokenPills

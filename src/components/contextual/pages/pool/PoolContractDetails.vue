@@ -36,6 +36,17 @@ function formSwapFeesHint(owner: string): string {
 
   return t('poolAttrs.feesEditableOwner');
 }
+
+function formatPoolName(name: string): string {
+  if (!name) return '';
+
+  if (name.includes('by Yukichi')) {
+    return name.replace(/(\d+\w+) by .*?_(\d+\w+)_POOL.*?/g, '$1_$2');
+  }
+
+  return name;
+}
+
 /**
  * COMPUTED
  */
@@ -58,9 +69,7 @@ const data = computed(() => {
     },
     {
       title: t('poolName'),
-      value: name?.includes('50CREAMSODA by Yukichi Fun_50WOAS_POOL')
-        ? '50CREAMSODA_50WOAS'
-        : name,
+      value: formatPoolName(name),
     },
     {
       title: t('poolSymbol'),

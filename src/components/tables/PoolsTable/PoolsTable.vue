@@ -274,6 +274,16 @@ function iconAddresses(pool: Pool) {
     ? [pool.address]
     : orderedTokenAddresses(pool);
 }
+
+function formatPoolName(name: string): string {
+  if (!name) return '';
+
+  if (name.includes('by Yukichi')) {
+    return name.replace(/(\d+\w+) by .*?_(\d+\w+)_POOL.*?/g, '$1_$2');
+  }
+
+  return name;
+}
 </script>
 
 <template>
@@ -334,13 +344,7 @@ function iconAddresses(pool: Pool) {
               alt="Yukichi Pool"
               class="verified-icon"
             />
-            {{
-              POOLS.Metadata[pool.id].name?.includes(
-                '50CREAMSODA by Yukichi Fun_50WOAS_POOL'
-              )
-                ? '50CREAMSODA_50WOAS'
-                : POOLS.Metadata[pool.id].name
-            }}
+            {{ formatPoolName(POOLS.Metadata[pool.id].name) }}
           </div>
           <div v-else class="flex justify-between items-center w-full">
             <img
@@ -355,11 +359,7 @@ function iconAddresses(pool: Pool) {
               alt="Yukichi Pool"
               class="mr-1 verified-icon"
             />
-            <span class="mr-2 pool-name">{{
-              pool.name?.includes('50CREAMSODA by Yukichi Fun_50WOAS_POOL')
-                ? '50CREAMSODA_50WOAS'
-                : pool.name
-            }}</span>
+            <span class="mr-2 pool-name">{{ formatPoolName(pool.name) }}</span>
             <TokenPills
               class="pool-pills"
               :tokens="orderedPoolTokens(pool, pool.tokens)"
