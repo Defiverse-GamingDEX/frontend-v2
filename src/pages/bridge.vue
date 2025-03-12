@@ -79,7 +79,6 @@ function changeTab(tab) {
 }
 // LIFE CYCLES
 onBeforeMount(async () => {
-  router.push('/');
   adminAddress.value = await getAdminAddress();
   checkMisMatch();
   checkWhileList();
