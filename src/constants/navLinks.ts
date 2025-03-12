@@ -25,12 +25,12 @@ let NAV_LINKS_MAINNET = [
   //   name_link: 'vebal',
   //   goal_key: 'ClickNavVebal',
   // },
-  {
-    text: 'Bridge',
-    path: 'bridge',
-    name_link: 'bridge',
-    goal_key: 'ClickNavBridge',
-  },
+  // {
+  //   text: 'Bridge',
+  //   path: 'bridge',
+  //   name_link: 'bridge',
+  //   goal_key: 'ClickNavBridge',
+  // },
 ];
 if (isTestnet == true) {
   NAV_LINKS_MAINNET = [
