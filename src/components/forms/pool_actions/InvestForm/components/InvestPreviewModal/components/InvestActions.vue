@@ -124,7 +124,8 @@ const transactionInProgress = computed(
 );
 
 const normalizedBptOut = computed((): string => {
-  return formatUnits(bptOut.value, props.pool?.onchain?.decimals || 18);
+  // return formatUnits(bptOut.value, props.pool?.onchain?.decimals || 18);
+  return formatUnits(bptOut.value, props.pool?.onchain?.decimals);
 });
 
 /**

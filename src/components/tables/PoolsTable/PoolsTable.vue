@@ -37,7 +37,7 @@ import PoolWarningTooltip from '@/components/pool/PoolWarningTooltip.vue';
 import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
-
+import YukichiIcon from '@/assets/images/pools/yukichi.png';
 /**
  * TYPES
  */
@@ -274,6 +274,19 @@ function iconAddresses(pool: Pool) {
     ? [pool.address]
     : orderedTokenAddresses(pool);
 }
+
+function formatPoolName(name: string): string {
+  if (!name) return '';
+
+  if (name.includes('by Yukichi')) {
+    return name.replace(
+      /(\d+[\w\s]+) by Yukichi Fun_(\d+[\w\s]+)_POOL.*?/g,
+      '$1_$2'
+    );
+  }
+
+  return name;
+}
 </script>
 
 <template>
@@ -314,7 +327,10 @@ function iconAddresses(pool: Pool) {
         </div>
       </template>
       <template #poolNameCell="pool">
-        <div v-if="!isLoading" class="flex items-center py-4 px-6">
+        <div
+          v-if="!isLoading"
+          class="flex justify-between items-center py-4 px-6"
+        >
           <div
             v-if="POOLS.Metadata[pool.id]"
             class="flex items-center text-left"
@@ -323,19 +339,32 @@ function iconAddresses(pool: Pool) {
               v-if="pool.isVerified"
               :src="VerifiedIcon"
               alt="Verified Pool"
-              class="ml-1 w-4 h-4"
+              class="verified-icon"
             />
-            {{ POOLS.Metadata[pool.id].name }}
+            <img
+              v-if="pool.isYukichi"
+              :src="YukichiIcon"
+              alt="Yukichi Pool"
+              class="verified-icon"
+            />
+            {{ formatPoolName(POOLS.Metadata[pool.id].name) }}
           </div>
-          <div v-else class="flex items-center">
+          <div v-else class="flex justify-between items-center w-full">
             <img
               v-if="pool.isVerified"
               :src="VerifiedIcon"
               alt="Verified Pool"
-              class="ml-1 w-4 h-4"
+              class="verified-icon"
             />
-            <span class="mr-2 pool-name">{{ pool.name }}</span>
+            <img
+              v-if="pool.isYukichi"
+              :src="YukichiIcon"
+              alt="Yukichi Pool"
+              class="mr-1 verified-icon"
+            />
+            <span class="mr-2 pool-name">{{ formatPoolName(pool.name) }}</span>
             <TokenPills
+              class="pool-pills"
               :tokens="orderedPoolTokens(pool, pool.tokens)"
               :isStablePool="isStableLike(pool.poolType)"
               :selectedTokens="selectedTokens"
@@ -346,7 +375,7 @@ function iconAddresses(pool: Pool) {
             label="LBP"
             color="amber"
           />
-          <BalChipNew v-else-if="pool?.isNew" />
+          <BalChipNew v-else-if="pool?.isNew" class="ml-2" />
           <PoolWarningTooltip :pool="pool" />
         </div>
       </template>
@@ -421,3 +450,16 @@ function iconAddresses(pool: Pool) {
     </BalTable>
   </BalCard>
 </template>
+<style lang="scss" scoped>
+.pool-name {
+  max-width: 280px;
+  word-break: break-word;
+  text-align: left;
+  min-width: 200px;
+}
+.pool-pills {
+  max-width: 220px;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+</style>

@@ -102,9 +102,9 @@ async function handleUnstakeSuccess() {
 </template>
 <style>
 .staked-pools .content .max-w-full .overflow-hidden .table-fixed {
-  min-width: 1280px;
+  min-width: 1440px;
 }
 .staked-pools .content .max-w-full .overflow-auto .table-fixed {
-  min-width: 1280px;
+  min-width: 1440px;
 }
 </style> 

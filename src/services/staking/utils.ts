@@ -51,7 +51,8 @@ export function calculateRewardTokenAprs({
       const data = rewardTokensMeta[rewardTokenAddress];
       const inflationRate = formatUnits(
         data.rate,
-        tokens[getAddress(rewardTokenAddress)]?.decimals || 18
+        //tokens[getAddress(rewardTokenAddress)]?.decimals || 18
+        tokens[getAddress(rewardTokenAddress)]?.decimals
       );
       // if the period is finished for a reward token,
       // it should be 0 as emissions are no longer seeded

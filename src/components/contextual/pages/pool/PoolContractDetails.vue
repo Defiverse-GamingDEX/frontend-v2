@@ -36,6 +36,20 @@ function formSwapFeesHint(owner: string): string {
 
   return t('poolAttrs.feesEditableOwner');
 }
+
+function formatPoolName(name: string): string {
+  if (!name) return '';
+
+  if (name.includes('by Yukichi')) {
+    return name.replace(
+      /(\d+[\w\s]+) by Yukichi Fun_(\d+[\w\s]+)_POOL.*?/g,
+      '$1_$2'
+    );
+  }
+
+  return name;
+}
+
 /**
  * COMPUTED
  */
@@ -58,7 +72,7 @@ const data = computed(() => {
     },
     {
       title: t('poolName'),
-      value: name,
+      value: formatPoolName(name),
     },
     {
       title: t('poolSymbol'),

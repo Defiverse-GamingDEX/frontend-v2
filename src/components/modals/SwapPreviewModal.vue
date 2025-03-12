@@ -749,10 +749,10 @@ watch(blockNumber, () => {
                   class="relative -top-0.5 px-1 text-xs text-gray-500 rounded border-gray-300"
                   >L</span
                 >
-                Trading Fee({{ poolSwapFees.swapFeePercent }}%)
+                Trading Fee({{ poolSwapFees?.swapFeePercent }}%)
               </div>
               <div>
-                {{ poolSwapFees.totalSwapFee }} {{ poolSwapFees.symbol }}
+                {{ poolSwapFees?.totalSwapFee }} {{ poolSwapFees?.symbol }}
               </div>
             </div>
             <div class="summary-item-row text-secondary">

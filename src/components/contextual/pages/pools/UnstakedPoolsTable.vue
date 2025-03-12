@@ -98,9 +98,9 @@ onMounted(() => {
 </template>
 <style>
 .unstaked-pools .content .max-w-full .overflow-hidden .table-fixed {
-  min-width: 1280px;
+  min-width: 1440px;
 }
 .unstaked-pools .content .max-w-full .overflow-auto .table-fixed {
-  min-width: 1280px;
+  min-width: 1440px;
 }
 </style> 

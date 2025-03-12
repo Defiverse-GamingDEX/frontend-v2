@@ -77,7 +77,7 @@ export class GeneralisedJoinHandler implements JoinPoolHandler {
 
     const bptOut = formatFixed(
       this.lastJoinRes.expectedOut,
-      this.pool.value.onchain?.decimals || 18
+      this.pool.value.onchain?.decimals
     );
     const priceImpact: number = bnum(
       formatFixed(this.lastJoinRes.priceImpact, 18)

@@ -116,7 +116,8 @@ export default class Stable {
     // pre-minted BPT.
     const tokenOutAddress = tokensListExclBpt(this.calc.pool.value)[tokenIndex];
     const tokenOutDecimals =
-      selectByAddress(this.calc.poolTokens, tokenOutAddress)?.decimals || 18;
+      //selectByAddress(this.calc.poolTokens, tokenOutAddress)?.decimals || 18;
+      selectByAddress(this.calc.poolTokens, tokenOutAddress)?.decimals;
     const tokenOutPriceRate =
       this.calc.pool.value.tokens.find(t =>
         isSameAddress(t.address, tokenOutAddress)

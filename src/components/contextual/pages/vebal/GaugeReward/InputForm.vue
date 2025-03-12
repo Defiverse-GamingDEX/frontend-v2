@@ -92,7 +92,8 @@ const amountBN = computed(() => bnum(_amount.value));
 const tokenBalanceBN = computed(() => bnum(props?.inputSelect?.balance));
 const hasAmount = computed(() => amountBN.value.gt(0));
 const hasBalance = computed(() => tokenBalanceBN.value.gt(0));
-const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+// const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+const decimalLimit = computed<number>(() => props?.inputSelect?.decimals);
 const inputRules = computed(() => {
   if (!hasToken.value || !isWalletReady.value || props.noRules) {
     return [isPositive()];

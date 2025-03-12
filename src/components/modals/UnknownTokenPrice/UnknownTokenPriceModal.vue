@@ -34,20 +34,20 @@ const PRICE_CAP = 100000000;
 const { seedTokens } = usePoolCreation();
 const { getToken, injectPrices, injectedPrices } = useTokens();
 const { t } = useI18n();
-
+const unknownTokenPrices = ref<TokenPrices>({});
 /**
  * LIFECYCLE
  */
-const unknownTokenPrices = computed((): TokenPrices => {
-  const _unknownTokenPrices = {};
-  for (const token of props.unknownTokens) {
-    _unknownTokenPrices[token] = {
-      [FiatCurrency.usd]:
-        injectedPrices.value?.[token]?.[FiatCurrency.usd] || null,
-    };
-  }
-  return _unknownTokenPrices;
-});
+// const unknownTokenPrices = computed((): TokenPrices => {
+//   const _unknownTokenPrices = {};
+//   for (const token of props.unknownTokens) {
+//     _unknownTokenPrices[token] = {
+//       [FiatCurrency.usd]:
+//         injectedPrices.value?.[token]?.[FiatCurrency.usd] || null,
+//     };
+//   }
+//   return _unknownTokenPrices;
+// });
 
 /**
  * COMPUTED
@@ -82,7 +82,18 @@ function injectUnknownPrices() {
   injectPrices(unknownTokenPrices.value);
   emit('close');
 }
+watchEffect(() => {
+  const _unknownTokenPrices = {};
+  for (const token of props.unknownTokens) {
+    _unknownTokenPrices[token] = {
+      [FiatCurrency.usd]:
+        injectedPrices.value?.[token]?.[FiatCurrency.usd] || null,
+    };
+  }
+  unknownTokenPrices.value = _unknownTokenPrices;
+});
 </script>
+
 
 <template>
   <BalModal

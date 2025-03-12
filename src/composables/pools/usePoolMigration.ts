@@ -163,7 +163,8 @@ export function usePoolMigration(
         token => token.address.toLowerCase() !== fromPool.address.toLowerCase()
       )
       .map(token =>
-        parseUnits(token.balance, fromPool.onchain?.decimals || 18).toString()
+        //parseUnits(token.balance, fromPool.onchain?.decimals || 18).toString()
+        parseUnits(token.balance, fromPool.onchain?.decimals).toString()
       );
 
     return {

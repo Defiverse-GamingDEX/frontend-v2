@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
+import YukichiIcon from '@/assets/images/pools/yukichi.png';
 import PoolPageHero from '@/components/heros/PoolPageHero.vue';
 import TokenSearchInput from '@/components/inputs/TokenSearchInput.vue';
 import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
-import usePoolTypeFilters from '@/composables/pools/usePoolTypeFilters';
+
 import usePools from '@/composables/pools/usePools';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
@@ -21,6 +22,11 @@ const { account } = useWeb3();
 // STATES
 const adminAddress = ref(null);
 const priceLastUpdated = ref('');
+const filterState = reactive({
+  isVerified: false,
+  isPermissionless: false,
+  isYukichi: false,
+});
 // COMPOSABLES
 const { getAdminAddress } = usePoolCreation();
 const router = useRouter();
@@ -29,30 +35,32 @@ const isElementSupported = appNetworkConfig.supportsElementPools;
 const { selectedTokens, addSelectedToken, removeSelectedToken } =
   usePoolFilters();
 
-const {
-  isVerifiedEnabled,
-  isPermissionlessEnabled,
-  isYukichiEnabled,
-  filterPools: filterPoolsByType,
-} = usePoolTypeFilters();
-
 const poolsSortField = ref('totalLiquidity');
+
+const filterOptions = computed(() => {
+  return {
+    isVerified: filterState.isVerified,
+    isPermissionless: filterState.isPermissionless,
+    isYukichi: filterState.isYukichi,
+  };
+});
 
 const {
   pools: rawPools,
   isLoading,
   poolsIsFetchingNextPage,
+  poolsHasNextPage,
   loadMorePools,
-} = usePools(selectedTokens, poolsSortField);
+} = usePools(selectedTokens, poolsSortField, filterOptions);
 
 const pools = computed(() => {
-  return filterPoolsByType(rawPools.value);
+  return rawPools.value;
 });
-console.log('🚀 ~ pools ~ pools:', pools);
+
 const { upToMediumBreakpoint } = useBreakpoints();
 const { networkSlug, networkConfig } = useNetwork();
 
-const isPaginated = computed(() => pools.value.length >= 10);
+const isPaginated = computed(() => poolsHasNextPage?.value);
 
 const isCreatePool = computed(() => {
   // if (!adminAddress.value) {
@@ -86,6 +94,23 @@ function navigateToCreatePool() {
 
 function onColumnSort(columnId: string) {
   poolsSortField.value = columnId;
+}
+
+// Handlers cho các toggle events
+function onVerifiedChange(value: boolean) {
+  filterState.isVerified = value;
+}
+
+function onPermissionlessChange(value: boolean) {
+  filterState.isPermissionless = value;
+}
+
+function onYukichiChange(value: boolean) {
+  filterState.isYukichi = value;
+}
+
+function loadMore() {
+  loadMorePools();
 }
 
 /**
@@ -138,27 +163,45 @@ onBeforeMount(async () => {
 
               <div class="flex gap-6 items-center">
                 <div class="flex gap-2 items-center toggle-custom">
-                  <BalToggle v-model="isVerifiedEnabled" :showLabel="false" />
+                  <BalToggle
+                    :modelValue="filterState.isVerified"
+                    name="verified"
+                    :showLabel="false"
+                    @update:model-value="onVerifiedChange"
+                  />
                   <span class="flex items-center text-sm text-white">
                     <img
                       :src="VerifiedIcon"
                       alt="Verified Pool"
-                      class="w-4 h-4"
+                      class="verified-icon"
                     />Verified</span
                   >
                 </div>
 
                 <div class="flex gap-2 items-center toggle-custom">
                   <BalToggle
-                    v-model="isPermissionlessEnabled"
+                    :modelValue="filterState.isPermissionless"
+                    name="permissionless"
                     :showLabel="false"
+                    @update:model-value="onPermissionlessChange"
                   />
                   <span class="text-sm text-white">Permissionless</span>
                 </div>
 
                 <div class="flex gap-2 items-center toggle-custom">
-                  <BalToggle v-model="isYukichiEnabled" :showLabel="false" />
-                  <span class="text-sm text-white">Yukichi</span>
+                  <BalToggle
+                    :modelValue="filterState.isYukichi"
+                    name="yukichi"
+                    :showLabel="false"
+                    @update:model-value="onYukichiChange"
+                  />
+                  <span class="flex items-center text-sm text-white">
+                    <img
+                      :src="YukichiIcon"
+                      alt="yukichi Pool"
+                      class="mr-1 verified-icon"
+                    />Yukichi</span
+                  >
                 </div>
               </div>
             </div>
@@ -187,7 +230,7 @@ onBeforeMount(async () => {
           :isPaginated="isPaginated"
           skeletonClass="pools-table-loading-height"
           @on-column-sort="onColumnSort"
-          @load-more="loadMorePools"
+          @load-more="loadMore"
         />
         <div v-if="isElementSupported" class="p-4 xl:p-0 mt-16">
           <FeaturedProtocols />

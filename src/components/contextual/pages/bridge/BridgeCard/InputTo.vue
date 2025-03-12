@@ -29,7 +29,8 @@ const emit = defineEmits<{
 
 // COMPUTEDS
 
-const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+// const decimalLimit = computed<number>(() => props?.inputSelect?.decimals || 18);
+const decimalLimit = computed<number>(() => props?.inputSelect?.decimals);
 
 /**
  * STATE

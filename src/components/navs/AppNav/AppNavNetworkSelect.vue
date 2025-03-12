@@ -56,6 +56,24 @@ const activeNetwork = computed((): NetworkOption | undefined =>
     return isActive(network);
   })
 );
+const checkActiveNetwork = () => {
+  if (!appNetworkSupported.value) {
+    let networkDefault = allNetworks.value[0];
+    if (networkDefault) {
+      hardRedirectTo(getNetworkChangeUrl(networkDefault));
+    }
+  }
+};
+
+// check wrong network connect
+watch(
+  () => activeNetwork.value,
+  () => {
+    if (!activeNetwork.value) {
+      checkActiveNetwork();
+    }
+  }
+);
 
 // LIFECYCLE
 onMounted(async () => {
@@ -80,7 +98,7 @@ onMounted(async () => {
     });
     router.replace({ query: {} });
   }
-
+  checkActiveNetwork();
   // hard for mainnet
   // console.log('networkIdCCC', networkId);
   // if (networkId.value !== 16116) {
