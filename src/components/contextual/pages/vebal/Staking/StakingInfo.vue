@@ -4,15 +4,26 @@ import ZIcon from '@/assets/images/bridge/tokens/Z.png';
 import BalCard from '@/components/_global/BalCard/BalCard.vue';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { useRouter } from 'vue-router';
-
-const myZ = ref(0);
-const myLockedZ = ref(105);
-const mySZ = ref(100);
+import useWeb3 from '@/services/web3/useWeb3';
+import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
+import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+const myZ = ref<number | unknown>(undefined);
+const myLockedZ = ref<number | unknown>(undefined);
+const mySZ = ref<number | unknown>(undefined);
 /**
  * COMPOSABLES
  */
+const { fNum2 } = useNumbers();
 const { upToLargeBreakpoint } = useBreakpoints();
 const router = useRouter();
+const { account, chainId, getProvider } = useWeb3();
+const STAKE_Z_NETWORK = computed(() => {
+  return (
+    STAKE_Z_NETWORKS.find(network => network.chain_id === chainId.value) || null
+  );
+});
+const { getTokenBalance, getLockedZAmount } = useStakeZ();
 /**
 /**
  * FUNCTIONS
@@ -20,6 +31,72 @@ const router = useRouter();
 const goToSwap = () => {
   router.push({ name: 'swap' });
 };
+const getZbalance = async () => {
+  try {
+    const provider = getProvider();
+    const zBalance = await getTokenBalance({
+      provider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.z_token_address,
+      walletAddress: account.value,
+      tokenDecimals: STAKE_Z_NETWORK.value?.z_token_decimals,
+    });
+    console.log('🚀 ~ getZbalance ~ zBalance:', zBalance);
+    return zBalance;
+  } catch (error) {
+    console.log(error, 'getZbalance=>error');
+    return 0;
+  }
+};
+const getLockedZbalance = async () => {
+  try {
+    const provider = getProvider();
+    const params = {
+      provider: provider,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      walletAddress: account.value,
+    };
+    const lockedZAmount = await getLockedZAmount(params);
+    console.log('🚀 ~ getLockedZbalance ~ lockedZAmount:', lockedZAmount);
+    return lockedZAmount;
+  } catch (error) {
+    console.log(error, 'getLockedZbalance=>error');
+    return 0;
+  }
+};
+const getSZbalance = async () => {
+  try {
+    const provider = getProvider();
+    const szBalance = await getTokenBalance({
+      provider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      walletAddress: account.value,
+      tokenDecimals: STAKE_Z_NETWORK.value?.sz_token_decimals,
+    });
+    console.log('🚀 ~ getSZbalance ~ szBalance:', szBalance);
+    return szBalance;
+  } catch (error) {
+    console.log(error, 'getSZbalance=>error');
+    return 0;
+  }
+};
+const getStakeZInfo = async () => {
+  try {
+    if (!account.value || !chainId.value) {
+      return;
+    }
+    myZ.value = await getZbalance();
+    myLockedZ.value = await getLockedZbalance();
+    mySZ.value = await getSZbalance();
+  } catch (error) {
+    console.log(error, 'getStakeZInfo=>error');
+  }
+};
+/**
+ * LIFE CYCLES
+ */
+onMounted(async () => {
+  await getStakeZInfo();
+});
 </script>
 
 <template>
@@ -32,7 +109,9 @@ const goToSwap = () => {
         <div class="card-content">
           <div class="title">My Z</div>
           <div class="flex justify-between items-center">
-            <div class="amount">{{ myZ }}</div>
+            <div class="amount">
+              {{ fNum2(myZ?.toString() || '0', FNumFormats.token) }}
+            </div>
             <div class="flex gap-1 items-center">
               <BalIcon
                 name="plus-circle"
@@ -65,7 +144,9 @@ const goToSwap = () => {
         <div class="card-content">
           <div class="title">My sZ</div>
           <div class="flex justify-between items-center">
-            <div class="amount">{{ mySZ }}</div>
+            <div class="amount">
+              {{ fNum2(mySZ?.toString() || '0', FNumFormats.token) }}
+            </div>
             <div class="flex gap-1 items-center">
               <router-link
                 :to="{
