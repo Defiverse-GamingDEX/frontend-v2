@@ -101,6 +101,37 @@ async function approveToken({
     throw error;
   }
 }
+
+async function getLockedZAmount(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.getLockedZAmount(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'getLockedZAmount=>error');
+    throw error;
+  }
+}
+async function getMaturityPeriod(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.getMaturityPeriod(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'getMaturityPeriod=>error');
+    throw error;
+  }
+}
+async function getEstimateSzAmount(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.getEstimateSzAmount(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'getEstimateSzAmount=>error');
+    throw error;
+  }
+}
 async function stakeZ(params) {
   try {
     params.abi = SZ_TOKEN_ABI;
@@ -108,17 +139,6 @@ async function stakeZ(params) {
     return rs;
   } catch (error) {
     console.log(error, 'stakeZ=>error');
-    throw error;
-  }
-}
-async function getLockedZAmount(params) {
-  try {
-    params.abi = SZ_TOKEN_ABI;
-    const rs = await stakeZService.getLockedZAmount(params);
-    console.log('🚀 ~ getLockedZAmount ~ rs:', rs);
-    return rs;
-  } catch (error) {
-    console.log(error, 'getLockedZAmount=>error');
     throw error;
   }
 }
@@ -131,5 +151,7 @@ export function useStakeZ() {
     approveToken,
     stakeZ,
     getLockedZAmount,
+    getMaturityPeriod,
+    getEstimateSzAmount,
   };
 }

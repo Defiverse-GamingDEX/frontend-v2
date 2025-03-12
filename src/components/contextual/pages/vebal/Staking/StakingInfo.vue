@@ -1,3 +1,9 @@
+<script lang="ts">
+// Add a default export to make the component importable with default import
+export default {
+  name: 'StakingInfo',
+};
+</script>
 <script setup lang="ts">
 import { ref } from 'vue';
 import ZIcon from '@/assets/images/bridge/tokens/Z.png';
@@ -8,6 +14,7 @@ import useWeb3 from '@/services/web3/useWeb3';
 import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import BigNumber from 'bignumber.js';
 const myZ = ref<number | unknown>(undefined);
 const myLockedZ = ref<number | unknown>(undefined);
 const mySZ = ref<number | unknown>(undefined);
@@ -40,7 +47,6 @@ const getZbalance = async () => {
       walletAddress: account.value,
       tokenDecimals: STAKE_Z_NETWORK.value?.z_token_decimals,
     });
-    console.log('🚀 ~ getZbalance ~ zBalance:', zBalance);
     return zBalance;
   } catch (error) {
     console.log(error, 'getZbalance=>error');
@@ -55,7 +61,10 @@ const getLockedZbalance = async () => {
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       walletAddress: account.value,
     };
-    const lockedZAmount = await getLockedZAmount(params);
+    let lockedZAmount: any = await getLockedZAmount(params);
+    lockedZAmount = BigNumber(lockedZAmount).div(
+      10 ** (STAKE_Z_NETWORK.value?.z_token_decimals ?? 18)
+    );
     console.log('🚀 ~ getLockedZbalance ~ lockedZAmount:', lockedZAmount);
     return lockedZAmount;
   } catch (error) {
@@ -91,11 +100,15 @@ const getStakeZInfo = async () => {
     console.log(error, 'getStakeZInfo=>error');
   }
 };
+const reloadStakeZInfo = async () => {
+  await getStakeZInfo();
+};
 /**
  * LIFE CYCLES
  */
 onMounted(async () => {
   await getStakeZInfo();
+  (window as any).emitter?.on('reloadStakeZInfo', reloadStakeZInfo);
 });
 </script>
 
@@ -129,7 +142,9 @@ onMounted(async () => {
         <div class="card-content">
           <div class="title">My locked Z</div>
           <div class="flex justify-between items-center">
-            <div class="amount">{{ myLockedZ }}</div>
+            <div class="amount">
+              {{ fNum2(myLockedZ?.toString() || '0', FNumFormats.token) }}
+            </div>
             <!-- <div class="flex gap-1 items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
               <span class="token">Z</span>

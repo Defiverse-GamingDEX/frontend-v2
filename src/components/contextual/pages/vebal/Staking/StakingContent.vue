@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import StakingForm from './StakingForm.vue';
 import StakingInfo from './StakingInfo.vue';

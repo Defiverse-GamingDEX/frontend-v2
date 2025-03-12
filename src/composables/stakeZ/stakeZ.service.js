@@ -7,14 +7,29 @@ const getLockedZAmount = async ({
   contractAddress,
   walletAddress,
 }) => {
-  console.log('🚀 ~ walletAddress:', walletAddress);
-  console.log('🚀 ~ contractAddress:', contractAddress);
-  console.log('🚀 ~ abi:', abi);
-  console.log('🚀 ~ provider:', provider);
   const myContract = new Contract(contractAddress, abi, provider);
   const lockedZAmount = await myContract.lockedAmount(walletAddress);
   console.log('🚀 ~ lockedZAmount:', lockedZAmount);
-  return lockedZAmount;
+  return lockedZAmount.toString() || 0;
+};
+const getMaturityPeriod = async ({ provider, abi, contractAddress }) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const maturityPeriod = await myContract.redemptionMaturityPeriod();
+  console.log(
+    '🚀 ~ getMaturityPeriod ~ maturityPeriod:',
+    maturityPeriod.toString()
+  );
+  return maturityPeriod.toNumber() || 0;
+};
+const getEstimateSzAmount = async ({
+  provider,
+  abi,
+  contractAddress,
+  amount,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const estimateSzAmount = await myContract.estimateSZ(amount);
+  return estimateSzAmount?.toNumber() || 0;
 };
 const _sendRawTx = async (
   contractAddress,
@@ -41,9 +56,6 @@ const _sendRawTx = async (
       signer
     );
 
-    if (isEstimate) {
-      return gas;
-    }
     // overwrite.gasLimit = gas;
     overwrite.maxPriorityFeePerGas = null;
     overwrite.maxFeePerGas = null;
@@ -79,7 +91,7 @@ const _estimateGas = async (myContract, action, params, overwrite, signer) => {
     .connect(signer)
     .estimateGas[action](...params);
   estimateGas = estimateGas?.toNumber() || 0;
-  return new BigNumber(estimateGas).times(2).toFixed(0);
+  return new BigNumber(estimateGas).times(1.3).toFixed(0);
 };
 
 const stakeZ = async params => {
@@ -87,48 +99,29 @@ const stakeZ = async params => {
     contractAddress, // contract token
     contractProvider, // contract provider
     account,
-    srcTokenSymbol,
-    desChainId,
-    srcTokenDecimal,
     value, // amount
-    vBridgeAddress,
-    srcTokenAddress, // account address
     signer,
-    slippage,
     abi,
-    gasPrice,
-    isEstimate,
-    nonce,
   } = params;
 
-  let decimals_value = BigNumber(value)
-    .times(10 ** srcTokenDecimal)
-    .toFixed(0);
   let overwrite = { from: account };
 
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
-    'send',
-    [
-      vBridgeAddress,
-      srcTokenAddress,
-      decimals_value,
-      desChainId,
-      nonce,
-      slippage,
-    ],
+    'stake',
+    [value],
     overwrite,
     signer,
-    abi,
-    gasPrice,
-    isEstimate
+    abi
   );
-
-  return { tx: rs, nonce };
+  console.log('🚀 ~ rs:', rs);
+  return rs;
 };
 
 export default {
   getLockedZAmount,
+  getMaturityPeriod,
+  getEstimateSzAmount,
   stakeZ,
 };

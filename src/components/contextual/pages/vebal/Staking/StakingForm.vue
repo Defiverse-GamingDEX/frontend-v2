@@ -1,34 +1,274 @@
+<script lang="ts">
+// Add a default export to make the component importable with default import
+export default {
+  name: 'StakingForm',
+};
+</script>
 <script setup lang="ts">
 import { ref } from 'vue';
-import BalTooltip from '@/components/_global/BalTooltip/BalTooltip.vue';
+
 import BalCard from '@/components/_global/BalCard/BalCard.vue';
 import ZIcon from '@/assets/images/bridge/tokens/Z.png';
 import useBreakpoints from '@/composables/useBreakpoints';
-const amount = ref('');
-const receiveAmount = ref('');
+import useWeb3 from '@/services/web3/useWeb3';
+import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
+import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { cloneDeep, debounce } from 'lodash';
+import BigNumber from 'bignumber.js';
+import { format } from 'date-fns';
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import useEthers from '@/composables/useEthers';
+/**
+ * STATES
+ */
+const isApproved = ref(false);
+const amount = ref<number | unknown>(0);
+const receiveAmount = ref<number | unknown>(0);
+const userZBalance = ref<number | unknown>(0);
+const rateSZ = ref<number | unknown>(0);
+const maturityPeriod = ref<any>({});
+const isLoading = ref(false);
+const validate = ref({
+  isError: false,
+  message: '',
+});
+/**
+ * COMPOSABLES
+ */
+const { fNum2 } = useNumbers();
+const { addNotification } = useNotifications();
+const { addTransaction } = useTransactions();
+const { txListener } = useEthers();
 const { upToLargeBreakpoint } = useBreakpoints();
-const handleAmountChange = async () => {
+const { account, chainId, getProvider, startConnectWithInjectedProvider } =
+  useWeb3();
+const STAKE_Z_NETWORK = computed(() => {
+  return (
+    STAKE_Z_NETWORKS.find(network => network.chain_id === chainId.value) || null
+  );
+});
+const {
+  getTokenBalance,
+  getMaturityPeriod,
+  getEstimateSzAmount,
+  checkTokenAllowance,
+  approveToken,
+  stakeZ,
+} = useStakeZ();
+/**
+ * METHODS
+ */
+const checkValidateAmount = () => {
+  if (Number(amount?.value) > Number(userZBalance?.value)) {
+    validate.value = {
+      isError: true,
+      message: 'Insufficient balance',
+    };
+    return;
+  }
+  validate.value = {
+    isError: false,
+    message: '',
+  };
+};
+const handleAmountChange = async event => {
+  console.log('🚀 ~ event:', event);
+  amount.value = event.target.value;
   if (!amount.value) {
-    receiveAmount.value = '';
+    receiveAmount.value = 0;
     return;
   }
 
   try {
-    // TODO: Call API to calculate receive amount
-    // For now, just multiply by 0.9523
-    const calculatedAmount = Number(amount.value) * 0.9523;
-    receiveAmount.value = calculatedAmount.toString();
+    const calculatedAmount = BigNumber(Number(amount?.value))
+      .times(Number(rateSZ?.value || 0))
+      .toNumber();
+    receiveAmount.value = calculatedAmount;
+    checkValidateAmount();
   } catch (error) {
     console.error('Error calculating receive amount:', error);
-    receiveAmount.value = '';
+    receiveAmount.value = 0;
   }
 };
+const delayinputChange = debounce(async event => {
+  handleAmountChange(event);
+}, 500);
 
-const handleStake = () => {
-  // TODO: Handle stake
-  amount.value = '';
-  receiveAmount.value = '';
+const getUserZBalance = async () => {
+  try {
+    const provider = getProvider();
+    const zBalance = await getTokenBalance({
+      provider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.z_token_address,
+      walletAddress: account.value,
+      tokenDecimals: STAKE_Z_NETWORK.value?.z_token_decimals,
+    });
+    return zBalance;
+  } catch (error) {
+    console.log(error, 'getZbalance=>error');
+    return 0;
+  }
 };
+const getRateSZ = async () => {
+  try {
+    const amount = 1;
+    const provider = getProvider();
+    const rateSZ = await getEstimateSzAmount({
+      provider: provider,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      amount: amount,
+    });
+    return rateSZ;
+  } catch (error) {
+    console.log(error, 'getRateSZ=>error');
+    return 0;
+  }
+};
+const getMaturityPeriodInfo = async () => {
+  try {
+    const provider = getProvider();
+    const rs = await getMaturityPeriod({
+      provider: provider,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+    });
+    console.log('🚀 ~ getMaturityPeriod ~ maturityPeriod:', rs);
+    const days = BigNumber(rs).div(86400).toFixed(0);
+    console.log('🚀 ~ getMaturityPeriodInfo ~ days:', days);
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + Number(days));
+    console.log('🚀 ~ getMaturityPeriodInfo ~ endDate:', endDate);
+    maturityPeriod.value = {
+      endDate: format(endDate, 'dd MMM yyyy'),
+      days: days,
+    };
+    console.log('🚀 ~ getMaturityPeriodInfo ~ maturityPeriod:', maturityPeriod);
+  } catch (error) {
+    console.log(error, 'getMaturityPeriod=>error');
+  }
+};
+const checkAllowance = async () => {
+  try {
+    const provider = getProvider();
+    const allowance = await checkTokenAllowance({
+      provider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.z_token_address,
+      walletAddress: account.value,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+    });
+    console.log('🚀 ~ checkAllowance ~ allowance:', allowance);
+    if (allowance > 0) {
+      isApproved.value = true;
+    } else {
+      isApproved.value = false;
+    }
+  } catch (error) {
+    console.log(error, 'checkAllowance=>error');
+  }
+};
+const fetchData = async () => {
+  try {
+    userZBalance.value = await getUserZBalance();
+    rateSZ.value = await getRateSZ();
+    await getMaturityPeriodInfo();
+    await checkAllowance();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+const handleApprove = async () => {
+  // TODO: Handle approve
+  try {
+    isLoading.value = true;
+    const provider = getProvider();
+    const signer = provider.getSigner();
+    const params = {
+      provider,
+      contractProvider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.z_token_address,
+      signer,
+      approveAmount: Number(amount.value),
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+    };
+    const tx = await approveToken(params);
+    console.log('🚀 ~ handleApprove ~ tx:', tx);
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        await checkAllowance();
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error: any) {
+    isLoading.value = false;
+    console.log(error, 'handleApprove=>error');
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
+};
+const handleStake = async () => {
+  // TODO: Handle stake
+  try {
+    isLoading.value = true;
+    console.log('🚀 ~ handleStake:', amount.value);
+    const provider = getProvider();
+    const decimals_amount = BigNumber(Number(amount.value))
+      .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals ?? 18))
+      .toFixed(0);
+    const signer = provider.getSigner();
+    const params = {
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      contractProvider: provider,
+      account: account.value,
+      value: decimals_amount, // amount
+      signer: signer,
+    };
+    console.log('🚀 ~ handleStake ~ params:', params);
+    const tx = await stakeZ(params);
+    console.log('🚀 ~ handleStake ~ rs:', tx);
+    const summary = `StakeZ success!`;
+    addTransaction({
+      id: tx?.hash || tx,
+      type: 'tx',
+      action: 'stakeZ',
+      summary,
+    });
+
+    tx &&
+      txListener(tx, {
+        onTxConfirmed: async (receipt: any) => {
+          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
+          await fetchData();
+          (window as any).emitter?.emit('reloadStakeZInfo');
+          isLoading.value = false;
+        },
+        onTxFailed: () => {
+          isLoading.value = false;
+        },
+      });
+    isLoading.value = false;
+  } catch (error: any) {
+    isLoading.value = false;
+    console.log(error, 'handleStake=>error');
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
+};
+/**
+ * LIFE CYCLES
+ */
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <template>
@@ -42,7 +282,11 @@ const handleStake = () => {
         <div class="flex justify-end items-center mb-1 balance-content">
           <span class="balance-label"
             >Balance:
-            <span class="balance-value">0</span>
+            <span class="balance-value">
+              {{
+                fNum2(userZBalance?.toString() || '0', FNumFormats.token)
+              }}</span
+            >
             Z
           </span>
         </div>
@@ -52,7 +296,7 @@ const handleStake = () => {
             type="number"
             placeholder="0"
             class="pr-10 w-full text-xl font-bold bg-white focus:outline-none font-sm"
-            @input="handleAmountChange"
+            @input="delayinputChange"
           />
           <div
             class="flex absolute top-1/2 right-0 gap-2 items-center -translate-y-1/2"
@@ -61,18 +305,21 @@ const handleStake = () => {
             <span class="text-xl font-bold text-gray-800">Z</span>
           </div>
         </div>
+        <div v-if="validate.isError" class="validate-amount">
+          {{ validate.message }}
+        </div>
       </div>
 
       <div class="flex justify-end items-center mb-4 ratio-content">
-        <span>1 Z = 0.9523 sZ</span>
+        <span>1 Z = {{ rateSZ }} sZ</span>
       </div>
 
       <div class="flex justify-between items-center mb-2 maturity-content">
         <div class="flex gap-1 items-center">
           <span class="label">Maturity</span>
-          <span class="days-label">(365 days)</span>
+          <span class="days-label">({{ maturityPeriod?.days }} days)</span>
         </div>
-        <span class="value">4 Dec 2025</span>
+        <span class="value">{{ maturityPeriod?.endDate }}</span>
       </div>
 
       <div class="flex flex-col mb-2">
@@ -101,33 +348,51 @@ const handleStake = () => {
           <hr class="mt-4 border-gray-800" />
         </div>
       </div>
-
-      <div class="mt-4 btn-actions">
-        <button
-          v-if="!amount"
-          class="py-3 px-8 w-full text-lg font-medium text-white rounded-xl cursor-not-allowed btn-enter-amount"
-          disabled
-        >
-          Enter Amount
-        </button>
-        <button
-          v-else
-          class="py-3 px-8 w-full text-lg font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-xl"
-          :disabled="!receiveAmount"
-          :class="{
-            'opacity-50 cursor-not-allowed': !receiveAmount,
-          }"
-          @click="handleStake"
-        >
-          Stake
-        </button>
+      <div v-if="!account" class="mt-4 btn-actions">
+        <BalBtn
+          :label="$t('connectWallet')"
+          :loading="isLoading"
+          classCustom="pink-white-shadow"
+          block
+          @click="startConnectWithInjectedProvider"
+        />
+      </div>
+      <div v-else class="mt-4 btn-actions">
+        <div v-if="!isApproved">
+          <BalBtn
+            label="Approve"
+            :loading="isLoading"
+            classCustom="pink-white-shadow"
+            block
+            @click="handleApprove"
+          />
+        </div>
+        <div v-else>
+          <BalBtn
+            v-if="!amount"
+            label="Enter Amount"
+            :disabled="true"
+            classCustom="pink-white-shadow"
+            block
+          />
+          <BalBtn
+            v-else
+            label="Stake"
+            :loading="isLoading"
+            :disabled="!receiveAmount || Number(amount) > Number(userZBalance)"
+            classCustom="pink-white-shadow"
+            block
+            @click="handleStake"
+          />
+        </div>
       </div>
     </BalCard>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 .staking-form {
+  // Styles for staking form container
   .balance-content {
     color: #000;
     font-size: 14px;
@@ -153,6 +418,11 @@ const handleStake = () => {
       }
       -moz-appearance: textfield;
     }
+  }
+  .validate-amount {
+    color: #f00;
+    font-size: 11px;
+    font-weight: 500;
   }
   .ratio-content {
     color: #000;
