@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import bridgeApi from '@/composables/bridge/bridge.price.api';
 import NumberAnimation from 'vue-number-animation';
+
+import useNetwork from '@/composables/useNetwork';
 /**
  * STATE
  */
 const tvl = ref(0);
 const volume_24h = ref(0);
 const volume_7d = ref(0);
+
 /**
  * COMPOSABLES
  */
+const { networkSlug } = useNetwork();
 
 /**
  * COMPUTED
@@ -20,13 +24,16 @@ const volume_7d = ref(0);
  */
 const getMarketInfo = async () => {
   try {
-    let rs = await bridgeApi.getMarketInfo();
+    let rs = await bridgeApi.getMarketInfo(networkSlug);
     console.log('rs', rs);
-    tvl.value = rs?.total_value_locked;
-    volume_24h.value = rs?.total_24h_volume;
-    volume_7d.value = rs?.total_1week_volume;
+    tvl.value = rs?.total_value_locked || 0;
+    volume_24h.value = rs?.total_24h_volume || 0;
+    volume_7d.value = rs?.total_1week_volume || 0;
   } catch (error) {
     console.log('🚀 ~ getMarketInfo ~ error:', error);
+    tvl.value = 0;
+    volume_24h.value = 0;
+    volume_7d.value = 0;
   }
 };
 const initData = () => {
