@@ -49,7 +49,7 @@ const sortedBalances = computed(() => {
   const addressesWithBalance = Object.entries(balances.value)
     .filter(
       ([address, balance]) =>
-        balance !== '0.0' && address !== veBalTokenInfo.value?.address
+        Number(balance) > 0 && address !== veBalTokenInfo.value?.address
     )
     .map(([address]) => address);
   const tokensWithBalance = Object.values(

@@ -36,8 +36,10 @@ const postBridgeRequestV2 = async params => {
   return data?.data;
 };
 
-const getMarketInfo = async () => {
-  let data = await axios.get(`${domain}/v1/market/info`, {});
+const getMarketInfo = async network => {
+  let data = await axios.get(`${domain}/v1/market/info`, {
+    params: { network },
+  });
   return data?.data;
 };
 // INTERNAL API - END
