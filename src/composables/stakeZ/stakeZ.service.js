@@ -19,7 +19,7 @@ const getMaturityPeriod = async ({ provider, abi, contractAddress }) => {
     '🚀 ~ getMaturityPeriod ~ maturityPeriod:',
     maturityPeriod.toString()
   );
-  return maturityPeriod.toNumber() || 0;
+  return maturityPeriod.toString() || 0;
 };
 const getEstimateSzAmount = async ({
   provider,
@@ -29,7 +29,60 @@ const getEstimateSzAmount = async ({
 }) => {
   const myContract = new Contract(contractAddress, abi, provider);
   const estimateSzAmount = await myContract.estimateSZ(amount);
-  return estimateSzAmount?.toNumber() || 0;
+  return estimateSzAmount?.toString() || 0;
+};
+const getEstimateZAmount = async ({
+  provider,
+  abi,
+  contractAddress,
+  amount,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const estimateZAmount = await myContract.estimateZ(amount);
+  return estimateZAmount?.toString() || 0;
+};
+const getAllRedeemableAmount_SZ = async ({
+  provider,
+  abi,
+  contractAddress,
+  walletAddress,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const allRedeemableAmount_SZ = await myContract.getAllRedeemableAmount_SZ(
+    walletAddress
+  );
+  console.log(
+    '🚀 ~ getAllRedeemableAmount_SZ ~ allRedeemableAmount_SZ:',
+    allRedeemableAmount_SZ
+  );
+  return allRedeemableAmount_SZ?.toString() || 0;
+};
+const getRedeemableAmount_SZ = async ({
+  provider,
+  abi,
+  contractAddress,
+  walletAddress,
+  stakeId,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const redeemableAmount_SZ = await myContract.getRedeemableAmount_SZ(
+    walletAddress,
+    stakeId
+  );
+  console.log(
+    '🚀 ~ getRedeemableAmount_SZ ~ redeemableAmount_SZ:',
+    redeemableAmount_SZ
+  );
+  return redeemableAmount_SZ?.toString() || 0;
+};
+const getEarlyRedeemPenalty = async ({ provider, abi, contractAddress }) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const earlyRedeemPenalty = await myContract.baseRedemptionRate();
+  console.log(
+    '🚀 ~ getEarlyRedeemPenalty ~ earlyRedeemPenalty:',
+    earlyRedeemPenalty
+  );
+  return earlyRedeemPenalty?.toString() || 0;
 };
 const _sendRawTx = async (
   contractAddress,
@@ -118,10 +171,63 @@ const stakeZ = async params => {
   console.log('🚀 ~ rs:', rs);
   return rs;
 };
+const redeemAllSZ = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    signer,
+    abi,
+  } = params;
 
+  let overwrite = { from: account };
+
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'redeemAll',
+    [],
+    overwrite,
+    signer,
+    abi
+  );
+  console.log('🚀 ~ rs=>redeemAllSZ:', rs);
+  return rs;
+};
+const redeemSZ = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    value, // amount
+    stakeId,
+    signer,
+    abi,
+  } = params;
+
+  let overwrite = { from: account };
+
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'redeem',
+    [value, stakeId],
+    overwrite,
+    signer,
+    abi
+  );
+  console.log('🚀 ~ rs=>redeemSZ:', rs);
+  return rs;
+};
 export default {
   getLockedZAmount,
   getMaturityPeriod,
   getEstimateSzAmount,
+  getEstimateZAmount,
+  getAllRedeemableAmount_SZ,
+  getRedeemableAmount_SZ,
+  getEarlyRedeemPenalty,
   stakeZ,
+  redeemAllSZ,
+  redeemSZ,
 };

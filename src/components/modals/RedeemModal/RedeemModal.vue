@@ -8,12 +8,21 @@
 
     <div class="px-2 redeem-modal-container">
       <div class="p-4 mb-2 rounded-xl border border-gray-800">
-        <div class="flex justify-end items-center mb-1 balance-content">
-          <span class="balance-label"
-            >Balance:
-            <span class="balance-value">{{ pool?.amountSZ }}</span>
+        <div class="flex flex-col justify-end items-end mb-1 balance-content">
+          <div class="text-xs balance-label">
+            Staked balance :
+            <span class="text-xs balance-value">{{ pool?.amountSZ }}</span>
             sZ
-          </span>
+          </div>
+          <div class="text-base balance-label">
+            Redeemable balance:
+            <span class="text-base balance-value">
+              {{
+                fNum2((redeemableBalance || 0).toString(), FNumFormats.token)
+              }}</span
+            >
+            sZ
+          </div>
         </div>
         <div class="relative input-control">
           <input
@@ -21,7 +30,7 @@
             type="number"
             placeholder="0"
             class="pr-10 w-full text-xl font-bold bg-whitefocus:outline-none font-sm"
-            @input="handleAmountChange"
+            @input="delayinputChange"
           />
           <div
             class="flex absolute top-1/2 right-0 gap-2 items-center -translate-y-1/2"
@@ -30,10 +39,13 @@
             <span class="text-xl font-bold text-gray-800">sZ</span>
           </div>
         </div>
+        <div v-if="validate.isError" class="validate-amount">
+          {{ validate.message }}
+        </div>
       </div>
 
       <div class="flex justify-end items-center mb-4 ratio-content">
-        <span>1 sZ = 1.05 Z</span>
+        <span>1 sZ = {{ estimateZRate }} Z</span>
       </div>
 
       <div class="flex justify-between items-center mb-8 maturity-content">
@@ -53,7 +65,7 @@
               iconClass="text-black"
             />
           </div>
-          <span class="value">50.0%</span>
+          <span class="value">{{ penaltyRate }} %</span>
         </div>
         <p class="warning-text">
           Redemption prior to maturity reduces the sZ that can be received.
@@ -78,25 +90,44 @@
     </div>
 
     <template #footer>
-      <div class="mt-4 btn-actions">
-        <button
-          v-if="!amount"
-          class="py-3 px-8 w-full text-lg font-medium text-white rounded-xl cursor-not-allowed btn-enter-amount"
-          disabled
-        >
-          Enter Amount
-        </button>
-        <button
-          v-else
-          class="py-3 px-8 w-full text-lg font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-xl"
-          :disabled="!receiveAmount"
-          :class="{
-            'opacity-50 cursor-not-allowed': !receiveAmount,
-          }"
-          @click="handleRedeem"
-        >
-          Redeem
-        </button>
+      <div v-if="!account" class="mt-4 btn-actions">
+        <BalBtn
+          :label="$t('connectWallet')"
+          :loading="isLoading"
+          classCustom="pink-white-shadow"
+          block
+          @click="startConnectWithInjectedProvider"
+        />
+      </div>
+      <div v-else class="mt-4 btn-actions">
+        <div v-if="!isApproved">
+          <BalBtn
+            :disabled="!amount || Number(amount) <= 0"
+            label="Approve"
+            :loading="isLoading"
+            classCustom="pink-white-shadow"
+            block
+            @click="handleApprove"
+          />
+        </div>
+        <div v-else>
+          <BalBtn
+            v-if="!amount"
+            label="Enter Amount"
+            :disabled="true"
+            classCustom="pink-white-shadow"
+            block
+          />
+          <BalBtn
+            v-else
+            label="Stake"
+            :loading="isLoading"
+            :disabled="!receiveAmount || validate.isError"
+            classCustom="pink-white-shadow"
+            block
+            @click="handleRedeem"
+          />
+        </div>
       </div>
     </template>
   </BalModal>
@@ -107,7 +138,16 @@ import { ref } from 'vue';
 import BalModal from '@/components/_global/BalModal/BalModal.vue';
 import BalTooltip from '@/components/_global/BalTooltip/BalTooltip.vue';
 import ZIcon from '@/assets/images/bridge/tokens/Z.png';
-
+import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
+import useWeb3 from '@/services/web3/useWeb3';
+import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
+import BigNumber from 'bignumber.js';
+import { format } from 'date-fns';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import useEthers from '@/composables/useEthers';
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import { debounce } from 'lodash';
 const props = defineProps<{
   show: boolean;
   pool?: any;
@@ -115,36 +155,267 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'redeem']);
 
+/**
+ * STATES
+ */
+const redeemableBalance = ref(0);
+const penaltyRate = ref(0);
+const estimateZRate = ref(0);
 const amount = ref('');
-const receiveAmount = ref('');
+const receiveAmount = ref<number | ''>('');
+const validate = ref({
+  isError: false,
+  message: '',
+});
+const isApproved = ref(true); // TODO need check
+const isLoading = ref(false);
+/**
+ * COMPOSABLES
+ */
+const { fNum2 } = useNumbers();
+const {
+  getRedeemableAmount_SZ,
+  getEstimateZAmount,
+  getEarlyRedeemPenalty,
+  checkTokenAllowance,
+  approveToken,
+  redeemSZ,
+} = useStakeZ();
+const { account, chainId, getProvider, startConnectWithInjectedProvider } =
+  useWeb3();
+const { addNotification } = useNotifications();
+const { addTransaction } = useTransactions();
+const { txListener } = useEthers();
+/**
+ * COMPUTED
+ */
+const STAKE_Z_NETWORK = computed(() => {
+  return (
+    STAKE_Z_NETWORKS.find(network => network.chain_id === chainId.value) || null
+  );
+});
+/**
+ * FUNCTIONS
+ */
+const getRedeemableBalance = async () => {
+  try {
+    const provider = getProvider();
+    const balance = await getRedeemableAmount_SZ({
+      provider: provider,
+      walletAddress: account.value,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      stakeId: props.pool?.id,
+    });
+    redeemableBalance.value = balance;
+    console.log(
+      '🚀 ~ getRedeemableBalance ~ redeemableBalance.value:',
+      redeemableBalance.value
+    );
+  } catch (error) {
+    console.log(error, 'getRedeemableBalance=>error');
+    redeemableBalance.value = 0;
+  }
+};
+const getPenaltyRate = async () => {
+  try {
+    const provider = getProvider();
+    let penalty = await getEarlyRedeemPenalty({
+      provider: provider,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+    });
+    if (penalty) {
+      console.log('🚀 ~ getPenaltyRate ~ penalty:', penalty);
+      penalty = BigNumber(penalty).div(1e4).toFixed(0);
+    }
+    penaltyRate.value = penalty;
+    console.log('🚀 ~ getPenatyRate ~ penaltyRate.value:', penaltyRate.value);
+  } catch (error) {
+    console.log(error, 'getPenatyRate=>error');
+    penaltyRate.value = 0;
+  }
+};
+const getEstimateZRate = async () => {
+  try {
+    const provider = getProvider();
+    const rate = await getEstimateZAmount({
+      provider: provider,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      amount: 1,
+    });
+    estimateZRate.value = rate;
+    console.log(
+      '🚀 ~ getEstimateZRate ~ estimateZRate.value:',
+      estimateZRate.value
+    );
+  } catch (error) {
+    console.log(error, 'getEstimateZRate=>error');
+    estimateZRate.value = 0;
+  }
+};
+const checkAllowance = async () => {
+  try {
+    const provider = getProvider();
+    const allowance = await checkTokenAllowance({
+      provider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      walletAddress: account.value,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+    });
 
-const handleAmountChange = async () => {
+    if (allowance.gt(0)) {
+      isApproved.value = true;
+    } else {
+      isApproved.value = false;
+    }
+  } catch (error) {
+    console.log(error, 'checkAllowance=>error');
+  }
+};
+const handleApprove = async () => {
+  // TODO: Handle approve
+  try {
+    isLoading.value = true;
+    const provider = getProvider();
+    const signer = provider.getSigner();
+    console.log(
+      '🚀 ~ handleApprove ~ redeemableBalance?.value:',
+      redeemableBalance?.value
+    );
+    const balance: any = redeemableBalance?.value || 0;
+    const approveAmount: any = BigNumber(balance)
+      .times(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
+      .toFixed(0);
+    const params = {
+      provider,
+      contractProvider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      signer,
+      approveAmount: approveAmount,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+    };
+    const tx = await approveToken(params);
+    console.log('🚀 ~ handleApprove ~ tx:', tx);
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        await checkAllowance();
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error: any) {
+    isLoading.value = false;
+    console.log(error, 'handleApprove=>error');
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
+};
+const fetchData = async () => {
+  try {
+    getRedeemableBalance();
+    getPenaltyRate();
+    getEstimateZRate();
+  } catch (error) {
+    console.log('🚀 ~ error:', error);
+  }
+};
+const delayinputChange = debounce(async event => {
+  handleAmountChange(event);
+}, 500);
+const checkValidateAmount = () => {
+  if (Number(amount?.value) > Number(redeemableBalance?.value)) {
+    validate.value = {
+      isError: true,
+      message: 'Insufficient balance',
+    };
+    return;
+  }
+  validate.value = {
+    isError: false,
+    message: '',
+  };
+};
+const handleAmountChange = async event => {
+  console.log('🚀 ~ event:', event);
+  amount.value = event.target.value;
   if (!amount.value) {
-    receiveAmount.value = '';
+    receiveAmount.value = 0;
     return;
   }
 
   try {
-    // TODO: Call API to calculate receive amount
-    // For now, just multiply by 1.05
-    const calculatedAmount = Number(amount.value) * 1.05;
-    receiveAmount.value = calculatedAmount.toString();
+    const calculatedAmount = BigNumber(Number(amount?.value))
+      .times(Number(estimateZRate?.value || 0))
+      .toNumber();
+    receiveAmount.value = calculatedAmount;
+    checkValidateAmount();
   } catch (error) {
     console.error('Error calculating receive amount:', error);
-    receiveAmount.value = '';
+    receiveAmount.value = 0;
   }
 };
 
-const handleRedeem = () => {
-  emit('redeem', {
-    amount: amount.value,
-    receiveAmount: receiveAmount.value,
-    pool: props.pool,
-  });
-  amount.value = '';
-  receiveAmount.value = '';
-  emit('close');
+const handleRedeem = async () => {
+  try {
+    isLoading.value = true;
+    console.log('🚀 ~ handleRedeem:', amount.value);
+    const provider = getProvider();
+    const decimals_amount = BigNumber(Number(amount.value))
+      .times(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals ?? 18))
+      .toFixed(0);
+    const signer = provider.getSigner();
+    const params = {
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      contractProvider: provider,
+      account: account.value,
+      value: decimals_amount, // amount
+      stakeId: props.pool?.id,
+      signer: signer,
+    };
+    console.log('🚀 ~ handleRedeem ~ params:', params);
+    const tx = await getRedeemableAmount_SZ(params);
+    console.log('🚀 ~ handleRedeem ~ rs:', tx);
+    const summary = `Redeem sZ success!`;
+    addTransaction({
+      id: tx?.hash || tx,
+      type: 'tx',
+      action: 'redeemSZ',
+      summary,
+    });
+
+    tx &&
+      txListener(tx, {
+        onTxConfirmed: async (receipt: any) => {
+          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
+          emit('redeem', {
+            receipt: receipt,
+          });
+          isLoading.value = false;
+        },
+        onTxFailed: () => {
+          isLoading.value = false;
+        },
+      });
+  } catch (error: any) {
+    isLoading.value = false;
+    console.log(error, 'handleStake=>error');
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
 };
+/**
+ * LIFE CYCLES
+ */
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -162,6 +433,11 @@ const handleRedeem = () => {
         .balance-value {
           color: #12a8ec;
         }
+      }
+      .validate-amount {
+        color: #f00;
+        font-size: 11px;
+        font-weight: 500;
       }
       .input-control {
         input {

@@ -157,8 +157,8 @@ const checkAllowance = async () => {
       walletAddress: account.value,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
     });
-    console.log('🚀 ~ checkAllowance ~ allowance:', allowance);
-    if (allowance > 0) {
+
+    if (allowance.gt(0)) {
       isApproved.value = true;
     } else {
       isApproved.value = false;
@@ -183,12 +183,20 @@ const handleApprove = async () => {
     isLoading.value = true;
     const provider = getProvider();
     const signer = provider.getSigner();
+    console.log(
+      '🚀 ~ handleApprove ~ userZBalance?.value:',
+      userZBalance?.value
+    );
+    const balance: any = userZBalance?.value || 0;
+    const approveAmount: any = BigNumber(balance)
+      .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
+      .toFixed(0);
     const params = {
       provider,
       contractProvider: provider,
       tokenAddress: STAKE_Z_NETWORK.value?.z_token_address,
       signer,
-      approveAmount: Number(amount.value),
+      approveAmount: approveAmount,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
     };
     const tx = await approveToken(params);
@@ -213,7 +221,6 @@ const handleApprove = async () => {
   }
 };
 const handleStake = async () => {
-  // TODO: Handle stake
   try {
     isLoading.value = true;
     console.log('🚀 ~ handleStake:', amount.value);
@@ -252,7 +259,6 @@ const handleStake = async () => {
           isLoading.value = false;
         },
       });
-    isLoading.value = false;
   } catch (error: any) {
     isLoading.value = false;
     console.log(error, 'handleStake=>error');
@@ -360,6 +366,7 @@ onMounted(() => {
       <div v-else class="mt-4 btn-actions">
         <div v-if="!isApproved">
           <BalBtn
+            :disabled="!amount || Number(amount) <= 0"
             label="Approve"
             :loading="isLoading"
             classCustom="pink-white-shadow"

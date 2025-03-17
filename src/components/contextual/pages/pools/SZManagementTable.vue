@@ -1,3 +1,9 @@
+<script lang="ts">
+// Add a default export to make the component importable with default import
+export default {
+  name: 'SZManagementTable',
+};
+</script>
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import BalTable from '@/components/_global/BalTable/BalTable.vue';
@@ -7,12 +13,22 @@ import useDarkMode from '@/composables/useDarkMode';
 import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
 import RedeemModal from '@/components/modals/RedeemModal/RedeemModal.vue';
-
-const { t } = useI18n();
-
+import useNetwork from '@/composables/useNetwork';
+import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
+import useWeb3 from '@/services/web3/useWeb3';
+import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
+import BigNumber from 'bignumber.js';
+import { format } from 'date-fns';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import useEthers from '@/composables/useEthers';
+import useNotifications from '@/composables/useNotifications';
+import useTransactions from '@/composables/useTransactions';
+import { f } from 'msw/lib/SetupApi-f4099ef3';
 const isLoading = ref(false);
 const showRedeemModal = ref(false);
 const selectedPool = ref();
+const { t } = useI18n();
+const isRedeemAll = ref(false);
 
 // Pagination
 const pagination = ref({
@@ -21,62 +37,8 @@ const pagination = ref({
   total: 20,
 });
 
-// Mock data array
-const data = [
-  {
-    id: 'sz-token-1',
-    name: 'sZ',
-    myBalance: '$xxxx',
-    amountSZ: '100',
-    amountZ: '105',
-    lockedDate: '5 Dec 2024',
-    maturity: '4 Dec 2025',
-    isVerified: true,
-  },
-  {
-    id: 'sz-token-2',
-    name: 'sZ',
-    myBalance: '$500',
-    amountSZ: '200',
-    amountZ: '210',
-    lockedDate: '6 Dec 2024',
-    maturity: '5 Dec 2025',
-    isVerified: true,
-  },
-  {
-    id: 'sz-token-3',
-    name: 'sZ',
-    myBalance: '$750',
-    amountSZ: '300',
-    amountZ: '315',
-    lockedDate: '7 Dec 2024',
-    maturity: '6 Dec 2025',
-    isVerified: true,
-  },
-  {
-    id: 'sz-token-4',
-    name: 'sZ',
-    myBalance: '$1000',
-    amountSZ: '400',
-    amountZ: '420',
-    lockedDate: '8 Dec 2024',
-    maturity: '7 Dec 2025',
-    isVerified: true,
-  },
-  {
-    id: 'sz-token-5',
-    name: 'sZ',
-    myBalance: '$1250',
-    amountSZ: '500',
-    amountZ: '525',
-    lockedDate: '9 Dec 2024',
-    maturity: '8 Dec 2025',
-    isVerified: true,
-  },
-];
-
 // Store fetched data
-const tableData = ref(data);
+const tableData = ref([]);
 
 // Define columns for the table
 const columns = [
@@ -101,21 +63,21 @@ const columns = [
   {
     name: 'My balance',
     id: 'myBalance',
-    accessor: 'myBalance',
+    Cell: 'myBalanceColumnCell',
     width: 150,
     align: 'right',
   },
   {
     name: 'Amount(sZ)',
     id: 'amountSZ',
-    accessor: 'amountSZ',
+    Cell: 'amountSZColumnCell',
     width: 150,
     align: 'right',
   },
   {
     name: 'Amount(Z)',
     id: 'amountZ',
-    accessor: 'amountZ',
+    Cell: 'amountZColumnCell',
     width: 150,
     align: 'right',
   },
@@ -144,10 +106,70 @@ const columns = [
 ];
 
 const { darkMode } = useDarkMode();
-
+const { getStakedList, redeemAllSZ, getAllRedeemableAmount_SZ } = useStakeZ();
+const { networkSlug } = useNetwork();
+const { account, chainId, getSigner, getProvider } = useWeb3();
+const { fNum2 } = useNumbers();
+const { addNotification } = useNotifications();
+const { addTransaction } = useTransactions();
+const { txListener } = useEthers();
+/**
+ * COMPUTED
+ */
+const STAKE_Z_NETWORK = computed(() => {
+  return (
+    STAKE_Z_NETWORKS.find(network => network.chain_id === chainId.value) || null
+  );
+});
 /**
  * FUNCTIONS
  */
+const mapData = stakedList => {
+  isRedeemAll.value = false;
+  const mappedData = stakedList.map(item => {
+    // get date now like 1744675200
+    const dateNow = Date.now();
+
+    console.log('🚀 ~ dateNow:', dateNow);
+    const isRedeem = item.redeemable_time * 1000 > Date.now() ? true : true;
+    console.log('🚀 ~  Date.now():', Date.now());
+    console.log('🚀 ~  item.redeemable_time:', item.redeemable_time);
+    return {
+      id: item.id,
+      name: 'sZ',
+      myBalance: item.value_usd || 0,
+      amountSZ: BigNumber(item.sz_amount || 0)
+        .div(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
+        .toNumber(),
+      amountZ: BigNumber(item.remaining_amount || 0)
+        .div(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
+        .toNumber(),
+      lockedDate: format(new Date(item.stake_time * 1000), 'dd MMM yyyy'),
+      maturity: format(new Date(item.maturity_time * 1000), 'dd MMM yyyy'),
+      isRedeem: isRedeem,
+    };
+  });
+  tableData.value = mappedData;
+};
+const checkIsRedeemAll = async () => {
+  try {
+    const provider = getProvider();
+    const params = {
+      provider: provider,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      walletAddress: account.value,
+    };
+    const rs: any = await getAllRedeemableAmount_SZ(params);
+    console.log('🚀 ~ checkIsRedeemAll ~ rs:', rs);
+    if (BigNumber(rs).gt(0)) {
+      isRedeemAll.value = true;
+    } else {
+      isRedeemAll.value = false;
+    }
+  } catch (error) {
+    console.log('🚀 ~ checkIsRedeemAll ~ error:', error);
+  }
+};
 const getData = async () => {
   // Call an API to get data
   // Update tableData with the fetched data
@@ -155,9 +177,18 @@ const getData = async () => {
   //TODO call API here
   try {
     isLoading.value = true;
-    // delay 1s here
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    tableData.value = data;
+    const params = {
+      user_address: account.value,
+      network: networkSlug.replace('-testnet', ''),
+      page: pagination.value.currentPage,
+      limit: pagination.value.sizePerPage,
+    };
+    const res = await getStakedList(params);
+    pagination.value.total = res?.total || 0;
+    console.log('🚀 ~ getData ~ res:', res);
+    if (res?.data?.length > 0) {
+      mapData(res?.data);
+    }
     isLoading.value = false;
   } catch (error) {
     console.log('🚀 ~ getData ~ error:', error);
@@ -168,16 +199,67 @@ const onClickHandler = (page: number) => {
   pagination.value.currentPage = page;
   getData();
 };
-const handleRedeemAll = () => {
+const handleRedeemAll = async () => {
   console.log('Redeem All');
+  try {
+    const provider = getProvider();
+    const signer = getSigner();
+    const params = {
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      contractProvider: provider,
+      account: account.value,
+      signer: signer,
+    };
+    console.log('🚀 ~ handleRedeemAll ~ params:', params);
+    const tx = await redeemAllSZ(params);
+    console.log('🚀 ~ handleRedeemAll ~ rs:', tx);
+    const summary = `Redeem all success!`;
+    addTransaction({
+      id: tx?.hash || tx,
+      type: 'tx',
+      action: 'redeemAllSZ',
+      summary,
+    });
+
+    tx &&
+      txListener(tx, {
+        onTxConfirmed: async (receipt: any) => {
+          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
+          fetchData();
+          isLoading.value = false;
+        },
+        onTxFailed: () => {
+          isLoading.value = false;
+        },
+      });
+  } catch (error: any) {
+    console.log('🚀 ~ handleRedeemAll ~ error:', error);
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
 };
 const handleRedeem = pool => {
   selectedPool.value = pool;
   showRedeemModal.value = true;
 };
-const handleRedeemSubmit = ({ amount, pool }) => {
-  console.log('Redeem', { amount, pool });
+const handleRedeemSubmit = ({ receipt }) => {
+  console.log('🚀 ~ handleRedeemSubmit ~ receipt:', receipt);
+  showRedeemModal.value = false;
+  fetchData();
 };
+const fetchData = async () => {
+  await getData();
+  await checkIsRedeemAll();
+};
+/**
+ * LIFE CYCLE
+ */
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <template>
@@ -190,7 +272,7 @@ const handleRedeemSubmit = ({ amount, pool }) => {
       <div class="w-full">
         <BalTable
           :columns="columns"
-          :data="data"
+          :data="tableData"
           :isLoading="isLoading"
           sticky="both"
           square
@@ -208,17 +290,34 @@ const handleRedeemSubmit = ({ amount, pool }) => {
           </template>
           <template #actionsColumnHeader>
             <button
-              class="py-1 px-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 rounded"
+              :disabled="!isRedeemAll"
+              :isLoading="isLoading"
+              class="py-1 px-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 rounded disabled:cursor-not-allowed"
               @click="handleRedeemAll"
             >
               Redeem All
             </button>
           </template>
-
+          myBalance
+          <template #myBalanceColumnCell="pool">
+            <div class="mr-6 text-right">${{ pool.myBalance }}</div>
+          </template>
+          <template #amountSZColumnCell="pool">
+            <div class="mr-6 text-right">
+              {{ fNum2(pool.amountSZ?.toString() || '0', FNumFormats.token) }}
+              sZ
+            </div>
+          </template>
+          <template #amountZColumnCell="pool">
+            <div class="mr-6 text-right">
+              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} Z
+            </div>
+          </template>
           <template #actionsColumnCell="pool">
             <div class="flex justify-end items-center py-4 px-6">
               <button
-                class="py-1 px-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 rounded"
+                :disabled="!pool.isRedeem"
+                class="py-1 px-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 rounded disabled:cursor-not-allowed"
                 @click="handleRedeem(pool)"
               >
                 Redeem
@@ -230,7 +329,7 @@ const handleRedeemSubmit = ({ amount, pool }) => {
     </div>
 
     <!-- Pagination -->
-    <div class="mt-4 paging-container">
+    <div v-if="tableData.length > 0" class="mt-4 paging-container">
       <VueAwesomePaginate
         v-model="pagination.currentPage"
         :totalItems="pagination.total"
@@ -246,6 +345,7 @@ const handleRedeemSubmit = ({ amount, pool }) => {
     <!-- Redeem Modal -->
     <teleport to="#modal">
       <RedeemModal
+        v-if="showRedeemModal"
         :show="showRedeemModal"
         :pool="selectedPool"
         @close="showRedeemModal = false"

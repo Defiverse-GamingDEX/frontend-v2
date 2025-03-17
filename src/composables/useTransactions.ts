@@ -57,7 +57,9 @@ export type TransactionAction =
   | 'atfSwap'
   | 'atfLimit'
   | 'bridge'
-  | 'stakeZ';
+  | 'stakeZ'
+  | 'redeemAllSZ'
+  | 'redeemSZ';
 
 export type TransactionType = 'order' | 'tx';
 
