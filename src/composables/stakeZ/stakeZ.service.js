@@ -171,6 +171,30 @@ const stakeZ = async params => {
   console.log('🚀 ~ rs:', rs);
   return rs;
 };
+const stakeZForTest = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    account,
+    value, // amount
+    signer,
+    abi,
+  } = params;
+
+  let overwrite = { from: account };
+  const twoDaysAgo = 86400 * 2;
+  const rs = await _sendRawTx(
+    contractAddress,
+    contractProvider,
+    'stakeForTest',
+    [value, twoDaysAgo],
+    overwrite,
+    signer,
+    abi
+  );
+  console.log('🚀 ~ rs:', rs);
+  return rs;
+};
 const redeemAllSZ = async params => {
   const {
     contractAddress, // contract token
@@ -230,4 +254,5 @@ export default {
   stakeZ,
   redeemAllSZ,
   redeemSZ,
+  stakeZForTest,
 };

@@ -56,6 +56,7 @@ const {
   checkTokenAllowance,
   approveToken,
   stakeZ,
+  stakeZForTest,
 } = useStakeZ();
 /**
  * METHODS
@@ -366,7 +367,6 @@ onMounted(() => {
       <div v-else class="mt-4 btn-actions">
         <div v-if="!isApproved">
           <BalBtn
-            :disabled="!amount || Number(amount) <= 0"
             label="Approve"
             :loading="isLoading"
             classCustom="pink-white-shadow"

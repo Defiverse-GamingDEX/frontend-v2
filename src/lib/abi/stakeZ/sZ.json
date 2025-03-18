@@ -636,32 +636,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "totalRewards",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalStaked",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -720,25 +694,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "name": "userStakeIndexes",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       },
       {
         "internalType": "uint256",
@@ -750,12 +705,17 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "initialAmount",
+        "name": "stakedAmount",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "sZAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "sZRedeemedAmount",
         "type": "uint256"
       },
       {
@@ -890,6 +850,24 @@
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_timeshift",
+        "type": "uint256"
+      }
+    ],
+    "name": "stakeForTest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
     "name": "stake",
@@ -926,7 +904,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_zAmount",
         "type": "uint256"
       }
     ],
@@ -945,7 +923,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_sZAmount",
         "type": "uint256"
       }
     ],
@@ -969,6 +947,19 @@
       }
     ],
     "name": "lockedAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTotalZ",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1022,12 +1013,17 @@
         "components": [
           {
             "internalType": "uint256",
-            "name": "initialAmount",
+            "name": "stakedAmount",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "amount",
+            "name": "sZAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sZRedeemedAmount",
             "type": "uint256"
           },
           {
@@ -1067,26 +1063,7 @@
         "type": "uint256"
       }
     ],
-    "name": "getRedeemableAmount_Z",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      }
-    ],
-    "name": "getAllRedeemableAmount_Z",
+    "name": "getRedeemableAmount_SZ",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1114,43 +1091,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_stakeId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getRedeemableAmount_SZ",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "depositRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1237,7 +1177,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_ts",
         "type": "uint256"
       }
     ],
@@ -1280,7 +1220,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_block",
         "type": "uint256"
       }
     ],
@@ -1312,7 +1252,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_ts",
         "type": "uint256"
       }
     ],
@@ -1331,7 +1271,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "_block",
         "type": "uint256"
       }
     ],

@@ -39,7 +39,7 @@ const pagination = ref({
 });
 
 // Store fetched data
-const tableData = ref([]);
+const tableData = ref<any>([]);
 
 // Define columns for the table
 const columns = [
@@ -49,7 +49,7 @@ const columns = [
     accessor: 'uri',
     Header: 'iconColumnHeader',
     Cell: 'iconColumnCell',
-    width: 125,
+    width: 100,
     noGrow: true,
     sticky: true,
     cellClassName: 'bg-white',
@@ -58,37 +58,37 @@ const columns = [
     name: 'Token name',
     id: 'name',
     accessor: 'name',
-    width: 150,
+    width: 50,
     cellClassName: 'p-6',
   },
   {
     name: 'My balance',
     id: 'myBalance',
     Cell: 'myBalanceColumnCell',
-    width: 150,
+    width: 120,
     align: 'right',
   },
   {
     name: 'Amount(sZ)',
     id: 'amountSZ',
     Cell: 'amountSZColumnCell',
-    width: 150,
+    width: 120,
     align: 'right',
   },
   {
     name: 'Amount(Z)',
     id: 'amountZ',
     Cell: 'amountZColumnCell',
+    width: 120,
+    align: 'right',
+  },
+  {
+    name: 'Redeemable amount(sZ)',
+    id: 'redeemable',
+    Cell: 'redeemableZColumnCell',
     width: 150,
     align: 'right',
   },
-  // {
-  //   name: 'Redeemable amount(sZ)',
-  //   id: 'redeemable',
-  //   Cell: 'redeemableZColumnCell',
-  //   width: 150,
-  //   align: 'right',
-  // },
   {
     name: 'Locked date',
     id: 'lockedDate',
@@ -108,13 +108,18 @@ const columns = [
     id: 'actions',
     Header: 'actionsColumnHeader',
     Cell: 'actionsColumnCell',
-    width: 200,
+    width: 180,
     align: 'right',
   },
 ];
 
 const { darkMode } = useDarkMode();
-const { getStakedList, redeemAllSZ, getAllRedeemableAmount_SZ } = useStakeZ();
+const {
+  getStakedList,
+  redeemAllSZ,
+  getAllRedeemableAmount_SZ,
+  getRedeemableAmount_SZ,
+} = useStakeZ();
 const { networkSlug } = useNetwork();
 const { account, chainId, getSigner, getProvider } = useWeb3();
 const { fNum2 } = useNumbers();
@@ -132,20 +137,41 @@ const STAKE_Z_NETWORK = computed(() => {
 /**
  * FUNCTIONS
  */
-const mapData = stakedList => {
-  isRedeemAll.value = false;
-  const mappedData = stakedList.map(item => {
+const getRedeemableBalance = async stakeId => {
+  try {
+    const provider = getProvider();
+    let balance = await getRedeemableAmount_SZ({
+      provider: provider,
+      walletAddress: account.value,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      stakeId: stakeId,
+    });
+    balance = BigNumber(balance)
+      .div(10 ** Number(STAKE_Z_NETWORK.value?.sz_token_decimals))
+      .toFixed();
+    return balance;
+  } catch (error) {
+    console.log(error, 'getRedeemableBalance=>error');
+    return 0;
+  }
+};
+const mapData = async stakedList => {
+  // Create array of promises
+  const promises = stakedList.map(async item => {
     // get date now like 1744675200
     const dateNow = Date.now();
-
-    console.log('🚀 ~ dateNow:', dateNow);
-    const isRedeem = item.redeemable_time * 1000 > Date.now() ? true : true;
-    console.log('🚀 ~  Date.now():', Date.now());
-    console.log('🚀 ~  item.redeemable_time:', item.redeemable_time);
+    let isRedeem = false;
+    const redeemableBalance = await getRedeemableBalance(item.id);
+    if (
+      dateNow >= item.redeemable_time * 1000 &&
+      BigNumber(redeemableBalance).gt(0)
+    ) {
+      isRedeem = true;
+    }
     return {
       id: item.id,
       name: 'sZ',
-      myBalance: item.value_usd || 0,
+      myBalance: BigNumber(item.value_usd || 0).toFixed(2),
       amountSZ: BigNumber(item.sz_amount || 0)
         .div(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
         .toNumber(),
@@ -154,10 +180,16 @@ const mapData = stakedList => {
         .toNumber(),
       lockedDate: format(new Date(item.stake_time * 1000), 'dd MMM yyyy'),
       maturity: format(new Date(item.maturity_time * 1000), 'dd MMM yyyy'),
+      redeemableBalance: redeemableBalance,
       isRedeem: isRedeem,
     };
   });
-  tableData.value = mappedData;
+
+  // Wait for all promises to resolve
+  const mappedData = await Promise.all(promises);
+  console.log('🚀 ~ mappedData:', mappedData);
+  tableData.value = mappedData || [];
+  console.log('🚀 ~ tableData.value:', tableData.value);
 };
 const checkIsRedeemAll = async () => {
   try {
@@ -195,7 +227,7 @@ const getData = async () => {
     pagination.value.total = res?.total || 0;
     console.log('🚀 ~ getData ~ res:', res);
     if (res?.data?.length > 0) {
-      mapData(res?.data);
+      await mapData(res?.data);
     }
     isLoading.value = false;
   } catch (error) {
@@ -325,14 +357,20 @@ onMounted(() => {
           </template>
           <template #redeemableZColumnCell="pool">
             <div class="mr-6 text-right">
-              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} Z
+              {{
+                fNum2(
+                  pool.redeemableBalance?.toString() || '0',
+                  FNumFormats.token
+                )
+              }}
+              Z
             </div>
           </template>
 
           <template #actionsColumnCell="pool">
             <div class="flex justify-end items-center py-4 px-6">
               <button
-                :disabled="!pool.isRedeem"
+                :disabled="!pool.isRedeem || isLoadingRedeemAll"
                 class="py-1 px-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 rounded disabled:cursor-not-allowed"
                 @click="handleRedeem(pool)"
               >

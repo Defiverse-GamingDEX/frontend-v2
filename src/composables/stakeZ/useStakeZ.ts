@@ -183,6 +183,16 @@ async function stakeZ(params) {
     throw error;
   }
 }
+async function stakeZForTest(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.stakeZForTest(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'stakeZ=>error');
+    throw error;
+  }
+}
 async function getStakedList(params) {
   try {
     const rs = await stakeZPriceAPI.getStakedList(params);
@@ -230,5 +240,6 @@ export function useStakeZ() {
     getStakedList,
     redeemAllSZ,
     redeemSZ,
+    stakeZForTest,
   };
 }
