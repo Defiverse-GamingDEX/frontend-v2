@@ -8,18 +8,29 @@ import useNetwork, { isL2 } from '@/composables/useNetwork';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import useWeb3 from '@/services/web3/useWeb3';
 
+import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
+import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
+
+import { cloneDeep, debounce } from 'lodash';
+import BigNumber from 'bignumber.js';
 import HeroConnectWalletButton from './HeroConnectWalletButton.vue';
 import { useUserPools } from '@/providers/local/user-pools.provider';
-
+/**
+ * STATES
+ */
+const sZBalance = ref<number | unknown>(0);
 /**
  * COMPOSABLES
  */
 const router = useRouter();
 const { fNum2 } = useNumbers();
-const { isWalletReady, isWalletConnecting } = useWeb3();
+const { isWalletReady, isWalletConnecting, account, getProvider, chainId } =
+  useWeb3();
+console.log('🚀 ~ chainId:', chainId);
 const { totalFiatValue, isLoading: isLoadingPools } = useUserPools();
 const { totalLockedValue, lock } = useLock();
 const { networkSlug } = useNetwork();
+const { getTokenBalance } = useStakeZ();
 
 /**
  * COMPUTED
@@ -39,8 +50,44 @@ const totalVeBalLabel = computed((): string =>
 
 const isLoadingTotalValue = computed((): boolean => isLoadingPools.value);
 
-const veGDT_amount = computed(() => {
+const sZ_amount = computed(() => {
   return fNum2(lock?.value?.lockedAmount, FNumFormats.token);
+});
+const STAKE_Z_NETWORK = computed(() => {
+  return (
+    STAKE_Z_NETWORKS.find(network => network.chain_id === chainId.value) || null
+  );
+});
+console.log(
+  '🚀 ~ constSTAKE_Z_NETWORK=computed ~ STAKE_Z_NETWORK:',
+  STAKE_Z_NETWORK
+);
+/**
+ * METHODS
+ */
+const getSZbalance = async () => {
+  try {
+    const provider = getProvider();
+    console.log('🚀 ~ getSZbalance ~ account.value:', account.value);
+    const balance = await getTokenBalance({
+      provider: provider,
+      tokenAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      walletAddress: account.value,
+      tokenDecimals: STAKE_Z_NETWORK.value?.sz_token_decimals,
+    });
+
+    console.log('🚀 ~ getSZbalance ~ balance:', balance);
+    sZBalance.value = balance;
+  } catch (error) {
+    console.log(error, 'getSZbalance=>error');
+    return 0;
+  }
+};
+/**
+ * LIFE CYCLE
+ */
+onMounted(() => {
+  getSZbalance();
 });
 </script>
 
@@ -77,7 +124,10 @@ const veGDT_amount = computed(() => {
               >{{ totalLockedValue }} {{ $t('veBAL.hero.tokens.veBAL') }}</span
             >
             <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span> -->
-            <span>{{ veGDT_amount }} {{ $t('veBAL.hero.tokens.veBAL') }}</span>
+            <span
+              >{{ fNum2((sZBalance || 0)?.toString(), FNumFormats.token) }}
+              {{ $t('veBAL.hero.tokens.veBAL') }}</span
+            >
           </div>
         </div>
       </template>

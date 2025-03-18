@@ -76,7 +76,7 @@ const columns = ref<ColumnDefinition<RewardRow>[]>([
     align: 'right',
     width: 150,
     totalsCell: 'totalAmountCell',
-    accessor: ({ amount }) => `${fNum2(amount, FNumFormats.token)} GDT`,
+    accessor: ({ amount }) => `${fNum2(amount, FNumFormats.token)} Z`,
   },
   {
     name: t('value'),
@@ -182,7 +182,7 @@ function formatPoolName(name: string): string {
       </template>
       <template #totalAmountCell>
         <div class="flex justify-end">
-          {{ fNum2(totalClaimAmount, FNumFormats.token) }} GDT
+          {{ fNum2(totalClaimAmount, FNumFormats.token) }} Z
         </div>
       </template>
       <template #totalValueCell>

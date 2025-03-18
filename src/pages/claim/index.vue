@@ -275,7 +275,7 @@ onBeforeMount(async () => {
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
-                  GDT {{ $t('incentives') }}
+                  Z {{ $t('incentives') }}
                 </h3>
                 <BalTooltip
                   iconSize="xs"
@@ -293,7 +293,7 @@ onBeforeMount(async () => {
               :isLoading="loading"
             />
           </div>
-          <div class="mb-16">
+          <!-- <div class="mb-16">
             <h3
               class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white"
             >
@@ -318,7 +318,7 @@ onBeforeMount(async () => {
               :isLoading="loading"
               deprecated
             />
-          </div>
+          </div> -->
         </template>
 
         <div v-if="!isL2">

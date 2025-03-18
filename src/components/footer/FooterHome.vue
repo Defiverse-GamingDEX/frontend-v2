@@ -145,8 +145,8 @@ export default {
               link: 'https://www.gaming-dex.com/#/defiverse/pool',
             },
             {
-              text: 'Vote with veGDT',
-              link: 'https://www.gaming-dex.com/#/defiverse/vegdt',
+              text: 'Vote with sZ',
+              link: 'https://www.gaming-dex.com/#/defiverse/sZ',
             },
             {
               text: 'Claim incentives',

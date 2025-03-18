@@ -3969,12 +3969,12 @@
       "id": "0xaa01a32965a072082dac7169b4c9457ce1508be5000200000000000000000001",
       "address": "0xAa01a32965A072082DAc7169b4c9457Ce1508be5",
       "poolType": "Weighted",
-      "symbol": "G-80GDT-20OAS",
+      "symbol": "G-80Z-20OAS",
       "tokens": [
         {
           "address": "0xe34Eec955bF457382cE37e1D8371e559cC6518Fb",
           "weight": "0.8",
-          "symbol": "GDT"
+          "symbol": "Z"
         },
         {
           "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
@@ -3984,7 +3984,7 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/GDT_L.png",
+      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/Z_L.png",
       "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
     }
   },
