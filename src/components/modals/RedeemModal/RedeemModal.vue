@@ -9,12 +9,12 @@
     <div class="px-2 redeem-modal-container">
       <div class="p-4 mb-2 rounded-xl border border-gray-800">
         <div class="flex flex-col justify-end items-end mb-1 balance-content">
-          <div class="text-xs balance-label">
+          <div class="text-xs text-right balance-label">
             Staked balance :
             <span class="text-xs balance-value">{{ pool?.amountSZ }}</span>
             sZ
           </div>
-          <div class="text-base balance-label">
+          <div class="text-base text-right balance-label">
             Redeemable balance:
             <span class="text-base balance-value">
               {{
@@ -120,7 +120,7 @@
           />
           <BalBtn
             v-else
-            label="Stake"
+            label="Redeem"
             :loading="isLoading"
             :disabled="!receiveAmount || validate.isError"
             classCustom="pink-white-shadow"
@@ -200,12 +200,15 @@ const STAKE_Z_NETWORK = computed(() => {
 const getRedeemableBalance = async () => {
   try {
     const provider = getProvider();
-    const balance = await getRedeemableAmount_SZ({
+    let balance = await getRedeemableAmount_SZ({
       provider: provider,
       walletAddress: account.value,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       stakeId: props.pool?.id,
     });
+    balance = BigNumber(balance)
+      .div(10 ** Number(STAKE_Z_NETWORK.value?.sz_token_decimals))
+      .toFixed();
     redeemableBalance.value = balance;
     console.log(
       '🚀 ~ getRedeemableBalance ~ redeemableBalance.value:',
@@ -369,15 +372,15 @@ const handleRedeem = async () => {
       .toFixed(0);
     const signer = provider.getSigner();
     const params = {
+      provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-      contractProvider: provider,
       account: account.value,
       value: decimals_amount, // amount
       stakeId: props.pool?.id,
       signer: signer,
     };
     console.log('🚀 ~ handleRedeem ~ params:', params);
-    const tx = await getRedeemableAmount_SZ(params);
+    const tx = await redeemSZ(params);
     console.log('🚀 ~ handleRedeem ~ rs:', tx);
     const summary = `Redeem sZ success!`;
     addTransaction({

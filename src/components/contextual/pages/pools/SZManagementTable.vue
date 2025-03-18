@@ -23,8 +23,9 @@ import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
-import { f } from 'msw/lib/SetupApi-f4099ef3';
+
 const isLoading = ref(false);
+const isLoadingRedeemAll = ref(false);
 const showRedeemModal = ref(false);
 const selectedPool = ref();
 const { t } = useI18n();
@@ -81,6 +82,13 @@ const columns = [
     width: 150,
     align: 'right',
   },
+  // {
+  //   name: 'Redeemable amount(sZ)',
+  //   id: 'redeemable',
+  //   Cell: 'redeemableZColumnCell',
+  //   width: 150,
+  //   align: 'right',
+  // },
   {
     name: 'Locked date',
     id: 'lockedDate',
@@ -100,7 +108,7 @@ const columns = [
     id: 'actions',
     Header: 'actionsColumnHeader',
     Cell: 'actionsColumnCell',
-    width: 160,
+    width: 200,
     align: 'right',
   },
 ];
@@ -160,7 +168,7 @@ const checkIsRedeemAll = async () => {
       walletAddress: account.value,
     };
     const rs: any = await getAllRedeemableAmount_SZ(params);
-    console.log('🚀 ~ checkIsRedeemAll ~ rs:', rs);
+    console.log('🚀 ~ getAllRedeemableAmount_SZ ~ rs:', rs);
     if (BigNumber(rs).gt(0)) {
       isRedeemAll.value = true;
     } else {
@@ -202,6 +210,7 @@ const onClickHandler = (page: number) => {
 const handleRedeemAll = async () => {
   console.log('Redeem All');
   try {
+    isLoadingRedeemAll.value = true;
     const provider = getProvider();
     const signer = getSigner();
     const params = {
@@ -226,10 +235,10 @@ const handleRedeemAll = async () => {
         onTxConfirmed: async (receipt: any) => {
           console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
           fetchData();
-          isLoading.value = false;
+          isLoadingRedeemAll.value = false;
         },
         onTxFailed: () => {
-          isLoading.value = false;
+          isLoadingRedeemAll.value = false;
         },
       });
   } catch (error: any) {
@@ -239,6 +248,7 @@ const handleRedeemAll = async () => {
       title: '',
       message: error?.message ? error.message : JSON.stringify(error),
     });
+    isLoadingRedeemAll.value = false;
   }
 };
 const handleRedeem = pool => {
@@ -289,14 +299,14 @@ onMounted(() => {
             </div>
           </template>
           <template #actionsColumnHeader>
-            <button
+            <BalBtn
+              label="Redeem all"
+              :loading="isLoadingRedeemAll"
               :disabled="!isRedeemAll"
-              :isLoading="isLoading"
-              class="py-1 px-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 rounded disabled:cursor-not-allowed"
+              classCustom="blue-white !rounded !h-8"
+              block
               @click="handleRedeemAll"
-            >
-              Redeem All
-            </button>
+            />
           </template>
           myBalance
           <template #myBalanceColumnCell="pool">
@@ -313,6 +323,12 @@ onMounted(() => {
               {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} Z
             </div>
           </template>
+          <template #redeemableZColumnCell="pool">
+            <div class="mr-6 text-right">
+              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} Z
+            </div>
+          </template>
+
           <template #actionsColumnCell="pool">
             <div class="flex justify-end items-center py-4 px-6">
               <button
