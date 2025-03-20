@@ -10,7 +10,6 @@ import { useTokens } from '@/providers/tokens.provider';
 import { configService } from '@/services/config/config.service';
 import { TokenInfoMap, TokenList } from '@/types/TokenList';
 import { useMagicKeys } from '@vueuse/core';
-
 import tokensUtils from '@/lib/utils/tokens';
 
 interface Props {
@@ -60,6 +59,7 @@ const state: ComponentState = reactive({
 const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
   useTokenLists();
 const tokenListArray = Object.entries(activeTokenLists.value) || [];
+
 const _token_list_origin = ref(
   tokenListArray
     ? tokenListArray.length > 0
@@ -138,7 +138,6 @@ const tokens = computed(() => {
   */
   // if (props.ignoreBalances) return tokensWithValues;
   // else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
-
   return filterNativeToken(tokensWithValues);
 });
 
@@ -188,7 +187,10 @@ function filterNativeToken(tokens) {
   let rs = [];
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
-
+    const owner = _token_list_origin.value?.find(
+      tokenFromAPI => tokenFromAPI.address === token.address
+    )?.owner;
+    token.owner = owner;
     //
     // TODO: Need to load token list by chain
     // let tokensByChain = tokensUtils.getTokenListFromNetworkId(
