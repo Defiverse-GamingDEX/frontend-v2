@@ -114,14 +114,19 @@ const getUserZBalance = async () => {
 };
 const getRateSZ = async () => {
   try {
-    const amount = 1;
+    const amount = BigNumber(1)
+      .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
+      .toFixed(0);
     const provider = getProvider();
     const rateSZ = await getEstimateSzAmount({
       provider: provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       amount: amount,
     });
-    return rateSZ;
+    console.log('🚀 ~ getRateSZ ~ rateSZ:', rateSZ);
+    return BigNumber(rateSZ)
+      .div(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
+      .toFixed();
   } catch (error) {
     console.log(error, 'getRateSZ=>error');
     return 0;

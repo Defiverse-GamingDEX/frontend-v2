@@ -27,8 +27,10 @@ const getEstimateSzAmount = async ({
   contractAddress,
   amount,
 }) => {
+  console.log('🚀 ~ getEstimateSzAmount=>amount:', amount);
   const myContract = new Contract(contractAddress, abi, provider);
   const estimateSzAmount = await myContract.estimateSZ(amount);
+  console.log('🚀 ~ estimateSzAmount:', estimateSzAmount);
   return estimateSzAmount?.toString() || 0;
 };
 const getEstimateZAmount = async ({

@@ -160,7 +160,7 @@ const emit = defineEmits(['close', 'redeem']);
  */
 const redeemableBalance = ref(0);
 const penaltyRate = ref(0);
-const estimateZRate = ref(0);
+const estimateZRate = ref<number | string>(0);
 const amount = ref('');
 const receiveAmount = ref<number | ''>('');
 const validate = ref({
@@ -240,12 +240,17 @@ const getPenaltyRate = async () => {
 const getEstimateZRate = async () => {
   try {
     const provider = getProvider();
+    const amount = BigNumber(1)
+      .times(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
+      .toFixed(0);
     const rate = await getEstimateZAmount({
       provider: provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-      amount: 1,
+      amount: amount,
     });
-    estimateZRate.value = rate;
+    estimateZRate.value = BigNumber(rate)
+      .div(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
+      .toFixed();
     console.log(
       '🚀 ~ getEstimateZRate ~ estimateZRate.value:',
       estimateZRate.value
