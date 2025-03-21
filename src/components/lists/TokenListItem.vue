@@ -1,51 +1,3 @@
-<template>
-  <div
-    ref="animateRef"
-    :class="[
-      `flex items-center py-3 border border-transparent ml-4 mr-2 px-2 text-base
-  leading-5 opacity-0 highlight hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg`,
-      {
-        'bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-500':
-          focussed,
-      },
-    ]"
-  >
-    <BalAsset
-      :address="token.address"
-      :iconURI="token.logoURI"
-      :size="34"
-      class="mr-3"
-    />
-    <div
-      :class="['flex-auto', { 'text-blue-500 dark:text-blue-200': focussed }]"
-    >
-      <div class="flex items-center">
-        {{ token.symbol }} <AtfBadge :address="token?.address" />
-      </div>
-      <div class="w-40 md:w-60 text-sm truncate text-gray">
-        {{ token.name }}
-      </div>
-    </div>
-    <span
-      v-if="!hideBalance"
-      class="flex flex-col items-end font-medium text-right"
-    >
-      <BalLoadingBlock v-if="balanceLoading" class="w-14 h-4" />
-      <template v-else>
-        <template v-if="balance > 0">
-          <template v-if="balance >= 0.0001">
-            {{ fNum2(balance, FNumFormats.token) }}
-          </template>
-          <template v-else> &#60; 0.0001 </template>
-        </template>
-        <div v-if="value > 0" class="text-sm font-normal text-secondary">
-          {{ fNum2(value, FNumFormats.fiat) }}
-        </div>
-      </template>
-    </span>
-  </div>
-</template>
-
 <script lang="ts">
 import anime from 'animejs';
 import { computed, onMounted, onUnmounted, PropType, ref } from 'vue';
@@ -55,6 +7,8 @@ import { useTokens } from '@/providers/tokens.provider';
 import { useUserSettings } from '@/providers/user-settings.provider';
 import { TokenInfo } from '@/types/TokenList';
 import AtfBadge from '@/components/badge/AtfBadge.vue';
+import VerifiedIcon from '@/assets/images/pools/verified.png';
+import YukichiIcon from '@/assets/images/pools/yukichi.png';
 export default {
   name: 'TokenListItem',
   components: {
@@ -111,7 +65,73 @@ export default {
       animateRef,
       balance,
       value,
+      VerifiedIcon,
+      YukichiIcon,
     };
   },
 };
 </script>
+
+<template>
+  <div
+    ref="animateRef"
+    :class="[
+      `flex items-center py-3 border border-transparent ml-4 mr-2 px-2 text-base
+  leading-5 opacity-0 highlight hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg`,
+      {
+        'bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-500':
+          focussed,
+      },
+    ]"
+  >
+    <BalAsset
+      :address="token.address"
+      :iconURI="token.logoURI"
+      :size="34"
+      class="mr-3"
+    />
+    <div
+      :class="['flex-auto', { 'text-blue-500 dark:text-blue-200': focussed }]"
+    >
+      <div class="flex items-center">
+        {{ token.symbol }}
+        <img
+          v-if="token?.owner == 'yukichi'"
+          width="24"
+          height="24"
+          :src="YukichiIcon"
+          class="ml-2"
+        />
+        <img
+          v-if="token?.owner == 'gamingdex'"
+          width="24"
+          height="24"
+          :src="VerifiedIcon"
+          class="ml-2"
+        />
+        <AtfBadge :address="token?.address" />
+      </div>
+      <div class="w-40 md:w-60 text-sm truncate text-gray">
+        {{ token.name }}
+      </div>
+    </div>
+    <span
+      v-if="!hideBalance"
+      class="flex flex-col items-end font-medium text-right"
+    >
+      <BalLoadingBlock v-if="balanceLoading" class="w-14 h-4" />
+      <template v-else>
+        <template v-if="balance > 0">
+          <template v-if="balance >= 0.0001">
+            {{ fNum2(balance, FNumFormats.token) }}
+          </template>
+          <template v-else> &#60; 0.0001 </template>
+        </template>
+        <div v-if="value > 0" class="text-sm font-normal text-secondary">
+          {{ fNum2(value, FNumFormats.fiat) }}
+        </div>
+      </template>
+    </span>
+  </div>
+</template>
+
