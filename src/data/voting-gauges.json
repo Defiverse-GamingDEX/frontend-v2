@@ -3960,122 +3960,6 @@
     }
   },
   {
-    "address": "0xE529B3801AE3EAA9B5AF0113FFAE368A7445E92B",
-    "network": 17117,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
-    "pool": {
-      "id": "0xe815154dc2bb9cceee8054b01e99850b2a8c0d1e000200000000000000000002",
-      "address": "0xe815154DC2bB9cCEEE8054b01e99850B2A8C0d1E",
-      "poolType": "Weighted",
-      "symbol": "G-50USDC-50OAS",
-      "tokens": [
-        {
-          "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
-          "weight": "0.5",
-          "symbol": "USDC"
-        },
-        {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/USDC_L.png",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
-    }
-  },
-  {
-    "address": "0x1550bd90d955dcbec9c4c774306b2f766a25987d",
-    "network": 17117,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
-    "pool": {
-      "id": "0x6797e1bc05285c51127bb9760d0a2df57bf6f0f0000200000000000000000003",
-      "address": "0x6797e1bc05285C51127bB9760d0A2DF57BF6f0f0",
-      "poolType": "Weighted",
-      "symbol": "G-50USDT-50OAS",
-      "tokens": [
-        {
-          "address": "0x66b8e41F428A9a7DbC7595b11d54462Be1A454Cb",
-          "weight": "0.5",
-          "symbol": "USDT"
-        },
-        {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/USDT_L.png",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
-    }
-  },
-  {
-    "address": "0xd6c79ca3f2bcffac8f0021d7fccc507592831207",
-    "network": 17117,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
-    "pool": {
-      "id": "0xbaf0f0499bc5530e2b6181e22567415f793a3d0b000200000000000000000005",
-      "address": "0xBAF0F0499Bc5530E2B6181e22567415F793A3d0B",
-      "poolType": "Weighted",
-      "symbol": "G-50WBTC-50OAS",
-      "tokens": [
-        {
-          "address": "0x19f01c4794599B36541B6F1f45dB1d0BB7F52Ff7",
-          "weight": "0.5",
-          "symbol": "WBTC"
-        },
-        {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/WBTC_L.png",
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png"
-    }
-  },
-  {
-    "address": "0x06f43a25ce878c486a8765e515c4d2cb6d03e804",
-    "network": 17117,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
-    "pool": {
-      "id": "0x3f197d7d1ff1de36c69cea2a2ab326a01612f848000200000000000000000008",
-      "address": "0x3F197D7d1ff1De36C69cea2A2aB326a01612f848",
-      "poolType": "Weighted",
-      "symbol": "G-50MCHC-50OAS",
-      "tokens": [
-        {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        },
-        {
-          "address": "0xDa615b699920f07474a12168282dF3AC229A8e1E",
-          "weight": "0.5",
-          "symbol": "MCHC"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/MCHC_L.png"
-    }
-  },
-  {
     "address": "0xad3929b3f1b1dc8a3f6bb4b0303c5d7d26f846fa",
     "network": 17117,
     "isKilled": false,
@@ -4100,8 +3984,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0xb2215B7855e4eA1c078f1D235397C7CC32e0BDA2": "tokens/OAS_L.png",
-      "0x4E7b1B5b8F8A4DFd920f88a7307b72a76f6Ae587": "tokens/TCGC_L.png"
+      "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99": "https://testnet.gaming-dex.com/tokens/OAS_L.png",
+      "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD": "https://testnet.gaming-dex.com/tokens/TCGC_L.png"
     }
   }
 ]
