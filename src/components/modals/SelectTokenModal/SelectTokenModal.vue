@@ -204,6 +204,7 @@ function filterNativeToken(tokens) {
         token?.name === 'OASYS'
     );
     if (tokenNative >= 0) {
+      token.owner = 'gamingdex';
       rs.push(token);
     }
   }
