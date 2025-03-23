@@ -186,11 +186,14 @@ function toggleSelectTokenList(): void {
 function filterNativeToken(tokens) {
   let rs = [];
   for (let i = 0; i < tokens.length; i++) {
-    let token = tokens[i];
+    let token: any = tokens[i];
     const owner = _token_list_origin.value?.find(
       tokenFromAPI => tokenFromAPI.address === token.address
     )?.owner;
     token.owner = owner;
+    if (token.name === 'OASYS') {
+      token.owner = 'gamingdex';
+    }
     //
     // TODO: Need to load token list by chain
     // let tokensByChain = tokensUtils.getTokenListFromNetworkId(
@@ -203,8 +206,8 @@ function filterNativeToken(tokens) {
         item.address?.toUpperCase() === token?.address.toUpperCase() ||
         token?.name === 'OASYS'
     );
+
     if (tokenNative >= 0) {
-      token.owner = 'gamingdex';
       rs.push(token);
     }
   }
