@@ -332,10 +332,10 @@ watchEffect(() => {
         <!-- Title for Tokens tab -->
         <div
           v-if="activeTab === 'tokens'"
-          class="flex justify-between items-center mb-4 w-full"
+          class="flex justify-between items-center w-full"
         >
           <div class="flex items-center">
-            <h5>{{ $t('Import token form') }}</h5>
+            <h5>{{ $t('Import token from contract address:') }}</h5>
           </div>
         </div>
       </div>

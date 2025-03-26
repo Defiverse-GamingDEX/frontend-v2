@@ -1,5 +1,5 @@
 <script>
-import { ref, computed } from 'vue'; // Added computed to imports
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useTokens } from '@/providers/tokens.provider';
 import { isAddress } from '@ethersproject/address';
@@ -88,6 +88,20 @@ export default {
       return isAddress(tokenAddress.value);
     });
 
+    // Add this function to handle keydown events
+    function handleKeyDown(event) {
+      console.log('🚀 ~ handleKeyDown ~ event:', event);
+      // Prevent form submission on Enter key
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation(); // Add this to stop event bubbling
+        // Optionally trigger the import if the address is valid
+        if (isAddressValid.value && isAddressValid.value) {
+          importToken();
+        }
+      }
+    }
+
     return {
       tokenAddress,
       error,
@@ -96,6 +110,7 @@ export default {
       tokenInfo,
       importToken,
       inputRules,
+      handleKeyDown,
       isAddressValid, // Export the computed property
     };
   },
@@ -118,6 +133,7 @@ export default {
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
+        @keydown="handleKeyDown"
       />
       <div v-if="error" class="mt-2 text-sm text-red-500">
         {{ error }}
@@ -130,10 +146,11 @@ export default {
           color="blue"
           classCustom="pink-white-shadow"
           size="sm"
+          :loading="loading"
           :disabled="!tokenAddress || !isAddressValid"
           @click="importToken"
         >
-          <BalLoadingIcon v-if="loading" /> {{ 'Import token' }}
+          {{ 'Import token' }}
         </BalBtn>
       </div>
     </div>
