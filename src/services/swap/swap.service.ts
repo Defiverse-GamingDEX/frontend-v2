@@ -86,7 +86,7 @@ export default class SwapService {
 
         console.log('HUNG:limit', limit);
         // TODO: Hung - Check limit again
-        return vaultService.swap(single, funds, 0, overrides);
+        return vaultService.swap(single, funds, limit, overrides);
       }
 
       const limits: string[] = this.calculateLimits(
