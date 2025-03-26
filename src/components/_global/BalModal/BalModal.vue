@@ -78,6 +78,9 @@ defineExpose({ hide });
             noBorder
             overflowYScroll
           >
+            <template v-if="$slots.tabs" #tabs>
+              <slot name="tabs" />
+            </template>
             <template v-if="$slots.header" #header>
               <slot name="header" />
             </template>
