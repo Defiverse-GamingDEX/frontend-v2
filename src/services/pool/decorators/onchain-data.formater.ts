@@ -68,6 +68,7 @@ export class OnchainDataFormater {
         symbol: this.tokenMeta[token]?.symbol,
         name: this.tokenMeta[token]?.name,
         logoURI: this.tokenMeta[token]?.logoURI,
+        owner: this.tokenMeta[token]?.owner,
       };
     });
 

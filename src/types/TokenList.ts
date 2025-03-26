@@ -5,6 +5,7 @@ export interface TokenInfo {
   readonly decimals: number;
   readonly symbol: string;
   readonly logoURI?: string;
+  readonly owner?: string;
   readonly tags?: string[];
   readonly extensions?: {
     readonly [key: string]: string | number | boolean | null;
@@ -37,6 +38,7 @@ export interface TokenList {
   readonly keywords?: string[];
   readonly tags?: Tags;
   readonly logoURI?: string;
+  readonly owner?: string;
 }
 
 export type TokenListMap = { [address: string]: TokenList };

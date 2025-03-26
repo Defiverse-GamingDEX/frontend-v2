@@ -105,6 +105,7 @@ export default function useSor({
   slippageBufferRate,
   isCowswapSwap,
 }: Props) {
+  let slippageBufferRateValue = slippageBufferRate.value;
   let sorManager: SorManager | undefined = undefined;
   const pools = ref<SubgraphPoolBase[]>([]);
   const sorReturn = ref<SorReturn>({
@@ -310,6 +311,15 @@ export default function useSor({
       return;
     }
 
+    slippageBufferRateValue = slippageBufferRate.value;
+
+    const tokenIn = getToken(tokenInAddress);
+    const tokenOut = getToken(tokenOutAddress);    
+    if ((tokenIn && tokenIn.owner === 'yukichi') || (tokenOut && tokenOut.owner === 'yukichi')) {
+      slippageBufferRateValue = 0.05; // 10%
+    }
+    console.log('HUNG:slippageBufferRateValue:', slippageBufferRateValue);
+
     const tokenInDecimals = getTokenDecimals(tokenInAddressInput.value);
     const tokenOutDecimals = getTokenDecimals(tokenOutAddressInput.value);
 
@@ -504,6 +514,7 @@ export default function useSor({
       summary = `${tokenInAmountFormatted} ${tokenInSymbol} -> ${tokenOutAmountFormatted} ${tokenOutSymbol}`;
     }
 
+    console.log('HUNG:slippageBufferRate:addTransaction:', slippageBufferRateValue);
     addTransaction({
       id: tx.hash,
       type: 'tx',
@@ -519,7 +530,7 @@ export default function useSor({
         exactIn: exactIn.value,
         quote: getQuote(),
         priceImpact: priceImpact.value,
-        slippageBufferRate: slippageBufferRate.value,
+        slippageBufferRate: slippageBufferRateValue,
       },
     });
 
@@ -553,6 +564,7 @@ export default function useSor({
       tokenInDecimals
     );
 
+    console.log('HUNG:slippageBufferRate:swap:', slippageBufferRateValue);    
     if (wrapType.value == WrapType.Wrap) {
       try {
         const tx = await wrap(
@@ -595,12 +607,13 @@ export default function useSor({
       return;
     }
 
+    // Hung: Fix slipage
     if (exactIn.value) {
       const tokenOutAmount = parseFixed(
         tokenOutAmountInput.value,
         tokenOutDecimals
       );
-      const minAmount = getMinOut(tokenOutAmount);
+      const minAmount = getMinOut(tokenOutAmount); 
       const sr: SorReturn = sorReturn.value as SorReturn;
 
       try {
@@ -664,14 +677,14 @@ export default function useSor({
 
   function getMaxIn(amount: BigNumber) {
     return amount
-      .mul(parseFixed(String(1 + slippageBufferRate.value), 18))
+      .mul(parseFixed(String(1 + slippageBufferRateValue), 18))
       .div(ONE);
   }
 
   function getMinOut(amount: BigNumber) {
     return amount
       .mul(ONE)
-      .div(parseFixed(String(1 + slippageBufferRate.value), 18));
+      .div(parseFixed(String(1 + slippageBufferRateValue), 18));
   }
 
   function getQuote(): SwapQuote {

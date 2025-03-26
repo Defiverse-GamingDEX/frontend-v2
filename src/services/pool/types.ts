@@ -27,6 +27,7 @@ export interface OnchainTokenData {
   logoURI: string | undefined;
   name: string;
   symbol: string;
+  owner?: string;
 }
 
 export type OnchainTokenDataMap = Record<Address, OnchainTokenData>;
