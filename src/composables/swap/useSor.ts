@@ -316,7 +316,7 @@ export default function useSor({
     const tokenIn = getToken(tokenInAddress);
     const tokenOut = getToken(tokenOutAddress);    
     if ((tokenIn && tokenIn.owner === 'yukichi') || (tokenOut && tokenOut.owner === 'yukichi')) {
-      slippageBufferRateValue = 0.05; // 10%
+      slippageBufferRateValue = 0.1; // 10%
     }
     console.log('HUNG:slippageBufferRateValue:', slippageBufferRateValue);
 
@@ -366,8 +366,6 @@ export default function useSor({
       );
 
       let tokenInAmountScaled = parseUnits(amount, tokenInDecimals);
-
-      console.log('[SOR Manager] swapExactIn');
 
       const swapReturn: SorReturn = await sorManager.getBestSwap(
         tokenInAddress,
@@ -481,7 +479,11 @@ export default function useSor({
   ): BigNumber {
     const divScale = BigNumber.from(10).pow(tokenDecimals);
     const wadScale = BigNumber.from(10).pow(18);
-    const effectivePrice = tokenAmountScaled.mul(divScale).div(tokenAmount);
+    if (tokenAmount.gte(0)) {
+      // HUNG: Hotfix decimals = 0
+      tokenAmount = BigNumber.from(1); // tokenAmount.add(0.0001)
+    }
+    const effectivePrice = tokenAmountScaled.mul(divScale).div(tokenAmount );    
     return effectivePrice
       .mul(wadScale)
       .div(parseUnits(Number(swapReturn.marketSpNormalised).toFixed(18)))
