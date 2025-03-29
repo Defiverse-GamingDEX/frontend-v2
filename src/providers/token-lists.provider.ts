@@ -23,7 +23,7 @@ export interface TokenListsState {
 }
 
 //const { uris } = tokenListService;
-const uris = ref<any | null>(null);
+export const uris = ref<any | null>(null);
 const { networkId } = useNetwork();
 
 /**

@@ -7,14 +7,14 @@ import useNotifications from '@/composables/useNotifications';
 import bridgeApi from '@/composables/bridge/bridge.price.api';
 import useWeb3 from '@/services/web3/useWeb3';
 import { fetchTokenListsByChainId } from '@/constants/tokenlists';
-import { useTokenLists } from '@/providers/token-lists.provider';
+import { useTokenLists, uris } from '@/providers/token-lists.provider';
 
 export default {
   name: 'ImportToken',
   emits: ['select', 'switch-tab'],
   setup(props, { emit }) {
     const { t } = useI18n();
-    const tokenAddress = ref('0xD77c861Db1142104c8F5822Fe3A15351d0c704F6');
+    const tokenAddress = ref('');
     const error = ref('');
     const loading = ref(false);
     const tokenFound = ref(false);
@@ -30,40 +30,56 @@ export default {
     // A function to force a complete refresh of the token lists
     async function forceRefreshTokens() {
       try {
-        console.log('Forcing a complete token list refresh');
-        // Fetch fresh token data from API
+        // 1. Fetch new token data from API
+        console.log('Fetching new token data from API...');
         const updatedTokensData = await fetchTokenListsByChainId(chainId.value);
 
         if (updatedTokensData && updatedTokensData[chainId.value]) {
           const newTokens = updatedTokensData[chainId.value];
-          console.log(
-            `Refreshed token list has ${newTokens.tokens.length} tokens`
-          );
+          console.log(`Got list of ${newTokens.tokens.length} tokens`);
 
-          // Convert to the format needed for token lists
+          // 2. Create key for token list
           const tokenListKey = JSON.stringify(newTokens);
 
-          // Clear and reload the token lists
+          // 3. Update allTokenLists
           tokenLists.allTokenLists.value = {
             [tokenListKey]: newTokens,
           };
 
-          // Update active keys
-          tokenLists.activeListKeys.value = [tokenListKey];
-          // Update approvedTokenLists
+          // 4. Update uris (important for approvedTokenLists)
+          if (uris.value) {
+            console.log('forceRefreshTokens ~ uris.value:', uris.value);
+            // Update Balancer.Default
+            uris.value.Balancer.Default = tokenListKey;
 
+            // Update Approved
+            uris.value.Approved = [tokenListKey];
+
+            // Update other lists
+            uris.value.All = [tokenListKey];
+            uris.value.Balancer.All = [tokenListKey];
+
+            console.log('Updated uris with new key:', tokenListKey);
+          }
+
+          // 5. Update activeListKeys (important for activeTokenLists)
+          tokenLists.activeListKeys.value = [tokenListKey];
+
+          console.log('Token list update successful');
           return true;
         }
+
+        console.warn('Could not get new token data');
         return false;
       } catch (error) {
-        console.error('Error refreshing token lists:', error);
+        console.error('Error updating token lists:', error);
         return false;
       }
     }
 
     // Only validate the address format
     function validateAddress(event) {
-      console.log('🚀 ~ validateAddress ~ event:', event);
+      console.log('validateAddress ~ event:', event);
       // If called from importToken (no event), use the current value
       if (!event) {
         error.value = '';
@@ -102,50 +118,40 @@ export default {
 
       try {
         loading.value = true;
-        // Call backend to import token
+
+        // 1. Call API to import token
         const params = {
           address: tokenAddress.value,
           chain_id: chainId.value,
         };
-        // const rs = await bridgeApi.importToken(params);
-        // console.log('🚀 ~ importToken ~ rs:', rs);
+        await bridgeApi.importToken(params);
 
-        // Wait to ensure backend has processed the token
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // 2. Wait for backend processing
+        await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Update token list with retry mechanism
-        console.log('Starting token list refresh after import');
-        let success = await forceRefreshTokens();
+        // 3. Update token list and uris
+        const success = await forceRefreshTokens();
 
-        // If first attempt fails, retry after a delay
-        if (!success) {
-          console.log('First refresh attempt failed, retrying...');
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          success = await forceRefreshTokens();
-        }
-
-        // Final check
-        if (success) {
-          console.log('Token lists successfully refreshed with new token');
-        } else {
-          console.warn('Token lists may not have been fully refreshed');
-        }
-
+        // 4. Success notification
         addNotification({
           type: 'success',
           title: '',
           message: 'Import token success',
         });
 
-        // Emit select event with the imported token address
+        // 5. Emit select event to choose token
         emit('select', tokenAddress.value);
       } catch (e) {
         console.error('Error importing token:', e);
+        let message =
+          e.response?.data?.message || e.message || 'Import token failed';
+        if (message === 'TOKEN_IS_EXISTS') {
+          message = 'Token is exists';
+        }
         addNotification({
           type: 'error',
           title: '',
-          message:
-            e.response?.data?.message || e.message || 'Import token failed',
+          message: message,
         });
       } finally {
         loading.value = false;
@@ -160,7 +166,7 @@ export default {
 
     // Add this function to handle keydown events
     function handleKeyDown(event) {
-      console.log('🚀 ~ handleKeyDown ~ event:', event);
+      console.log('handleKeyDown ~ event:', event);
       // Prevent form submission on Enter key
       if (event.key === 'Enter') {
         event.preventDefault();
