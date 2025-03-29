@@ -53,6 +53,27 @@ const importToken = async params => {
   });
   return data?.data;
 };
+const uploadImage = async imageFile => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  let response = await axios.post(`${domain}/v1/image/upload`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'x-access-token': accessToken,
+    },
+  });
+
+  // Handle different response formats
+  const responseData = response?.data;
+
+  // If the API returns data.imageUrl, transform it to match the expected format
+  if (responseData && responseData.imageUrl && !responseData.url) {
+    responseData.url = responseData.imageUrl;
+  }
+
+  return responseData;
+};
 // INTERNAL API - END
 export default {
   getRoutes,
@@ -63,4 +84,5 @@ export default {
   postBridgeRequestV2,
   getMarketInfo,
   importToken,
+  uploadImage,
 };

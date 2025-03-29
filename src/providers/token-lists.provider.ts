@@ -8,6 +8,7 @@ import {
   reactive,
   ref,
   toRefs,
+  watchEffect,
 } from 'vue';
 
 import useNetwork from '@/composables/useNetwork';
@@ -105,6 +106,59 @@ function isActiveList(uri: string): boolean {
   return state.activeListKeys.includes(uri);
 }
 
+/**
+ * Force a complete refresh of token lists for a specific chain ID
+ * This is used after importing a new token to ensure it appears in the lists
+ */
+export async function forceRefreshTokens(chainId: number): Promise<boolean> {
+  try {
+    // 1. Fetch new token data from API
+    console.log('Fetching new token data from API...');
+    const updatedTokensData = await fetchTokenListsByChainId(chainId);
+
+    if (updatedTokensData && updatedTokensData[chainId]) {
+      const newTokens = updatedTokensData[chainId];
+      console.log(`Got list of ${newTokens.tokens.length} tokens`);
+
+      // 2. Create key for token list
+      const tokenListKey = JSON.stringify(newTokens);
+
+      // 3. Update allTokenLists
+      allTokenLists.value = {
+        [tokenListKey]: newTokens,
+      };
+
+      // 4. Update uris (important for approvedTokenLists)
+      if (uris.value) {
+        console.log('forceRefreshTokens ~ uris.value:', uris.value);
+        // Update Balancer.Default
+        uris.value.Balancer.Default = tokenListKey;
+
+        // Update Approved
+        uris.value.Approved = [tokenListKey];
+
+        // Update other lists
+        uris.value.All = [tokenListKey];
+        uris.value.Balancer.All = [tokenListKey];
+
+        console.log('Updated uris with new key:', tokenListKey);
+      }
+
+      // 5. Update activeListKeys (important for activeTokenLists)
+      state.activeListKeys = [tokenListKey];
+
+      console.log('Token list update successful');
+      return true;
+    }
+
+    console.warn('Could not get new token data');
+    return false;
+  } catch (error) {
+    console.error('Error updating token lists:', error);
+    return false;
+  }
+}
+
 export const tokenListsProvider = () => {
   onBeforeMount(async () => {
     uris.value = await tokenListService.getUris();
@@ -142,6 +196,7 @@ export const tokenListsProvider = () => {
     // methods
     toggleTokenList,
     isActiveList,
+    forceRefreshTokens,
   };
 };
 
