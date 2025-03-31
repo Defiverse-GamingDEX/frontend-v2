@@ -37,8 +37,18 @@ export default {
       return !!previewUrl.value;
     });
 
+    // Supported file extensions
+    const supportedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
     // Accept only image files
-    const acceptedFileTypes = 'image/png, image/jpeg, image/jpg, image/gif';
+    const acceptedFileTypes =
+      'image/png, image/jpeg, image/jpg, image/gif, image/webp';
+
+    // Helper function to check file extension
+    const isValidFileExtension = filename => {
+      if (!filename) return false;
+      const extension = filename.split('.').pop().toLowerCase();
+      return supportedExtensions.includes(extension);
+    };
 
     // Open file browser
     const openFileBrowser = () => {
@@ -52,16 +62,14 @@ export default {
       const file = event.target.files[0];
       if (!file) return;
 
-      // Check file type
-      if (
-        !file.type.match(
-          acceptedFileTypes.replace(/\s/g, '').split(',').join('|')
-        )
-      ) {
+      // Check file extension
+      if (!isValidFileExtension(file.name)) {
         addNotification({
           type: 'error',
           title: '',
-          message: 'Invalid file type. Please upload an image file.',
+          message: `Invalid file type. Only ${supportedExtensions
+            .join(', ')
+            .toUpperCase()} files are supported.`,
         });
         return;
       }
@@ -146,6 +154,7 @@ export default {
       fileInput,
       hasImage,
       acceptedFileTypes,
+      supportedExtensions,
       openFileBrowser,
       onFileSelected,
       removeImage,
@@ -238,7 +247,8 @@ export default {
       </div>
 
       <p class="text-xs text-gray-500">
-        Recommended: PNG or JPG. Max size: 5MB
+        Supported formats: {{ supportedExtensions.join(', ').toUpperCase() }}.
+        Max size: 5MB
       </p>
     </div>
   </div>
