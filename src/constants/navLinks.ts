@@ -34,7 +34,13 @@ let NAV_LINKS_MAINNET = [
 ];
 if (isTestnet == true) {
   NAV_LINKS_MAINNET = [
-    ...NAV_LINKS_MAINNET,
+    {
+      text: 'pool',
+      path: 'pool',
+      name_link: 'list-pool',
+      goal_key: 'ClickNavPools',
+    },
+    { text: 'swap', path: 'swap', name_link: 'swap', goal_key: 'ClickNavSwap' },
     {
       text: 'claim',
       path: 'claim',
