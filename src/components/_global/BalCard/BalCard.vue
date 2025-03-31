@@ -7,6 +7,9 @@
       ]"
     >
       <div v-if="imgSrc" class="feature" :style="featureStyles" />
+      <div v-if="$slots.tabs" :class="['tabs-container']">
+        <slot name="tabs" />
+      </div>
       <div v-if="!!title || $slots.header" :class="['header', headerClasses]">
         <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -- Not sure if this is fine -->
         <component :is="titleTag" v-if="!!title" v-text="title" />
