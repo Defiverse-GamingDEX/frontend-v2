@@ -198,7 +198,7 @@ export default {
           :outline="false"
           :disabled="!tokenAddress || !isAddressValid"
           :loading="loading"
-          class="!py-4 !px-4 !h-auto"
+          :class="loading ? 'py-2 px-4 h-auto' : 'py-4 px-4 h-auto'"
           @click="importToken"
         >
           {{ 'Import token' }}
