@@ -105,6 +105,7 @@ export default function useSor({
   slippageBufferRate,
   isCowswapSwap,
 }: Props) {
+  let slippageBufferRateValue = slippageBufferRate.value;
   let sorManager: SorManager | undefined = undefined;
   const pools = ref<SubgraphPoolBase[]>([]);
   const sorReturn = ref<SorReturn>({
@@ -310,6 +311,18 @@ export default function useSor({
       return;
     }
 
+    slippageBufferRateValue = slippageBufferRate.value;
+
+    const tokenIn = getToken(tokenInAddress);
+    const tokenOut = getToken(tokenOutAddress);
+    if (
+      (tokenIn && tokenIn.owner === 'yukichi') ||
+      (tokenOut && tokenOut.owner === 'yukichi')
+    ) {
+      slippageBufferRateValue = 0.1; // 10%
+    }
+    console.log('HUNG:slippageBufferRateValue:', slippageBufferRateValue);
+
     const tokenInDecimals = getTokenDecimals(tokenInAddressInput.value);
     const tokenOutDecimals = getTokenDecimals(tokenOutAddressInput.value);
 
@@ -356,8 +369,6 @@ export default function useSor({
       );
 
       let tokenInAmountScaled = parseUnits(amount, tokenInDecimals);
-
-      console.log('[SOR Manager] swapExactIn');
 
       const swapReturn: SorReturn = await sorManager.getBestSwap(
         tokenInAddress,
@@ -438,11 +449,13 @@ export default function useSor({
           address: tokenOutAddress,
           isInputToken: true,
         });
+
         tokenInAmount = await mutateAmount({
           amount: tokenInAmount,
           address: tokenInAddress,
           isInputToken: false,
         });
+
         const priceImpactCalc = calcPriceImpact(
           tokenInDecimals,
           tokenInAmount,
@@ -471,6 +484,10 @@ export default function useSor({
   ): BigNumber {
     const divScale = BigNumber.from(10).pow(tokenDecimals);
     const wadScale = BigNumber.from(10).pow(18);
+    if (tokenAmount.lte(0)) {
+      // HUNG: Hotfix decimals = 0
+      tokenAmount = BigNumber.from(1); // tokenAmount.add(0.0001)
+    }
     const effectivePrice = tokenAmountScaled.mul(divScale).div(tokenAmount);
     return effectivePrice
       .mul(wadScale)
@@ -519,7 +536,7 @@ export default function useSor({
         exactIn: exactIn.value,
         quote: getQuote(),
         priceImpact: priceImpact.value,
-        slippageBufferRate: slippageBufferRate.value,
+        slippageBufferRate: slippageBufferRateValue,
       },
     });
 
@@ -595,6 +612,7 @@ export default function useSor({
       return;
     }
 
+    // Hung: Fix slipage
     if (exactIn.value) {
       const tokenOutAmount = parseFixed(
         tokenOutAmountInput.value,
@@ -664,14 +682,14 @@ export default function useSor({
 
   function getMaxIn(amount: BigNumber) {
     return amount
-      .mul(parseFixed(String(1 + slippageBufferRate.value), 18))
+      .mul(parseFixed(String(1 + slippageBufferRateValue), 18))
       .div(ONE);
   }
 
   function getMinOut(amount: BigNumber) {
     return amount
       .mul(ONE)
-      .div(parseFixed(String(1 + slippageBufferRate.value), 18));
+      .div(parseFixed(String(1 + slippageBufferRateValue), 18));
   }
 
   function getQuote(): SwapQuote {

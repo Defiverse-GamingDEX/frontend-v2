@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
 const GAUGE_REWARD_CONTRACT_ADDRESS =
-  '0x4e32701fEEF5282151bC02B47E9E13074b701b30';
+  '0xc6016cf2fC03fcEC27eFF83A4218F98710Fa8F81';
 
 import { gasPriceService } from '@/services/gas-price/gas-price.service';
 

@@ -31,7 +31,7 @@ const STAKE_Z_NETWORKS_TESTNET = [
     name: 'Defiverse Testnet',
     z_token_address: '0x33faF6B389064c572b807498e17A21440ef15F15',
     z_token_decimals: 18,
-    sz_token_address: '0x1C5dc980FB9BaE72A64749b08DFEE3be3f5Fd9d3',
+    sz_token_address: '0x9Ba4a34cF63eFBf66c4d6a36470632b7D5511864',
     sz_token_decimals: 18,
   },
 ];

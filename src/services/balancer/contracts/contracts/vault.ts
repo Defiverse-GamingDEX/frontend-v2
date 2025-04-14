@@ -258,6 +258,7 @@ export default class Vault {
         symbol: tokenInfo[token]?.symbol,
         name: tokenInfo[token]?.name,
         logoURI: tokenInfo[token]?.logoURI,
+        owner: tokenInfo[token]?.owner,
       };
     });
 
