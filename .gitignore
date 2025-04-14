@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 #rollup analyzer
 stats.html
+.qodo

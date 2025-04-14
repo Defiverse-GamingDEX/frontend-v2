@@ -1,17 +1,27 @@
 <script setup lang="ts">
-import { computed, reactive, toRef, watch, watchEffect } from 'vue';
+import { computed, reactive, toRef, watch, watchEffect, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import TokenListItem from '@/components/lists/TokenListItem.vue';
 import TokenListsListItem from '@/components/lists/TokenListsListItem.vue';
+import ImportToken from '@/components/modals/SelectTokenModal/ImportToken.vue';
 import useUrls from '@/composables/useUrls';
 import { useTokenLists } from '@/providers/token-lists.provider';
 import { useTokens } from '@/providers/tokens.provider';
 import { configService } from '@/services/config/config.service';
-import { TokenInfoMap, TokenList } from '@/types/TokenList';
+import { TokenInfoMap, TokenList, TokenInfo } from '@/types/TokenList';
 import { useMagicKeys } from '@vueuse/core';
-
 import tokensUtils from '@/lib/utils/tokens';
+
+// Augment TokenInfo interface to allow for owner property
+declare module '@/types/TokenList' {
+  interface TokenInfo {
+    owner?: string;
+    price?: number;
+    balance?: string;
+    value?: number;
+  }
+}
 
 interface Props {
   open?: boolean;
@@ -54,12 +64,20 @@ const state: ComponentState = reactive({
   focussedToken: 0,
 });
 
+// Tabs state
+const activeTab = ref('lists'); // 'lists' or 'tokens'
+const tabs = [
+  { id: 'lists', name: 'Lists' },
+  { id: 'tokens', name: 'Import token' },
+];
+
 /**
  * COMPOSABLES
  */
 const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
   useTokenLists();
 const tokenListArray = Object.entries(activeTokenLists.value) || [];
+
 const _token_list_origin = ref(
   tokenListArray
     ? tokenListArray.length > 0
@@ -138,7 +156,6 @@ const tokens = computed(() => {
   */
   // if (props.ignoreBalances) return tokensWithValues;
   // else return orderBy(tokensWithValues, ['value', 'balance'], ['desc', 'desc']);
-
   return filterNativeToken(tokensWithValues);
 });
 
@@ -184,11 +201,17 @@ function toggleSelectTokenList(): void {
   state.query = '';
 }
 
-function filterNativeToken(tokens) {
-  let rs = [];
+function filterNativeToken(tokens: TokenInfo[]): TokenInfo[] {
+  let rs: TokenInfo[] = [];
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
-
+    const owner = _token_list_origin.value?.find(
+      tokenFromAPI => tokenFromAPI.address === token.address
+    )?.owner;
+    token.owner = owner;
+    if (token.name === 'OASYS') {
+      token.owner = 'gamingdex';
+    }
     //
     // TODO: Need to load token list by chain
     // let tokensByChain = tokensUtils.getTokenListFromNetworkId(
@@ -201,6 +224,7 @@ function filterNativeToken(tokens) {
         item.address?.toUpperCase() === token?.address.toUpperCase() ||
         token?.name === 'OASYS'
     );
+
     if (tokenNative >= 0) {
       rs.push(token);
     }
@@ -244,140 +268,202 @@ watchEffect(() => {
 
 <template>
   <BalModal show noContentPad @close="$emit('close')">
-    <template #header>
-      <div class="flex justify-between items-center w-full">
-        <div class="flex items-center">
-          <BalBtn
-            v-if="state.selectTokenList"
-            color="gray"
-            size="xs"
-            class="mr-2"
-            flat
-            circle
-            @click="onListExit"
-          >
-            <BalIcon name="arrow-left" size="sm" />
-          </BalBtn>
-          <h5>{{ title }}</h5>
-        </div>
+    <!-- Tabs -->
+    <template #tabs>
+      <div class="flex w-full border-b dark:border-gray-900 tabs-container">
         <div
-          v-if="!state.selectTokenList && !hideTokenLists"
-          class="group flex items-center mr-2 cursor-pointer"
-          @click="toggleSelectTokenList"
+          v-for="tab in tabs"
+          :key="tab.id"
+          class="flex-1 py-3 font-bold text-center transition cursor-pointer"
+          :class="{
+            'active-tab': activeTab === tab.id,
+            'inactive-tab': activeTab !== tab.id,
+          }"
+          @click="activeTab = tab.id"
         >
-          <span class="text-xs text-secondary">{{ $t('tokenLists') }}</span>
-          <div class="flex items-center ml-2">
-            <span class="mr-1">
-              <img
-                v-for="(tokenlist, i) in activeTokenLists"
-                :key="i"
-                :src="resolve(tokenlist.logoURI || '')"
-                class="inline-block w-6 h-6 bg-white rounded-full shadow"
+          {{ tab.name }}
+        </div>
+      </div>
+    </template>
+    <template #header>
+      <div class="w-full">
+        <div
+          v-if="activeTab === 'lists'"
+          class="flex justify-between items-center mb-4 w-full"
+        >
+          <div class="flex items-center">
+            <BalBtn
+              v-if="state.selectTokenList"
+              color="gray"
+              size="xs"
+              class="mr-2"
+              flat
+              circle
+              @click="onListExit"
+            >
+              <BalIcon name="arrow-left" size="sm" />
+            </BalBtn>
+            <h5>{{ title }}</h5>
+          </div>
+          <div
+            v-if="!state.selectTokenList && !hideTokenLists"
+            class="group flex items-center mr-2 cursor-pointer"
+            @click="toggleSelectTokenList"
+          >
+            <span class="text-xs text-secondary">{{ $t('tokenLists') }}</span>
+            <div class="flex items-center ml-2">
+              <span class="mr-1">
+                <img
+                  v-for="(tokenlist, i) in activeTokenLists"
+                  :key="i"
+                  :src="resolve(tokenlist.logoURI || '')"
+                  class="inline-block w-6 h-6 bg-white rounded-full shadow"
+                />
+              </span>
+              <BalIcon
+                name="chevron-down"
+                size="sm"
+                class="ml-1 text-blue-500 group-hover:text-pink-500 group-focus:text-pink-500 dark:text-blue-400 transition-all duration-200 ease-out"
               />
-            </span>
-            <BalIcon
-              name="chevron-down"
-              size="sm"
-              class="ml-1 text-blue-500 group-hover:text-pink-500 group-focus:text-pink-500 dark:text-blue-400 transition-all duration-200 ease-out"
-            />
+            </div>
+          </div>
+        </div>
+
+        <!-- Title for Tokens tab -->
+        <div v-if="activeTab === 'tokens'" class="w-full">
+          <div class="flex justify-center items-center">
+            <h5 class="mb-2 text-lg font-bold text-center">
+              IMPORT TOKEN ERC20
+            </h5>
           </div>
         </div>
       </div>
     </template>
-    <template v-if="state.selectTokenList">
-      <div class="flex px-4 pt-2 pb-3 mr-2">
-        <BalTextInput
-          v-model="state.query"
-          name="tokenSearchInput"
-          :placeholder="$t('searchByName')"
-          size="sm"
-          class="w-full"
-          autoFocus
-        >
-          <template #prepend>
-            <div class="flex justify-center items-center w-8 h-full">
-              <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
-            </div>
-          </template>
-        </BalTextInput>
-      </div>
-      <div>
-        <div
-          v-if="Object.keys(tokenLists).length > 0"
-          class="overflow-y-scroll h-96"
-        >
-          <TokenListsListItem
-            v-for="(tokenList, uri) in tokenLists"
-            :key="uri"
-            :isActive="isActiveList(uri.toString())"
-            :tokenlist="tokenList"
-            :uri="uri"
-            @toggle="onToggleList(uri.toString())"
+
+    <!-- Lists Tab Content -->
+    <div v-if="activeTab === 'lists'">
+      <template v-if="state.selectTokenList">
+        <div class="flex px-4 pt-2 pb-3 mr-2">
+          <BalTextInput
+            v-model="state.query"
+            name="tokenSearchInput"
+            :placeholder="$t('searchByName')"
+            size="sm"
+            class="w-full"
+            autoFocus
+          >
+            <template #prepend>
+              <div class="flex justify-center items-center w-8 h-full">
+                <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
+              </div>
+            </template>
+          </BalTextInput>
+        </div>
+        <div>
+          <div
+            v-if="Object.keys(tokenLists).length > 0"
+            class="overflow-y-scroll h-96"
+          >
+            <TokenListsListItem
+              v-for="(tokenList, uri) in tokenLists"
+              :key="uri"
+              :isActive="isActiveList(uri.toString())"
+              :tokenlist="tokenList"
+              :uri="uri"
+              @toggle="onToggleList(uri.toString())"
+            />
+          </div>
+          <div
+            v-else
+            class="flex justify-center items-center h-96"
+            v-text="$t('errorNoLists')"
           />
         </div>
-        <div
-          v-else
-          class="flex justify-center items-center h-96"
-          v-text="$t('errorNoLists')"
-        />
-      </div>
-    </template>
-    <template v-else>
-      <div class="flex px-4 pt-2 pb-3 mr-2">
-        <BalTextInput
-          v-model="state.query"
-          name="tokenSearchInput"
-          :placeholder="$t('searchBy')"
-          size="sm"
-          class="w-full"
-          autoFocus
-        >
-          <template #prepend>
-            <div class="flex justify-center items-center w-8 h-full">
-              <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
-            </div>
-          </template>
-        </BalTextInput>
-      </div>
-      <div class="overflow-hidden">
-        <RecycleScroller
-          v-if="tokens.length > 0"
-          v-slot="{ item: token, index }"
-          class="overflow-y-scroll list-height"
-          :items="tokens"
-          :itemSize="70"
-          keyField="address"
-          :buffer="100"
-        >
-          <a @click="onSelectToken(token.address)">
-            <TokenListItem
-              :token="token"
-              :hideBalance="ignoreBalances"
-              :balanceLoading="dynamicDataLoading"
-              :focussed="index == state.focussedToken"
-              tabIndex="0"
-            />
-          </a>
-        </RecycleScroller>
-        <div
-          v-else-if="state.loading"
-          class="flex justify-center items-center h-96"
-        >
-          <BalLoadingIcon />
+      </template>
+      <template v-else>
+        <div class="flex px-4 pt-2 pb-3 mr-2">
+          <BalTextInput
+            v-model="state.query"
+            name="tokenSearchInput"
+            :placeholder="$t('searchBy')"
+            size="sm"
+            class="w-full"
+            autoFocus
+          >
+            <template #prepend>
+              <div class="flex justify-center items-center w-8 h-full">
+                <BalIcon name="search" size="sm" class="mr-2 text-gray-500" />
+              </div>
+            </template>
+          </BalTextInput>
         </div>
-        <div
-          v-else
-          class="p-12 h-96 text-center text-secondary"
-          v-text="$t('errorNoTokens')"
-        />
-      </div>
-    </template>
+        <div class="overflow-hidden">
+          <RecycleScroller
+            v-if="tokens.length > 0"
+            v-slot="{ item: token, index }"
+            class="overflow-y-scroll list-height"
+            :items="tokens"
+            :itemSize="70"
+            keyField="address"
+            :buffer="100"
+          >
+            <a @click="onSelectToken(token.address)">
+              <TokenListItem
+                :token="token"
+                :hideBalance="ignoreBalances"
+                :balanceLoading="dynamicDataLoading"
+                :focussed="index == state.focussedToken"
+                tabIndex="0"
+              />
+            </a>
+          </RecycleScroller>
+          <div
+            v-else-if="state.loading"
+            class="flex justify-center items-center h-96"
+          >
+            <BalLoadingIcon />
+          </div>
+          <div
+            v-else
+            class="p-12 h-96 text-center text-secondary"
+            v-text="$t('errorNoTokens')"
+          />
+        </div>
+      </template>
+    </div>
+
+    <!-- Tokens Tab Content -->
+    <div v-else-if="activeTab === 'tokens'">
+      <ImportToken @select="onSelectToken" />
+    </div>
   </BalModal>
 </template>
 
 <style scoped>
 .list-height {
   height: 70vh;
+}
+
+.tabs-container {
+  margin-top: -4px;
+}
+
+.active-tab {
+  background-color: #f9fafb;
+  border-bottom: 2px solid #3b82f6;
+  font-weight: 500;
+}
+
+.dark .active-tab {
+  background-color: #1f2937;
+}
+
+.inactive-tab:hover {
+  background-color: #f3f4f6;
+}
+
+.dark .inactive-tab:hover {
+  background-color: #374151;
 }
 </style>
 

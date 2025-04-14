@@ -274,6 +274,8 @@ function initSrcBE() {
       'chain_id_decimals'
     );
     result = reOrderTokensList(result);
+    result = result.filter((item: any) => item.chain_id_decimals !== 2400); // TODO remove TCGverse
+    console.log('🚀 ~ initSrcBE ~ result:', result);
     return result || [];
   }
 }
@@ -728,7 +730,8 @@ function getDstByChainIdAndTokenAddress(routes, srcChainId, tokenAddress) {
         route.src.token_address === tokenAddress
     )
     .map(route => route.dst);
-  const result = groupByChainId(dstList);
+  let result = groupByChainId(dstList);
+  result = result.filter((item: any) => item.chain_id_decimals !== 2400); // TODO remove TCGverse
   return result;
 }
 

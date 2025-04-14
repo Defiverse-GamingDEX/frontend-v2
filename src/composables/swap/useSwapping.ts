@@ -305,8 +305,11 @@ export default function useSwapping(
     if (isCowswapSwap.value) {
       cowswap.handleAmountChange();
     } else {
+      if (isJoinExitSwap.value) {
+        await joinExit.handleAmountChange();
+      }
+
       await sor.handleAmountChange();
-      await joinExit.handleAmountChange();
     }
   }
 
