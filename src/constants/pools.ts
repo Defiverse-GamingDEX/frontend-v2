@@ -809,7 +809,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   },
   Factories: {
     '0x58e6f99bb65378f47a520fc9630bd711f2cf3dc7': 'composableStablePool', // ComposableStable V3
-    '0xf6b5ff30ecdf0f6ae318d8787729b1aaf9ebdaea': 'weightedPool', // WeightedPool V3
+    '0x48494fa9ead46ee8e3fcb66487a6dbbd34dcafe3': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [
@@ -817,7 +817,6 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
       '0xbaf0f0499bc5530e2b6181e22567415f793a3d0b000200000000000000000005',
       '0x3f197d7d1ff1de36c69cea2a2ab326a01612f848000200000000000000000008',
       '0xa85ae7f245e690ec70867248d246f60a41bace0e000200000000000000000009',
-
       // '0xb14753b418b66b30afe1ff2078fac93d66fe219f000200000000000000000001',
       // '0x49ae791942ac56e66017924994df196189a5bbed000200000000000000000002',
       // '0x4cc04216f2863842e3be0fe22bb763382f26500c000200000000000000000003',
