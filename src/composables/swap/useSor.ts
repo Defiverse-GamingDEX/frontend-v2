@@ -314,8 +314,11 @@ export default function useSor({
     slippageBufferRateValue = slippageBufferRate.value;
 
     const tokenIn = getToken(tokenInAddress);
-    const tokenOut = getToken(tokenOutAddress);    
-    if ((tokenIn && tokenIn.owner === 'yukichi') || (tokenOut && tokenOut.owner === 'yukichi')) {
+    const tokenOut = getToken(tokenOutAddress);
+    if (
+      (tokenIn && tokenIn.owner === 'yukichi') ||
+      (tokenOut && tokenOut.owner === 'yukichi')
+    ) {
       slippageBufferRateValue = 0.1; // 10%
     }
     console.log('HUNG:slippageBufferRateValue:', slippageBufferRateValue);
@@ -446,11 +449,13 @@ export default function useSor({
           address: tokenOutAddress,
           isInputToken: true,
         });
+
         tokenInAmount = await mutateAmount({
           amount: tokenInAmount,
           address: tokenInAddress,
           isInputToken: false,
         });
+
         const priceImpactCalc = calcPriceImpact(
           tokenInDecimals,
           tokenInAmount,
@@ -479,11 +484,11 @@ export default function useSor({
   ): BigNumber {
     const divScale = BigNumber.from(10).pow(tokenDecimals);
     const wadScale = BigNumber.from(10).pow(18);
-    if (tokenAmount.gte(0)) {
+    if (tokenAmount.lte(0)) {
       // HUNG: Hotfix decimals = 0
       tokenAmount = BigNumber.from(1); // tokenAmount.add(0.0001)
     }
-    const effectivePrice = tokenAmountScaled.mul(divScale).div(tokenAmount );    
+    const effectivePrice = tokenAmountScaled.mul(divScale).div(tokenAmount);
     return effectivePrice
       .mul(wadScale)
       .div(parseUnits(Number(swapReturn.marketSpNormalised).toFixed(18)))
@@ -516,7 +521,6 @@ export default function useSor({
       summary = `${tokenInAmountFormatted} ${tokenInSymbol} -> ${tokenOutAmountFormatted} ${tokenOutSymbol}`;
     }
 
-    console.log('HUNG:slippageBufferRate:addTransaction:', slippageBufferRateValue);
     addTransaction({
       id: tx.hash,
       type: 'tx',
@@ -566,7 +570,6 @@ export default function useSor({
       tokenInDecimals
     );
 
-    console.log('HUNG:slippageBufferRate:swap:', slippageBufferRateValue);    
     if (wrapType.value == WrapType.Wrap) {
       try {
         const tx = await wrap(
@@ -615,7 +618,7 @@ export default function useSor({
         tokenOutAmountInput.value,
         tokenOutDecimals
       );
-      const minAmount = getMinOut(tokenOutAmount); 
+      const minAmount = getMinOut(tokenOutAmount);
       const sr: SorReturn = sorReturn.value as SorReturn;
 
       try {
