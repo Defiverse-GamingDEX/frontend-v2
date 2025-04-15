@@ -122,6 +122,7 @@ const {
 } = useStakeZ();
 const { networkSlug } = useNetwork();
 const { account, chainId, getSigner, getProvider } = useWeb3();
+console.log('🚀 ~ account:', account);
 const { fNum2 } = useNumbers();
 const { addNotification } = useNotifications();
 const { addTransaction } = useTransactions();
@@ -293,13 +294,23 @@ const handleRedeemSubmit = ({ receipt }) => {
   fetchData();
 };
 const fetchData = async () => {
+  if (!account.value) return;
   await getData();
   await checkIsRedeemAll();
 };
 /**
+ * WATCHERS
+ */
+watch(account, () => {
+  if (account.value) {
+    fetchData();
+  }
+});
+/**
  * LIFE CYCLE
  */
 onMounted(() => {
+  console.log('🚀 ~ onMounted ~ account:', account);
   fetchData();
 });
 </script>
