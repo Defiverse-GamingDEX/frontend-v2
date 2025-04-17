@@ -668,21 +668,21 @@ export const DEFIVERSE_POOLS: Pool[] = [
 
 export const DEFIVERSE_POOLS_TESTNET: Pool[] = [
   {
-    id: '0xe815154dc2bb9cceee8054b01e99850b2a8c0d1e000200000000000000000002',
+    id: '0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083',
     network: Network.DEFIVERSE_TESTNET,
   },
-  {
-    id: '0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0xa85ae7f245e690ec70867248d246f60a41bace0e000200000000000000000009',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x35235c062df1e4154e157413d347f4a8a4a93c09000200000000000000000008',
-    network: Network.DEFIVERSE_TESTNET,
-  },
+  // {
+  //   id: '0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
+  // {
+  //   id: '0xa85ae7f245e690ec70867248d246f60a41bace0e000200000000000000000009',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
+  // {
+  //   id: '0x35235c062df1e4154e157413d347f4a8a4a93c09000200000000000000000008',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
 ];
 
 export const POOLS = [
