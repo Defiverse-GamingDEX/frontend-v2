@@ -1,24 +1,24 @@
 [
   {
-    "address": "0x6db07B40a3052e9160232e76BDf600aED692F35F",
+    "address": "0x19Dcc71E689eC9bfBb34028F465b7848e5298ee7",
     "network": 17117,
     "isKilled": false,
     "relativeWeightCap": "0.15",
     "addedTimestamp": 1700039704,
     "pool": {
-      "id": "0xe815154dc2bb9cceee8054b01e99850b2a8c0d1e000200000000000000000002",
-      "address": "0xe815154DC2bB9cCEEE8054b01e99850B2A8C0d1E",
+      "id": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083",
+      "address": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87",
       "poolType": "Weighted",
-      "symbol": "G-50USDC-50OAS",
+      "symbol": "G-70USDC-30OAS",
       "tokens": [
         {
           "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
-          "weight": "0.5",
+          "weight": "0.7",
           "symbol": "USDC"
         },
         {
           "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
+          "weight": "0.3",
           "symbol": "WOAS"
         }
       ]
@@ -26,35 +26,6 @@
     "tokenLogoURIs": {
       "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "tokens/USDC_L.png",
       "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99": "tokens/OAS_L.png"
-    }
-  },
-  {
-    "address": "0xC42623A8c4ad8602Ad8eca36a4051a18cE36eC17",
-    "network": 17117,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
-    "pool": {
-      "id": "0xa85ae7f245e690ec70867248d246f60a41bace0e000200000000000000000009",
-      "address": "0xA85Ae7F245e690ec70867248D246f60A41BaCe0E",
-      "poolType": "Weighted",
-      "symbol": "G-50TCGC-50OAS",
-      "tokens": [
-        {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        },
-        {
-          "address": "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD",
-          "weight": "0.5",
-          "symbol": "TCGC"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99": "https://testnet.gaming-dex.com/tokens/OAS_L.png",
-      "0x99b88cbF947Ce0d75dA00f271e52eb82EbfA68dD": "https://testnet.gaming-dex.com/tokens/TCGC_L.png"
     }
   }
 ]
