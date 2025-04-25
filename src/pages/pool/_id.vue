@@ -35,7 +35,7 @@ import { PoolToken } from '@/services/pool/types';
 import { providePoolStaking } from '@/providers/local/pool-staking.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 import BrandedRedirectCard from '@/components/pool/branded-redirect/BrandedRedirectCard.vue';
-
+import ExtraRewardCard from '@/components/contextual/pages/pool/ExtraRewardCard.vue';
 /**
  * STATE
  */
@@ -290,7 +290,6 @@ watch(poolQuery.error, () => {
             :missingPrices="missingPrices"
             class="mb-4"
           />
-
           <BalLoadingBlock v-if="loadingPool" class="h-40 pool-actions-card" />
           <StakingIncentivesCard
             v-if="isStakablePool && !loadingPool && pool && isWalletReady"
@@ -302,6 +301,12 @@ watch(poolQuery.error, () => {
             :pool="pool"
             class="pool-locking"
           />
+          <BalLoadingBlock
+            v-if="loadingPool || !pool"
+            class="mb-4 h-60 pool-actions-card"
+          />
+
+          <ExtraRewardCard v-else :pool="pool" class="mb-4" />
         </BalStack>
       </div>
     </div>

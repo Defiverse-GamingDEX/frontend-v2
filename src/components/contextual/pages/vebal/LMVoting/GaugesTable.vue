@@ -228,7 +228,7 @@ function openConfigReward(gauge) {
   router.push({
     name: 'gauge-reward',
     params: {
-      poolId: gauge.pool.id,
+      id: gauge.pool.id,
       networkSlug: getNetworkSlug(gauge.network),
     },
     query: { returnRoute: 'vebal', gaugeAddress: gauge.address },
