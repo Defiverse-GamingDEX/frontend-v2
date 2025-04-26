@@ -42,7 +42,6 @@ async function getGaugeAddress() {
     console.log('🚀 ~ getGaugeAddress ~ response:', response);
     gaugeAddress.value = response.gauge_address;
   } catch (error) {
-    gaugeAddress.value = '0x19Dcc71E689eC9bfBb34028F465b7848e5298ee7';
     console.error(error);
   }
 }
