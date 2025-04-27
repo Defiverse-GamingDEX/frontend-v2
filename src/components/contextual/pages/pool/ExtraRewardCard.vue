@@ -5,18 +5,19 @@ import { useRouter } from 'vue-router';
 import useNetwork from '@/composables/useNetwork';
 import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
-import gaugeApi from '@/composables/gaugeReward/gauge.api';
+
 import useConfig from '@/composables/useConfig';
 /**
  * TYPES
  */
 type Props = {
   pool: Pool;
+  gaugeAddress: string;
 };
 /**
  * STATS
  */
-const gaugeAddress = ref('');
+// const gaugeAddress = ref('');
 /**
  * PROPS
  */
@@ -33,34 +34,16 @@ const { networkConfig } = useConfig();
 /**
  * METHODS
  */
-async function getGaugeAddress() {
-  try {
-    const response = await gaugeApi.getGaugeAddress({
-      pool_id: props.pool.id,
-      chain_id: networkConfig.chainId,
-    });
-    console.log('🚀 ~ getGaugeAddress ~ response:', response);
-    gaugeAddress.value = response.gauge_address;
-    console.log(
-      '🚀 ~ getGaugeAddress ~  gaugeAddress.value:',
-      gaugeAddress.value
-    );
-  } catch (error) {
-    console.error(error);
-  }
-}
+
 function openAddRewardsPage() {
   router.push({
     path: `/${networkSlug}/user-gauge-reward/${props.pool.id}`,
-    query: { returnRoute: 'pool', gaugeAddress: gaugeAddress.value },
+    query: { returnRoute: 'pool', gaugeAddress: props.gaugeAddress },
   });
 }
 /**
  * CYCLES
  */
-onMounted(() => {
-  getGaugeAddress();
-});
 </script>
 
 <template>
