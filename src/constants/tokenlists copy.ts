@@ -19,27 +19,6 @@ interface TokenListMapByNetwork {
  * Mapping of the TokenLists used on each network
  */
 export const TOKEN_LIST_MAP: TokenListMapByNetwork = {
-  '1': {
-    Balancer: {
-      Default:
-        'https://raw.githubusercontent.com/balancer-labs/assets/master/generated/listed.tokenlist.json',
-      Vetted:
-        'https://raw.githubusercontent.com/balancer-labs/assets/master/generated/vetted.tokenlist.json',
-    },
-    External: [
-      'ipns://tokens.uniswap.org',
-      'https://www.gemini.com/uniswap/manifest.json',
-    ],
-  },
-  '5': {
-    Balancer: {
-      Default:
-        'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/goerli.listed.tokenlist.json',
-      Vetted:
-        'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/goerli.vetted.tokenlist.json',
-    },
-    External: [],
-  },
   '10': {
     Balancer: {
       Default: '',
