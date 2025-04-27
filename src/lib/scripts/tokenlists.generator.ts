@@ -35,7 +35,6 @@ async function generate() {
     console.log('⏳ Generating tokenlists...');
     await generate();
     console.log('Generated tokenlists at /src/assets/data/tokenlists/*');
-    // process.exit(0);
   } catch (error) {
     console.error('Failed to generate tokenlists:', error);
     process.exit(1);
