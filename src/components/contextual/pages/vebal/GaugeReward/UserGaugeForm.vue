@@ -118,18 +118,7 @@ async function initTokenList(depositedList) {
         depositedToken.provider = provider;
         balance = await getBalance(depositedToken, account.value);
       }
-      const itemPush = {
-        tokenSymbol: '',
-        tokenAddress: depositedTokenAddress,
-        balance: balance,
-        amount: 0,
-        decimals: 18,
-        periods: 0, // weeks
-        isAllowance: true,
-        isError: true,
-        isDeposited: true,
-      };
-      input_list.value.push(itemPush);
+      addInput();
     }
   }
   emit('update:input-list', input_list.value);
@@ -139,7 +128,6 @@ async function initTokenList(depositedList) {
  */
 onBeforeMount(async () => {
   await getTokenList();
-  addInput();
 });
 /**
  * EXPOSE
