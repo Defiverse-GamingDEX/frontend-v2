@@ -25,7 +25,7 @@ const NAV_LINKS_MAINNET = [
     path: 'sZ',
     name_link: 'vebal',
     goal_key: 'ClickNavVebal',
-    chainsSupport: [17117, 9372, 248],
+    chainsSupport: [9372, 248],
   },
   {
     text: 'Bridge',

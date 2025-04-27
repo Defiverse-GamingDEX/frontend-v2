@@ -6,7 +6,8 @@ import PortfolioPageHero from '@/components/heros/PortfolioPageHero.vue';
 import { useLock } from '@/composables/useLock';
 import { providerUserPools } from '@/providers/local/user-pools.provider';
 import { provideUserStaking } from '@/providers/local/user-staking.provider';
-
+import useConfig from '@/composables/useConfig';
+import { NAV_LINKS } from '@/constants/navLinks';
 /**
  * PROVIDERS
  */
@@ -17,6 +18,17 @@ providerUserPools(userStaking);
  * COMPOSABLES
  */
 const { lockPool, lock } = useLock();
+const { networkConfig } = useConfig();
+const isShowSZManagement = computed(() => {
+  if (networkConfig.chainId === 248 || networkConfig.chainId === 9372) {
+    return true;
+  }
+  return false;
+});
+console.log(
+  '🚀 ~ isShowSZManagement ~ isShowSZManagement:',
+  isShowSZManagement
+);
 </script>
 
 <template>
@@ -37,7 +49,7 @@ const { lockPool, lock } = useLock();
             :lock="lock"
             :lockPool="lockPool"
           /> -->
-          <SZManagementTable />
+          <SZManagementTable v-if="isShowSZManagement" />
         </BalStack>
       </BalStack>
     </div>

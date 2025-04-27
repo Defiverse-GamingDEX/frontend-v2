@@ -140,7 +140,7 @@ export default {
       // },
     ];
     // add vote with sZ
-    if (networkConfig.chainId !== 16116) {
+    if (networkConfig.chainId !== 16116 && networkConfig.chainId !== 17117) {
       infrastructureLinks.splice(1, 0, {
         text: 'Vote with sZ',
         link: 'https://www.gaming-dex.com/#/defiverse/sZ',
