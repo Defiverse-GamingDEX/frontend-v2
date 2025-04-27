@@ -52,6 +52,7 @@ const _sendRawTx = async (
 };
 
 const _estimateGas = async (myContract, action, params, overwrite, signer) => {
+  console.log('🚀 ~ const_estimateGas= ~ params:', params);
   try {
     let estimateGas = await myContract
       .connect(signer)
@@ -59,7 +60,7 @@ const _estimateGas = async (myContract, action, params, overwrite, signer) => {
     estimateGas = estimateGas?.toNumber() || 0;
     return new BigNumber(estimateGas).times(1.5).toFixed(0);
   } catch (error) {
-    return 1000000;
+    return 12000000;
   }
 };
 

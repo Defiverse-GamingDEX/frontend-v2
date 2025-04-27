@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, defineAsyncComponent, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
-import Col3Layout from '@/components/layouts/Col3Layout.vue';
-import GaugeForm from './GaugeForm.vue';
-import TargetGauge from './TargetGauge.vue';
+// Using defineAsyncComponent to handle components with no default export
+const Col3Layout = defineAsyncComponent(
+  () => import('@/components/layouts/Col3Layout.vue')
+);
+const UserGaugeForm = defineAsyncComponent(() => import('./UserGaugeForm.vue'));
+const TargetGauge = defineAsyncComponent(() => import('./TargetGauge.vue'));
 
 import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 import usePoolQuery from '@/composables/queries/usePoolQuery';
@@ -14,22 +19,32 @@ import useAlerts, { AlertPriority, AlertType } from '@/composables/useAlerts';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { networkSlug } from '@/composables/useNetwork';
 import { isVeBalPool } from '@/composables/usePool';
-import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
 
 import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
+import { GAUGE_REWARD_MAX_PERIODS } from '@/constants/gaugeReward/gauge-tokens-config';
+import BigNumber from 'bignumber.js';
+// Type definitions for better error handling
+interface RewardItem {
+  isError?: boolean;
+  [key: string]: any;
+}
+
 /**
  * STATE
  */
 const route = useRoute();
+const router = useRouter();
 const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = route.query.gaugeAddress as string;
-const input_list = ref([]);
+const returnRoute = route.query.returnRoute as string;
+const input_list = ref<RewardItem[]>([]);
 const isAllowance = ref(true);
 const isLoading = ref(false);
-const gaugeForm = ref(null);
+const gaugeForm = ref<any>(null);
+const maxPeriods = ref(GAUGE_REWARD_MAX_PERIODS);
+
 /**
  * COMPOSABLES
  */
@@ -40,12 +55,12 @@ const { isWalletReady, account, getSigner, getProvider, chainId } = useWeb3();
 const { addAlert, removeAlert } = useAlerts();
 const _isVeBalPool = isVeBalPool(poolId);
 const { bp } = useBreakpoints();
-const { depositTokens } = useGaugeReward();
+const { checkTokenAllowance, depositTokens, approveToken } = useGaugeReward();
 
 const { addNotification } = useNotifications();
 const { addTransaction } = useTransactions();
 const { txListener } = useEthers();
-
+const provider = getProvider();
 /**
  * COMPUTED
  */
@@ -63,9 +78,21 @@ const swapCardShadow = computed(() => {
 
 const isError = computed(() => {
   const list = input_list.value;
-  const isItemError = list.find(item => item.isError === true);
+  const isItemError = list.find(item => {
+    if (
+      item.balance === 0 ||
+      item.amount === 0 ||
+      item.periods === 0 ||
+      item.periods > maxPeriods.value ||
+      item.amount > item.balance
+    ) {
+      return true;
+    }
+    return false;
+  });
   return isItemError ? true : false;
 });
+
 //#region pool query
 const poolQuery = usePoolQuery(poolId, undefined, undefined);
 const pool = computed(() => poolQuery.data.value);
@@ -101,12 +128,78 @@ watch(poolQuery.error, () => {
  * FUNCTIONS
  */
 
-function updateInputList(payload) {
+function updateInputList(payload: RewardItem[]) {
   input_list.value = payload;
+  console.log('🚀 ~ updateInputList ~ input_list:', input_list.value);
+  // check isAllowance
+  isAllowance.value = input_list.value.every(item => item.isAllowance);
+  console.log('🚀 ~ updateInputList ~ isAllowance:', isAllowance.value);
 }
-function handleApproveButton() {
-  console.log(input_list.value, 'input_list=>updateInputList');
+async function checkAllowanceToken(address) {
+  try {
+    const allowance = await checkTokenAllowance(
+      address,
+      provider,
+      account.value
+    );
+    console.log(allowance?.toString(), 'checkAllowanceToken');
+    return BigNumber(allowance?.toString() || 0).gt(0) ? true : false;
+  } catch (error) {
+    console.log(error, 'error=>checkAllowanceToken');
+    throw error;
+  }
 }
+async function handleApproveButton() {
+  const token = input_list.value[0];
+  try {
+    isLoading.value = true;
+    const signer = getSigner();
+    let tx = await approveToken(
+      token.tokenAddress,
+      provider,
+      account.value,
+      signer,
+      chainId.value
+    );
+
+    const summary = `Approve token success!`;
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'approve',
+      summary,
+    });
+    txListener(tx, {
+      onTxConfirmed: async () => {
+        const is_allowance = await checkAllowanceToken(token.tokenAddress);
+        isAllowance.value = is_allowance || false;
+        isLoading.value = false;
+      },
+      onTxFailed: () => {
+        isLoading.value = false;
+      },
+    });
+  } catch (error) {
+    console.log(error, 'error=>handleApproveButton');
+    isLoading.value = false;
+    addNotification({
+      type: 'error',
+      title: '',
+      message: error?.message ? error.message : JSON.stringify(error),
+    });
+  }
+}
+
+function goBack() {
+  // Use direct navigation to avoid router param issues
+  const path =
+    returnRoute === 'pool'
+      ? `/#/${networkSlug}/pool/${poolId}`
+      : `/#/${networkSlug}/sZ`;
+
+  window.location.href = path;
+}
+
 async function handleSubmitButton() {
   try {
     isLoading.value = true;
@@ -133,15 +226,19 @@ async function handleSubmitButton() {
 
     txListener(tx, {
       onTxConfirmed: async () => {
-        await gaugeForm.value.getTokenList();
-
+        if (
+          gaugeForm.value &&
+          typeof gaugeForm.value.getTokenList === 'function'
+        ) {
+          await gaugeForm.value.getTokenList();
+        }
         isLoading.value = false;
       },
       onTxFailed: () => {
         isLoading.value = false;
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log(error, 'error=>handleTransferButton');
     isLoading.value = false;
     addNotification({
@@ -163,17 +260,17 @@ async function handleSubmitButton() {
         noBorder
       >
         <div class="mb-4 navigation">
-          <router-link :to="`/${networkSlug}/sZ`" class="flex items-center">
+          <div class="flex items-center cursor-pointer" @click="goBack">
             <BalIcon class="mr-1 text-gray-400" name="chevron-left" />
-            <h5>Set Reward</h5>
-          </router-link>
+            <h5>Add Extra Rewards</h5>
+          </div>
         </div>
         <div class="px-6 main-container">
           <div class="target-gauge-container">
             <TargetGauge :pool="pool" />
           </div>
           <div class="mt-2 form-container">
-            <GaugeForm
+            <UserGaugeForm
               ref="gaugeForm"
               :gaugeAddress="gaugeAddress"
               @update:input-list="updateInputList"
@@ -182,6 +279,7 @@ async function handleSubmitButton() {
           <div class="mt-8 btn-actions">
             <BalBtn
               v-if="!isAllowance"
+              :disabled="input_list.length === 0 || isError"
               :label="$t('Approve')"
               :loading="isLoading"
               classCustom="pink-white-shadow"

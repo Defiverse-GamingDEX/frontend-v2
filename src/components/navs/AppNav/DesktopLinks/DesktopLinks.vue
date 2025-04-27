@@ -5,7 +5,8 @@ import { NAV_LINKS } from '@/constants/navLinks';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useRoute } from 'vue-router';
 import DesktopLinkItem from './DesktopLinkItem.vue';
-
+import useConfig from '@/composables/useConfig';
+const { networkConfig } = useConfig();
 const { isGoerli } = useWeb3();
 
 /**
@@ -34,12 +35,23 @@ function isActive(page: string): boolean {
   <div class="desktop-links">
     <DesktopLinkItem
       v-for="i in navLinks"
+      v-show="
+        !i.chainsSupport ||
+        (i.chainsSupport && i.chainsSupport.includes(networkConfig.chainId))
+      "
       :key="i.text"
       :to="{ name: i.name_link, params: { networkSlug } }"
       :active="isActive(i.name_link)"
       @click="trackGoal(i.goal)"
     >
-      {{ $t(i.text) }}
+      <span
+        v-if="
+          !i.chainsSupport ||
+          (i.chainsSupport && i.chainsSupport.includes(networkConfig.chainId))
+        "
+      >
+        {{ $t(i.text) }}
+      </span>
     </DesktopLinkItem>
     <!-- <a
       href="https://app.tealswap.com/bridge"

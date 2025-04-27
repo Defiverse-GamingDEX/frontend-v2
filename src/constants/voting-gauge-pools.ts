@@ -667,10 +667,10 @@ export const DEFIVERSE_POOLS: Pool[] = [
 // ];
 
 export const DEFIVERSE_POOLS_TESTNET: Pool[] = [
-  {
-    id: '0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083',
-    network: Network.DEFIVERSE_TESTNET,
-  },
+  // {
+  //   id: '0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
   // {
   //   id: '0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005',
   //   network: Network.DEFIVERSE_TESTNET,
@@ -685,6 +685,8 @@ export const DEFIVERSE_POOLS_TESTNET: Pool[] = [
   // },
 ];
 
+export const OASYS_POOLS_TESTNET: Pool[] = [];
+
 export const POOLS = [
   ...MAINNET_POOLS,
   ...ARBITRUM_POOLS,
@@ -693,4 +695,5 @@ export const POOLS = [
   ...OPTIMISM_POOLS,
   ...DEFIVERSE_POOLS,
   ...DEFIVERSE_POOLS_TESTNET,
+  ...OASYS_POOLS_TESTNET,
 ];
