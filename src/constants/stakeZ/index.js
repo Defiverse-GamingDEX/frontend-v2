@@ -21,17 +21,17 @@ const STAKE_Z_NETWORKS_TESTNET = [
   {
     chain_id: 9372,
     name: 'OASYS Testnet',
-    z_token_address: '0x0000000000000000000000000000000000000000',
+    z_token_address: '0x42DD917a3C8A14a766712Fabe7B048f0306246F6',
     z_token_decimals: 18,
-    sz_token_address: '0x0000000000000000000000000000000000000000',
+    sz_token_address: '0x9288F664FEFc9f374A53C4307BD3c8F91e83f466',
     sz_token_decimals: 18,
   },
   {
     chain_id: 17117,
     name: 'Defiverse Testnet',
-    z_token_address: '0x33faF6B389064c572b807498e17A21440ef15F15',
+    z_token_address: '0x0000000000000000000000000000000000000000',
     z_token_decimals: 18,
-    sz_token_address: '0x9Ba4a34cF63eFBf66c4d6a36470632b7D5511864',
+    sz_token_address: '0x0000000000000000000000000000000000000000',
     sz_token_decimals: 18,
   },
 ];
