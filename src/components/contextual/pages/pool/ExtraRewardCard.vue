@@ -36,11 +36,15 @@ const { networkConfig } = useConfig();
 async function getGaugeAddress() {
   try {
     const response = await gaugeApi.getGaugeAddress({
-      poolId: props.pool.id,
+      pool_id: props.pool.id,
       chain_id: networkConfig.chainId,
     });
     console.log('🚀 ~ getGaugeAddress ~ response:', response);
     gaugeAddress.value = response.gauge_address;
+    console.log(
+      '🚀 ~ getGaugeAddress ~  gaugeAddress.value:',
+      gaugeAddress.value
+    );
   } catch (error) {
     console.error(error);
   }
@@ -48,7 +52,7 @@ async function getGaugeAddress() {
 function openAddRewardsPage() {
   router.push({
     path: `/${networkSlug}/user-gauge-reward/${props.pool.id}`,
-    query: { returnRoute: 'pool', gaugeAddress: props.pool.address },
+    query: { returnRoute: 'pool', gaugeAddress: gaugeAddress.value },
   });
 }
 /**
