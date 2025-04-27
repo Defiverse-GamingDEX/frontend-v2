@@ -17,6 +17,11 @@
           <div class="flex md:hidden flex-col gap-2">
             <p v-for="i in link_nav" :key="i.text">
               <router-link
+                v-if="
+                  !i.chainsSupport ||
+                  (i.chainsSupport &&
+                    i.chainsSupport.includes(networkConfig.chainId))
+                "
                 class="text-lg font-medium link"
                 :to="{ name: i.name_link, params: { networkSlug } }"
               >
@@ -149,7 +154,7 @@ import IconTwitter from '@/components/icons/IconTwitter.vue';
 import IconYoutube from '@/components/icons/IconYoutube.vue';
 import { EXTERNAL_LINKS } from '@/constants/links';
 import { NAV_LINKS } from '@/constants/navLinks';
-
+import useConfig from '@/composables/useConfig';
 import useNetwork from '@/composables/useNetwork';
 
 import AppLogo from '../images/AppLogo.vue';
@@ -168,13 +173,14 @@ export default {
   setup() {
     const { t } = useI18n();
     const { networkSlug } = useNetwork();
-
+    const { networkConfig } = useConfig();
     return {
       link_nav: NAV_LINKS,
       EXTERNAL_LINKS,
       t,
       networkSlug,
       isThirdPartyServicesModalVisible,
+      networkConfig,
     };
   },
 };

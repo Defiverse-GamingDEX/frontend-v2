@@ -5,16 +5,21 @@
     >
       <div class="flex md:flex-row flex-wrap py-12 px-4 lg:px-0 list-footer">
         <!-- nav link -->
-        <div class="md:hidden item">
+        <!-- <div class="md:hidden item">
           <p v-for="i in link_nav" :key="i.text">
             <router-link
+              v-if="
+                !i.chainsSupport ||
+                (i.chainsSupport &&
+                  i.chainsSupport.includes(networkConfig.chainId))
+              "
               class="text-lg font-medium link"
               :to="{ name: i.name_link, params: { networkSlug } }"
             >
               {{ $t(i.text) }}
             </router-link>
           </p>
-        </div>
+        </div> -->
         <!-- nav link -->
 
         <!-- links -->
@@ -108,7 +113,7 @@ import { EXTERNAL_LINKS } from '@/constants/links';
 import { NAV_LINKS } from '@/constants/navLinks';
 
 import useNetwork from '@/composables/useNetwork';
-
+import useConfig from '@/composables/useConfig';
 export default {
   components: {
     IconTwitter,
@@ -119,14 +124,49 @@ export default {
   setup() {
     const { t } = useI18n();
     const { networkSlug } = useNetwork();
-
+    const { networkConfig } = useConfig();
+    const infrastructureLinks = [
+      {
+        text: 'Explore pools',
+        link: 'https://www.gaming-dex.com/#/defiverse/pool',
+      },
+      // {
+      //   text: 'Vote with sZ',
+      //   link: 'https://www.gaming-dex.com/#/defiverse/sZ',
+      // },
+      // {
+      //   text: 'Claim incentives',
+      //   link: 'https://www.gaming-dex.com/#/defiverse/claim',
+      // },
+    ];
+    // add vote with sZ
+    if (networkConfig.chainId !== 16116) {
+      infrastructureLinks.splice(1, 0, {
+        text: 'Vote with sZ',
+        link: 'https://www.gaming-dex.com/#/defiverse/sZ',
+      });
+    }
+    // add bridge
+    if (networkConfig.chainId === 248 || networkConfig.chainId === 16116) {
+      infrastructureLinks.push({
+        text: 'Bridge',
+        link: 'https://www.gaming-dex.com/#/defiverse/bridge',
+      });
+    }
+    // add claim incentives
+    if (networkConfig.chainId !== 16116 && networkConfig.chainId !== 248) {
+      infrastructureLinks.splice(2, 0, {
+        text: 'Claim incentives',
+        link: 'https://www.gaming-dex.com/#/defiverse/claim',
+      });
+    }
     return {
       EXTERNAL_LINKS,
       t,
       networkSlug,
       isThirdPartyServicesModalVisible,
       link_nav: NAV_LINKS,
-
+      networkConfig,
       links: [
         {
           label: 'gaming-dex.com',
@@ -139,20 +179,7 @@ export default {
         },
         {
           label: 'Infrastructure',
-          childs: [
-            {
-              text: 'Explore pools',
-              link: 'https://www.gaming-dex.com/#/defiverse/pool',
-            },
-            {
-              text: 'Vote with sZ',
-              link: 'https://www.gaming-dex.com/#/defiverse/sZ',
-            },
-            {
-              text: 'Claim incentives',
-              link: 'https://www.gaming-dex.com/#/defiverse/claim',
-            },
-          ],
+          childs: infrastructureLinks,
         },
         {
           label: 'Learn',

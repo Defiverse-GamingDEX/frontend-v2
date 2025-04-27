@@ -42,6 +42,7 @@ const navLinks = NAV_LINKS.map(i => {
     label: t(i.text),
     path: `/${networkSlug}/${i.path}`,
     goal: Goals[i.goal_key],
+    chainsSupport: i.chainsSupport,
   };
 });
 
@@ -115,11 +116,24 @@ watch(blockNumber, async () => {
     <div class="grid mt-2 text-lg grid-col-1">
       <div
         v-for="link in navLinks"
+        v-show="
+          !link.chainsSupport ||
+          (link.chainsSupport &&
+            link.chainsSupport.includes(networkConfig.chainId))
+        "
         :key="link.label"
         class="side-bar-link"
         @click="navTo(link.path, link.goal)"
       >
-        {{ link.label }}
+        <span
+          v-if="
+            !link.chainsSupport ||
+            (link.chainsSupport &&
+              link.chainsSupport.includes(networkConfig.chainId))
+          "
+        >
+          {{ link.label }}
+        </span>
       </div>
       <!-- <div class="side-bar-link">
         <a
