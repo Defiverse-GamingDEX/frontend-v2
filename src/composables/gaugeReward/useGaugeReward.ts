@@ -107,6 +107,7 @@ async function depositTokens(
       gasPrice: gasPrice,
     };
 
+    console.log('gaugeRewardService.depositTokens :> ', params);
     const tx = await gaugeRewardService.depositTokens(params);
 
     return tx;
