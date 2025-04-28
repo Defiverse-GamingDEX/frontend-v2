@@ -69,6 +69,7 @@ const depositTokens = async params => {
     contractAddress, // contract token
     contractProvider, // contract provider
     gauge, // gauge pool address
+    streamer,
     tokens, // token address array
     periods, // amounts arrays
     amounts,
@@ -77,13 +78,17 @@ const depositTokens = async params => {
     abi,
     gasPrice,
   } = params;
-
+  let finalStreamer = streamer;
+  if (!finalStreamer) {
+    finalStreamer = '0x0000000000000000000000000000000000000000';
+  }
   let overwrite = { from: account };
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
     'depositTokens',
-    [gauge, tokens, periods, amounts],
+    [gauge, finalStreamer, tokens, periods, amounts],
     overwrite,
     signer,
     abi,

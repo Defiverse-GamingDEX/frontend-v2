@@ -26,6 +26,7 @@ import useTransactions from '@/composables/useTransactions';
 const route = useRoute();
 const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = route.query.gaugeAddress as string;
+const streamerAddress = route.query.streamer as string;
 const input_list = ref([]);
 const isAllowance = ref(true);
 const isLoading = ref(false);
@@ -116,6 +117,7 @@ async function handleSubmitButton() {
 
     let tx = await depositTokens(
       gaugeAddress,
+      streamerAddress,
       input_list.value,
       account.value,
       signer,

@@ -38,6 +38,7 @@ const route = useRoute();
 const router = useRouter();
 const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = route.query.gaugeAddress as string;
+const streamerAddress = route.query.streamer as string;
 const returnRoute = route.query.returnRoute as string;
 const input_list = ref<RewardItem[]>([]);
 const isAllowance = ref(true);
@@ -209,6 +210,7 @@ async function handleSubmitButton() {
 
     let tx = await depositTokens(
       gaugeAddress,
+      streamerAddress,
       input_list.value,
       account.value,
       signer,
