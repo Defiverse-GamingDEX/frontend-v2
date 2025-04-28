@@ -13,6 +13,7 @@ import useConfig from '@/composables/useConfig';
 type Props = {
   pool: Pool;
   gaugeAddress: string;
+  streamerAddress: string;
 };
 /**
  * STATS
@@ -38,7 +39,11 @@ const { networkConfig } = useConfig();
 function openAddRewardsPage() {
   router.push({
     path: `/${networkSlug}/user-gauge-reward/${props.pool.id}`,
-    query: { returnRoute: 'pool', gaugeAddress: props.gaugeAddress },
+    query: {
+      returnRoute: 'pool',
+      gaugeAddress: props.gaugeAddress,
+      streamer: props.streamerAddress,
+    },
   });
 }
 /**

@@ -44,6 +44,7 @@ import useConfig from '@/composables/useConfig';
 const route = useRoute();
 const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = ref('');
+const streamerAddress = ref('');
 /**
  * PROVIDERS
  */
@@ -146,7 +147,9 @@ async function getGaugeAddress() {
       chain_id: networkConfig.chainId,
     });
     console.log('🚀 ~ getGaugeAddress ~ response:', response);
-    gaugeAddress.value = response.gauge_address;
+    //gaugeAddress.value = response.gauge_address;
+    gaugeAddress.value = response.gauge;
+    streamerAddress.value = response.streamer || '';
     console.log(
       '🚀 ~ getGaugeAddress ~  gaugeAddress.value:',
       gaugeAddress.value
@@ -329,6 +332,7 @@ watch(poolQuery.error, () => {
           <ExtraRewardCard
             v-else
             :gaugeAddress="gaugeAddress"
+            :streamerAddress="streamerAddress"
             :pool="pool"
             class="mb-4"
           />

@@ -73,6 +73,7 @@ async function approveToken(address, provider, walletAddress, signer, chainId) {
 }
 async function depositTokens(
   gaugeAddress,
+  gaugeStreamerAddress,
   input_list,
   account,
   signer,
@@ -98,6 +99,7 @@ async function depositTokens(
       contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
       contractProvider: provider, // contract provider
       gauge: gaugeAddress, // gauge pool address
+      streamer: gaugeStreamerAddress,
       tokens: tokens, // token address array
       periods: periods, // periods arrays
       amounts: amounts,
