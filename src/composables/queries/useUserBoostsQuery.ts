@@ -7,7 +7,7 @@ import QUERY_KEYS from '@/constants/queryKeys';
 import useWeb3 from '@/services/web3/useWeb3';
 import { stakingRewardsService } from '@/services/staking/staking-rewards.service';
 import { GaugeShare } from './useUserGaugeSharesQuery';
-import { isDefiverse, isL2 } from '../useNetwork';
+import { isDefiverse, isDefiverseTestnet, isL2 } from '../useNetwork';
 
 /**
  * TYPES
@@ -48,11 +48,9 @@ export default function useUserBoostsQuery(
   //   (): boolean =>
   //     !!gaugeShares.value && isWalletReady.value && !isDefiverse.value
 
-
   // Hung: Check me
   const enabled = computed(
-    (): boolean =>
-      !!gaugeShares.value && isWalletReady.value
+    (): boolean => !!gaugeShares.value && isWalletReady.value
   );
 
   /**

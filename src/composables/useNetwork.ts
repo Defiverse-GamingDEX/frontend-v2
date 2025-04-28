@@ -61,7 +61,13 @@ export const isOasysTestnet = computed(
   () => networkId.value === Network.OASYS_TESTNET
 );
 
-export const isL2 = computed(() => isPolygon.value || isArbitrum.value);
+export const isL2 = computed(
+  () =>
+    isPolygon.value ||
+    isArbitrum.value ||
+    isDefiverse.value ||
+    isDefiverseTestnet.value
+);
 export const isTestnet = computed(() => isGoerli.value);
 
 /**
