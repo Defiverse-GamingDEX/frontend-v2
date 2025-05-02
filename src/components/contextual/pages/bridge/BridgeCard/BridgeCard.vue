@@ -1256,7 +1256,7 @@ onBeforeMount(async () => {
                   Number(inputFromSelect.amount) ||
                 Number(inputFromSelect.amount) < Number(minAmountRoute)
               "
-              :label="$t('Tranfer')"
+              :label="$t('Transfer')"
               :loading="isLoading"
               classCustom="pink-white-shadow"
               block
