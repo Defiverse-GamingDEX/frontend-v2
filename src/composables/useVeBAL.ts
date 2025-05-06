@@ -29,8 +29,8 @@ export const isVeBalSupported = computed(
   () =>
     isMainnet.value ||
     isGoerli.value ||
-    isDefiverse.value ||
-    isDefiverseTestnet.value ||
+    // isDefiverse.value ||
+    // isDefiverseTestnet.value ||
     isOasys.value ||
     isOasysTestnet.value
 );
