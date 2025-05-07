@@ -9,11 +9,17 @@ import {
 import { BigNumber } from '@ethersproject/bignumber';
 import { AddressZero } from '@ethersproject/constants';
 import { Provider } from '@ethersproject/providers';
-
+import axios from 'axios';
 import { NATIVE_ASSET_ADDRESS } from '@/constants/tokens';
 import { getBalancer } from '@/dependencies/balancer-sdk';
 
 const SWAP_COST = import.meta.env.VITE_SWAP_COST || '100000';
+
+const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
+
+const BASE_API_URL = IS_TESTNET
+  ? 'https://price-api-testnet.gaming-dex.com'
+  : 'https://price-api.gaming-dex.com';
 
 export interface SorReturn {
   tokenIn: string;
@@ -99,6 +105,31 @@ export class SorManager {
     try {
       // Fetch of all pools from V2 subgraph and pull onchain data
       const v2result = await this.sorV2.fetchPools();
+
+      // ==============================================================================
+      try {
+        const chain_id = IS_TESTNET ? 9372 : 248;
+        const response = await axios.get(
+          `${BASE_API_URL}/api/v1/tokens/search?chain_id=${chain_id}`
+        );
+
+        if (response.data) {
+          const data = response.data[chain_id];
+          if (data && data.tokens) {
+            const yukichiToken = {};
+            for (const t of data.tokens) {
+              if (t && t.owner == 'yukichi') {
+                yukichiToken[t.address.toLowerCase()] = true;
+              }
+            }
+            this.sorV2.setYukichiTokens(yukichiToken);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching token lists:', error);
+      }
+      // ==============================================================================
+
       this.fetchStatus.v2finishedFetch = true;
       this.fetchStatus.v2success = v2result;
     } catch (err) {
