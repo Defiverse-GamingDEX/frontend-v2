@@ -263,7 +263,7 @@ onBeforeMount(async () => {
   <div>
     <HeroClaim
       :title="$t('claimHero.title')"
-      :description="$t('claimHero.description')"
+      :description="$t('claimHero.nodescription')"
     />
     <div>
       <div class="xl:container py-12 xl:px-4 xl:mx-auto">

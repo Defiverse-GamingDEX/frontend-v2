@@ -271,13 +271,6 @@
   dependencies:
     dotenv "^8.2.0"
 
-"@balancer-labs/sor@4.1.1-beta.1":
-  version "4.1.1-beta.1"
-  resolved "https://registry.yarnpkg.com/@balancer-labs/sor/-/sor-4.1.1-beta.1.tgz#0d93da9366e34e97a8560f185b9851f38cbe708f"
-  integrity sha512-lBJRa5EwMjOzxHrH8QSZ8RaszhZu4XCwMEpS57eCGv5gvkgADXBaMseZhV/ofCKaagxa4FOBvXY1DlUZtfyMJg==
-  dependencies:
-    isomorphic-fetch "^2.2.1"
-
 "@balancer-labs/typechain@1.0.0", "@balancer-labs/typechain@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@balancer-labs/typechain/-/typechain-1.0.0.tgz#823eb13b9e166f7b50334c9d70d9ade81344f5c9"
@@ -303,13 +296,13 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz#2cbcf822bf3764c9658c4d2e568bd0c0cb748016"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
-"@defiverse/balancer-sdk@0.1.194":
-  version "0.1.194"
-  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk/-/balancer-sdk-0.1.194.tgz#0f03c58a5b1e54b1fb9a109453369e0e8297d735"
-  integrity sha512-QHpE5RoxurklGkOlNLVo/goQsBZ08BVp89mbZCaOTSg0nSGX34EvYYbY/u2OsN1dqEJrAD45G5n/rjbDEZO0Xw==
+"@defiverse/balancer-sdk@0.1.199":
+  version "0.1.199"
+  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk/-/balancer-sdk-0.1.199.tgz#3c2a1009924a3e223ca241830892d56e624909a8"
+  integrity sha512-ZIf7i7hk5n/grWiKbVCOUpha/1fIRj5kFrDXe3RKdnC80eS09QD0F37qyZd1paBWJYT1VWSswhJmOIERoxWaRg==
   dependencies:
-    "@balancer-labs/sor" "4.1.1-beta.1"
     "@balancer-labs/typechain" "^1.0.0"
+    "@defiverse/sor" "4.1.6"
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/abstract-signer" "^5.4.0"
     "@ethersproject/address" "^5.4.0"
@@ -324,6 +317,13 @@
     graphql-request "^3.5.0"
     json-to-graphql-query "^2.2.4"
     lodash "^4.17.21"
+
+"@defiverse/sor@4.1.6":
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/@defiverse/sor/-/sor-4.1.6.tgz#18d4a272cb960ad144ec1e21cb2e6d5dcd954df5"
+  integrity sha512-dkcSlike75Fqecb6TWSazPdyg+Jb3BSKmSvXeQPXRhUMM1qPv1n9qWDSJJdL+KnfSGNkDXBR3Nq9mIfjn+yE2g==
+  dependencies:
+    isomorphic-fetch "^2.2.1"
 
 "@ensdomains/content-hash@^2.5.3":
   version "2.5.7"
