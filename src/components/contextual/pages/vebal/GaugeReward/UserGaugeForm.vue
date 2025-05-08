@@ -41,7 +41,7 @@ const tokenListArray = Object.entries(approvedTokenLists.value) || [];
 /**
  * STATES
  */
-const input_list = ref<inputForm>([]);
+const input_list = ref<inputForm[]>([]);
 const length_conts = ref(GAUGE_REWARD_NUMBER_ADD);
 const _token_list = ref(
   tokenListArray
@@ -118,9 +118,9 @@ async function initTokenList(depositedList) {
         depositedToken.provider = provider;
         balance = await getBalance(depositedToken, account.value);
       }
-      addInput();
     }
   }
+  addInput();
   emit('update:input-list', input_list.value);
 }
 /**
