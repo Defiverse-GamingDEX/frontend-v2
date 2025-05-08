@@ -82,7 +82,14 @@ const columns = ref<ColumnDefinition<Reward>[]>([
  * COMPUTED
  */
 const rewardsData = computed((): Reward[] => {
-  return props.gauge.rewardTokens.map(tokenAddress => {
+  const rewardTokens = props.gauge.rewardTokens.filter(tokenAddress => {
+    const token = getToken(tokenAddress);
+    if (token.symbol == 'sZ') {
+      return false;
+    }
+    return true;
+  });
+  return rewardTokens.map(tokenAddress => {
     const token = getToken(tokenAddress);
     const amount = formatUnits(
       props.gauge.claimableRewards[tokenAddress],
