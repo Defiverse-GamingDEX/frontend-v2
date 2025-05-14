@@ -109,6 +109,8 @@ onMounted(() => {
         <div v-else class="mb-1 text-3xl font-semibold text-white">
           {{ totalInvestedLabel }}
         </div>
+
+        <!--
         <div v-if="!isL2" class="inline-block relative mt-2">
           <BalLoadingBlock
             v-if="isLoadingTotalValue"
@@ -119,17 +121,14 @@ onMounted(() => {
             v-else
             class="group flex items-center px-3 h-8 text-sm font-medium text-yellow-500 hover:text-white focus:text-white rounded-tr rounded-bl border border-yellow-500 transition-colors cursor-pointer vebal-banner"
             @click="router.push({ name: 'vebal', params: { networkSlug } })"
-          >
-            <!-- <span v-if="totalLockedValue === '0'"
-              >{{ totalLockedValue }} {{ $t('veBAL.hero.tokens.veBAL') }}</span
-            >
-            <span v-else>{{ $t('inclXInVeBal', [totalVeBalLabel]) }}</span> -->
+          >            
             <span
               >{{ fNum2((sZBalance || 0)?.toString(), FNumFormats.token) }}
               {{ $t('veBAL.hero.tokens.veBAL') }}</span
             >
-          </div>
+          </div>          
         </div>
+        -->
       </template>
       <template v-else>
         <div class="text-3xl font-semibold text-white">
