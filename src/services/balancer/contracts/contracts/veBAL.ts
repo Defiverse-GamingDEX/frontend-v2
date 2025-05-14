@@ -50,11 +50,22 @@ export default class VeBAL {
     veBalMulticaller.call('totalSupply', this.address, 'totalSupply()');
 
     const result = await veBalMulticaller.execute<VeBalLockInfoResult>();
+    console.log('🚀 ~ VeBAL ~ getLockInfo ~ result:', result);
 
     return this.formatLockInfo(result);
   }
 
   public formatLockInfo(lockInfo: VeBalLockInfoResult) {
+    if (!lockInfo.locked) {
+      return {
+        lockedEndDate: 0,
+        lockedAmount: '0',
+        totalSupply: '0',
+        epoch: '0',
+        hasExistingLock: false,
+        isExpired: false,
+      };
+    }
     const [lockedAmount, lockedEndDate] = lockInfo.locked;
 
     const hasExistingLock = lockedAmount.gt(0);

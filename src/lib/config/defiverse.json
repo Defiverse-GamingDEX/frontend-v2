@@ -53,7 +53,7 @@
     "balancerHelpers": "0x4087EDb699803608A0214FD92e32119CAF57EcA3",
     "batchRelayer": "0x7b9B6f094DC2Bd1c12024b0D9CC63d6993Be1888",
     "batchRelayerV4": "0x00e695aA8000df01B8DC8401B4C34Fba5D56BBb2",
-    "gaugeFactory": "",
+    "gaugeFactory": "0x292a25B056b2B65BE230597c9372F7a984dEDE2a",
     "balancerMinter": "",
     "gaugeController": "",
     "tokenAdmin": "",
@@ -63,7 +63,7 @@
     "feeDistributor": "",
     "feeDistributorDeprecated": "",
     "faucet": "",
-    "gaugeRewardsHelper": "",
+    "gaugeRewardsHelper": "0x8c93FFec055a6d7A8F2d3Db2d80Fd908F4068880",
     "oracle": "0xd967c8c063B9610254CCFB5Bf697f3e43E25ea34"
   },
   "keys": {

@@ -301,13 +301,27 @@ export default defineComponent({
   color: #fff;
   background: #ff5a8c 0% 0% no-repeat padding-box;
 }
+
 .bal-btn.pink-white:disabled {
   @apply bg-gray-300 text-base shadow-none;
 }
 .bal-btn.pink-white:hover {
   opacity: 0.8;
 }
-
+.bal-btn.blue-white {
+  color: #fff;
+  background: rgb(59 130 246) 0% 0% no-repeat padding-box;
+}
+.bal-btn.blue-white:disabled {
+  background: rgb(148 163 184) !important;
+  @apply text-base shadow-none;
+  :hover {
+    background: rgb(148 163 184) !important;
+  }
+}
+.bal-btn.blue-white:hover {
+  background: rgb(37 99 235) 0% 0% no-repeat padding-box;
+}
 .content {
   @apply flex justify-center items-center w-full h-full;
 }

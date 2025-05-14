@@ -122,7 +122,8 @@ const balRewardsData = computed((): RewardRow[] => {
   if (!isWalletReady.value) return [];
   // Using reduce to filter out gauges we don't have corresponding pools for
   return gauges.value.reduce<RewardRow[]>((arr, gauge) => {
-    const amount = formatUnits(gauge.claimableTokens, balToken.value.decimals);
+    const decimals = balToken && balToken.value ? balToken.value.decimals : 18;
+    const amount = formatUnits(gauge.claimableTokens, decimals);
     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
 
     if (pool && bnum(amount).gt(0))
@@ -262,7 +263,7 @@ onBeforeMount(async () => {
   <div>
     <HeroClaim
       :title="$t('claimHero.title')"
-      :description="$t('claimHero.description')"
+      :description="$t('claimHero.nodescription')"
     />
     <div>
       <div class="xl:container py-12 xl:px-4 xl:mx-auto">
@@ -271,11 +272,13 @@ onBeforeMount(async () => {
         </h2>
 
         <template v-if="!isL2">
-          <div class="mb-16">
+          <!-- Hung tam thoi disable deploy mainnet -->
+
+          <!-- <div class="mb-16">
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
-                  GDT {{ $t('incentives') }}
+                  Z {{ $t('incentives') }}
                 </h3>
                 <BalTooltip
                   iconSize="xs"
@@ -292,8 +295,8 @@ onBeforeMount(async () => {
               :rewardsData="balRewardsData"
               :isLoading="loading"
             />
-          </div>
-          <div class="mb-16">
+          </div> -->
+          <!-- <div class="mb-16">
             <h3
               class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white"
             >
@@ -318,7 +321,7 @@ onBeforeMount(async () => {
               :isLoading="loading"
               deprecated
             />
-          </div>
+          </div> -->
         </template>
 
         <div v-if="!isL2">

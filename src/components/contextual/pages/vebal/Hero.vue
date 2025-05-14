@@ -58,13 +58,13 @@ function navigateToGetVeBAL() {
           </ul>
         </div>
         <div class="flex justify-center mt-6">
-          <BalBtn
+          <!-- <BalBtn
             classCustom="gray-blue"
             class="mr-3 hero-btn"
             @click="navigateToGetVeBAL"
           >
             {{ $t('veBAL.hero.buttons.getVeBAL') }}
-          </BalBtn>
+          </BalBtn> -->
           <BalBtn
             tag="a"
             href="https://docs.gaming-dex.com/token/dfv-token"

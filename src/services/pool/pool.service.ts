@@ -100,8 +100,6 @@ export default class PoolService {
   public setVolumeSnapshot(poolSnapshot: Pool | undefined): string {
     let snapshotVolume = '0';
     if (poolSnapshot) snapshotVolume = poolSnapshot.totalSwapVolume || '0';
-    console.log(poolSnapshot, 'snapshotVolume');
-    console.log(this.pool.totalSwapVolume, 'this.pool.totalSwapVolume');
     const volumeSnapshot = bnum(this.pool.totalSwapVolume || 0)
       .minus(snapshotVolume)
       .toString();

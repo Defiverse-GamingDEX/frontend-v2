@@ -24,8 +24,9 @@ import useTransactions from '@/composables/useTransactions';
  * STATE
  */
 const route = useRoute();
-const poolId = (route.params.poolId as string).toLowerCase();
+const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = route.query.gaugeAddress as string;
+const streamerAddress = route.query.streamer as string;
 const input_list = ref([]);
 const isAllowance = ref(true);
 const isLoading = ref(false);
@@ -116,6 +117,7 @@ async function handleSubmitButton() {
 
     let tx = await depositTokens(
       gaugeAddress,
+      streamerAddress,
       input_list.value,
       account.value,
       signer,
@@ -163,7 +165,7 @@ async function handleSubmitButton() {
         noBorder
       >
         <div class="mb-4 navigation">
-          <router-link :to="`/${networkSlug}/vegdt`" class="flex items-center">
+          <router-link :to="`/${networkSlug}/sZ`" class="flex items-center">
             <BalIcon class="mr-1 text-gray-400" name="chevron-left" />
             <h5>Set Reward</h5>
           </router-link>

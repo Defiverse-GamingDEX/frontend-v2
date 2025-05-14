@@ -66,6 +66,10 @@ const GaugeRewardPage = () =>
   import(
     /* webpackChunkName: "GaugeRewardPage" */ /* webpackPrefetch: true */ '@/pages/gauge-reward.vue'
   );
+const UserGaugeRewardPage = () =>
+  import(
+    /* webpackChunkName: "UserGaugeRewardPage" */ /* webpackPrefetch: true */ '@/pages/user-gauge-reward.vue'
+  );
 declare module 'vue-router' {
   interface RouteMeta {
     layout?: string;
@@ -152,20 +156,26 @@ const routes: RouteRecordRaw[] = [
     meta: { layout: 'FocusedLayout' },
   },
   {
-    path: '/:networkSlug/vegdt',
+    path: '/:networkSlug/sZ',
     name: 'vebal',
     component: VeBalPage,
   },
   {
-    path: '/:networkSlug/get-vegdt',
+    path: '/:networkSlug/get-sZ',
     name: 'get-vebal',
     component: GetVeBalPage,
     meta: { layout: 'FocusedLayout' },
   },
   {
-    path: '/:networkSlug/gauge-reward/:poolId',
+    path: '/:networkSlug/gauge-reward/:id',
     name: 'gauge-reward',
     component: GaugeRewardPage,
+    meta: { layout: 'FocusedLayout' },
+  },
+  {
+    path: '/:networkSlug/user-gauge-reward/:id',
+    name: 'user-gauge-reward',
+    component: UserGaugeRewardPage,
     meta: { layout: 'FocusedLayout' },
   },
   {
@@ -211,7 +221,6 @@ if (isGoerli.value) {
     component: FaucetPage,
   });
 }
-
 /**
  * DEV/STAGING ONLY ROUTES
  */

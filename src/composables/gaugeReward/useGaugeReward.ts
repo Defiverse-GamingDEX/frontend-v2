@@ -2,15 +2,21 @@ import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { default as GaugeRewardABI } from '@/lib/abi/gaugeReward/GaugeRewardDistributor.json';
 import { Contract } from '@ethersproject/contracts';
 import gaugeRewardService from './gauge-reward.services.js';
-
+import useConfig from '@/composables/useConfig';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-
-const GAUGE_REWARD_CONTRACT_ADDRESS =
-  '0x4e32701fEEF5282151bC02B47E9E13074b701b30';
-
+import { GAUGE_REWARD_NETWORKS } from '@/constants/gaugeReward/gauge-networks';
 import { gasPriceService } from '@/services/gas-price/gas-price.service';
-
+const { networkConfig } = useConfig();
+console.log('🚀 ~ networkConfig:', networkConfig);
+const GAUGE_REWARD_CONTRACT_ADDRESS =
+  GAUGE_REWARD_NETWORKS.find(
+    network => network.chainId === networkConfig.chainId
+  )?.gaugeRewardContractAddress || '';
+console.log(
+  '🚀 ~ GAUGE_REWARD_CONTRACT_ADDRESS:',
+  GAUGE_REWARD_CONTRACT_ADDRESS
+);
 async function getGasPrice(signer: JsonRpcSigner) {
   let price: number;
 
@@ -27,6 +33,7 @@ async function getGasPrice(signer: JsonRpcSigner) {
 }
 async function checkTokenAllowance(address, provider, walletAddress) {
   try {
+    console.log('🚀 ~ checkTokenAllowance ~ provider:', provider);
     // const { address } = token;
     const tokenContract = new Contract(address, ERC20ABI, provider);
     const tokenAllowance = await tokenContract.allowance(
@@ -46,12 +53,15 @@ async function approveToken(address, provider, walletAddress, signer, chainId) {
   // const { address } = token;
   try {
     const contract = new Contract(address, ERC20ABI, provider);
-    const gasPrice = await getGasPrice(signer);
+    // const gasPrice = await getGasPrice(signer);
+    // console.log('🚀 ~ approveToken ~ gasPrice:', gasPrice);
+    console.log(
+      '🚀 ~ approveToken ~ GAUGE_REWARD_CONTRACT_ADDRESS:',
+      GAUGE_REWARD_CONTRACT_ADDRESS
+    );
     const tx = await contract
       .connect(signer)
-      .approve(GAUGE_REWARD_CONTRACT_ADDRESS, ethers.constants.MaxUint256, {
-        gasPrice: gasPrice,
-      });
+      .approve(GAUGE_REWARD_CONTRACT_ADDRESS, ethers.constants.MaxUint256);
 
     return tx;
   } catch (error) {
@@ -61,6 +71,7 @@ async function approveToken(address, provider, walletAddress, signer, chainId) {
 }
 async function depositTokens(
   gaugeAddress,
+  gaugeStreamerAddress,
   input_list,
   account,
   signer,
@@ -86,6 +97,7 @@ async function depositTokens(
       contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
       contractProvider: provider, // contract provider
       gauge: gaugeAddress, // gauge pool address
+      streamer: gaugeStreamerAddress,
       tokens: tokens, // token address array
       periods: periods, // periods arrays
       amounts: amounts,
@@ -95,6 +107,7 @@ async function depositTokens(
       gasPrice: gasPrice,
     };
 
+    console.log('gaugeRewardService.depositTokens :> ', params);
     const tx = await gaugeRewardService.depositTokens(params);
 
     return tx;
@@ -129,7 +142,7 @@ async function startDistributions(account, signer, currentProvider, chainId) {
 async function getRewardTokens(gaugeAddress, currentProvider) {
   try {
     const provider = currentProvider;
-
+    console.log('🚀 ~ getRewardTokens ~ provider:', provider);
     const params = {
       contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
       contractProvider: provider, // contract provider

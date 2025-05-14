@@ -631,40 +631,61 @@ export const DEFIVERSE_POOLS: Pool[] = [
   // },
 ];
 
+// export const DEFIVERSE_POOLS_TESTNET: Pool[] = [
+//   {
+//     id: '0xb14753b418b66b30afe1ff2078fac93d66fe219f000200000000000000000001',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0x49ae791942ac56e66017924994df196189a5bbed000200000000000000000002',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0x4cc04216f2863842e3be0fe22bb763382f26500c000200000000000000000003',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0x14310f8c12b102f0c9fc699fe344cc2b59608247000200000000000000000004',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0x80246799ef36dfcb403dc10e29f0cca74350be54000200000000000000000006',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0xd6f0649118b6a83344d28f798db3192e47c8494e000200000000000000000007',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+//   {
+//     id: '0x35235c062df1e4154e157413d347f4a8a4a93c09000200000000000000000008',
+//     network: Network.DEFIVERSE_TESTNET,
+//   },
+// ];
+
 export const DEFIVERSE_POOLS_TESTNET: Pool[] = [
-  {
-    id: '0xb14753b418b66b30afe1ff2078fac93d66fe219f000200000000000000000001',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x49ae791942ac56e66017924994df196189a5bbed000200000000000000000002',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x4cc04216f2863842e3be0fe22bb763382f26500c000200000000000000000003',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x14310f8c12b102f0c9fc699fe344cc2b59608247000200000000000000000004',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x80246799ef36dfcb403dc10e29f0cca74350be54000200000000000000000006',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0xd6f0649118b6a83344d28f798db3192e47c8494e000200000000000000000007',
-    network: Network.DEFIVERSE_TESTNET,
-  },
-  {
-    id: '0x35235c062df1e4154e157413d347f4a8a4a93c09000200000000000000000008',
-    network: Network.DEFIVERSE_TESTNET,
-  },
+  // {
+  //   id: '0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
+  // {
+  //   id: '0x5c4143e57a66cff930098f4699ee538870200d63000200000000000000000005',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
+  // {
+  //   id: '0xa85ae7f245e690ec70867248d246f60a41bace0e000200000000000000000009',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
+  // {
+  //   id: '0x35235c062df1e4154e157413d347f4a8a4a93c09000200000000000000000008',
+  //   network: Network.DEFIVERSE_TESTNET,
+  // },
 ];
+
+export const OASYS_POOLS_TESTNET: Pool[] = [];
 
 export const POOLS = [
   ...MAINNET_POOLS,
@@ -674,4 +695,5 @@ export const POOLS = [
   ...OPTIMISM_POOLS,
   ...DEFIVERSE_POOLS,
   ...DEFIVERSE_POOLS_TESTNET,
+  ...OASYS_POOLS_TESTNET,
 ];

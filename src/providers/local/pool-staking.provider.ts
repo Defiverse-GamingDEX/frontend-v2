@@ -69,12 +69,19 @@ const provider = (_poolId?: string) => {
       poolGauges.value?.pool?.preferentialGauge?.id
   );
 
+  // Hung:
+
   // Is it possible to stake this pool's BPT?
+  // const isStakablePool = computed(
+  //   (): boolean =>
+  //     !!poolId.value &&
+  //     poolGauges.value?.liquidityGauges?.[0]?.id !== undefined &&
+  //     POOLS.Stakable.AllowList.includes(poolId.value)
+  // );
+
   const isStakablePool = computed(
     (): boolean =>
-      !!poolId.value &&
-      poolGauges.value?.liquidityGauges?.[0]?.id !== undefined &&
-      POOLS.Stakable.AllowList.includes(poolId.value)
+      !!poolId.value && poolGauges.value?.liquidityGauges?.[0]?.id !== undefined
   );
 
   // User's staked shares for pool (onchain data).

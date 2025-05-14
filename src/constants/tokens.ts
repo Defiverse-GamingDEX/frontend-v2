@@ -15,7 +15,7 @@ type CommonTokens = {
   bbaUSD?: string;
   bbaUSDv2?: string;
   DFV?: string;
-  GDT?: string;
+  Z?: string;
   OAS?: string;
 };
 
@@ -138,14 +138,14 @@ export const TOKENS_GENERIC: TokenConstants = {
 
 export const TOKENS_DEFIVERSE: TokenConstants = {
   Popular: {
-    Symbols: ['GDT', 'BAL', 'WOAS'],
+    Symbols: ['Z', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351', // need CONFIRM
     WETH: '0x5a89E11Cb554E00c2f51C4bb7F05bc7Ab0Fa6351',
     BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
-    GDT: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    Z: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
   },
   PriceChainMap: {
     '0x5a89e11cb554e00c2f51c4bb7f05bc7ab0fa6351':
@@ -159,14 +159,14 @@ export const TOKENS_DEFIVERSE: TokenConstants = {
 
 export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
   Popular: {
-    Symbols: ['GDT', 'BAL', 'WOAS'],
+    Symbols: ['Z', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99', // need CONFIRM
     WOAS: '0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99',
     BAL: '0xe34Eec955bF457382cE37e1D8371e559cC6518Fb',
-    GDT: '0xe34Eec955bF457382cE37e1D8371e559cC6518Fb',
+    Z: '0xe34Eec955bF457382cE37e1D8371e559cC6518Fb',
   },
   PriceChainMap: {
     // woas
@@ -243,14 +243,14 @@ export const TOKENS_DEFIVERSE_TESTNET: TokenConstants = {
 
 export const TOKENS_OASYS: TokenConstants = {
   Popular: {
-    Symbols: ['GDT', 'BAL', 'WOAS'],
+    Symbols: ['Z', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0x5200000000000000000000000000000000000001', // need CONFIRM
     WETH: '0x5200000000000000000000000000000000000001',
-    BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
-    GDT: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    BAL: '0x2B726256AdD04e65403cEf6679A2f2dfF7DDe9F9',
+    Z: '0xC683DA627fF9fD56740C72A703528861c33d3B3a',
   },
   PriceChainMap: {
     '0x5200000000000000000000000000000000000001':
@@ -260,14 +260,14 @@ export const TOKENS_OASYS: TokenConstants = {
 
 export const TOKENS_OASYS_TESTNET: TokenConstants = {
   Popular: {
-    Symbols: ['GDT', 'BAL', 'WOAS'],
+    Symbols: ['Z', 'BAL', 'WOAS'],
   },
   Addresses: {
     nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
     wNativeAsset: '0x5200000000000000000000000000000000000001', // need CONFIRM
     WETH: '0x5200000000000000000000000000000000000001',
     BAL: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
-    GDT: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
+    Z: '0xA3496414a9900A9AE5960C1fEC30e563213b68bE',
   },
   PriceChainMap: {
     '0x5200000000000000000000000000000000000001':

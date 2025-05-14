@@ -92,54 +92,6 @@ export const initializeTokenListMap = async () => {
   const { oasysJsonBE: oasysJsonBE, defiverseJsonBE: defiverseJsonBE } =
     await fetchTokenLists();
   return {
-    '1': {
-      Balancer: {
-        Default:
-          'https://raw.githubusercontent.com/balancer-labs/assets/master/generated/listed.tokenlist.json',
-        Vetted:
-          'https://raw.githubusercontent.com/balancer-labs/assets/master/generated/vetted.tokenlist.json',
-      },
-      External: [
-        'ipns://tokens.uniswap.org',
-        'https://www.gemini.com/uniswap/manifest.json',
-      ],
-    },
-    '5': {
-      Balancer: {
-        Default:
-          'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/goerli.listed.tokenlist.json',
-        Vetted:
-          'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/goerli.vetted.tokenlist.json',
-      },
-      External: [],
-    },
-    '10': {
-      Balancer: {
-        Default: '',
-        Vetted: '',
-      },
-      External: [],
-    },
-    '137': {
-      Balancer: {
-        Default:
-          'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/polygon.listed.tokenlist.json',
-        Vetted:
-          'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/polygon.vetted.tokenlist.json',
-      },
-      External: [
-        'https://unpkg.com/quickswap-default-token-list@1.0.67/build/quickswap-default.tokenlist.json',
-      ],
-    },
-    '42161': {
-      Balancer: {
-        Default:
-          'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/arbitrum.listed.tokenlist.json',
-        Vetted:
-          'https://raw.githubusercontent.com/balancer-labs/assets/refactor-for-multichain/generated/arbitrum.vetted.tokenlist.json',
-      },
-      External: [],
-    },
     '16116': {
       Balancer: {
         Default: JSON.stringify(defiverseJsonBE),

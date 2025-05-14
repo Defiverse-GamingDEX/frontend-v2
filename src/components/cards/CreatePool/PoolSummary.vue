@@ -20,7 +20,7 @@ const manualColorMap = {
   WBTC: '#F7931A',
   BAL: '#00265A',
   DFV: '#00265A',
-  GDT: '#00265A',
+  Z: '#00265A',
 };
 
 /** STATE */

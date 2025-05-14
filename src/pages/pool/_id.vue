@@ -35,13 +35,17 @@ import { PoolToken } from '@/services/pool/types';
 import { providePoolStaking } from '@/providers/local/pool-staking.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 import BrandedRedirectCard from '@/components/pool/branded-redirect/BrandedRedirectCard.vue';
-
+import ExtraRewardCard from '@/components/contextual/pages/pool/ExtraRewardCard.vue';
+import gaugeApi from '@/composables/gaugeReward/gauge.api';
+import useConfig from '@/composables/useConfig';
 /**
  * STATE
  */
 const route = useRoute();
 const poolId = (route.params.id as string).toLowerCase();
-
+const gaugeAddress = ref('');
+const streamerAddress = ref('');
+const canStake = ref(false);
 /**
  * PROVIDERS
  */
@@ -56,6 +60,7 @@ const { prices } = useTokens();
 const { isWalletReady } = useWeb3();
 const { addAlert, removeAlert } = useAlerts();
 const _isVeBalPool = isVeBalPool(poolId);
+const { networkConfig } = useConfig();
 
 //#region pool query
 const poolQuery = usePoolQuery(poolId, undefined, undefined);
@@ -136,8 +141,30 @@ function addIntersectionObserver(): void {
   observer = new IntersectionObserver(callback, options);
   observer.observe(intersectionSentinel.value);
 }
+async function getGaugeAddress() {
+  try {
+    const response = await gaugeApi.getGaugeAddress({
+      pool_id: poolId,
+      chain_id: networkConfig.chainId,
+    });
+    console.log('🚀 ~ getGaugeAddress ~ response:', response);
+    //gaugeAddress.value = response.gauge_address;
+    gaugeAddress.value = response.gauge;
+    streamerAddress.value = response.streamer || '';
+    console.log(
+      '🚀 ~ getGaugeAddress ~  gaugeAddress.value:',
+      gaugeAddress.value
+    );
+    if (response.stake_enabled) {
+      canStake.value = true;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 onMounted(() => {
   addIntersectionObserver();
+  getGaugeAddress();
 });
 onBeforeUnmount(() => {
   observer?.disconnect();
@@ -290,10 +317,9 @@ watch(poolQuery.error, () => {
             :missingPrices="missingPrices"
             class="mb-4"
           />
-
           <BalLoadingBlock v-if="loadingPool" class="h-40 pool-actions-card" />
           <StakingIncentivesCard
-            v-if="isStakablePool && !loadingPool && pool && isWalletReady"
+            v-if="canStake && !loadingPool && pool && isWalletReady"
             :pool="pool"
             class="staking-incentives"
           />
@@ -301,6 +327,18 @@ watch(poolQuery.error, () => {
             v-if="_isVeBalPool && !loadingPool && pool"
             :pool="pool"
             class="pool-locking"
+          />
+          <BalLoadingBlock
+            v-if="loadingPool || !pool"
+            class="mb-4 h-60 pool-actions-card"
+          />
+
+          <ExtraRewardCard
+            v-else
+            :gaugeAddress="gaugeAddress"
+            :streamerAddress="streamerAddress"
+            :pool="pool"
+            class="mb-4"
           />
         </BalStack>
       </div>

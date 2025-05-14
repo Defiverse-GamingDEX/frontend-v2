@@ -31,6 +31,7 @@ type inputForm = {
   isAllowance: boolean;
   isError: boolean;
   isDeposited: boolean;
+  isShowDelete: boolean;
 };
 
 // PROPS
@@ -39,10 +40,12 @@ type Props = {
   index: number;
   input_list: array;
   rules?: Rules;
+  isShowDelete?: boolean;
 };
 const props = withDefaults(defineProps<Props>(), {
   ignoreWalletBalance: false,
   rules: () => [],
+  isShowDelete: true,
 });
 /**
  * COMPOSABLES
@@ -285,13 +288,16 @@ async function handleApproveButton() {
   <div class="input-form-component">
     <div class="input-content">
       <div class="input-title">
-        {{ index + 1 }}
-        <span v-if="index === 0" class="mr-1"> st </span>
-        <span v-if="index === 1" class="mr-1"> nd </span>
-        <span v-if="index === 2" class="mr-1"> rd </span>
-        <span v-if="index > 2" class="mr-1"> th </span>
+        <span v-if="isShowDelete">
+          {{ index + 1 }}
+          <span v-if="index === 0" class="mr-1 ml-[-4px]"> st </span>
+          <span v-if="index === 1" class="mr-1 ml-[-4px]"> nd </span>
+          <span v-if="index === 2" class="mr-1 ml-[-4px]"> rd </span>
+          <span v-if="index > 2" class="mr-1 ml-[-4px]"> th </span>
+        </span>
         Reward token
         <span
+          v-if="isShowDelete"
           class="hover:text-red-500 dark:hover:text-red-500 delete-icon ease-color text-secondary"
           @click.stop.prevent="deleteInput(index)"
         >
@@ -393,6 +399,7 @@ async function handleApproveButton() {
       class="mt-2 mb-4 btn-action"
     >
       <BalBtn
+        v-if="isShowDelete"
         :label="$t('Approve')"
         :loading="isLoading"
         classCustom="pink-white-shadow"
