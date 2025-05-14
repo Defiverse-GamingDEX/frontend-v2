@@ -17,13 +17,13 @@ const GAUGE_REWARD_NETWORKS_MAINNET = [
     id: 'oasys',
     chainId: 248,
     chainIdHex: '0xf8',
-    gaugeRewardContractAddress: '',
+    gaugeRewardContractAddress: '0xd5FcBEDaAb0C49EEd82835f1052B319eE4828E46',
   },
   {
     id: 'defiverse',
     chainId: 16116,
     chainIdHex: '0x3EF4',
-    gaugeRewardContractAddress: '',
+    gaugeRewardContractAddress: '0xEbAB4820901a5383b7F305C278cF501c7cfBd73f',
   },
 ];
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';

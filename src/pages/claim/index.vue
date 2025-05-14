@@ -272,7 +272,9 @@ onBeforeMount(async () => {
         </h2>
 
         <template v-if="!isL2">
-          <div class="mb-16">
+          <!-- Hung tam thoi disable deploy mainnet -->
+
+          <!-- <div class="mb-16">
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
@@ -293,7 +295,7 @@ onBeforeMount(async () => {
               :rewardsData="balRewardsData"
               :isLoading="loading"
             />
-          </div>
+          </div> -->
           <!-- <div class="mb-16">
             <h3
               class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white"

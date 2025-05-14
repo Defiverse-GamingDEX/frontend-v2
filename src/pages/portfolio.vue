@@ -49,7 +49,9 @@ console.log(
             :lock="lock"
             :lockPool="lockPool"
           /> -->
-          <SZManagementTable v-if="isShowSZManagement" />
+
+          <!-- Hung disable de deploy mainnet -->
+          <!-- <SZManagementTable v-if="isShowSZManagement" /> -->
         </BalStack>
       </BalStack>
     </div>

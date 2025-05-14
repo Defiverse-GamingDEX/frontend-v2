@@ -2,9 +2,9 @@ const STAKE_Z_NETWORKS_MAINNET = [
   {
     chain_id: 248,
     name: 'OASYS Mainnet',
-    z_token_address: '0x0000000000000000000000000000000000000000',
+    z_token_address: '0xC683DA627fF9fD56740C72A703528861c33d3B3a',
     z_token_decimals: 18,
-    sz_token_address: '0x0000000000000000000000000000000000000000',
+    sz_token_address: '0x2B726256AdD04e65403cEf6679A2f2dfF7DDe9F9',
     sz_token_decimals: 18,
   },
   {
