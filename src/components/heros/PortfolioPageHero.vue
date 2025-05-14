@@ -110,7 +110,7 @@ onMounted(() => {
           {{ totalInvestedLabel }}
         </div>
 
-        <!--
+        <!-- HUNG hide sZ
         <div v-if="!isL2" class="inline-block relative mt-2">
           <BalLoadingBlock
             v-if="isLoadingTotalValue"
