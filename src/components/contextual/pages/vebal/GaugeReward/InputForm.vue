@@ -172,7 +172,13 @@ async function checkAllowanceToken(address) {
 }
 function getTokenList(listSelected) {
   let rs = cloneDeep(_token_list_origin.value);
-  rs = rs.filter(item => item.symbol !== 'OAS' && item.symbol !== 'WOAS');
+  console.log('🚀 ~ getTokenList ~ rs:', rs);
+  rs = rs.filter(
+    item =>
+      item.symbol !== 'OAS' &&
+      item.symbol !== 'WOAS' &&
+      item.owner !== 'yukichi'
+  );
   for (let i = rs.length - 1; i >= 0; i--) {
     const token = rs[i];
     token.provider = provider;
