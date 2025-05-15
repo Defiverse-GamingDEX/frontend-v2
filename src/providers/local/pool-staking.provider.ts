@@ -68,6 +68,7 @@ const provider = (_poolId?: string) => {
     (): string | undefined | null =>
       poolGauges.value?.pool?.preferentialGauge?.id
   );
+  console.log('🚀 ~ provider ~ poolGauges:', poolGauges);
 
   // Hung:
 
