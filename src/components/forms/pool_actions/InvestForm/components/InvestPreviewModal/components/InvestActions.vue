@@ -30,7 +30,8 @@ import { Goals, trackGoal } from '@/composables/useFathom';
 import { bnum } from '@/lib/utils';
 import { useTokens } from '@/providers/tokens.provider';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
-
+import gaugeApi from '@/composables/gaugeReward/gauge.api';
+import useConfig from '@/composables/useConfig';
 /**
  * TYPES
  */
@@ -68,7 +69,7 @@ const investmentState = reactive<InvestmentState>({
   confirmed: false,
   confirmedAt: '',
 });
-
+const isCanStakePool = ref(false);
 /**
  * COMPOSABLES
  */
@@ -80,7 +81,7 @@ const { lockablePoolId } = useVeBal();
 const { isStakablePool } = usePoolStaking();
 const { networkSlug } = useNetwork();
 const { refetchBalances } = useTokens();
-
+const { networkConfig } = useConfig();
 const { poolWeightsLabel } = usePool(toRef(props, 'pool'));
 const {
   fullAmounts,
@@ -205,7 +206,22 @@ async function submit(): Promise<TransactionResponse> {
     });
   }
 }
+const checkIsCanStakePool = async () => {
+  try {
+    const response = await gaugeApi.getGaugeAddress({
+      pool_id: props.pool.id,
+      chain_id: networkConfig.chainId,
+    });
+    console.log('🚀 ~ checkIsCanStakePool ~ response:', response);
 
+    if (response.stake_enabled) {
+      isCanStakePool.value = true;
+      console.log('🚀 ~ checkIsCanStakePool ~ isCanStakePool:', isCanStakePool);
+    }
+  } catch (error) {
+    console.log('🚀 ~ checkIsCanStakePool ~ error:', error);
+  }
+};
 /**
  * WATCHERS
  */
@@ -213,6 +229,9 @@ watch(blockNumber, async () => {
   if (shouldFetchBatchSwap.value && !transactionInProgress.value) {
     await props.math.getBatchSwap();
   }
+});
+onMounted(() => {
+  checkIsCanStakePool();
 });
 </script>
 
@@ -236,7 +255,7 @@ watch(blockNumber, async () => {
         <StarsIcon class="mr-2 h-5 text-orange-300" />{{ $t('lockToGetVeBAL') }}
       </BalBtn>
       <BalBtn
-        v-else-if="isStakablePool"
+        v-else-if="isCanStakePool"
         color="gradient"
         block
         class="flex mt-2"

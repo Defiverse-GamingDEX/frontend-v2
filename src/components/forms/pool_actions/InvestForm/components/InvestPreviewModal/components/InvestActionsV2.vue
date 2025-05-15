@@ -19,7 +19,8 @@ import { TransactionActionInfo } from '@/types/transactions';
 import useJoinPool from '@/composables/pools/useJoinPool';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
-
+import gaugeApi from '@/composables/gaugeReward/gauge.api';
+import useConfig from '@/composables/useConfig';
 /**
  * TYPES
  */
@@ -36,7 +37,7 @@ const emit = defineEmits<{
   (e: 'success', value: TransactionReceipt): void;
   (e: 'showStakeModal'): void;
 }>();
-
+const isCanStakePool = ref(false);
 /**
  * COMPOSABLES
  */
@@ -45,7 +46,8 @@ const { fNum2 } = useNumbers();
 const { addTransaction } = useTransactions();
 const { txListener, getTxConfirmedAt } = useEthers();
 const { lockablePoolId } = useVeBal();
-const { isStakablePool } = usePoolStaking();
+const { isStakablePool } = usePoolStaking(); // old code
+console.log('🚀 ~ isStakablePool:', isStakablePool);
 const { poolWeightsLabel } = usePool(toRef(props, 'pool'));
 const {
   rektPriceImpact,
@@ -56,7 +58,7 @@ const {
   resetTxState,
   approvalActions: joinPoolApprovalActions,
 } = useJoinPool();
-
+const { networkConfig } = useConfig();
 const approvalActions = ref(joinPoolApprovalActions.value);
 
 const tokensToApprove = computed(() =>
@@ -119,7 +121,24 @@ async function handleTransaction(tx): Promise<void> {
     },
   });
 }
+const checkIsCanStakePool = async () => {
+  try {
+    const response = await gaugeApi.getGaugeAddress({
+      pool_id: props.pool.id,
+      chain_id: networkConfig.chainId,
+    });
 
+    if (response.stake_enabled) {
+      isCanStakePool.value = true;
+      console.log('🚀 ~ checkIsCanStakePool ~ isCanStakePool:', isCanStakePool);
+    }
+  } catch (error) {
+    console.log('🚀 ~ checkIsCanStakePool ~ error:', error);
+  }
+};
+onMounted(() => {
+  checkIsCanStakePool();
+});
 onUnmounted(() => {
   // Reset tx state after Invest Modal is closed. Ready for another Invest transaction
   resetTxState();
@@ -165,7 +184,7 @@ async function submit(): Promise<TransactionResponse> {
         <StarsIcon class="mr-2 h-5 text-orange-300" />{{ $t('lockToGetVeBAL') }}
       </BalBtn>
       <BalBtn
-        v-else-if="isStakablePool"
+        v-else-if="isCanStakePool"
         color="gradient"
         block
         class="flex mt-2"
