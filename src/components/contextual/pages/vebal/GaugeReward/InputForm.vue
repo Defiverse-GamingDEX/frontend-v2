@@ -47,6 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
   rules: () => [],
   isShowDelete: true,
 });
+const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 /**
  * COMPOSABLES
  */
@@ -173,12 +174,11 @@ async function checkAllowanceToken(address) {
 function getTokenList(listSelected) {
   let rs = cloneDeep(_token_list_origin.value);
   console.log('🚀 ~ getTokenList ~ rs:', rs);
-  rs = rs.filter(
-    item =>
-      item.symbol !== 'OAS' &&
-      item.symbol !== 'WOAS' &&
-      item.owner !== 'yukichi'
-  );
+  rs = rs.filter(item => item.symbol !== 'OAS' && item.symbol !== 'WOAS');
+  // only filter yukichi for PROD
+  if (isTestnet == 'false') {
+    rs = rs.filter(item => item.owner !== 'yukichi');
+  }
   for (let i = rs.length - 1; i >= 0; i--) {
     const token = rs[i];
     token.provider = provider;
