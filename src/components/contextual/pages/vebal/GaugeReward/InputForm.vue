@@ -177,10 +177,11 @@ function getTokenList(listSelected) {
   rs = rs.filter(item => item.symbol !== 'OAS' && item.symbol !== 'WOAS');
   // only filter yukichi for PROD
   if (isTestnet == 'false') {
-    rs = rs.filter(item => item.owner !== 'yukichi');
+    rs = rs.filter(item => item.owner !== 'yukichi' && item.decimals != 0);
+    console.log('🚀 ~ getTokenList AfterFilter ~ rs:', rs);
   }
   for (let i = rs.length - 1; i >= 0; i--) {
-    const token = rs[i];
+    const token: any = rs[i];
     token.provider = provider;
     const tokenSelected = listSelected.find(
       item =>
