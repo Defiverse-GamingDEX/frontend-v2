@@ -95,6 +95,9 @@
         </div>
         <!-- /Community -->
       </div>
+      <div class="pb-12 text-sm text-white dark:text-gray-400">
+        Version 1.89.1
+      </div>
     </div>
   </footer>
 </template>

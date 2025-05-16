@@ -4,7 +4,7 @@
       class="xl:container lg:px-4 xl:mx-auto dark:border-t dark:border-gray-800"
     >
       <div
-        class="flex flex-col md:flex-row gap-8 md:justify-between py-12 px-4 lg:px-0 text-primary"
+        class="flex flex-col md:flex-row gap-8 md:justify-between px-4 lg:px-0 pt-12 pb-4 text-primary"
       >
         <div class="flex flex-col gap-8">
           <router-link
@@ -136,6 +136,9 @@
             </p>
           </div> -->
         </div>
+      </div>
+      <div class="pb-12 text-sm text-white dark:text-gray-400">
+        Version 1.89.1
       </div>
     </div>
   </footer>
