@@ -8,6 +8,8 @@ import { hasBalEmissions } from '@/services/staking/utils';
 import { AprBreakdown } from '@defiverse/balancer-sdk';
 import { useTokens } from '@/providers/tokens.provider';
 
+const BLOCK_TOKENS = ['0x4b3954b1fc477730e4e492a406e0b407d37136fb'];
+
 /**
  * TYPES
  */
@@ -32,6 +34,30 @@ const { getToken } = useTokens();
  */
 
 const apr = computed(() => props.pool?.apr || props.poolApr);
+// const apr = computed(() => {
+//   const data = {
+//     swapFees: 1000,
+//     tokenAprs: {
+//       total: 0,
+//       breakdown: {},
+//     },
+//     protocolApr: 0,
+//     stakingApr: {
+//       min: 0,
+//       max: 0,
+//     },
+//     rewardAprs: {
+//       total: 0,
+//       breakdown: {
+//         '0x4b3954b1fc477730e4e492a406e0b407d37136fb': 0,
+//         '0x7275b8dbaf919fdda6ee6b36f12fd25c0f193502': 30000,
+//       },
+//     },
+//     min: 100,
+//     max: 900,
+//   };
+//   return data;
+// });
 
 const boost = computed((): string => props.pool?.boost || '');
 const hasBoost = computed((): boolean => !!boost.value);
@@ -47,7 +73,7 @@ const rewardTokensAPR = computed(
   (): number => apr.value?.rewardAprs.total || 0
 );
 const hasRewardTokens = computed((): boolean =>
-  bnum(rewardTokensAPR.value).gt(0)
+  bnum(rewardTokensAPR.value).gte(0)
 );
 
 /**
@@ -79,22 +105,26 @@ const unboostedTotalAPR = computed((): string =>
 const breakdownItems = computed((): Array<any> => {
   const items: Array<any> = [];
 
-  if (!isMinMaxSame.value) {
-    items.push(['Min Z', minBalAPR.value], ['Max Z', maxBalAPR.value]);
-  }
+  // Hung: Disable sZ, open later
+  // if (!isMinMaxSame.value) {
+  //   items.push(['Min sZ', minBalAPR.value], ['Max sZ', maxBalAPR.value]);
+  // }
 
   if (hasRewardTokens.value) {
-    if (isMinMaxSame.value) {
-      items.push(['Z', minBalAPR.value]);
-    }
+    // Hung: Disable sZ, open later
+    // if (isMinMaxSame.value) {
+    //   items.push(['sZ', minBalAPR.value]);
+    // }
 
     const rewardAprTokens = apr.value?.rewardAprs.breakdown;
     if (rewardAprTokens) {
       Object.keys(rewardAprTokens).forEach(address => {
-        items.push([
-          getToken(address)?.symbol || 'Rewards',
-          rewardAprTokens[address],
-        ]);
+        if (!BLOCK_TOKENS.includes(address.toLowerCase())) {
+          items.push([
+            getToken(address)?.symbol || 'Rewards',
+            rewardAprTokens[address],
+          ]);
+        }
       });
     } else {
       items.push(['Rewards', rewardTokensAPR.value]);
@@ -107,7 +137,7 @@ const breakdownItems = computed((): Array<any> => {
 
 <template>
   <div data-testid="staking-apr">
-    <div v-if="hasBoost">
+    <!-- <div v-if="hasBoost">
       <div class="flex items-center">
         {{ boostedTotalAPR }}
         <span class="ml-1 text-secondarytext-xs">
@@ -140,6 +170,25 @@ const breakdownItems = computed((): Array<any> => {
           {{ $t('staking.stakingApr') }}
         </span>
       </div>
-    </template>
+    </template> -->
+
+    <BalBreakdown :items="breakdownItems">
+      <div class="flex items-center">
+        {{ unboostedTotalAPR }}
+        <span class="ml-1 text-xs text-secondary">
+          {{
+            isMinMaxSame
+              ? $t('staking.stakingApr')
+              : $t('staking.minimumStakingApr')
+          }}
+        </span>
+      </div>
+      <template #item="{ item: [label, amount] }">
+        {{ fNum2(amount, FNumFormats.bp) }}
+        <span class="ml-1 text-xs capitalize text-secondary">
+          {{ label }} {{ $t('apr') }}
+        </span>
+      </template>
+    </BalBreakdown>
   </div>
 </template>

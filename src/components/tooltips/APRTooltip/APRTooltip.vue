@@ -34,9 +34,10 @@ const { fNum2 } = useNumbers();
 /**
  * COMPUTED
  */
-const apr = computed<AprBreakdown | undefined>(
-  () => props.pool?.apr || props.poolApr
-);
+const apr = computed<AprBreakdown | undefined>(() => {
+  const data = props.pool?.apr || props.poolApr;
+  return data;
+});
 const validAPR = computed(() => Number(apr.value?.min || 0) <= APR_THRESHOLD);
 
 const hasYieldAPR = computed(() => {
@@ -55,6 +56,15 @@ const totalLabel = computed((): string =>
     <template #activator>
       <div class="ml-1">
         <StarsIcon
+          :gradFrom="
+            hasYieldAPR || hasStakingRewards(apr) || hasVebalAPR
+              ? 'purple'
+              : 'yellow'
+          "
+          class="-mr-1 h-4"
+          v-bind="$attrs"
+        />
+        <!-- <StarsIcon
           v-if="hasYieldAPR || hasStakingRewards(apr) || hasVebalAPR"
           :gradFrom="hasVebalAPR ? 'purple' : 'yellow'"
           class="-mr-1 h-4"
@@ -66,7 +76,7 @@ const totalLabel = computed((): string =>
           size="sm"
           class="text-white dark:text-gray-500"
           v-bind="$attrs"
-        />
+        /> -->
       </div>
     </template>
     <div class="text-sm divide-y dark:divide-gray-900">
