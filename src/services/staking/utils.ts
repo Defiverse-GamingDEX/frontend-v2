@@ -128,10 +128,12 @@ export function getAprRange(apr: string) {
 export function hasStakingRewards(aprs?: AprBreakdown) {
   if (!aprs?.stakingApr) return false;
 
-  return (
-    bnum(aprs.stakingApr?.min || 0).gt(0) ||
-    bnum(aprs.rewardAprs.total || 0).gt(0)
-  );
+  // return (
+  //   bnum(aprs.stakingApr?.min || 0).gt(0) ||
+  //   bnum(aprs.rewardAprs.total || 0).gt(0)
+  // );
+  const tokens = Object.keys(aprs.rewardAprs?.breakdown) || [];
+  return tokens.length > 1;
 }
 
 /**
