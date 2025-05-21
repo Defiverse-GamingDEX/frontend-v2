@@ -174,7 +174,7 @@ async function checkAllowanceToken(address) {
 function getTokenList(listSelected) {
   let rs = cloneDeep(_token_list_origin.value);
   console.log('🚀 ~ getTokenList ~ rs:', rs);
-  rs = rs.filter(item => item.symbol !== 'OAS' && item.symbol !== 'WOAS');
+  rs = rs.filter(item => item.symbol !== 'OAS');
   // only filter yukichi for PROD
   if (isTestnet == 'false') {
     rs = rs.filter(item => item.owner !== 'yukichi' && item.decimals != 0);
