@@ -45,7 +45,7 @@ export const networkLabelMap = {
 
 export const networkId = ref<Network>(NETWORK_ID);
 
-export const isMainnet = computed(() => networkId.value === Network.MAINNET);
+export const isMainnet = computed(() => networkId.value === Network.OASYS);
 export const isPolygon = computed(() => networkId.value === Network.POLYGON);
 export const isArbitrum = computed(() => networkId.value === Network.ARBITRUM);
 export const isGoerli = computed(() => networkId.value === Network.GOERLI);

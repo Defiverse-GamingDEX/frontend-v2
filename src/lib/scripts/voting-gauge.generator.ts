@@ -39,7 +39,7 @@ async function getGaugeRelativeWeight(gaugeAddresses: string[]) {
   const INFURA_KEY = import.meta.env.VITE_INFURA_PROJECT_ID;
   if (!INFURA_KEY) throw Error('VITE_INFURA_PROJECT_ID not found!');
 
-  const rpcUrl = template(config[Network.MAINNET].rpc, { INFURA_KEY });
+  const rpcUrl = template(config[Network.OASYS_TESTNET].rpc, { INFURA_KEY });
   const provider = new JsonRpcProvider(rpcUrl);
 
   // HUNG
@@ -50,7 +50,7 @@ async function getGaugeRelativeWeight(gaugeAddresses: string[]) {
   // );
 
   const multicaller = new Multicaller(
-    config[Network.DEFIVERSE].key,
+    config[Network.OASYS_TESTNET].key,
     provider,
     VEBalHelpersABI
   );
@@ -66,7 +66,7 @@ async function getGaugeRelativeWeight(gaugeAddresses: string[]) {
     // Hung
     multicaller.call(
       getAddress(gaugeAddress),
-      config[Network.DEFIVERSE].addresses.veBALHelpers,
+      config[Network.OASYS_TESTNET].addresses.veBALHelpers,
       'gauge_relative_weight',
       [getAddress(gaugeAddress)]
     );
