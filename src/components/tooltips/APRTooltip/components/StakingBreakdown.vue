@@ -105,16 +105,14 @@ const unboostedTotalAPR = computed((): string =>
 const breakdownItems = computed((): Array<any> => {
   const items: Array<any> = [];
 
-  // Hung: Disable sZ, open later
-  // if (!isMinMaxSame.value) {
-  //   items.push(['Min sZ', minBalAPR.value], ['Max sZ', maxBalAPR.value]);
-  // }
+  if (!isMinMaxSame.value) {
+    items.push(['Min sZ', minBalAPR.value], ['Max sZ', maxBalAPR.value]);
+  }
 
   if (hasRewardTokens.value) {
-    // Hung: Disable sZ, open later
-    // if (isMinMaxSame.value) {
-    //   items.push(['sZ', minBalAPR.value]);
-    // }
+    if (isMinMaxSame.value) {
+      items.push(['sZ', minBalAPR.value]);
+    }
 
     const rewardAprTokens = apr.value?.rewardAprs.breakdown;
     if (rewardAprTokens) {
@@ -137,7 +135,9 @@ const breakdownItems = computed((): Array<any> => {
 
 <template>
   <div data-testid="staking-apr">
-    <!-- <div v-if="hasBoost">
+    <!-- 
+    Hung: Can check lai
+    <div v-if="hasBoost">
       <div class="flex items-center">
         {{ boostedTotalAPR }}
         <span class="ml-1 text-secondarytext-xs">

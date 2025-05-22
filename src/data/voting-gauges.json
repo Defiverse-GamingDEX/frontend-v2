@@ -1,24 +1,24 @@
 [
   {
-    "address": "0x19Dcc71E689eC9bfBb34028F465b7848e5298ee7",
-    "network": 17117,
+    "address": "0x6c92f94a6d1d68c7982ef9436324fdfbbef94888",
+    "network": 9372,
     "isKilled": false,
     "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
+    "addedTimestamp": 1747910545,
     "pool": {
-      "id": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083",
-      "address": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87",
+      "id": "0x4e66d5f08e81979bd5951c93839bc97265681975000200000000000000000000",
+      "address": "0x4e66d5f08e81979bd5951c93839bc97265681975",
       "poolType": "Weighted",
-      "symbol": "G-70USDC-30OAS",
+      "symbol": "G-50USDC-50WOAS",
       "tokens": [
         {
-          "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
-          "weight": "0.7",
+          "address": "0x2af09148c7bf784e54c7730724e4b48e4735426c",
+          "weight": "0.5",
           "symbol": "USDC"
         },
         {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.3",
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
           "symbol": "WOAS"
         }
       ]
@@ -26,6 +26,35 @@
     "tokenLogoURIs": {
       "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "tokens/USDC_L.png",
       "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99": "tokens/OAS_L.png"
+    }
+  },
+  {
+    "address": "0x3526b66cb9ab051e9fa44dbaee42ebef739583aa",
+    "network": 9372,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1747910545,
+    "pool": {
+      "id": "0xfef873185b752fabc1a1b94900282fd68a40ed05000200000000000000000008",
+      "address": "0xfef873185b752fabc1a1b94900282fd68a40ed05",
+      "poolType": "Weighted",
+      "symbol": "G-50WOAS-50BtcUSD",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "WOAS"
+        },
+        {
+          "address": "0xbc071ae9a15fd89ccd9b2c60f1bcb936d918a7d6",
+          "weight": "0.5",
+          "symbol": "BtcUSD"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99": "tokens/OAS_L.png",
+      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "tokens/BtcUSD.png"
     }
   }
 ]

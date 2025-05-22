@@ -2,15 +2,23 @@ import { Duration, Interval, intervalToDuration, nextThursday } from 'date-fns';
 import { computed, onUnmounted, ref } from 'vue';
 
 import {
-  GOERLI_VOTING_GAUGES,
-  DEFIVERSE_VOTING_GAUGES,
-  DEFIVERSE_TESTNET_VOTING_GAUGES,
-  MAINNET_VOTING_GAUGES,
+  // GOERLI_VOTING_GAUGES,
+  // DEFIVERSE_VOTING_GAUGES,
+  // DEFIVERSE_TESTNET_VOTING_GAUGES,
+  OASYS_VOTING_GAUGES,
+  OASYS_TESTNET_VOTING_GAUGES,
+  // MAINNET_VOTING_GAUGES,
   VotingGauge,
 } from '@/constants/voting-gauges';
 
 import useGaugeVotesQuery from './queries/useGaugeVotesQuery';
-import { isGoerli, isDefiverse, isDefiverseTestnet } from './useNetwork';
+import {
+  isGoerli,
+  isDefiverse,
+  isDefiverseTestnet,
+  isOasys,
+  isOasysTestnet,
+} from './useNetwork';
 import { orderedPoolTokens } from '@/composables/usePool';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
 import { Pool } from '@/services/pool/types';
@@ -27,14 +35,26 @@ export default function useVotingGauges() {
 
   // Hard coded list of voting gauges
   const _votingGauges = computed((): VotingGauge[] => {
-    if (isGoerli.value) {
-      return GOERLI_VOTING_GAUGES as VotingGauge[];
-    } else if (isDefiverse.value) {
-      return DEFIVERSE_VOTING_GAUGES as VotingGauge[];
-    } else if (isDefiverseTestnet.value) {
-      return DEFIVERSE_TESTNET_VOTING_GAUGES as VotingGauge[];
+    // if (isGoerli.value) {
+    //   return GOERLI_VOTING_GAUGES as VotingGauge[];
+    // } else if (isDefiverse.value) {
+    //   return DEFIVERSE_VOTING_GAUGES as VotingGauge[];
+    // } else if (isDefiverseTestnet.value) {
+    //   return DEFIVERSE_TESTNET_VOTING_GAUGES as VotingGauge[];
+    // } else if (isOasysTestnet.value) {
+    //   return OASYS_TESTNET_VOTING_GAUGES as VotingGauge[];
+    // } else if (isOasys.value) {
+    //   return OASYS_VOTING_GAUGES as VotingGauge[];
+    // } else {
+    //   return MAINNET_VOTING_GAUGES as VotingGauge[];
+    // }
+
+    if (isOasysTestnet.value) {
+      return OASYS_TESTNET_VOTING_GAUGES as VotingGauge[];
+    } else if (isOasys.value) {
+      return OASYS_VOTING_GAUGES as VotingGauge[];
     } else {
-      return MAINNET_VOTING_GAUGES as VotingGauge[];
+      return OASYS_TESTNET_VOTING_GAUGES as VotingGauge[];
     }
   });
 
@@ -48,7 +68,9 @@ export default function useVotingGauges() {
       !!gaugeVotesQuery.error.value
   );
 
-  const votingGauges = computed(() => gaugeVotesQuery.data.value || []);
+  const votingGauges = computed(() => {
+    return gaugeVotesQuery.data.value || [];
+  });
 
   const unallocatedVotes = computed(() => {
     if (isLoading.value || !votingGauges.value) return totalVotes;
