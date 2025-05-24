@@ -36,7 +36,11 @@ export const DEFIVERSE_TESTNET_VOTING_GAUGES: VotingGauge[] = (
 
 export const OASYS_TESTNET_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
-).filter(gauge => gauge.network === Network.OASYS_TESTNET);
+).filter(
+  gauge =>
+    gauge.network === Network.OASYS_TESTNET ||
+    gauge.network === Network.DEFIVERSE_TESTNET
+);
 
 export const OASYS_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
