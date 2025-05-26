@@ -10,13 +10,13 @@ import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
 import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
 import toraIcon from '@/assets/images/bridge/tokens/tora.jpg';
 import oassyIcon from '@/assets/images/bridge/tokens/oassy.png';
-import oraIcon from '@/assets/images/bridge/tokens/ora.jpeg';
+import oraIcon from '@/assets/images/bridge/tokens/ora.png';
 import toriIcon from '@/assets/images/bridge/tokens/tori.jpg';
 import hunterIcon from '@/assets/images/bridge/tokens/hunter.png';
 import mchinuIcon from '@/assets/images/bridge/tokens/mchinu.jpg';
-import moaiIcon from '@/assets/images/bridge/tokens/moai.webp';
+import moaiIcon from '@/assets/images/bridge/tokens/moai.png';
 //import nyanoIcon from '@/assets/images/bridge/tokens/nyano.jpg';
-import hentaiIcon from '@/assets/images/bridge/tokens/hentai.jpeg';
+import hentaiIcon from '@/assets/images/bridge/tokens/hentai.png';
 import shrIcon from '@/assets/images/bridge/tokens/shr.png';
 
 import ZIcon from '@/assets/images/bridge/tokens/Z.png';
