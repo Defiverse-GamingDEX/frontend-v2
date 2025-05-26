@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="pb-12 text-sm text-white dark:text-gray-400">
-        Version 1.89.4
+        Version 1.89.5
       </div>
     </div>
   </footer>

@@ -8,6 +8,17 @@ import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
 import usdcIcon from '@/assets/images/bridge/tokens/usdc.png';
 import usdtIcon from '@/assets/images/bridge/tokens/usdt.png';
 import wbtcIcon from '@/assets/images/bridge/tokens/wbtc.png';
+import toraIcon from '@/assets/images/bridge/tokens/tora.jpg';
+import oassyIcon from '@/assets/images/bridge/tokens/oassy.png';
+import oraIcon from '@/assets/images/bridge/tokens/ora.jpeg';
+import toriIcon from '@/assets/images/bridge/tokens/tori.jpg';
+import hunterIcon from '@/assets/images/bridge/tokens/hunter.png';
+import mchinuIcon from '@/assets/images/bridge/tokens/mchinu.jpg';
+import moaiIcon from '@/assets/images/bridge/tokens/moai.webp';
+//import nyanoIcon from '@/assets/images/bridge/tokens/nyano.jpg';
+import hentaiIcon from '@/assets/images/bridge/tokens/hentai.jpeg';
+import shrIcon from '@/assets/images/bridge/tokens/shr.png';
+
 import ZIcon from '@/assets/images/bridge/tokens/Z.png';
 import stOASIcon from '@/assets/images/bridge/tokens/stOAS.png';
 import bridgeService from '@/composables/bridge/bridge.services';
@@ -87,8 +98,28 @@ function getTokenURL(tokenSymbol) {
       return stOASIcon;
     case 'Z':
       return ZIcon;
+    case 'TORA':
+      return toraIcon;
+    case 'OASSY':
+      return oassyIcon;
+    case 'ORA':
+      return oraIcon;
+    case 'TORI':
+      return toriIcon;
+    case 'HUNTER':
+      return hunterIcon;
+    case 'MCHINU':
+      return mchinuIcon;
+    case 'MOAI':
+      return moaiIcon;
+    // case 'NYANO':
+    //   return nyanoIcon;
+    case 'hentai':
+      return hentaiIcon;
+    case 'SHR':
+      return shrIcon;
     default:
-      return ethIcon;
+      return null;
   }
 }
 const getTxUrl = (txId, chainInfo) => {
