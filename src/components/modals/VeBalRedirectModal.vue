@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { Network } from '@defiverse/balancer-sdk';
+console.log('🚀 ~ Network:', Network);
 
 import BalModal from '@/components/_global/BalModal/BalModal.vue';
 import useVeBAL from '@/composables/useVeBAL';
@@ -12,7 +13,12 @@ import { getNetworkSlug } from '@/composables/useNetwork';
  * STATE
  */
 const redirectModal = ref<typeof BalModal>();
-
+const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' ? 'true' : 'false';
+console.log('🚀 ~ isTestnet:', isTestnet);
+const networkName = computed(() => (isTestnet ? 'Oasys Testnet' : 'Oasys'));
+const network = computed(() =>
+  isTestnet ? Network.OASYS_TESTNET : Network.MAINNET
+);
 /**
  * COMPOSABLES
  */
@@ -40,7 +46,7 @@ function handleInternalClose() {
     </template>
     <div>
       <p class="whitespace-pre-line">
-        {{ $t('modals.veBalRedirectModal.description') }}
+        {{ $t('modals.veBalRedirectModal.description', { networkName }) }}
       </p>
 
       <div class="grid grid-cols-2 grid-rows-1 gap-4 mt-4">
@@ -51,7 +57,7 @@ function handleInternalClose() {
           @click="
             router.push({
               name: 'vebal',
-              params: { networkSlug: getNetworkSlug(Network.MAINNET) },
+              params: { networkSlug: getNetworkSlug(network) },
             })
           "
         />
