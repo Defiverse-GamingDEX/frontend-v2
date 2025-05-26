@@ -27,12 +27,11 @@ const showRedirectModal = ref(false);
  */
 export const isVeBalSupported = computed(
   () =>
-    isMainnet.value ||
-    isGoerli.value ||
+    // isMainnet.value ||
+    // isGoerli.value ||
     // isDefiverse.value ||
     // isDefiverseTestnet.value ||
-    isOasys.value ||
-    isOasysTestnet.value
+    isOasys.value || isOasysTestnet.value
 );
 
 /**
