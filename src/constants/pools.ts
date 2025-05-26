@@ -96,7 +96,7 @@ const POOLS_GOERLI: Pools = {
     veBAL: '0xf8a0623ab66f985effc1c69d05f1af4badb01b00000200000000000000000060',
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -174,7 +174,7 @@ const POOLS_MAINNET: Pools = {
     veBAL: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014',
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -380,7 +380,7 @@ const POOLS_POLYGON: Pools = {
     },
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -516,7 +516,7 @@ const POOLS_POLYGON: Pools = {
 const POOLS_ARBITRUM: Pools = {
   IdsMap: {},
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -603,7 +603,7 @@ const POOLS_ARBITRUM: Pools = {
 const POOLS_GENERIC: Pools = {
   IdsMap: {},
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -702,7 +702,7 @@ const POOLS_DEFIVERSE: Pools = {
     // veBAL: '0x8ea93dfbe0c02aafdc8a9e6bfdd7efacdac8cca6000200000000000000000000',
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -770,7 +770,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
     // veBAL: '0xaa01a32965a072082dac7169b4c9457ce1508be5000200000000000000000001',
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -835,7 +835,7 @@ const POOLS_OASYS_TESTNET: Pools = {
     veBAL: '',
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -894,7 +894,7 @@ const POOLS_OASYS: Pools = {
     veBAL: '',
   },
   Pagination: {
-    PerPage: 10,
+    PerPage: 50,
     PerPool: 10,
     PerPoolInitial: 5,
   },
