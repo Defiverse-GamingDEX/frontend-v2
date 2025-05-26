@@ -85,7 +85,7 @@ function symbolFor(token: any): string {
     <img
       v-if="iconSRC && !error"
       :src="iconSRC"
-      class="object-cover w-auto h-full bg-white rounded-full"
+      class="object-cover w-full h-full bg-white rounded-full"
       @error="error = true"
     />
     <Avatar v-else-if="!!address" :address="address" :size="size" />
