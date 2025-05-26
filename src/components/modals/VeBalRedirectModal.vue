@@ -30,6 +30,15 @@ const router = useRouter();
  */
 function handleInternalClose() {
   redirectModal?.value?.hide();
+  router.push({
+    name: 'home',
+  });
+}
+function handleExternalClose() {
+  setShowRedirectModal(false);
+  router.push({
+    name: 'home',
+  });
 }
 </script>
 
@@ -37,7 +46,7 @@ function handleInternalClose() {
   <BalModal
     ref="redirectModal"
     :show="showRedirectModal"
-    @close="setShowRedirectModal(false)"
+    @close="handleExternalClose"
   >
     <template #header>
       <h3>
