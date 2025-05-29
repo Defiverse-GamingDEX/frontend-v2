@@ -141,21 +141,53 @@ const barColor = computed(() =>
 /**
  * WATCHERS
  */
-watchEffect(async () => {
-  _amount.value = props?.inputSelect?.amount;
-  _address.value = props?.inputSelect?.tokenAddress;
-  _periods.value = props?.inputSelect?.periods;
-  _token_list.value = getTokenList(props.input_list);
-  console.log(_address.value, props.inputSelect, '_address.value');
-  let inputSelect = cloneDeep(props?.inputSelect);
-  const isAllowance = await checkAllowanceToken(inputSelect.tokenAddress);
-  inputSelect.isAllowance = isAllowance;
+// watchEffect(async () => {
+//   _amount.value = props?.inputSelect?.amount;
+//   _address.value = props?.inputSelect?.tokenAddress;
+//   _periods.value = props?.inputSelect?.periods;
+//   _token_list.value = getTokenList(props.input_list);
+//   console.log(_address.value, props.inputSelect, '_address.value');
+//   let inputSelect = cloneDeep(props?.inputSelect);
+//   const isAllowance = await checkAllowanceToken(inputSelect.tokenAddress);
+//   inputSelect.isAllowance = isAllowance;
 
-  inputSelect.isError = checkTokenSelectError(inputSelect);
+//   inputSelect.isError = checkTokenSelectError(inputSelect);
 
-  emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
-});
+//   emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
+// });
+// Theo dõi các props cơ bản để cập nhật state local
+watch(
+  () => [
+    props?.inputSelect?.amount,
+    props?.inputSelect?.tokenAddress,
+    props?.inputSelect?.periods,
+    props.input_list,
+  ],
+  () => {
+    _amount.value = props?.inputSelect?.amount;
+    _address.value = props?.inputSelect?.tokenAddress;
+    _periods.value = props?.inputSelect?.periods;
+    _token_list.value = getTokenList(props.input_list);
+  },
+  { immediate: true }
+);
 
+// Theo dõi tokenAddress để chỉ check allowance khi tokenAddress thay đổi
+watch(
+  () => props?.inputSelect?.tokenAddress,
+  async (newAddress, oldAddress) => {
+    if (!newAddress) return;
+    let inputSelect = cloneDeep(props?.inputSelect);
+    const isAllowance = await checkAllowanceToken(inputSelect.tokenAddress);
+    inputSelect.isAllowance = isAllowance;
+    inputSelect.isError = checkTokenSelectError(inputSelect);
+    emit('update:inputSelect', {
+      inputSelect: inputSelect,
+      index: props.index,
+    });
+  },
+  { immediate: true }
+);
 // FUNCTIONS
 async function checkAllowanceToken(address) {
   try {
