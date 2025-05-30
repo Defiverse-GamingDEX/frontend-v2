@@ -30,7 +30,7 @@ import {
 import { bnum } from '@/lib/utils';
 import { Pool } from '@/services/pool/types';
 import { POOLS } from '@/constants/pools';
-
+import BigNumber from 'bignumber.js';
 import PoolsTableActionsCell from './PoolsTableActionsCell.vue';
 import TokenPills from './TokenPills/TokenPills.vue';
 import PoolWarningTooltip from '@/components/pool/PoolWarningTooltip.vue';
@@ -287,6 +287,40 @@ function formatPoolName(name: string): string {
 
   return name;
 }
+
+function formatPoolNameFromPoolInfo(pool: Pool) {
+  // format pool name from pool info
+  if (POOLS.wrongPoolNameWhitelist?.includes(pool.id)) {
+    let poolName = '';
+    if (pool.tokens.length > 0) {
+      console.log(
+        '🚀 ~ formatPoolNameFromPoolInfo ~ pool.tokens:',
+        pool.tokens
+      );
+      for (let i = 0; i < pool.tokens.length; i++) {
+        const token = pool.tokens[i];
+        const token_weight = token.weight
+          ? BigNumber(token.weight || 0)
+              .times(100)
+              .toFixed(0)
+          : '';
+        const token_name = token.symbol || '';
+        poolName += token_weight + token_name;
+        if (i < pool.tokens.length - 1) {
+          poolName += '_';
+        }
+      }
+      return poolName;
+    }
+  }
+  if (pool.name.includes('by Yukichi')) {
+    return pool.name.replace(
+      /(\d+[\w\s]+) by Yukichi Fun_(\d+[\w\s]+)_POOL.*?/g,
+      '$1_$2'
+    );
+  }
+  return pool.name;
+}
 </script>
 
 <template>
@@ -362,7 +396,9 @@ function formatPoolName(name: string): string {
               alt="Yukichi Pool"
               class="mr-1 verified-icon"
             />
-            <span class="mr-2 pool-name">{{ formatPoolName(pool.name) }}</span>
+            <span class="mr-2 pool-name">{{
+              formatPoolNameFromPoolInfo(pool)
+            }}</span>
             <TokenPills
               class="pool-pills"
               :tokens="orderedPoolTokens(pool, pool.tokens)"
