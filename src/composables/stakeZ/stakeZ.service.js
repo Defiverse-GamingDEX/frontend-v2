@@ -112,13 +112,14 @@ const _sendRawTx = async (
     );
 
     // overwrite.gasLimit = gas;
-    overwrite.maxPriorityFeePerGas = null;
-    overwrite.maxFeePerGas = null;
+    // overwrite.maxPriorityFeePerGas = null;
+    // overwrite.maxFeePerGas = null;
 
     const tx = await myContract.connect(signer)[action](...params, {
       gasLimit: gas,
       gasPrice: gasPrice,
       value: overwrite.value,
+      type: 0,
     });
 
     //let rs = await tx.wait();

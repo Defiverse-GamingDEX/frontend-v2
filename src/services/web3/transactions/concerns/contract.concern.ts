@@ -46,7 +46,7 @@ export class ContractConcern extends TransactionConcern {
         options,
         forceLegacyTxType
       );
-      const txOptions = { ...options, ...gasSettings };
+      const txOptions = { ...options, ...gasSettings, type: 0 };
 
       await Promise.all([
         verifyTransactionSender(this.signer),
