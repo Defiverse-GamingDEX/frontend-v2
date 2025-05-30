@@ -133,7 +133,7 @@ export function hasStakingRewards(aprs?: AprBreakdown) {
   //   bnum(aprs.rewardAprs.total || 0).gt(0)
   // );
   const tokens = Object.keys(aprs.rewardAprs?.breakdown) || [];
-  return tokens.length > 1;
+  return tokens.length > 0;
 }
 
 /**
