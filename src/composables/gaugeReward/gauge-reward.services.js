@@ -25,12 +25,12 @@ const _sendRawTx = async (
       signer
     );
     // overwrite.gasLimit = gas;
-    overwrite.maxPriorityFeePerGas = null;
-    overwrite.maxFeePerGas = null;
+    // overwrite.maxPriorityFeePerGas = null;
+    // overwrite.maxFeePerGas = null;
 
     const tx = await myContract
       .connect(signer)
-      [action](...params, { gasLimit: gas, gasPrice: gasPrice });
+      [action](...params, { gasLimit: gas, gasPrice: gasPrice, type: 0 });
     //let rs = await tx.wait();
     //console.log('--->rs: ', rs); // eslint-disable-line no-console
     return tx;
