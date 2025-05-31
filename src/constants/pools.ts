@@ -83,6 +83,7 @@ export type Pools = {
   DisabledJoins: string[];
   BrandedRedirect?: Record<string, string>;
   VerifiedPools?: string[];
+  wrongPoolNameWhitelist?: string[];
 };
 
 const POOLS_GOERLI: Pools = {
@@ -960,6 +961,10 @@ const POOLS_OASYS: Pools = {
     '0x4eb6713e7c542394b24317398a75aec21775f9a7000200000000000000000007',
     '0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd000200000000000000000001',
     '0x79f56c1c78843710d0cc037c857426e1cee6104500020000000000000000000e',
+  ],
+  wrongPoolNameWhitelist: [
+    '0x3d84d6b0b139b015ede21081e04ce5eb32016c5200020000000000000000000c',
+    '0xca5be5c3ad37aaf7a197331a2ac9fdca4ab2818900020000000000000000000d',
   ],
 };
 
