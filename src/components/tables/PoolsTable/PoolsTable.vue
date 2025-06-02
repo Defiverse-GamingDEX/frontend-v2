@@ -313,9 +313,9 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
       return poolName;
     }
   }
-  if (pool.name.includes('by Yukichi')) {
+  if (/by yukichi\s+fun_/i.test(pool.name)) {
     return pool.name.replace(
-      /(\d+[\w\s]+) by Yukichi Fun_(\d+[\w\s]+)_POOL.*?/g,
+      /(.*?)\s+by\s+yukichi\s+fun_([\w\d]+)_pool.*?/i,
       '$1_$2'
     );
   }
