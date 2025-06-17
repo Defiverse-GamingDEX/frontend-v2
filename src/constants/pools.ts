@@ -703,7 +703,7 @@ const POOLS_DEFIVERSE: Pools = {
     // veBAL: '0x8ea93dfbe0c02aafdc8a9e6bfdd7efacdac8cca6000200000000000000000000',
   },
   Pagination: {
-    PerPage: 50,
+    PerPage: 30,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -771,7 +771,7 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
     // veBAL: '0xaa01a32965a072082dac7169b4c9457ce1508be5000200000000000000000001',
   },
   Pagination: {
-    PerPage: 50,
+    PerPage: 20,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -836,7 +836,7 @@ const POOLS_OASYS_TESTNET: Pools = {
     veBAL: '',
   },
   Pagination: {
-    PerPage: 50,
+    PerPage: 30,
     PerPool: 10,
     PerPoolInitial: 5,
   },
@@ -895,7 +895,7 @@ const POOLS_OASYS: Pools = {
     veBAL: '',
   },
   Pagination: {
-    PerPage: 50,
+    PerPage: 30,
     PerPool: 10,
     PerPoolInitial: 5,
   },

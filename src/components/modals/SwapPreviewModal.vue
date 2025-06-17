@@ -758,6 +758,15 @@ watch(blockNumber, () => {
             <div class="summary-item-row text-secondary">
               <div class="w-64">
                 {{ labels.swapSummary.totalWithSlippage }}
+                <div
+                  v-if="
+                    swapping.tokenIn?.value.owner === 'yukichi' ||
+                    swapping.tokenOut?.value.owner === 'yukichi'
+                  "
+                  class="text-xs text-red-500"
+                >
+                  ※ ⚠️ Slippage settings have been changed in Yukichi token.
+                </div>
               </div>
               <div
                 v-html="
