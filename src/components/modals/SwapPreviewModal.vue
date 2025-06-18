@@ -64,9 +64,42 @@ const priceUpdateAccepted = ref(false);
 const showSummaryInFiat = ref(false);
 
 // COMPUTED
-const slippageRatePercent = computed(() =>
-  fNum2(slippage.value, FNumFormats.percent)
-);
+const slippageRatePercent = computed(() => {
+  let rs: any = slippage.value;
+  if (
+    props.swapping.tokenIn.value.owner === 'yukichi' ||
+    props.swapping.tokenOut.value.owner === 'yukichi'
+  ) {
+    const tokenOutValueExpected: any =
+      props.swapping.tokenOutAmountInput.value || 0;
+    console.log(
+      '🚀 ~ slippageRatePercent ~ tokenOutValueExpected:',
+      tokenOutValueExpected
+    );
+    console.log('🚀 ~ slippageRatePercent ~ summary:', summary.value);
+    const tokenOutValueReceived: any =
+      parseFloat(
+        summary.value.totalWithSlippage
+          .replace('TOA', '')
+          .trim()
+          .replace(/,/g, '')
+      ) || 0;
+
+    console.log(
+      '🚀 ~ slippageRatePercent ~ tokenOutValueReceived:',
+      tokenOutValueReceived
+    );
+    const slippageYukichi: any =
+      (
+        (tokenOutValueExpected - tokenOutValueReceived) /
+        tokenOutValueExpected
+      ).toFixed(4) || 0;
+    console.log('🚀 ~ slippageRatePercent ~ slippageYukichi:', slippageYukichi);
+    rs = Math.max(rs, parseFloat(slippageYukichi));
+  }
+  console.log('🚀 ~ slippageRatePercent ~ rs:', rs);
+  return fNum2(rs, FNumFormats.percent);
+});
 
 const addressIn = computed(() => props.swapping.tokenIn.value.address);
 
@@ -131,6 +164,7 @@ const summary = computed(() => {
     summaryItems.totalWithSlippage = tokenOutAmountInput;
   } else {
     const quote = props.swapping.getQuote();
+    console.log('🚀 ~ summary ~ quote:', quote);
 
     if (exactIn) {
       summaryItems.amountBeforeFees = tokenOutAmountInput;
