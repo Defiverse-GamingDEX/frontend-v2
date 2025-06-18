@@ -222,9 +222,13 @@ export default function usePoolsQuery(
         if (!poolsRepository) {
           poolsRepository = initializePoolsRepository();
         }
-
+        // get time call queryFn
+        const startTime = performance.now();
         await nextTick();
         const result = await queryFn({ pageParam: 0 });
+        const endTime = performance.now();
+        const executionTime = endTime - startTime;
+        console.log(`Execution time: ${executionTime} milliseconds`);
         currentData.value = result; // save result to current data
         console.log('🚀 ~ result:', result);
         isInitialLoad.value = false;
