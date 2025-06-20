@@ -1,60 +1,31 @@
 [
   {
-    "address": "0x6c92f94a6d1d68c7982ef9436324fdfbbef94888",
+    "address": "0xfc4676803caeaa0c6ce55ed2261efda52cc0ea18",
     "network": 9372,
     "isKilled": false,
     "relativeWeightCap": "0.15",
     "addedTimestamp": 1747910545,
     "pool": {
-      "id": "0x4e66d5f08e81979bd5951c93839bc97265681975000200000000000000000000",
-      "address": "0x4e66d5f08e81979bd5951c93839bc97265681975",
+      "id": "0xfda16dee087590dab4096d4a43a6712c7f13d69200020000000000000000000d",
+      "address": "0xfda16dee087590dab4096d4a43a6712c7f13d692",
       "poolType": "Weighted",
-      "symbol": "G-50USDC-50WOAS",
-      "tokens": [
-        {
-          "address": "0x2af09148c7bf784e54c7730724e4b48e4735426c",
-          "weight": "0.5",
-          "symbol": "USDC"
-        },
-        {
-          "address": "0x5200000000000000000000000000000000000001",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x2af09148c7bf784e54c7730724e4b48e4735426c": "tokens/USDC_L.png",
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
-    }
-  },
-  {
-    "address": "0x3526b66cb9ab051e9fa44dbaee42ebef739583aa",
-    "network": 9372,
-    "isKilled": false,
-    "relativeWeightCap": "0.15",
-    "addedTimestamp": 1747910545,
-    "pool": {
-      "id": "0xfef873185b752fabc1a1b94900282fd68a40ed05000200000000000000000008",
-      "address": "0xfef873185b752fabc1a1b94900282fd68a40ed05",
-      "poolType": "Weighted",
-      "symbol": "G-50WOAS-50BtcUSD",
+      "symbol": "20WOAS-80USDT",
       "tokens": [
         {
           "address": "0x5200000000000000000000000000000000000001",
-          "weight": "0.5",
+          "weight": "0.2",
           "symbol": "WOAS"
         },
         {
-          "address": "0xbc071ae9a15fd89ccd9b2c60f1bcb936d918a7d6",
-          "weight": "0.5",
-          "symbol": "BtcUSD"
+          "address": "0xacb7a8e74a9f09735fece0176fcfb0591d801a77",
+          "weight": "0.8",
+          "symbol": "USDT"
         }
       ]
     },
     "tokenLogoURIs": {
       "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
-      "0xbc071ae9a15fd89ccd9b2c60f1bcb936d918a7d6": "tokens/BtcUSD.png"
+      "0xacb7a8e74a9f09735fece0176fcfb0591d801a77": "tokens/USDT_L.png"
     }
   },
   {

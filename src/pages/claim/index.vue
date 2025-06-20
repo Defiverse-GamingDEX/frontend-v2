@@ -120,6 +120,7 @@ const balRewardsData = computed((): RewardRow[] => {
   // if (!isWalletReady.value || isDefiverse.value) return [];
   // Hung open
   if (!isWalletReady.value) return [];
+
   // Using reduce to filter out gauges we don't have corresponding pools for
   return gauges.value.reduce<RewardRow[]>((arr, gauge) => {
     const decimals = balToken && balToken.value ? balToken.value.decimals : 18;
