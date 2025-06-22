@@ -9,10 +9,13 @@ import { GAUGE_REWARD_NETWORKS } from '@/constants/gaugeReward/gauge-networks';
 import { gasPriceService } from '@/services/gas-price/gas-price.service';
 const { networkConfig } = useConfig();
 console.log('🚀 ~ networkConfig:', networkConfig);
-const GAUGE_REWARD_CONTRACT_ADDRESS =
-  GAUGE_REWARD_NETWORKS.find(
-    network => network.chainId === networkConfig.chainId
-  )?.gaugeRewardContractAddress || '';
+
+const gaugeConfig = GAUGE_REWARD_NETWORKS.find(
+  network => network.chainId === networkConfig.chainId
+);
+
+const GAUGE_REWARD_CONTRACT_ADDRESS = gaugeConfig?.gaugeRewardContractAddress;
+
 console.log(
   '🚀 ~ GAUGE_REWARD_CONTRACT_ADDRESS:',
   GAUGE_REWARD_CONTRACT_ADDRESS
@@ -159,6 +162,39 @@ async function getRewardTokens(gaugeAddress, currentProvider) {
   }
 }
 
+async function getRewardAmounts(gaugeAddress, currentProvider) {
+  try {
+    const provider = currentProvider;
+    console.log('HUNG:getRewardAmounts:', gaugeAddress);
+    const params = {
+      contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
+      contractProvider: provider, // contract provider
+      gaugeAddress: gaugeAddress,
+      abi: GaugeRewardABI,
+    };
+    const data: any = [];
+    const rs = await gaugeRewardService.getRewardAmounts(params);
+
+    if (rs) {
+      const tokens = rs[0];
+      const rewards = rs[1];
+      for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i] !== '0x0000000000000000000000000000000000000000') {
+          data.push({
+            token: tokens[i],
+            amount: rewards[i].toString(),
+          });
+        }
+      }
+    }
+
+    return data;
+  } catch (error) {
+    console.log('HUNG:getRewardAmounts error:', error);
+    throw error;
+  }
+}
+
 export function useGaugeReward() {
   return {
     checkTokenAllowance,
@@ -166,5 +202,6 @@ export function useGaugeReward() {
     depositTokens,
     startDistributions,
     getRewardTokens,
+    getRewardAmounts,
   };
 }

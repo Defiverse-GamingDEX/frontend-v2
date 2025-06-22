@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-
+import BigNumber from 'bignumber.js';
 import useNetwork from '@/composables/useNetwork';
 import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
-
-import useConfig from '@/composables/useConfig';
+import { useTokens } from '@/providers/tokens.provider';
+import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
 /**
  * TYPES
  */
@@ -27,10 +26,44 @@ const props = defineProps<Props>();
 /**
  * COMPOSABLES
  */
-const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
+const { isWalletReady, startConnectWithInjectedProvider, getProvider } =
+  useWeb3();
 const { networkSlug } = useNetwork();
 const router = useRouter();
-const { networkConfig } = useConfig();
+const { getRewardAmounts } = useGaugeReward();
+const { getToken } = useTokens();
+
+const rewardList = ref<any>([]);
+
+async function getGaugeRewardAmounts() {
+  try {
+    const provider = getProvider();
+    let rs = await getRewardAmounts(props.gaugeAddress, provider);
+    if (rs) {
+      const data = rs.map(item => {
+        const token = getToken(item.token);
+        if (!token) return null;
+
+        const convertedAmount = BigNumber(item.amount)
+          .div(10 ** token.decimals)
+          .toFixed();
+        return {
+          ...item,
+          convertedAmount,
+          token,
+        };
+      });
+
+      if (data) {
+        rewardList.value = data.filter(t => !!t);
+      }
+
+      console.log('HUNG:', rewardList.value);
+    }
+  } catch (error) {
+    console.log('getGaugeRewardAmounts error :', error);
+  }
+}
 
 /**
  * METHODS
@@ -49,6 +82,13 @@ function openAddRewardsPage() {
 /**
  * CYCLES
  */
+onBeforeMount(async () => {
+  getGaugeRewardAmounts();
+});
+/**
+ * EXPOSE
+ */
+// defineExpose({ getTokenList });
 </script>
 
 <template>
@@ -58,22 +98,38 @@ function openAddRewardsPage() {
         <h5>{{ $t('Extra Rewards') }}</h5>
       </div>
     </template>
-    <div class="py-2 px-4">
-      <BalBtn
-        v-if="isWalletReady"
-        color="gradient"
-        block
-        @click.prevent="openAddRewardsPage"
-      >
-        {{ $t('Add Rewards') }}
-      </BalBtn>
-      <BalBtn
-        v-else
-        :label="$t('connectWallet')"
-        color="gradient"
-        block
-        @click="startConnectWithInjectedProvider"
-      />
+    <div class="py-2">
+      <BalStack vertical spacing="sm" class="py-2 px-4">
+        <BalStack
+          v-for="(item, index) in rewardList"
+          :key="index"
+          horizontal
+          justify="between"
+        >
+          <span>{{ item.token.name }}</span>
+          <BalStack horizontal spacing="sm" align="center">
+            <span>{{ item.convertedAmount }} </span>
+          </BalStack>
+        </BalStack>
+      </BalStack>
+      <BalStack spacing="sm" class="px-4 mt-2">
+        <BalBtn
+          v-if="isWalletReady"
+          color="gradient"
+          block
+          @click.prevent="openAddRewardsPage"
+        >
+          {{ $t('Add Rewards') }}
+        </BalBtn>
+
+        <BalBtn
+          v-else
+          :label="$t('connectWallet')"
+          color="gradient"
+          block
+          @click="startConnectWithInjectedProvider"
+        />
+      </BalStack>
     </div>
   </BalCard>
 </template>

@@ -138,8 +138,27 @@ const getRewardTokens = async params => {
   return rs;
 };
 
+const getRewardAmounts = async params => {
+  const {
+    contractAddress, // contract token
+    contractProvider, // contract provider
+    gaugeAddress,
+    abi,
+  } = params;
+
+  const contract = await new ethers.Contract(
+    contractAddress,
+    abi,
+    contractProvider
+  );
+
+  const rs = await contract.getRewardAmounts(gaugeAddress);
+  return rs;
+};
+
 export default {
   depositTokens,
   startDistributions,
   getRewardTokens,
+  getRewardAmounts,
 };
