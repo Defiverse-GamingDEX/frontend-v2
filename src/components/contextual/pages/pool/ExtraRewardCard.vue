@@ -59,7 +59,7 @@ async function getGaugeRewardAmounts() {
       });
 
       if (data) {
-        rewardList.value = data.filter(t => !!t);
+        rewardList.value = data.filter(t => !!t) || [];
       }
     }
   } catch (error) {
@@ -90,9 +90,6 @@ watch(
     getGaugeRewardAmounts();
   }
 );
-// onBeforeMount(async () => {
-//   getGaugeRewardAmounts();
-// });
 /**
  * EXPOSE
  */

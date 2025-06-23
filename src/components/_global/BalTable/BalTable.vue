@@ -47,6 +47,7 @@ type Props = {
   pin?: DataPinState | null;
   getTableRowClass?: (rowData: DataProp, rowIndex: number) => string;
   isOnlyDescSort?: boolean;
+  loadingText?: string;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -64,6 +65,7 @@ const props = withDefaults(defineProps<Props>(), {
   isLoadingMore: false,
   getTableRowClass: () => '',
   isOnlyDescSort: false,
+  loadingText: '',
 });
 
 const stickyHeaderRef = ref();
@@ -291,6 +293,7 @@ watch(
         :class="[skeletonClass, 'min-w-full']"
         square
         :style="{ width: `${placeholderBlockWidth}px` }"
+        :text="loadingText"
       />
       <div
         v-else-if="!isLoading && !tableData.length"

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import useDarkMode from '@/composables/useDarkMode';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 
 /**
  * TYPES
@@ -11,6 +12,7 @@ type Props = {
   darker?: boolean;
   square?: boolean;
   rounded?: RoundedOpts;
+  text?: string;
 };
 
 /**
@@ -21,12 +23,31 @@ const props = withDefaults(defineProps<Props>(), {
   darker: false,
   square: false,
   rounded: 'lg',
+  text: '',
 });
 
 /**
  * COMPOSABLES
  */
 const { darkMode } = useDarkMode();
+
+/**
+ * ANIMATED DOTS FOR LOADING TEXT
+ */
+const dots = ref('');
+let intervalId: number | undefined;
+
+onMounted(() => {
+  let count = 0;
+  intervalId = window.setInterval(() => {
+    count = (count + 1) % 4;
+    dots.value = '.'.repeat(count) || '.';
+  }, 500);
+});
+
+onUnmounted(() => {
+  if (intervalId) clearInterval(intervalId);
+});
 
 /**
  * COMPUTED
@@ -49,6 +70,9 @@ const classes = computed(() => {
 
 <template>
   <div :class="['bal-loading-block', classes]" />
+  <div v-if="text" class="p-4 text-sm text-gray-500">
+    {{ text }}<span>{{ dots }}</span>
+  </div>
 </template>
 
 <style>

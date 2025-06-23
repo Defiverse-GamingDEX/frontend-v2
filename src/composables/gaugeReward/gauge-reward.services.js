@@ -139,6 +139,7 @@ const getRewardTokens = async params => {
 };
 
 const getRewardAmounts = async params => {
+  console.log('getRewardAmounts:', params);
   const {
     contractAddress, // contract token
     contractProvider, // contract provider
