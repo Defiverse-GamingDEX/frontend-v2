@@ -36,6 +36,10 @@ const { getToken } = useTokens();
 const rewardList = ref<any>([]);
 
 async function getGaugeRewardAmounts() {
+  if (!props.gaugeAddress) {
+    rewardList.value = [];
+    return;
+  }
   try {
     const provider = getProvider();
     let rs = await getRewardAmounts(props.gaugeAddress, provider);
@@ -57,8 +61,6 @@ async function getGaugeRewardAmounts() {
       if (data) {
         rewardList.value = data.filter(t => !!t);
       }
-
-      console.log('HUNG:', rewardList.value);
     }
   } catch (error) {
     console.log('getGaugeRewardAmounts error :', error);
@@ -82,9 +84,15 @@ function openAddRewardsPage() {
 /**
  * CYCLES
  */
-onBeforeMount(async () => {
-  getGaugeRewardAmounts();
-});
+watch(
+  () => props.gaugeAddress,
+  newVal => {
+    getGaugeRewardAmounts();
+  }
+);
+// onBeforeMount(async () => {
+//   getGaugeRewardAmounts();
+// });
 /**
  * EXPOSE
  */
