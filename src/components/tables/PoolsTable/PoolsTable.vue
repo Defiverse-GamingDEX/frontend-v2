@@ -342,6 +342,7 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
       :onRowClick="handleRowClick"
       :isPaginated="isPaginated"
       isOnlyDescSort
+      loadingText="Loading"
       :initialState="{
         sortColumn: sortColumn,
         sortDirection: 'desc',
