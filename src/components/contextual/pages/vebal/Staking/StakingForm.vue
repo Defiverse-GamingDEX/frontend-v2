@@ -275,6 +275,11 @@ const handleStake = async () => {
     });
   }
 };
+watch(account, () => {
+  if (account.value) {
+    fetchData();
+  }
+});
 /**
  * LIFE CYCLES
  */

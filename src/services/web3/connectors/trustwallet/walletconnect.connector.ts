@@ -31,7 +31,7 @@ export class WalletConnectConnector extends Connector {
     };
     const provider = await EthereumProvider.init({
       projectId: 'ca78539a9b756312f579aed453d6d36f',
-      chains: [DEFIVERSE],
+      chains: [ETHEREUM],
       optionalChains: [
         ETHEREUM,
         POLYGON,
@@ -65,11 +65,32 @@ export class WalletConnectConnector extends Connector {
     this.provider = provider;
 
     try {
-      const accounts = await provider.enable();
-
-      const chainId = await provider.request({ method: 'eth_chainId' });
+      await provider.enable();
+      const accounts = provider?.accounts;
+      const chainId = provider?.chainId?.toString();
       this.handleChainChanged(chainId);
       this.handleAccountsChanged(accounts);
+      // chain changed
+      provider.on('chainChanged', chainId => {
+        console.log(
+          '🚀 ~ WalletConnectConnector ~ connect ~ chainId:',
+          chainId
+        );
+      });
+      // accounts changed
+      provider.on('accountsChanged', accounts => {
+        console.log(
+          '🚀 ~ WalletConnectConnector ~ connect ~ accounts:',
+          accounts
+        );
+      });
+      // session established
+      provider.on('connect', session => {
+        console.log(
+          '🚀 ~ WalletConnectConnector ~ connect ~ session:',
+          session
+        );
+      });
     } catch (err) {
       if ((err as WalletError).code === 4001) {
         // EIP-1193 userRejectedRequest error

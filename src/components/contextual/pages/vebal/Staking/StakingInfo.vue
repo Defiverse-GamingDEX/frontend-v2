@@ -110,6 +110,11 @@ onMounted(async () => {
   await getStakeZInfo();
   (window as any).emitter?.on('reloadStakeZInfo', reloadStakeZInfo);
 });
+watch(account, () => {
+  if (account.value) {
+    getStakeZInfo();
+  }
+});
 </script>
 
 <template>
