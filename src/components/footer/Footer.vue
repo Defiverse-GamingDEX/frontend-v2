@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="pb-12 text-sm text-white dark:text-gray-400">
-        Version 1.89.10
+        Version {{ packageJson.version }}
       </div>
     </div>
   </footer>
@@ -161,7 +161,7 @@ import useConfig from '@/composables/useConfig';
 import useNetwork from '@/composables/useNetwork';
 
 import AppLogo from '../images/AppLogo.vue';
-
+import packageJson from '../../../package.json';
 export default {
   components: {
     IconTwitter,
@@ -184,6 +184,7 @@ export default {
       networkSlug,
       isThirdPartyServicesModalVisible,
       networkConfig,
+      packageJson,
     };
   },
 };
