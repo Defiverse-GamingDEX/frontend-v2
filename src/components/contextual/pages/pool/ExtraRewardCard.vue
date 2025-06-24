@@ -149,11 +149,11 @@ onMounted(async () => {
           justify="between"
         >
           <span class="flex items-center">
-            <img
-              v-if="item.token.logoURI"
-              :src="item.token.logoURI"
-              alt=""
-              class="w-5 h-5 !mr-2"
+            <BalAsset
+              :address="item.token.address"
+              :iconURI="item.token.logoURI"
+              :size="24"
+              class="!mr-2"
             />
             <span class="font-bold text-gray-800">{{ item.token.name }}</span>
           </span>
