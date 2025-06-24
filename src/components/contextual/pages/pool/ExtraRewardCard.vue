@@ -6,6 +6,8 @@ import { Pool } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
 import { useTokens } from '@/providers/tokens.provider';
 import { useGaugeReward } from '@/composables/gaugeReward/useGaugeReward';
+import { ref } from 'vue';
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 /**
  * TYPES
  */
@@ -32,8 +34,9 @@ const { networkSlug } = useNetwork();
 const router = useRouter();
 const { getRewardAmounts } = useGaugeReward();
 const { getToken } = useTokens();
-
+const { fNum2 } = useNumbers();
 const rewardList = ref<any>([]);
+const isCollapsed = ref(false);
 
 async function getGaugeRewardAmounts() {
   if (!props.gaugeAddress) {
@@ -57,9 +60,14 @@ async function getGaugeRewardAmounts() {
           token,
         };
       });
+      console.log('🚀 ~ getGaugeRewardAmounts ~ data:', data);
 
       if (data) {
         rewardList.value = data.filter(t => !!t) || [];
+        console.log(
+          '🚀 ~ getGaugeRewardAmounts ~ rewardList.value:',
+          rewardList.value
+        );
       }
     }
   } catch (error) {
@@ -81,6 +89,11 @@ function openAddRewardsPage() {
     },
   });
 }
+
+function toggleCollapse() {
+  isCollapsed.value = !isCollapsed.value;
+}
+
 /**
  * CYCLES
  */
@@ -90,6 +103,9 @@ watch(
     getGaugeRewardAmounts();
   }
 );
+onMounted(async () => {
+  await getGaugeRewardAmounts();
+});
 /**
  * EXPOSE
  */
@@ -99,21 +115,52 @@ watch(
 <template>
   <BalCard v-if="gaugeAddress" shadow="2xl" noPad class="rounded-xl">
     <template #header>
-      <div class="card-header">
+      <div class="flex justify-between items-center card-header">
         <h5>{{ $t('Extra Rewards') }}</h5>
+        <span class="cursor-pointer" @click="toggleCollapse">
+          <svg
+            :class="{ 'rotate-180': !isCollapsed, 'rotate-0': isCollapsed }"
+            width="20"
+            height="20"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M7 10l5 5 5-5"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
       </div>
     </template>
     <div class="py-2">
-      <BalStack vertical spacing="sm" class="py-2 px-4">
+      <BalStack v-show="!isCollapsed" vertical spacing="sm" class="py-2 px-4">
+        <div class="flex justify-between title-container">
+          <div class="text-sm">Token</div>
+          <div class="text-sm">Remaining</div>
+        </div>
         <BalStack
           v-for="(item, index) in rewardList"
           :key="index"
           horizontal
           justify="between"
         >
-          <span>{{ item.token.name }}</span>
+          <span class="flex items-center">
+            <img
+              v-if="item.token.logoURI"
+              :src="item.token.logoURI"
+              alt=""
+              class="w-5 h-5 !mr-2"
+            />
+            <span class="font-bold text-gray-800">{{ item.token.name }}</span>
+          </span>
           <BalStack horizontal spacing="sm" align="center">
-            <span>{{ item.convertedAmount }} </span>
+            <span class="font-bold text-gray-800">
+              {{ fNum2(item.convertedAmount, FNumFormats.token) }}
+            </span>
           </BalStack>
         </BalStack>
       </BalStack>
