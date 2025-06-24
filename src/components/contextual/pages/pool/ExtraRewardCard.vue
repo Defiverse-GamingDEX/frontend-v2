@@ -117,7 +117,7 @@ onMounted(async () => {
     <template #header>
       <div class="flex justify-between items-center card-header">
         <h5>{{ $t('Extra Rewards') }}</h5>
-        <!-- <span class="cursor-pointer" @click="toggleCollapse">
+        <span class="cursor-pointer" @click="toggleCollapse">
           <svg
             :class="{ 'rotate-180': !isCollapsed, 'rotate-0': isCollapsed }"
             width="20"
@@ -133,15 +133,15 @@ onMounted(async () => {
               stroke-linecap="round"
             />
           </svg>
-        </span> -->
+        </span>
       </div>
     </template>
     <div class="py-2">
       <BalStack v-show="!isCollapsed" vertical spacing="sm" class="py-2 px-4">
-        <!-- <div class="flex justify-between title-container">
+        <div class="flex justify-between title-container">
           <div class="text-sm">Token</div>
           <div class="text-sm">Remaining</div>
-        </div> -->
+        </div>
         <BalStack
           v-for="(item, index) in rewardList"
           :key="index"
@@ -149,12 +149,12 @@ onMounted(async () => {
           justify="between"
         >
           <span class="flex items-center">
-            <!-- <img
-              v-if="item.token.logoURI"
-              :src="item.token.logoURI"
-              alt=""
-              class="w-5 h-5 !mr-2"
-            /> -->
+            <BalAsset
+              :address="item.token.address"
+              :iconURI="item.token.logoURI"
+              :size="24"
+              class="!mr-2"
+            />
             <span class="font-bold text-gray-800">{{ item.token.name }}</span>
           </span>
           <BalStack horizontal spacing="sm" align="center">
