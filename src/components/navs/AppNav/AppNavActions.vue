@@ -5,10 +5,13 @@ import { computed } from 'vue';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { useSidebar } from '@/composables/useSidebar';
 import useWeb3 from '@/services/web3/useWeb3';
+import { useRoute } from 'vue-router';
+import { PATH_NAME_USE_NAV_SWITCH_NETWORK } from '@/constants/links';
 
 import AppNavAccountBtn from './AppNavAccountBtn.vue';
 import AppNavActivityBtn from './AppNavActivityBtn/AppNavActivityBtn.vue';
 import AppNavNetworkSelect from './AppNavNetworkSelect.vue';
+import AppNavNetworkSelectForSwitch from './AppNavNetworkSelectForSwitch.vue';
 import { Goals, trackGoal } from '@/composables/useFathom';
 
 /**
@@ -18,11 +21,17 @@ import { Goals, trackGoal } from '@/composables/useFathom';
 const { isMobile } = useBreakpoints();
 const { account, connector, startConnectWithInjectedProvider } = useWeb3();
 const { setSidebarOpen } = useSidebar();
+const route = useRoute();
 
 /**
  * COMPUTED
  */
-const hideNetworkSelect = computed(() => connector.value?.id === 'gnosis');
+const isSwitchNetwork = computed(() =>
+  PATH_NAME_USE_NAV_SWITCH_NETWORK.includes(route?.name?.toString() || '')
+);
+const hideNetworkSelect = computed(
+  () => connector.value?.id === 'gnosis' || isSwitchNetwork.value
+);
 
 /**
  * METHODS
@@ -49,6 +58,7 @@ function connectWalletHandler() {
       <span class="lg:hidden" v-text="$t('connect')" />
     </BalBtn>
     <AppNavNetworkSelect v-if="!hideNetworkSelect" />
+    <AppNavNetworkSelectForSwitch v-if="isSwitchNetwork" />
     <BalBtn
       v-if="isMobile"
       color="white"

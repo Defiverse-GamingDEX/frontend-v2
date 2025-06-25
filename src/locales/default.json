@@ -1554,6 +1554,7 @@
     "transfer": "Transfer",
     "transferToken": "Transfer Token",
     "transferNft": "Transfer NFT",
+    "errorMissingNetworkConfig": "Missing network configuration",
     "": ""
   },
   "": ""

@@ -114,6 +114,8 @@ export default function useWeb3() {
   const getProvider = () => new Web3Provider(provider.value as any, 'any'); // https://github.com/ethers-io/ethers.js/issues/866
   const getSigner = () => getProvider().getSigner();
   const connectToAppNetwork = () => switchToAppNetwork(provider.value as any);
+  const switchNetwork = network =>
+    switchToAppNetwork(provider.value as any, network);
 
   function startConnectWithInjectedProvider(): void {
     if (hasInjectedProvider() && getInjectedProvider().isCoinbaseWallet) {
@@ -186,5 +188,6 @@ export default function useWeb3() {
     toggleWalletSelectModal,
     startConnectWithInjectedProvider,
     setBlockNumber,
+    switchNetwork,
   };
 }

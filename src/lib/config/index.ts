@@ -21,7 +21,7 @@ import saakuru from './saakuru.json';
 import tcgverse from './tcgverse.json';
 export interface Config {
   key: string;
-  chainId: Network | 12345 | 17;
+  chainId: Network | number;
   chainName: string;
   name: string;
   shortName: string;

@@ -3,8 +3,11 @@ import { ExternalProvider } from '@ethersproject/providers';
 import { configService } from '@/services/config/config.service';
 import { WalletError } from '@/types';
 
-export async function switchToAppNetwork(provider: ExternalProvider) {
-  const appNetworkConfig = configService.network;
+export async function switchToAppNetwork(
+  provider: ExternalProvider,
+  network = null
+) {
+  const appNetworkConfig = network || configService.network;
   const hexChainId = `0x${appNetworkConfig.chainId.toString(16)}`;
   try {
     if (provider.request) {
@@ -23,14 +26,17 @@ export async function switchToAppNetwork(provider: ExternalProvider) {
     }
     // chain does not exist, let's add it
     if (error.code === 4902) {
-      return importNetworkDetailsToWallet(provider);
+      return importNetworkDetailsToWallet(provider, network);
     }
   }
   return false;
 }
 
-export async function importNetworkDetailsToWallet(provider: ExternalProvider) {
-  const appNetworkConfig = configService.network;
+export async function importNetworkDetailsToWallet(
+  provider: ExternalProvider,
+  network
+) {
+  const appNetworkConfig = network || configService.network;
   const hexChainId = `0x${appNetworkConfig.chainId.toString(16)}`;
   try {
     const request = {
