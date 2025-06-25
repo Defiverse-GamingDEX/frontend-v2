@@ -1549,5 +1549,12 @@
     "buyBtnLabel": "Buy Crypto",
     "buyTokenBtn": "Buy",
     "comingSoon": "Coming Soon"
-  }
+  },
+  "transfer": {
+    "transfer": "Transfer",
+    "transferToken": "Transfer Token",
+    "transferNft": "Transfer NFT",
+    "": ""
+  },
+  "": ""
 }

@@ -48,6 +48,8 @@ export const Goals = {
   CowswapSwap: '6OKQIZ6Y',
   BalancerSwap: 'YV0NCHEC',
   BalancerSwapMainnet: 'LGKR6VHG',
+  ClickNavTransferToken: 'AK3FX9BQ',
+  ClickNavTransferNft: 'A2K7YPLD',
 };
 
 export function trackGoal(goal: string, value = 0) {

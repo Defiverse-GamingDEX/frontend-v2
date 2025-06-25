@@ -14,13 +14,18 @@ const { isGoerli } = useWeb3();
  */
 const route = useRoute();
 const { networkSlug } = useNetwork();
+const countHidePopover = ref(0);
 
 const navLinks = NAV_LINKS.map(i => {
   return {
     ...i,
-    goal: Goals[i.goal_key],
+    goal: i.goal_key ? Goals[i.goal_key] : '',
   };
 });
+
+const isChainsSupport = chains => {
+  return !chains || (chains && chains.includes(networkConfig.chainId));
+};
 
 /**
  * METHODS
@@ -33,26 +38,58 @@ function isActive(page: string): boolean {
 
 <template>
   <div class="desktop-links">
-    <DesktopLinkItem
+    <div
       v-for="i in navLinks"
-      v-show="
-        !i.chainsSupport ||
-        (i.chainsSupport && i.chainsSupport.includes(networkConfig.chainId))
-      "
+      v-show="isChainsSupport(i.chainsSupport)"
       :key="i.text"
-      :to="{ name: i.name_link, params: { networkSlug } }"
-      :active="isActive(i.name_link)"
-      @click="trackGoal(i.goal)"
     >
-      <span
-        v-if="
-          !i.chainsSupport ||
-          (i.chainsSupport && i.chainsSupport.includes(networkConfig.chainId))
-        "
+      <BalPopover
+        v-if="i.children"
+        noPad
+        class="h-full"
+        :countHide="countHidePopover"
       >
-        {{ $t(i.text) }}
-      </span>
-    </DesktopLinkItem>
+        <template #activator>
+          <div
+            class="flex flex-row justify-center items-center p-0 h-full text-white hover:text-gray-600 dark:hover:text-yellow-500 bg-transparent shadow-none cursor-pointer"
+          >
+            {{ $t(i.text) }}
+            <BalIcon name="chevron-down" size="sm" class="ml-2" />
+          </div>
+        </template>
+        <div class="flex overflow-hidden flex-col p-3 w-44 rounded-lg">
+          <DesktopLinkItem
+            v-for="j in i.children"
+            v-show="isChainsSupport(j.chainsSupport)"
+            :key="j.text"
+            class="for-popup"
+            :to="{ name: j.name_link, params: { networkSlug } }"
+            :active="isActive(j.name_link)"
+            @click="
+              () => {
+                trackGoal(Goals[j.goal_key]);
+                countHidePopover++;
+              }
+            "
+          >
+            <span v-if="j.name_link && isChainsSupport(j.chainsSupport)">
+              {{ $t(j.text) }}
+            </span>
+            <BalIcon v-if="isActive(j.name_link)" name="check" />
+          </DesktopLinkItem>
+        </div>
+      </BalPopover>
+      <DesktopLinkItem
+        v-else-if="i.name_link && isChainsSupport(i.chainsSupport)"
+        :to="{ name: i.name_link, params: { networkSlug } }"
+        :active="isActive(i.name_link)"
+        @click="trackGoal(i.goal)"
+      >
+        <span>
+          {{ $t(i.text) }}
+        </span>
+      </DesktopLinkItem>
+    </div>
     <!-- <a
       href="https://app.tealswap.com/bridge"
       class="border-white dark:border-gray-900 desktop-link-item-custom"
