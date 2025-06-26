@@ -54,7 +54,7 @@ export default function useWeb3Watchers() {
 
   function checkIsUnsupportedNetwork() {
     if (
-      !isSwitchNetwork &&
+      !isSwitchNetwork.value &&
       chainId.value &&
       (isUnsupportedNetwork.value || isMismatchedNetwork.value)
     ) {
@@ -107,6 +107,10 @@ export default function useWeb3Watchers() {
 
   // Watch for user network switch
   // -> Display alert message if unsupported or not the same as app network.
+  watch(isSwitchNetwork, () => {
+    checkIsUnsupportedNetwork();
+  });
+
   watch(chainId, () => {
     checkIsUnsupportedNetwork();
   });

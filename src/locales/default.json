@@ -1555,6 +1555,10 @@
     "transferToken": "Transfer Token",
     "transferNft": "Transfer NFT",
     "errorMissingNetworkConfig": "Missing network configuration",
+    "tokenType": "Token Type",
+    "SelectTheToken": "Select The Token",
+    "SelectAToken": "Select a Token",
+    "importToken": "Import Token",
     "": ""
   },
   "": ""

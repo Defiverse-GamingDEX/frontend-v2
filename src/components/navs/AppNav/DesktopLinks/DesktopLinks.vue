@@ -14,7 +14,6 @@ const { isGoerli } = useWeb3();
  */
 const route = useRoute();
 const { networkSlug } = useNetwork();
-const countHidePopover = ref(0);
 
 const navLinks = NAV_LINKS.map(i => {
   return {
@@ -43,12 +42,7 @@ function isActive(page: string): boolean {
       v-show="isChainsSupport(i.chainsSupport)"
       :key="i.text"
     >
-      <BalPopover
-        v-if="i.children"
-        noPad
-        class="h-full"
-        :countHide="countHidePopover"
-      >
+      <BalPopover v-if="i.children" noPad class="h-full">
         <template #activator>
           <div
             class="flex flex-row justify-center items-center p-0 h-full text-white hover:text-gray-600 dark:hover:text-yellow-500 bg-transparent shadow-none cursor-pointer"
@@ -57,27 +51,29 @@ function isActive(page: string): boolean {
             <BalIcon name="chevron-down" size="sm" class="ml-2" />
           </div>
         </template>
-        <div class="flex overflow-hidden flex-col p-3 w-44 rounded-lg">
-          <DesktopLinkItem
-            v-for="j in i.children"
-            v-show="isChainsSupport(j.chainsSupport)"
-            :key="j.text"
-            class="for-popup"
-            :to="{ name: j.name_link, params: { networkSlug } }"
-            :active="isActive(j.name_link)"
-            @click="
-              () => {
-                trackGoal(Goals[j.goal_key]);
-                countHidePopover++;
-              }
-            "
-          >
-            <span v-if="j.name_link && isChainsSupport(j.chainsSupport)">
-              {{ $t(j.text) }}
-            </span>
-            <BalIcon v-if="isActive(j.name_link)" name="check" />
-          </DesktopLinkItem>
-        </div>
+        <template #default="{ close }">
+          <div class="flex overflow-hidden flex-col p-3 w-44 rounded-lg">
+            <DesktopLinkItem
+              v-for="j in i.children"
+              v-show="isChainsSupport(j.chainsSupport)"
+              :key="j.text"
+              class="for-popup"
+              :to="{ name: j.name_link, params: { networkSlug } }"
+              :active="isActive(j.name_link)"
+              @click="
+                () => {
+                  trackGoal(Goals[j.goal_key]);
+                  close();
+                }
+              "
+            >
+              <span v-if="j.name_link && isChainsSupport(j.chainsSupport)">
+                {{ $t(j.text) }}
+              </span>
+              <BalIcon v-if="isActive(j.name_link)" name="check" />
+            </DesktopLinkItem>
+          </div>
+        </template>
       </BalPopover>
       <DesktopLinkItem
         v-else-if="i.name_link && isChainsSupport(i.chainsSupport)"

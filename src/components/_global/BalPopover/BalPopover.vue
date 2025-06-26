@@ -12,7 +12,6 @@ const props = withDefaults(defineProps<Props>(), {
   trigger: 'click',
   align: 'right',
   detached: false,
-  countHide: 0,
 });
 
 const emit = defineEmits<{
@@ -77,15 +76,6 @@ watch(popoverOpened, () => {
     emit('hide');
   }
 });
-
-watch(
-  () => props.countHide,
-  val => {
-    if (val > 0) {
-      hidePopover();
-    }
-  }
-);
 </script>
 
 <template>

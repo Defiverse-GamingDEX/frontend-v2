@@ -92,7 +92,7 @@ function getSocialComponent(componentName) {
   return socialLinks[componentName].component;
 }
 
-async function navTo(path: string, goal: string) {
+async function navTo(path: any, goal: string) {
   trackGoal(goal);
   router.push(path);
   emit('close');
@@ -105,7 +105,7 @@ function isChainsSupport(chains) {
 function mapNavLink(i) {
   return {
     label: t(i.text),
-    path: `/${networkSlug}/${i.path}`,
+    path: { name: i.name_link, params: { networkSlug } },
     goal: Goals[i.goal_key],
   };
 }
