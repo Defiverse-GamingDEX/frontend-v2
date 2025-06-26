@@ -9,6 +9,7 @@ import homestead from './homestead.json';
 import optimism from './optimism.json';
 import polygon from './polygon.json';
 import test from './test.json';
+import bscTestnet from './bsc-testnet.json';
 
 // network for bridge
 import avalancheTestnet from './avalanche-testnet.json';
@@ -83,6 +84,7 @@ export interface Config {
     faucet: string;
     gaugeRewardsHelper?: string;
     oracle?: string;
+    disperse?: string;
   };
   keys: {
     infura: string;
@@ -122,6 +124,7 @@ const config: Record<Network | number, Config> = {
   5555: chainverse,
   7225878: saakuru,
   43113: avalancheTestnet,
+  97: bscTestnet,
 };
 
 export default config;

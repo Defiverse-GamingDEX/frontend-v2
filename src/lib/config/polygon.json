@@ -29,7 +29,7 @@
   "nativeAsset": {
     "name": "Matic",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    "symbol": "MATIC",
+    "symbol": "POL",
     "decimals": 18,
     "deeplinkId": "matic",
     "logoURI": "tokens/matic.svg",
@@ -62,7 +62,8 @@
     "feeDistributor": "",
     "feeDistributorDeprecated": "",
     "faucet": "",
-    "gaugeRewardsHelper": "0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33"
+    "gaugeRewardsHelper": "0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33",
+    "disperse": "0xFE466D3573297181cf7E1368a9B9cB086F97afe5"
   },
   "keys": {
     "infura": "daaa68ec242643719749dd1caba2fc66",

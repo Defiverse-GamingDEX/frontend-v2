@@ -14,6 +14,7 @@ import networksSupport from '@/constants/networksToSelect';
 export interface NetworkOption {
   chainId: string;
   name: string;
+  logoURI: string;
 }
 
 // COMPOSABLES
@@ -65,7 +66,9 @@ function isActive(network: NetworkOption): boolean {
       <BalBtn color="white" :size="upToLargeBreakpoint ? 'md' : 'sm'">
         <img
           v-if="activeNetwork?.chainId"
-          :src="buildNetworkIconURL(activeNetwork.chainId)"
+          :src="
+            activeNetwork.logoURI || buildNetworkIconURL(activeNetwork.chainId)
+          "
           :alt="activeNetwork?.name || 'Unknown'"
           class="w-6 h-6 rounded-full"
         />
@@ -89,7 +92,7 @@ function isActive(network: NetworkOption): boolean {
       >
         <div class="flex items-center">
           <img
-            :src="buildNetworkIconURL(network.chainId)"
+            :src="network.logoURI || buildNetworkIconURL(network.chainId)"
             :alt="network.name"
             class="mr-2 w-6 h-6 rounded-full"
           />
