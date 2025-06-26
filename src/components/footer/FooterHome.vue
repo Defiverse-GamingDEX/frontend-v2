@@ -96,7 +96,7 @@
         <!-- /Community -->
       </div>
       <div class="pb-12 text-sm text-white dark:text-gray-400">
-        Version 1.89.11
+        Version {{ packageJson.version }}
       </div>
     </div>
   </footer>
@@ -117,6 +117,7 @@ import { NAV_LINKS } from '@/constants/navLinks';
 
 import useNetwork from '@/composables/useNetwork';
 import useConfig from '@/composables/useConfig';
+import packageJson from '../../../package.json';
 export default {
   components: {
     IconTwitter,
@@ -170,6 +171,7 @@ export default {
       isThirdPartyServicesModalVisible,
       link_nav: NAV_LINKS,
       networkConfig,
+      packageJson,
       links: [
         {
           label: 'gaming-dex.com',
