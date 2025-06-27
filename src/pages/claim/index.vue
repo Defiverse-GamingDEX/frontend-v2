@@ -155,11 +155,14 @@ const protocolRewardsDataDeprecated = computed((): ProtocolRewardRow[] => {
 const gaugesWithRewards = computed((): Gauge[] => {
   return gauges.value.filter(gauge => gauge.rewardTokens.length > 0);
 });
+console.log('🚀 ~ gaugesWithRewards ~ gaugesWithRewards:', gaugesWithRewards);
 
 const gaugeTables = computed((): GaugeTable[] => {
   // Only return gauges if we have a corresponding pool and rewards > 0
   return gaugesWithRewards.value.reduce<GaugeTable[]>((arr, gauge) => {
     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
+    console.log('poolAAA', pool);
+    console.log('🚀 ~ gaugeTables ~ gauge:', gauge);
     const totalRewardValue = Object.values(gauge.claimableRewards).reduce(
       (acc, reward) => acc.plus(reward),
       bnum(0)
