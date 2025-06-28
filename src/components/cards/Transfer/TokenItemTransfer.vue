@@ -1,0 +1,144 @@
+<script lang="ts">
+import anime from 'animejs';
+import { computed, onMounted, onUnmounted, PropType, ref } from 'vue';
+
+import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { useTokens } from '@/providers/tokens.provider';
+import { useUserSettings } from '@/providers/user-settings.provider';
+import { TokenInfo } from '@/types/TokenList';
+import AtfBadge from '@/components/badge/AtfBadge.vue';
+import VerifiedIcon from '@/assets/images/pools/verified.png';
+import YukichiIcon from '@/assets/images/pools/yukichi.png';
+export default {
+  name: 'TokenItemTransfer',
+  components: {
+    AtfBadge,
+  },
+  props: {
+    token: { type: Object as PropType<TokenInfo>, required: true },
+    balanceLoading: { type: Boolean, default: true },
+    hideBalance: { type: Boolean, default: false },
+    focussed: { type: Boolean, default: false },
+  },
+
+  setup(props) {
+    /**
+     * COMPOSABLES
+     */
+    const { fNum2 } = useNumbers();
+    const animateRef = ref();
+    const { balances, prices } = useTokens();
+    const { currency } = useUserSettings();
+
+    /**
+     * COMPUTED
+     */
+    const balance = computed(() => Number(balances.value[props.token.address]));
+    const price = computed(() =>
+      prices.value[props.token.address]
+        ? prices.value[props.token.address][currency.value]
+        : 0
+    );
+    const value = computed(() => balance.value * price.value);
+
+    function getNumber(num) {
+      return Number(num || 0);
+    }
+
+    /**
+     * CALLBACKS
+     */
+    onMounted(() => {
+      anime({
+        opacity: 1,
+        targets: animateRef.value,
+        delay: anime.stagger(100),
+      });
+    });
+
+    onUnmounted(() => {
+      anime({
+        opacity: 0,
+        targets: animateRef.value,
+      });
+    });
+
+    return {
+      fNum2,
+      FNumFormats,
+      animateRef,
+      balance,
+      value,
+      VerifiedIcon,
+      YukichiIcon,
+    };
+  },
+};
+</script>
+
+<template>
+  <div
+    ref="animateRef"
+    :class="[
+      `flex items-center py-3 border border-transparent  px-2 text-base
+  leading-5 opacity-0 highlight hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg`,
+      {
+        'bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-500':
+          focussed,
+      },
+    ]"
+  >
+    <BalAsset
+      :address="token.address"
+      :iconURI="token.logoURI"
+      :size="34"
+      class="mr-3"
+    />
+    <div
+      :class="['flex-auto', { 'text-blue-500 dark:text-blue-200': focussed }]"
+    >
+      <div class="flex items-center">
+        {{ token.symbol }}
+        <img
+          v-if="token?.owner == 'yukichi'"
+          width="24"
+          height="24"
+          :src="YukichiIcon"
+          class="ml-2"
+        />
+        <img
+          v-if="token?.owner == 'gamingdex'"
+          width="24"
+          height="24"
+          :src="VerifiedIcon"
+          class="ml-2"
+        />
+        <AtfBadge :address="token?.address" />
+      </div>
+      <div class="w-40 md:w-60 text-sm truncate text-gray">
+        {{ token.name }}
+      </div>
+    </div>
+    <span
+      v-if="!hideBalance"
+      class="flex flex-col items-end font-medium text-right"
+    >
+      <BalLoadingBlock v-if="balanceLoading" class="w-14 h-4" />
+      <template v-else>
+        <template v-if="Number(token?.balance || 0) > 0">
+          <template v-if="Number(token?.balance || 0) >= 0.0001">
+            {{ fNum2(Number(token?.balance || 0), FNumFormats.token) }}
+          </template>
+          <template v-else> &#60; 0.0001 </template>
+        </template>
+        <div
+          v-if="Number(token?.value || 0) > 0"
+          class="text-sm font-normal text-secondary"
+        >
+          {{ fNum2(Number(token?.value || 0), FNumFormats.fiat) }}
+        </div>
+      </template>
+    </span>
+  </div>
+</template>
+

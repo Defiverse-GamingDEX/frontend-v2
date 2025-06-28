@@ -1559,6 +1559,16 @@
     "SelectTheToken": "Select The Token",
     "SelectAToken": "Select a Token",
     "importToken": "Import Token",
+    "importERC20Token": "Import ERC20 Token",
+    "importBEP20Token": "Import BEP20 Token",
+    "tokenAddress": "Token address",
+    "import": "Import",
+    "pleaseEnterAddress": "Please enter address",
+    "tokenInfo": "Token Info",
+    "tokenNotFound": "Token not found",
+    "tokenAlreadyExists": "Token already exists",
+    "tokenImportFailed": "Token import failed",
+    "tokenAddedSuccess": "Token has been added to your local token list.",
     "": ""
   },
   "": ""

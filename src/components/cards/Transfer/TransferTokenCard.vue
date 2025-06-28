@@ -4,6 +4,14 @@
     shadow="none"
     noBorder
   >
+    <BalAlert
+      v-if="!isChainSupprt"
+      class="p-3 mb-4"
+      type="error"
+      size="sm"
+      :title="$t('unsupportedNetwork')"
+      block
+    />
     <div
       class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center"
     >
@@ -25,17 +33,18 @@
             {{ $t('transfer.SelectTheToken') }}
           </h6>
 
-          <SelectTokenForTransfer @on-selected="handleSelectedToken" />
+          <SelectTokenForTransfer
+            :chainId="chainId"
+            @on-selected="handleSelectedToken"
+          />
         </BalStack>
       </div>
       <div class="flex mt-4 md:mt-4 md:mr-10">
         <span class="mr-1"> {{ $t('balance') }}: </span>
-        <span class="font-semibold text-gray-700 min-w-40"
-          >{{ fNum2(balanceShow.value, FNumFormats.token)
-          }}<span class="text-gray-400"
-            >&nbsp;{{ balanceShow?.symbol }}</span
-          ></span
-        >
+        <span class="font-semibold text-gray-700 min-w-40">
+          {{ fNum2(balanceShow.value, FNumFormats.token) }}
+          <span class="text-gray-400"> &nbsp;{{ balanceShow?.symbol }}</span>
+        </span>
       </div>
     </div>
     <!--  -->
@@ -43,17 +52,18 @@
 </template>
 
 <script setup lang="ts">
+import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
+
 import useWeb3 from '@/services/web3/useWeb3';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-
-import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
+import { chainIdsForTransferToken } from '@/constants/networksToSelect';
 
 /**
  * STATE
  */
 const tokenType = ref('erc20');
 const selectedToken = ref<any>(null);
-
+const nativeBalance = ref('0');
 /**
  * COMPOSABLES
  */
@@ -72,7 +82,21 @@ const optionsTokenType = computed(() => {
   ];
 });
 
+const isChainSupprt = computed(() => {
+  return chainIdsForTransferToken.includes(Number(chainId.value));
+});
+
+const isNative = computed(() => {
+  return tokenType.value == 'native';
+});
+
 const balanceShow = computed(() => {
+  if (isNative.value) {
+    return {
+      value: nativeBalance.value || 0,
+      symbol: 'ETH',
+    };
+  }
   return {
     value: selectedToken.value?.balance || 0,
     symbol: selectedToken.value?.symbol,

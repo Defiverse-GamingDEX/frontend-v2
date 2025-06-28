@@ -17,4 +17,7 @@ export default {
     Toggled: 'tokenLists.toggled',
   },
   Transactions: 'transactions',
+  Transfer: {
+    TokenList: 'transfer.tokenList',
+  },
 };
