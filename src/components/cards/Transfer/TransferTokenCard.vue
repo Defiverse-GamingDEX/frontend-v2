@@ -1,9 +1,5 @@
 <template>
-  <BalCard
-    class="relative !overflow-visible card-container bg-blue"
-    shadow="none"
-    noBorder
-  >
+  <BalCard class="relative card-container bg-blue" shadow="none" noBorder>
     <BalAlert
       v-if="!isChainSupprt"
       class="p-3 mb-4"
@@ -24,7 +20,7 @@
         </BalStack>
         <!--  -->
         <BalStack
-          v-if="tokenType == 'erc20'"
+          v-show="tokenType == 'erc20'"
           spacing="xs"
           vertical
           class="mt-6"
@@ -48,27 +44,53 @@
       </div>
     </div>
     <!--  -->
+    <BalStack spacing="xs" vertical class="mt-6">
+      <h6 class="mb-1">
+        {{ $t('transfer.recipientsAndAmounts') }}
+      </h6>
+      <p class="mb-1 text-sm">
+        {{ $t('transfer.enterRecipientsAndAmounts') }}
+      </p>
+      <BalTextArea
+        v-model="recipients"
+        name="tokenAddressInput"
+        :placeholder="$t('transfer.placeholderRecipientsAndAmounts')"
+        size="sm"
+        sizeHeight="lg"
+        class="w-full"
+        :rules="[isRequired(), isAddresAndAmount(1, false)]"
+        validateOn="input"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+    </BalStack>
   </BalCard>
 </template>
 
 <script setup lang="ts">
 import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
 
-import useWeb3 from '@/services/web3/useWeb3';
+import useTransferTokens from '@/composables/transfer/useTransferTokens';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { chainIdsForTransferToken } from '@/constants/networksToSelect';
+import {
+  isAddresAndAmountCheck,
+  isRequired,
+  isAddresAndAmount,
+} from '@/lib/utils/validations';
 
 /**
  * STATE
  */
 const tokenType = ref('erc20');
 const selectedToken = ref<any>(null);
-const nativeBalance = ref('0');
+const nativeBalance = ref({ value: '0', symbol: '' });
+const recipients = ref('');
 /**
  * COMPOSABLES
  */
 
-const { chainId, account } = useWeb3();
+const { chainId, isChainSupprt, fetchNativeBalance } = useTransferTokens();
 const { fNum2 } = useNumbers();
 
 /**
@@ -82,20 +104,13 @@ const optionsTokenType = computed(() => {
   ];
 });
 
-const isChainSupprt = computed(() => {
-  return chainIdsForTransferToken.includes(Number(chainId.value));
-});
-
 const isNative = computed(() => {
   return tokenType.value == 'native';
 });
 
 const balanceShow = computed(() => {
   if (isNative.value) {
-    return {
-      value: nativeBalance.value || 0,
-      symbol: 'ETH',
-    };
+    return nativeBalance.value;
   }
   return {
     value: selectedToken.value?.balance || 0,
@@ -109,6 +124,19 @@ const balanceShow = computed(() => {
 function handleSelectedToken(token: any): void {
   selectedToken.value = { ...token };
 }
+
+/**
+ * WATCH
+ */
+watch(isNative, async val => {
+  if (val) {
+    nativeBalance.value = await fetchNativeBalance();
+  }
+});
+watch(recipients, async val => {
+  const valid = isAddresAndAmountCheck(val, 1, false);
+  console.log('------valid', valid);
+});
 </script>
 
 <style lang="scss" scoped>

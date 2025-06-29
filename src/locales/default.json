@@ -1550,6 +1550,7 @@
     "buyTokenBtn": "Buy",
     "comingSoon": "Coming Soon"
   },
+  "invalidFormat": "Invalid format",
   "transfer": {
     "transfer": "Transfer",
     "transferToken": "Transfer Token",
@@ -1569,6 +1570,9 @@
     "tokenAlreadyExists": "Token already exists",
     "tokenImportFailed": "Token import failed",
     "tokenAddedSuccess": "Token has been added to your local token list.",
+    "recipientsAndAmounts": "Recipients and amounts",
+    "enterRecipientsAndAmounts": "Enter one address and amount on each line. (Supports any format)",
+    "placeholderRecipientsAndAmounts": "Please enter address and amount\n address,000\n address,000\n ...",
     "": ""
   },
   "": ""

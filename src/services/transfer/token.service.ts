@@ -101,7 +101,7 @@ export default class TokenService {
     }
   }
 
-  private async fetchNativeBalance(
+  public async fetchNativeBalance(
     account: string,
     decimals: number
   ): Promise<string> {
@@ -109,7 +109,7 @@ export default class TokenService {
     return formatUnits(balance.toString(), decimals);
   }
 
-  private async fetchErc20Balance(
+  public async fetchErc20Balance(
     account: string,
     tokenAddress: string,
     decimals: number

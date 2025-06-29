@@ -1,6 +1,6 @@
 import { isAddress } from '@ethersproject/address';
 import numeral from 'numeral';
-
+import _ from 'lodash';
 import i18n from '@/plugins/i18n';
 
 import { bnum } from '.';
@@ -63,4 +63,55 @@ export function isGreaterThanOrEqualTo(min: number | string, msg = '') {
 }
 export function isValidAddressV2() {
   return v => !v || isAddress(v) || i18n.global.t('mustBeValidAddressV2');
+}
+
+export function isAddresAndAmountCheck(
+  text: string,
+  numAmount: number,
+  isAmountInteger: boolean
+) {
+  const lines = text.trim().split('\n');
+  let valid = true;
+  for (let index = 0; index < lines.length; index++) {
+    const s = lines[index];
+    if (_.isEmpty(_.trim(s))) {
+      valid = false;
+      break;
+    }
+    const pair = s.split(',');
+    if (!pair || pair.length !== numAmount + 1) {
+      valid = false;
+      break;
+    }
+    if (!isAddress(_.trim(pair[0]))) {
+      valid = false;
+      break;
+    }
+
+    // check amount
+    for (let jdx = 1; jdx <= numAmount; jdx++) {
+      let amount = bnum(0);
+      try {
+        amount = bnum(_.trim(pair[jdx]));
+      } catch (err) {
+        amount = bnum(0);
+      }
+      if (amount.isNaN() || amount.isLessThanOrEqualTo(0)) {
+        valid = false;
+        break;
+      }
+      if (isAmountInteger && amount.isInteger()) {
+        valid = false;
+        break;
+      }
+    }
+  }
+  return valid;
+}
+
+export function isAddresAndAmount(numAmount: number, isAmountInteger: boolean) {
+  return v =>
+    !v ||
+    isAddresAndAmountCheck(v, numAmount, isAmountInteger) ||
+    i18n.global.t('invalidFormat');
 }
