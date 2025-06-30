@@ -14,7 +14,7 @@
             <span class="text-xs balance-value">{{ pool?.amountSZ }}</span>
             sZ
           </div>
-          <div class="text-base text-right balance-label">
+          <!-- <div class="text-base text-right balance-label">
             Redeemable balance:
             <span class="text-base balance-value">
               {{
@@ -22,7 +22,7 @@
               }}</span
             >
             sZ
-          </div>
+          </div> -->
         </div>
         <div class="relative input-control">
           <input
