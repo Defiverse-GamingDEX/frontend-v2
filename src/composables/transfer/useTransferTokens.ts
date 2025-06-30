@@ -1,15 +1,11 @@
 import { computed } from 'vue';
-import { getAddress, isAddress } from '@ethersproject/address';
-import { TokenInfo, TokenInfoMap } from '@/types/TokenList';
-import { BalanceMap } from '@/services/token/concerns/balances.concern';
-import useTokenListsByChainId from './useTokenListsByChainId';
-import useTokensLocal from './useTokensLocal';
-import useBalancesCurrentConnectQuery from '@/composables/queries/useBalancesCurrentConnectQuery';
+import { TokenInfo } from '@/types/TokenList';
 
 import { chainIdsForTransferToken } from '@/constants/networksToSelect';
 import configs from '@/lib/config';
 import useWeb3 from '@/services/web3/useWeb3';
 import TokenService from '@/services/transfer/token.service';
+import { isRowCheck, validColType } from '@/lib/utils/validations';
 
 /**
  * TYPES
@@ -20,6 +16,10 @@ declare module '@/types/TokenList' {
     balance?: string;
     value?: number;
   }
+}
+export interface ValueTextAreaType {
+  isValid: boolean;
+  value: string[];
 }
 
 export default function useTransferTokens() {
@@ -59,10 +59,33 @@ export default function useTransferTokens() {
     return { ...token, balance };
   }
 
+  function convertValueTextArea(
+    text: string,
+    validCol: validColType
+  ): ValueTextAreaType[] {
+    if (!text.trim()) return [];
+    const lines = text.trim().split('\n');
+    const rows: ValueTextAreaType[] = [];
+    for (let index = 0; index < lines.length; index++) {
+      const row = lines[index];
+      const pairs = row
+        .trim()
+        .split(',')
+        ?.map(i => i.trim());
+
+      rows.push({
+        isValid: isRowCheck(row, validCol),
+        value: pairs,
+      });
+    }
+    return rows;
+  }
+
   return {
     chainId,
     isChainSupprt,
     fetchNativeBalance,
     fetchErc20Balance,
+    convertValueTextArea,
   };
 }

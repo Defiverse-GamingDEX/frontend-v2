@@ -1,7 +1,7 @@
 <template>
   <BalCard class="relative card-container bg-blue" shadow="none" noBorder>
     <BalAlert
-      v-if="!chainId"
+      v-if="!isWalletReady"
       class="p-3 mb-4"
       type="error"
       size="md"
@@ -19,7 +19,7 @@
     <div
       class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center"
     >
-      <div>
+      <div class="flex-1">
         <BalStack spacing="xs" vertical>
           <h6 class="mb-1">
             {{ $t('transfer.tokenType') }}
@@ -39,6 +39,7 @@
 
           <SelectTokenForTransfer
             :chainId="chainId"
+            :selectedToken="selectedToken"
             @on-selected="handleSelectedToken"
           />
         </BalStack>
@@ -73,18 +74,48 @@
         spellcheck="false"
       />
     </BalStack>
+    <!--  -->
+    <BalStack v-if="recipientsValues.length" spacing="xs" vertical class="mt-6">
+      <ValuesConfirmTransfer
+        :data="recipientsValues"
+        :headers="['address', 'amount']"
+        :symbol="balanceShow?.symbol"
+        :total="amountTotal"
+        :remaining="amountRemaining"
+      />
+    </BalStack>
+    <div class="m-auto mt-6 mb-6 max-w-sm">
+      <BalBtn
+        v-if="!isWalletReady"
+        :label="$t('connectWallet')"
+        color="gradient"
+        block
+        @click="startConnectWithInjectedProvider"
+      />
+      <BalBtn
+        v-else
+        :label="$t('preview')"
+        classCustom="pink-white-shadow"
+        block
+        :disabled="submissionDisabled"
+        @click="showPreviewModal = true"
+      />
+    </div>
   </BalCard>
 </template>
 
 <script setup lang="ts">
 import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
-
-import useTransferTokens from '@/composables/transfer/useTransferTokens';
+import ValuesConfirmTransfer from './ValuesConfirmTransfer.vue';
+import { bnum } from '@/lib/utils';
+import useTransferTokens, {
+  ValueTextAreaType,
+} from '@/composables/transfer/useTransferTokens';
+import useWeb3 from '@/services/web3/useWeb3';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import {
   isRequired,
   isRowsTextArea,
-  isRowsCheck,
   validColType,
 } from '@/lib/utils/validations';
 
@@ -94,13 +125,19 @@ import {
 const tokenType = ref('erc20');
 const selectedToken = ref<any>(null);
 const nativeBalance = ref({ value: '0', symbol: '' });
-const recipients = ref('');
+// const recipients = ref('');
+const recipients = ref('0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE, 1');
+const recipientsValues = ref<ValueTextAreaType[]>([]);
+const amountTotal = ref('0');
 const ruleCol = { 0: ['isAddress'], 1: ['isAmount'] } as validColType;
+const showPreviewModal = ref(false);
 
 /**
  * COMPOSABLES
  */
-const { chainId, isChainSupprt, fetchNativeBalance } = useTransferTokens();
+const { chainId, isChainSupprt, fetchNativeBalance, convertValueTextArea } =
+  useTransferTokens();
+const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 const { fNum2 } = useNumbers();
 
 /**
@@ -128,11 +165,25 @@ const balanceShow = computed(() => {
   };
 });
 
+const amountRemaining = computed(() => {
+  return bnum(balanceShow?.value.value || 0)
+    .minus(amountTotal.value)
+    .toString();
+});
+
+const submissionDisabled = computed(() => {
+  return (
+    recipientsValues.value?.length <= 0 ||
+    bnum(balanceShow?.value.value).isLessThanOrEqualTo(0) ||
+    bnum(amountRemaining.value).isLessThanOrEqualTo(0)
+  );
+});
+
 /**
  * FUNCTIONS
  */
 function handleSelectedToken(token: any): void {
-  selectedToken.value = { ...token };
+  selectedToken.value = token;
 }
 
 /**
@@ -144,17 +195,11 @@ watch(isNative, async val => {
   }
 });
 watch(recipients, async val => {
-  const valid = isRowsCheck(val, ruleCol);
-  console.log('------valid', valid);
+  const rows = convertValueTextArea(val, ruleCol);
+  recipientsValues.value = rows;
+  amountTotal.value = rows
+    .reduce((totalValue, { value }) => totalValue.plus(value[1] ?? 0), bnum(0))
+    .toString();
 });
 </script>
 
-<style lang="scss" scoped>
-.btn-select-token {
-  :deep {
-    .content {
-      @apply justify-between;
-    }
-  }
-}
-</style>

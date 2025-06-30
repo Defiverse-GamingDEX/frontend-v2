@@ -1551,6 +1551,9 @@
     "comingSoon": "Coming Soon"
   },
   "invalidFormat": "Invalid format",
+  "address": "Address",
+  "remaining": "Remaining",
+  "orderNumberText": "No.",
   "transfer": {
     "transfer": "Transfer",
     "transferToken": "Transfer Token",

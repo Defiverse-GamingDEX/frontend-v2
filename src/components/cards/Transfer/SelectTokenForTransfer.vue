@@ -3,7 +3,7 @@
     <BalBtn
       outline
       size="md"
-      class="w-60 btn-select-token"
+      class="w-full max-w-xs btn-select-token"
       color="gray"
       :disabled="!chainId"
       @click="onOpenSelectTokenModal"
@@ -16,7 +16,7 @@
           class="mr-2"
         />
         <span class="text-lg text-gray-700 truncate">{{
-          truncateText(selectedToken?.name || selectedToken?.symbol, 16, 14, 0)
+          truncateText(selectedToken?.name || selectedToken?.symbol, 16, 20, 0)
         }}</span>
       </div>
       <span v-else class="text-lg text-gray-700">{{
@@ -47,10 +47,12 @@ import { truncateText } from '@/plugins/utils.js';
 
 interface Props {
   chainId: number;
+  selectedToken: any;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   chainId: 0,
+  selectedToken: null,
 });
 
 /**
@@ -63,7 +65,7 @@ const emit = defineEmits<{
 /**
  * STATE
  */
-const selectedToken = ref<any>(null);
+
 const openSelectTokenModal = ref(false);
 const { chainId } = toRefs(props);
 
@@ -71,9 +73,7 @@ const { chainId } = toRefs(props);
  * FUNCTIONS
  */
 function handleSelectedToken(token: any): void {
-  console.log('-------token', token);
-  selectedToken.value = token ? { ...token } : null;
-  emit('onSelected', token);
+  emit('onSelected', token ? { ...token } : null);
 }
 
 function onOpenSelectTokenModal(): void {

@@ -74,8 +74,8 @@ export type validColType = Record<number, ValidatorName[]>;
  * @returns
  */
 export function isRowCheck(rowText: string, validCol: validColType) {
-  const s = rowText;
-  if (_.isEmpty(_.trim(s))) {
+  const s = _.trim(rowText);
+  if (_.isEmpty(s)) {
     return false;
   }
   const numCol = Object.keys(validCol).length;
