@@ -154,14 +154,11 @@ const protocolRewardsDataDeprecated = computed((): ProtocolRewardRow[] => {
 const gaugesWithRewards = computed((): Gauge[] => {
   return gauges.value.filter(gauge => gauge.rewardTokens.length > 0);
 });
-console.log('🚀 ~ gaugesWithRewards ~ gaugesWithRewards:', gaugesWithRewards);
 
 const gaugeTables = computed((): GaugeTable[] => {
   // Only return gauges if we have a corresponding pool and rewards > 0
   return gaugesWithRewards.value.reduce<GaugeTable[]>((arr, gauge) => {
     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
-    console.log('poolAAA', pool);
-    console.log('🚀 ~ gaugeTables ~ gauge:', gauge);
     const totalRewardValue = Object.values(gauge.claimableRewards).reduce(
       (acc, reward) => acc.plus(reward),
       bnum(0)
@@ -281,7 +278,7 @@ onBeforeMount(async () => {
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
-                  Z {{ $t('incentives') }}
+                  sZ {{ $t('incentives') }}
                 </h3>
                 <BalTooltip
                   iconSize="xs"
