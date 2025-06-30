@@ -1,10 +1,18 @@
 <template>
   <BalCard class="relative card-container bg-blue" shadow="none" noBorder>
     <BalAlert
-      v-if="!isChainSupprt"
+      v-if="!chainId"
       class="p-3 mb-4"
       type="error"
-      size="sm"
+      size="md"
+      :title="$t('connectYourWallet')"
+      block
+    />
+    <BalAlert
+      v-else-if="!isChainSupprt"
+      class="p-3 mb-4"
+      type="error"
+      size="md"
       :title="$t('unsupportedNetwork')"
       block
     />
@@ -58,7 +66,7 @@
         size="sm"
         sizeHeight="lg"
         class="w-full"
-        :rules="[isRequired(), isAddresAndAmount(1, false)]"
+        :rules="[isRequired(), isRowsTextArea(ruleCol)]"
         validateOn="input"
         autocomplete="off"
         autocorrect="off"
@@ -74,9 +82,10 @@ import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
 import useTransferTokens from '@/composables/transfer/useTransferTokens';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import {
-  isAddresAndAmountCheck,
   isRequired,
-  isAddresAndAmount,
+  isRowsTextArea,
+  isRowsCheck,
+  validColType,
 } from '@/lib/utils/validations';
 
 /**
@@ -86,10 +95,11 @@ const tokenType = ref('erc20');
 const selectedToken = ref<any>(null);
 const nativeBalance = ref({ value: '0', symbol: '' });
 const recipients = ref('');
+const ruleCol = { 0: ['isAddress'], 1: ['isAmount'] } as validColType;
+
 /**
  * COMPOSABLES
  */
-
 const { chainId, isChainSupprt, fetchNativeBalance } = useTransferTokens();
 const { fNum2 } = useNumbers();
 
@@ -134,7 +144,7 @@ watch(isNative, async val => {
   }
 });
 watch(recipients, async val => {
-  const valid = isAddresAndAmountCheck(val, 1, false);
+  const valid = isRowsCheck(val, ruleCol);
   console.log('------valid', valid);
 });
 </script>

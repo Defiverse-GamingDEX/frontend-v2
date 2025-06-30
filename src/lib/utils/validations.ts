@@ -65,53 +65,66 @@ export function isValidAddressV2() {
   return v => !v || isAddress(v) || i18n.global.t('mustBeValidAddressV2');
 }
 
-export function isAddresAndAmountCheck(
-  text: string,
-  numAmount: number,
-  isAmountInteger: boolean
-) {
+export type ValidatorName = 'isAddress' | 'isAmount' | 'isInteger';
+export type validColType = Record<number, ValidatorName[]>;
+/**
+ *
+ * @param rowText
+ * @param validCol: Ex {0: ['isAddress'], 1: ['isAmount'], ...}
+ * @returns
+ */
+export function isRowCheck(rowText: string, validCol: validColType) {
+  const s = rowText;
+  if (_.isEmpty(_.trim(s))) {
+    return false;
+  }
+  const numCol = Object.keys(validCol).length;
+  const pair = s.split(',');
+  if (!pair || pair.length !== numCol) {
+    return false;
+  }
+  let valid = true;
+  for (let idx = 0; idx < numCol; idx++) {
+    const val = _.trim(pair[idx]);
+    const amountVal = bnum(val) ?? bnum(0);
+    const rules = validCol[idx];
+    if (_.isEmpty(val)) {
+      valid = false;
+      break;
+    }
+    rules.forEach(rule => {
+      if (rule === 'isAddress' && !isAddress(val)) {
+        valid = false;
+      }
+      if (
+        rule === 'isAmount' &&
+        (amountVal.isNaN() || amountVal.isLessThanOrEqualTo(0))
+      ) {
+        valid = false;
+      }
+      if (
+        rule === 'isInteger' &&
+        (amountVal.isNaN() || !amountVal.isInteger())
+      ) {
+        valid = false;
+      }
+    });
+  }
+  return valid;
+}
+
+export function isRowsCheck(text: string, validCol: validColType) {
   const lines = text.trim().split('\n');
   let valid = true;
   for (let index = 0; index < lines.length; index++) {
-    const s = lines[index];
-    if (_.isEmpty(_.trim(s))) {
+    if (!isRowCheck(lines[index], validCol)) {
       valid = false;
       break;
-    }
-    const pair = s.split(',');
-    if (!pair || pair.length !== numAmount + 1) {
-      valid = false;
-      break;
-    }
-    if (!isAddress(_.trim(pair[0]))) {
-      valid = false;
-      break;
-    }
-
-    // check amount
-    for (let jdx = 1; jdx <= numAmount; jdx++) {
-      let amount = bnum(0);
-      try {
-        amount = bnum(_.trim(pair[jdx]));
-      } catch (err) {
-        amount = bnum(0);
-      }
-      if (amount.isNaN() || amount.isLessThanOrEqualTo(0)) {
-        valid = false;
-        break;
-      }
-      if (isAmountInteger && amount.isInteger()) {
-        valid = false;
-        break;
-      }
     }
   }
   return valid;
 }
 
-export function isAddresAndAmount(numAmount: number, isAmountInteger: boolean) {
-  return v =>
-    !v ||
-    isAddresAndAmountCheck(v, numAmount, isAmountInteger) ||
-    i18n.global.t('invalidFormat');
+export function isRowsTextArea(validCol: validColType) {
+  return v => !v || isRowsCheck(v, validCol) || i18n.global.t('invalidFormat');
 }

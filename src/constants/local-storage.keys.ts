@@ -18,6 +18,8 @@ export default {
   },
   Transactions: 'transactions',
   Transfer: {
-    TokenList: 'transfer.tokenList',
+    erc20: 'transfer.ERC20',
+    erc721: 'transfer.ERC721',
+    erc1155: 'transfer.ERC1155',
   },
 };

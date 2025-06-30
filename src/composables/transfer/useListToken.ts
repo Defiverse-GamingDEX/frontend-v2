@@ -23,7 +23,7 @@ export default function useTransferTokens() {
   /**
    * COMPOSABLES + COMPUTED
    */
-  const { tokenListLocal } = useTokensLocal();
+  const { erc20 } = useTokensLocal();
   const { data: tokenListBe, isLoading: isLoadingTokenListBe } =
     useTokenListsByChainId(chainId, {
       staleTime: 5000 * 60, // cache 5 min
@@ -31,7 +31,7 @@ export default function useTransferTokens() {
 
   const tokens = computed((): TokenInfoMap => {
     return {
-      ...mapTokenListTokens(tokenListLocal.value || []),
+      ...mapTokenListTokens(erc20.value || []),
       ...mapTokenListTokens(tokenListBe.value?.tokens || []),
     };
   });
