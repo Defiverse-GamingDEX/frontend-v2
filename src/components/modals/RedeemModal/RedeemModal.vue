@@ -11,7 +11,11 @@
         <div class="flex flex-col justify-end items-end mb-1 balance-content">
           <div class="text-xs text-right balance-label">
             Staked balance :
-            <span class="text-xs balance-value">{{ pool?.amountSZ }}</span>
+            <span
+              class="text-xs hover:underline cursor-pointer balance-value"
+              @click="setMaxAmount"
+              >{{ pool?.amountSZ }}</span
+            >
             sZ
           </div>
           <!-- <div class="text-base text-right balance-label">
@@ -159,9 +163,9 @@ const emit = defineEmits(['close', 'redeem']);
  * STATES
  */
 const redeemableBalance = ref(0);
-const penaltyRate = ref(0);
+const penaltyRate = ref<number | string>(0);
 const estimateZRate = ref<number | string>(0);
-const amount = ref('');
+const amount = ref(0);
 const receiveAmount = ref<number | ''>('');
 const validate = ref({
   isError: false,
@@ -197,58 +201,74 @@ const STAKE_Z_NETWORK = computed(() => {
 /**
  * FUNCTIONS
  */
-const getRedeemableBalance = async () => {
+// const getRedeemableBalance = async () => {
+//   try {
+//     const provider = getProvider();
+//     let balance = await getRedeemableAmount_SZ({
+//       provider: provider,
+//       walletAddress: account.value,
+//       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+//       stakeId: props.pool?.id,
+//     });
+//     balance = BigNumber(balance)
+//       .div(10 ** Number(STAKE_Z_NETWORK.value?.sz_token_decimals))
+//       .toFixed();
+//     redeemableBalance.value = balance;
+//     console.log(
+//       '🚀 ~ getRedeemableBalance ~ redeemableBalance.value:',
+//       redeemableBalance.value
+//     );
+//   } catch (error) {
+//     console.log(error, 'getRedeemableBalance=>error');
+//     redeemableBalance.value = 0;
+//   }
+// };
+// const getPenaltyRate = async () => {
+//   try {
+//     const provider = getProvider();
+//     let penalty = await getEarlyRedeemPenalty({
+//       provider: provider,
+//       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+//     });
+//     if (penalty) {
+//       console.log('🚀 ~ getPenaltyRate ~ penalty:', penalty);
+//       penalty = BigNumber(penalty).div(1e4).toFixed(0);
+//     }
+//     penaltyRate.value = penalty;
+//     console.log('🚀 ~ getPenatyRate ~ penaltyRate.value:', penaltyRate.value);
+//   } catch (error) {
+//     console.log(error, 'getPenatyRate=>error');
+//     penaltyRate.value = 0;
+//   }
+// };
+const getEstimateZRate = async (amountInput: number) => {
   try {
+    console.log('🚀 ~ getEstimateZRate ~ pool:', props.pool);
+    const stakeId = props.pool?.id;
     const provider = getProvider();
-    let balance = await getRedeemableAmount_SZ({
-      provider: provider,
-      walletAddress: account.value,
-      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-      stakeId: props.pool?.id,
-    });
-    balance = BigNumber(balance)
-      .div(10 ** Number(STAKE_Z_NETWORK.value?.sz_token_decimals))
-      .toFixed();
-    redeemableBalance.value = balance;
-    console.log(
-      '🚀 ~ getRedeemableBalance ~ redeemableBalance.value:',
-      redeemableBalance.value
-    );
-  } catch (error) {
-    console.log(error, 'getRedeemableBalance=>error');
-    redeemableBalance.value = 0;
-  }
-};
-const getPenaltyRate = async () => {
-  try {
-    const provider = getProvider();
-    let penalty = await getEarlyRedeemPenalty({
-      provider: provider,
-      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-    });
-    if (penalty) {
-      console.log('🚀 ~ getPenaltyRate ~ penalty:', penalty);
-      penalty = BigNumber(penalty).div(1e4).toFixed(0);
-    }
-    penaltyRate.value = penalty;
-    console.log('🚀 ~ getPenatyRate ~ penaltyRate.value:', penaltyRate.value);
-  } catch (error) {
-    console.log(error, 'getPenatyRate=>error');
-    penaltyRate.value = 0;
-  }
-};
-const getEstimateZRate = async () => {
-  try {
-    const provider = getProvider();
-    const amount = BigNumber(1)
+    const amount = BigNumber(amountInput || 0)
       .times(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
       .toFixed(0);
-    const rate = await getEstimateZAmount({
+    const rs = await getEstimateZAmount({
       provider: provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       amount: amount,
+      stakeId: stakeId,
+      account: account.value,
     });
-    estimateZRate.value = BigNumber(rate)
+    console.log('🚀 ~ getEstimateZRate ~ rs:', rs);
+    const { redemptionRate, zAmount } = rs;
+    // Format penaltyRate to remove trailing zeros
+    const rateNum = BigNumber(redemptionRate?.toString() || 0).div(1e4);
+    const rateStr = rateNum.toFixed(2);
+    penaltyRate.value = rateStr.endsWith('.00')
+      ? rateStr.slice(0, -3)
+      : rateStr;
+    console.log(
+      '🚀 ~ getEstimateZRate ~ penaltyRate.value :',
+      penaltyRate.value
+    );
+    estimateZRate.value = BigNumber(zAmount?.toString() || 0)
       .div(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
       .toFixed();
     console.log(
@@ -324,9 +344,8 @@ const handleApprove = async () => {
 };
 const fetchData = async () => {
   try {
-    getRedeemableBalance();
-    getPenaltyRate();
-    getEstimateZRate();
+    //getRedeemableBalance();
+    getEstimateZRate(1);
   } catch (error) {
     console.log('🚀 ~ error:', error);
   }
@@ -335,7 +354,7 @@ const delayinputChange = debounce(async event => {
   handleAmountChange(event);
 }, 500);
 const checkValidateAmount = () => {
-  if (Number(amount?.value) > Number(redeemableBalance?.value)) {
+  if (Number(amount?.value) > Number(props.pool?.amountSZ)) {
     validate.value = {
       isError: true,
       message: 'Insufficient balance',
@@ -347,6 +366,19 @@ const checkValidateAmount = () => {
     message: '',
   };
 };
+const calculateReceiveAmount = () => {
+  try {
+    const calculatedAmount = BigNumber(Number(amount?.value))
+      .times(Number(estimateZRate?.value || 0))
+      .toNumber();
+    receiveAmount.value = calculatedAmount;
+
+    checkValidateAmount();
+  } catch (error) {
+    console.error('Error calculating receive amount:', error);
+    receiveAmount.value = 0;
+  }
+};
 const handleAmountChange = async event => {
   console.log('🚀 ~ event:', event);
   amount.value = event.target.value;
@@ -354,17 +386,7 @@ const handleAmountChange = async event => {
     receiveAmount.value = 0;
     return;
   }
-
-  try {
-    const calculatedAmount = BigNumber(Number(amount?.value))
-      .times(Number(estimateZRate?.value || 0))
-      .toNumber();
-    receiveAmount.value = calculatedAmount;
-    checkValidateAmount();
-  } catch (error) {
-    console.error('Error calculating receive amount:', error);
-    receiveAmount.value = 0;
-  }
+  calculateReceiveAmount();
 };
 
 const handleRedeem = async () => {
@@ -417,6 +439,10 @@ const handleRedeem = async () => {
       message: error?.message ? error.message : JSON.stringify(error),
     });
   }
+};
+const setMaxAmount = () => {
+  amount.value = props.pool?.amountSZ;
+  calculateReceiveAmount();
 };
 /**
  * LIFE CYCLES

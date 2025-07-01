@@ -38,10 +38,13 @@ const getEstimateZAmount = async ({
   abi,
   contractAddress,
   amount,
+  stakeId,
+  account,
 }) => {
   const myContract = new Contract(contractAddress, abi, provider);
-  const estimateZAmount = await myContract.estimateZ(amount);
-  return estimateZAmount?.toString() || 0;
+  const rs = await myContract.calcReceivedZ(account, amount, stakeId);
+  console.log('🚀 ~ stakeZService ~ calcReceivedZ: ', rs);
+  return rs || null;
 };
 const getAllRedeemableAmount_SZ = async ({
   provider,
