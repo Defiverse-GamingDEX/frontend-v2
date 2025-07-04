@@ -1,10 +1,10 @@
 import { TransactionResponse } from '@ethersproject/providers';
 import { computed, Ref, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { approveTokens } from '@/lib/utils/balancer/tokens';
 import { bnum } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
 import { ExtendedTokenInfo } from '@/types/TokenList';
+import TokenService from '@/services/transfer/token.service';
 
 import useEthers from '../useEthers';
 import useTransactions from '../useTransactions';
@@ -22,14 +22,13 @@ export default function useTokenApproval(
   const tmpApproved = ref(false);
   const approveAmount = ref('0');
 
-  const { addTransaction } = useTransactions();
-  const { t } = useI18n();
-
   /**
    * COMPOSABLES
    */
-  const { getProvider } = useWeb3();
+  const { account, getProvider } = useWeb3();
   const { txListener } = useEthers();
+  const { addTransaction } = useTransactions();
+  const { t } = useI18n();
 
   /**
    * COMPUTED
@@ -47,13 +46,23 @@ export default function useTokenApproval(
   /**
    * METHODS
    */
+  function _tokenService() {
+    const provider = getProvider();
+    return new TokenService(provider);
+  }
+
   async function checkApprove(): Promise<void> {
     try {
       if (token.value.type === 'native') {
         return;
       }
       if (token.value.type === 'erc20') {
-        approveAmount.value = '0';
+        approveAmount.value = await _tokenService().fetchErc20Allowance(
+          account.value,
+          spender.value,
+          token.value.address,
+          token.value.decimals
+        );
       }
       if (token.value.type === 'erc721') {
         approveAmount.value = '0';
@@ -62,16 +71,34 @@ export default function useTokenApproval(
         approveAmount.value = '0';
       }
     } catch (error) {
+      console.log('------approveAmount.error', error);
       approveAmount.value = '0';
+    }
+  }
+
+  async function approveToken(): Promise<TransactionResponse | undefined> {
+    if (token.value.type === 'native') {
+      return;
+    }
+    if (token.value.type === 'erc20') {
+      return approveErc20();
+    }
+    if (token.value.type === 'erc721') {
+      // TODO
+    }
+    if (token.value.type === 'erc1155') {
+      // TODO
     }
   }
 
   async function approveErc20(): Promise<TransactionResponse> {
     approving.value = true;
     try {
-      const [tx] = await approveTokens(getProvider(), spender.value, [
-        token.value.address,
-      ]);
+      const tx = await _tokenService().approveTokenErc20(
+        spender.value,
+        token.value.address
+      );
+
       txHandler(tx, spender.value);
       return tx;
     } catch (e) {
@@ -94,15 +121,19 @@ export default function useTokenApproval(
     });
 
     txListener(tx, {
-      onTxConfirmed: () => {
+      onTxConfirmed: async () => {
+        await checkApprove();
         approving.value = false;
-        tmpApproved.value = true;
       },
       onTxFailed: () => {
         approving.value = false;
       },
     });
   }
+
+  onMounted(() => {
+    checkApprove();
+  });
 
   /**
    * WATCHERS
@@ -113,6 +144,7 @@ export default function useTokenApproval(
   return {
     approved,
     approving,
+    approveToken,
     approveErc20,
   };
 }

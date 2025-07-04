@@ -1345,6 +1345,7 @@
     "approve": "Approve",
     "depositTokens": "Deposit tokens",
     "transfer": "Transfer",
+    "batchTransfer": "Transfer",
     "claim": "Claim",
     "createPool": "Create pool",
     "drip": "Drip",
@@ -1554,6 +1555,8 @@
   "address": "Address",
   "remaining": "Remaining",
   "orderNumberText": "No.",
+  "sending": "Sending",
+  "sent": "Sent",
   "transfer": {
     "transfer": "Transfer",
     "transferToken": "Transfer Token",
@@ -1576,6 +1579,22 @@
     "recipientsAndAmounts": "Recipients and amounts",
     "enterRecipientsAndAmounts": "Enter one address and amount on each line. (Supports any format)",
     "placeholderRecipientsAndAmounts": "Please enter address and amount\n address,000\n address,000\n ...",
+    "approveForTransfer": "Approve {0} for transfer",
+    "transferSuccess": "Transfer successful!",
+    "transactionTypesTooltips": {
+      "tokenApproval": {
+        "content": "You must approve this token before transferring",
+        "title": "Approve {0}"
+      },
+      "nftApproval": {
+        "content": "Approval is required to transfer this NFT.",
+        "title": "Approve {0}"
+      },
+      "transfer": {
+        "content": "Finalize the transaction by submitting it for inclusion on the blockchain.",
+        "title": "Confirm transaction"
+      }
+    },
     "": ""
   },
   "": ""

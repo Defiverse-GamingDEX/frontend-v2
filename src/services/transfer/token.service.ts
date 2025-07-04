@@ -2,12 +2,15 @@ import { TokenInfo, TokenInfoMap } from '@/types/TokenList';
 import { BalanceMap } from '@/services/token/concerns/balances.concern';
 import { getAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
+import { MaxUint256 } from '@ethersproject/constants';
 import { includesAddress, isSameAddress } from '@/lib/utils';
 import { Contract } from '@ethersproject/contracts';
-import { Web3Provider } from '@ethersproject/providers';
+import { Web3Provider, TransactionResponse } from '@ethersproject/providers';
 import TokenServiceCustom from '@/services/token/token.service.custom';
 import ConfigServiceCustom from '@/services/config/config.service.custom';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
+import { default as DisperseABI } from '@/lib/abi//Disperse.json';
+import { Transaction } from './transaction';
 
 export default class TokenService {
   constructor(private readonly provider: Web3Provider) {}
@@ -117,5 +120,58 @@ export default class TokenService {
     const tokenContract = new Contract(tokenAddress, ERC20ABI, this.provider);
     const balance = await tokenContract.balanceOf(account);
     return formatUnits(balance.toString(), decimals);
+  }
+
+  public async fetchErc20Allowance(
+    account: string,
+    spender: string,
+    tokenAddress: string,
+    decimals: number
+  ): Promise<string> {
+    const tokenContract = new Contract(tokenAddress, ERC20ABI, this.provider);
+    const allowance = await tokenContract.allowance(account, spender);
+    return formatUnits(allowance.toString(), decimals);
+  }
+
+  private overrides = {
+    137: {
+      maxFeePerGas: '300000000000',
+      maxPriorityFeePerGas: '300000000000',
+    },
+    80001: {
+      maxFeePerGas: '300000000000',
+      maxPriorityFeePerGas: '300000000000',
+    },
+  };
+
+  public async approveTokenErc20(
+    spender: string,
+    token: string
+  ): Promise<TransactionResponse> {
+    const transaction = new Transaction(this.provider.getSigner());
+    return await transaction.sendTransaction({
+      contractAddress: token,
+      abi: ERC20ABI,
+      action: 'approve',
+      params: [spender, MaxUint256.toString()],
+    });
+  }
+
+  public async disperseToken(
+    contractAddress: string,
+    token: string,
+    recipients: string[],
+    amounts: string[]
+  ) {
+    const transaction = new Transaction(this.provider.getSigner());
+    const network = await this.provider.getNetwork();
+    const chainId = network?.chainId;
+    return await transaction.sendTransaction({
+      contractAddress: contractAddress,
+      abi: DisperseABI,
+      action: 'disperseTokenSimple',
+      params: [token, recipients, amounts],
+      options: this.overrides[chainId] || {},
+    });
   }
 }

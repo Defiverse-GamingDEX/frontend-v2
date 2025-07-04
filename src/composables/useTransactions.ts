@@ -37,6 +37,7 @@ export type TransactionAction =
   | 'claim'
   | 'approve'
   | 'transfer'
+  | 'batchTransfer'
   | 'depositTokens'
   | 'swap'
   | 'wrap'
@@ -270,6 +271,7 @@ export default function useTransactions() {
     explorerLinks,
     getProvider: getWeb3Provider,
     blockNumber,
+    explorerLinkUser,
   } = useWeb3();
   const { addNotification } = useNotifications();
   const { t } = useI18n();
@@ -425,6 +427,8 @@ export default function useTransactions() {
           explorerLink:
             transaction.action === 'bridge'
               ? ''
+              : transaction.action === 'batchTransfer'
+              ? explorerLinkUser.txLink(transaction.id)
               : getExplorerLink(transaction.id, transaction.type),
         },
       });

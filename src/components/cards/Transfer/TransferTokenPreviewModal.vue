@@ -60,39 +60,44 @@ const amount = toRef(props, 'amount');
 const addressContract = toRef(props, 'addressContract');
 const loadingTransfer = ref(false);
 
-const { approved, approving, approveErc20 } = useTokenApproval(
+const { approved, approving, approveToken } = useTokenApproval(
   token,
   amount,
   addressContract,
-  'sssss'
+  'transfer.approveForTransfer'
 );
+
+const { transferTokenErc20 } = useTransferTokens();
 const { t } = useI18n();
 
 const actions = computed(() => {
   return [
-    ...(approved
+    ...(approved.value
       ? []
       : [
           {
-            label: t('approveCowswapRelayer'),
-            loadingLabel: t('approvingCowswapRelayer'),
-            confirmingLabel: t('approveCowswapRelayer'),
-            action: approveErc20,
+            label: `${t('approve')} ${token.value.symbol}`,
+            loadingLabel: `${t('approving')} ${token.value.symbol}...`,
+            confirmingLabel: `${t('confirming')} ${token.value.symbol}`,
+            action: approveToken,
             stepTooltip: t(
-              'swapSummary.transactionTypesTooltips.cowswapRelayerApproval.content'
+              'transfer.transactionTypesTooltips.tokenApproval.content'
             ),
           },
         ]),
     {
-      label: t('approveCowswapRelayer'),
-      loadingLabel: t('approvingCowswapRelayer'),
-      confirmingLabel: t('approveCowswapRelayer'),
-      action: approveErc20,
-      stepTooltip: t(
-        'swapSummary.transactionTypesTooltips.cowswapRelayerApproval.content'
-      ),
+      label: t('send'),
+      loadingLabel: t('sending'),
+      confirmingLabel: t('sending'),
+      action: onSend,
+      stepTooltip: t('transfer.transactionTypesTooltips.transfer.content'),
     },
   ];
 });
+
+// METHODS
+function onSend() {
+  return transferTokenErc20(token.value, props.recipientsValues);
+}
 </script>
 
