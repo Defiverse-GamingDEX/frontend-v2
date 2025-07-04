@@ -47,8 +47,8 @@
       <div class="flex mt-4 md:mt-4 md:mr-10">
         <span class="mr-1"> {{ $t('balance') }}: </span>
         <span class="font-semibold text-gray-700 min-w-40">
-          {{ fNum2(balanceShow.value, FNumFormats.token) }}
-          <span class="text-gray-400"> &nbsp;{{ balanceShow?.symbol }}</span>
+          {{ fNum2(tokenShow?.balance || 0, FNumFormats.token) }}
+          <span class="text-gray-400"> &nbsp;{{ tokenShow?.symbol }}</span>
         </span>
       </div>
     </div>
@@ -79,7 +79,7 @@
       <ValuesConfirmTransfer
         :data="recipientsValues"
         :headers="['address', 'amount']"
-        :symbol="balanceShow?.symbol"
+        :symbol="tokenShow?.symbol"
         :total="amountTotal"
         :remaining="amountRemaining"
       />
@@ -101,16 +101,30 @@
         @click="showPreviewModal = true"
       />
     </div>
+
+    <!-- Modal preview -->
+    <TransferTokenPreviewModal
+      v-if="showPreviewModal"
+      :token="tokenShow"
+      :amount="amountTotal"
+      :addressContract="disperseAddress"
+      :amountRemaining="amountRemaining"
+      :recipientsValues="recipientsValues"
+      @close="showPreviewModal = false"
+    />
   </BalCard>
 </template>
 
 <script setup lang="ts">
 import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
 import ValuesConfirmTransfer from './ValuesConfirmTransfer.vue';
+import TransferTokenPreviewModal from './TransferTokenPreviewModal.vue';
 import { bnum } from '@/lib/utils';
 import useTransferTokens, {
   ValueTextAreaType,
 } from '@/composables/transfer/useTransferTokens';
+
+import { ExtendedTokenInfo } from '@/types/TokenList';
 import useWeb3 from '@/services/web3/useWeb3';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import {
@@ -124,9 +138,9 @@ import {
  */
 const tokenType = ref('erc20');
 const selectedToken = ref<any>(null);
-const nativeBalance = ref({ value: '0', symbol: '' });
+const nativeToken = ref<ExtendedTokenInfo>();
 // const recipients = ref('');
-const recipients = ref('0xf9209B6F49BB9fD73422BA834f4cD444aE7ceacE, 1');
+const recipients = ref('0x8F61AE321DCb503af3764C2416DD3cB73D9c3c8D, 1');
 const recipientsValues = ref<ValueTextAreaType[]>([]);
 const amountTotal = ref('0');
 const ruleCol = { 0: ['isAddress'], 1: ['isAmount'] } as validColType;
@@ -135,8 +149,15 @@ const showPreviewModal = ref(false);
 /**
  * COMPOSABLES
  */
-const { chainId, isChainSupprt, fetchNativeBalance, convertValueTextArea } =
-  useTransferTokens();
+const {
+  chainId,
+  account,
+  isChainSupprt,
+  configService,
+  fetchNativeBalance,
+  fetchErc20Balance,
+  convertValueTextArea,
+} = useTransferTokens();
 const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 const { fNum2 } = useNumbers();
 
@@ -155,18 +176,15 @@ const isNative = computed(() => {
   return tokenType.value == 'native';
 });
 
-const balanceShow = computed(() => {
+const tokenShow = computed(() => {
   if (isNative.value) {
-    return nativeBalance.value;
+    return nativeToken.value;
   }
-  return {
-    value: selectedToken.value?.balance || 0,
-    symbol: selectedToken.value?.symbol,
-  };
+  return selectedToken.value;
 });
 
 const amountRemaining = computed(() => {
-  return bnum(balanceShow?.value.value || 0)
+  return bnum(tokenShow?.value?.balance || 0)
     .minus(amountTotal.value)
     .toString();
 });
@@ -174,9 +192,13 @@ const amountRemaining = computed(() => {
 const submissionDisabled = computed(() => {
   return (
     recipientsValues.value?.length <= 0 ||
-    bnum(balanceShow?.value.value).isLessThanOrEqualTo(0) ||
+    bnum(tokenShow.value?.balance).isLessThanOrEqualTo(0) ||
     bnum(amountRemaining.value).isLessThanOrEqualTo(0)
   );
+});
+
+const disperseAddress = computed(() => {
+  return configService.value?.addresses?.disperse || '';
 });
 
 /**
@@ -191,9 +213,19 @@ function handleSelectedToken(token: any): void {
  */
 watch(isNative, async val => {
   if (val) {
-    nativeBalance.value = await fetchNativeBalance();
+    nativeToken.value = await fetchNativeBalance();
   }
 });
+
+watch(account, async val => {
+  if (val) {
+    nativeToken.value = await fetchNativeBalance();
+    if (selectedToken.value) {
+      selectedToken.value = await fetchErc20Balance(selectedToken.value);
+    }
+  }
+});
+
 watch(recipients, async val => {
   const rows = convertValueTextArea(val, ruleCol);
   recipientsValues.value = rows;

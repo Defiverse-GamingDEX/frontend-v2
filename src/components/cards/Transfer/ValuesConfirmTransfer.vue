@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-confirm">
     <BalTable
       :columns="columns"
       :data="rewardsData"
@@ -33,7 +33,7 @@
     </BalTable>
     <div
       v-if="props.total"
-      class="flex justify-between items-center p-4 align-top bg-white dark:bg-gray-850 border-t dark:border-gray-900"
+      class="flex justify-between items-center py-2 px-4 align-top bg-white dark:bg-gray-850 border-t dark:border-gray-900"
     >
       <span class="font-semibold text-left"> {{ $t('total') }} </span>
       <span class="font-semibold text-left">
@@ -45,7 +45,7 @@
     </div>
     <div
       v-if="props.remaining"
-      class="flex justify-between items-center px-4 align-top bg-white dark:bg-gray-850 dark:border-gray-900"
+      class="flex justify-between items-center py-2 px-4 align-top bg-white dark:bg-gray-850 dark:border-gray-900"
     >
       <span class="font-semibold text-left"> {{ $t('remaining') }} </span>
       <span
@@ -101,7 +101,6 @@ const columns = computed(() => {
       id: i,
       accessor: 'no',
       Cell: i + 'Cell',
-      noGrow: true,
       align: i == 'amount' ? 'right' : 'left',
       className: '!p-4',
       cellClassName: '!p-4',
@@ -141,3 +140,12 @@ const symbolShow = computed(() => {
   return truncateText(props.symbol, 16, 8, 0);
 });
 </script>
+
+<style scoped>
+.table-confirm :deep(.tbody) {
+  max-height: 300px;
+}
+.table-confirm :deep(.tbody)::-webkit-scrollbar {
+  width: 5px;
+}
+</style>

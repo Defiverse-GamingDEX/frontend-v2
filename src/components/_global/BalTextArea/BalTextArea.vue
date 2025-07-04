@@ -142,7 +142,7 @@ onMounted(() => {
           :value="modelValue"
           v-bind="inputAttrs"
           :disabled="disabled"
-          :class="['input', inputClasses]"
+          :class="['textarea', inputClasses]"
           @blur="onBlur"
           @input="onInput"
           @keydown="onKeydown"
@@ -164,20 +164,20 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.input-container {
+.textarea-container {
   @apply transition-colors;
 }
-.input-container {
+.textarea-container {
   background: #f5f9fa 0% 0% no-repeat padding-box;
   box-shadow: inset 0px 1px 3px #0000004a;
   border-radius: 10px;
 }
-.input-group {
+.textarea-group {
   @apply flex;
 }
 
-.input {
-  @apply grow bg-transparent overflow-hidden w-full;
+.textarea {
+  @apply grow bg-transparent overflow-auto w-full;
 }
 
 .label {

@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { TokenInfo } from '@/types/TokenList';
+import { ExtendedTokenInfo } from '@/types/TokenList';
 
 import { chainIdsForTransferToken } from '@/constants/networksToSelect';
 import configs from '@/lib/config';
@@ -10,25 +10,24 @@ import { isRowCheck, validColType } from '@/lib/utils/validations';
 /**
  * TYPES
  */
-declare module '@/types/TokenList' {
-  interface TokenInfo {
-    price?: number;
-    balance?: string;
-    value?: number;
-  }
-}
+
 export interface ValueTextAreaType {
   isValid: boolean;
   value: string[];
 }
 
 export default function useTransferTokens() {
-  const { chainId, account, getProvider } = useWeb3();
   /**
    * COMPOSABLES + COMPUTED
    */
+  const { chainId, account, getProvider, getSigner } = useWeb3();
+
   const isChainSupprt = computed(() => {
     return chainIdsForTransferToken.includes(Number(chainId.value));
+  });
+
+  const configService = computed(() => {
+    return configs[chainId.value];
   });
 
   // METHODS
@@ -36,21 +35,20 @@ export default function useTransferTokens() {
     const provider = getProvider();
     return new TokenService(provider);
   }
-  function _configService() {
-    return configs[chainId.value];
-  }
-  async function fetchNativeBalance() {
+
+  async function fetchNativeBalance(): Promise<ExtendedTokenInfo> {
     const balance = await _tokenService().fetchNativeBalance(
       account.value,
-      _configService().nativeAsset.decimals
+      configService.value.nativeAsset.decimals
     );
     return {
-      value: balance,
-      symbol: _configService().nativeAsset.symbol,
+      balance: balance,
+      chainId: chainId.value,
+      ...configService.value.nativeAsset,
     };
   }
 
-  async function fetchErc20Balance(token: TokenInfo) {
+  async function fetchErc20Balance(token: ExtendedTokenInfo) {
     const balance = await _tokenService().fetchErc20Balance(
       account.value,
       token.address,
@@ -83,7 +81,9 @@ export default function useTransferTokens() {
 
   return {
     chainId,
+    account,
     isChainSupprt,
+    configService,
     fetchNativeBalance,
     fetchErc20Balance,
     convertValueTextArea,

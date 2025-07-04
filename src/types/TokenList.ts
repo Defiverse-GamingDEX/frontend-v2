@@ -43,3 +43,10 @@ export interface TokenList {
 
 export type TokenListMap = { [address: string]: TokenList };
 export type TokenInfoMap = Record<string, TokenInfo>;
+
+export interface ExtendedTokenInfo extends TokenInfo {
+  readonly price?: number;
+  readonly balance?: string;
+  readonly value?: number;
+  readonly type?: 'native' | 'erc20' | 'erc721' | 'erc1155';
+}
