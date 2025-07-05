@@ -10,6 +10,7 @@ import { PATH_NAME_USE_NAV_SWITCH_NETWORK } from '@/constants/links';
 
 import AppNavAccountBtn from './AppNavAccountBtn.vue';
 import AppNavActivityBtn from './AppNavActivityBtn/AppNavActivityBtn.vue';
+import AppNavActivityBtnChainConnect from './AppNavActivityBtn/AppNavActivityBtnChainConnect.vue';
 import AppNavNetworkSelect from './AppNavNetworkSelect.vue';
 import AppNavNetworkSelectForSwitch from './AppNavNetworkSelectForSwitch.vue';
 import { Goals, trackGoal } from '@/composables/useFathom';
@@ -45,7 +46,8 @@ function connectWalletHandler() {
 <template>
   <div class="grid grid-rows-1 grid-flow-col gap-2">
     <!-- <DarkModeToggle v-if="isDesktop" /> -->
-    <AppNavActivityBtn v-if="account" />
+    <AppNavActivityBtn v-if="account && !isSwitchNetwork" />
+    <AppNavActivityBtnChainConnect v-if="account && isSwitchNetwork" />
     <AppNavAccountBtn v-if="account" />
     <BalBtn
       v-else

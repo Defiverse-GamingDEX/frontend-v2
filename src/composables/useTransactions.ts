@@ -19,6 +19,7 @@ import useNumbers, { FNumFormats } from './useNumbers';
 import { getMulticaller } from '@/dependencies/Multicaller';
 import OracleAbi from '@/lib/abi/Oracle.json';
 import configs from '@/lib/config';
+import { useRoute } from 'vue-router';
 
 const WEEK_MS = 86_400_000 * 7;
 // Please update the schema version when making changes to the transaction structure.
@@ -38,6 +39,7 @@ export type TransactionAction =
   | 'approve'
   | 'transfer'
   | 'batchTransfer'
+  | 'approveBatchTransfer'
   | 'depositTokens'
   | 'swap'
   | 'wrap'
@@ -162,6 +164,7 @@ function isTransactionRecent(transaction: Transaction): boolean {
 }
 
 function clearAllTransactions() {
+  transactionsState.value = {};
   setTransactions({});
 }
 
@@ -169,13 +172,13 @@ function getId(id: string, type: TransactionType) {
   return `${type}_${id}`;
 }
 
-function getTransactions(): TransactionsMap {
-  const transactionsMap = transactionsState.value[networkId] ?? {};
+function getTransactions(chainId?: number): TransactionsMap {
+  const transactionsMap = transactionsState.value[chainId || networkId] ?? {};
   return transactionsMap;
 }
 
-function setTransactions(transactionsMap: TransactionsMap) {
-  transactionsState.value[networkId] = transactionsMap;
+function setTransactions(transactionsMap: TransactionsMap, chainId?: number) {
+  transactionsState.value[chainId ?? networkId] = transactionsMap;
 
   lsSet(
     LS_KEYS.Transactions,
@@ -184,8 +187,8 @@ function setTransactions(transactionsMap: TransactionsMap) {
   );
 }
 
-function getTransaction(id: string, type: TransactionType) {
-  const transactionsMap = getTransactions();
+function getTransaction(id: string, type: TransactionType, chainId?: number) {
+  const transactionsMap = getTransactions(chainId);
   const txId = getId(id, type);
 
   return transactionsMap[txId] ?? null;
@@ -194,9 +197,10 @@ function getTransaction(id: string, type: TransactionType) {
 function updateTransaction(
   id: string,
   type: TransactionType,
-  updates: Partial<Transaction>
+  updates: Partial<Transaction>,
+  chainId?: number
 ) {
-  const transactionsMap = getTransactions();
+  const transactionsMap = getTransactions(chainId);
   const txId = getId(id, type);
   const transaction = transactionsMap[txId];
 
@@ -213,7 +217,7 @@ function updateTransaction(
       transactionsMap[txId] = merge({}, transaction, updates);
     }
 
-    setTransactions(transactionsMap);
+    setTransactions(transactionsMap, chainId);
 
     return true;
   }
@@ -264,7 +268,7 @@ function shouldCheckTx(transaction: Transaction, lastBlockNumber: number) {
   }
 }
 
-export default function useTransactions() {
+export default function useTransactions(chainId?: Ref<number>) {
   // COMPOSABLES
   const {
     account,
@@ -279,6 +283,25 @@ export default function useTransactions() {
 
   // COMPUTED
   const provider = computed(() => getWeb3Provider());
+
+  const transactionsWithChain = computed(() =>
+    orderBy(
+      Object.values(getTransactions(chainId?.value)),
+      'addedTime',
+      'desc'
+    ).filter(isTransactionRecent)
+  );
+  const pendingTransactionsWithChain = computed(() =>
+    transactionsWithChain.value.filter(transaction =>
+      isPendingTransactionStatus(transaction.status)
+    )
+  );
+  const finalizedTransactionsWithChain = computed(() =>
+    transactionsWithChain.value.filter(transaction =>
+      isFinalizedTransactionStatus(transaction.status)
+    )
+  );
+
   /**
    * CALLBACKS
    */
@@ -332,7 +355,7 @@ export default function useTransactions() {
   }
 
   function addTransaction(newTransaction: NewTransaction) {
-    const transactionsMap = getTransactions();
+    const transactionsMap = getTransactions(chainId?.value);
     const txId = getId(newTransaction.id, newTransaction.type);
     if (transactionsMap[txId]) {
       throw new Error(`The transaction ${newTransaction.id} already exists.`);
@@ -345,17 +368,22 @@ export default function useTransactions() {
       status: 'pending',
     };
 
-    setTransactions(transactionsMap);
-    addNotificationForTransaction(newTransaction.id, newTransaction.type);
+    setTransactions(transactionsMap, chainId?.value);
+    addNotificationForTransaction(
+      newTransaction.id,
+      newTransaction.type,
+      chainId?.value
+    );
   }
 
   function finalizeTransaction(
     id: string,
     type: TransactionType,
-    receipt: Transaction['receipt']
+    receipt: Transaction['receipt'],
+    chainId?: number
   ) {
     if (receipt != null) {
-      const transaction = getTransaction(id, type);
+      const transaction = getTransaction(id, type, chainId);
 
       if (transaction != null) {
         const updates: Partial<Transaction> = {
@@ -381,10 +409,9 @@ export default function useTransactions() {
           }
         }
 
-        const updateSuccessful = updateTransaction(id, type, updates);
-
+        const updateSuccessful = updateTransaction(id, type, updates, chainId);
         if (updateSuccessful) {
-          addNotificationForTransaction(id, type);
+          addNotificationForTransaction(id, type, chainId);
           return true;
         }
       }
@@ -393,8 +420,12 @@ export default function useTransactions() {
     return false;
   }
 
-  function addNotificationForTransaction(id: string, type: TransactionType) {
-    const transaction = getTransaction(id, type);
+  function addNotificationForTransaction(
+    id: string,
+    type: TransactionType,
+    chainId?: number
+  ) {
+    const transaction = getTransaction(id, type, chainId);
 
     // check protected token to change label action
     if (transaction != null) {
@@ -427,7 +458,9 @@ export default function useTransactions() {
           explorerLink:
             transaction.action === 'bridge'
               ? ''
-              : transaction.action === 'batchTransfer'
+              : ['batchTransfer', 'approveBatchTransfer'].includes(
+                  transaction.action
+                )
               ? explorerLinkUser.txLink(transaction.id)
               : getExplorerLink(transaction.id, transaction.type),
         },
@@ -496,6 +529,13 @@ export default function useTransactions() {
     return cowswapExplorer.orderLink(id);
   }
 
+  function getExplorerLinkConnect(id: string, type: TransactionType) {
+    if (type === 'tx') {
+      return explorerLinkUser.txLink(id);
+    }
+    return cowswapExplorer.orderLink(id);
+  }
+
   return {
     // methods
     getTransaction,
@@ -505,6 +545,7 @@ export default function useTransactions() {
     handlePendingTransactions,
     finalizeTransaction,
     getExplorerLink,
+    getExplorerLinkConnect,
     isSuccessfulTransaction,
     isPendingTransactionStatus,
     updateTransaction,
@@ -514,5 +555,9 @@ export default function useTransactions() {
     pendingTransactions,
     finalizedTransactions,
     transactions,
+    //
+    transactionsWithChain,
+    pendingTransactionsWithChain,
+    finalizedTransactionsWithChain,
   };
 }

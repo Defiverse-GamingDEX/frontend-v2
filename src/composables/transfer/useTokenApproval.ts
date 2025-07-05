@@ -25,9 +25,9 @@ export default function useTokenApproval(
   /**
    * COMPOSABLES
    */
-  const { account, getProvider } = useWeb3();
+  const { chainId, account, getProvider } = useWeb3();
   const { txListener } = useEthers();
-  const { addTransaction } = useTransactions();
+  const { addTransaction } = useTransactions(chainId);
   const { t } = useI18n();
 
   /**
@@ -112,7 +112,7 @@ export default function useTokenApproval(
     addTransaction({
       id: tx.hash,
       type: 'tx',
-      action: 'approve',
+      action: 'approveBatchTransfer',
       summary: t(keySummary, [token.value?.symbol]),
       details: {
         contractAddress: token.value.address,
@@ -120,15 +120,21 @@ export default function useTokenApproval(
       },
     });
 
-    txListener(tx, {
-      onTxConfirmed: async () => {
-        await checkApprove();
-        approving.value = false;
+    txListener(
+      tx,
+      {
+        onTxConfirmed: async () => {
+          await checkApprove();
+          approving.value = false;
+        },
+        onTxFailed: () => {
+          approving.value = false;
+        },
       },
-      onTxFailed: () => {
-        approving.value = false;
-      },
-    });
+      false,
+      true,
+      chainId.value
+    );
   }
 
   onMounted(() => {

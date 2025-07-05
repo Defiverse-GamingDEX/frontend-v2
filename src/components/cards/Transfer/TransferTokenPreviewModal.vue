@@ -21,7 +21,6 @@
           </div>
         </template>
         <ValuesConfirmTransfer
-          class="mb-4"
           :data="props.recipientsValues"
           :headers="['address', 'amount']"
           :symbol="token?.symbol"
@@ -44,7 +43,7 @@ import useTokenApproval from '@/composables/transfer/useTokenApproval';
 import { ExtendedTokenInfo } from '@/types/TokenList';
 import { useI18n } from 'vue-i18n';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'transferred']);
 
 interface Props {
   token: ExtendedTokenInfo;
@@ -60,14 +59,14 @@ const amount = toRef(props, 'amount');
 const addressContract = toRef(props, 'addressContract');
 const loadingTransfer = ref(false);
 
-const { approved, approving, approveToken } = useTokenApproval(
+const { approved, approveToken } = useTokenApproval(
   token,
   amount,
   addressContract,
   'transfer.approveForTransfer'
 );
 
-const { transferTokenErc20 } = useTransferTokens();
+const { transferToken } = useTransferTokens();
 const { t } = useI18n();
 
 const actions = computed(() => {
@@ -96,8 +95,12 @@ const actions = computed(() => {
 });
 
 // METHODS
+function onTxConfirmed() {
+  emit('close');
+  emit('transferred');
+}
 function onSend() {
-  return transferTokenErc20(token.value, props.recipientsValues);
+  return transferToken(token.value, props.recipientsValues, onTxConfirmed);
 }
 </script>
 

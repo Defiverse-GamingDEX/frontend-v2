@@ -3,7 +3,7 @@ import { BalanceMap } from '@/services/token/concerns/balances.concern';
 import { getAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
 import { MaxUint256 } from '@ethersproject/constants';
-import { includesAddress, isSameAddress } from '@/lib/utils';
+import { includesAddress, isSameAddress, bnum } from '@/lib/utils';
 import { Contract } from '@ethersproject/contracts';
 import { Web3Provider, TransactionResponse } from '@ethersproject/providers';
 import TokenServiceCustom from '@/services/token/token.service.custom';
@@ -172,6 +172,29 @@ export default class TokenService {
       action: 'disperseTokenSimple',
       params: [token, recipients, amounts],
       options: this.overrides[chainId] || {},
+    });
+  }
+
+  public async disperseNative(
+    contractAddress: string,
+    recipients: string[],
+    amounts: string[]
+  ) {
+    const transaction = new Transaction(this.provider.getSigner());
+    const network = await this.provider.getNetwork();
+    const chainId = network?.chainId;
+    const amountTotal = amounts
+      .reduce((totalValue, amount) => totalValue.plus(amount ?? 0), bnum(0))
+      .toString();
+    return await transaction.sendTransaction({
+      contractAddress: contractAddress,
+      abi: DisperseABI,
+      action: 'disperseEther',
+      params: [recipients, amounts],
+      options: {
+        value: amountTotal,
+        ...(this.overrides[chainId] || {}),
+      },
     });
   }
 }

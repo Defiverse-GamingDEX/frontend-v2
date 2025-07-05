@@ -143,7 +143,7 @@ const symbolShow = computed(() => {
 
 <style scoped>
 .table-confirm :deep(.tbody) {
-  max-height: 300px;
+  max-height: 30vh;
 }
 .table-confirm :deep(.tbody)::-webkit-scrollbar {
   width: 5px;

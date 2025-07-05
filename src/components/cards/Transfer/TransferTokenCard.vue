@@ -111,6 +111,7 @@
       :amountRemaining="amountRemaining"
       :recipientsValues="recipientsValues"
       @close="showPreviewModal = false"
+      @transferred="onTransferred"
     />
   </BalCard>
 </template>
@@ -123,7 +124,7 @@ import { bnum } from '@/lib/utils';
 import useTransferTokens, {
   ValueTextAreaType,
 } from '@/composables/transfer/useTransferTokens';
-
+import useListToken from '@/composables/transfer/useListToken';
 import { ExtendedTokenInfo } from '@/types/TokenList';
 import useWeb3 from '@/services/web3/useWeb3';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
@@ -160,6 +161,7 @@ const {
 } = useTransferTokens();
 const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 const { fNum2 } = useNumbers();
+const { refetchBalances } = useListToken();
 
 /**
  * COMPUTED
@@ -208,6 +210,21 @@ function handleSelectedToken(token: any): void {
   selectedToken.value = token ? { ...token, type: 'erc20' } : null;
 }
 
+async function refreshBalance(): Promise<void> {
+  if (nativeToken.value) {
+    nativeToken.value = await fetchNativeBalance();
+  }
+  if (selectedToken.value) {
+    selectedToken.value = await fetchErc20Balance(selectedToken.value);
+  }
+}
+
+async function onTransferred(): Promise<void> {
+  refreshBalance();
+  refetchBalances.value();
+  recipients.value = '';
+}
+
 /**
  * WATCH
  */
@@ -219,10 +236,13 @@ watch(isNative, async val => {
 
 watch(account, async val => {
   if (val) {
-    nativeToken.value = await fetchNativeBalance();
-    if (selectedToken.value) {
-      selectedToken.value = await fetchErc20Balance(selectedToken.value);
-    }
+    refreshBalance();
+  }
+});
+
+watch(chainId, async val => {
+  if (val) {
+    refreshBalance();
   }
 });
 

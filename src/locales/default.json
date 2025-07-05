@@ -1346,6 +1346,7 @@
     "depositTokens": "Deposit tokens",
     "transfer": "Transfer",
     "batchTransfer": "Transfer",
+    "approveBatchTransfer": "Approve",
     "claim": "Claim",
     "createPool": "Create pool",
     "drip": "Drip",
@@ -1580,7 +1581,8 @@
     "enterRecipientsAndAmounts": "Enter one address and amount on each line. (Supports any format)",
     "placeholderRecipientsAndAmounts": "Please enter address and amount\n address,000\n address,000\n ...",
     "approveForTransfer": "Approve {0} for transfer",
-    "transferSuccess": "Transfer successful!",
+    "transferTokenSummary_one": "Transfer {amount} {currency} to {count} address.",
+    "transferTokenSummary_other": "Transfer {amount} {currency} to {count} addresses.",
     "transactionTypesTooltips": {
       "tokenApproval": {
         "content": "You must approve this token before transferring",

@@ -15,19 +15,19 @@ import ActivityRows from './ActivityRows.vue';
  * COMPOSABLES
  */
 const { upToLargeBreakpoint, isMobile } = useBreakpoints();
-const { account, getSigner } = useWeb3();
+const { chainId, account, getSigner } = useWeb3();
 const { t } = useI18n();
 
 const {
-  transactions,
-  pendingTransactions,
-  finalizedTransactions,
-  getExplorerLink,
+  transactionsWithChain: transactions,
+  pendingTransactionsWithChain: pendingTransactions,
+  finalizedTransactionsWithChain: finalizedTransactions,
+  getExplorerLinkConnect: getExplorerLink,
   clearAllTransactions,
   isSuccessfulTransaction,
   updateTransaction,
   isPendingTransactionStatus,
-} = useTransactions();
+} = useTransactions(chainId);
 
 const { addNotification } = useNotifications();
 
@@ -67,7 +67,7 @@ async function cancelOrder(orderId: string) {
 <template>
   <BalPopover
     noPad
-    :align="isMobile ? 'left' : undefined"
+    :align="isMobile ? 'center' : undefined"
     :detached="isMobile ? true : undefined"
   >
     <template #activator>
