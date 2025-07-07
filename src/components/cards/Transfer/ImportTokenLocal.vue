@@ -1,12 +1,16 @@
 <template>
   <div>
-    <h5 class="mb-4 text-lg font-bold text-center">
+    <h5 v-if="props.type == 'erc20'" class="mb-4 text-lg font-bold text-center">
       <span v-if="[56, 97].includes(Number(chainId))">
         {{ $t('transfer.importBEP20Token') }}
       </span>
       <span v-else>
         {{ $t('transfer.importERC20Token') }}
       </span>
+    </h5>
+    <h5 v-else class="mb-4 text-lg font-bold text-center">
+      {{ $t('transfer.importNft') }} -
+      <span>{{ props.type.toLocaleUpperCase() }}</span>
     </h5>
     <div>
       <p class="mb-2 text-base font-bold">{{ $t('transfer.tokenAddress') }}</p>
@@ -67,22 +71,34 @@
 <script setup lang="ts">
 import { isAddress } from '@ethersproject/address';
 import { isValidAddressV2, isRequired } from '@/lib/utils/validations';
-import { TokenInfo } from '@/types/TokenList';
+import { TokenInfo, ExtendedTokenInfo } from '@/types/TokenList';
 import i18n from '@/plugins/i18n';
 import useNotifications from '@/composables/useNotifications';
 import useTokensLocal from '@/composables/transfer/useTokensLocal';
 import useWeb3 from '@/services/web3/useWeb3';
 import TokenService from '@/services/transfer/token.service';
 
+interface Props {
+  type?: 'erc20' | 'erc721' | 'erc1155';
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  type: 'erc20',
+});
+
 const emit = defineEmits(['onImported']);
 
 const tokenAddress = ref('');
 const loading = ref(false);
 const loadingCheck = ref(false);
-const tokenInfo = ref<TokenInfo | null>(null);
+const tokenInfo = ref<ExtendedTokenInfo | null>();
 const isTokenInvalid = ref(false);
 
-const { importToken: importTokenLocal } = useTokensLocal();
+const {
+  importToken: importTokenLocal,
+  import721,
+  import1155,
+} = useTokensLocal();
 const { chainId, account, getProvider } = useWeb3();
 const { addNotification } = useNotifications();
 
@@ -99,8 +115,19 @@ async function onCheckAddress(): Promise<void> {
     loadingCheck.value = true;
     const provider = getProvider();
     const tokenService = new TokenService(provider);
-    const info = await tokenService.getInfoTokenErc20(tokenAddress.value);
+    let info;
+    if (props.type == 'erc20') {
+      info = await tokenService.getInfoTokenErc20(tokenAddress.value);
+    } else if (props.type == 'erc721') {
+      info = await tokenService.getInfoTokenErc721(tokenAddress.value);
+    } else if (props.type == 'erc1155') {
+      info = await tokenService.getInfoTokenErc1155(tokenAddress.value);
+    }
+
     tokenInfo.value = info;
+    if (!info) {
+      isTokenInvalid.value = true;
+    }
   } catch (error) {
     tokenInfo.value = null;
     isTokenInvalid.value = true;
@@ -114,18 +141,27 @@ async function importToken(): Promise<void> {
       throw { message: i18n.global.t('transfer.tokenNotFound') };
     }
     loading.value = true;
-    importTokenLocal(tokenInfo.value);
-    const address = tokenInfo.value.address;
-    const provider = getProvider();
-    const tokenService = new TokenService(provider);
-    const balances = await tokenService.getBalanceTokens(account.value, {
-      [address]: tokenInfo.value,
-    });
+    if (props.type == 'erc20') {
+      importTokenLocal(tokenInfo.value);
+      const address = tokenInfo.value.address;
+      const provider = getProvider();
+      const tokenService = new TokenService(provider);
+      const balances = await tokenService.getBalanceTokens(account.value, {
+        [address]: tokenInfo.value,
+      });
+      emit('onImported', {
+        ...tokenInfo.value,
+        balance: balances[address],
+      });
+    } else if (props.type == 'erc721') {
+      import721(tokenInfo.value);
+      emit('onImported', tokenInfo.value);
+    } else if (props.type == 'erc1155') {
+      import1155(tokenInfo.value);
+      emit('onImported', tokenInfo.value);
+    }
+
     loading.value = false;
-    emit('onImported', {
-      ...tokenInfo.value,
-      balance: balances[address],
-    });
     addNotification({
       type: 'success',
       title: '',

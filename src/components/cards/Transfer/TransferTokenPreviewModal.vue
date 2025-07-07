@@ -47,15 +47,16 @@ const emit = defineEmits(['close', 'transferred']);
 
 interface Props {
   token: ExtendedTokenInfo;
-  amount: string;
+  amount?: string;
   addressContract: string;
-  amountRemaining: string;
+  amountRemaining?: string;
   recipientsValues: ValueTextAreaType[];
 }
 
 const props = defineProps<Props>();
 const token = toRef(props, 'token');
-const amount = toRef(props, 'amount');
+// const amount = toRef(props, 'amount');
+const amount = computed(() => toRef(props, 'amount').value ?? '0');
 const addressContract = toRef(props, 'addressContract');
 const loadingTransfer = ref(false);
 

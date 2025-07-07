@@ -1569,6 +1569,7 @@
     "importToken": "Import Token",
     "importERC20Token": "Import ERC20 Token",
     "importBEP20Token": "Import BEP20 Token",
+    "importNft": "Import NFT",
     "tokenAddress": "Token address",
     "import": "Import",
     "pleaseEnterAddress": "Please enter address",

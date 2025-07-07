@@ -3,7 +3,10 @@ import { useI18n } from 'vue-i18n';
 import { ExtendedTokenInfo } from '@/types/TokenList';
 import { TransactionResponse } from '@ethersproject/providers';
 import { parseUnits } from '@ethersproject/units';
-import { chainIdsForTransferToken } from '@/constants/networksToSelect';
+import {
+  chainIdsForTransferToken,
+  chainIdsForTransferNft,
+} from '@/constants/networksToSelect';
 import configs from '@/lib/config';
 import useWeb3 from '@/services/web3/useWeb3';
 import TokenService from '@/services/transfer/token.service';
@@ -35,6 +38,10 @@ export default function useTransferTokens() {
 
   const isChainSupprt = computed(() => {
     return chainIdsForTransferToken.includes(Number(chainId.value));
+  });
+
+  const isChainSupprtSendNft = computed(() => {
+    return chainIdsForTransferNft.includes(Number(chainId.value));
   });
 
   const configService = computed(() => {
@@ -216,6 +223,7 @@ export default function useTransferTokens() {
     chainId,
     account,
     isChainSupprt,
+    isChainSupprtSendNft,
     configService,
     isLoadingTransfer,
     fetchNativeBalance,

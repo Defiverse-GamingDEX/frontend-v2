@@ -16,7 +16,14 @@
           class="mr-2"
         />
         <span class="text-lg text-gray-700 truncate">{{
-          truncateText(selectedToken?.name || selectedToken?.symbol, 16, 20, 0)
+          truncateText(
+            selectedToken?.name ||
+              selectedToken?.symbol ||
+              selectedToken?.address,
+            16,
+            20,
+            0
+          )
         }}</span>
       </div>
       <span v-else class="text-lg text-gray-700">{{
@@ -31,9 +38,18 @@
     </BalBtn>
     <teleport to="#modal">
       <SelectTokenTransferModal
-        v-if="chainId"
+        v-if="chainId && props.type == 'erc20'"
         :key="chainId"
         :open="openSelectTokenModal"
+        @close="openSelectTokenModal = false"
+        @select="handleSelectedToken"
+      />
+    </teleport>
+    <teleport to="#modal">
+      <SelectNftTransferModal
+        v-if="chainId && nftType"
+        :open="openSelectTokenModal"
+        :type="nftType"
         @close="openSelectTokenModal = false"
         @select="handleSelectedToken"
       />
@@ -43,16 +59,25 @@
 
 <script setup lang="ts">
 import SelectTokenTransferModal from './SelectTokenTransferModal.vue';
+import SelectNftTransferModal from './SelectNftTransferModal.vue';
 import { truncateText } from '@/plugins/utils.js';
 
 interface Props {
   chainId: number;
   selectedToken: any;
+  type?: 'erc20' | 'erc721' | 'erc1155';
 }
 
 const props = withDefaults(defineProps<Props>(), {
   chainId: 0,
   selectedToken: null,
+  type: 'erc20',
+});
+
+const nftType = computed(() => {
+  return props.type === 'erc721' || props.type === 'erc1155'
+    ? props.type
+    : undefined;
 });
 
 /**

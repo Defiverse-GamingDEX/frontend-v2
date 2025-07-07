@@ -1,4 +1,4 @@
-import { TokenInfo, TokenInfoMap, ExtendedTokenInfo } from '@/types/TokenList';
+import { TokenInfoMap, ExtendedTokenInfo } from '@/types/TokenList';
 import { BalanceMap } from '@/services/token/concerns/balances.concern';
 import { getAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
@@ -26,7 +26,7 @@ export default class TokenService {
 
   public async getInfoTokenErc20(
     tokenAddress: string
-  ): Promise<TokenInfo | null> {
+  ): Promise<ExtendedTokenInfo | null> {
     try {
       const network = await this.provider.getNetwork();
       const chainId = network?.chainId;

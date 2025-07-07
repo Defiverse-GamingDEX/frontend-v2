@@ -140,8 +140,7 @@ import {
 const tokenType = ref('erc20');
 const selectedToken = ref<any>(null);
 const nativeToken = ref<ExtendedTokenInfo>();
-// const recipients = ref('');
-const recipients = ref('0x8F61AE321DCb503af3764C2416DD3cB73D9c3c8D, 0.1');
+const recipients = ref('');
 const recipientsValues = ref<ValueTextAreaType[]>([]);
 const amountTotal = ref('0');
 const ruleCol = { 0: ['isAddress'], 1: ['isAmount'] } as validColType;

@@ -1,15 +1,5 @@
 <script setup lang="ts">
-/**
- * COMPOSABLES
- */
-
-/**
- * COMPUTED
- */
-
-/**
- * CALLBACKS
- */
+import TransferNftCard from '@/components/cards/Transfer/TransferNftCard.vue';
 </script>
 
 <template>
@@ -19,11 +9,7 @@
     >
       {{ $t('transfer.transferNft') }}
     </h1>
-    <div
-      class="overflow-hidden p-4 bg-white dark:bg-gray-850 rounded-lg border dark:border-gray-900 shadow-lg"
-    >
-      TODO
-    </div>
+    <TransferNftCard />
   </div>
 </template>
 

@@ -5,7 +5,7 @@ import { computed, onMounted, onUnmounted, PropType, ref } from 'vue';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
 import { useUserSettings } from '@/providers/user-settings.provider';
-import { TokenInfo } from '@/types/TokenList';
+import { ExtendedTokenInfo } from '@/types/TokenList';
 import AtfBadge from '@/components/badge/AtfBadge.vue';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
 import YukichiIcon from '@/assets/images/pools/yukichi.png';
@@ -15,7 +15,7 @@ export default {
     AtfBadge,
   },
   props: {
-    token: { type: Object as PropType<TokenInfo>, required: true },
+    token: { type: Object as PropType<ExtendedTokenInfo>, required: true },
     balanceLoading: { type: Boolean, default: true },
     hideBalance: { type: Boolean, default: false },
     focussed: { type: Boolean, default: false },
@@ -98,7 +98,7 @@ export default {
       :class="['flex-auto', { 'text-blue-500 dark:text-blue-200': focussed }]"
     >
       <div class="flex items-center">
-        {{ token.symbol }}
+        {{ token.symbol || token.name || token.address }}
         <img
           v-if="token?.owner == 'yukichi'"
           width="24"
@@ -115,7 +115,10 @@ export default {
         />
         <AtfBadge :address="token?.address" />
       </div>
-      <div class="w-40 md:w-60 text-sm truncate text-gray">
+      <div
+        v-if="!['erc721', 'erc1155'].includes(token?.type || '')"
+        class="w-40 md:w-60 text-sm truncate text-gray"
+      >
         {{ token.name }}
       </div>
     </div>
