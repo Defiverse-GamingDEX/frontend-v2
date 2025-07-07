@@ -1,42 +1,40 @@
 {
-  "key": "10",
-  "chainId": 10,
-  "chainName": "Optimism",
-  "name": "Optimism Mainnet",
-  "shortName": "Optimism",
-  "slug": "optimism",
-  "network": "optimism",
+  "key": "20197",
+  "chainId": 20197,
+  "chainName": "Oasys Sand Verse",
+  "name": "Oasys Sand Verse",
+  "shortName": "BSC",
+  "slug": "oasys-sand-verse",
+  "network": "Oasys Sand Verse",
   "unknown": false,
-  "rpc": "https://mainnet.optimism.io",
-  "ws": "wss://ws-mainnet.optimism.io",
-  "blockTime": 13,
-  "explorer": "https://optimistic.etherscan.io/",
-  "explorerName": "The Optimism Explorer",
-  "subgraph": "https://api.thegraph.com/subgraphs/name/beethovenxfi/beethovenx-v2-optimism",
+  "rpc": "https://rpc.sandverse.oasys.games",
+  "ws": "https://rpc.sandverse.oasys.games",
+  "explorer": "https://scan.sandverse.oasys.games",
+  "explorerName": "Bscscan",
+  "subgraph": "",
   "poolsUrlV2": "",
   "subgraphs": {
-    "main": [
-      "https://api.thegraph.com/subgraphs/name/beethovenxfi/beethovenx-v2-optimism"
-    ],
+    "main": [],
     "aave": "",
-    "gauge": "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-gauges-optimism",
+    "gauge": "",
     "blocks": ""
   },
-  "supportsEIP1559": false,
-  "supportsElementPools": false,
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
   "nativeAsset": {
-    "name": "Ether",
+    "name": "OASYS",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    "symbol": "ETH",
+    "symbol": "OAS",
     "decimals": 18,
-    "deeplinkId": "ether",
-    "logoURI": "tokens/optimism.png",
+    "deeplinkId": "oas",
+    "logoURI": "tokens/oas.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
     "merkleRedeem": "",
     "merkleOrchard": "",
-    "multicall": "",
+    "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
     "authorizer": "",
     "vault": "",
     "weightedPoolFactory": "",
@@ -49,7 +47,7 @@
     "lidoRelayer": "",
     "balancerHelpers": "",
     "batchRelayer": "",
-    "batchRelayerV4": "0x1a58897Ab366082028ced3740900ecBD765Af738",
+    "batchRelayerV4": "",
     "gaugeFactory": "",
     "balancerMinter": "",
     "gaugeController": "",
@@ -59,11 +57,13 @@
     "veBALHelpers": "",
     "feeDistributor": "",
     "feeDistributorDeprecated": "",
-    "faucet": ""
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "nftTransfer": "0xDC2f2158010A7A1Cd559A9BF373e43760eA137Cd"
   },
   "keys": {
-    "infura": "",
-    "alchemy": ""
+    "infura": "daaa68ec242643719749dd1caba2fc66",
+    "alchemy": "oGLgncMVHNWltnK0nTfiryxQ6gYemKQO"
   },
   "strategies": {
     "0": {
@@ -80,7 +80,7 @@
     }
   },
   "gauges": {
-    "type": 5,
-    "weight": 0
+    "type": 2,
+    "weight": 100
   }
 }

@@ -13,6 +13,7 @@ import bscTestnet from './bsc-testnet.json';
 import bsc from './bsc.json';
 import astarTestnet from './astar-testnet.json';
 import astar from './astar.json';
+import oasysSandverse from './oasys-sandverse.json';
 
 // network for bridge
 import avalancheTestnet from './avalanche-testnet.json';
@@ -88,6 +89,7 @@ export interface Config {
     gaugeRewardsHelper?: string;
     oracle?: string;
     disperse?: string;
+    nftTransfer?: string;
   };
   keys: {
     infura: string;
@@ -131,6 +133,7 @@ const config: Record<Network | number, Config> = {
   56: bsc,
   81: astarTestnet,
   592: astar,
+  20197: oasysSandverse,
 };
 
 export default config;

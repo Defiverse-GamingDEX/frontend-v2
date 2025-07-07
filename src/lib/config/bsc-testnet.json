@@ -59,7 +59,8 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "disperse": "0x265a33Ba6B601D20100BE0198e42a44A7aFCc8ea"
+    "disperse": "0x265a33Ba6B601D20100BE0198e42a44A7aFCc8ea",
+    "nftTransfer": "0x0e79b465A519fF3D70222686745CB1Db58c95Dd0"
   },
   "keys": {
     "infura": "daaa68ec242643719749dd1caba2fc66",

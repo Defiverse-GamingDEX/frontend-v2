@@ -1,4 +1,4 @@
-import { TokenInfo, TokenInfoMap } from '@/types/TokenList';
+import { TokenInfo, TokenInfoMap, ExtendedTokenInfo } from '@/types/TokenList';
 import { BalanceMap } from '@/services/token/concerns/balances.concern';
 import { getAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
@@ -10,10 +10,19 @@ import TokenServiceCustom from '@/services/token/token.service.custom';
 import ConfigServiceCustom from '@/services/config/config.service.custom';
 import { default as ERC20ABI } from '@/lib/abi//ERC20.json';
 import { default as DisperseABI } from '@/lib/abi//Disperse.json';
+import { default as ERC721ABI } from '@/lib/abi//ERC721.json';
+import { default as ERC1155ABI } from '@/lib/abi//ERC1155.json';
+import { default as NftTransferABI } from '@/lib/abi//NftTransfer.json';
 import { Transaction } from './transaction';
 
 export default class TokenService {
   constructor(private readonly provider: Web3Provider) {}
+
+  /**
+   *
+   * ERC20
+   *
+   */
 
   public async getInfoTokenErc20(
     tokenAddress: string
@@ -196,5 +205,204 @@ export default class TokenService {
         ...(this.overrides[chainId] || {}),
       },
     });
+  }
+
+  /**
+   *
+   * ERC721
+   *
+   */
+
+  public async getInfoTokenErc721(
+    tokenAddress: string
+  ): Promise<ExtendedTokenInfo | null> {
+    try {
+      const network = await this.provider.getNetwork();
+      const chainId = network?.chainId;
+      const tokenContract = new Contract(
+        tokenAddress,
+        ERC721ABI,
+        this.provider
+      );
+      const name = await tokenContract.name();
+      return {
+        address: getAddress(tokenAddress),
+        chainId,
+        name,
+        symbol: '',
+        decimals: 0,
+        type: 'erc721',
+      };
+    } catch (error) {
+      console.log('getInfoTokenErc721 error', error);
+      return null;
+    }
+  }
+
+  public async erc721OwnerOf(
+    tokenAddress: string,
+    tokenId: string | number
+  ): Promise<string> {
+    try {
+      const tokenContract = new Contract(
+        tokenAddress,
+        ERC721ABI,
+        this.provider
+      );
+      const owner = await tokenContract.ownerOf(tokenId);
+      return owner;
+    } catch (error) {
+      console.log('erc721OwnerOf error', error);
+      return '';
+    }
+  }
+
+  public async erc721IsApprovedForAll(
+    tokenAddress: string,
+    operator: string
+  ): Promise<boolean> {
+    try {
+      const tokenContract = new Contract(
+        tokenAddress,
+        ERC721ABI,
+        this.provider
+      );
+      const res = await tokenContract.isApprovedForAll(operator);
+      return res;
+    } catch (error) {
+      console.log('erc721IsApprovedForAll error', error);
+      return false;
+    }
+  }
+
+  public async erc721SetApprovalForAll(
+    tokenAddress: string,
+    operator: string,
+    setValue: boolean
+  ) {
+    const transaction = new Transaction(this.provider.getSigner());
+    return await transaction.sendTransaction({
+      contractAddress: tokenAddress,
+      abi: ERC721ABI,
+      action: 'setApprovalForAll',
+      params: [operator, setValue],
+      options: {},
+    });
+  }
+
+  public async transferERC721(
+    contractAddress: string,
+    token: string,
+    recipients: string[],
+    tokenIs: string[]
+  ) {
+    const transaction = new Transaction(this.provider.getSigner());
+    return await transaction.sendTransaction({
+      contractAddress: contractAddress,
+      abi: NftTransferABI,
+      action: 'transferERC721',
+      params: [token, recipients, tokenIs],
+      options: {},
+    });
+  }
+
+  /**
+   *
+   * ERC1155
+   *
+   */
+
+  public async transferERC1155(
+    contractAddress: string,
+    token: string,
+    recipients: string[],
+    tokenIs: string[],
+    amounts: string[]
+  ) {
+    const transaction = new Transaction(this.provider.getSigner());
+    return await transaction.sendTransaction({
+      contractAddress: contractAddress,
+      abi: NftTransferABI,
+      action: 'transferERC1155',
+      params: [token, recipients, tokenIs, amounts],
+      options: {},
+    });
+  }
+
+  public async getInfoTokenErc1155(
+    tokenAddress: string
+  ): Promise<ExtendedTokenInfo | null> {
+    try {
+      const network = await this.provider.getNetwork();
+      const chainId = network?.chainId;
+      const tokenContract = new Contract(
+        tokenAddress,
+        ERC1155ABI,
+        this.provider
+      );
+      return {
+        address: getAddress(tokenAddress),
+        chainId,
+        name: '',
+        symbol: '',
+        decimals: 0,
+        type: 'erc1155',
+      };
+    } catch (error) {
+      console.log('getInfoTokenErc1155 error', error);
+      return null;
+    }
+  }
+
+  public async erc1155IsApprovedForAll(
+    tokenAddress: string,
+    operator: string
+  ): Promise<boolean> {
+    try {
+      const tokenContract = new Contract(
+        tokenAddress,
+        ERC1155ABI,
+        this.provider
+      );
+      const res = await tokenContract.isApprovedForAll(operator);
+      return res;
+    } catch (error) {
+      console.log('erc1155IsApprovedForAll error', error);
+      return false;
+    }
+  }
+
+  public async erc1155SetApprovalForAll(
+    tokenAddress: string,
+    operator: string,
+    setValue: boolean
+  ) {
+    const transaction = new Transaction(this.provider.getSigner());
+    return await transaction.sendTransaction({
+      contractAddress: tokenAddress,
+      abi: ERC1155ABI,
+      action: 'setApprovalForAll',
+      params: [operator, setValue],
+      options: {},
+    });
+  }
+
+  public async erc721BalanceOf(
+    tokenAddress: string,
+    acount: string,
+    tokenId: string | number
+  ): Promise<string> {
+    try {
+      const tokenContract = new Contract(
+        tokenAddress,
+        ERC721ABI,
+        this.provider
+      );
+      const res = await tokenContract.balanceOf(acount, tokenId);
+      return res;
+    } catch (error) {
+      console.log('erc721OwnerOf error', error);
+      return '';
+    }
   }
 }
