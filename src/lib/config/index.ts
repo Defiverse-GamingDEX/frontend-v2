@@ -10,6 +10,9 @@ import optimism from './optimism.json';
 import polygon from './polygon.json';
 import test from './test.json';
 import bscTestnet from './bsc-testnet.json';
+import bsc from './bsc.json';
+import astarTestnet from './astar-testnet.json';
+import astar from './astar.json';
 
 // network for bridge
 import avalancheTestnet from './avalanche-testnet.json';
@@ -125,6 +128,9 @@ const config: Record<Network | number, Config> = {
   7225878: saakuru,
   43113: avalancheTestnet,
   97: bscTestnet,
+  56: bsc,
+  81: astarTestnet,
+  592: astar,
 };
 
 export default config;

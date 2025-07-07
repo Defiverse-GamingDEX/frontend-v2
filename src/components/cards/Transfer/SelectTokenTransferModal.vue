@@ -51,7 +51,7 @@ const { tokensWithValues, isLoadingTokens, dynamicDataLoading, searchTokens } =
  * COMPUTED
  */
 const tokensShow = computed((): TokenInfo[] => {
-  if (tokensSearch.value?.length > 0) return tokensSearch.value;
+  if (searchText.value) return tokensSearch.value;
   if (tokensWithValues.value?.length > 0) return tokensWithValues.value;
   return [];
 });

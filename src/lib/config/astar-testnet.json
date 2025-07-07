@@ -1,16 +1,16 @@
 {
-  "key": "97",
-  "chainId": 97,
-  "chainName": "BNB Smart Chain Testnet",
-  "name": "BSC - Testnet",
-  "shortName": "BSC",
-  "slug": "bsc-testnet",
-  "network": "bsc",
+  "key": "81",
+  "chainId": 81,
+  "chainName": "Astar - Shibuya",
+  "name": "Astar - Shibuya",
+  "shortName": "Shibuya",
+  "slug": "shibuya",
+  "network": "shibuya",
   "unknown": false,
-  "rpc": "https://data-seed-prebsc-1-s1.binance.org:8545",
-  "ws": "wss://bsc-testnet-rpc.publicnode.com",
-  "explorer": "https://testnet.bscscan.com",
-  "explorerName": "Bscscan",
+  "rpc": "https://evm.shibuya.astar.network",
+  "ws": "https://evm.shibuya.astar.network",
+  "explorer": "https://shibuya.blockscout.com",
+  "explorerName": "Shibuya explorer",
   "subgraph": "",
   "poolsUrlV2": "",
   "subgraphs": {
@@ -23,18 +23,18 @@
   "supportsElementPools": true,
   "blockTime": 12,
   "nativeAsset": {
-    "name": "BNB",
+    "name": "SBY",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    "symbol": "BNB",
+    "symbol": "SBY",
     "decimals": 18,
-    "deeplinkId": "ether",
-    "logoURI": "tokens/bsc.png",
-    "minTransactionBuffer": "0.05"
+    "logoURI": "tokens/astar.png",
+    "deeplinkId": "",
+    "minTransactionBuffer": ""
   },
   "addresses": {
     "merkleRedeem": "",
     "merkleOrchard": "",
-    "multicall": "0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb",
+    "multicall": "",
     "authorizer": "",
     "vault": "",
     "weightedPoolFactory": "",
@@ -59,7 +59,7 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "disperse": "0x265a33Ba6B601D20100BE0198e42a44A7aFCc8ea"
+    "disperse": "0x0855eA6187dE973Bc5849d67C14f59c6fE2cF039"
   },
   "keys": {
     "infura": "daaa68ec242643719749dd1caba2fc66",

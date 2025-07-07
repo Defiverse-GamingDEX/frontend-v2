@@ -25,7 +25,7 @@ export async function switchToAppNetwork(
       return false;
     }
     // chain does not exist, let's add it
-    if (error.code === 4902) {
+    if (error.code === 4902 || error.code === -32603) {
       return importNetworkDetailsToWallet(provider, network);
     }
   }

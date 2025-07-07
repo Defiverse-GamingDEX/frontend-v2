@@ -1,16 +1,16 @@
 {
-  "key": "97",
-  "chainId": 97,
-  "chainName": "BNB Smart Chain Testnet",
-  "name": "BSC - Testnet",
-  "shortName": "BSC",
-  "slug": "bsc-testnet",
-  "network": "bsc",
+  "key": "592",
+  "chainId": 592,
+  "chainName": "Astar mainnet",
+  "name": "Astar mainnet",
+  "shortName": "astar",
+  "slug": "astar",
+  "network": "astar",
   "unknown": false,
-  "rpc": "https://data-seed-prebsc-1-s1.binance.org:8545",
-  "ws": "wss://bsc-testnet-rpc.publicnode.com",
-  "explorer": "https://testnet.bscscan.com",
-  "explorerName": "Bscscan",
+  "rpc": "https://evm.astar.network",
+  "ws": "https://evm.astar.network",
+  "explorer": "https://blockscout.com/astar",
+  "explorerName": "Shibuya explorer",
   "subgraph": "",
   "poolsUrlV2": "",
   "subgraphs": {
@@ -23,18 +23,18 @@
   "supportsElementPools": true,
   "blockTime": 12,
   "nativeAsset": {
-    "name": "BNB",
+    "name": "ASTR",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    "symbol": "BNB",
+    "symbol": "ASTR",
     "decimals": 18,
-    "deeplinkId": "ether",
-    "logoURI": "tokens/bsc.png",
-    "minTransactionBuffer": "0.05"
+    "logoURI": "tokens/astar.png",
+    "deeplinkId": "",
+    "minTransactionBuffer": ""
   },
   "addresses": {
     "merkleRedeem": "",
     "merkleOrchard": "",
-    "multicall": "0x1Ee38d535d541c55C9dae27B12edf090C608E6Fb",
+    "multicall": "0x5ba1e12693dc8f9c48aad8770482f4739beed696",
     "authorizer": "",
     "vault": "",
     "weightedPoolFactory": "",
@@ -59,7 +59,7 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "disperse": "0x265a33Ba6B601D20100BE0198e42a44A7aFCc8ea"
+    "disperse": "0xFE466D3573297181cf7E1368a9B9cB086F97afe5"
   },
   "keys": {
     "infura": "daaa68ec242643719749dd1caba2fc66",
