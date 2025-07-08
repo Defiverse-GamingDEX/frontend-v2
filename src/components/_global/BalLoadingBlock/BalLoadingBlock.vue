@@ -71,7 +71,7 @@ const classes = computed(() => {
 <template>
   <div>
     <div :class="['bal-loading-block', classes]" />
-    <div v-if="text" class="p-4 text-sm text-gray-500">
+    <div v-if="text" class="p-10 text-center text-gray-500 text-md">
       {{ text }}<span>{{ dots }}</span>
     </div>
   </div>
