@@ -24,11 +24,13 @@
       <BalBtnGroup v-model="tokenType" :options="optionsTokenType" />
     </BalStack>
     <TransferNftCard721 v-show="tokenType == 'erc721'" />
+    <TransferNftCard1155 v-show="tokenType == 'erc1155'" />
   </BalCard>
 </template>
 
 <script setup lang="ts">
 import TransferNftCard721 from './TransferNftCard721.vue';
+import TransferNftCard1155 from './TransferNftCard1155.vue';
 
 import useTransferTokens from '@/composables/transfer/useTransferTokens';
 import useWeb3 from '@/services/web3/useWeb3';

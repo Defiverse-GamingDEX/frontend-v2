@@ -30,6 +30,11 @@
           <span class="text-sm text-gray-400"> &nbsp;{{ symbolShow }} </span>
         </div>
       </template>
+      <template #tokenIdCell="item">
+        <div v-if="item.isValid" class="py-2 px-4 text-left">
+          <span class="font-bold">{{ item?.tokenId }}</span>
+        </div>
+      </template>
     </BalTable>
     <div
       v-if="props.total"
@@ -104,6 +109,7 @@ const columns = computed(() => {
       align: i == 'amount' ? 'right' : 'left',
       className: '!p-4',
       cellClassName: '!p-4',
+      width: i == 'address' ? 200 : undefined,
     };
   });
   return [

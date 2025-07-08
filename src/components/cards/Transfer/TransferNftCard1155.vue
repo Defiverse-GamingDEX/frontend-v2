@@ -87,10 +87,12 @@
 import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
 import ValuesConfirmTransfer from './ValuesConfirmTransfer.vue';
 import TransferTokenPreviewModal from './TransferTokenPreviewModal.vue';
+import { bnum } from '@/lib/utils';
 import useTransferTokens, {
   ValueTextAreaType,
 } from '@/composables/transfer/useTransferTokens';
 
+import { ExtendedTokenInfo } from '@/types/TokenList';
 import useWeb3 from '@/services/web3/useWeb3';
 
 import {
@@ -102,12 +104,17 @@ import {
 /**
  * STATE
  */
-const tokenType = 'erc721';
+const tokenType = 'erc1155';
 const selectedToken = ref<any>(null);
-const recipients = ref('');
+// const recipients = ref('');
+const recipients = ref('0x8F61AE321DCb503af3764C2416DD3cB73D9c3c8D, ');
 const recipientsValues = ref<ValueTextAreaType[]>([]);
-const ruleCol = { 0: ['isAddress'], 1: ['isInteger'] } as validColType;
-const headers = ['address', 'tokenId'];
+const ruleCol = {
+  0: ['isAddress'],
+  1: ['isInteger'],
+  2: ['isInteger'],
+} as validColType;
+const headers = ['address', 'tokenId', 'amount'];
 const showPreviewModal = ref(false);
 const isLoadingCheck = ref(false);
 const errors = ref<string[]>([]);
@@ -120,7 +127,7 @@ const {
   isChainSupprtSendNft,
   configService,
   convertValueTextArea,
-  checkOwnerErc721,
+  checkBalanceErc1155,
 } = useTransferTokens();
 const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 
@@ -156,9 +163,9 @@ async function onCheckToken(): Promise<void> {
   isLoadingCheck.value = true;
   errors.value = [];
   try {
-    await checkOwnerErc721(
+    await checkBalanceErc1155(
       selectedToken.value.address,
-      recipientsValues.value.filter(i => i.isValid).map(i => i.value[1])
+      recipientsValues.value.filter(i => i.isValid)
     );
     showPreviewModal.value = true;
   } catch (error: any) {

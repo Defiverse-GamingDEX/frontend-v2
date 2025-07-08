@@ -55,15 +55,15 @@
     <!--  -->
     <BalStack spacing="xs" vertical class="mt-6">
       <h6 class="mb-1">
-        {{ $t('transfer.recipientsAndAmounts') }}
+        {{ $t('transfer.recipientInput.erc20.title') }}
       </h6>
       <p class="mb-1 text-sm">
-        {{ $t('transfer.enterRecipientsAndAmounts') }}
+        {{ $t('transfer.recipientInput.erc20.content') }}
       </p>
       <BalTextArea
         v-model="recipients"
         name="tokenAddressInput"
-        :placeholder="$t('transfer.placeholderRecipientsAndAmounts')"
+        :placeholder="$t('transfer.recipientInput.erc20.placeholder')"
         size="sm"
         sizeHeight="lg"
         class="w-full"
@@ -78,7 +78,7 @@
     <BalStack v-if="recipientsValues.length" spacing="xs" vertical class="mt-6">
       <ValuesConfirmTransfer
         :data="recipientsValues"
-        :headers="['address', 'amount']"
+        :headers="headers"
         :symbol="tokenShow?.symbol"
         :total="amountTotal"
         :remaining="amountRemaining"
@@ -110,6 +110,7 @@
       :addressContract="disperseAddress"
       :amountRemaining="amountRemaining"
       :recipientsValues="recipientsValues"
+      :headers="headers"
       @close="showPreviewModal = false"
       @transferred="onTransferred"
     />
@@ -144,6 +145,7 @@ const recipients = ref('');
 const recipientsValues = ref<ValueTextAreaType[]>([]);
 const amountTotal = ref('0');
 const ruleCol = { 0: ['isAddress'], 1: ['isAmount'] } as validColType;
+const headers = ['address', 'amount'];
 const showPreviewModal = ref(false);
 
 /**

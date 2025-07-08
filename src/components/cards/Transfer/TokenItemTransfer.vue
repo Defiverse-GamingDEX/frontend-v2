@@ -97,7 +97,7 @@ export default {
     <div
       :class="['flex-auto', { 'text-blue-500 dark:text-blue-200': focussed }]"
     >
-      <div class="flex items-center">
+      <div class="flex items-center break-all">
         {{ token.symbol || token.name || token.address }}
         <img
           v-if="token?.owner == 'yukichi'"

@@ -17,12 +17,12 @@
           <div
             class="py-2 px-4 w-full text-sm bg-gray-50 dark:bg-gray-800 rounded-t-lg border-b dark:border-gray-800"
           >
-            {{ $t('transfer.recipientsAndAmounts') }}
+            {{ $t(`transfer.recipientInput.${token.type || 'erc20'}.title`) }}
           </div>
         </template>
         <ValuesConfirmTransfer
           :data="props.recipientsValues"
-          :headers="['address', 'amount']"
+          :headers="props.headers"
           :symbol="token?.symbol"
           :total="amount"
           :remaining="props.amountRemaining"
@@ -51,12 +51,13 @@ interface Props {
   addressContract: string;
   amountRemaining?: string;
   recipientsValues: ValueTextAreaType[];
+  headers: string[];
 }
 
 const props = defineProps<Props>();
 const token = toRef(props, 'token');
 // const amount = toRef(props, 'amount');
-const amount = computed(() => toRef(props, 'amount').value ?? '0');
+const amount = computed(() => toRef(props, 'amount').value ?? '');
 const addressContract = toRef(props, 'addressContract');
 const loadingTransfer = ref(false);
 

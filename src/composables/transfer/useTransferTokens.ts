@@ -15,6 +15,7 @@ import useEthers from '../useEthers';
 import useTransactions from '../useTransactions';
 import { bnum } from '@/lib/utils';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
+import { theme } from 'tailwind.config';
 
 /**
  * TYPES
@@ -76,6 +77,69 @@ export default function useTransferTokens() {
     return { ...token, balance };
   }
 
+  async function checkOwnerErc721(tokenAddress: string, tokenIds: string[]) {
+    if (!tokenAddress || !tokenIds?.length) {
+      throw 'Invalid params';
+    }
+    const ownerList = await Promise.allSettled(
+      tokenIds.map(tokenId => {
+        return _tokenService().erc721OwnerOf(tokenAddress, tokenId);
+      })
+    );
+    const errors: string[] = [];
+    ownerList.map((result, index) => {
+      const anAddress = (result as any).value ?? '';
+      if (anAddress == '') {
+        errors.push(t(`transfer.tokenIdNotExist`, { id: tokenIds[index] }));
+      } else if (account.value.toLocaleLowerCase() != anAddress.toLowerCase()) {
+        errors.push(t(`transfer.notOwnedToken`, { id: tokenIds[index] }));
+      }
+    });
+    if (errors?.length) {
+      throw errors;
+    }
+    return ownerList;
+  }
+
+  async function checkBalanceErc1155(
+    tokenAddress: string,
+    recipients: ValueTextAreaType[]
+  ) {
+    if (!tokenAddress || !recipients?.length) {
+      throw 'Invalid params';
+    }
+    const ownerBalanceList = await Promise.allSettled(
+      recipients.map(i => {
+        return _tokenService().erc1155BalanceOf(
+          tokenAddress,
+          account.value,
+          i.value[1]
+        );
+      })
+    );
+    const errors: string[] = [];
+    ownerBalanceList.map((result, index) => {
+      const balance = bnum((result as any).value ?? '0');
+      const tokenId = recipients[index].value[1];
+      const amount = bnum(recipients[index].value[2]);
+      if (balance.eq(0)) {
+        errors.push(t(`transfer.tokenZeroBalance`, { id: tokenId }));
+      } else if (balance.lt(amount)) {
+        errors.push(
+          t(`transfer.insufficientBalance`, {
+            id: tokenId,
+            requiredAmount: amount,
+            balance: balance,
+          })
+        );
+      }
+    });
+    if (errors?.length) {
+      throw errors;
+    }
+    return ownerBalanceList;
+  }
+
   function convertValueTextArea(
     text: string,
     validCol: validColType
@@ -111,10 +175,10 @@ export default function useTransferTokens() {
       return transferTokenErc20(token, _recipients, onTxConfirmed);
     }
     if (token.type === 'erc721') {
-      // TODO
+      return transferNft721(token, _recipients, onTxConfirmed);
     }
     if (token.type === 'erc1155') {
-      // TODO
+      return transferNft71155(token, _recipients, onTxConfirmed);
     }
   }
 
@@ -171,10 +235,75 @@ export default function useTransferTokens() {
     }
   }
 
+  async function transferNft721(
+    token: ExtendedTokenInfo,
+    recipients: ValueTextAreaType[],
+    onTxConfirmed: () => void
+  ): Promise<TransactionResponse> {
+    try {
+      if (!configService.value.addresses.nftTransfer) {
+        throw t('errorMissingNetworkConfig');
+      }
+      isLoadingTransfer.value = true;
+
+      const tx = await _tokenService().transferERC721(
+        configService.value.addresses.nftTransfer,
+        token.address,
+        recipients.map(i => i.value[0]),
+        recipients.map(i => i.value[1])
+      );
+
+      txHandler(tx, getSummaryTransfer(token, recipients), onTxConfirmed);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      isLoadingTransfer.value = false;
+      return Promise.reject(e);
+    }
+  }
+
+  async function transferNft71155(
+    token: ExtendedTokenInfo,
+    recipients: ValueTextAreaType[],
+    onTxConfirmed: () => void
+  ): Promise<TransactionResponse> {
+    try {
+      if (!configService.value.addresses.nftTransfer) {
+        throw t('errorMissingNetworkConfig');
+      }
+      isLoadingTransfer.value = true;
+
+      const tx = await _tokenService().transferERC1155(
+        configService.value.addresses.nftTransfer,
+        token.address,
+        recipients.map(i => i.value[0]),
+        recipients.map(i => i.value[1]),
+        recipients.map(i => i.value[2])
+      );
+
+      txHandler(tx, getSummaryTransfer(token, recipients), onTxConfirmed);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      isLoadingTransfer.value = false;
+      return Promise.reject(e);
+    }
+  }
+
   function getSummaryTransfer(
     token: ExtendedTokenInfo,
     recipients: ValueTextAreaType[]
   ) {
+    if (token.type == 'erc721' || token.type == 'erc1155') {
+      const key =
+        recipients.length === 1
+          ? 'transfer.transferNftSummary_one'
+          : 'transfer.transferNftSummary_other';
+      return t(key, {
+        type: token.type.toLocaleUpperCase(),
+        count: recipients.length,
+      });
+    }
     const key =
       recipients.length === 1
         ? 'transfer.transferTokenSummary_one'
@@ -228,6 +357,8 @@ export default function useTransferTokens() {
     isLoadingTransfer,
     fetchNativeBalance,
     fetchErc20Balance,
+    checkOwnerErc721,
+    checkBalanceErc1155,
     convertValueTextArea,
     transferToken,
     transferTokenErc20,

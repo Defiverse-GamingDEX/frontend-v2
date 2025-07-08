@@ -259,6 +259,7 @@ export default class TokenService {
 
   public async erc721IsApprovedForAll(
     tokenAddress: string,
+    account: string,
     operator: string
   ): Promise<boolean> {
     try {
@@ -267,7 +268,7 @@ export default class TokenService {
         ERC721ABI,
         this.provider
       );
-      const res = await tokenContract.isApprovedForAll(operator);
+      const res = await tokenContract.isApprovedForAll(account, operator);
       return res;
     } catch (error) {
       console.log('erc721IsApprovedForAll error', error);
@@ -340,6 +341,9 @@ export default class TokenService {
         ERC1155ABI,
         this.provider
       );
+      const address = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+      // temporary call to check token address
+      await tokenContract.isApprovedForAll(address, address);
       return {
         address: getAddress(tokenAddress),
         chainId,
@@ -356,6 +360,7 @@ export default class TokenService {
 
   public async erc1155IsApprovedForAll(
     tokenAddress: string,
+    account: string,
     operator: string
   ): Promise<boolean> {
     try {
@@ -364,7 +369,7 @@ export default class TokenService {
         ERC1155ABI,
         this.provider
       );
-      const res = await tokenContract.isApprovedForAll(operator);
+      const res = await tokenContract.isApprovedForAll(account, operator);
       return res;
     } catch (error) {
       console.log('erc1155IsApprovedForAll error', error);
@@ -387,7 +392,7 @@ export default class TokenService {
     });
   }
 
-  public async erc721BalanceOf(
+  public async erc1155BalanceOf(
     tokenAddress: string,
     acount: string,
     tokenId: string | number
@@ -395,7 +400,7 @@ export default class TokenService {
     try {
       const tokenContract = new Contract(
         tokenAddress,
-        ERC721ABI,
+        ERC1155ABI,
         this.provider
       );
       const res = await tokenContract.balanceOf(acount, tokenId);

@@ -19,7 +19,6 @@ export default function useTokenApproval(
    * STATE
    */
   const approving = ref(false);
-  const tmpApproved = ref(false);
   const approveAmount = ref('0');
 
   /**
@@ -37,10 +36,10 @@ export default function useTokenApproval(
     if (token.value.type === 'native') {
       return true;
     }
-    if (tmpApproved.value) {
-      return true;
-    }
-    return bnum(approveAmount.value).isGreaterThanOrEqualTo(amount.value);
+
+    return bnum(approveAmount.value).isGreaterThanOrEqualTo(
+      amount.value || '0'
+    );
   });
 
   /**
@@ -65,14 +64,23 @@ export default function useTokenApproval(
         );
       }
       if (token.value.type === 'erc721') {
-        approveAmount.value = '0';
+        const isApprovedForAll = await _tokenService().erc721IsApprovedForAll(
+          token.value.address,
+          account.value,
+          spender.value
+        );
+        approveAmount.value = isApprovedForAll ? '1' : '-1';
       }
       if (token.value.type === 'erc1155') {
-        approveAmount.value = '0';
+        const isApprovedForAll = await _tokenService().erc1155IsApprovedForAll(
+          token.value.address,
+          account.value,
+          spender.value
+        );
+        approveAmount.value = isApprovedForAll ? '1' : '-1';
       }
     } catch (error) {
-      console.log('------approveAmount.error', error);
-      approveAmount.value = '0';
+      approveAmount.value = '-1';
     }
   }
 
@@ -84,10 +92,10 @@ export default function useTokenApproval(
       return approveErc20();
     }
     if (token.value.type === 'erc721') {
-      // TODO
+      return approveErc721();
     }
     if (token.value.type === 'erc1155') {
-      // TODO
+      return approveErc1155();
     }
   }
 
@@ -97,6 +105,42 @@ export default function useTokenApproval(
       const tx = await _tokenService().approveTokenErc20(
         spender.value,
         token.value.address
+      );
+
+      txHandler(tx, spender.value);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      approving.value = false;
+      return Promise.reject(e);
+    }
+  }
+
+  async function approveErc721(): Promise<TransactionResponse> {
+    approving.value = true;
+    try {
+      const tx = await _tokenService().erc721SetApprovalForAll(
+        token.value.address,
+        spender.value,
+        true
+      );
+
+      txHandler(tx, spender.value);
+      return tx;
+    } catch (e) {
+      console.log(e);
+      approving.value = false;
+      return Promise.reject(e);
+    }
+  }
+
+  async function approveErc1155(): Promise<TransactionResponse> {
+    approving.value = true;
+    try {
+      const tx = await _tokenService().erc1155SetApprovalForAll(
+        token.value.address,
+        spender.value,
+        true
       );
 
       txHandler(tx, spender.value);

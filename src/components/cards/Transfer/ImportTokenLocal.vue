@@ -29,7 +29,7 @@
         :disabled="loading || loadingCheck"
       />
 
-      <div v-if="loadingCheck" class="text-green-700">Checking...</div>
+      <div v-if="loadingCheck" class="text-green-700">{{ $t('checking') }}</div>
       <div v-if="isTokenInvalid" class="text-red-500">
         {{ $t('transfer.tokenNotFound') }}
       </div>
@@ -43,7 +43,9 @@
             class="mr-2"
           />
           <div>
-            <span class="font-semibold">{{ tokenInfo?.name }}</span>
+            <span class="font-semibold">{{
+              tokenInfo?.name || truncateText(tokenInfo?.address, 16, 10, 10)
+            }}</span>
             <span class="text-gray-400">&nbsp;{{ tokenInfo?.symbol }}</span>
           </div>
         </div>
@@ -77,6 +79,7 @@ import useNotifications from '@/composables/useNotifications';
 import useTokensLocal from '@/composables/transfer/useTokensLocal';
 import useWeb3 from '@/services/web3/useWeb3';
 import TokenService from '@/services/transfer/token.service';
+import { truncateText } from '@/plugins/utils.js';
 
 interface Props {
   type?: 'erc20' | 'erc721' | 'erc1155';

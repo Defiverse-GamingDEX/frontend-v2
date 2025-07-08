@@ -21,7 +21,7 @@
               selectedToken?.symbol ||
               selectedToken?.address,
             16,
-            20,
+            18,
             0
           )
         }}</span>

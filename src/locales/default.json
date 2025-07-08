@@ -1558,6 +1558,8 @@
   "orderNumberText": "No.",
   "sending": "Sending",
   "sent": "Sent",
+  "tokenId": "Nft id",
+  "checking": "Checking...",
   "transfer": {
     "transfer": "Transfer",
     "transferToken": "Transfer Token",
@@ -1578,12 +1580,33 @@
     "tokenAlreadyExists": "Token already exists",
     "tokenImportFailed": "Token import failed",
     "tokenAddedSuccess": "Token has been added to your local token list.",
-    "recipientsAndAmounts": "Recipients and amounts",
-    "enterRecipientsAndAmounts": "Enter one address and amount on each line. (Supports any format)",
-    "placeholderRecipientsAndAmounts": "Please enter address and amount\n address,000\n address,000\n ...",
     "approveForTransfer": "Approve {0} for transfer",
     "transferTokenSummary_one": "Transfer {amount} {currency} to {count} address.",
     "transferTokenSummary_other": "Transfer {amount} {currency} to {count} addresses.",
+    "transferNftSummary_one": "Transfer NFT - {type} to {count} address.",
+    "transferNftSummary_other": "Transfer NFT - {type} to {count} addresses.",
+    "recipientInput": {
+      "native": {
+        "title": "Recipients and amounts",
+        "content": "Enter one address and amount on each line. (Supports any format)",
+        "placeholder": "Please enter address and amount\n address,000\n address,000\n ..."
+      },
+      "erc20": {
+        "title": "Recipients and amounts",
+        "content": "Enter one address and amount on each line. (Supports any format)",
+        "placeholder": "Please enter address and amount\n address,000\n address,000\n ..."
+      },
+      "erc721": {
+        "title": "Recipients, NFT Ids",
+        "content": "Enter one address and NFT Ids on each line. (Supports any format)",
+        "placeholder": "Please enter address and NFT Ids\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,11\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,12\n ..."
+      },
+      "erc1155": {
+        "title": "Receivers, NFT Ids, Amounts",
+        "content": "Enter one address, NFT Ids and amounts on each line. (Supports any format)",
+        "placeholder": "Please enter address and NFT Ids\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,11,1000\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,12,1000\n ..."
+      }
+    },
     "transactionTypesTooltips": {
       "tokenApproval": {
         "content": "You must approve this token before transferring",
@@ -1598,6 +1621,10 @@
         "title": "Confirm transaction"
       }
     },
+    "tokenIdNotExist": "The token ID {id} does not exist",
+    "notOwnedToken": "You do not own token ID {id}",
+    "tokenZeroBalance": "Token ID {id} has zero balance.",
+    "insufficientBalance": "Not enough balance for Token ID {id}. You need {requiredAmount}, but only have {balance}.",
     "": ""
   },
   "": ""
