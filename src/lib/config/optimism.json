@@ -30,7 +30,7 @@
     "symbol": "ETH",
     "decimals": 18,
     "deeplinkId": "ether",
-    "logoURI": "tokens/eth.png",
+    "logoURI": "tokens/optimism.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {

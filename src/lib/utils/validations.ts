@@ -1,6 +1,6 @@
 import { isAddress } from '@ethersproject/address';
 import numeral from 'numeral';
-
+import _ from 'lodash';
 import i18n from '@/plugins/i18n';
 
 import { bnum } from '.';
@@ -63,4 +63,68 @@ export function isGreaterThanOrEqualTo(min: number | string, msg = '') {
 }
 export function isValidAddressV2() {
   return v => !v || isAddress(v) || i18n.global.t('mustBeValidAddressV2');
+}
+
+export type ValidatorName = 'isAddress' | 'isAmount' | 'isInteger';
+export type validColType = Record<number, ValidatorName[]>;
+/**
+ *
+ * @param rowText
+ * @param validCol: Ex {0: ['isAddress'], 1: ['isAmount'], ...}
+ * @returns
+ */
+export function isRowCheck(rowText: string, validCol: validColType) {
+  const s = _.trim(rowText);
+  if (_.isEmpty(s)) {
+    return false;
+  }
+  const numCol = Object.keys(validCol).length;
+  const pair = s.split(',');
+  if (!pair || pair.length !== numCol) {
+    return false;
+  }
+  let valid = true;
+  for (let idx = 0; idx < numCol; idx++) {
+    const val = _.trim(pair[idx]);
+    const amountVal = bnum(val) ?? bnum(0);
+    const rules = validCol[idx];
+    if (_.isEmpty(val)) {
+      valid = false;
+      break;
+    }
+    rules.forEach(rule => {
+      if (rule === 'isAddress' && !isAddress(val)) {
+        valid = false;
+      }
+      if (
+        rule === 'isAmount' &&
+        (amountVal.isNaN() || amountVal.isLessThanOrEqualTo(0))
+      ) {
+        valid = false;
+      }
+      if (
+        rule === 'isInteger' &&
+        (amountVal.isNaN() || !amountVal.isInteger())
+      ) {
+        valid = false;
+      }
+    });
+  }
+  return valid;
+}
+
+export function isRowsCheck(text: string, validCol: validColType) {
+  const lines = text.trim().split('\n');
+  let valid = true;
+  for (let index = 0; index < lines.length; index++) {
+    if (!isRowCheck(lines[index], validCol)) {
+      valid = false;
+      break;
+    }
+  }
+  return valid;
+}
+
+export function isRowsTextArea(validCol: validColType) {
+  return v => !v || isRowsCheck(v, validCol) || i18n.global.t('invalidFormat');
 }

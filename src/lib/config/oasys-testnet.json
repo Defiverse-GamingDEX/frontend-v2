@@ -64,7 +64,8 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "oracle": "0xB5c387708CF3634738686492e9dDFC8f6CF22713"
+    "oracle": "0xB5c387708CF3634738686492e9dDFC8f6CF22713",
+    "nftTransfer": "0x841457a0E6d8a608cc98e17F06Ab7791316a43E6"
   },
   "keys": {
     "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",

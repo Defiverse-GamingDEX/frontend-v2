@@ -33,7 +33,7 @@
     "symbol": "OAS",
     "decimals": 18,
     "deeplinkId": "oas",
-    "logoURI": "tokens/oas.png",
+    "logoURI": "tokens/defiverse.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
@@ -64,7 +64,8 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "0x8c93FFec055a6d7A8F2d3Db2d80Fd908F4068880",
-    "oracle": "0xd967c8c063B9610254CCFB5Bf697f3e43E25ea34"
+    "oracle": "0xd967c8c063B9610254CCFB5Bf697f3e43E25ea34",
+    "disperse": "0x4a1fD3A4cd58a1733675851880935ae16186d910"
   },
   "keys": {
     "infura": "a90d83d72d0c4b7682e2272d61a1f59b",

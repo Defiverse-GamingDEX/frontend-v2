@@ -3,6 +3,7 @@ import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { BLOCKED_ADDRESSES } from '@/constants/blocked';
+import { PATH_NAME_USE_NAV_SWITCH_NETWORK } from '@/constants/links';
 import { includesAddress } from '@/lib/utils';
 import useWeb3 from '@/services/web3/useWeb3';
 
@@ -32,6 +33,10 @@ export default function useWeb3Watchers() {
 
   const route = useRoute();
 
+  const isSwitchNetwork = computed(() =>
+    PATH_NAME_USE_NAV_SWITCH_NETWORK.includes(route?.name?.toString() || '')
+  );
+
   function handleTransactionReplacement(
     tx: EthereumTransactionData,
     replacementReason: ReplacementReason
@@ -49,6 +54,7 @@ export default function useWeb3Watchers() {
 
   function checkIsUnsupportedNetwork() {
     if (
+      !isSwitchNetwork.value &&
       chainId.value &&
       (isUnsupportedNetwork.value || isMismatchedNetwork.value)
     ) {
@@ -101,6 +107,10 @@ export default function useWeb3Watchers() {
 
   // Watch for user network switch
   // -> Display alert message if unsupported or not the same as app network.
+  watch(isSwitchNetwork, () => {
+    checkIsUnsupportedNetwork();
+  });
+
   watch(chainId, () => {
     checkIsUnsupportedNetwork();
   });

@@ -1,0 +1,86 @@
+{
+  "key": "56",
+  "chainId": 56,
+  "chainName": "BNB Smart Chain Mainnet",
+  "name": "BSC - Mainnet",
+  "shortName": "BSC",
+  "slug": "bsc",
+  "network": "bsc",
+  "unknown": false,
+  "rpc": "https://bsc-dataseed.binance.org",
+  "ws": "wss://bsc-rpc.publicnode.com",
+  "explorer": "https://bscscan.com",
+  "explorerName": "Bscscan",
+  "subgraph": "",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [],
+    "aave": "",
+    "gauge": "",
+    "blocks": ""
+  },
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
+  "nativeAsset": {
+    "name": "BNB",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "BNB",
+    "decimals": 18,
+    "deeplinkId": "ether",
+    "logoURI": "tokens/bsc.png",
+    "minTransactionBuffer": "0.05"
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "0xca11bde05977b3631167028862be2a173976ca11",
+    "authorizer": "",
+    "vault": "",
+    "weightedPoolFactory": "",
+    "stablePoolFactory": "",
+    "weth": "",
+    "rETH": "",
+    "stMATIC": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "",
+    "batchRelayer": "",
+    "batchRelayerV4": "",
+    "gaugeFactory": "",
+    "balancerMinter": "",
+    "gaugeController": "",
+    "tokenAdmin": "",
+    "veBAL": "",
+    "veDelegationProxy": "",
+    "veBALHelpers": "",
+    "feeDistributor": "",
+    "feeDistributorDeprecated": "",
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "disperse": "0xFE466D3573297181cf7E1368a9B9cB086F97afe5"
+  },
+  "keys": {
+    "infura": "daaa68ec242643719749dd1caba2fc66",
+    "alchemy": "oGLgncMVHNWltnK0nTfiryxQ6gYemKQO"
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 2,
+    "weight": 100
+  }
+}

@@ -46,3 +46,8 @@ export const EXTERNAL_LINKS = {
     Home: 'https://sense.finance/',
   },
 };
+
+export const PATH_NAME_USE_NAV_SWITCH_NETWORK = [
+  'transfer-token',
+  'transfer-nft',
+];

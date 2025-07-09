@@ -110,10 +110,21 @@ export default function useWeb3() {
       `${configService.network.explorer}/token/${address}`,
   };
 
+  const explorerLinkUser = {
+    txLink: (txHash: string) =>
+      `${userNetworkConfig?.value?.explorer}/tx/${txHash}`,
+    addressLink: (address: string) =>
+      `${userNetworkConfig?.value?.explorer}/address/${address}`,
+    tokenLink: (address: string) =>
+      `${userNetworkConfig?.value?.explorer}/token/${address}`,
+  };
+
   // METHODS
   const getProvider = () => new Web3Provider(provider.value as any, 'any'); // https://github.com/ethers-io/ethers.js/issues/866
   const getSigner = () => getProvider().getSigner();
   const connectToAppNetwork = () => switchToAppNetwork(provider.value as any);
+  const switchNetwork = network =>
+    switchToAppNetwork(provider.value as any, network);
 
   function startConnectWithInjectedProvider(): void {
     if (hasInjectedProvider() && getInjectedProvider().isCoinbaseWallet) {
@@ -161,6 +172,7 @@ export default function useWeb3() {
     isMismatchedNetwork,
     isUnsupportedNetwork,
     explorerLinks,
+    explorerLinkUser,
     signer,
     blockNumber,
     isMainnet,
@@ -186,5 +198,6 @@ export default function useWeb3() {
     toggleWalletSelectModal,
     startConnectWithInjectedProvider,
     setBlockNumber,
+    switchNetwork,
   };
 }
