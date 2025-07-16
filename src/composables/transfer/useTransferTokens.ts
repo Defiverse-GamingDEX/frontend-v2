@@ -15,7 +15,6 @@ import useEthers from '../useEthers';
 import useTransactions from '../useTransactions';
 import { bnum } from '@/lib/utils';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { theme } from 'tailwind.config';
 
 /**
  * TYPES

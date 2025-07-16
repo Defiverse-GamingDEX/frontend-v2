@@ -24,6 +24,9 @@ export class Transaction extends TransactionConcern {
     super();
   }
 
+  private chainsHasGasPrice = [1, 56, 97, 81, 592, 137, 248];
+  private chainsEip1559 = [1, 248];
+
   public async sendTransaction({
     contractAddress,
     abi,
@@ -46,7 +49,29 @@ export class Transaction extends TransactionConcern {
         options,
         forceLegacyTxType
       );
-      const txOptions = { ...options, ...gasSettings, type: 0 };
+      const network = await this.signer.provider.getNetwork();
+      const chainId = network?.chainId;
+
+      if (
+        this.chainsHasGasPrice.includes(chainId) &&
+        gasSettings.gasPrice === 0
+      ) {
+        const gasprice = await this.signer.provider.getGasPrice();
+        gasSettings.gasPrice = gasprice.toNumber();
+      }
+      if (
+        this.chainsHasGasPrice.includes(chainId) &&
+        gasSettings.maxFeePerGas === 0
+      ) {
+        const gasprice = await this.signer.provider.getGasPrice();
+        gasSettings.maxFeePerGas = gasprice.toNumber();
+      }
+
+      const txOptions = { ...gasSettings, ...options };
+
+      if (this.chainsEip1559.includes(chainId)) {
+        txOptions.type = 0;
+      }
 
       await Promise.all([verifyTransactionSender(this.signer)]);
 
