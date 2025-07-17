@@ -8,6 +8,7 @@
   "network": "Oasys Sand Verse",
   "unknown": false,
   "rpc": "https://rpc.sandverse.oasys.games",
+  "publicRpc": "https://rpc.sandverse.oasys.games",
   "ws": "https://rpc.sandverse.oasys.games",
   "explorer": "https://scan.sandverse.oasys.games",
   "explorerName": "Bscscan",

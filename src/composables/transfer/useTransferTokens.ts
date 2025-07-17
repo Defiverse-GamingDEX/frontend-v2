@@ -30,17 +30,17 @@ export default function useTransferTokens() {
   /**
    * COMPOSABLES + COMPUTED
    */
-  const { chainId, account, getProvider, getSigner } = useWeb3();
+  const { chainId, account, getProvider } = useWeb3();
   const { txListener } = useEthers();
-  const { addTransaction } = useTransactions(chainId);
+  const { addTransaction, finalizeTransaction } = useTransactions(chainId);
   const { t } = useI18n();
   const { fNum2 } = useNumbers();
 
-  const isChainSupprt = computed(() => {
+  const isChainSupport = computed(() => {
     return chainIdsForTransferToken.includes(Number(chainId.value));
   });
 
-  const isChainSupprtSendNft = computed(() => {
+  const isChainSupportSendNft = computed(() => {
     return chainIdsForTransferNft.includes(Number(chainId.value));
   });
 
@@ -337,7 +337,9 @@ export default function useTransferTokens() {
           onTxConfirmed();
           isLoadingTransfer.value = false;
         },
-        onTxFailed: () => {
+        onTxFailed: tx => {
+          const receipt: any = { status: 0 };
+          finalizeTransaction(tx.hash, 'tx', receipt, chainId.value);
           isLoadingTransfer.value = false;
         },
       },
@@ -350,8 +352,8 @@ export default function useTransferTokens() {
   return {
     chainId,
     account,
-    isChainSupprt,
-    isChainSupprtSendNft,
+    isChainSupport,
+    isChainSupportSendNft,
     configService,
     isLoadingTransfer,
     fetchNativeBalance,

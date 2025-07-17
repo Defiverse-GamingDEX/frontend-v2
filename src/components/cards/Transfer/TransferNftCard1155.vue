@@ -87,12 +87,10 @@
 import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
 import ValuesConfirmTransfer from './ValuesConfirmTransfer.vue';
 import TransferTokenPreviewModal from './TransferTokenPreviewModal.vue';
-import { bnum } from '@/lib/utils';
 import useTransferTokens, {
   ValueTextAreaType,
 } from '@/composables/transfer/useTransferTokens';
 
-import { ExtendedTokenInfo } from '@/types/TokenList';
 import useWeb3 from '@/services/web3/useWeb3';
 
 import {
@@ -106,8 +104,7 @@ import {
  */
 const tokenType = 'erc1155';
 const selectedToken = ref<any>(null);
-// const recipients = ref('');
-const recipients = ref('0x8F61AE321DCb503af3764C2416DD3cB73D9c3c8D, ');
+const recipients = ref('');
 const recipientsValues = ref<ValueTextAreaType[]>([]);
 const ruleCol = {
   0: ['isAddress'],
@@ -124,7 +121,7 @@ const errors = ref<string[]>([]);
  */
 const {
   chainId,
-  isChainSupprtSendNft,
+  isChainSupportSendNft,
   configService,
   convertValueTextArea,
   checkBalanceErc1155,
@@ -137,7 +134,7 @@ const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 
 const submissionDisabled = computed(() => {
   return (
-    !isChainSupprtSendNft ||
+    !isChainSupportSendNft ||
     !selectedToken.value?.address ||
     recipientsValues.value?.length <= 0 ||
     recipientsValues.value.filter(i => !i.isValid).length > 0

@@ -2,12 +2,22 @@ import i18n from '@/plugins/i18n';
 import LS_KEYS from '@/constants/local-storage.keys';
 import { lsGet, lsSet } from '@/lib/utils';
 import { ExtendedTokenInfo } from '@/types/TokenList';
+import useWeb3 from '@/services/web3/useWeb3';
 
 const erc20 = ref<ExtendedTokenInfo[]>(lsGet(LS_KEYS.Transfer.erc20, []));
 const erc721 = ref<ExtendedTokenInfo[]>(lsGet(LS_KEYS.Transfer.erc721, []));
 const erc1155 = ref<ExtendedTokenInfo[]>(lsGet(LS_KEYS.Transfer.erc1155, []));
 
 export default function useTokensLocal() {
+  const { chainId } = useWeb3();
+
+  const erc721ForChain = computed((): ExtendedTokenInfo[] => {
+    return erc721.value?.filter(i => i.chainId == chainId.value);
+  });
+  const erc1155ForChain = computed((): ExtendedTokenInfo[] => {
+    return erc1155.value?.filter(i => i.chainId == chainId.value);
+  });
+
   // METHODS
   function importToken(token: ExtendedTokenInfo): void {
     const tokenFind = erc20?.value.find(
@@ -52,6 +62,8 @@ export default function useTokensLocal() {
     erc20,
     erc721,
     erc1155,
+    erc721ForChain,
+    erc1155ForChain,
     //method
     importToken,
     import721,
