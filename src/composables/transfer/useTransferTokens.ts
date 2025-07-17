@@ -32,7 +32,7 @@ export default function useTransferTokens() {
    */
   const { chainId, account, getProvider } = useWeb3();
   const { txListener } = useEthers();
-  const { addTransaction } = useTransactions(chainId);
+  const { addTransaction, finalizeTransaction } = useTransactions(chainId);
   const { t } = useI18n();
   const { fNum2 } = useNumbers();
 
@@ -337,7 +337,9 @@ export default function useTransferTokens() {
           onTxConfirmed();
           isLoadingTransfer.value = false;
         },
-        onTxFailed: () => {
+        onTxFailed: tx => {
+          const receipt: any = { status: 0 };
+          finalizeTransaction(tx.hash, 'tx', receipt, chainId.value);
           isLoadingTransfer.value = false;
         },
       },
