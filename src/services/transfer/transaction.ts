@@ -24,7 +24,7 @@ export class Transaction extends TransactionConcern {
     super();
   }
 
-  private chainsHasGasPrice = [1, 56, 97, 81, 592, 137, 248];
+  private chainsHasGasPrice = [1, 56, 97, 17117, 16116, 81, 592, 137, 248];
   private chainsEip1559 = [1, 248];
 
   public async sendTransaction({
