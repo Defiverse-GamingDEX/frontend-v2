@@ -9,6 +9,7 @@
   "unknown": false,
   "rpc": "https://evm.shibuya.astar.network",
   "ws": "https://evm.shibuya.astar.network",
+  "publicRpc": "https://evm.shibuya.astar.network",
   "explorer": "https://shibuya.blockscout.com",
   "explorerName": "Shibuya explorer",
   "subgraph": "",

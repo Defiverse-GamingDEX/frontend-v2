@@ -9,6 +9,7 @@
   "unknown": false,
   "rpc": "https://bsc-dataseed.binance.org",
   "ws": "wss://bsc-rpc.publicnode.com",
+  "publicRpc": "https://bsc-dataseed.binance.org",
   "explorer": "https://bscscan.com",
   "explorerName": "Bscscan",
   "subgraph": "",
