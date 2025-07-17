@@ -117,7 +117,7 @@ const errors = ref<string[]>([]);
  */
 const {
   chainId,
-  isChainSupprtSendNft,
+  isChainSupportSendNft,
   configService,
   convertValueTextArea,
   checkOwnerErc721,
@@ -130,7 +130,7 @@ const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 
 const submissionDisabled = computed(() => {
   return (
-    !isChainSupprtSendNft ||
+    !isChainSupportSendNft ||
     !selectedToken.value?.address ||
     recipientsValues.value?.length <= 0 ||
     recipientsValues.value.filter(i => !i.isValid).length > 0

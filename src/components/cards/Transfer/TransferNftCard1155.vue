@@ -87,12 +87,10 @@
 import SelectTokenForTransfer from './SelectTokenForTransfer.vue';
 import ValuesConfirmTransfer from './ValuesConfirmTransfer.vue';
 import TransferTokenPreviewModal from './TransferTokenPreviewModal.vue';
-import { bnum } from '@/lib/utils';
 import useTransferTokens, {
   ValueTextAreaType,
 } from '@/composables/transfer/useTransferTokens';
 
-import { ExtendedTokenInfo } from '@/types/TokenList';
 import useWeb3 from '@/services/web3/useWeb3';
 
 import {
@@ -124,7 +122,7 @@ const errors = ref<string[]>([]);
  */
 const {
   chainId,
-  isChainSupprtSendNft,
+  isChainSupportSendNft,
   configService,
   convertValueTextArea,
   checkBalanceErc1155,
@@ -137,7 +135,7 @@ const { isWalletReady, startConnectWithInjectedProvider } = useWeb3();
 
 const submissionDisabled = computed(() => {
   return (
-    !isChainSupprtSendNft ||
+    !isChainSupportSendNft ||
     !selectedToken.value?.address ||
     recipientsValues.value?.length <= 0 ||
     recipientsValues.value.filter(i => !i.isValid).length > 0

@@ -9,7 +9,7 @@
       block
     />
     <BalAlert
-      v-else-if="!isChainSupprt"
+      v-else-if="!isChainSupport"
       class="p-3 mb-4"
       type="error"
       size="md"
@@ -154,7 +154,7 @@ const showPreviewModal = ref(false);
 const {
   chainId,
   account,
-  isChainSupprt,
+  isChainSupport,
   configService,
   fetchNativeBalance,
   fetchErc20Balance,

@@ -9,7 +9,7 @@
       block
     />
     <BalAlert
-      v-else-if="!isChainSupprtSendNft"
+      v-else-if="!isChainSupportSendNft"
       class="p-3 mb-4"
       type="error"
       size="md"
@@ -48,7 +48,7 @@ const optionsTokenType = [
 /**
  * COMPOSABLES
  */
-const { isChainSupprtSendNft } = useTransferTokens();
+const { isChainSupportSendNft } = useTransferTokens();
 const { isWalletReady } = useWeb3();
 </script>
 
