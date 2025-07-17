@@ -35,14 +35,14 @@ const tabs = [
  * COMPOSABLES
  */
 
-const { erc721, erc1155 } = useTokensLocal();
+const { erc721ForChain, erc1155ForChain } = useTokensLocal();
 
 /**
  * COMPUTED
  */
 const tokens = computed((): ExtendedTokenInfo[] => {
-  if (props.type == 'erc721') return erc721.value;
-  return erc1155.value;
+  if (props.type == 'erc721') return erc721ForChain.value;
+  return erc1155ForChain.value;
 });
 const tokensShow = computed((): ExtendedTokenInfo[] => {
   if (searchText.value) return tokensSearch.value;

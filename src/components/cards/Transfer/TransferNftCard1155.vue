@@ -104,8 +104,7 @@ import {
  */
 const tokenType = 'erc1155';
 const selectedToken = ref<any>(null);
-// const recipients = ref('');
-const recipients = ref('0x8F61AE321DCb503af3764C2416DD3cB73D9c3c8D, ');
+const recipients = ref('');
 const recipientsValues = ref<ValueTextAreaType[]>([]);
 const ruleCol = {
   0: ['isAddress'],

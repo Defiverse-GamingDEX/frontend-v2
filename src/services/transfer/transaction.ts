@@ -24,8 +24,7 @@ export class Transaction extends TransactionConcern {
     super();
   }
 
-  private chainsHasGasPrice = [1, 56, 97, 17117, 16116, 81, 592, 137, 248];
-  private chainsEip1559 = [1, 248];
+  private chainsEip1559 = [1, 248, 137];
 
   public async sendTransaction({
     contractAddress,
@@ -51,25 +50,21 @@ export class Transaction extends TransactionConcern {
       );
       const network = await this.signer.provider.getNetwork();
       const chainId = network?.chainId;
+      const gasprice = await this.signer.provider.getGasPrice();
+      // console.log('-----chainId', chainId);
+      // console.log('-----gasSettings', gasSettings);
+      // console.log('-----gasprice', gasprice.toNumber());
 
-      if (
-        this.chainsHasGasPrice.includes(chainId) &&
-        gasSettings.gasPrice === 0
-      ) {
-        const gasprice = await this.signer.provider.getGasPrice();
+      if (gasSettings.gasPrice === 0 && gasprice.toNumber()) {
         gasSettings.gasPrice = gasprice.toNumber();
       }
-      if (
-        this.chainsHasGasPrice.includes(chainId) &&
-        gasSettings.maxFeePerGas === 0
-      ) {
-        const gasprice = await this.signer.provider.getGasPrice();
+      if (gasSettings.maxFeePerGas === 0 && gasprice.toNumber()) {
         gasSettings.maxFeePerGas = gasprice.toNumber();
       }
 
       const txOptions = { ...gasSettings, ...options };
 
-      if (this.chainsEip1559.includes(chainId)) {
+      if (!this.chainsEip1559.includes(chainId)) {
         txOptions.type = 0;
       }
 
