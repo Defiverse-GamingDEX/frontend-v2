@@ -9,7 +9,7 @@ import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
-
+import { useTokenLists } from '@/providers/token-lists.provider';
 import usePools from '@/composables/pools/usePools';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
@@ -28,6 +28,21 @@ const filterState = reactive({
   isYukichi: false,
 });
 // COMPOSABLES
+const { activeTokenLists, approvedTokenLists, toggleTokenList, isActiveList } =
+  useTokenLists();
+const tokenListArray = Object.entries(activeTokenLists.value) || [];
+
+const _token_list_origin = ref(
+  tokenListArray
+    ? tokenListArray.length > 0
+      ? tokenListArray[0]
+        ? tokenListArray[0].length >= 2
+          ? tokenListArray[0][1].tokens
+          : []
+        : []
+      : []
+    : []
+);
 const { getAdminAddress } = usePoolCreation();
 const router = useRouter();
 const { appNetworkConfig } = useWeb3();
@@ -54,7 +69,42 @@ const {
 } = usePools(selectedTokens, poolsSortField, filterOptions);
 
 const pools = computed(() => {
-  return rawPools.value;
+  let pools = rawPools.value;
+  const tokenListOrigin = _token_list_origin.value;
+
+  // process pool is verified
+  for (let i = 0; i < pools.length; i++) {
+    let pool: any = { ...rawPools.value[i] }; // Create a mutable copy of the pool object
+    const tokenList = pool.tokensList;
+    let isVerified = true;
+    if (tokenList.length > 0) {
+      for (let j = 0; j < tokenList.length; j++) {
+        const token = tokenList[j];
+        let availableToken = tokenListOrigin.find(
+          t => t.address?.toLowerCase() === token.toLowerCase()
+        );
+        if (availableToken && availableToken.owner !== 'gamingdex') {
+          isVerified = false;
+          break;
+        }
+      }
+    }
+    // if pool is yukichi pool
+    if (pool.isYukichi) {
+      isVerified = false;
+    }
+    pool.isVerified = isVerified;
+    pools[i] = pool; // Replace the readonly object with our mutable copy
+  }
+  // process filter pools
+  if (filterState.isVerified) {
+    pools = pools.filter((p: any) => p.isVerified);
+  }
+  if (filterState.isPermissionless) {
+    pools = pools.filter((p: any) => !p.isYukichi && !p.isVerified);
+  }
+  console.log('🚀 ~ pools ~ poolsFinal:', pools);
+  return pools;
 });
 
 const { upToMediumBreakpoint } = useBreakpoints();
@@ -93,20 +143,32 @@ function navigateToCreatePool() {
 }
 
 function onColumnSort(columnId: string) {
+  console.log('🚀 ~ onColumnSort ~ columnId:', columnId);
+  if (columnId === 'volume') {
+    columnId = 'totalSwapVolume';
+  } else {
+    columnId = 'totalLiquidity';
+  }
   poolsSortField.value = columnId;
 }
 
 // Handlers cho các toggle events
 function onVerifiedChange(value: boolean) {
   filterState.isVerified = value;
+  filterState.isPermissionless = false;
+  filterState.isYukichi = false;
 }
 
 function onPermissionlessChange(value: boolean) {
   filterState.isPermissionless = value;
+  filterState.isVerified = false;
+  filterState.isYukichi = false;
 }
 
 function onYukichiChange(value: boolean) {
   filterState.isYukichi = value;
+  filterState.isVerified = false;
+  filterState.isPermissionless = false;
 }
 
 function loadMore() {
@@ -263,3 +325,4 @@ onBeforeMount(async () => {
   }
 }
 </style>
+

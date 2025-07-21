@@ -137,8 +137,8 @@ export default function usePoolsQuery(
 
     const queryArgs: GraphQLArgs = {
       chainId: configService.network.chainId,
-      //orderBy: poolsSortField?.value || 'totalLiquidity',
-      orderBy: 'totalLiquidity', // hard because volumne and apr not have in subgraph
+      orderBy: poolsSortField?.value || 'totalLiquidity',
+      //orderBy: 'totalLiquidity', // hard because volumne and apr not have in subgraph
       orderDirection: 'desc',
       where: {
         tokensList: { [tokensListFilterOperation]: tokenListFormatted },
@@ -170,21 +170,23 @@ export default function usePoolsQuery(
         // no thing to do filter after have data because graphQL not support
       } else if (isVerified) {
         // Combine with poolIds if they exist
-        let idConditions = [...verifiedPools];
-        if (filterOptions?.poolIds?.value) {
-          // Only keep IDs that are both in verifiedPools and poolIds
-          idConditions = idConditions.filter(id =>
-            filterOptions.poolIds.value.includes(id)
-          );
-        }
-        queryArgs.where.id = { in: idConditions };
+        // let idConditions = [...verifiedPools];
+        // if (filterOptions?.poolIds?.value) {
+        //   // Only keep IDs that are both in verifiedPools and poolIds
+        //   idConditions = idConditions.filter(id =>
+        //     filterOptions.poolIds.value.includes(id)
+        //   );
+        // }
+        // queryArgs.where.id = { in: idConditions };
+        //  no thing to do now filter by token in frontend
       } else if (isPermissionless) {
         // Combine not_in conditions
-        const notInConditions = [...verifiedPools];
-        if (POOLS.BlockList) {
-          notInConditions.push(...POOLS.BlockList);
-        }
-        queryArgs.where.id = { not_in: notInConditions };
+        // const notInConditions = [...verifiedPools];
+        // if (POOLS.BlockList) {
+        //   notInConditions.push(...POOLS.BlockList);
+        // }
+        // queryArgs.where.id = { not_in: notInConditions };
+        // no thing to do now filter by token in frontend
       } else if (isYukichi) {
         queryArgs.where.owner = { not_in: [gameDexOwnerAddress] };
       }
@@ -285,12 +287,19 @@ export default function usePoolsQuery(
         await nextTick();
         poolsStoreService.setPools([]);
       }
+      const isVerified = currentFilterOptions.value?.isVerified ?? false;
+      console.log('🚀 ~ queryFn ~ isVerified:', isVerified);
       const gameDexOwnerAddress = GAMING_DEX_OWNER_ADDRESS;
       const poolsRs: Pool[] = await poolsRepository.fetch(fetchOptions);
       const pools = poolsRs.map(pool => {
-        const verifiedPools = POOLS.VerifiedPools || [];
-        const isVerifiedPool = verifiedPools.includes(pool.id);
+        console.log('🚀 ~ queryFn ~ pool:', pool);
+        // const verifiedPools = POOLS.VerifiedPools || [];
+        // let isVerifiedPool = verifiedPools.includes(pool.id); // old logic
+        let isVerifiedPool = false;
         const isYukichiPool = pool.owner !== gameDexOwnerAddress;
+        if (isYukichiPool) {
+          isVerifiedPool = false;
+        }
         return {
           ...pool,
           isVerified: isVerifiedPool || false,
