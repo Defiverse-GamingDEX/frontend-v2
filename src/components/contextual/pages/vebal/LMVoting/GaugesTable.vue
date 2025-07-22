@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PoolToken } from '@defiverse/balancer-sdk';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -17,6 +17,8 @@ import {
   isUnknownType,
   orderedPoolTokens,
   poolURLFor,
+  totalAprLabel,
+  absMaxApr,
 } from '@/composables/usePool';
 import { oneSecondInMs } from '@/composables/useTime';
 import { orderedTokenURIs } from '@/composables/useVotingGauges';
@@ -29,6 +31,11 @@ import DistributeRewardsBtn from './DistributeRewardsBtn.vue';
 import GaugesTableMyVotes from './GaugesTableMyVotes.vue';
 import GaugesTableVoteBtn from './GaugesTableVoteBtn.vue';
 import GaugeVoteInfo from './GaugeVoteInfo.vue';
+import useNumbers from '@/composables/useNumbers';
+import APRTooltip from '@/components/tooltips/APRTooltip/APRTooltip.vue';
+import { getBalancer } from '@/dependencies/balancer-sdk';
+import useNetwork from '@/composables/useNetwork';
+import { Pool } from '@/services/pool/types';
 
 /**
  * TYPES
@@ -55,7 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   tabSelect: 'gauge',
   data: () => [],
 });
-
+console.log('🚀 ~ props.data:', props.data);
 const emit = defineEmits<{
   (e: 'clickedVote', value: VotingGaugeWithVotes): void;
 }>();
@@ -63,8 +70,10 @@ const emit = defineEmits<{
 /**
  * STATE
  */
-
 const adminAddress = ref(null);
+const gaugesWithApr = ref<VotingGaugeWithVotes[]>([]);
+const isLoadingApr = ref(false);
+const loadingAprGaugeIds = ref<Set<string>>(new Set());
 
 /**
  * COMPOSABLES
@@ -74,6 +83,8 @@ const { t } = useI18n();
 const { upToLargeBreakpoint } = useBreakpoints();
 const { isWalletReady, account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
+const { fNum2 } = useNumbers();
+const { networkId } = useNetwork();
 
 /**
  * DATA
@@ -125,6 +136,21 @@ const columns = computed(() => {
       Cell: 'myVotesCell',
       cellClassName: 'font-numeric',
       hidden: !isWalletReady.value,
+    },
+    {
+      name: t('apr'),
+      Cell: 'aprCell',
+      accessor: gauge => gauge.pool?.apr?.min.toString() || '0',
+      align: 'right',
+      id: 'apr',
+      sortKey: gauge => {
+        let apr = 0;
+        if (gauge.pool?.apr) {
+          apr = Number(gauge.pool.apr.min || 0);
+        }
+        return isFinite(apr) ? apr : 0;
+      },
+      width: 150,
     },
     {
       name: t('veBAL.liquidityMining.table.vote'),
@@ -234,16 +260,108 @@ function openConfigReward(gauge) {
     query: { returnRoute: 'vebal', gaugeAddress: gauge.address },
   });
 }
+
+/**
+ * Fetch APR data for all gauges
+ */
+async function fetchAprData() {
+  if (!props.data || props.data.length === 0) return;
+
+  // Initialize with all gauges
+  gaugesWithApr.value = [...props.data];
+
+  // Process gauges in batches to avoid too many simultaneous requests
+  const batchSize = 5;
+  for (let i = 0; i < props.data.length; i += batchSize) {
+    const batch = props.data.slice(i, i + batchSize);
+
+    // Mark these gauges as loading APR
+    batch.forEach(gauge => {
+      loadingAprGaugeIds.value.add(gauge.pool.id);
+    });
+
+    // Create promises for each gauge in the batch
+    const promises = batch.map(async gauge => {
+      try {
+        // Create a full pool object from the gauge's pool data
+        const pool = {
+          ...gauge.pool,
+          chainId: networkId.value,
+          name: gauge.pool.symbol || '',
+          poolTypeVersion: 1,
+          swapFee: '0',
+          protocolYieldFeeCache: '0',
+          tokens: gauge.pool.tokens || [],
+          totalLiquidity: '0',
+          totalShares: '0',
+          tokensList: gauge.pool.tokens?.map(t => t.address) || [],
+          owner: '',
+          factory: '',
+        } as Pool;
+
+        // Fetch APR data from Balancer SDK
+        const aprData = await getBalancer().pools.apr(pool);
+        console.log('🚀 ~ fetchAprData ~ aprData:', aprData);
+
+        if (aprData) {
+          // Find the gauge in our array and update it
+          const gaugeIndex = gaugesWithApr.value.findIndex(
+            g => g.pool.id === gauge.pool.id
+          );
+          if (gaugeIndex >= 0) {
+            const updatedGauge = { ...gaugesWithApr.value[gaugeIndex] };
+            (updatedGauge.pool as any).apr = aprData;
+            gaugesWithApr.value[gaugeIndex] = updatedGauge;
+          }
+        }
+      } catch (error) {
+        console.error(`Failed to fetch APR for pool ${gauge.pool.id}:`, error);
+      } finally {
+        // Remove this gauge from loading state
+        loadingAprGaugeIds.value.delete(gauge.pool.id);
+      }
+    });
+
+    // Wait for all promises in the batch to resolve
+    await Promise.all(promises);
+  }
+}
+
+/**
+ * Check if a specific gauge's APR is loading
+ */
+function isGaugeAprLoading(gauge: VotingGaugeWithVotes): boolean {
+  return loadingAprGaugeIds.value.has(gauge.pool.id);
+}
+
 /**
  * WATCHERS
  */
-// watchEffect(() => {
-//   _amount.value = props?.inputSelect?.amount;
-//   _address.value = props?.inputSelect?.tokenAddress;
-// });
+watch(
+  () => props.data,
+  async newData => {
+    if (newData && newData.length > 0) {
+      // Initialize gaugesWithApr immediately with the data
+      gaugesWithApr.value = [...newData];
+      // Then fetch APR data asynchronously
+      fetchAprData();
+    }
+  },
+  { immediate: true }
+);
+
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
+});
+
+onMounted(() => {
+  if (props.data && props.data.length > 0) {
+    // Initialize gaugesWithApr immediately with the data
+    gaugesWithApr.value = [...props.data];
+    // Then fetch APR data asynchronously
+    fetchAprData();
+  }
 });
 </script>
 
@@ -258,7 +376,7 @@ onBeforeMount(async () => {
     <BalTable
       :key="dataKey"
       :columns="columns"
-      :data="data"
+      :data="gaugesWithApr.length > 0 ? gaugesWithApr : data"
       :isLoading="isLoading"
       skeletonClass="h-64"
       sticky="both"
@@ -356,6 +474,16 @@ onBeforeMount(async () => {
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <GaugesTableMyVotes :gauge="gauge"></GaugesTableMyVotes>
           {{ tabSelect?.value }}
+        </div>
+      </template>
+      <template #aprCell="gauge">
+        <div class="flex justify-end py-4 px-6 text-right font-numeric">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
+          <template v-else-if="gauge.pool?.apr">
+            {{ totalAprLabel(gauge.pool.apr, gauge.pool.boost) }}
+            <APRTooltip :pool="gauge.pool" />
+          </template>
+          <template v-else> - </template>
         </div>
       </template>
       <template #voteColumnCell="gauge">
