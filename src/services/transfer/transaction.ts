@@ -9,6 +9,8 @@ import { captureException } from '@sentry/browser';
 import { Contract, ContractInterface } from 'ethers';
 import { verifyTransactionSender } from '@/services/web3/web3.plugin';
 import { TransactionConcern } from '@/services/web3/transactions/concerns/transaction.concern';
+import { GasSettings } from '@/services/gas-price/providers/types';
+import BigNumber from 'bignumber.js';
 
 type SendTransactionOpts = {
   contractAddress: string;
@@ -32,7 +34,6 @@ export class Transaction extends TransactionConcern {
     action,
     params = [],
     options = {},
-    forceLegacyTxType = false,
   }: SendTransactionOpts): Promise<TransactionResponse> {
     const contractWithSigner = new Contract(contractAddress, abi, this.signer);
 
@@ -41,12 +42,11 @@ export class Transaction extends TransactionConcern {
     console.log('Params: ', JSON.stringify(params));
 
     try {
-      const gasSettings = await this.gasPrice.settingsForContractCall(
+      const gasSettings = await this.estimateGas(
         contractWithSigner,
         action,
         params,
-        options,
-        forceLegacyTxType
+        options
       );
       const network = await this.signer.provider.getNetwork();
       const chainId = network?.chainId;
@@ -55,11 +55,15 @@ export class Transaction extends TransactionConcern {
       // console.log('-----gasSettings', gasSettings);
       // console.log('-----gasprice', gasprice.toNumber());
 
-      if (gasSettings.gasPrice === 0 && gasprice.toNumber()) {
+      if (!this.chainsEip1559.includes(chainId) && gasprice.toNumber()) {
         gasSettings.gasPrice = gasprice.toNumber();
       }
-      if (gasSettings.maxFeePerGas === 0 && gasprice.toNumber()) {
-        gasSettings.maxFeePerGas = gasprice.toNumber();
+      if (this.chainsEip1559.includes(chainId) && gasprice.toNumber()) {
+        gasSettings.maxFeePerGas = BigNumber(gasprice.toNumber())
+          .times(1.1)
+          .decimalPlaces(0, BigNumber.ROUND_DOWN)
+          .toNumber();
+        gasSettings.maxPriorityFeePerGas = gasprice.toNumber();
       }
 
       const txOptions = { ...gasSettings, ...options };
@@ -95,6 +99,29 @@ export class Transaction extends TransactionConcern {
       }
       return Promise.reject(error);
     }
+  }
+
+  private formatGasLimit(limit: number): number {
+    return Math.floor(limit * 1.2);
+  }
+
+  public async estimateGas(
+    contractWithSigner: Contract,
+    action: string,
+    params: any[],
+    options: Record<string, any>
+  ): Promise<GasSettings> {
+    const gasSettings: GasSettings = {};
+    try {
+      const gasLimit = await contractWithSigner.estimateGas[action](
+        ...params,
+        options
+      );
+      gasSettings.gasLimit = this.formatGasLimit(gasLimit.toNumber());
+    } catch (err) {
+      gasSettings.gasLimit = this.formatGasLimit(8020031);
+    }
+    return gasSettings;
   }
 
   public async callStatic<T>({
