@@ -65,7 +65,11 @@ async function cancelOrder(orderId: string) {
 </script>
 
 <template>
-  <BalPopover noPad :align="isMobile ? 'left' : undefined">
+  <BalPopover
+    noPad
+    :align="isMobile ? 'left' : undefined"
+    :detached="isMobile ? true : undefined"
+  >
     <template #activator>
       <BalBtn
         color="white"

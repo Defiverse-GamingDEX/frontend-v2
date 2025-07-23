@@ -43,7 +43,7 @@ export async function multicall<T>(
     );
 
     return res.map(([success, returnData], i) => {
-      if (!success) return null;
+      if (!success || returnData === '0x') return null;
       const decodedResult = itf.decodeFunctionResult(calls[i][1], returnData);
       // Automatically unwrap any simple return values
       return decodedResult.length > 1 ? decodedResult : decodedResult[0];

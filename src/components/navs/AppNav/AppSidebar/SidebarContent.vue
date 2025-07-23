@@ -36,15 +36,18 @@ const router = useRouter();
  * STATE
  */
 const blockIcon = ref<HTMLDivElement>();
+const navLinks = ref<any[]>([]);
 
-const navLinks = NAV_LINKS.map(i => {
-  return {
-    label: t(i.text),
-    path: `/${networkSlug}/${i.path}`,
-    goal: Goals[i.goal_key],
-    chainsSupport: i.chainsSupport,
-  };
-});
+// const navLinks = NAV_LINKS.filter(i => isChainsSupport(i.chainsSupport)).map(
+//   i => {
+//     return {
+//       label: t(i.text),
+//       path: `/${networkSlug}/${i.path}`,
+//       goal: Goals[i.goal_key],
+//       chainsSupport: i.chainsSupport,
+//     };
+//   }
+// );
 
 const ecosystemLinks = [
   { label: t('docs'), url: 'https://docs.gaming-dex.com/' },
@@ -89,10 +92,22 @@ function getSocialComponent(componentName) {
   return socialLinks[componentName].component;
 }
 
-async function navTo(path: string, goal: string) {
+async function navTo(path: any, goal: string) {
   trackGoal(goal);
   router.push(path);
   emit('close');
+}
+
+function isChainsSupport(chains) {
+  return !chains || (chains && chains.includes(networkConfig.chainId));
+}
+
+function mapNavLink(i) {
+  return {
+    label: t(i.text),
+    path: { name: i.name_link, params: { networkSlug } },
+    goal: Goals[i.goal_key],
+  };
 }
 
 /**
@@ -102,6 +117,17 @@ watch(blockNumber, async () => {
   blockIcon.value?.classList.add('block-change');
   await sleep(300);
   blockIcon.value?.classList.remove('block-change');
+});
+
+onBeforeMount(() => {
+  navLinks.value = NAV_LINKS.flatMap(i => {
+    if (i.children) {
+      return i.children
+        .filter(j => isChainsSupport(j.chainsSupport))
+        .map(j => mapNavLink(j));
+    }
+    return isChainsSupport(i.chainsSupport) ? [mapNavLink(i)] : [];
+  });
 });
 </script>
 
@@ -116,24 +142,11 @@ watch(blockNumber, async () => {
     <div class="grid mt-2 text-lg grid-col-1">
       <div
         v-for="link in navLinks"
-        v-show="
-          !link.chainsSupport ||
-          (link.chainsSupport &&
-            link.chainsSupport.includes(networkConfig.chainId))
-        "
         :key="link.label"
         class="side-bar-link"
         @click="navTo(link.path, link.goal)"
       >
-        <span
-          v-if="
-            !link.chainsSupport ||
-            (link.chainsSupport &&
-              link.chainsSupport.includes(networkConfig.chainId))
-          "
-        >
-          {{ link.label }}
-        </span>
+        {{ link.label }}
       </div>
       <!-- <div class="side-bar-link">
         <a

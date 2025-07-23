@@ -74,7 +74,7 @@ export const isTestnet = computed(() => isGoerli.value);
  * METHODS
  */
 
-export function networkFor(key: string | number): Network {
+export function networkFor(key: string | number): Network | number {
   switch (key.toString()) {
     case '1':
       return Network.MAINNET;

@@ -1,0 +1,87 @@
+{
+  "key": "592",
+  "chainId": 592,
+  "chainName": "Astar mainnet",
+  "name": "Astar mainnet",
+  "shortName": "astar",
+  "slug": "astar",
+  "network": "astar",
+  "unknown": false,
+  "rpc": "https://evm.astar.network",
+  "ws": "https://evm.astar.network",
+  "publicRpc": "https://evm.astar.network",
+  "explorer": "https://blockscout.com/astar",
+  "explorerName": "Shibuya explorer",
+  "subgraph": "",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [],
+    "aave": "",
+    "gauge": "",
+    "blocks": ""
+  },
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
+  "nativeAsset": {
+    "name": "ASTR",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "ASTR",
+    "decimals": 18,
+    "logoURI": "tokens/astar.png",
+    "deeplinkId": "",
+    "minTransactionBuffer": ""
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "0x5ba1e12693dc8f9c48aad8770482f4739beed696",
+    "authorizer": "",
+    "vault": "",
+    "weightedPoolFactory": "",
+    "stablePoolFactory": "",
+    "weth": "",
+    "rETH": "",
+    "stMATIC": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "",
+    "batchRelayer": "",
+    "batchRelayerV4": "",
+    "gaugeFactory": "",
+    "balancerMinter": "",
+    "gaugeController": "",
+    "tokenAdmin": "",
+    "veBAL": "",
+    "veDelegationProxy": "",
+    "veBALHelpers": "",
+    "feeDistributor": "",
+    "feeDistributorDeprecated": "",
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "disperse": "0xFE466D3573297181cf7E1368a9B9cB086F97afe5"
+  },
+  "keys": {
+    "infura": "daaa68ec242643719749dd1caba2fc66",
+    "alchemy": "oGLgncMVHNWltnK0nTfiryxQ6gYemKQO"
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 2,
+    "weight": 100
+  }
+}

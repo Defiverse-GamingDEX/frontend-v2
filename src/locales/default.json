@@ -1345,6 +1345,8 @@
     "approve": "Approve",
     "depositTokens": "Deposit tokens",
     "transfer": "Transfer",
+    "batchTransfer": "Transfer",
+    "approveBatchTransfer": "Approve",
     "claim": "Claim",
     "createPool": "Create pool",
     "drip": "Drip",
@@ -1549,5 +1551,81 @@
     "buyBtnLabel": "Buy Crypto",
     "buyTokenBtn": "Buy",
     "comingSoon": "Coming Soon"
-  }
+  },
+  "invalidFormat": "Invalid format",
+  "address": "Address",
+  "remaining": "Remaining",
+  "orderNumberText": "No.",
+  "sending": "Sending",
+  "sent": "Sent",
+  "tokenId": "Nft id",
+  "checking": "Checking...",
+  "transfer": {
+    "transfer": "Transfer",
+    "transferToken": "Transfer Token",
+    "transferNft": "Transfer NFT",
+    "errorMissingNetworkConfig": "Missing network configuration",
+    "tokenType": "Token Type",
+    "SelectTheToken": "Select The Token",
+    "SelectAToken": "Select a Token",
+    "importToken": "Import Token",
+    "importERC20Token": "Import ERC20 Token",
+    "importBEP20Token": "Import BEP20 Token",
+    "importNft": "Import NFT",
+    "tokenAddress": "Token address",
+    "import": "Import",
+    "pleaseEnterAddress": "Please enter address",
+    "tokenInfo": "Token Info",
+    "tokenNotFound": "Token not found",
+    "tokenAlreadyExists": "Token already exists",
+    "tokenImportFailed": "Token import failed",
+    "tokenAddedSuccess": "Token has been added to your local token list.",
+    "approveForTransfer": "Approve {0} for transfer",
+    "transferTokenSummary_one": "Transfer {amount} {currency} to {count} address.",
+    "transferTokenSummary_other": "Transfer {amount} {currency} to {count} addresses.",
+    "transferNftSummary_one": "Transfer NFT - {type} to {count} address.",
+    "transferNftSummary_other": "Transfer NFT - {type} to {count} addresses.",
+    "recipientInput": {
+      "native": {
+        "title": "Recipients and amounts",
+        "content": "Enter one address and amount on each line. (Supports any format)",
+        "placeholder": "Please enter address and amount\n address,000\n address,000\n ..."
+      },
+      "erc20": {
+        "title": "Recipients and amounts",
+        "content": "Enter one address and amount on each line. (Supports any format)",
+        "placeholder": "Please enter address and amount\n address,000\n address,000\n ..."
+      },
+      "erc721": {
+        "title": "Recipients, NFT Ids",
+        "content": "Enter one address and NFT Ids on each line. (Supports any format)",
+        "placeholder": "Please enter address and NFT Ids\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,11\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,12\n ..."
+      },
+      "erc1155": {
+        "title": "Receivers, NFT Ids, Amounts",
+        "content": "Enter one address, NFT Ids and amounts on each line. (Supports any format)",
+        "placeholder": "Please enter address and NFT Ids\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,11,1000\n 0xF0a461322c1e7383fF1b73c886e073392896eb65,12,1000\n ..."
+      }
+    },
+    "transactionTypesTooltips": {
+      "tokenApproval": {
+        "content": "You must approve this token before transferring",
+        "title": "Approve {0}"
+      },
+      "nftApproval": {
+        "content": "Approval is required to transfer this NFT.",
+        "title": "Approve {0}"
+      },
+      "transfer": {
+        "content": "Finalize the transaction by submitting it for inclusion on the blockchain.",
+        "title": "Confirm transaction"
+      }
+    },
+    "tokenIdNotExist": "The token ID {id} does not exist",
+    "notOwnedToken": "You do not own token ID {id}",
+    "tokenZeroBalance": "Token ID {id} has zero balance.",
+    "insufficientBalance": "Not enough balance for Token ID {id}. You need {requiredAmount}, but only have {balance}.",
+    "": ""
+  },
+  "": ""
 }

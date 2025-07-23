@@ -1,0 +1,87 @@
+{
+  "key": "81",
+  "chainId": 81,
+  "chainName": "Astar - Shibuya",
+  "name": "Astar - Shibuya",
+  "shortName": "Shibuya",
+  "slug": "shibuya",
+  "network": "shibuya",
+  "unknown": false,
+  "rpc": "https://evm.shibuya.astar.network",
+  "ws": "https://evm.shibuya.astar.network",
+  "publicRpc": "https://evm.shibuya.astar.network",
+  "explorer": "https://shibuya.blockscout.com",
+  "explorerName": "Shibuya explorer",
+  "subgraph": "",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [],
+    "aave": "",
+    "gauge": "",
+    "blocks": ""
+  },
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
+  "nativeAsset": {
+    "name": "SBY",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "SBY",
+    "decimals": 18,
+    "logoURI": "tokens/astar.png",
+    "deeplinkId": "",
+    "minTransactionBuffer": ""
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "",
+    "authorizer": "",
+    "vault": "",
+    "weightedPoolFactory": "",
+    "stablePoolFactory": "",
+    "weth": "",
+    "rETH": "",
+    "stMATIC": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "",
+    "batchRelayer": "",
+    "batchRelayerV4": "",
+    "gaugeFactory": "",
+    "balancerMinter": "",
+    "gaugeController": "",
+    "tokenAdmin": "",
+    "veBAL": "",
+    "veDelegationProxy": "",
+    "veBALHelpers": "",
+    "feeDistributor": "",
+    "feeDistributorDeprecated": "",
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "disperse": "0x0855eA6187dE973Bc5849d67C14f59c6fE2cF039"
+  },
+  "keys": {
+    "infura": "daaa68ec242643719749dd1caba2fc66",
+    "alchemy": "oGLgncMVHNWltnK0nTfiryxQ6gYemKQO"
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 2,
+    "weight": 100
+  }
+}
