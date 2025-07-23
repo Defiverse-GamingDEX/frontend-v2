@@ -36,6 +36,13 @@ import APRTooltip from '@/components/tooltips/APRTooltip/APRTooltip.vue';
 import { getBalancer } from '@/dependencies/balancer-sdk';
 import useNetwork from '@/composables/useNetwork';
 import { Pool } from '@/services/pool/types';
+import PoolRepository from '@/services/pool/pool.repository';
+import { useTokens } from '@/providers/tokens.provider';
+import { configService } from '@/services/config/config.service';
+import {
+  PoolsFallbackRepository,
+  PoolRepository as SDKPoolRepository,
+} from '@defiverse/balancer-sdk';
 
 /**
  * TYPES
@@ -85,6 +92,7 @@ const { isWalletReady, account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
 const { fNum2 } = useNumbers();
 const { networkId } = useNetwork();
+const { tokens: tokenMeta } = useTokens();
 
 /**
  * DATA
@@ -262,6 +270,184 @@ function openConfigReward(gauge) {
 }
 
 /**
+ * Fetch pool data with the correct repository for a specific chain
+ */
+async function fetchPoolWithCorrectRepository(
+  poolId: string,
+  chainId: number
+): Promise<Pool | null> {
+  try {
+    // Get network config for the specific chainId
+    const networkConfig = configService.getNetworkConfig(chainId);
+    if (!networkConfig) {
+      console.error(`No network config found for chainId ${chainId}`);
+      return null;
+    }
+
+    console.log(
+      `Using subgraph for network ${chainId}:`,
+      networkConfig.subgraphs.main
+    );
+
+    // Create a new PoolRepository instance
+    const poolRepository = new PoolRepository(tokenMeta);
+
+    // Get access to the private repository property
+    const repo = poolRepository as any;
+
+    // Save the original repository
+    const originalRepository = repo.repository;
+
+    // Create query args
+    const queryArgs = {
+      where: {
+        id: {
+          eq: poolId.toLowerCase(),
+        },
+        poolType: {
+          not_in: [
+            'Element',
+            'AaveLinear',
+            'EulerLinear',
+            'Linear',
+            'ERC4626Linear',
+            'FX',
+            'Gyro2',
+            'Gyro3',
+            'GyroE',
+            'HighAmpComposableStable',
+          ],
+        },
+        totalShares: {
+          gt: -1,
+        },
+      },
+    };
+
+    try {
+      // Temporarily create a new repository with the correct chainId
+      // This is a hack to override the repository's internal configuration
+
+      // Build custom repositories for the specific chainId
+      const customRepositories = buildRepositoriesForChainId(chainId, poolId);
+
+      // Replace the repository with our custom one
+      repo.repository = new PoolsFallbackRepository(customRepositories, {
+        timeout: 30 * 1000,
+      });
+
+      // Now fetch with the custom repository
+      const pool = await poolRepository.fetch(queryArgs);
+
+      if (!pool) {
+        console.warn(`No pool found for ID ${poolId} on chain ${chainId}`);
+        return null;
+      }
+
+      return pool;
+    } finally {
+      // Restore the original repository
+      repo.repository = originalRepository;
+    }
+  } catch (error) {
+    console.error(
+      `Error fetching pool data for ${poolId} on chain ${chainId}:`,
+      error
+    );
+    return null;
+  }
+}
+
+/**
+ * Build repositories for a specific chainId
+ */
+function buildRepositoriesForChainId(
+  chainId: number,
+  targetPoolId: string
+): SDKPoolRepository[] {
+  const repositories: SDKPoolRepository[] = [];
+
+  // Create a subgraph repository for the specific chainId
+  const subgraphRepository = {
+    fetch: async (): Promise<Pool[]> => {
+      // Get the network config for the chainId
+      const networkConfig = configService.getNetworkConfig(chainId);
+
+      // Use the first subgraph URL from the network config
+      const subgraphUrl = networkConfig.subgraphs.main[0];
+
+      // Create a temporary fetch function that uses the correct subgraph URL
+      const fetchFromSubgraph = async () => {
+        try {
+          const response = await fetch(subgraphUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              query: `
+                query GetPool($id: String!) {
+                  pool(id: $id) {
+                    id
+                    address
+                    poolType
+                    swapFee
+                    totalShares
+                    totalLiquidity
+                    tokens {
+                      address
+                      balance
+                      weight
+                      symbol
+                      name
+                      decimals
+                    }
+                  }
+                }
+              `,
+              variables: {
+                id: targetPoolId.toLowerCase(),
+              },
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.errors) {
+            console.error('Subgraph query errors:', data.errors);
+            return [];
+          }
+
+          if (!data.data.pool) {
+            return [];
+          }
+
+          // Convert the response to a Pool object
+          const pool = {
+            ...data.data.pool,
+            chainId,
+          };
+
+          return [pool];
+        } catch (error) {
+          console.error('Error fetching from subgraph:', error);
+          return [];
+        }
+      };
+
+      return fetchFromSubgraph();
+    },
+    get skip(): number {
+      return 0;
+    },
+  };
+
+  repositories.push(subgraphRepository);
+
+  return repositories;
+}
+
+/**
  * Fetch APR data for all gauges
  */
 async function fetchAprData() {
@@ -283,21 +469,29 @@ async function fetchAprData() {
     // Create promises for each gauge in the batch
     const promises = batch.map(async gauge => {
       try {
-        // Create a full pool object from the gauge's pool data
-        const pool = {
-          ...gauge.pool,
-          chainId: networkId.value,
-          name: gauge.pool.symbol || '',
-          poolTypeVersion: 1,
-          swapFee: '0',
-          protocolYieldFeeCache: '0',
-          tokens: gauge.pool.tokens || [],
-          totalLiquidity: '0',
-          totalShares: '0',
-          tokensList: gauge.pool.tokens?.map(t => t.address) || [],
-          owner: '',
-          factory: '',
-        } as Pool;
+        // Fetch the actual pool data using our custom method
+        const chainId = gauge.network || networkId.value;
+        console.log(
+          `Fetching pool data for ${gauge.pool.id} on chain ${chainId}`
+        );
+
+        // Use our custom method that creates a repository with the correct chainId
+        const pool = await fetchPoolWithCorrectRepository(
+          gauge.pool.id,
+          chainId
+        );
+
+        if (!pool) {
+          console.warn(
+            `No pool found for ID ${gauge.pool.id} on chain ${chainId}`
+          );
+          throw new Error(`Pool not found: ${gauge.pool.id}`);
+        }
+
+        console.log(
+          `Successfully fetched pool data for ${gauge.pool.id}:`,
+          pool
+        );
 
         // Fetch APR data from Balancer SDK
         const aprData = await getBalancer().pools.apr(pool);
