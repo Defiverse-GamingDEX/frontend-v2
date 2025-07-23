@@ -56,6 +56,7 @@ const services = [
   'alchemy',
   'the-graph',
   'fathom-analytics',
+  'google-analytics',
   'TRM-labs',
   'sentry',
 ];
