@@ -1,8 +1,8 @@
 import { merge } from 'lodash';
 
 const defaultArgs = {
-  first: 999,
-  // first: 200,
+  // first: 999,
+  first: 200,
 };
 
 const defaultAttrs = {
