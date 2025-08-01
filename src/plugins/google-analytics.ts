@@ -1,13 +1,14 @@
 /**
  * Google Analytics 4 implementation
- * Tracking ID: G-Y6LDFXS7HJ
+ * Tracking ID:
  */
-
+import { IS_PROD } from '@/constants/env';
+const trackingId = IS_PROD ? 'G-Y6LDFXS7HJ' : 'G-P01DGL40LM';
 export default function initGoogleAnalytics() {
   // Create script element for the gtag.js library
   const gtagScript = document.createElement('script');
   gtagScript.async = true;
-  gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-Y6LDFXS7HJ';
+  gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${trackingId}`;
   document.head.appendChild(gtagScript);
 
   // Initialize the dataLayer and gtag function
@@ -16,7 +17,7 @@ export default function initGoogleAnalytics() {
     window.dataLayer.push(args);
   }
   gtag('js', new Date());
-  gtag('config', 'G-Y6LDFXS7HJ');
+  gtag('config', trackingId);
 
   // Add gtag to window for potential future use
   window.gtag = gtag;
