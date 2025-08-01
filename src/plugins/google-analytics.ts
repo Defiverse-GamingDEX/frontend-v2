@@ -3,7 +3,7 @@
  * Tracking ID:
  */
 import { IS_PROD } from '@/constants/env';
-const trackingId = IS_PROD ? 'G-Y6LDFXS7HJ' : 'G-P01DGL40LM';
+const trackingId = IS_PROD ? 'G-Y6LDFXS7HJ' : 'G-SQ3V8W9FS5';
 export default function initGoogleAnalytics() {
   // Create script element for the gtag.js library
   const gtagScript = document.createElement('script');
