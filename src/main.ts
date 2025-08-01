@@ -4,6 +4,7 @@ import 'vue3-virtual-scroller/dist/vue3-virtual-scroller.css';
 
 import { registerPlugins } from '@/plugins';
 import registerDirectives from '@/plugins/directives';
+import initGoogleAnalytics from '@/plugins/google-analytics';
 import initSentry from '@/plugins/sentry';
 import '@/plugins/singularity';
 import { BarChart, LineChart, PieChart } from 'echarts/charts';
@@ -23,6 +24,7 @@ const emitter = mitt();
 window.emitter = emitter;
 console.log(window.emitter, 'window.emitter');
 initDependencies();
+initGoogleAnalytics(); // Initialize Google Analytics
 
 echarts.use([
   TooltipComponent,
