@@ -63,7 +63,8 @@ export default function useEthers() {
       onTxFailed: FailedTxCallback;
     },
     shouldRefetchBalances = true,
-    shouldRetry = true
+    shouldRetry = true,
+    chainId?: number
   ): Promise<boolean> {
     console.log('tx', tx);
     let confirmed = false;
@@ -85,9 +86,7 @@ export default function useEthers() {
         );
         if (realTx.txHash !== null) {
           txHash = realTx.txHash;
-          updateTransaction(tx.hash, 'tx', {
-            id: realTx.txHash,
-          });
+          updateTransaction(tx.hash, 'tx', { id: realTx.txHash }, chainId);
         }
       } catch {
         // eslint-disable-next-line no-empty
@@ -95,7 +94,7 @@ export default function useEthers() {
 
       // Attempt to finalize transaction so that the pending tx watcher won't check the tx again.
       if (receipt != null) {
-        finalizeTransaction(txHash, 'tx', receipt);
+        finalizeTransaction(txHash, 'tx', receipt, chainId);
       }
       callbacks.onTxConfirmed(receipt);
       if (shouldRefetchBalances && !supportsBlocknative.value) {

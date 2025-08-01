@@ -49,6 +49,7 @@ declare module '@vue/runtime-core' {
     BalTable: typeof import('./src/components/_global/BalTable/BalTable.vue')['default']
     BalTableRow: typeof import('./src/components/_global/BalTable/BalTableRow.vue')['default']
     BalTabs: typeof import('./src/components/_global/BalTabs/BalTabs.vue')['default']
+    BalTextArea: typeof import('./src/components/_global/BalTextArea/BalTextArea.vue')['default']
     BalTextInput: typeof import('./src/components/_global/BalTextInput/BalTextInput.vue')['default']
     BalToggle: typeof import('./src/components/_global/BalToggle/BalToggle.vue')['default']
     BalTooltip: typeof import('./src/components/_global/BalTooltip/BalTooltip.vue')['default']

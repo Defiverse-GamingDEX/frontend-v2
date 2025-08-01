@@ -32,7 +32,7 @@
     "symbol": "OAS",
     "decimals": 18,
     "deeplinkId": "oas",
-    "logoURI": "tokens/oas.png",
+    "logoURI": "tokens/MCHC_L.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
@@ -63,7 +63,8 @@
     "feeDistributorDeprecated": "0x7df7A30016E2825F65DDe5af4059A662926Bd0E8",
     "faucet": "",
     "gaugeRewardsHelper": "",
-    "oracle": "0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01"
+    "oracle": "0xB0A3E83540923ecFfc9a8eE9042F30b6AD4a6B01",
+    "nftTransfer": "0x841457a0E6d8a608cc98e17F06Ab7791316a43E6"
   },
   "keys": {
     "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",

@@ -1,0 +1,167 @@
+import { Goals, trackGoal } from '@/composables/useFathom';
+import { WalletError } from '@/types';
+import {
+  JsonRpcSigner,
+  TransactionResponse,
+  TransactionRequest,
+} from '@ethersproject/providers';
+import { captureException } from '@sentry/browser';
+import { Contract, ContractInterface } from 'ethers';
+import { verifyTransactionSender } from '@/services/web3/web3.plugin';
+import { TransactionConcern } from '@/services/web3/transactions/concerns/transaction.concern';
+import { GasSettings } from '@/services/gas-price/providers/types';
+import BigNumber from 'bignumber.js';
+
+type SendTransactionOpts = {
+  contractAddress: string;
+  abi: ContractInterface;
+  action: string;
+  params?: any[];
+  options?: TransactionRequest;
+  forceLegacyTxType?: boolean;
+};
+
+export class Transaction extends TransactionConcern {
+  constructor(private readonly signer: JsonRpcSigner) {
+    super();
+  }
+
+  private chainsEip1559 = [1, 248, 137];
+
+  public async sendTransaction({
+    contractAddress,
+    abi,
+    action,
+    params = [],
+    options = {},
+  }: SendTransactionOpts): Promise<TransactionResponse> {
+    const contractWithSigner = new Contract(contractAddress, abi, this.signer);
+
+    const block = await this.signer.provider.getBlockNumber();
+    console.log(`Contract: ${contractAddress} Action: ${action}`);
+    console.log('Params: ', JSON.stringify(params));
+
+    try {
+      const gasSettings = await this.estimateGas(
+        contractWithSigner,
+        action,
+        params,
+        options
+      );
+      const network = await this.signer.provider.getNetwork();
+      const chainId = network?.chainId;
+      const gasprice = await this.signer.provider.getGasPrice();
+      // console.log('-----chainId', chainId);
+      // console.log('-----gasSettings', gasSettings);
+      // console.log('-----gasprice', gasprice.toNumber());
+
+      if (!this.chainsEip1559.includes(chainId) && gasprice.toNumber()) {
+        gasSettings.gasPrice = gasprice.toNumber();
+      }
+      if (this.chainsEip1559.includes(chainId) && gasprice.toNumber()) {
+        gasSettings.maxFeePerGas = BigNumber(gasprice.toNumber())
+          .times(1.1)
+          .decimalPlaces(0, BigNumber.ROUND_DOWN)
+          .toNumber();
+        gasSettings.maxPriorityFeePerGas = gasprice.toNumber();
+      }
+
+      const txOptions = { ...gasSettings, ...options };
+
+      if (!this.chainsEip1559.includes(chainId)) {
+        txOptions.type = 0;
+      }
+
+      await Promise.all([verifyTransactionSender(this.signer)]);
+
+      trackGoal(Goals.ContractTransactionSubmitted);
+      return await contractWithSigner[action](...params, txOptions);
+    } catch (err) {
+      const error = err as WalletError;
+
+      if (this.shouldRetryAsLegacy(error)) {
+        return await this.sendTransaction({
+          contractAddress,
+          abi,
+          action,
+          params,
+          options,
+          forceLegacyTxType: true,
+        });
+      } else if (this.shouldLogFailure(error)) {
+        await this.logFailedTx(
+          contractWithSigner,
+          action,
+          params,
+          block,
+          options
+        );
+      }
+      return Promise.reject(error);
+    }
+  }
+
+  private formatGasLimit(limit: number): number {
+    return Math.floor(limit * 1.2);
+  }
+
+  public async estimateGas(
+    contractWithSigner: Contract,
+    action: string,
+    params: any[],
+    options: Record<string, any>
+  ): Promise<GasSettings> {
+    const gasSettings: GasSettings = {};
+    try {
+      const gasLimit = await contractWithSigner.estimateGas[action](
+        ...params,
+        options
+      );
+      gasSettings.gasLimit = this.formatGasLimit(gasLimit.toNumber());
+    } catch (err) {
+      gasSettings.gasLimit = this.formatGasLimit(8020031);
+    }
+    return gasSettings;
+  }
+
+  public async callStatic<T>({
+    contractAddress,
+    abi,
+    action,
+    params = [],
+    options = {},
+  }: SendTransactionOpts): Promise<T> {
+    console.log('Sending transaction');
+    console.log('Contract', contractAddress);
+    console.log('Action', `"${action}"`);
+    console.log('Params', params);
+    const contract = new Contract(contractAddress, abi, this.signer);
+    const contractWithSigner = contract.connect(this.signer);
+    return await contractWithSigner.callStatic[action](...params, options);
+  }
+
+  private async logFailedTx(
+    contract: Contract,
+    action: string,
+    params: any,
+    block: number,
+    overrides: any
+  ): Promise<void> {
+    const sender = await this.signer.getAddress();
+    const chainId = await this.signer.getChainId();
+    const calldata = contract.interface.encodeFunctionData(action, params);
+    const msgValue = overrides.value ? overrides.value.toString() : 0;
+    const simulate = `https://dashboard.tenderly.co/balancer/v2/simulator/new?rawFunctionInput=${calldata}&block=${block}&blockIndex=0&from=${sender}&gas=8000000&gasPrice=0&value=${msgValue}&contractAddress=${contract.address}&network=${chainId}`;
+
+    captureException(
+      `Failed transaction:
+    Action: ${action}
+    Sender: ${sender}`,
+      {
+        extra: {
+          simulate: simulate,
+        },
+      }
+    );
+  }
+}

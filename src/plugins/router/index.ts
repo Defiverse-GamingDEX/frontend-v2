@@ -70,6 +70,14 @@ const UserGaugeRewardPage = () =>
   import(
     /* webpackChunkName: "UserGaugeRewardPage" */ /* webpackPrefetch: true */ '@/pages/user-gauge-reward.vue'
   );
+const TransferNftPage = () =>
+  import(
+    /* webpackChunkName: "TransferNftPage" */ /* webpackPrefetch: true */ '@/pages/transfer/transfer-nft.vue'
+  );
+const TransferTokenPage = () =>
+  import(
+    /* webpackChunkName: "TransferTokenPage" */ /* webpackPrefetch: true */ '@/pages/transfer/transfer-token.vue'
+  );
 declare module 'vue-router' {
   interface RouteMeta {
     layout?: string;
@@ -198,6 +206,16 @@ const routes: RouteRecordRaw[] = [
     path: '/:networkSlug/portfolio',
     name: 'portfolio',
     component: PortfolioPage,
+  },
+  {
+    path: '/transfer/nft',
+    name: 'transfer-nft',
+    component: TransferNftPage,
+  },
+  {
+    path: '/transfer/token',
+    name: 'transfer-token',
+    component: TransferTokenPage,
   },
   {
     path: '/:networkSlug?',

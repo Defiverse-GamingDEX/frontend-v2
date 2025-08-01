@@ -5,6 +5,7 @@ type Props = {
   trigger?: PopoverTrigger;
   align?: string;
   detached?: boolean;
+  countHide?: number;
 };
 
 const props = withDefaults(defineProps<Props>(), {

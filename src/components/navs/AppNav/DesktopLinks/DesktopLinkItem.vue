@@ -29,6 +29,9 @@ const classes = computed(() => ({
     overflow-hidden p-0 transition-all
     ease-in-out duration-500;
 }
+.desktop-link-item.for-popup {
+  @apply text-gray-600 !text-base flex flex-row justify-between py-1;
+}
 
 /* .desktop-link-item::before {
   content: '';
@@ -65,7 +68,8 @@ const classes = computed(() => ({
   border-color: theme('colors.blue.300');
 }
 
-.desktop-link-item.router-link-active {
+.desktop-link-item.router-link-active,
+.desktop-link-item.router-link-active.for-popup {
   @apply text-yellow-50 dark:text-blue-400 hover:text-yellow-50 dark:hover:text-blue-400 transition-colors;
 
   font-weight: 600 !important;

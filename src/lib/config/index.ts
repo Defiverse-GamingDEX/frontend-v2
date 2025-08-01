@@ -9,6 +9,11 @@ import homestead from './homestead.json';
 import optimism from './optimism.json';
 import polygon from './polygon.json';
 import test from './test.json';
+import bscTestnet from './bsc-testnet.json';
+import bsc from './bsc.json';
+import astarTestnet from './astar-testnet.json';
+import astar from './astar.json';
+import oasysSandverse from './oasys-sandverse.json';
 
 // network for bridge
 import avalancheTestnet from './avalanche-testnet.json';
@@ -21,7 +26,7 @@ import saakuru from './saakuru.json';
 import tcgverse from './tcgverse.json';
 export interface Config {
   key: string;
-  chainId: Network | 12345 | 17;
+  chainId: Network | number;
   chainName: string;
   name: string;
   shortName: string;
@@ -83,6 +88,8 @@ export interface Config {
     faucet: string;
     gaugeRewardsHelper?: string;
     oracle?: string;
+    disperse?: string;
+    nftTransfer?: string;
   };
   keys: {
     infura: string;
@@ -122,6 +129,11 @@ const config: Record<Network | number, Config> = {
   5555: chainverse,
   7225878: saakuru,
   43113: avalancheTestnet,
+  97: bscTestnet,
+  56: bsc,
+  81: astarTestnet,
+  592: astar,
+  20197: oasysSandverse,
 };
 
 export default config;

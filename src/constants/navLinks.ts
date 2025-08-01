@@ -34,6 +34,28 @@ const NAV_LINKS_MAINNET = [
     goal_key: 'ClickNavBridge',
     chainsSupport: [248, 16116],
   },
+  {
+    text: 'transfer.transfer',
+    path: 'transfer/token',
+    name_link: 'transfer-token',
+    goal_key: 'ClickNavTransferToken',
+    children: [
+      {
+        text: 'transfer.transferToken',
+        path: 'transfer/token',
+        name_link: 'transfer-token',
+        goal_key: 'ClickNavTransferToken',
+        chainsSupport: null,
+      },
+      {
+        text: 'transfer.transferNft',
+        path: 'transfer/nft',
+        name_link: 'transfer-nft',
+        goal_key: 'ClickNavTransferNft',
+        chainsSupport: null,
+      },
+    ],
+  },
 ];
 
 export const NAV_LINKS = [...NAV_LINKS_MAINNET];

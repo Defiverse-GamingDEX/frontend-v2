@@ -8,6 +8,7 @@
   "network": "optimism",
   "unknown": false,
   "rpc": "https://mainnet.optimism.io",
+  "publicRpc": "https://mainnet.optimism.io",
   "ws": "wss://ws-mainnet.optimism.io",
   "blockTime": 13,
   "explorer": "https://optimistic.etherscan.io/",
@@ -30,7 +31,7 @@
     "symbol": "ETH",
     "decimals": 18,
     "deeplinkId": "ether",
-    "logoURI": "tokens/eth.png",
+    "logoURI": "tokens/optimism.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
