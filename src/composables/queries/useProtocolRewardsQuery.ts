@@ -59,6 +59,11 @@ export default function useProtocolRewardsQuery(
    * QUERY FUNCTION
    */
   const queryFn = async () => {
+    if (
+      !configService.network.addresses.feeDistributorDeprecated &&
+      !configService.network.addresses.feeDistributor
+    )
+      return {};
     try {
       const [v1, v2] = await Promise.all([
         feeDistributorV1.getClaimableBalances(account.value),
