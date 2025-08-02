@@ -69,14 +69,32 @@ export default class BalancesConcern {
 
       const multicall = getMulticall();
 
-      const balances: BigNumber[] = (
-        await multicall<BigNumberish>(
-          this.network,
-          this.provider,
-          erc20Abi,
-          addresses.map(address => [address, 'balanceOf', [account]])
-        )
-      ).map(result => BigNumber.from(result ?? '0')); // If we fail to read a token's balance, treat it as zero
+      const balances: BigNumber[] = [];
+      for (let i = 0; i < addresses.length; i += 150) {
+        const list = addresses.slice(i, i + 150);
+
+        if (list.length > 0) {
+          const balancesArr: BigNumber[] = (
+            await multicall<BigNumberish>(
+              this.network,
+              this.provider,
+              erc20Abi,
+              list.map(address => [address, 'balanceOf', [account]])
+            )
+          ).map(result => BigNumber.from(result ?? '0')); // If we fail to read a token's balance, treat it as zero
+
+          balances.push(...balancesArr);
+        }
+      }
+
+      // const balances: BigNumber[] = (
+      //   await multicall<BigNumberish>(
+      //     this.network,
+      //     this.provider,
+      //     erc20Abi,
+      //     addresses.map(address => [address, 'balanceOf', [account]])
+      //   )
+      // ).map(result => BigNumber.from(result ?? '0')); // If we fail to read a token's balance, treat it as zero
 
       return {
         ...this.associateBalances(balances, addresses, tokens),

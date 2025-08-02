@@ -37,24 +37,37 @@ export class GaugesDecorator {
     subgraphGauges: SubgraphGauge[],
     userAddress: string
   ): Promise<Gauge[]> {
-    this.multicaller = this.resetMulticaller(this.abi);
-    this.callRewardTokens(subgraphGauges);
-    this.callClaimableTokens(subgraphGauges, userAddress);
+    const ret: Gauge[] = [];
 
-    let gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>();
+    for (let i = 0; i < subgraphGauges.length; i += 150) {
+      const list = subgraphGauges.slice(i, i + 150);
 
-    if (isL2.value) {
-      this.multicaller = this.resetMulticaller(this.rewardsHelperAbi);
+      this.multicaller = this.resetMulticaller(this.abi);
+      this.callRewardTokens(list);
+      this.callClaimableTokens(list, userAddress);
+
+      let gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>();
+
+      if (isL2.value) {
+        this.multicaller = this.resetMulticaller(this.rewardsHelperAbi);
+      }
+      this.callClaimableRewards(list, userAddress, gaugesDataMap);
+      gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
+        gaugesDataMap
+      );
+
+      const arr = list.map(subgraphGauge => ({
+        ...subgraphGauge,
+        ...this.format(gaugesDataMap[subgraphGauge.id]),
+      }));
+      ret.push(...arr);
     }
-    this.callClaimableRewards(subgraphGauges, userAddress, gaugesDataMap);
-    gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
-      gaugesDataMap
-    );
 
-    return subgraphGauges.map(subgraphGauge => ({
-      ...subgraphGauge,
-      ...this.format(gaugesDataMap[subgraphGauge.id]),
-    }));
+    return ret;
+    // return subgraphGauges.map(subgraphGauge => ({
+    //   ...subgraphGauge,
+    //   ...this.format(gaugesDataMap[subgraphGauge.id]),
+    // }));
   }
 
   /**
