@@ -17,23 +17,24 @@ const _sendRawTx = async (
       abi,
       contractProvider
     );
-    const gas = await _estimateGas(
-      myContract,
-      action,
-      params,
-      overwrite,
-      signer
-    );
+    // HUNG remove
+    // const gas = await _estimateGas(
+    //   myContract,
+    //   action,
+    //   params,
+    //   overwrite,
+    //   signer
+    // );
 
-    if (isEstimate) {
-      return gas;
-    }
+    // if (isEstimate) {
+    //   return gas;
+    // }
     // overwrite.gasLimit = gas;
     // overwrite.maxPriorityFeePerGas = null;
     // overwrite.maxFeePerGas = null;
 
     const tx = await myContract.connect(signer)[action](...params, {
-      gasLimit: gas,
+      // gasLimit: gas,
       gasPrice: gasPrice,
       value: overwrite.value,
       type: 0,
@@ -70,7 +71,7 @@ const _sendRawTxNative = async (
   gasPrice = null
 ) => {
   try {
-    const myContract = await new ethers.Contract(
+    const myContract = new ethers.Contract(
       contractAddress,
       abi,
       contractProvider
@@ -214,9 +215,9 @@ const bridgeWithdrawTo = async params => {
     .toFixed(0);
   let overwrite = { from: account };
 
-  // if (srcTokenSymbol === 'OAS') {
-  //   overwrite.value = decimals_value;
-  // }
+  if (srcTokenSymbol === 'OAS') {
+    overwrite.value = decimals_value;
+  }
 
   //const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
 
