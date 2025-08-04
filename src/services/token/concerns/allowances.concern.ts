@@ -58,18 +58,39 @@ export default class AllowancesConcern {
   ): Promise<AllowanceMap> {
     const network = this.service.configService.network.key;
     const provider = this.service.rpcProviderService.jsonProvider;
-    const allowances: BigNumber[] = (
-      await getMulticall()<BigNumberish>(
-        network,
-        provider,
-        erc20Abi,
-        tokenAddresses.map(token => [
-          token,
-          'allowance',
-          [account, contractAddress],
-        ])
-      )
-    ).map(balance => BigNumber.from(balance ?? '0')); // If we fail to read a token's allowance, treat it as zero;
+
+    const multicall = getMulticall();
+
+    const allowances: BigNumber[] = [];
+
+    for (let i = 0; i < tokenAddresses.length; i += 150) {
+      const list = tokenAddresses.slice(i, i + 150);
+      if (list.length > 0) {
+        const arr: BigNumber[] = (
+          await multicall<BigNumberish>(
+            network,
+            provider,
+            erc20Abi,
+            list.map(token => [token, 'allowance', [account, contractAddress]])
+          )
+        ).map(balance => BigNumber.from(balance ?? '0')); // If we fail to read a token's allowance, treat it as zero;
+
+        allowances.push(...arr);
+      }
+    }
+
+    // const allowances = (
+    //   await getMulticall()<BigNumberish>(
+    //     network,
+    //     provider,
+    //     erc20Abi,
+    //     tokenAddresses.map(token => [
+    //       token,
+    //       'allowance',
+    //       [account, contractAddress],
+    //     ])
+    //   )
+    // ).map(balance => BigNumber.from(balance ?? '0')); // If we fail to read a token's allowance, treat it as zero;
 
     return Object.fromEntries(
       tokenAddresses.map((token, i) => [
