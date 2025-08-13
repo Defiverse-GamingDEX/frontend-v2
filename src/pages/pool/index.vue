@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, reactive, watch } from 'vue';
+import { computed, ref, reactive, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
 import YukichiIcon from '@/assets/images/pools/yukichi.png';
@@ -12,6 +12,7 @@ import usePoolFilters from '@/composables/pools/usePoolFilters';
 
 import poolPriceApi from '@/composables/pools/pool.price.api.js';
 import useBreakpoints from '@/composables/useBreakpoints';
+import { getBalancer } from '@/dependencies/balancer-sdk';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
 import { configService } from '@/services/config/config.service';
@@ -51,6 +52,7 @@ const isLoading = ref(false);
 const poolsIsFetchingNextPage = ref(false);
 const poolsHasNextPage = ref(false);
 const currentOffset = ref(0);
+const isFetchingApr = ref(false);
 const pageSize = 30;
 
 // Function to clean and validate token address
@@ -128,27 +130,10 @@ const transformApiPoolToPool = (apiPool: any) => {
     unwrappedTokens: apiPool.unwrappedTokens || [], // missing unwrappedTokens
     onchain: apiPool.onchain || null, // missing onchain
     feesSnapshot: apiPool.feesSnapshot || '0',
-    volumeSnapshot: apiPool.volumeSnapshot || '0', // missing volumeSnapshot
+    volumeSnapshot: apiPool.totalSwapVolume || '0',
     isVerified: apiPool.is_verified,
     isYukichi: apiPool.is_yukichi,
-    apr: apiPool.apr || {
-      swapFees: 0,
-      tokenAprs: {
-        total: 0,
-        breakdown: {},
-      },
-      stakingApr: {
-        min: 0,
-        max: 0,
-      },
-      rewardAprs: {
-        total: 0,
-        breakdown: {},
-      },
-      protocolApr: 0,
-      min: 0,
-      max: 0,
-    }, // missing apr
+    apr: apiPool.apr || null,
   };
 };
 
@@ -225,6 +210,14 @@ const loadPools = async (reset = false) => {
     // Update pagination state
     poolsHasNextPage.value = poolRender.length === pageSize;
     currentOffset.value += pageSize;
+
+    // Fetch APR data after pools are loaded and table is rendered
+    if (poolRender.length > 0) {
+      // Use nextTick to ensure table is rendered before fetching APR
+      await nextTick();
+      console.log('🚀 Table rendered, starting APR fetch...');
+      fetchAprData();
+    }
   } catch (error) {
     console.error('Error loading pools:', error);
   } finally {
@@ -266,6 +259,73 @@ const lastUpdated = async () => {
   if (data) return format(new Date(data.last_update), 'yyyy-MM-dd HH:mm:ss');
 
   return '';
+};
+
+// Function to fetch APR data for pools after table is rendered
+const fetchAprData = async () => {
+  try {
+    // Filter pools that don't have APR data yet
+    console.log('🚀 ~ fetchAprData ~ rawPools.value:', rawPools.value);
+    const poolsNeedingApr = rawPools.value.filter(
+      pool =>
+        !pool.apr ||
+        (typeof pool.apr === 'object' && Object.keys(pool.apr).length === 0)
+    );
+
+    if (poolsNeedingApr.length === 0) {
+      console.log('✅ All pools already have APR data');
+      return;
+    }
+
+    console.log(
+      '🚀 Starting APR fetch for',
+      poolsNeedingApr.length,
+      'pools (out of',
+      rawPools.value.length,
+      'total)'
+    );
+
+    isFetchingApr.value = true;
+
+    // Process pools in batches to avoid overwhelming the API
+    const batchSize = 5;
+    const pools = poolsNeedingApr;
+
+    for (let i = 0; i < pools.length; i += batchSize) {
+      const batch = pools.slice(i, i + batchSize);
+
+      // Process batch in parallel
+      const aprPromises = batch.map(async (pool, index) => {
+        try {
+          // Fetch APR data from Balancer SDK
+          const aprData = await getBalancer().pools.apr(pool);
+          console.log(`🚀 ~ fetchAprData ~ pool[${i + index}] APR:`, aprData);
+
+          // Update the pool with APR data
+          const poolIndex = rawPools.value.findIndex(p => p.id === pool.id);
+          if (poolIndex !== -1) {
+            rawPools.value[poolIndex].apr = aprData;
+          }
+        } catch (error) {
+          console.error(`❌ Failed to fetch APR for pool ${pool.id}:`, error);
+        }
+      });
+
+      // Wait for current batch to complete
+      await Promise.all(aprPromises);
+
+      // Small delay between batches to be nice to the API
+      if (i + batchSize < pools.length) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+
+    isFetchingApr.value = false;
+    console.log('✅ APR fetch completed for all pools');
+  } catch (error) {
+    console.error('❌ Error fetching APR data:', error);
+    isFetchingApr.value = false;
+  }
 };
 
 /**
