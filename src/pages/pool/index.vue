@@ -35,6 +35,7 @@ const { appNetworkConfig, chainId: userNetworkId } = useWeb3();
 const isElementSupported = appNetworkConfig.supportsElementPools;
 const { selectedTokens, addSelectedToken, removeSelectedToken } =
   usePoolFilters();
+console.log('🚀 ~ selectedTokens:', selectedTokens);
 
 const poolsSortField = ref('totalLiquidity');
 
@@ -186,14 +187,22 @@ const loadPools = async (reset = false) => {
     const filterType = getFilterType();
     console.log('🔍 Using filter type:', filterType);
 
-    const response = await poolPriceApi.searchPoolList({
+    // Prepare token addresses for filtering
+    const tokenAddresses = selectedTokens.value.filter(Boolean);
+    console.log('🔍 Token addresses for filtering:', tokenAddresses);
+
+    const apiParams = {
       filter_type: filterType,
       chain_id: getCurrentChainId(),
       order_field: getOrderField(),
       order_type: 'desc',
       offset: currentOffset.value,
       limit: pageSize,
-    });
+      token_addresses: tokenAddresses.length > 0 ? tokenAddresses : undefined,
+    };
+
+    console.log('🚀 API call params:', apiParams);
+    const response = await poolPriceApi.searchPoolList(apiParams);
 
     // Handle different response structures
     const poolsData = response.pools || response.data || response || [];
@@ -389,6 +398,16 @@ watch(poolsSortField, (newSort, oldSort) => {
   console.log('� Sort changed:', oldSort, '→', newSort);
   loadPools(true);
 });
+
+// Watch for selected tokens changes and reload pools
+watch(
+  selectedTokens,
+  (newTokens, oldTokens) => {
+    console.log('🔄 Selected tokens changed:', oldTokens, '→', newTokens);
+    loadPools(true);
+  },
+  { deep: true }
+);
 
 /**
  * LIFECYCLE
