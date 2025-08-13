@@ -53,25 +53,68 @@ const poolsHasNextPage = ref(false);
 const currentOffset = ref(0);
 const pageSize = 30;
 
+// Function to clean and validate token address
+const cleanTokenAddress = (address: string) => {
+  if (!address) return '';
+
+  // Remove double 0x prefix if it exists
+  let cleanedAddress = address.replace(/^0x0x/, '0x');
+
+  // Ensure address starts with 0x
+  if (!cleanedAddress.startsWith('0x')) {
+    cleanedAddress = '0x' + cleanedAddress;
+  }
+
+  // Validate address format (should be 42 characters: 0x + 40 hex chars)
+  if (!/^0x[a-fA-F0-9]{40}$/.test(cleanedAddress)) {
+    console.warn('Invalid token address format:', address, '→', cleanedAddress);
+  }
+
+  return cleanedAddress;
+};
+
 // Function to transform API response to Pool format
 const transformApiPoolToPool = (apiPool: any) => {
+  // Clean and transform tokens
+  const cleanedTokens = (apiPool.tokens || []).map((token: any) => {
+    const originalAddress = token.address;
+    const cleanedAddress = cleanTokenAddress(token.address);
+
+    if (originalAddress !== cleanedAddress) {
+      console.log(
+        '🔧 Cleaned token address:',
+        originalAddress,
+        '→',
+        cleanedAddress
+      );
+    }
+
+    return {
+      ...token,
+      address: cleanedAddress,
+    };
+  });
+
+  // Create clean tokensList from cleaned tokens
+  const cleanedTokensList = cleanedTokens.map((token: any) => token.address);
+
   return {
     id: apiPool.id || '',
     name: apiPool.name || '',
-    address: apiPool.address || '',
-    chainId: apiPool.chainId || userNetworkId.value, // missing chainId
-    poolType: apiPool.poolType || '',
-    poolTypeVersion: apiPool.poolTypeVersion || null,
+    address: cleanTokenAddress(apiPool.address || ''),
+    chainId: apiPool.chainId || userNetworkId.value,
+    poolType: apiPool.poolType || 'Weighted',
+    poolTypeVersion: apiPool.poolTypeVersion || 0,
     swapFee: apiPool.swapFee || '0',
-    swapEnabled: apiPool.swapEnabled || false,
+    swapEnabled: apiPool.swapEnabled !== false,
     protocolYieldFeeCache: apiPool.protocolYieldFeeCache || '',
     protocolSwapFeeCache: apiPool.protocolSwapFeeCache || '',
     owner: apiPool.owner || '',
     factory: apiPool.factory || '',
     symbol: apiPool.symbol || '',
-    tokens: apiPool.tokens || [],
-    tokensList: apiPool.tokensList || [],
-    tokenAddresses: apiPool.tokenAddresses || [], // missing tokenAddresses
+    tokens: cleanedTokens,
+    tokensList: cleanedTokensList,
+    tokenAddresses: apiPool.tokenAddresses || cleanedTokensList,
     totalLiquidity: apiPool.totalLiquidity || '0',
     totalShares: apiPool.totalShares || '0',
     totalSwapFee: apiPool.totalSwapFee || '0',
@@ -114,15 +157,19 @@ const getFilterType = () => {
   if (filterOptions.value.isVerified) return 'verified';
   if (filterOptions.value.isYukichi) return 'yukichi';
   if (filterOptions.value.isPermissionless) return 'permission_less';
-  return null; // default
+  return null; // default to verified if no filter selected
 };
 
 // Function to get order field based on sort field
 const getOrderField = () => {
+  console.log(
+    '🚀 ~ getOrderField ~ poolsSortField.value:',
+    poolsSortField.value
+  );
   switch (poolsSortField.value) {
     case 'totalLiquidity':
       return 'total_liquidity';
-    case 'totalSwapVolume':
+    case 'volume':
       return 'total_swap_volume';
     default:
       return 'total_liquidity';
@@ -137,6 +184,12 @@ const getCurrentChainId = () => {
 
 // Function to load pools
 const loadPools = async (reset = false) => {
+  console.log(
+    '🚀 loadPools called with reset:',
+    reset,
+    'Stack:',
+    new Error().stack?.split('\n')[2]
+  );
   try {
     if (reset) {
       currentOffset.value = 0;
@@ -146,6 +199,7 @@ const loadPools = async (reset = false) => {
     }
 
     const filterType = getFilterType();
+    console.log('🔍 Using filter type:', filterType);
 
     const response = await poolPriceApi.searchPoolList({
       filter_type: filterType,
@@ -222,34 +276,59 @@ function navigateToCreatePool() {
 }
 
 function onColumnSort(columnId: string) {
+  console.log('🚀 ~ onColumnSort ~ columnId:', columnId);
   poolsSortField.value = columnId;
 }
 
 // Handlers cho các toggle events
 function onVerifiedChange(value: boolean) {
-  filterState.isVerified = value;
+  if (value) {
+    // Nếu chọn Verified, tắt 2 cái còn lại
+    filterState.isVerified = true;
+    filterState.isPermissionless = false;
+    filterState.isYukichi = false;
+  } else {
+    filterState.isVerified = false;
+  }
+  // Reload pools với filter mới
+  loadPools(true);
 }
 
 function onPermissionlessChange(value: boolean) {
-  filterState.isPermissionless = value;
+  if (value) {
+    // Nếu chọn Permissionless, tắt 2 cái còn lại
+    filterState.isVerified = false;
+    filterState.isPermissionless = true;
+    filterState.isYukichi = false;
+  } else {
+    filterState.isPermissionless = false;
+  }
+  // Reload pools với filter mới
+  loadPools(true);
 }
 
 function onYukichiChange(value: boolean) {
-  filterState.isYukichi = value;
+  if (value) {
+    // Nếu chọn Yukichi, tắt 2 cái còn lại
+    filterState.isVerified = false;
+    filterState.isPermissionless = false;
+    filterState.isYukichi = true;
+  } else {
+    filterState.isYukichi = false;
+  }
+  // Reload pools với filter mới
+  loadPools(true);
 }
 
 function loadMore() {
   loadMorePools();
 }
 
-// Watch for filter changes and reload pools
-watch(
-  [filterOptions, poolsSortField],
-  () => {
-    loadPools(true);
-  },
-  { deep: true }
-);
+// Watch for sort field changes and reload pools
+watch(poolsSortField, (newSort, oldSort) => {
+  console.log('� Sort changed:', oldSort, '→', newSort);
+  loadPools(true);
+});
 
 /**
  * LIFECYCLE
