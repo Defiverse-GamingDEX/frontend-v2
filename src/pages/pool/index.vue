@@ -88,25 +88,27 @@ const transformApiPoolToPool = (apiPool: any) => {
     volumeSnapshot: apiPool.volumeSnapshot || '0', // missing volumeSnapshot
     isVerified: apiPool.is_verified,
     isYukichi: apiPool.is_yukichi,
-    apr: apiPool.apr || null, // missing apr
-    // Add other required Pool properties with defaults
+    apr: apiPool.apr || {
+      swapFees: 0,
+      tokenAprs: {
+        total: 0,
+        breakdown: {},
+      },
+      stakingApr: {
+        min: 0,
+        max: 0,
+      },
+      rewardAprs: {
+        total: 0,
+        breakdown: {},
+      },
+      protocolApr: 0,
+      min: 0,
+      max: 0,
+    }, // missing apr
   };
 };
 
-// Computed property to properly unwrap and transform the pools array
-const pools = computed(() => {
-  console.log('🚀 ~ rawPools.value in computed:', rawPools.value);
-  // Transform API response to Pool format and remove Vue proxy wrappers
-  const transformedPools = rawPools.value.map(pool =>
-    transformApiPoolToPool(pool)
-  );
-  console.log('🚀 ~ transformedPools[0]:', transformedPools[0]);
-  const finalPools = JSON.parse(JSON.stringify(transformedPools));
-  console.log('🚀 ~ finalPools[0]:', finalPools[0]);
-  return finalPools;
-});
-
-console.log('🚀 ~ rawPools:', rawPools);
 // Function to get filter type based on current filter state
 const getFilterType = () => {
   if (filterOptions.value.isVerified) return 'verified';
