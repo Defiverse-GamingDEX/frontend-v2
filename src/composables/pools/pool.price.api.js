@@ -16,7 +16,7 @@ export default {
    * @param {string} params.order_type - Order type: 'desc', 'asc'
    * @param {number} [params.offset] - Offset for pagination (default: 0)
    * @param {number} [params.limit] - Limit for pagination (default: 30)
-   * @param {string[]} [params.token_addresses] - Array of token addresses to filter pools
+   * @param {string[]} [params.tokens] - Array of token addresses to filter pools
    * @returns {Promise} API response
    */
   async searchPoolList(params = {}) {
@@ -28,7 +28,7 @@ export default {
         order_type = 'desc',
         offset = 0,
         limit = 30,
-        token_addresses = null,
+        tokens = null,
       } = params;
 
       const queryParams = new URLSearchParams({
@@ -41,9 +41,9 @@ export default {
       });
 
       // Add token_addresses if provided
-      if (token_addresses && token_addresses.length > 0) {
-        token_addresses.forEach(address => {
-          queryParams.append('token_addresses', address);
+      if (tokens && tokens.length > 0) {
+        tokens.forEach(address => {
+          queryParams.append('tokens', address);
         });
       }
 

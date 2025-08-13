@@ -13,6 +13,9 @@ import usePoolFilters from '@/composables/pools/usePoolFilters';
 import poolPriceApi from '@/composables/pools/pool.price.api.js';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { getBalancer } from '@/dependencies/balancer-sdk';
+import { getTimeTravelBlock } from '@/composables/useSnapshots';
+import { balancerSubgraphService } from '@/services/balancer/subgraph/balancer-subgraph.service';
+import { bnum } from '@/lib/utils';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
 import { configService } from '@/services/config/config.service';
@@ -54,6 +57,8 @@ const poolsIsFetchingNextPage = ref(false);
 const poolsHasNextPage = ref(false);
 const currentOffset = ref(0);
 const isFetchingApr = ref(false);
+const isFetchingSnapshots = ref(false);
+const snapshotsCache = ref<any[]>([]);
 const pageSize = 30;
 
 // Function to clean and validate token address
@@ -74,6 +79,91 @@ const cleanTokenAddress = (address: string) => {
   }
 
   return cleanedAddress;
+};
+
+// Function to fetch pool snapshots from 24h ago
+const fetchPoolSnapshots = async (poolIds: string[]) => {
+  try {
+    const blockNumber = await getTimeTravelBlock();
+    const block = { number: blockNumber };
+    const isInPoolIds = { id: { in: poolIds } };
+
+    const snapshots = await balancerSubgraphService.pools.get({
+      where: isInPoolIds,
+      block,
+    });
+
+    console.log('🕐 Fetched pool snapshots from 24h ago:', snapshots.length);
+    return snapshots;
+  } catch (error) {
+    console.error('❌ Failed to fetch pool snapshots:', error);
+    return [];
+  }
+};
+
+// Function to calculate 24h volume snapshot using subgraph data
+const calculateVolumeSnapshot = (currentPool: any, poolSnapshot: any) => {
+  if (!poolSnapshot) {
+    return '0'; // No snapshot data available
+  }
+
+  const currentVolume = bnum(currentPool.totalSwapVolume || '0');
+  const snapshotVolume = bnum(poolSnapshot.totalSwapVolume || '0');
+  const volumeSnapshot = currentVolume.minus(snapshotVolume).toString();
+
+  console.log(`📊 Volume calculation for ${currentPool.id}:`, {
+    current: currentVolume.toString(),
+    snapshot: snapshotVolume.toString(),
+    diff: volumeSnapshot,
+  });
+
+  return volumeSnapshot;
+};
+
+// Function to update pools with volumeSnapshot
+const updatePoolsWithVolumeSnapshot = async (pools: any[], reset: boolean) => {
+  if (pools.length === 0) return;
+
+  try {
+    let snapshots: any[] = [];
+
+    if (reset) {
+      // Fetch fresh snapshots for new data
+      isFetchingSnapshots.value = true;
+      const poolIds = pools.map(pool => pool.id);
+      snapshots = await fetchPoolSnapshots(poolIds);
+      snapshotsCache.value = snapshots;
+      console.log('✅ Fetched fresh snapshots');
+    } else if (snapshotsCache.value.length > 0) {
+      // Use cached snapshots for pagination
+      snapshots = snapshotsCache.value;
+      console.log('✅ Using cached snapshots');
+    } else {
+      // No snapshots available, set default values
+      pools.forEach(pool => {
+        pool.volumeSnapshot = '0';
+      });
+      return;
+    }
+
+    // Update pools with calculated volumeSnapshot
+    pools.forEach(pool => {
+      const snapshot = snapshots.find(s => s.id === pool.id);
+      pool.volumeSnapshot = calculateVolumeSnapshot(pool, snapshot);
+    });
+
+    console.log('✅ Updated pools with volumeSnapshot');
+  } catch (error) {
+    console.error('❌ Failed to calculate volumeSnapshot:', error);
+    // Set default volumeSnapshot if calculation fails
+    pools.forEach(pool => {
+      pool.volumeSnapshot = '0';
+    });
+  } finally {
+    if (reset) {
+      isFetchingSnapshots.value = false;
+    }
+  }
 };
 
 // Function to transform API response to Pool format
@@ -131,7 +221,7 @@ const transformApiPoolToPool = (apiPool: any) => {
     unwrappedTokens: apiPool.unwrappedTokens || [], // missing unwrappedTokens
     onchain: apiPool.onchain || null, // missing onchain
     feesSnapshot: apiPool.feesSnapshot || '0',
-    volumeSnapshot: apiPool.totalSwapVolume || '0',
+    volumeSnapshot: apiPool.volumeSnapshot || '0', // API should provide 24h volume
     isVerified: apiPool.is_verified,
     isYukichi: apiPool.is_yukichi,
     apr: apiPool.apr || null,
@@ -198,7 +288,7 @@ const loadPools = async (reset = false) => {
       order_type: 'desc',
       offset: currentOffset.value,
       limit: pageSize,
-      token_addresses: tokenAddresses.length > 0 ? tokenAddresses : undefined,
+      tokens: tokenAddresses.length > 0 ? tokenAddresses : undefined,
     };
 
     console.log('🚀 API call params:', apiParams);
@@ -219,6 +309,9 @@ const loadPools = async (reset = false) => {
     // Update pagination state
     poolsHasNextPage.value = poolRender.length === pageSize;
     currentOffset.value += pageSize;
+
+    // Update pools with volumeSnapshot
+    await updatePoolsWithVolumeSnapshot(poolRender, reset);
 
     // Fetch APR data after pools are loaded and table is rendered
     if (poolRender.length > 0) {

@@ -422,6 +422,7 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
           class="flex justify-end py-4 px-6 -mt-1 font-numeric"
         >
           <BalLoadingBlock v-if="!pool?.volumeSnapshot" class="w-12 h-4" />
+
           <span v-else class="text-right">
             {{
               fNum2(pool?.volumeSnapshot, {
