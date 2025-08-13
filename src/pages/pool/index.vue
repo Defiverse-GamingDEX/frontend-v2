@@ -16,6 +16,9 @@ import { getBalancer } from '@/dependencies/balancer-sdk';
 import { getTimeTravelBlock } from '@/composables/useSnapshots';
 import { balancerSubgraphService } from '@/services/balancer/subgraph/balancer-subgraph.service';
 import { bnum } from '@/lib/utils';
+import PoolService from '@/services/pool/pool.service';
+import type { Pool } from '@/services/pool/types';
+import type { SDKPoolRepository } from '@balancer-labs/sdk';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
 import { configService } from '@/services/config/config.service';
@@ -363,35 +366,138 @@ const lastUpdated = async () => {
   return '';
 };
 
+/**
+ * Build repositories for a specific chainId to fetch complete pool data
+ */
+const buildRepositoriesForChainId = (chainId: number, targetPoolId: string) => {
+  const repositories: any[] = [];
+
+  // Create a subgraph repository for the specific chainId
+  const subgraphRepository = {
+    fetch: async (): Promise<any[]> => {
+      try {
+        // Get the network config for the chainId
+        const networkConfig = configService.getNetworkConfig(chainId);
+
+        // Use the first subgraph URL from the network config
+        const subgraphUrl = networkConfig.subgraphs.main[0];
+
+        const response = await fetch(subgraphUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
+              query GetPool($id: String!) {
+                pool(id: $id) {
+                  id
+                  address
+                  poolType
+                  swapFee
+                  totalShares
+                  totalLiquidity
+                  totalSwapVolume
+                  totalSwapFee
+                  tokens {
+                    address
+                    balance
+                    weight
+                    symbol
+                    name
+                    decimals
+                  }
+                  swapsCount
+                  holdersCount
+                }
+              }
+            `,
+            variables: {
+              id: targetPoolId.toLowerCase(),
+            },
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+          console.error('Subgraph query errors:', data.errors);
+          return [];
+        }
+
+        if (!data.data.pool) {
+          console.warn(`Pool ${targetPoolId} not found in subgraph`);
+          return [];
+        }
+
+        // Convert the response to a Pool object
+        const pool = {
+          ...data.data.pool,
+          chainId,
+        };
+
+        console.log(`📊 Fetched complete pool data for ${targetPoolId}:`, pool);
+        return [pool];
+      } catch (error) {
+        console.error('Error fetching from subgraph:', error);
+        return [];
+      }
+    },
+    get skip(): number {
+      return 0;
+    },
+  };
+
+  repositories.push(subgraphRepository);
+  return repositories;
+};
+
+// Function to fetch complete pool data from subgraph
+const fetchCompletePoolData = async (poolId: string, chainId: number) => {
+  try {
+    const repositories = buildRepositoriesForChainId(chainId, poolId);
+    const pools = await repositories[0].fetch();
+    return pools.length > 0 ? pools[0] : null;
+  } catch (error) {
+    console.error(`Failed to fetch complete pool data for ${poolId}:`, error);
+    return null;
+  }
+};
+
+// Function to test APR calculation using PoolService.setAPR()
+const testPoolServiceAPR = async (pool: any) => {
+  try {
+    const poolService = new PoolService(pool);
+    const aprFromPoolService = await poolService.setAPR();
+    console.log(`🔬 PoolService APR for ${pool.id}:`, aprFromPoolService);
+    return aprFromPoolService;
+  } catch (error) {
+    console.error(`❌ PoolService APR failed for ${pool.id}:`, error);
+    return null;
+  }
+};
+
+// Function to test APR calculation using getBalancer().pools.apr()
+const testBalancerSDKAPR = async (pool: any) => {
+  try {
+    const aprFromSDK = await getBalancer().pools.apr(pool);
+    console.log(`🔬 Balancer SDK APR for ${pool.id}:`, aprFromSDK);
+    return aprFromSDK;
+  } catch (error) {
+    console.error(`❌ Balancer SDK APR failed for ${pool.id}:`, error);
+    return null;
+  }
+};
+
 // Function to fetch APR data for pools after table is rendered
 const fetchAprData = async () => {
   try {
     // Filter pools that don't have APR data yet
     console.log('🚀 ~ fetchAprData ~ rawPools.value:', rawPools.value);
-    const poolsNeedingApr = rawPools.value.filter(
-      pool =>
-        !pool.apr ||
-        (typeof pool.apr === 'object' && Object.keys(pool.apr).length === 0)
-    );
-
-    if (poolsNeedingApr.length === 0) {
-      console.log('✅ All pools already have APR data');
-      return;
-    }
-
-    console.log(
-      '🚀 Starting APR fetch for',
-      poolsNeedingApr.length,
-      'pools (out of',
-      rawPools.value.length,
-      'total)'
-    );
-
-    isFetchingApr.value = true;
 
     // Process pools in batches to avoid overwhelming the API
     const batchSize = 5;
-    const pools = poolsNeedingApr;
+    const pools = rawPools.value;
 
     for (let i = 0; i < pools.length; i += batchSize) {
       const batch = pools.slice(i, i + batchSize);
@@ -399,8 +505,18 @@ const fetchAprData = async () => {
       // Process batch in parallel
       const aprPromises = batch.map(async (pool, index) => {
         try {
+          // add get info pool before fetch apr
+          const completePoolData = await fetchCompletePoolData(
+            pool.id,
+            pool.chainId || getCurrentChainId()
+          );
+          console.log(
+            '🚀 ~ fetchAprData ~ completePoolData:',
+            completePoolData
+          );
+
           // Fetch APR data from Balancer SDK
-          const aprData = await getBalancer().pools.apr(pool);
+          const aprData = await getBalancer().pools.apr(completePoolData);
           console.log(`🚀 ~ fetchAprData ~ pool[${i + index}] APR:`, aprData);
 
           // Update the pool with APR data
