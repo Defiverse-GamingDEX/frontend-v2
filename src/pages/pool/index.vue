@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, reactive } from 'vue';
+import { computed, ref, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
 import YukichiIcon from '@/assets/images/pools/yukichi.png';
@@ -10,7 +10,7 @@ import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
 
-import usePools from '@/composables/pools/usePools';
+import poolPriceApi from '@/composables/pools/pool.price.api.js';
 import useBreakpoints from '@/composables/useBreakpoints';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -20,7 +20,7 @@ import { format } from 'date-fns';
 
 const { account } = useWeb3();
 // STATES
-const adminAddress = ref(null);
+const adminAddress = ref<string | null>(null);
 const priceLastUpdated = ref('');
 const filterState = reactive({
   isVerified: false,
@@ -30,7 +30,7 @@ const filterState = reactive({
 // COMPOSABLES
 const { getAdminAddress } = usePoolCreation();
 const router = useRouter();
-const { appNetworkConfig } = useWeb3();
+const { appNetworkConfig, chainId: userNetworkId } = useWeb3();
 const isElementSupported = appNetworkConfig.supportsElementPools;
 const { selectedTokens, addSelectedToken, removeSelectedToken } =
   usePoolFilters();
@@ -45,17 +45,144 @@ const filterOptions = computed(() => {
   };
 });
 
-const {
-  pools: rawPools,
-  isLoading,
-  poolsIsFetchingNextPage,
-  poolsHasNextPage,
-  loadMorePools,
-} = usePools(selectedTokens, poolsSortField, filterOptions);
+// New pools state using the searchPoolList API
+const rawPools = ref<any[]>([]);
+const isLoading = ref(false);
+const poolsIsFetchingNextPage = ref(false);
+const poolsHasNextPage = ref(false);
+const currentOffset = ref(0);
+const pageSize = 30;
 
+// Function to transform API response to Pool format
+const transformApiPoolToPool = (apiPool: any) => {
+  return {
+    id: apiPool.id || '',
+    name: apiPool.name || '',
+    address: apiPool.address || '',
+    chainId: apiPool.chainId || userNetworkId.value, // missing chainId
+    poolType: apiPool.poolType || '',
+    poolTypeVersion: apiPool.poolTypeVersion || null,
+    swapFee: apiPool.swapFee || '0',
+    swapEnabled: apiPool.swapEnabled || false,
+    protocolYieldFeeCache: apiPool.protocolYieldFeeCache || '',
+    protocolSwapFeeCache: apiPool.protocolSwapFeeCache || '',
+    owner: apiPool.owner || '',
+    factory: apiPool.factory || '',
+    symbol: apiPool.symbol || '',
+    tokens: apiPool.tokens || [],
+    tokensList: apiPool.tokensList || [],
+    tokenAddresses: apiPool.tokenAddresses || [], // missing tokenAddresses
+    totalLiquidity: apiPool.totalLiquidity || '0',
+    totalShares: apiPool.totalShares || '0',
+    totalSwapFee: apiPool.totalSwapFee || '0',
+    totalSwapVolume: apiPool.totalSwapVolume || '0',
+    priceRateProviders: apiPool.priceRateProviders || [],
+    createTime: apiPool.createTime || null,
+    totalWeight: apiPool.totalWeight || '0',
+    lowerTarget: apiPool.lowerTarget || '',
+    upperTarget: apiPool.upperTarget || '',
+    isNew: apiPool.isNew || false, // missing isNew
+    unwrappedTokens: apiPool.unwrappedTokens || [], // missing unwrappedTokens
+    onchain: apiPool.onchain || null, // missing onchain
+    feesSnapshot: apiPool.feesSnapshot || '0',
+    volumeSnapshot: apiPool.volumeSnapshot || '0', // missing volumeSnapshot
+    isVerified: apiPool.is_verified,
+    isYukichi: apiPool.is_yukichi,
+    apr: apiPool.apr || null, // missing apr
+    // Add other required Pool properties with defaults
+  };
+};
+
+// Computed property to properly unwrap and transform the pools array
 const pools = computed(() => {
-  return rawPools.value;
+  console.log('🚀 ~ rawPools.value in computed:', rawPools.value);
+  // Transform API response to Pool format and remove Vue proxy wrappers
+  const transformedPools = rawPools.value.map(pool =>
+    transformApiPoolToPool(pool)
+  );
+  console.log('🚀 ~ transformedPools[0]:', transformedPools[0]);
+  const finalPools = JSON.parse(JSON.stringify(transformedPools));
+  console.log('🚀 ~ finalPools[0]:', finalPools[0]);
+  return finalPools;
 });
+
+console.log('🚀 ~ rawPools:', rawPools);
+// Function to get filter type based on current filter state
+const getFilterType = () => {
+  if (filterOptions.value.isVerified) return 'verified';
+  if (filterOptions.value.isYukichi) return 'yukichi';
+  if (filterOptions.value.isPermissionless) return 'permission_less';
+  return null; // default
+};
+
+// Function to get order field based on sort field
+const getOrderField = () => {
+  switch (poolsSortField.value) {
+    case 'totalLiquidity':
+      return 'total_liquidity';
+    case 'totalSwapVolume':
+      return 'total_swap_volume';
+    default:
+      return 'total_liquidity';
+  }
+};
+
+// Function to get current chain ID
+const getCurrentChainId = () => {
+  const { networkId } = useNetwork();
+  return networkId.value;
+};
+
+// Function to load pools
+const loadPools = async (reset = false) => {
+  try {
+    if (reset) {
+      currentOffset.value = 0;
+      isLoading.value = true;
+    } else {
+      poolsIsFetchingNextPage.value = true;
+    }
+
+    const filterType = getFilterType();
+
+    const response = await poolPriceApi.searchPoolList({
+      filter_type: filterType,
+      chain_id: getCurrentChainId(),
+      order_field: getOrderField(),
+      order_type: 'desc',
+      offset: currentOffset.value,
+      limit: pageSize,
+    });
+
+    // Handle different response structures
+    const poolsData = response.pools || response.data || response || [];
+    console.log('🚀 ~ loadPools ~ poolsData:', poolsData);
+    console.log('🚀 ~ loadPools ~ poolsData[0]:', poolsData[0]);
+    const poolRender = poolsData.map(pool => transformApiPoolToPool(pool));
+    console.log('🚀 ~ loadPools ~ poolRender:', poolRender);
+    if (reset) {
+      rawPools.value = poolRender;
+    } else {
+      rawPools.value = [...rawPools.value, ...poolRender];
+    }
+
+    // Update pagination state
+    poolsHasNextPage.value = poolRender.length === pageSize;
+    currentOffset.value += pageSize;
+  } catch (error) {
+    console.error('Error loading pools:', error);
+  } finally {
+    isLoading.value = false;
+    poolsIsFetchingNextPage.value = false;
+  }
+};
+
+// Function to load more pools (for pagination)
+const loadMorePools = () => {
+  if (!poolsIsFetchingNextPage.value && poolsHasNextPage.value) {
+    loadPools(false);
+  }
+};
 
 const { upToMediumBreakpoint } = useBreakpoints();
 const { networkSlug, networkConfig } = useNetwork();
@@ -113,12 +240,23 @@ function loadMore() {
   loadMorePools();
 }
 
+// Watch for filter changes and reload pools
+watch(
+  [filterOptions, poolsSortField],
+  () => {
+    loadPools(true);
+  },
+  { deep: true }
+);
+
 /**
  * LIFECYCLE
  */
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
   priceLastUpdated.value = await lastUpdated();
+  // Load initial pools
+  await loadPools(true);
 });
 </script>
 
@@ -220,7 +358,7 @@ onBeforeMount(async () => {
           </div>
         </div>
         <PoolsTable
-          :data="pools"
+          :data="rawPools"
           :noPoolsLabel="$t('noPoolsFound')"
           :isLoading="isLoading"
           :selectedTokens="selectedTokens"
