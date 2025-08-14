@@ -170,11 +170,11 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
     align: 'right',
     id: 'volume',
     Cell: 'volumeCell',
-    sortKey: pool => {
-      const volume = Number(pool?.volumeSnapshot);
-      if (volume === Infinity || isNaN(volume)) return 0;
-      return volume;
-    },
+    // sortKey: pool => {
+    //   const volume = Number(pool?.volumeSnapshot);
+    //   if (volume === Infinity || isNaN(volume)) return 0;
+    //   return volume;
+    // },
     width: 175,
     cellClassName: 'font-numeric',
   },
