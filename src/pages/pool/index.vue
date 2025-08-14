@@ -9,7 +9,7 @@ import FeaturedProtocols from '@/components/sections/FeaturedProtocols.vue';
 import PoolsTable from '@/components/tables/PoolsTable/PoolsTable.vue';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
 import usePoolFilters from '@/composables/pools/usePoolFilters';
-
+import usePools from '@/composables/pools/usePools';
 import poolPriceApi from '@/composables/pools/pool.price.api.js';
 import useBreakpoints from '@/composables/useBreakpoints';
 import { getBalancer } from '@/dependencies/balancer-sdk';
@@ -52,6 +52,13 @@ const filterOptions = computed(() => {
     isYukichi: filterState.isYukichi,
   };
 });
+const {
+  pools: rawPools2,
+  isLoading: isLoading2,
+  poolsIsFetchingNextPage: poolsIsFetchingNextPage2,
+  poolsHasNextPage: poolsHasNextPage2,
+  loadMorePools: loadMorePools2,
+} = usePools(selectedTokens, poolsSortField, filterOptions);
 
 // New pools state using the searchPoolList API
 const rawPools = ref<any[]>([]);
@@ -113,12 +120,6 @@ const calculateVolumeSnapshot = (currentPool: any, poolSnapshot: any) => {
   const currentVolume = bnum(currentPool.totalSwapVolume || '0');
   const snapshotVolume = bnum(poolSnapshot.totalSwapVolume || '0');
   const volumeSnapshot = currentVolume.minus(snapshotVolume).toString();
-
-  console.log(`📊 Volume calculation for ${currentPool.id}:`, {
-    current: currentVolume.toString(),
-    snapshot: snapshotVolume.toString(),
-    diff: volumeSnapshot,
-  });
 
   return volumeSnapshot;
 };
@@ -299,10 +300,7 @@ const loadPools = async (reset = false) => {
 
     // Handle different response structures
     const poolsData = response.pools || response.data || response || [];
-    console.log('🚀 ~ loadPools ~ poolsData:', poolsData);
-    console.log('🚀 ~ loadPools ~ poolsData[0]:', poolsData[0]);
     const poolRender = poolsData.map(pool => transformApiPoolToPool(pool));
-    console.log('🚀 ~ loadPools ~ poolRender:', poolRender);
     if (reset) {
       rawPools.value = poolRender;
     } else {
@@ -464,31 +462,6 @@ const fetchCompletePoolData = async (poolId: string, chainId: number) => {
   }
 };
 
-// Function to test APR calculation using PoolService.setAPR()
-const testPoolServiceAPR = async (pool: any) => {
-  try {
-    const poolService = new PoolService(pool);
-    const aprFromPoolService = await poolService.setAPR();
-    console.log(`🔬 PoolService APR for ${pool.id}:`, aprFromPoolService);
-    return aprFromPoolService;
-  } catch (error) {
-    console.error(`❌ PoolService APR failed for ${pool.id}:`, error);
-    return null;
-  }
-};
-
-// Function to test APR calculation using getBalancer().pools.apr()
-const testBalancerSDKAPR = async (pool: any) => {
-  try {
-    const aprFromSDK = await getBalancer().pools.apr(pool);
-    console.log(`🔬 Balancer SDK APR for ${pool.id}:`, aprFromSDK);
-    return aprFromSDK;
-  } catch (error) {
-    console.error(`❌ Balancer SDK APR failed for ${pool.id}:`, error);
-    return null;
-  }
-};
-
 // Function to fetch APR data for pools after table is rendered
 const fetchAprData = async () => {
   try {
@@ -506,15 +479,18 @@ const fetchAprData = async () => {
       const aprPromises = batch.map(async (pool, index) => {
         try {
           // add get info pool before fetch apr
-          const completePoolData = await fetchCompletePoolData(
+          const poolData = await fetchCompletePoolData(
             pool.id,
             pool.chainId || getCurrentChainId()
           );
+          const completePoolData = {
+            ...pool,
+            ...poolData,
+          };
           console.log(
             '🚀 ~ fetchAprData ~ completePoolData:',
             completePoolData
           );
-
           // Fetch APR data from Balancer SDK
           const aprData = await getBalancer().pools.apr(completePoolData);
           console.log(`🚀 ~ fetchAprData ~ pool[${i + index}] APR:`, aprData);
