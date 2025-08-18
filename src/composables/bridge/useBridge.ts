@@ -473,6 +473,7 @@ async function bridgeSend({
       inputToSelect.tokenAddress,
       inputToSelect.tokensList
     );
+    console.log('HUNG:chainFrom:',chainFrom);
     console.log('Submit Button-> is_pegged', is_pegged);
     console.log('Submit Button-> cbridge_token_vault', cbridge_token_vault);
     console.log('Submit Button-> cbridge_peg', cbridge_peg);
@@ -512,6 +513,7 @@ async function bridgeSend({
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
           nonce,
+          verseBridgeVersion: chainFrom.verseBridgeVersion,
         };
         rs = await bridgeService.tokenVaultDeposit(params);
       }
@@ -532,6 +534,7 @@ async function bridgeSend({
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
           nonce,
+          verseBridgeVersion: chainFrom.verseBridgeVersion,
         };
         rs = await bridgeService.bridgeSend(params);
       }
@@ -575,6 +578,7 @@ async function bridgeSend({
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
             nonce,
+            verseBridgeVersion: chainFrom.verseBridgeVersion,
           };
           rs = await bridgeService.burn(params);
         } else {
@@ -596,6 +600,7 @@ async function bridgeSend({
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
             nonce,
+            verseBridgeVersion: chainFrom.verseBridgeVersion,
           };
           rs = await bridgeService.bridgeSend(params);
         }
@@ -616,6 +621,7 @@ async function bridgeSend({
         gasPrice: chainFrom?.gasPrice,
         isEstimate,
         nonce,
+        verseBridgeVersion: chainFrom.verseBridgeVersion,
       };
 
       rs = await bridgeService.bridgeWithdrawTo(params);
@@ -635,6 +641,7 @@ async function bridgeSend({
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
           nonce,
+          verseBridgeVersion: chainFrom.verseBridgeVersion,
         };
         rs = await bridgeService.bridgeDepositETHTo(params);
       } else {
@@ -653,6 +660,7 @@ async function bridgeSend({
           gasPrice: chainFrom?.gasPrice,
           isEstimate,
           nonce,
+          verseBridgeVersion: chainFrom.verseBridgeVersion,
         };
         rs = await bridgeService.bridgeDepositERC20To(params);
       }
@@ -716,6 +724,7 @@ async function bridgeSend({
               gasPrice: chainFrom?.gasPrice,
               isEstimate,
               nonce,
+              verseBridgeVersion: chainFrom.verseBridgeVersion,
             };
             rs = await bridgeService.bridgeSend(params);
           }
@@ -738,6 +747,7 @@ async function bridgeSend({
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
             nonce,
+            verseBridgeVersion: chainFrom.verseBridgeVersion,
           };
           rs = await bridgeService.bridgeWithdrawTo(params);
         } else {
@@ -756,6 +766,7 @@ async function bridgeSend({
             gasPrice: chainFrom?.gasPrice,
             isEstimate,
             nonce,
+            verseBridgeVersion: chainFrom.verseBridgeVersion,
           };
           rs = await bridgeService.bridgeWithdrawTo(params);
         }
