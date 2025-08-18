@@ -225,9 +225,10 @@ function groupByChainId(arr) {
         decimals: curr.token_decimals,
         is_native: checkIsNative(curr.token_address, chainId),
         rpc: networkStaticInfo?.rpc,
+        verse_bridge_version: curr?.verse_bridge_version || 0,
       });
     }
-    acc[chainId] = { ...acc[chainId], ...networkStaticInfo };
+    acc[chainId] = { ...acc[chainId], ...networkStaticInfo, ...curr };
     return acc;
   }, {});
 
