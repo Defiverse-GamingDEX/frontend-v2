@@ -84,7 +84,12 @@ async function onSelectNetwork(network: number): Promise<void> {
             <div class="item-img">
               <img width="48" height="48" :src="item.img_url" />
             </div>
-            <div class="item-label">{{ item.name }}</div>
+            <div class="item-label">
+              {{ item.name }}
+              <span v-if="item.verse_bridge_version > 0"
+                >(v{{ item.verse_bridge_version }})</span
+              >
+            </div>
           </div>
         </div>
         <div

@@ -69,7 +69,12 @@ function getNetwork(chain_id) {
         <div class="item-img">
           <img width="48" height="48" :src="network?.img_url" />
         </div>
-        <div class="item-label">{{ network?.name }}</div>
+        <div class="item-label">
+          {{ network?.name }}
+          <span v-if="network?.verse_bridge_version > 0">
+            (v{{ network?.verse_bridge_version }})
+          </span>
+        </div>
       </div>
       <BalIcon
         name="chevron-down"

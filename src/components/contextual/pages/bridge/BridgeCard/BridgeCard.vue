@@ -225,9 +225,10 @@ function groupByChainId(arr) {
         decimals: curr.token_decimals,
         is_native: checkIsNative(curr.token_address, chainId),
         rpc: networkStaticInfo?.rpc,
+        verse_bridge_version: curr?.verse_bridge_version || 0,
       });
     }
-    acc[chainId] = { ...acc[chainId], ...networkStaticInfo };
+    acc[chainId] = { ...acc[chainId], ...networkStaticInfo, ...curr };
     return acc;
   }, {});
 
@@ -745,6 +746,11 @@ function checkInputToChange() {
   );
   inputToSelect.value.chainsList = dstBE.value;
 
+  // Filter out Defiverse (chain ID 16116) from chainTo options
+  inputToSelect.value.chainsList = inputToSelect.value.chainsList.filter(
+    (chain: any) => chain.chain_id_decimals !== 16116
+  );
+
   // sort order
   inputToSelect.value.chainsList = sortArrayByReference(
     inputToSelect.value.chainsList,
@@ -778,12 +784,8 @@ function checkInputToChange() {
   } else {
     // set default chainId for inputTo
     if (inputToSelect.value.chainsList.length > 0) {
-      let avaiChain: any = inputToSelect.value.chainsList.find(
-        (chain: any) => chain.chain_id_decimals === 16116 // set Defiverse is default
-      );
-      if (!avaiChain) {
-        avaiChain = inputToSelect.value.chainsList[0];
-      }
+      // Since Defiverse is filtered out, use the first available chain as default
+      let avaiChain: any = inputToSelect.value.chainsList[0];
       inputToSelect.value.chainId = avaiChain.chain_id_decimals;
       //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(
