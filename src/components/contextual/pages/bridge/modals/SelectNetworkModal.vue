@@ -86,9 +86,6 @@ async function onSelectNetwork(network: number): Promise<void> {
             </div>
             <div class="item-label">
               {{ item.name }}
-              <span v-if="item.verse_bridge_version > 0"
-                >(v{{ item.verse_bridge_version }})</span
-              >
             </div>
           </div>
         </div>
