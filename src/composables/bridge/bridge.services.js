@@ -35,7 +35,7 @@ const _sendRawTx = async (
     const tx = await myContract.connect(signer)[action](...params, {
       gasLimit: gas,
       gasPrice: gasPrice,
-      value: verseBridgeVersion == 2 ? overwrite.value : 0,
+      value: overwrite.value || 0, // verseBridgeVersion == 2 ? overwrite.value : 0,
       type: 0,
     });
 

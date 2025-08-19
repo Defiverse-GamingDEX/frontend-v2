@@ -76,6 +76,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       symbol: 'OAS',
       decimals: 18,
     },
+    verseBridgeVersion: 2
   },
   {
     chain_id: '0x3EF4',
@@ -121,7 +122,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 1
+    verseBridgeVersion: 2
   },
   {
     chain_id: '0x960',
