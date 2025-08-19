@@ -68,6 +68,7 @@ export default class PoolService {
 
     try {
       const sdkApr = await getBalancer().pools.apr(this.pool);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ sdkApr:${this.pool.id}`, sdkApr)
 
       if (sdkApr) apr = sdkApr;
     } catch (error) {
