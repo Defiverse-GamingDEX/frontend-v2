@@ -275,10 +275,7 @@ function initSrcBE() {
       'chain_id_decimals'
     );
     result = reOrderTokensList(result);
-    result = result.filter(
-      (item: any) =>
-        item.chain_id_decimals !== 2400 && item.chain_id_decimals !== 29548
-    ); // TODO remove TCGverse and MCHVerse
+    result = result.filter((item: any) => item.chain_id_decimals !== 2400); // TODO remove TCGverse
     console.log('🚀 ~ initSrcBE ~ result:', result);
     return result || [];
   }
@@ -752,10 +749,6 @@ function checkInputToChange() {
   // Filter out Defiverse (chain ID 16116) from chainTo options
   inputToSelect.value.chainsList = inputToSelect.value.chainsList.filter(
     (chain: any) => chain.chain_id_decimals !== 16116
-  );
-  // Filter out MCHVerse (chain ID 29548) from chainTo options
-  inputToSelect.value.chainsList = inputToSelect.value.chainsList.filter(
-    (chain: any) => chain.chain_id_decimals !== 29548
   );
 
   // sort order
