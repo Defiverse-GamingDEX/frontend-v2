@@ -18,7 +18,7 @@ import { balancerSubgraphService } from '@/services/balancer/subgraph/balancer-s
 import { bnum } from '@/lib/utils';
 import PoolService from '@/services/pool/pool.service';
 import type { Pool } from '@/services/pool/types';
-import type { SDKPoolRepository } from '@balancer-labs/sdk';
+import usePoolAprQuery from '@/composables/queries/usePoolAprQuery';
 import useNetwork from '@/composables/useNetwork';
 import useWeb3 from '@/services/web3/useWeb3';
 import { configService } from '@/services/config/config.service';
@@ -465,8 +465,8 @@ const fetchCompletePoolData = async (poolId: string, chainId: number) => {
 // Function to fetch APR data for pools after table is rendered
 const fetchAprData = async () => {
   try {
-    // Filter pools that don't have APR data yet
     console.log('🚀 ~ fetchAprData ~ rawPools.value:', rawPools.value);
+    isFetchingApr.value = true;
 
     // Process pools in batches to avoid overwhelming the API
     const batchSize = 5;
@@ -475,24 +475,29 @@ const fetchAprData = async () => {
     for (let i = 0; i < pools.length; i += batchSize) {
       const batch = pools.slice(i, i + batchSize);
 
-      // Process batch in parallel
+      // Process batch in parallel using direct SDK call
       const aprPromises = batch.map(async (pool, index) => {
         try {
-          // add get info pool before fetch apr
-          const poolData = await fetchCompletePoolData(
+          // Fetch complete pool data first
+          const completePoolData = await fetchCompletePoolData(
             pool.id,
             pool.chainId || getCurrentChainId()
           );
-          const completePoolData = {
-            ...pool,
-            ...poolData,
-          };
+
+          const poolToUse = completePoolData
+            ? {
+                ...pool,
+                ...completePoolData,
+              }
+            : pool;
+
           console.log(
-            '🚀 ~ fetchAprData ~ completePoolData:',
-            completePoolData
+            `🚀 ~ fetchAprData ~ poolToUse[${i + index}]:`,
+            poolToUse
           );
-          // Fetch APR data from Balancer SDK
-          const aprData = await getBalancer().pools.apr(completePoolData);
+
+          // Fetch APR data from Balancer SDK directly
+          const aprData = await getBalancer().pools.apr(poolToUse);
           console.log(`🚀 ~ fetchAprData ~ pool[${i + index}] APR:`, aprData);
 
           // Update the pool with APR data
@@ -514,10 +519,10 @@ const fetchAprData = async () => {
       }
     }
 
-    isFetchingApr.value = false;
     console.log('✅ APR fetch completed for all pools');
   } catch (error) {
     console.error('❌ Error fetching APR data:', error);
+  } finally {
     isFetchingApr.value = false;
   }
 };
