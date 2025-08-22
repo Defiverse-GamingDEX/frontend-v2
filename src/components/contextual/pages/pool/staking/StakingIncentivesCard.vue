@@ -12,7 +12,7 @@ import { Pool } from '@/services/pool/types';
 import StakePreviewModal from './StakePreviewModal.vue';
 import { StakeAction } from '@/components/contextual/pages/pool/staking/StakePreview.vue';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
-import StakingGaugeMigrate from './StakingGaugeMigrate.vue';
+import MigrateGaugeModal from './MigrateGaugeModal.vue';
 
 type Props = {
   pool: Pool;
@@ -22,7 +22,7 @@ const props = defineProps<Props>();
 /**
  * STATE
  */
-const isMigrate = ref(false);
+const isMigrateModalVisible = ref(false);
 const isStakePreviewVisible = ref(false);
 const stakeAction = ref<StakeAction>('stake');
 
@@ -57,11 +57,7 @@ const fiatValueOfUnstakedShares = computed(() => {
     .toString();
 });
 
-const headerTitle = computed(() => {
-  return isMigrate.value
-    ? t('migratePool.migrateStakedTokens')
-    : t('staking.stakingIncentives');
-});
+// Remove headerTitle computed - we always show 'Staking incentives' as title
 
 const fiatValueOfLegacyStakedShares = computed(() => {
   // Temporary mock value for legacy staked shares
@@ -92,17 +88,17 @@ function handlePreviewClose() {
   isStakePreviewVisible.value = false;
 }
 
-function showMigrate() {
-  isMigrate.value = true;
+function showMigrateModal() {
+  isMigrateModalVisible.value = true;
 }
 
 function handleMigrateSuccess() {
-  isMigrate.value = false;
+  isMigrateModalVisible.value = false;
   // Optionally refresh data here
 }
 
 function handleMigrateClose() {
-  isMigrate.value = false;
+  isMigrateModalVisible.value = false;
 }
 </script>
 
@@ -140,7 +136,7 @@ function handleMigrateClose() {
                     <BalIcon v-if="isStakablePool" size="sm" name="check" />
                     <BalIcon v-else size="sm" name="x" />
                   </div>
-                  <h6>{{ headerTitle }}</h6>
+                  <h6>{{ $t('staking.stakingIncentives') }}</h6>
                 </BalStack>
                 <BalStack
                   v-if="isStakablePool"
@@ -155,25 +151,12 @@ function handleMigrateClose() {
           </template>
           <template #staking-incentives>
             <div class="relative bg-white dark:bg-gray-850 rounded-b-lg">
-              <!-- Migration View -->
-              <div
-                v-if="isMigrate"
-                class="p-4 rounded-b-lg border-t dark:border-gray-900"
-              >
-                <StakingGaugeMigrate
-                  :pool="pool"
-                  @success="handleMigrateSuccess"
-                  @close="handleMigrateClose"
-                />
-              </div>
-
-              <!-- Normal Staking View -->
               <BalStack
-                v-else
                 vertical
                 spacing="sm"
                 class="p-4 rounded-b-lg border-t dark:border-gray-900"
               >
+                <!-- Staked LP tokens -->
                 <BalStack horizontal justify="between" class="rounded-b-lg">
                   <span>{{ $t('staked') }} {{ $t('lpTokens') }}</span>
                   <BalStack horizontal spacing="sm" align="center">
@@ -188,6 +171,8 @@ function handleMigrateClose() {
                     <BalTooltip :text="$t('staking.stakedLpTokensTooltip')" />
                   </BalStack>
                 </BalStack>
+
+                <!-- Unstaked LP tokens -->
                 <BalStack horizontal justify="between">
                   <span>{{ $t('unstaked') }} {{ $t('lpTokens') }}</span>
                   <BalStack horizontal spacing="sm" align="center">
@@ -202,6 +187,8 @@ function handleMigrateClose() {
                     <BalTooltip :text="$t('staking.unstakedLpTokensTooltip')" />
                   </BalStack>
                 </BalStack>
+
+                <!-- Normal Stake/Unstake buttons when no legacy tokens -->
                 <BalStack horizontal spacing="sm" class="mt-2">
                   <BalBtn
                     color="gradient"
@@ -223,10 +210,44 @@ function handleMigrateClose() {
                   >
                     {{ $t('unstake') }}
                   </BalBtn>
-                  <BalBtn outline color="purple" size="sm" @click="showMigrate">
-                    Migrate
-                  </BalBtn>
                 </BalStack>
+
+                <!-- Legacy LP tokens section - only shown when user has legacy staked tokens -->
+                <template v-if="hasLegacyStakedShares">
+                  <BalStack horizontal justify="between">
+                    <span>{{ $t('migratePool.legacyLpTokens') }}</span>
+                    <BalStack horizontal spacing="sm" align="center">
+                      <AnimatePresence :isVisible="isRefetchingStakedShares">
+                        <BalLoadingBlock class="h-5" />
+                      </AnimatePresence>
+                      <AnimatePresence :isVisible="!isRefetchingStakedShares">
+                        <span>
+                          {{
+                            fNum2(
+                              fiatValueOfLegacyStakedShares,
+                              FNumFormats.fiat
+                            )
+                          }}
+                        </span>
+                      </AnimatePresence>
+                      <BalTooltip
+                        text="The legacy LP tokens is shown only when user has staked LP into the old gauge"
+                      />
+                    </BalStack>
+                  </BalStack>
+
+                  <!-- Migrate button - full width when legacy tokens exist -->
+                  <BalBtn
+                    color="gradient"
+                    size="sm"
+                    class="mt-2"
+                    block
+                    @click="showMigrateModal"
+                  >
+                    {{ $t('migrate') }}
+                  </BalBtn>
+                </template>
+
                 <BalAlert
                   v-if="hasNonPrefGaugeBalance"
                   :title="$t('staking.restakeGauge')"
@@ -248,6 +269,12 @@ function handleMigrateClose() {
       :pool="pool"
       :action="stakeAction"
       @close="handlePreviewClose"
+    />
+    <MigrateGaugeModal
+      :isVisible="isMigrateModalVisible"
+      :pool="pool"
+      @close="handleMigrateClose"
+      @success="handleMigrateSuccess"
     />
   </div>
 </template>
