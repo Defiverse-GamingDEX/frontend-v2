@@ -284,6 +284,13 @@
     "approve": "Approve migration",
     "approving": "Approving migration",
     "confirming": "Confirming migration",
+    "migrateStakedTokens": "Migrate Staked Tokens",
+    "legacyLpTokens": "Legacy LP tokens",
+    "unstakeFromLegacy": "Unstake from legacy staking",
+    "unstakeFromLegacyStaking": "Unstake from legacy staking",
+    "stakeToNewPool": "Stake to New Pool",
+    "successTitle": "Migration completed successfully!",
+    "successDescription": "Your tokens have been successfully migrated to the new gauge.",
     "previewModal": {
       "titles": {
         "default": "Migrate preview",

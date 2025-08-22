@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { getAddress } from '@ethersproject/address';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-import BalLoadingBlock from '@/components/_global/BalLoadingBlock/BalLoadingBlock.vue';
 import AnimatePresence from '@/components/animate/AnimatePresence.vue';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { useTokens } from '@/providers/tokens.provider';
@@ -12,6 +12,7 @@ import { Pool } from '@/services/pool/types';
 import StakePreviewModal from './StakePreviewModal.vue';
 import { StakeAction } from '@/components/contextual/pages/pool/staking/StakePreview.vue';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
+import StakingGaugeMigrate from './StakingGaugeMigrate.vue';
 
 type Props = {
   pool: Pool;
@@ -21,13 +22,14 @@ const props = defineProps<Props>();
 /**
  * STATE
  */
-
+const isMigrate = ref(false);
 const isStakePreviewVisible = ref(false);
 const stakeAction = ref<StakeAction>('stake');
 
 /**
  * COMPOSABLES
  */
+const { t } = useI18n();
 const { fNum2 } = useNumbers();
 const { balanceFor } = useTokens();
 const {
@@ -55,6 +57,22 @@ const fiatValueOfUnstakedShares = computed(() => {
     .toString();
 });
 
+const headerTitle = computed(() => {
+  return isMigrate.value
+    ? t('migratePool.migrateStakedTokens')
+    : t('staking.stakingIncentives');
+});
+
+const fiatValueOfLegacyStakedShares = computed(() => {
+  // Temporary mock value for legacy staked shares
+  // In real implementation, this should come from the provider
+  return '10.00';
+});
+
+const hasLegacyStakedShares = computed(() => {
+  return Number(fiatValueOfLegacyStakedShares.value) > 0;
+});
+
 /**
  * METHODS
  */
@@ -72,6 +90,19 @@ function showUnstakePreview() {
 
 function handlePreviewClose() {
   isStakePreviewVisible.value = false;
+}
+
+function showMigrate() {
+  isMigrate.value = true;
+}
+
+function handleMigrateSuccess() {
+  isMigrate.value = false;
+  // Optionally refresh data here
+}
+
+function handleMigrateClose() {
+  isMigrate.value = false;
 }
 </script>
 
@@ -109,7 +140,7 @@ function handlePreviewClose() {
                     <BalIcon v-if="isStakablePool" size="sm" name="check" />
                     <BalIcon v-else size="sm" name="x" />
                   </div>
-                  <h6>{{ $t('staking.stakingIncentives') }}</h6>
+                  <h6>{{ headerTitle }}</h6>
                 </BalStack>
                 <BalStack
                   v-if="isStakablePool"
@@ -124,7 +155,21 @@ function handlePreviewClose() {
           </template>
           <template #staking-incentives>
             <div class="relative bg-white dark:bg-gray-850 rounded-b-lg">
+              <!-- Migration View -->
+              <div
+                v-if="isMigrate"
+                class="p-4 rounded-b-lg border-t dark:border-gray-900"
+              >
+                <StakingGaugeMigrate
+                  :pool="pool"
+                  @success="handleMigrateSuccess"
+                  @close="handleMigrateClose"
+                />
+              </div>
+
+              <!-- Normal Staking View -->
               <BalStack
+                v-else
                 vertical
                 spacing="sm"
                 class="p-4 rounded-b-lg border-t dark:border-gray-900"
@@ -177,6 +222,9 @@ function handlePreviewClose() {
                     @click="showUnstakePreview"
                   >
                     {{ $t('unstake') }}
+                  </BalBtn>
+                  <BalBtn outline color="purple" size="sm" @click="showMigrate">
+                    Migrate
                   </BalBtn>
                 </BalStack>
                 <BalAlert
