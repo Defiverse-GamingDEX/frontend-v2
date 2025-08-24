@@ -753,7 +753,7 @@ function checkInputToChange() {
 
   // Filter out Defiverse (chain ID 16116) from chainTo options
   inputToSelect.value.chainsList = inputToSelect.value.chainsList.filter(
-    (chain: any) => chain.chain_id_decimals !== 16116
+    (chain: any) => chain.chain_id_decimals !== 161161
   );
 
   // sort order
@@ -1172,7 +1172,7 @@ onBeforeMount(async () => {
                   />
                 </template>
                 <div class="tooltip-content">
-                
+
                   <div>Balabalaba</div>
                 </div>
               </BalTooltip>  -->

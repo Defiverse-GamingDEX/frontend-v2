@@ -32,12 +32,7 @@ const activeVotingGauge = ref<VotingGaugeWithVotes | null>(null);
 
 const adminAddress = ref(null);
 
-const networkFilters = [
-  Network.MAINNET,
-  Network.POLYGON,
-  Network.ARBITRUM,
-  Network.OPTIMISM,
-];
+const networkFilters = [Network.MAINNET, Network.OASYS, Network.OASYS_TESTNET];
 
 const tabSelect = ref('gauge');
 /**

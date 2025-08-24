@@ -20,13 +20,13 @@ const NAV_LINKS_MAINNET = [
     goal_key: 'ClickNavPortfolio',
     chainsSupport: [17117, 9372, 248, 16116],
   },
-  // {
-  //   text: 'sZ',
-  //   path: 'sZ',
-  //   name_link: 'vebal',
-  //   goal_key: 'ClickNavVebal',
-  //   chainsSupport: [9372, 248],
-  // },
+  {
+    text: 'sZ',
+    path: 'sZ',
+    name_link: 'vebal',
+    goal_key: 'ClickNavVebal',
+    chainsSupport: [9372, 248],
+  },
   {
     text: 'Bridge',
     path: 'bridge',

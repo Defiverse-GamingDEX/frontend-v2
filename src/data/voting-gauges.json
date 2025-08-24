@@ -1,31 +1,60 @@
 [
   {
-    "address": "0x19Dcc71E689eC9bfBb34028F465b7848e5298ee7",
-    "network": 17117,
+    "address": "0xfc4676803caeaa0c6ce55ed2261efda52cc0ea18",
+    "network": 9372,
     "isKilled": false,
     "relativeWeightCap": "0.15",
-    "addedTimestamp": 1700039704,
+    "addedTimestamp": 1747910545,
     "pool": {
-      "id": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083",
-      "address": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87",
+      "id": "0xfda16dee087590dab4096d4a43a6712c7f13d69200020000000000000000000d",
+      "address": "0xfda16dee087590dab4096d4a43a6712c7f13d692",
       "poolType": "Weighted",
-      "symbol": "G-70USDC-30OAS",
+      "symbol": "20WOAS-80USDT",
       "tokens": [
         {
-          "address": "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18",
-          "weight": "0.7",
-          "symbol": "USDC"
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.2",
+          "symbol": "WOAS"
         },
         {
-          "address": "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99",
-          "weight": "0.3",
-          "symbol": "WOAS"
+          "address": "0xacb7a8e74a9f09735fece0176fcfb0591d801a77",
+          "weight": "0.8",
+          "symbol": "USDT"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0x9C9a2a20e96eAae6dF4ae3C7d8CD1a65Fe7D0F18": "tokens/USDC_L.png",
-      "0x6B382742b07AAbBA58c38d792B5d7CBAaB246e99": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0xacb7a8e74a9f09735fece0176fcfb0591d801a77": "tokens/USDT_L.png"
+    }
+  },
+  {
+    "address": "0xb4d8e836a48bba5078f67cc8ea5e65153f5f3ad7",
+    "network": 17117,
+    "isKilled": false,
+    "relativeWeightCap": "0.15",
+    "addedTimestamp": 1747910545,
+    "pool": {
+      "id": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083",
+      "address": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87",
+      "poolType": "Weighted",
+      "symbol": "G-30WOAS-70USDC",
+      "tokens": [
+        {
+          "address": "0x9c9a2a20e96eaae6df4ae3c7d8cd1a65fe7d0f18",
+          "weight": "0.7",
+          "symbol": "USDC"
+        },
+        {
+          "address": "0x6b382742b07aabba58c38d792b5d7cbaab246e99",
+          "weight": "0.3",
+          "symbol": "OAS"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x6b382742b07aabba58c38d792b5d7cbaab246e99": "tokens/OAS_L.png",
+      "0x9c9a2a20e96eaae6df4ae3c7d8cd1a65fe7d0f18": "tokens/USDC_L.png"
     }
   }
 ]

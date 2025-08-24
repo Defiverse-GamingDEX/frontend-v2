@@ -120,6 +120,7 @@ const balRewardsData = computed((): RewardRow[] => {
   // if (!isWalletReady.value || isDefiverse.value) return [];
   // Hung open
   if (!isWalletReady.value) return [];
+
   // Using reduce to filter out gauges we don't have corresponding pools for
   return gauges.value.reduce<RewardRow[]>((arr, gauge) => {
     const decimals = balToken && balToken.value ? balToken.value.decimals : 18;
@@ -274,7 +275,7 @@ onBeforeMount(async () => {
         <template v-if="!isL2">
           <!-- Hung tam thoi disable deploy mainnet -->
 
-          <!-- <div class="mb-16">
+          <div class="mb-16">
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
@@ -295,8 +296,10 @@ onBeforeMount(async () => {
               :rewardsData="balRewardsData"
               :isLoading="loading"
             />
-          </div> -->
-          <!-- <div class="mb-16">
+          </div>
+
+          <!--
+          <div class="mb-16">
             <h3
               class="inline-block xl:px-0 pl-4 mt-8 mr-1.5 mb-3 text-xl text-white"
             >
@@ -321,7 +324,8 @@ onBeforeMount(async () => {
               :isLoading="loading"
               deprecated
             />
-          </div> -->
+          </div>
+          -->
         </template>
 
         <div v-if="!isL2">
