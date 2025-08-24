@@ -34,6 +34,18 @@ export const DEFIVERSE_TESTNET_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
 ).filter(gauge => gauge.network === Network.DEFIVERSE_TESTNET);
 
+export const OASYS_TESTNET_VOTING_GAUGES: VotingGauge[] = (
+  ALL_VOTING_GAUGES as VotingGauge[]
+).filter(
+  gauge =>
+    gauge.network === Network.OASYS_TESTNET ||
+    gauge.network === Network.DEFIVERSE_TESTNET
+);
+
+export const OASYS_VOTING_GAUGES: VotingGauge[] = (
+  ALL_VOTING_GAUGES as VotingGauge[]
+).filter(gauge => gauge.network === Network.OASYS);
+
 export const MAINNET_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
 ).filter(gauge => gauge.network !== Network.GOERLI);

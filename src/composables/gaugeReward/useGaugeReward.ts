@@ -94,7 +94,7 @@ async function depositTokens(
         return decimals_value;
       }) || [];
 
-    const gasPrice = await getGasPrice(signer);
+    // const gasPrice = await getGasPrice(signer);
 
     const params = {
       contractAddress: GAUGE_REWARD_CONTRACT_ADDRESS, // contract token
@@ -107,7 +107,7 @@ async function depositTokens(
       account,
       signer,
       abi: GaugeRewardABI,
-      gasPrice: gasPrice,
+      gasPrice: 0, // gasPrice,
     };
 
     console.log('gaugeRewardService.depositTokens :> ', params);
