@@ -13,6 +13,7 @@ type Props = {
   isVisible: boolean;
   pool: Pool;
   gaugeInfo: any;
+  legacyStakedShares: string;
 };
 
 /**
@@ -81,7 +82,9 @@ watch(
 
       <StakingGaugeMigrate
         :pool="pool"
+        :gaugeLpToken="gaugeInfo.lpToken"
         :gaugeInfo="gaugeInfo"
+        :legacyStakedShares="legacyStakedShares"
         @close="handleClose"
         @success="handleSuccess"
       />

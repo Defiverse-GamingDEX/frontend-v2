@@ -11,9 +11,11 @@ import { useTokens } from '@/providers/tokens.provider';
 import useTokenApprovalActions from '@/composables/approvals/useTokenApprovalActions';
 import { ApprovalAction } from '@/composables/approvals/types';
 import { TransactionActionInfo } from '@/types/transactions';
+import useTransactions from '@/composables/useTransactions';
 type Props = {
   pool: Pool;
   gaugeInfo: any; // New prop to receive gauge info
+  legacyStakedShares: string;
 };
 
 const props = defineProps<Props>();
@@ -36,7 +38,8 @@ const needsApproval = ref(false);
  */
 const { t } = useI18n();
 const { fNum2 } = useNumbers();
-const { balanceFor } = useTokens();
+const { balanceFor, refetchBalances, balanceQueryLoading } = useTokens();
+const { addTransaction } = useTransactions();
 const {
   stakedShares,
   isRefetchingStakedShares,
@@ -53,7 +56,7 @@ const gauge_address = computed(() => {
 });
 const lpTokenAmountStep1 = computed(() => {
   // For migration, we use the staked shares from the legacy gauge
-  return stakedShares.value || '0';
+  return props.legacyStakedShares || '0';
 });
 const lpTokenAmountStep2 = computed(() => {
   // For migration, we use the staked shares from the legacy gauge
@@ -80,21 +83,81 @@ const isMigrationComplete = computed(
 /**
  * COMPUTED
  */
+const hasWalletBalance = computed(() => {
+  return bnum(lpTokenAmountStep2.value).gt(0);
+});
+
 const canStake = computed(() => {
-  return canProceedToStep2.value && !needsApproval.value;
+  return (
+    canProceedToStep2.value && !needsApproval.value && hasWalletBalance.value
+  );
 });
 
 const showApprovalButton = computed(() => {
-  return isStep2Active.value && needsApproval.value && !stakeCompleted.value;
+  return (
+    isStep2Active.value &&
+    needsApproval.value &&
+    hasWalletBalance.value &&
+    !stakeCompleted.value
+  );
 });
 
 const showStakeButton = computed(() => {
-  return isStep2Active.value && !needsApproval.value && !stakeCompleted.value;
+  return (
+    isStep2Active.value &&
+    !needsApproval.value &&
+    hasWalletBalance.value &&
+    !stakeCompleted.value
+  );
+});
+
+const showWaitingForBalance = computed(() => {
+  return (
+    isStep2Active.value &&
+    !hasWalletBalance.value &&
+    !balanceQueryLoading.value &&
+    !stakeCompleted.value
+  );
 });
 
 /**
  * METHODS
  */
+async function waitForBalanceUpdate(maxRetries = 5, intervalMs = 1000) {
+  let retries = 0;
+  const initialBalance = lpTokenAmountStep2.value;
+
+  console.log(
+    '🚀 ~ Waiting for balance update, initial balance:',
+    initialBalance
+  );
+
+  while (retries < maxRetries) {
+    await refetchBalances.value();
+
+    // Wait a bit for the reactive value to update
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const currentBalance = lpTokenAmountStep2.value;
+    console.log(`🚀 ~ Retry ${retries + 1}: Balance = ${currentBalance}`);
+
+    // Check if balance has increased (tokens returned to wallet)
+    if (bnum(currentBalance).gt(initialBalance)) {
+      console.log('🚀 ~ Balance updated successfully!');
+      return true;
+    }
+
+    retries++;
+    if (retries < maxRetries) {
+      console.log(`🚀 ~ Balance not updated yet, waiting ${intervalMs}ms...`);
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+    }
+  }
+
+  console.log('🚀 ~ Max retries reached, balance may not have updated');
+  return false;
+}
+
 async function checkApproveNewGauge() {
   try {
     console.log(
@@ -127,8 +190,10 @@ async function handleApproval() {
       isApproving.value = true;
       const approvalAction = approvalActions.value[0];
       const tx = await approvalAction.action();
-      await tx.wait();
+      console.log('🚀 ~ handleApproval ~ tx:', tx.hash);
 
+      await tx.wait();
+      console.log('🚀 ~ handleApproval ~ tx:', tx);
       // Re-check approval status after approval transaction
       await checkApproveNewGauge();
       isApproving.value = false;
@@ -149,14 +214,45 @@ async function handleUnstake() {
       gauge_legacy_address
     );
     const tx = await unstakeWithGaugeAddress(gauge_legacy_address);
+
+    // Add transaction tracking for unstake
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'unstake',
+      summary: t('transactionSummary.unstakeFromLegacyGauge', {
+        pool: props.pool.symbol,
+        amount: fNum2(lpTokenAmountStep1.value),
+      }),
+      details: {
+        amount: fNum2(lpTokenAmountStep1.value),
+        pool: props.pool,
+        gauge: gauge_legacy_address,
+      },
+    });
+
     await tx.wait();
+
+    // First refetch staking data
+    await refetchAllPoolStakingData();
+
+    // Then wait for balance to be updated with retry logic
+    console.log('🚀 ~ Starting balance update wait...');
+    const balanceUpdated = await waitForBalanceUpdate(5, 1000);
+
+    if (balanceUpdated) {
+      console.log('🚀 ~ Balance updated, checking approvals...');
+      await checkApproveNewGauge();
+    } else {
+      console.log('🚀 ~ Balance may not have updated, but proceeding anyway');
+      // Still try to check approvals in case balance was already there
+      await checkApproveNewGauge();
+    }
     unstakeCompleted.value = true;
     currentStep.value = 2;
-    await refetchAllPoolStakingData();
-    await checkApproveNewGauge();
+    isUnstaking.value = false;
   } catch (error) {
     console.error('Unstake failed:', error);
-  } finally {
     isUnstaking.value = false;
   }
 }
@@ -166,6 +262,23 @@ async function handleStake() {
     isStaking.value = true;
     const gauge_address = props.gaugeInfo.gauge;
     const tx = await stakeWithGaugeAddress(gauge_address);
+
+    // Add transaction tracking for stake
+    addTransaction({
+      id: tx.hash,
+      type: 'tx',
+      action: 'stake',
+      summary: t('transactionSummary.migrateToNewGauge', {
+        pool: props.pool.symbol,
+        amount: fNum2(lpTokenAmountStep2.value),
+      }),
+      details: {
+        amount: fNum2(lpTokenAmountStep2.value),
+        pool: props.pool,
+        gauge: gauge_address,
+      },
+    });
+
     await tx.wait();
     stakeCompleted.value = true;
     await refetchAllPoolStakingData();
@@ -180,10 +293,6 @@ async function handleStake() {
 function handleClose() {
   emit('close');
 }
-
-onMounted(() => {
-  checkApproveNewGauge();
-});
 </script>
 
 <template>
@@ -315,6 +424,21 @@ onMounted(() => {
         >
           {{ $t('migratePool.stakeToNewPool') }}
         </BalBtn>
+      </div>
+
+      <!-- Waiting for balance message -->
+      <div v-else-if="showWaitingForBalance" class="py-4 text-center">
+        <div class="flex flex-col items-center space-y-2">
+          <BalLoadingIcon />
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            {{ $t('migratePool.waitingForTokensToAppearInWallet') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading balance -->
+      <div v-else-if="balanceQueryLoading" class="flex justify-center py-4">
+        <BalLoadingBlock class="w-full h-12" />
       </div>
     </div>
 

@@ -185,61 +185,67 @@ onBeforeMount(() => {
                 spacing="sm"
                 class="p-4 rounded-b-lg border-t dark:border-gray-900"
               >
-                <!-- Staked LP tokens -->
-                <BalStack horizontal justify="between" class="rounded-b-lg">
-                  <span>{{ $t('staked') }} {{ $t('lpTokens') }}</span>
-                  <BalStack horizontal spacing="sm" align="center">
-                    <AnimatePresence :isVisible="isRefetchingStakedShares">
-                      <BalLoadingBlock class="h-5" />
-                    </AnimatePresence>
-                    <AnimatePresence :isVisible="!isRefetchingStakedShares">
-                      <span>
-                        {{ fNum2(fiatValueOfStakedShares, FNumFormats.fiat) }}
-                      </span>
-                    </AnimatePresence>
-                    <BalTooltip :text="$t('staking.stakedLpTokensTooltip')" />
+                <template v-if="!hasLegacyStakedShares">
+                  <!-- Staked LP tokens -->
+                  <BalStack horizontal justify="between" class="rounded-b-lg">
+                    <span>{{ $t('staked') }} {{ $t('lpTokens') }}</span>
+                    <BalStack horizontal spacing="sm" align="center">
+                      <AnimatePresence :isVisible="isRefetchingStakedShares">
+                        <BalLoadingBlock class="h-5" />
+                      </AnimatePresence>
+                      <AnimatePresence :isVisible="!isRefetchingStakedShares">
+                        <span>
+                          {{ fNum2(fiatValueOfStakedShares, FNumFormats.fiat) }}
+                        </span>
+                      </AnimatePresence>
+                      <BalTooltip :text="$t('staking.stakedLpTokensTooltip')" />
+                    </BalStack>
                   </BalStack>
-                </BalStack>
 
-                <!-- Unstaked LP tokens -->
-                <BalStack horizontal justify="between">
-                  <span>{{ $t('unstaked') }} {{ $t('lpTokens') }}</span>
-                  <BalStack horizontal spacing="sm" align="center">
-                    <AnimatePresence :isVisible="isRefetchingStakedShares">
-                      <BalLoadingBlock class="h-5" />
-                    </AnimatePresence>
-                    <AnimatePresence :isVisible="!isRefetchingStakedShares">
-                      <span>
-                        {{ fNum2(fiatValueOfUnstakedShares, FNumFormats.fiat) }}
-                      </span>
-                    </AnimatePresence>
-                    <BalTooltip :text="$t('staking.unstakedLpTokensTooltip')" />
+                  <!-- Unstaked LP tokens -->
+                  <BalStack horizontal justify="between">
+                    <span>{{ $t('unstaked') }} {{ $t('lpTokens') }}</span>
+                    <BalStack horizontal spacing="sm" align="center">
+                      <AnimatePresence :isVisible="isRefetchingStakedShares">
+                        <BalLoadingBlock class="h-5" />
+                      </AnimatePresence>
+                      <AnimatePresence :isVisible="!isRefetchingStakedShares">
+                        <span>
+                          {{
+                            fNum2(fiatValueOfUnstakedShares, FNumFormats.fiat)
+                          }}
+                        </span>
+                      </AnimatePresence>
+                      <BalTooltip
+                        :text="$t('staking.unstakedLpTokensTooltip')"
+                      />
+                    </BalStack>
                   </BalStack>
-                </BalStack>
 
-                <!-- Normal Stake/Unstake buttons when no legacy tokens -->
-                <BalStack horizontal spacing="sm" class="mt-2">
-                  <BalBtn
-                    color="gradient"
-                    size="sm"
-                    :disabled="
-                      fiatValueOfUnstakedShares === '0' ||
-                      hasNonPrefGaugeBalance
-                    "
-                    @click="showStakePreview"
-                  >
-                    {{ $t('stake') }}
-                  </BalBtn>
-                  <BalBtn
-                    outline
-                    color="blue"
-                    size="sm"
-                    :disabled="fiatValueOfStakedShares === '0'"
-                    @click="showUnstakePreview"
-                  >
-                    {{ $t('unstake') }}
-                  </BalBtn>
-                </BalStack>
+                  <!-- Normal Stake/Unstake buttons when no legacy tokens -->
+                  <BalStack horizontal spacing="sm" class="mt-2">
+                    <BalBtn
+                      color="gradient"
+                      size="sm"
+                      :disabled="
+                        fiatValueOfUnstakedShares === '0' ||
+                        hasNonPrefGaugeBalance
+                      "
+                      @click="showStakePreview"
+                    >
+                      {{ $t('stake') }}
+                    </BalBtn>
+                    <BalBtn
+                      outline
+                      color="blue"
+                      size="sm"
+                      :disabled="fiatValueOfStakedShares === '0'"
+                      @click="showUnstakePreview"
+                    >
+                      {{ $t('unstake') }}
+                    </BalBtn>
+                  </BalStack>
+                </template>
 
                 <!-- Legacy LP tokens section - only shown when user has legacy staked tokens -->
                 <template v-if="hasLegacyStakedShares">
@@ -269,13 +275,13 @@ onBeforeMount(() => {
                   </BalBtn>
                 </template>
 
-                <BalAlert
+                <!-- <BalAlert
                   v-if="hasNonPrefGaugeBalance"
                   :title="$t('staking.restakeGauge')"
                   class="mt-2"
                 >
                   {{ $t('staking.restakeGaugeDescription') }}
-                </BalAlert>
+                </BalAlert> -->
               </BalStack>
             </div>
           </template>
@@ -295,6 +301,7 @@ onBeforeMount(() => {
       :isVisible="isMigrateModalVisible"
       :pool="pool"
       :gaugeInfo="gaugeInfo"
+      :legacyStakedShares="legacyStakedShares"
       @close="handleMigrateClose"
       @success="handleMigrateSuccess"
     />

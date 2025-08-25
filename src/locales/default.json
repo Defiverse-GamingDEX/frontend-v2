@@ -291,6 +291,7 @@
     "stakeToNewPool": "Stake to New Pool",
     "successTitle": "Migration completed successfully!",
     "successDescription": "Your tokens have been successfully migrated to the new gauge.",
+    "waitingForTokensToAppearInWallet": "Waiting for tokens to appear in wallet",
     "previewModal": {
       "titles": {
         "default": "Migrate preview",
@@ -1408,6 +1409,8 @@
   "transactionSummary": {
     "stake": "{amount} in {pool}",
     "unstake": "{amount} from {pool}",
+    "unstakeFromLegacyGauge": "Unstake from legacy gauge",
+    "migrateToNewGauge": "Migrate to new gauge",
     "approveForInvesting": "Approve {0} for adding liquidity",
     "approveForSwapping": "Approve {0} for swapping",
     "approveForLocking": "Approve {0} for locking",
