@@ -364,7 +364,7 @@ async function getBalance(token, walletAddress) {
     const tokenContract = new Contract(address, ERC20ABI, currentProvider);
     const tokenBalance = await tokenContract.balanceOf(walletAddress);
     const weiBalance = tokenBalance?.toString();
-    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals)).toFixed();
+    const rs = bnum(weiBalance).div(Math.pow(10, token?.decimals || 18)).toFixed();
 
     return rs;
   } catch (error) {

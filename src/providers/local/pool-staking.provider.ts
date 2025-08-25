@@ -37,19 +37,25 @@ const provider = (_poolId?: string) => {
 
   // Fetches all gauges for specified pool (incl. preferential gauge).
   const poolGaugesQuery = usePoolGaugesQuery(poolAddress);
+  console.log("🚀 ~ provider ~ poolAddress:", poolAddress.value)
+
   const { data: poolGauges, refetch: refetchPoolGauges } = poolGaugesQuery;
+  console.log("🚀 ~ provider ~ poolGauges:", poolGauges.value)
 
   // Access user data fetched on wallet connection/change.
   const { userGaugeSharesQuery, userBoostsQuery, stakedSharesQuery } =
     useUserData();
+  console.log("🚀 ~ provider ~ stakedSharesQuery:", stakedSharesQuery)
   const { data: userGaugeShares, refetch: refetchUserGaugeShares } =
     userGaugeSharesQuery;
   const { data: boostsMap, refetch: refetchUserBoosts } = userBoostsQuery;
+  
   const {
     data: _stakedShares,
     refetch: refetchStakedShares,
     isRefetching: isRefetchingStakedShares,
   } = stakedSharesQuery;
+  console.log("🚀 ~ provider ~ stakedSharesQuery.data:", stakedSharesQuery.data)
 
   /**
    * COMPUTED
@@ -68,7 +74,8 @@ const provider = (_poolId?: string) => {
     (): string | undefined | null =>
       poolGauges.value?.pool?.preferentialGauge?.id
   );
-  console.log('🚀 ~ provider ~ poolGauges:', poolGauges);
+  console.log("🚀 ~ provider ~ preferentialGaugeAddress.value:", preferentialGaugeAddress.value)
+  console.log('🚀 ~ provider ~ poolGauges.value:', poolGauges.value);
 
   // Hung:
 
@@ -167,11 +174,14 @@ const provider = (_poolId?: string) => {
       throw new Error(`No preferential gauge found for this pool.`);
     }
 
+    //const gauge = new LiquidityGauge('0xfc4676803caeaa0c6ce55ed2261efda52cc0ea18');
     const gauge = new LiquidityGauge(preferentialGaugeAddress.value);
+    console.log("🚀 ~ stake ~ preferentialGaugeAddress.value):", preferentialGaugeAddress.value)
     // User's current full BPT balance for this pool.
     const userBptBalance = parseUnits(
       balanceFor(getAddress(poolAddress.value))
     );
+    console.log("🚀 ~ stake ~ userBptBalance:", userBptBalance)
 
     return await gauge.stake(userBptBalance);
   }
@@ -208,6 +218,20 @@ const provider = (_poolId?: string) => {
     return await gauge.unstake(balance);
   }
 
+  async function unstakeWithGaugeAddress(gaugeAddress: string) {
+    const gauge = new LiquidityGauge(gaugeAddress);
+    const balance = await gauge.balance(account.value);
+    return await gauge.unstake(balance);
+  }
+  async function stakeWithGaugeAddress(gaugeAddress: string) {
+    if (!poolAddress.value) throw new Error('No pool to stake.');
+    const gauge = new LiquidityGauge(gaugeAddress);
+        // User's current full BPT balance for this pool.
+    const userBptBalance = parseUnits(
+      balanceFor(getAddress(poolAddress.value))
+    );
+    return await gauge.stake(userBptBalance);
+  }
   /**
    * Fetch preferential gauge address for pool.
    *
@@ -255,6 +279,8 @@ const provider = (_poolId?: string) => {
     refetchAllPoolStakingData,
     stake,
     unstake,
+    unstakeWithGaugeAddress,
+    stakeWithGaugeAddress,
   };
 };
 

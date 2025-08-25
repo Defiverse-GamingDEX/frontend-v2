@@ -46,6 +46,7 @@ const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = ref('');
 const streamerAddress = ref('');
 const canStake = ref(false);
+const gaugeInfo = ref<any>(null);
 /**
  * PROVIDERS
  */
@@ -149,6 +150,7 @@ async function getGaugeAddress() {
     });
     console.log('🚀 ~ getGaugeAddress ~ response:', response);
     //gaugeAddress.value = response.gauge_address;
+    gaugeInfo.value = response;
     gaugeAddress.value = response.gauge;
     streamerAddress.value = response.streamer || '';
     console.log(
@@ -321,6 +323,7 @@ watch(poolQuery.error, () => {
           <StakingIncentivesCard
             v-if="canStake && !loadingPool && pool && isWalletReady"
             :pool="pool"
+            :gaugeInfo="gaugeInfo"
             class="staking-incentives"
           />
           <PoolLockingCard

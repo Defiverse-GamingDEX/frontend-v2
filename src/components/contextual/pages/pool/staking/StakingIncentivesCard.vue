@@ -13,9 +13,12 @@ import StakePreviewModal from './StakePreviewModal.vue';
 import { StakeAction } from '@/components/contextual/pages/pool/staking/StakePreview.vue';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 import MigrateGaugeModal from './MigrateGaugeModal.vue';
-
+import { useBridge } from '@/composables/bridge/useBridge';
+import useWeb3 from '@/services/web3/useWeb3';
+import useConfig from '@/composables/useConfig';
 type Props = {
   pool: Pool;
+  gaugeInfo: any; // New prop to receive gauge info
 };
 const props = defineProps<Props>();
 
@@ -39,13 +42,16 @@ const {
   stakedShares,
   hasNonPrefGaugeBalance,
 } = usePoolStaking();
-
+const { getBalance } = useBridge();
+const { account } = useWeb3();
+const legacyStakedShares = ref<any>(0);
+const { networkConfig } = useConfig();
 /**
  * COMPUTED
  */
 const fiatValueOfStakedShares = computed(() => {
-  return bnum(props.pool.totalLiquidity)
-    .div(props.pool.totalShares)
+  return bnum(props.pool.totalLiquidity) // total $ of gauge
+    .div(props.pool.totalShares) // total LP gauge
     .times((stakedShares.value || 0).toString())
     .toString();
 });
@@ -56,17 +62,20 @@ const fiatValueOfUnstakedShares = computed(() => {
     .times(balanceFor(getAddress(props.pool.address)))
     .toString();
 });
+console.log('🚀 ~ props.pool.address:', props.pool.address);
+console.log(
+  '🚀 ~ balanceFor(getAddress(props.pool.address))',
+  balanceFor(getAddress(props.pool.address))
+);
+console.log(
+  '🚀 ~ fiatValueOfUnstakedShares.value:',
+  fiatValueOfUnstakedShares.value
+);
 
 // Remove headerTitle computed - we always show 'Staking incentives' as title
 
-const fiatValueOfLegacyStakedShares = computed(() => {
-  // Temporary mock value for legacy staked shares
-  // In real implementation, this should come from the provider
-  return '10.00';
-});
-
 const hasLegacyStakedShares = computed(() => {
-  return Number(fiatValueOfLegacyStakedShares.value) > 0;
+  return Number(legacyStakedShares.value) > 0;
 });
 
 /**
@@ -93,13 +102,33 @@ function showMigrateModal() {
 }
 
 function handleMigrateSuccess() {
-  isMigrateModalVisible.value = false;
+  // isMigrateModalVisible.value = false;
   // Optionally refresh data here
 }
 
 function handleMigrateClose() {
   isMigrateModalVisible.value = false;
 }
+async function getLegacyStakedShares() {
+  console.log(props.gaugeInfo, 'LegacyStakedShares=> props.gaugeInfo');
+  const legacy_gauge = props.gaugeInfo?.legacy_gauge;
+  console.log('🚀 ~ getLegacyStakedShares ~ legacy_gauge:', legacy_gauge);
+  console.log('🚀 ~ getLegacyStakedShares ~ networkConfig:', networkConfig);
+  const token = {
+    address: legacy_gauge,
+    chainId: networkConfig.chainId,
+    rpc: networkConfig.rpc,
+  };
+  const legacy_gauge_user_balane = await getBalance(token, account.value);
+  console.log(
+    '🚀 ~ getLegacyStakedShares ~ legacy_gauge_user_balane:',
+    legacy_gauge_user_balane
+  );
+  legacyStakedShares.value = legacy_gauge_user_balane;
+}
+onBeforeMount(() => {
+  getLegacyStakedShares();
+});
 </script>
 
 <template>
@@ -222,17 +251,9 @@ function handleMigrateClose() {
                       </AnimatePresence>
                       <AnimatePresence :isVisible="!isRefetchingStakedShares">
                         <span>
-                          {{
-                            fNum2(
-                              fiatValueOfLegacyStakedShares,
-                              FNumFormats.fiat
-                            )
-                          }}
+                          {{ fNum2(legacyStakedShares, FNumFormats.number) }}
                         </span>
                       </AnimatePresence>
-                      <BalTooltip
-                        text="The legacy LP tokens is shown only when user has staked LP into the old gauge"
-                      />
                     </BalStack>
                   </BalStack>
 
@@ -273,6 +294,7 @@ function handleMigrateClose() {
     <MigrateGaugeModal
       :isVisible="isMigrateModalVisible"
       :pool="pool"
+      :gaugeInfo="gaugeInfo"
       @close="handleMigrateClose"
       @success="handleMigrateSuccess"
     />

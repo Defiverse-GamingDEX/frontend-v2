@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { Pool } from '@/services/pool/types';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 import AnimatePresence from '@/components/animate/AnimatePresence.vue';
-import { bnum } from '@/lib/utils';
+import { bnum, trackLoading } from '@/lib/utils';
 import { getAddress } from '@ethersproject/address';
 import { useTokens } from '@/providers/tokens.provider';
-
+import useTokenApprovalActions from '@/composables/approvals/useTokenApprovalActions';
+import { ApprovalAction } from '@/composables/approvals/types';
+import { TransactionActionInfo } from '@/types/transactions';
 type Props = {
   pool: Pool;
+  gaugeInfo: any; // New prop to receive gauge info
 };
 
 const props = defineProps<Props>();
@@ -22,9 +25,12 @@ const emit = defineEmits(['success', 'close']);
 const currentStep = ref<1 | 2>(1);
 const isUnstaking = ref(false);
 const isStaking = ref(false);
+const isApproving = ref(false);
 const unstakeCompleted = ref(false);
 const stakeCompleted = ref(false);
-
+const isLoadingApprovalsForGauge = ref(false);
+const approvalActions = ref<TransactionActionInfo[]>([]);
+const needsApproval = ref(false);
 /**
  * COMPOSABLES
  */
@@ -34,26 +40,31 @@ const { balanceFor } = useTokens();
 const {
   stakedShares,
   isRefetchingStakedShares,
-  unstake,
-  stake,
+  unstakeWithGaugeAddress,
+  stakeWithGaugeAddress,
   refetchAllPoolStakingData,
 } = usePoolStaking();
 
 /**
  * COMPUTED
  */
-const lpTokenAmount = computed(() => {
+const gauge_address = computed(() => {
+  return props.gaugeInfo.gauge;
+});
+const lpTokenAmountStep1 = computed(() => {
   // For migration, we use the staked shares from the legacy gauge
   return stakedShares.value || '0';
 });
-
-const fiatValueOfLPTokens = computed(() => {
-  return bnum(props.pool.totalLiquidity)
-    .div(props.pool.totalShares)
-    .times(lpTokenAmount.value.toString())
-    .toString();
+const lpTokenAmountStep2 = computed(() => {
+  // For migration, we use the staked shares from the legacy gauge
+  return balanceFor(getAddress(props.pool.address)) || '0';
 });
-
+// We need to use the pool address (LP token) for approvals
+const { getTokenApprovalActionsForSpender } = useTokenApprovalActions(
+  [props.pool.address], // LP token address
+  ref(balanceFor(getAddress(props.pool.address))),
+  ApprovalAction.Staking
+);
 const isStep1Active = computed(
   () => currentStep.value === 1 && !unstakeCompleted.value
 );
@@ -67,16 +78,82 @@ const isMigrationComplete = computed(
 );
 
 /**
+ * COMPUTED
+ */
+const canStake = computed(() => {
+  return canProceedToStep2.value && !needsApproval.value;
+});
+
+const showApprovalButton = computed(() => {
+  return isStep2Active.value && needsApproval.value && !stakeCompleted.value;
+});
+
+const showStakeButton = computed(() => {
+  return isStep2Active.value && !needsApproval.value && !stakeCompleted.value;
+});
+
+/**
  * METHODS
  */
+async function checkApproveNewGauge() {
+  try {
+    console.log(
+      '🚀 ~ checkApproveNewGauge ~ gauge_address:',
+      gauge_address.value
+    );
+
+    const actions = await trackLoading(async () => {
+      return getTokenApprovalActionsForSpender(gauge_address.value);
+    }, isLoadingApprovalsForGauge);
+
+    console.log('🚀 ~ checkApproveNewGauge ~ actions:', actions);
+
+    if (actions && actions.length > 0) {
+      approvalActions.value = actions;
+      needsApproval.value = true;
+    } else {
+      approvalActions.value = [];
+      needsApproval.value = false;
+    }
+  } catch (error) {
+    console.log('🚀 ~ checkApproveNewGauge ~ error:', error);
+    needsApproval.value = false;
+  }
+}
+
+async function handleApproval() {
+  try {
+    if (approvalActions.value.length > 0) {
+      isApproving.value = true;
+      const approvalAction = approvalActions.value[0];
+      const tx = await approvalAction.action();
+      await tx.wait();
+
+      // Re-check approval status after approval transaction
+      await checkApproveNewGauge();
+      isApproving.value = false;
+    }
+  } catch (error) {
+    console.error('Approval failed:', error);
+    isApproving.value = false;
+  }
+}
+
 async function handleUnstake() {
   try {
     isUnstaking.value = true;
-    // const tx = await unstake();
-    // await tx.wait();
+    const gauge_legacy_address = props.gaugeInfo.legacy_gauge;
+    console.log('🚀 ~ handleUnstake ~ props.gaugeInfo:', props.gaugeInfo);
+    console.log(
+      '🚀 ~ handleUnstake ~ gauge_legacy_address:',
+      gauge_legacy_address
+    );
+    const tx = await unstakeWithGaugeAddress(gauge_legacy_address);
+    await tx.wait();
     unstakeCompleted.value = true;
     currentStep.value = 2;
     await refetchAllPoolStakingData();
+    await checkApproveNewGauge();
   } catch (error) {
     console.error('Unstake failed:', error);
   } finally {
@@ -87,7 +164,8 @@ async function handleUnstake() {
 async function handleStake() {
   try {
     isStaking.value = true;
-    const tx = await stake();
+    const gauge_address = props.gaugeInfo.gauge;
+    const tx = await stakeWithGaugeAddress(gauge_address);
     await tx.wait();
     stakeCompleted.value = true;
     await refetchAllPoolStakingData();
@@ -102,6 +180,10 @@ async function handleStake() {
 function handleClose() {
   emit('close');
 }
+
+onMounted(() => {
+  checkApproveNewGauge();
+});
 </script>
 
 <template>
@@ -156,7 +238,10 @@ function handleClose() {
     </div>
 
     <!-- LP Token Display -->
-    <div class="p-4 mb-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+    <div
+      v-if="!stakeCompleted"
+      class="p-4 mb-4 bg-gray-50 dark:bg-gray-800 rounded-xl"
+    >
       <div class="flex justify-between items-center">
         <span class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('lpTokens') }}
@@ -168,10 +253,12 @@ function handleClose() {
           <AnimatePresence :isVisible="!isRefetchingStakedShares">
             <div class="text-right">
               <div class="text-lg font-semibold">
-                {{ fNum2(lpTokenAmount) }}
-              </div>
-              <div class="text-sm text-gray-500">
-                {{ fNum2(fiatValueOfLPTokens, FNumFormats.fiat) }}
+                <span v-if="currentStep === 1">
+                  {{ fNum2(lpTokenAmountStep1) }}
+                </span>
+                <span v-else>
+                  {{ fNum2(lpTokenAmountStep2) }}
+                </span>
               </div>
             </div>
           </AnimatePresence>
@@ -193,33 +280,41 @@ function handleClose() {
           >
             {{ $t('migratePool.unstakeFromLegacy') }}
           </BalBtn>
-          <div v-else class="flex items-center text-green-500">
-            <BalIcon name="check-circle" size="lg" />
-            <span class="ml-2 font-medium">{{ $t('completed') }}</span>
-          </div>
         </div>
       </div>
     </div>
 
-    <!-- Step 2: Stake to new pool -->
-    <div v-if="currentStep === 2" :class="[]">
-      <div class="">
-        <div>
-          <BalBtn
-            v-if="!stakeCompleted"
-            :color="isStep2Active ? 'gradient' : 'gray'"
-            :disabled="!canProceedToStep2 || isStaking"
-            :loading="isStaking"
-            class="w-full"
-            @click="handleStake"
-          >
-            {{ $t('migratePool.stakeToNewPool') }}
-          </BalBtn>
-          <div v-else class="flex items-center text-green-500">
-            <BalIcon name="check-circle" size="lg" />
-            <span class="ml-2 font-medium">{{ $t('completed') }}</span>
-          </div>
-        </div>
+    <!-- Step 2: Approve and Stake to new pool -->
+    <div v-if="currentStep === 2" class="space-y-3">
+      <!-- Loading approval status -->
+      <div v-if="isLoadingApprovalsForGauge" class="flex justify-center">
+        <BalLoadingBlock class="w-full h-12" />
+      </div>
+
+      <!-- Approval button when needed -->
+      <div v-else-if="showApprovalButton">
+        <BalBtn
+          :color="isStep2Active ? 'gradient' : 'gray'"
+          :disabled="!canProceedToStep2"
+          :loading="isApproving"
+          class="mb-3 w-full"
+          @click="handleApproval"
+        >
+          {{ approvalActions[0]?.label || $t('approve') }}
+        </BalBtn>
+      </div>
+
+      <!-- Stake button when approval is complete or not needed -->
+      <div v-else-if="showStakeButton">
+        <BalBtn
+          :color="isStep2Active ? 'gradient' : 'gray'"
+          :disabled="!canStake || isStaking"
+          :loading="isStaking"
+          class="w-full"
+          @click="handleStake"
+        >
+          {{ $t('migratePool.stakeToNewPool') }}
+        </BalBtn>
       </div>
     </div>
 

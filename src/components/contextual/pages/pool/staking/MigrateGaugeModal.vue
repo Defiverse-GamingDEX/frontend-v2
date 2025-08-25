@@ -12,6 +12,7 @@ import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 type Props = {
   isVisible: boolean;
   pool: Pool;
+  gaugeInfo: any;
 };
 
 /**
@@ -80,6 +81,7 @@ watch(
 
       <StakingGaugeMigrate
         :pool="pool"
+        :gaugeInfo="gaugeInfo"
         @close="handleClose"
         @success="handleSuccess"
       />
