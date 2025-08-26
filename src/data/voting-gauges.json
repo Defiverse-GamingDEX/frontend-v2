@@ -3,7 +3,7 @@
     "address": "0xfc4676803caeaa0c6ce55ed2261efda52cc0ea18",
     "network": 9372,
     "isKilled": false,
-    "relativeWeightCap": "0.15",
+    "relativeWeightCap": "1",
     "addedTimestamp": 1747910545,
     "pool": {
       "id": "0xfda16dee087590dab4096d4a43a6712c7f13d69200020000000000000000000d",
@@ -32,7 +32,7 @@
     "address": "0xb4d8e836a48bba5078f67cc8ea5e65153f5f3ad7",
     "network": 17117,
     "isKilled": false,
-    "relativeWeightCap": "0.15",
+    "relativeWeightCap": "1",
     "addedTimestamp": 1747910545,
     "pool": {
       "id": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083",
