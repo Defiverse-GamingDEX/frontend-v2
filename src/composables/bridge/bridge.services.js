@@ -9,7 +9,8 @@ const _sendRawTx = async (
   signer,
   abi,
   gasPrice = null,
-  isEstimate = false
+  isEstimate = false,
+  verseBridgeVersion = 0
 ) => {
   try {
     const myContract = await new ethers.Contract(
@@ -17,26 +18,24 @@ const _sendRawTx = async (
       abi,
       contractProvider
     );
-    // HUNG remove
-    // const gas = await _estimateGas(
-    //   myContract,
-    //   action,
-    //   params,
-    //   overwrite,
-    //   signer
-    // );
+    let gas = null;
+    if (verseBridgeVersion != 2) {
+      gas = await _estimateGas(myContract, action, params, overwrite, signer);
 
-    // if (isEstimate) {
-    //   return gas;
-    // }
+      if (isEstimate) {
+        return gas;
+      }
+    }
+
     // overwrite.gasLimit = gas;
     // overwrite.maxPriorityFeePerGas = null;
     // overwrite.maxFeePerGas = null;
 
+    console.log('HUNG:overwrite:', overwrite);
     const tx = await myContract.connect(signer)[action](...params, {
-      // gasLimit: gas,
+      gasLimit: gas,
       gasPrice: gasPrice,
-      value: overwrite.value,
+      value: overwrite.value || 0, // verseBridgeVersion == 2 ? overwrite.value : 0,
       type: 0,
     });
 
@@ -205,6 +204,7 @@ const bridgeWithdrawTo = async params => {
     gasPrice,
     isEstimate,
     nonce,
+    verseBridgeVersion,
   } = params;
   console.log('🚀 ~ bridgeWithdrawTo ~ nonce:', nonce);
 
@@ -215,8 +215,10 @@ const bridgeWithdrawTo = async params => {
     .toFixed(0);
   let overwrite = { from: account };
 
-  if (srcTokenSymbol === 'OAS') {
-    overwrite.value = decimals_value;
+  if (verseBridgeVersion == 2) {
+    if (srcTokenSymbol === 'OAS') {
+      overwrite.value = decimals_value;
+    }
   }
 
   //const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))?.toString();
@@ -230,7 +232,8 @@ const bridgeWithdrawTo = async params => {
     signer,
     abi,
     gasPrice,
-    isEstimate
+    isEstimate,
+    verseBridgeVersion
   );
 
   return { tx: rs, nonce };

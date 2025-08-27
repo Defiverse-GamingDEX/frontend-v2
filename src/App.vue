@@ -82,7 +82,7 @@ export default defineComponent({
       store.dispatch('app/init');
     });
     onMounted(async () => {
-      initSingularity();
+      //initSingularity();
     });
     function handleThirdPartyModalToggle(value: boolean) {
       isThirdPartyServicesModalVisible.value = value;

@@ -92,6 +92,7 @@ const inputFromSelect = ref({
   tokensList: [],
   minAmount: 0,
   isOnlyDefiBridge: false,
+  verse_bridge_version: 0,
 });
 const inputToSelect = ref({
   chainId: '',
@@ -103,6 +104,7 @@ const inputToSelect = ref({
   tokensList: [],
   chainsList: [],
   isOnlyDefiBridge: false,
+  verse_bridge_version: 0,
 });
 const anotherWalletAddress = ref('');
 const isAllowance = ref(false);
@@ -543,6 +545,8 @@ async function updateNetWorkInputFrom(chainId) {
     inputFromSelect.value.minAmount = networkChoose.min_amount;
     inputFromSelect.value.chainId = networkChoose.chain_id_decimals;
     inputFromSelect.value.tokensList = cloneDeep(networkChoose.tokens);
+    inputFromSelect.value.verse_bridge_version =
+      networkChoose.verse_bridge_version;
     // TODO check token is_native
     inputFromSelect.value.tokensList = inputFromSelect.value.tokensList.map(
       item => {
@@ -700,7 +704,7 @@ async function getEstimateFee() {
 async function handleInputToChange(inputSelect) {
   console.log('🚀 ~ handleInputToChange ~ inputSelect:', inputSelect);
   inputToSelect.value = inputSelect;
-
+  checkInputToChange();
   initMinAmountRoute();
   getEstimateFee();
 }
@@ -744,6 +748,7 @@ function checkInputToChange() {
     inputFrom.chainId,
     inputFrom.tokenAddress
   );
+  console.log('🚀 ~ checkInputToChange ~ dstBE:', dstBE);
   inputToSelect.value.chainsList = dstBE.value;
 
   // Filter out Defiverse (chain ID 16116) from chainTo options
@@ -765,12 +770,14 @@ function checkInputToChange() {
     let avaiChain = inputToSelect.value.chainsList?.find(
       item => item.chain_id_decimals === inputToSelect.value.chainId
     );
+    console.log('🚀 ~ checkInputToChange ~ avaiChain:', avaiChain);
     if (!avaiChain) {
       inputToSelect.value.chainId = '';
       //inputToSelect.value.tokenSymbol = '';
       inputToSelect.value.tokenAddress = '';
       inputToSelect.value.decimals = 0;
       inputToSelect.value.tokensList = [];
+      inputToSelect.value.verse_bridge_version = 0;
     } else {
       //inputToSelect.value.tokenSymbol = avaiChain.tokens[0]?.symbol;
       inputToSelect.value.tokenAddress = avaiChain.tokens.find(
@@ -780,9 +787,14 @@ function checkInputToChange() {
         token => token.symbol === inputToSelect.value.tokenSymbol
       )?.decimals;
       inputToSelect.value.tokensList = avaiChain.tokens;
+      inputToSelect.value.verse_bridge_version = avaiChain.verse_bridge_version;
     }
   } else {
     // set default chainId for inputTo
+    console.log(
+      '🚀 ~ checkInputToChange ~ inputToSelect.value.chainsList:',
+      inputToSelect.value.chainsList
+    );
     if (inputToSelect.value.chainsList.length > 0) {
       // Since Defiverse is filtered out, use the first available chain as default
       let avaiChain: any = inputToSelect.value.chainsList[0];
@@ -795,12 +807,14 @@ function checkInputToChange() {
         token => token.symbol === inputToSelect.value.tokenSymbol
       )?.decimals;
       inputToSelect.value.tokensList = avaiChain.tokens;
+      inputToSelect.value.verse_bridge_version = avaiChain.verse_bridge_version;
     } else {
       inputToSelect.value.chainId = '';
       //inputToSelect.value.tokenSymbol = '';
       inputToSelect.value.tokenAddress = '';
       inputToSelect.value.decimals = 0;
       inputToSelect.value.tokensList = [];
+      inputToSelect.value.verse_bridge_version = 0;
     }
   }
 }
@@ -1055,6 +1069,12 @@ onBeforeMount(async () => {
               @update:input-select="delayinputFromChange"
               @update:network="handleNetworkChange"
             />
+            <div
+              v-if="inputFromSelect?.verse_bridge_version > 0"
+              class="bridge-version"
+            >
+              * Bridge Version: V{{ inputFromSelect?.verse_bridge_version }}
+            </div>
           </div>
           <div class="flex justify-center items-center my-3">
             <BridgePairToggle @toggle="handleTokenSwitch" />
@@ -1067,6 +1087,12 @@ onBeforeMount(async () => {
               :disabled="!isWalletReady"
               @update:input-select="handleInputToChange"
             />
+            <div
+              v-if="inputToSelect?.verse_bridge_version > 0"
+              class="bridge-version"
+            >
+              * Bridge Version: V{{ inputToSelect?.verse_bridge_version }}
+            </div>
           </div>
           <div class="input-another-wallet">
             <div class="title">Send to another wallet</div>
@@ -1146,7 +1172,7 @@ onBeforeMount(async () => {
                   />
                 </template>
                 <div class="tooltip-content">
-                
+
                   <div>Balabalaba</div>
                 </div>
               </BalTooltip>  -->
@@ -1282,6 +1308,13 @@ onBeforeMount(async () => {
 
 <style scoped lang="scss">
 .bridge-card {
+  .bridge-version {
+    margin-top: 8pt;
+    font-size: 12px;
+    line-height: 16px;
+    color: #faa732;
+    font-weight: bold;
+  }
   > .bal-card {
     :deep() {
       > .card-container {

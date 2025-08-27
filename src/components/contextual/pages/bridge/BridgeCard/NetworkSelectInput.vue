@@ -71,9 +71,6 @@ function getNetwork(chain_id) {
         </div>
         <div class="item-label">
           {{ network?.name }}
-          <span v-if="network?.verse_bridge_version > 0">
-            (v{{ network?.verse_bridge_version }})
-          </span>
         </div>
       </div>
       <BalIcon

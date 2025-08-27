@@ -191,4 +191,4 @@ onMounted(async () => {
   @apply p-4 w-full flex items-center justify-between;
   @apply border-b dark:border-gray-700;
 }
-</style> 
+</style>

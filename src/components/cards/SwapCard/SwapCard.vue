@@ -172,7 +172,7 @@
       />
     </div>
   </BalCard>
-  <SingularityComponent />
+  <!-- <SingularityComponent /> -->
 
   <teleport to="#modal">
     <SwapPreviewModal
@@ -209,7 +209,7 @@ import { formatUnits } from '@ethersproject/units';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import SingularityComponent from '../SingularityCard/SingularityComponent.vue';
+// import SingularityComponent from '../SingularityCard/SingularityComponent.vue';
 import SwapPair from './SwapPair.vue';
 import SwapRoute from './SwapRoute.vue';
 export default defineComponent({
@@ -218,7 +218,7 @@ export default defineComponent({
     SwapPreviewModal,
     SwapRoute,
     SwapSettingsPopover,
-    SingularityComponent,
+    //SingularityComponent,
   },
   setup() {
     // STATES
