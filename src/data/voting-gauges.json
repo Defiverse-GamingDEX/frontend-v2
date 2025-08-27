@@ -311,34 +311,6 @@
     }
   },
   {
-    "address": "0x3a91ded81f05e0351a6e245798fb399fbd616740",
-    "network": 9372,
-    "isKilled": false,
-    "relativeWeightCap": "1",
-    "addedTimestamp": 1747910545,
-    "pool": {
-      "id": "0xc42b3c9131c4f2f184f4b7ae1a1a1abfe1883a43000200000000000000000026",
-      "address": "0xc42b3c9131c4f2f184f4b7ae1a1a1abfe1883a43",
-      "poolType": "Weighted",
-      "symbol": "50OAS-50btcUSD",
-      "tokens": [
-        {
-          "address": "0x5200000000000000000000000000000000000001",
-          "weight": "0.5",
-          "symbol": "WOAS"
-        },
-        {
-          "address": "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4",
-          "weight": "0.5",
-          "symbol": "btcUSD"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
-    }
-  },
-  {
     "address": "0x3138a7da7ac0f209046150ff1fafc276853477b0",
     "network": 9372,
     "isKilled": false,
