@@ -1,60 +1,60 @@
 [
   {
-    "address": "0xfc4676803caeaa0c6ce55ed2261efda52cc0ea18",
+    "address": "0x6f23c4a12ce2adaffe1c189afd436d613655b87f",
     "network": 9372,
     "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1747910545,
     "pool": {
-      "id": "0xfda16dee087590dab4096d4a43a6712c7f13d69200020000000000000000000d",
-      "address": "0xfda16dee087590dab4096d4a43a6712c7f13d692",
+      "id": "0x9fcd5447675ba979746fac40d398e292a514917e00020000000000000000001a",
+      "address": "0x9fcd5447675ba979746fac40d398e292a514917e",
       "poolType": "Weighted",
-      "symbol": "20WOAS-80USDT",
+      "symbol": "50OAS-50USDC",
       "tokens": [
         {
           "address": "0x5200000000000000000000000000000000000001",
-          "weight": "0.2",
+          "weight": "0.5",
           "symbol": "WOAS"
         },
         {
           "address": "0xacb7a8e74a9f09735fece0176fcfb0591d801a77",
-          "weight": "0.8",
-          "symbol": "USDT"
+          "weight": "0.5",
+          "symbol": "USDC"
         }
       ]
     },
     "tokenLogoURIs": {
       "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
-      "0xacb7a8e74a9f09735fece0176fcfb0591d801a77": "tokens/USDT_L.png"
+      "0x2af09148c7bf784e54c7730724e4b48e4735426c": "tokens/USDC_L.png"
     }
   },
   {
-    "address": "0xb4d8e836a48bba5078f67cc8ea5e65153f5f3ad7",
+    "address": "0xe45afb61726b7c2b9b80bde1f889ab8ed992e4ab",
     "network": 17117,
     "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1747910545,
     "pool": {
-      "id": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87000200000000000000000083",
-      "address": "0x34d4fbfdc8043d97e4bb1296a38d118a4825ae87",
+      "id": "0x31d80d3f21b1e5ae8ac066e13fd327da8a5846a200020000000000000000001b",
+      "address": "0x31d80d3f21b1e5ae8ac066e13fd327da8a5846a2",
       "poolType": "Weighted",
-      "symbol": "G-30WOAS-70USDC",
+      "symbol": "50OAS-50WETH",
       "tokens": [
         {
-          "address": "0x9c9a2a20e96eaae6df4ae3c7d8cd1a65fe7d0f18",
-          "weight": "0.7",
-          "symbol": "USDC"
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "WOAS"
         },
         {
-          "address": "0x6b382742b07aabba58c38d792b5d7cbaab246e99",
-          "weight": "0.3",
-          "symbol": "OAS"
+          "address": "0x8b7474fe43f5cda205999c56c9249bbc6ea3de1f",
+          "weight": "0.5",
+          "symbol": "WETH"
         }
       ]
     },
     "tokenLogoURIs": {
-      "0x6b382742b07aabba58c38d792b5d7cbaab246e99": "tokens/OAS_L.png",
-      "0x9c9a2a20e96eaae6df4ae3c7d8cd1a65fe7d0f18": "tokens/USDC_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x8b7474fe43f5cda205999c56c9249bbc6ea3de1f": "tokens/ETH_L.png"
     }
   },
   {
