@@ -170,11 +170,11 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
     align: 'right',
     id: 'volume',
     Cell: 'volumeCell',
-    // sortKey: pool => {
-    //   const volume = Number(pool?.volumeSnapshot);
-    //   if (volume === Infinity || isNaN(volume)) return 0;
-    //   return volume;
-    // },
+    sortKey: pool => {
+      const volume = Number(pool?.volumeSnapshot);
+      if (volume === Infinity || isNaN(volume)) return 0;
+      return volume;
+    },
     width: 175,
     cellClassName: 'font-numeric',
   },
@@ -184,15 +184,15 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
     accessor: pool => pool?.apr?.min.toString() || '0',
     align: 'right',
     id: 'apr',
-    // sortKey: pool => {
-    //   let apr = 0;
+    sortKey: pool => {
+      let apr = 0;
 
-    //   if (pool?.apr) {
-    //     apr = Number(absMaxApr(pool.apr, pool.boost));
-    //   }
+      if (pool?.apr) {
+        apr = Number(absMaxApr(pool.apr, pool.boost));
+      }
 
-    //   return isFinite(apr) ? apr : 0;
-    // },
+      return isFinite(apr) ? apr : 0;
+    },
     width: 220,
   },
   {
