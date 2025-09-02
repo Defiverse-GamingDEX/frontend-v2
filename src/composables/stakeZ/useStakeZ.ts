@@ -143,6 +143,16 @@ async function getEstimateZAmount(params) {
     throw error;
   }
 }
+async function canRedeemAll(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.canRedeemAll(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'canRedeemAll=>error');
+    throw error;
+  }
+}
 async function getAllRedeemableAmount_SZ(params) {
   try {
     params.abi = SZ_TOKEN_ABI;
@@ -160,6 +170,16 @@ async function getRedeemableAmount_SZ(params) {
     return rs;
   } catch (error) {
     console.log(error, 'getRedeemableAmount_SZ=>error');
+    throw error;
+  }
+}
+async function getRedeemableAmount_Z(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.getRedeemableAmount_Z(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'getRedeemableAmount_Z=>error');
     throw error;
   }
 }
@@ -236,10 +256,12 @@ export function useStakeZ() {
     getEstimateZAmount,
     getAllRedeemableAmount_SZ,
     getRedeemableAmount_SZ,
+    getRedeemableAmount_Z,
     getEarlyRedeemPenalty,
     getStakedList,
     redeemAllSZ,
     redeemSZ,
     stakeZForTest,
+    canRedeemAll,
   };
 }

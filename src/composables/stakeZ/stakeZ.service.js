@@ -46,6 +46,20 @@ const getEstimateZAmount = async ({
   console.log('🚀 ~ stakeZService ~ calcReceivedZ: ', rs);
   return rs || null;
 };
+const canRedeemAll = async ({
+  provider,
+  abi,
+  contractAddress,
+  walletAddress,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const _canRedeemAll = await myContract.canRedeemAll(walletAddress);
+  console.log(
+    '🚀 ~ getAllRedeemableAmount_SZ ~ allRedeemableAmount_SZ:',
+    _canRedeemAll
+  );
+  return _canRedeemAll || false;
+};
 const getAllRedeemableAmount_SZ = async ({
   provider,
   abi,
@@ -79,6 +93,24 @@ const getRedeemableAmount_SZ = async ({
     redeemableAmount_SZ
   );
   return redeemableAmount_SZ?.toString() || 0;
+};
+const getRedeemableAmount_Z = async ({
+  provider,
+  abi,
+  contractAddress,
+  walletAddress,
+  stakeId,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const redeemableAmount_Z = await myContract.getRedeemableAmount_Z(
+    walletAddress,
+    stakeId
+  );
+  console.log(
+    '🚀 ~ getRedeemableAmount_Z ~ redeemableAmount_Z:',
+    redeemableAmount_Z
+  );
+  return redeemableAmount_Z?.toString() || 0;
 };
 const getEarlyRedeemPenalty = async ({ provider, abi, contractAddress }) => {
   const myContract = new Contract(contractAddress, abi, provider);
@@ -256,9 +288,11 @@ export default {
   getEstimateZAmount,
   getAllRedeemableAmount_SZ,
   getRedeemableAmount_SZ,
+  getRedeemableAmount_Z,
   getEarlyRedeemPenalty,
   stakeZ,
   redeemAllSZ,
   redeemSZ,
   stakeZForTest,
+  canRedeemAll,
 };
