@@ -279,7 +279,7 @@ onBeforeMount(async () => {
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
-                  Z {{ $t('incentives') }}
+                  sZ {{ $t('incentives') }}
                 </h3>
                 <BalTooltip
                   iconSize="xs"

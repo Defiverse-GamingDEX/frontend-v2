@@ -155,7 +155,7 @@ const barColor = computed(() =>
 
 //   emit('update:inputSelect', { inputSelect: inputSelect, index: props.index });
 // });
-// Theo dõi các props cơ bản để cập nhật state local
+
 watch(
   () => [
     props?.inputSelect?.amount,
@@ -172,7 +172,6 @@ watch(
   { immediate: true }
 );
 
-// Theo dõi tokenAddress để chỉ check allowance khi tokenAddress thay đổi
 watch(
   () => props?.inputSelect?.tokenAddress,
   async (newAddress, oldAddress) => {
@@ -207,11 +206,8 @@ function getTokenList(listSelected) {
   let rs = cloneDeep(_token_list_origin.value);
   console.log('🚀 ~ getTokenList ~ rs:', rs);
   rs = rs.filter(item => item.symbol !== 'OAS');
-  // only filter yukichi for PROD
-  if (isTestnet == 'false') {
-    rs = rs.filter(item => item.owner !== 'yukichi' && item.decimals != 0);
-    console.log('🚀 ~ getTokenList AfterFilter ~ rs:', rs);
-  }
+  rs = rs.filter(item => item.owner !== 'yukichi' && item.decimals != 0);
+  console.log('🚀 ~ getTokenList AfterFilter ~ rs:', rs);
   for (let i = rs.length - 1; i >= 0; i--) {
     const token: any = rs[i];
     token.provider = provider;

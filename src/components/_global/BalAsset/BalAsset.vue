@@ -61,6 +61,26 @@ watch(iconSRC, newURL => {
   if (newURL !== '') error.value = false;
 });
 
+// Watch for token changes to reset error state and retry loading the image
+watch(
+  token,
+  () => {
+    if (token.value?.logoURI) {
+      error.value = false;
+    }
+  },
+  { deep: true }
+);
+
+// Watch for changes in the tokens provider's dynamic data loading state
+const { dynamicDataLoaded } = useTokens();
+watch(dynamicDataLoaded, isLoaded => {
+  if (isLoaded && token.value?.logoURI) {
+    // Reset error state to trigger image reload
+    error.value = false;
+  }
+});
+
 function symbolFor(token: any): string {
   let symbol = token?.symbol || '---';
   if (props.useWOAS) return symbol;
