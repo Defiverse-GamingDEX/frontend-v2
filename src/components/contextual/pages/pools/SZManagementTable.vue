@@ -83,7 +83,7 @@ const columns = [
     align: 'right',
   },
   {
-    name: 'Redeemable amount(sZ)',
+    name: 'Redeemable amount(Z)',
     id: 'redeemable',
     Cell: 'redeemableZColumnCell',
     width: 150,
@@ -118,7 +118,9 @@ const {
   getStakedList,
   redeemAllSZ,
   getAllRedeemableAmount_SZ,
+  canRedeemAll,
   getRedeemableAmount_SZ,
+  getRedeemableAmount_Z,
 } = useStakeZ();
 const { networkSlug } = useNetwork();
 const { account, chainId, getSigner, getProvider } = useWeb3();
@@ -141,7 +143,7 @@ const STAKE_Z_NETWORK = computed(() => {
 const getRedeemableBalance = async stakeId => {
   try {
     const provider = getProvider();
-    let balance = await getRedeemableAmount_SZ({
+    let balance = await getRedeemableAmount_Z({
       provider: provider,
       walletAddress: account.value,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
@@ -200,13 +202,15 @@ const checkIsRedeemAll = async () => {
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       walletAddress: account.value,
     };
-    const rs: any = await getAllRedeemableAmount_SZ(params);
-    console.log('🚀 ~ getAllRedeemableAmount_SZ ~ rs:', rs);
-    if (BigNumber(rs).gt(0)) {
-      isRedeemAll.value = true;
-    } else {
-      isRedeemAll.value = false;
-    }
+    // const rs: any = await getAllRedeemableAmount_SZ(params);
+    const rs: any = await canRedeemAll(params);
+    console.log('🚀 ~ canRedeemAll ~ rs:', rs);
+    // if (BigNumber(rs).gt(0)) {
+    //   isRedeemAll.value = rs;
+    // } else {
+    //   isRedeemAll.value = false;
+    // }
+    isRedeemAll.value = rs;
   } catch (error) {
     console.log('🚀 ~ checkIsRedeemAll ~ error:', error);
   }
