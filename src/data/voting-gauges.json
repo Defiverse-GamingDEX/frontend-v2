@@ -54,7 +54,7 @@
     },
     "tokenLogoURIs": {
       "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
-      "0x681d8394472ef320ad043ed6d8497d58be1ad2a6": "tokens/USDC_L.png"
+      "0x681d8394472ef320ad043ed6d8497d58be1ad2a6": "tokens/WBTC.png"
     }
   },
   {
@@ -111,7 +111,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png"
     }
   },
   {
@@ -139,7 +140,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x96ff01ba17e3d59615f8a75426fd6a9c47daf78c": "https://price-api.gaming-dex.com/static/image_662293c7c3964e078bfcd758b07423f7.png"
     }
   },
   {
@@ -195,7 +197,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0xfafe89fe47c4d8b5b86586ac44a86cdd5e14d0bf": "https://price-api.gaming-dex.com/static/image_eda41e6607e2487c93b1235ab94ebb2c.png"
     }
   },
   {
@@ -223,7 +226,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0xbfd114edd9b093efa5bd3a28f681a87dde583716": "https://www.gaming-dex.com/tokens/TCGC_L.png"
     }
   },
   {
@@ -251,7 +255,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x00a3ab180977a3c33df1f762a11e18db5f735a35": "tokens/MCHC_L.png"
     }
   },
   {
@@ -279,7 +284,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x01b1b2d05ecf018403af2e08fe6f5e8ead95e76a": "https://price-api.gaming-dex.com/static/image_926cece775e046e1b7dfb834ea571656.jpg"
     }
   },
   {
@@ -307,7 +313,8 @@
       ]
     },
     "tokenLogoURIs": {
-      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png"
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
     }
   },
   {
@@ -334,7 +341,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x2af09148c7bf784e54c7730724e4b48e4735426c": "tokens/USDC_L.png"
+    }
   },
   {
     "address": "0xe6c61622264eec13b01bd2651f32e8e01e0fc436",
@@ -360,7 +370,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x681d8394472ef320ad043ed6d8497d58be1ad2a6": "tokens/WBTC_L.png"
+    }
   },
   {
     "address": "0xa6eac08d61fef23cb4e789f569b3d9073d61f7ca",
@@ -386,7 +399,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x8b7474fe43f5cda205999c56c9249bbc6ea3de1f": "tokens/ETH_L.png"
+    }
   },
   {
     "address": "0x3e97a967edf11e14b12772a9b8e56418726924d3",
@@ -412,7 +428,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x42dd917a3c8a14a766712fabe7b048f0306246f6": "tokens/Z.png"
+    }
   },
   {
     "address": "0x887fbc28483009bc8fa5480533ef13d0c552dd31",
@@ -438,7 +457,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x96ff01ba17e3d59615f8a75426fd6a9c47daf78c": "https://price-api.gaming-dex.com/static/image_662293c7c3964e078bfcd758b07423f7.png"
+    }
   },
   {
     "address": "0x3f6380aad2821a758454852bf5966518e51aaa66",
@@ -464,7 +486,9 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png"
+    }
   },
   {
     "address": "0x850820aafbd8b713f08b316023b521be13940ca9",
@@ -490,7 +514,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0xfafe89fe47c4d8b5b86586ac44a86cdd5e14d0bf": "https://price-api.gaming-dex.com/static/image_eda41e6607e2487c93b1235ab94ebb2c.png"
+    }
   },
   {
     "address": "0x2e60120abb1ccf6a1689bba2e8a684f838daa326",
@@ -516,7 +543,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0xbfd114edd9b093efa5bd3a28f681a87dde583716": "tokens/TCGC_L.png"
+    }
   },
   {
     "address": "0x4b98391254a593cbc723dd8a2a7a1cccf1307783",
@@ -542,7 +572,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x00a3ab180977a3c33df1f762a11e18db5f735a35": "tokens/MCHC_L.png"
+    }
   },
   {
     "address": "0x18b4be8481278e5d945d2123307bb5b24fe42975",
@@ -568,7 +601,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x01b1b2d05ecf018403af2e08fe6f5e8ead95e76a": "https://price-api.gaming-dex.com/static/image_926cece775e046e1b7dfb834ea571656.jpg"
+    }
   },
   {
     "address": "0x3840e334fb283fae9ff641f50c2624077e101682",
@@ -594,7 +630,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0x681d8394472ef320ad043ed6d8497d58be1ad2a6": "tokens/WBTC_L.png",
+      "0x8b7474fe43f5cda205999c56c9249bbc6ea3de1f": "tokens/ETH_L.png"
+    }
   },
   {
     "address": "0x2a23fad0ee30098d23283b230e50c581026e7ec6",
@@ -620,7 +659,10 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
+    }
   },
   {
     "address": "0x1bf69ca91fb503c4d8dd894070a56e8438c93715",
@@ -646,6 +688,9 @@
         }
       ]
     },
-    "tokenLogoURIs": {}
+    "tokenLogoURIs": {
+      "0x2af09148c7bf784e54c7730724e4b48e4735426c": "tokens/USDC_L.png",
+      "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
+    }
   }
 ]
