@@ -13,12 +13,13 @@ import {
 } from '@/composables/useVeBAL';
 import TimelockIcon from '@/components/_global/icons/TimelockIcon.vue';
 import BalTooltip from '@/components/_global/BalTooltip/BalTooltip.vue';
-
+import { formatNumberToCurrency } from '@/lib/utils/index';
 /**
  * TYPES
  */
 type Props = {
   gauge: VotingGaugeWithVotes;
+  isGaugeAprLoading: boolean;
 };
 
 /**
@@ -56,7 +57,16 @@ const poolHasUnderUtilizedVotingPoewer = computed<boolean>(
       'text-red-600': poolHasUnderUtilizedVotingPoewer,
     }"
   >
-    {{ myVotes }}
+    <div>
+      <div class="mb-2">{{ myVotes }}</div>
+      <BalLoadingBlock v-if="isGaugeAprLoading" class="w-12 h-4" />
+      <template v-else-if="gauge.myVotes">
+        <div class="text-right">
+          {{ formatNumberToCurrency(gauge.myVotes) }} (sZ)
+        </div>
+      </template>
+      <template v-else><div class="text-right">-</div></template>
+    </div>
     <BalTooltip
       v-if="isVotingTimeLocked(gauge.lastUserVoteTime)"
       textAlign="left"

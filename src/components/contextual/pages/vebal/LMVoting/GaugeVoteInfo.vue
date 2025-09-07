@@ -4,12 +4,13 @@ import { computed } from 'vue';
 import useNumbers from '@/composables/useNumbers';
 import { bnum, scale } from '@/lib/utils';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
-
+import { formatNumberToCurrency } from '@/lib/utils/index';
 /**
  * TYPES
  */
 type Props = {
   gauge: VotingGaugeWithVotes;
+  isGaugeAprLoading: boolean;
 };
 
 /**
@@ -67,7 +68,16 @@ function formatVotesAsPercent(votes: string): string {
 <template>
   <BalTooltip textAlign="left">
     <template #activator>
-      <span :class="voteTextClass">{{ votesNextPeriod }}</span>
+      <div :class="voteTextClass">
+        <div class="mb-2">{{ votesNextPeriod }}</div>
+        <BalLoadingBlock v-if="isGaugeAprLoading" class="w-12 h-4" />
+        <template v-else-if="gauge.poolVotes">
+          <div class="text-right">
+            {{ formatNumberToCurrency(gauge.poolVotes) }} (sZ)
+          </div>
+        </template>
+        <template v-else><div class="text-right">-</div></template>
+      </div>
     </template>
     <div>
       <div class="mb-2 text-sm font-semibold">
