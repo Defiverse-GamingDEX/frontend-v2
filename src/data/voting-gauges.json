@@ -578,35 +578,6 @@
     }
   },
   {
-    "address": "0x18b4be8481278e5d945d2123307bb5b24fe42975",
-    "network": 9372,
-    "isKilled": false,
-    "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
-    "pool": {
-      "id": "0x1300d965c1c51e34e0cf7f3466819eb0bf14b23500020000000000000000002e",
-      "address": "0x1300d965c1c51e34e0cf7f3466819eb0bf14b235",
-      "poolType": "Weighted",
-      "symbol": "50stOAS-50BPC",
-      "tokens": [
-        {
-          "address": "0xf73d74a089366486401d67ad83013a623d40ac77",
-          "weight": "0.5",
-          "symbol": "stOAS"
-        },
-        {
-          "address": "0x01b1b2d05ecf018403af2e08fe6f5e8ead95e76a",
-          "weight": "0.5",
-          "symbol": "BPC"
-        }
-      ]
-    },
-    "tokenLogoURIs": {
-      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
-      "0x01b1b2d05ecf018403af2e08fe6f5e8ead95e76a": "https://price-api.gaming-dex.com/static/image_926cece775e046e1b7dfb834ea571656.jpg"
-    }
-  },
-  {
     "address": "0x3840e334fb283fae9ff641f50c2624077e101682",
     "network": 9372,
     "isKilled": false,
@@ -645,7 +616,7 @@
       "id": "0xbce3b08fb25a71e03c85275c917cbdc867a4299d00020000000000000000002f",
       "address": "0xbce3b08fb25a71e03c85275c917cbdc867a4299d",
       "poolType": "Weighted",
-      "symbol": "50stOAS-50btcUSD",
+      "symbol": "50stOAS-50BPC",
       "tokens": [
         {
           "address": "0xf73d74a089366486401d67ad83013a623d40ac77",
@@ -653,15 +624,15 @@
           "symbol": "stOAS"
         },
         {
-          "address": "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4",
+          "address": "0x01b1b2d05ecf018403af2e08fe6f5e8ead95e76a",
           "weight": "0.5",
-          "symbol": "btcUSD"
+          "symbol": "BPC"
         }
       ]
     },
     "tokenLogoURIs": {
       "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
-      "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
+      "0x01b1b2d05ecf018403af2e08fe6f5e8ead95e76a": "https://price-api.gaming-dex.com/static/image_926cece775e046e1b7dfb834ea571656.jpg"
     }
   },
   {
