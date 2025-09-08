@@ -19,6 +19,7 @@ import { AprBreakdown } from '@defiverse/balancer-sdk';
 type Props = {
   pool: Pool;
   poolApr?: AprBreakdown;
+  isNextPeriodApr: boolean;
 };
 
 /**
@@ -35,7 +36,9 @@ const { fNum2 } = useNumbers();
  * COMPUTED
  */
 const apr = computed<AprBreakdown | undefined>(() => {
-  const data = props.pool?.apr || props.poolApr;
+  const data = props.isNextPeriodApr
+    ? props.pool?.nextPeriodApr
+    : props.pool?.apr || props.poolApr;
   return data;
 });
 const validAPR = computed(() => Number(apr.value?.min || 0) <= APR_THRESHOLD);

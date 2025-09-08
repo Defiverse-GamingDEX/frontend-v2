@@ -17,7 +17,6 @@ type Props = {
  * PROPS & EMITS
  */
 const props = withDefaults(defineProps<Props>(), {});
-
 /**
  * COMPOSABLES
  */
@@ -69,7 +68,7 @@ function formatVotesAsPercent(votes: string): string {
   <BalTooltip textAlign="left">
     <template #activator>
       <div :class="voteTextClass">
-        <div class="mb-2">{{ votesNextPeriod }}</div>
+        <div class="mb-2 text-right">{{ votesNextPeriod }}</div>
         <BalLoadingBlock v-if="isGaugeAprLoading" class="w-12 h-4" />
         <template v-else-if="gauge.poolVotes">
           <div class="text-right">

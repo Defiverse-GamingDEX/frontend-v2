@@ -11,15 +11,19 @@ const getGaugeAddress = async params => {
   return response.data;
 };
 const getVotingPoolDetails = async params => {
-  params.pool_ids = [
-    '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024',
-  ];
-  params.gauge_ids = ['0x3840e334fb283fae9ff641f50c2624077e101682'];
-  const response = await axios.post(
-    `${domain}/v1/pools/voting-pool-details`,
-    params
-  );
-  return response.data;
+  try {
+    const response = await axios.post(
+      `${domain}/v1/pools/voting-pool-details`,
+      params,
+      {
+        timeout: 1000,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 // INTERNAL API - END

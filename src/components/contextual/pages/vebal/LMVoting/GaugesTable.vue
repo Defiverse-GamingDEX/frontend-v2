@@ -183,7 +183,7 @@ const columns = computed(() => {
   ];
 });
 
-const dataKey = computed(() => JSON.stringify(props.data));
+const dataKey = computed(() => JSON.stringify(gaugesWithApr.value));
 
 // COMPUTED
 const isAdmin = computed(() => {
@@ -311,7 +311,7 @@ async function fetchVotingPoolDetails() {
           votingPoolDetails
         );
         if (votingPoolDetails) {
-          const detail = votingPoolDetails[`${gauge.id}`];
+          const detail = votingPoolDetails[`${gauge.pool.id}`];
           console.log('🚀 ~ fetchAprData ~ detail:', detail);
           const gaugeIndex = gaugesWithApr.value.findIndex(
             (g: any) => g.id === detail.gauge
@@ -326,7 +326,7 @@ async function fetchVotingPoolDetails() {
               '🚀 ~ fetchVotingPoolDetails ~ updatedGauge:',
               updatedGauge
             );
-            gaugesWithApr.value[gaugeIndex] = updatedGauge;
+            gaugesWithApr.value.splice(gaugeIndex, 1, updatedGauge);
           }
         }
       } catch (error) {
@@ -376,6 +376,7 @@ onMounted(async () => {
     // Initialize gaugesWithApr immediately with the data
     gaugesWithApr.value = [...props.data];
     await fetchVotingPoolDetails();
+    console.log('🚀 ~ onMounted ~ gaugesWithApr:', gaugesWithApr.value);
   }
 });
 </script>
@@ -390,8 +391,9 @@ onMounted(async () => {
   >
     <BalTable
       :key="dataKey"
+      :dataKey="dataKey"
       :columns="columns"
-      :data="gaugesWithApr.length > 0 ? gaugesWithApr : data"
+      :data="gaugesWithApr"
       :isLoading="isLoading"
       skeletonClass="h-64"
       sticky="both"
@@ -501,7 +503,7 @@ onMounted(async () => {
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
           <template v-else-if="gauge.pool?.nextPeriodApr">
             {{ totalAprLabel(gauge.pool.nextPeriodApr, gauge.pool.boost) }}
-            <APRTooltip :pool="gauge.pool" />
+            <APRTooltip :pool="gauge.pool" :isNextPeriodApr="true" />
           </template>
           <template v-else> - </template>
         </div>
