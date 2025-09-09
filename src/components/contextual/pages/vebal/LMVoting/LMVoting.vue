@@ -29,6 +29,7 @@ const tokenFilter = useDebouncedRef<string>('', 500);
 const showExpiredGauges = useDebouncedRef<boolean>(false, 500);
 const activeNetworkFilters = useDebouncedRef<Network[]>([], 500);
 const activeVotingGauge = ref<VotingGaugeWithVotes | null>(null);
+const tableRerenderCounter = ref<number>(0);
 
 const adminAddress = ref(null);
 
@@ -99,7 +100,9 @@ const hasExpiredLock = computed(
     veBalLockInfoQuery.data.value?.isExpired
 );
 
-const gaugesTableKey = computed(() => JSON.stringify(isLoading.value));
+const gaugesTableKey = computed(() =>
+  JSON.stringify([isLoading.value, tableRerenderCounter.value])
+);
 
 const gaugesFilteredByExpiring = computed(() => {
   if (showExpiredGauges.value) {
@@ -152,12 +155,13 @@ function setActiveGaugeVote(votingGauge: VotingGaugeWithVotes) {
 function handleModalClose() {
   activeVotingGauge.value = null;
   refetchVotingGauges.value();
+  tableRerenderCounter.value++;
 }
 
 function handleVoteSuccess() {
   refetchVotingGauges.value();
 }
-function changeTab(tab) {
+function changeTab(tab: string) {
   tabSelect.value = tab;
 }
 </script>
@@ -338,4 +342,4 @@ function changeTab(tab) {
     }
   }
 }
-</style> 
+</style>
