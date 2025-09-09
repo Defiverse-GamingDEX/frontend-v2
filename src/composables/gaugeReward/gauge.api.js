@@ -14,10 +14,7 @@ const getVotingPoolDetails = async params => {
   try {
     const response = await axios.post(
       `${domain}/v1/pools/voting-pool-details`,
-      params,
-      {
-        timeout: 1000,
-      }
+      params
     );
     return response.data;
   } catch (error) {
