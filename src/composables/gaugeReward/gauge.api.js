@@ -10,7 +10,21 @@ const getGaugeAddress = async params => {
   });
   return response.data;
 };
+const getVotingPoolDetails = async params => {
+  try {
+    const response = await axios.post(
+      `${domain}/v1/pools/voting-pool-details`,
+      params
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 // INTERNAL API - END
 export default {
   getGaugeAddress,
+  getVotingPoolDetails,
 };
