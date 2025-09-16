@@ -134,6 +134,26 @@ const columns = computed(() => {
       cellClassName: 'font-numeric',
     },
     {
+      name: 'Swap fee',
+      id: 'swapFee',
+      accessor: 'swapFee',
+      align: 'right',
+      Cell: 'swapFeeCell',
+      sortKey: gauge => Number(gauge.swapFee || 0),
+      width: 120,
+      cellClassName: 'font-numeric',
+    },
+    {
+      name: 'Next Emission',
+      id: 'nextEmission',
+      accessor: 'nextEmission',
+      align: 'right',
+      Cell: 'nextEmissionCell',
+      sortKey: gauge => Number(gauge.nextEmission || 0),
+      width: 140,
+      cellClassName: 'font-numeric',
+    },
+    {
       name: t('veBAL.liquidityMining.table.nextPeriodVotes'),
       accessor: 'id',
       align: 'right',
@@ -472,6 +492,24 @@ onMounted(async () => {
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.tvl">
             {{ fNum2(gauge.tvl, { style: 'currency' }) }}
+          </template>
+          <template v-else> - </template>
+        </div>
+      </template>
+      <template #swapFeeCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-6 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
+          <template v-else-if="gauge.swapFee">
+            {{ fNum2(gauge.swapFee, { style: 'currency' }) }}
+          </template>
+          <template v-else> - </template>
+        </div>
+      </template>
+      <template #nextEmissionCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-6 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
+          <template v-else-if="gauge.nextEmission">
+            {{ fNum2(gauge.nextEmission, { style: 'decimal' }) }} sZ
           </template>
           <template v-else> - </template>
         </div>
