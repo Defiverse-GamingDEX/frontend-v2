@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 
 import useExpiredGaugesQuery from '@/composables/queries/useExpiredGaugesQuery';
 import useVeBalLockInfoQuery from '@/composables/queries/useVeBalLockInfoQuery';
@@ -11,6 +11,7 @@ import { poolURLFor } from '@/composables/usePool';
 import useVotingGauges from '@/composables/useVotingGauges';
 import useWeb3 from '@/services/web3/useWeb3';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
+import useVotingInfo from '@/composables/gaugeReward/useVotingInfo';
 
 import { bnum, isSameAddress, scale } from '@/lib/utils';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
@@ -31,7 +32,7 @@ const activeNetworkFilters = useDebouncedRef<Network[]>([], 500);
 const activeVotingGauge = ref<VotingGaugeWithVotes | null>(null);
 const tableRerenderCounter = ref<number>(0);
 
-const adminAddress = ref(null);
+const adminAddress = ref<string | null>(null);
 
 const networkFilters = [Network.MAINNET, Network.OASYS, Network.OASYS_TESTNET];
 
@@ -52,7 +53,7 @@ const veBalLockInfoQuery = useVeBalLockInfoQuery();
 
 const { shouldResubmitVotes } = useVotingEscrowLocks();
 
-const { isWalletReady, account } = useWeb3();
+const { account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
 
 const votingGaugeAddresses = computed<string[]>(
@@ -140,6 +141,38 @@ const filteredVotingGauges = computed(() => {
     );
   });
 });
+
+const { data: votingInfo, isLoading: isLoadingVotingInfo } = useVotingInfo();
+
+const nextEmissionFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.next_period?.emission) {
+    return '—';
+  }
+  return `${fNum2(
+    votingInfo.value.next_period.emission.toString(),
+    FNumFormats.token
+  )} sZ`;
+});
+
+const totalVotePowerFormatted = computed<string>(() => {
+  if (
+    isLoadingVotingInfo.value ||
+    !votingInfo.value?.next_period?.total_vote_powers
+  ) {
+    return '—';
+  }
+  return `${votingInfo.value.next_period.total_vote_powers} sZ`;
+});
+
+const totalFeeFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.next_period?.total_fee) {
+    return '—';
+  }
+  return `${fNum2(
+    votingInfo.value.next_period.total_fee.toString(),
+    FNumFormats.fiat
+  )}$`;
+});
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
@@ -189,7 +222,7 @@ function changeTab(tab: string) {
       class="mx-4 xl:mx-0 mb-7"
     ></ResubmitVotesAlert>
     <div class="flex flex-wrap justify-between items-end px-4 lg:px-0">
-      <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0">
+      <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0 w-full">
         <BalCard shadow="none" class="p-0 md:w-48 min-w-max">
           <div class="flex items-center">
             <p class="inline mr-1 text-sm text-secondary">
@@ -224,6 +257,22 @@ function changeTab(tab: string) {
         </BalCard>
         <BalCard shadow="none" class="md:w-48 min-w-max">
           <div class="flex items-center">
+            <p class="inline mr-1 text-sm text-secondary">Total vote power</p>
+          </div>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ totalVotePowerFormatted }}
+          </p>
+        </BalCard>
+        <BalCard shadow="none" class="md:w-48 min-w-max">
+          <div class="flex items-center">
+            <p class="inline mr-1 text-sm text-secondary">Total Fee</p>
+          </div>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ totalFeeFormatted }}
+          </p>
+        </BalCard>
+        <BalCard shadow="none" class="md:w-48 min-w-max">
+          <div class="flex items-center">
             <p
               :class="{ 'text-orange-500 font-medium': votingPeriodLastHour }"
               class="inline mr-1 text-sm text-secondary"
@@ -252,9 +301,17 @@ function changeTab(tab: string) {
             </span>
           </p>
         </BalCard>
+        <BalCard shadow="none" class="md:w-48 min-w-max">
+          <div class="flex items-center">
+            <p class="inline mr-1 text-sm text-secondary">Next Emission</p>
+          </div>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ nextEmissionFormatted }}
+          </p>
+        </BalCard>
       </div>
-      <div class="mb-3 lg:mb-0">
-        <div class="mb-4 gauge-tabs">
+      <div class="flex justify-between mt-4 mb-3 lg:mb-0 w-full">
+        <div class="gauge-tabs">
           <div class="flex justify-end align-center">
             <BalBtn
               v-if="isAdmin"

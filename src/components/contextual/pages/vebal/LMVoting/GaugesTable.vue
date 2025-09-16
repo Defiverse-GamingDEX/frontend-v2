@@ -276,6 +276,10 @@ async function fetchVotingPoolDetails() {
 
   // Initialize with all gauges
   gaugesWithApr.value = [...props.data];
+  console.log(
+    '🚀 ~ fetchVotingPoolDetails ~ gaugesWithApr.value:',
+    gaugesWithApr.value
+  );
 
   // Process gauges in batches to avoid too many simultaneous requests
   const batchSize = 5;
