@@ -124,6 +124,16 @@ const columns = computed(() => {
       width: 350,
     },
     {
+      name: 'TVL',
+      id: 'tvl',
+      accessor: 'tvl',
+      align: 'right',
+      Cell: 'tvlCell',
+      sortKey: gauge => Number(gauge.tvl || 0),
+      width: 120,
+      cellClassName: 'font-numeric',
+    },
+    {
       name: t('veBAL.liquidityMining.table.nextPeriodVotes'),
       accessor: 'id',
       align: 'right',
@@ -455,6 +465,15 @@ onMounted(async () => {
           />
           <BalChipNew v-if="getIsGaugeNew(addedTimestamp)" class="ml-2" />
           <BalChipExpired v-if="getIsGaugeExpired(address)" class="ml-2" />
+        </div>
+      </template>
+      <template #tvlCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-6 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
+          <template v-else-if="gauge.tvl">
+            {{ fNum2(gauge.tvl, { style: 'currency' }) }}
+          </template>
+          <template v-else> - </template>
         </div>
       </template>
       <template #nextPeriodVotesCell="gauge">
