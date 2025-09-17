@@ -131,7 +131,7 @@ const columns = computed(() => {
       align: 'right',
       Cell: 'tvlCell',
       sortKey: gauge => Number(gauge.total_liquidity || 0),
-      width: 80,
+      width: 200,
       cellClassName: 'font-numeric',
     },
     {
@@ -491,7 +491,9 @@ onMounted(async () => {
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.total_liquidity">
-            {{ fNum2(gauge.total_liquidity, { style: 'currency' }) }}
+            <div class="break-all">
+              {{ fNum2(gauge.total_liquidity, { style: 'currency' }) }}
+            </div>
           </template>
           <template v-else> - </template>
         </div>
