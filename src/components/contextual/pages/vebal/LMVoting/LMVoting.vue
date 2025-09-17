@@ -143,35 +143,27 @@ const filteredVotingGauges = computed(() => {
 });
 
 const { data: votingInfo, isLoading: isLoadingVotingInfo } = useVotingInfo();
+console.log('🚀 ~ votingInfo:', votingInfo);
 
 const nextEmissionFormatted = computed<string>(() => {
-  if (isLoadingVotingInfo.value || !votingInfo.value?.next_period?.emission) {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.emission) {
     return '—';
   }
-  return `${fNum2(
-    votingInfo.value.next_period.emission.toString(),
-    FNumFormats.token
-  )} sZ`;
+  return `${fNum2(votingInfo.value.emission.toString(), FNumFormats.token)} sZ`;
 });
 
 const totalVotePowerFormatted = computed<string>(() => {
-  if (
-    isLoadingVotingInfo.value ||
-    !votingInfo.value?.next_period?.total_vote_powers
-  ) {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.total_vote_powers) {
     return '—';
   }
-  return `${votingInfo.value.next_period.total_vote_powers} sZ`;
+  return `${fNum2(votingInfo.value.total_vote_powers, FNumFormats.token)} sZ`;
 });
 
 const totalFeeFormatted = computed<string>(() => {
-  if (isLoadingVotingInfo.value || !votingInfo.value?.next_period?.total_fee) {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.total_fee) {
     return '—';
   }
-  return `${fNum2(
-    votingInfo.value.next_period.total_fee.toString(),
-    FNumFormats.fiat
-  )}$`;
+  return `${fNum2(votingInfo.value.total_fee)}$`;
 });
 // LIFE CYCLES
 onBeforeMount(async () => {

@@ -23,20 +23,16 @@ const getVotingPoolDetails = async params => {
   }
 };
 
-const getVotingInfo = async () => {
+const getVotingInfo = async params => {
   try {
-    const response = await axios.get(`${domain}/v1/pools/voting-pool-info`);
+    const response = await axios.get(`${domain}/v1/pools/voting-info`, {
+      params,
+    });
     return response.data;
   } catch (error) {
     console.log('API not ready, using mock data:', error);
     // Mock data fallback when BE API is not ready
-    return {
-      next_period: {
-        emission: 999999,
-        total_vote_powers: '999,999',
-        total_fee: 9999,
-      },
-    };
+    throw error;
   }
 };
 

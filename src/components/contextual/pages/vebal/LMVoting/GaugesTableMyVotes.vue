@@ -42,7 +42,7 @@ const myVotes = computed(() => {
   });
 });
 const myVotesValue = computed(() => {
-  return formatNumberToCurrency(props.gauge.myVotes || '0', 10);
+  return formatNumberToCurrency(props.gauge.myVotes || '0', 4);
 });
 console.log(myVotesValue.value, 'myVotesValue');
 const poolHasUnderUtilizedVotingPoewer = computed<boolean>(
@@ -63,8 +63,8 @@ const poolHasUnderUtilizedVotingPoewer = computed<boolean>(
     <div>
       <div class="mb-2 text-right">{{ myVotes }}</div>
       <BalLoadingBlock v-if="isGaugeAprLoading" class="w-12 h-4" />
-      <template v-else-if="Number(myVotesValue) > 0">
-        <div class="text-right">{{ myVotesValue }} (sZ)</div>
+      <template v-else-if="myVotesValue">
+        <div class="text-right break-all">{{ myVotesValue }} (sZ)</div>
       </template>
       <template v-else><div class="text-right">-</div></template>
     </div>

@@ -38,6 +38,7 @@ import useNetwork from '@/composables/useNetwork';
 import { Pool } from '@/services/pool/types';
 import PoolRepository from '@/services/pool/pool.repository';
 import { useTokens } from '@/providers/tokens.provider';
+import BigNumber from 'bignumber.js';
 import { configService } from '@/services/config/config.service';
 import {
   PoolsFallbackRepository,
@@ -121,38 +122,38 @@ const columns = computed(() => {
       id: 'poolComposition',
       accessor: 'id',
       Cell: 'poolCompositionCell',
-      width: 350,
+      width: 250,
     },
     {
       name: 'TVL',
-      id: 'tvl',
-      accessor: 'tvl',
+      id: 'total_liquidity',
+      accessor: 'total_liquidity',
       align: 'right',
       Cell: 'tvlCell',
-      sortKey: gauge => Number(gauge.tvl || 0),
-      width: 120,
+      sortKey: gauge => Number(gauge.total_liquidity || 0),
+      width: 80,
       cellClassName: 'font-numeric',
     },
     {
       name: 'Swap fee',
-      id: 'swapFee',
-      accessor: 'swapFee',
+      id: 'swap_fee',
+      accessor: 'swap_fee',
       align: 'right',
       Cell: 'swapFeeCell',
-      sortKey: gauge => Number(gauge.swapFee || 0),
-      width: 120,
+      sortKey: gauge => Number(gauge.swap_fee || 0),
+      width: 80,
       cellClassName: 'font-numeric',
     },
-    {
-      name: 'Next Emission',
-      id: 'nextEmission',
-      accessor: 'nextEmission',
-      align: 'right',
-      Cell: 'nextEmissionCell',
-      sortKey: gauge => Number(gauge.nextEmission || 0),
-      width: 140,
-      cellClassName: 'font-numeric',
-    },
+    // {
+    //   name: 'Next Emission',
+    //   id: 'nextEmission',
+    //   accessor: 'nextEmission',
+    //   align: 'right',
+    //   Cell: 'nextEmissionCell',
+    //   sortKey: gauge => Number(gauge.nextEmission || 0),
+    //   width: 80,
+    //   cellClassName: 'font-numeric',
+    // },
     {
       name: t('veBAL.liquidityMining.table.nextPeriodVotes'),
       accessor: 'id',
@@ -169,7 +170,7 @@ const columns = computed(() => {
       align: 'right',
       id: 'myVotes',
       sortKey: gauge => Number(gauge.userVotes),
-      width: 100,
+      width: 140,
       Cell: 'myVotesCell',
       cellClassName: 'font-numeric',
       hidden: !isWalletReady.value,
@@ -425,7 +426,6 @@ onMounted(async () => {
   >
     <BalTable
       :key="dataKey"
-      :dataKey="dataKey"
       :columns="columns"
       :data="gaugesWithApr"
       :isLoading="isLoading"
@@ -490,8 +490,8 @@ onMounted(async () => {
       <template #tvlCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
-          <template v-else-if="gauge.tvl">
-            {{ fNum2(gauge.tvl, { style: 'currency' }) }}
+          <template v-else-if="gauge.total_liquidity">
+            {{ fNum2(gauge.total_liquidity, { style: 'currency' }) }}
           </template>
           <template v-else> - </template>
         </div>
@@ -499,13 +499,13 @@ onMounted(async () => {
       <template #swapFeeCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
-          <template v-else-if="gauge.swapFee">
-            {{ fNum2(gauge.swapFee, { style: 'currency' }) }}
+          <template v-else-if="gauge.swap_fee">
+            {{ fNum2(gauge.swap_fee, { style: 'currency' }) }}
           </template>
           <template v-else> - </template>
         </div>
       </template>
-      <template #nextEmissionCell="gauge">
+      <!-- <template #nextEmissionCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.nextEmission">
@@ -513,7 +513,7 @@ onMounted(async () => {
           </template>
           <template v-else> - </template>
         </div>
-      </template>
+      </template> -->
       <template #nextPeriodVotesCell="gauge">
         <!-- Put to BalLazy the most expensive to render component -->
         <BalLazy>
