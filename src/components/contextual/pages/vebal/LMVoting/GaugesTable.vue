@@ -565,7 +565,15 @@ onMounted(async () => {
         <div class="flex justify-end py-4 px-6 text-right font-numeric">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
           <template v-else-if="gauge.pool?.nextPeriodApr">
-            {{ totalAprLabel(gauge.pool.nextPeriodApr, gauge.pool.boost) }}
+            <span
+              v-if="
+                totalAprLabel(gauge.pool.nextPeriodApr, gauge.pool.boost) !== -1
+              "
+              >{{
+                totalAprLabel(gauge.pool.nextPeriodApr, gauge.pool.boost)
+              }}</span
+            >
+            <span v-else> &#8734; </span>
             <APRTooltip :pool="gauge.pool" :isNextPeriodApr="true" />
           </template>
           <template v-else> - </template>

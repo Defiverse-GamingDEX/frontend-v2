@@ -251,7 +251,8 @@ export function absMaxApr(aprs: AprBreakdown, boost?: string): string {
 /**
  * @summary Returns total APR label, whether range or single value.
  */
-export function totalAprLabel(aprs: AprBreakdown, boost?: string): string {
+export function totalAprLabel(aprs: AprBreakdown, boost?: string): string | number {
+  if (aprs.min === -1 || aprs.max === -1) return -1;
   if (boost) {
     numF(absMaxApr(aprs, boost), FNumFormats.bp);
   }

@@ -49,7 +49,7 @@ const hasYieldAPR = computed(() => {
 
 const hasVebalAPR = computed((): boolean => isVeBalPool(props.pool.id));
 
-const totalLabel = computed((): string =>
+const totalLabel = computed((): string | number =>
   apr.value ? totalAprLabel(apr.value, props.pool.boost) : '0'
 );
 </script>
@@ -91,7 +91,8 @@ const totalLabel = computed((): string =>
           {{ $t('totalAPR') }}
         </div>
         <div class="text-lg font-bold normal-nums tracking-tighter">
-          {{ totalLabel }}
+          <span v-if="totalLabel !== -1">{{ totalLabel }}</span>
+          <span v-else> &#8734; </span>
         </div>
       </div>
       <div class="p-3 text-left">
