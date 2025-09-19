@@ -214,8 +214,8 @@ function changeTab(tab: string) {
       class="mx-4 xl:mx-0 mb-7"
     ></ResubmitVotesAlert>
     <div class="flex flex-wrap justify-between items-end px-4 lg:px-0">
-      <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0 w-full">
-        <BalCard shadow="none" class="p-0 md:w-48 min-w-max">
+      <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0 w-full card-group">
+        <BalCard shadow="none" class="p-0 xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
             <p class="inline mr-1 text-sm text-secondary">
               My unallocated votes
@@ -247,7 +247,7 @@ function changeTab(tab: string) {
             class="relative top-0.5"
           />
         </BalCard>
-        <BalCard shadow="none" class="md:w-48 min-w-max">
+        <BalCard shadow="none" class="xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
             <p class="inline mr-1 text-sm text-secondary">Total vote power</p>
           </div>
@@ -388,6 +388,17 @@ function changeTab(tab: string) {
       background: rgba(255, 255, 255, 0.6784313725) 0% 0% no-repeat padding-box;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1607843137);
       color: #1eadee;
+    }
+  }
+}
+.card-group {
+  @media (max-width: 768px) {
+    display: block;
+  }
+  .bal-card {
+    @media (max-width: 768px) {
+      width: 100%;
+      margin-bottom: 12px;
     }
   }
 }
