@@ -490,7 +490,7 @@ onMounted(async () => {
       <template #tvlCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
-          <template v-else-if="gauge.total_liquidity">
+          <template v-else-if="gauge.total_liquidity >= 0">
             <div class="break-all">
               {{ fNum2(gauge.total_liquidity, { style: 'currency' }) }}
             </div>
@@ -501,7 +501,7 @@ onMounted(async () => {
       <template #swapFeeCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
-          <template v-else-if="gauge.swap_fee">
+          <template v-else-if="gauge.swap_fee >= 0">
             {{ fNum2(gauge.swap_fee, { style: 'currency' }) }}
           </template>
           <template v-else> - </template>

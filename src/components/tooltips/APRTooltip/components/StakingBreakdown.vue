@@ -128,7 +128,7 @@ const breakdownItems = computed((): Array<any> => {
       items.push(['Rewards', rewardTokensAPR.value]);
     }
   }
-
+  console.log(items, 'items');
   return items;
 });
 </script>
@@ -184,7 +184,8 @@ const breakdownItems = computed((): Array<any> => {
         </span>
       </div>
       <template #item="{ item: [label, amount] }">
-        {{ fNum2(amount, FNumFormats.bp) }}
+        <span v-if="amount !== -1"> {{ fNum2(amount, FNumFormats.bp) }} </span>
+        <span v-else> &#8734; </span>
         <span class="ml-1 text-xs capitalize text-secondary">
           {{ label }} {{ $t('apr') }}
         </span>
