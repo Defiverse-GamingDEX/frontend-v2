@@ -22,7 +22,6 @@ import Root from './Root.vue';
 import { initDependencies } from './dependencies';
 const emitter = mitt();
 window.emitter = emitter;
-console.log(window.emitter, 'window.emitter');
 initDependencies();
 initGoogleAnalytics(); // Initialize Google Analytics
 

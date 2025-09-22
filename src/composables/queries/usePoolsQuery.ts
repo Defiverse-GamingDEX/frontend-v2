@@ -83,7 +83,6 @@ export default function usePoolsQuery(
     return {
       fetch: async (options: PoolsRepositoryFetchOptions): Promise<Pool[]> => {
         const params = getQueryArgs(options);
-        console.log('🚀 ~ fetch: ~ params:', params);
         const pools = await balancerSubgraphService.pools.get(params);
         const poolDecorator = new PoolDecorator(pools);
         let decoratedPools = await poolDecorator.decorate(tokenMeta.value);
@@ -118,13 +117,6 @@ export default function usePoolsQuery(
     const isPermissionless =
       currentFilterOptions.value?.isPermissionless ?? false;
     const isYukichi = currentFilterOptions.value?.isYukichi ?? false;
-
-    console.log(
-      '🚀 ~ getQueryArgs ~  isVerified, isPermissionless, isYukichi:',
-      isVerified,
-      isPermissionless,
-      isYukichi
-    );
 
     const gameDexOwnerAddress = GAMING_DEX_OWNER_ADDRESS;
     const verifiedPools = POOLS.VerifiedPools || [];
@@ -189,7 +181,6 @@ export default function usePoolsQuery(
         queryArgs.where.owner = { not_in: [gameDexOwnerAddress] };
       }
     }
-    console.log('🚀 ~ getQueryArgs ~ queryArgs:', queryArgs);
     return queryArgs;
   }
 
@@ -213,8 +204,6 @@ export default function usePoolsQuery(
   watch(
     () => [filterOptions?.value, filterTokens?.value, poolsSortField?.value],
     async (newValues, oldValues) => {
-      console.log('🚀 ~ filterOptions?.value:', filterOptions?.value);
-
       currentFilterOptions.value = filterOptions.value;
       isReady.value = true;
 
@@ -228,9 +217,7 @@ export default function usePoolsQuery(
         const result = await queryFn({ pageParam: 0 });
         const endTime = performance.now();
         const executionTime = endTime - startTime;
-        console.log(`Execution time: ${executionTime} milliseconds`);
         currentData.value = result; // save result to current data
-        console.log('🚀 ~ result:', result);
         isInitialLoad.value = false;
         isReady.value = false;
       } catch (e) {
@@ -250,7 +237,6 @@ export default function usePoolsQuery(
   );
 
   const queryFn = async ({ pageParam = 0 }) => {
-    console.log('🚀 ~ queryFn ~ pageParam:', pageParam);
     // if it is merge (pageParam > 0),
     if (pageParam > 0) {
       isReady.value = true;

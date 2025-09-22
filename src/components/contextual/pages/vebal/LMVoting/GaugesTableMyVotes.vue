@@ -44,7 +44,6 @@ const myVotes = computed(() => {
 const myVotesValue = computed(() => {
   return formatNumberToCurrency(props.gauge.myVotes || '0', 2);
 });
-console.log(myVotesValue.value, 'myVotesValue');
 const poolHasUnderUtilizedVotingPoewer = computed<boolean>(
   () =>
     !!gaugesUsingUnderUtilizedVotingPower.value.find(gauge =>

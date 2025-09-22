@@ -143,7 +143,6 @@ const filteredVotingGauges = computed(() => {
 });
 
 const { data: votingInfo, isLoading: isLoadingVotingInfo } = useVotingInfo();
-console.log('🚀 ~ votingInfo:', votingInfo);
 
 const nextEmissionFormatted = computed<string>(() => {
   if (isLoadingVotingInfo.value || !votingInfo.value?.emission) {

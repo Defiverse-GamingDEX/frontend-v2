@@ -65,7 +65,6 @@ const getLockedZbalance = async () => {
     lockedZAmount = BigNumber(lockedZAmount).div(
       10 ** (STAKE_Z_NETWORK.value?.z_token_decimals ?? 18)
     );
-    console.log('🚀 ~ getLockedZbalance ~ lockedZAmount:', lockedZAmount);
     return lockedZAmount;
   } catch (error) {
     console.log(error, 'getLockedZbalance=>error');
@@ -81,7 +80,6 @@ const getSZbalance = async () => {
       walletAddress: account.value,
       tokenDecimals: STAKE_Z_NETWORK.value?.sz_token_decimals,
     });
-    console.log('🚀 ~ getSZbalance ~ szBalance:', szBalance);
     return szBalance;
   } catch (error) {
     console.log(error, 'getSZbalance=>error');

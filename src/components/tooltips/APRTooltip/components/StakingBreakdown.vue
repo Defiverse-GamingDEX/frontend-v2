@@ -128,7 +128,6 @@ const breakdownItems = computed((): Array<any> => {
       items.push(['Rewards', rewardTokensAPR.value]);
     }
   }
-  console.log(items, 'items');
   return items;
 });
 </script>

@@ -70,7 +70,6 @@ const props = withDefaults(defineProps<Props>(), {
   tabSelect: 'gauge',
   data: () => [],
 });
-console.log('🚀 ~ props.data:', props.data);
 const emit = defineEmits<{
   (e: 'clickedVote', value: VotingGaugeWithVotes): void;
 }>();
@@ -140,6 +139,7 @@ const columns = computed(() => {
       accessor: 'swap_fee',
       align: 'right',
       Cell: 'swapFeeCell',
+      Header: 'swapFeeHeader',
       sortKey: gauge => Number(gauge.swap_fee || 0),
       width: 80,
       cellClassName: 'font-numeric',
@@ -307,10 +307,6 @@ async function fetchVotingPoolDetails() {
 
   // Initialize with all gauges
   gaugesWithApr.value = [...props.data];
-  console.log(
-    '🚀 ~ fetchVotingPoolDetails ~ gaugesWithApr.value:',
-    gaugesWithApr.value
-  );
 
   // Process gauges in batches to avoid too many simultaneous requests
   const batchSize = 5;
@@ -327,9 +323,6 @@ async function fetchVotingPoolDetails() {
       try {
         // Fetch the actual pool data using our custom method
         const chainId = gauge.network || networkId.value;
-        console.log(
-          `Fetching pool data for ${gauge.pool.id} on chain ${chainId}`
-        );
         const poolIds = [gauge.pool.id];
         const gaugeIds = [gauge.id];
         const userAddress = account.value;
@@ -339,15 +332,11 @@ async function fetchVotingPoolDetails() {
           gauge_ids: gaugeIds,
           user_address: userAddress,
         };
-        console.log('🚀 ~ fetchVotingPoolDetails ~ params:', params);
         const votingPoolDetails = await gaugeApi.getVotingPoolDetails(params);
-        console.log(
-          '🚀 ~ fetchVotingPoolDetails ~ votingPoolDetails:',
-          votingPoolDetails
-        );
+
         if (votingPoolDetails) {
           const detail = votingPoolDetails[`${gauge.pool.id}`];
-          console.log('🚀 ~ fetchAprData ~ detail:', detail);
+
           const gaugeIndex = gaugesWithApr.value.findIndex(
             (g: any) => g.id === detail.gauge
           );
@@ -357,10 +346,7 @@ async function fetchVotingPoolDetails() {
               ...detail,
             };
             updatedGauge.pool.nextPeriodApr = detail.nextPeriodApr;
-            console.log(
-              '🚀 ~ fetchVotingPoolDetails ~ updatedGauge:',
-              updatedGauge
-            );
+
             gaugesWithApr.value.splice(gaugeIndex, 1, updatedGauge);
           }
         }
@@ -411,7 +397,6 @@ onMounted(async () => {
     // Initialize gaugesWithApr immediately with the data
     gaugesWithApr.value = [...props.data];
     await fetchVotingPoolDetails();
-    console.log('🚀 ~ onMounted ~ gaugesWithApr:', gaugesWithApr.value);
   }
 });
 </script>
@@ -596,6 +581,18 @@ onMounted(async () => {
           block
           @click.stop.prevent="openConfigReward(gauge)"
         />
+      </template>
+      <template #swapFeeHeader>
+        <div class="flex justify-end items-center">
+          <h5 class="text-base">Swap fee</h5>
+          <BalTooltip
+            text="Swap Fee (this period)"
+            iconSize="sm"
+            iconClass="text-gray-400 dark:text-gray-600"
+            width="72"
+            class="ml-1"
+          />
+        </div>
       </template>
     </BalTable>
   </BalCard>

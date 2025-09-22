@@ -16,10 +16,6 @@ const gaugeConfig = GAUGE_REWARD_NETWORKS.find(
 
 const GAUGE_REWARD_CONTRACT_ADDRESS = gaugeConfig?.gaugeRewardContractAddress;
 
-console.log(
-  '🚀 ~ GAUGE_REWARD_CONTRACT_ADDRESS:',
-  GAUGE_REWARD_CONTRACT_ADDRESS
-);
 async function getGasPrice(signer: JsonRpcSigner) {
   let price: number;
 
@@ -57,11 +53,6 @@ async function approveToken(address, provider, walletAddress, signer, chainId) {
   try {
     const contract = new Contract(address, ERC20ABI, provider);
     // const gasPrice = await getGasPrice(signer);
-    // console.log('🚀 ~ approveToken ~ gasPrice:', gasPrice);
-    console.log(
-      '🚀 ~ approveToken ~ GAUGE_REWARD_CONTRACT_ADDRESS:',
-      GAUGE_REWARD_CONTRACT_ADDRESS
-    );
     const tx = await contract
       .connect(signer)
       .approve(GAUGE_REWARD_CONTRACT_ADDRESS, ethers.constants.MaxUint256);

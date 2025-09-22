@@ -21,7 +21,6 @@ export default function useVotingInfo() {
         chain_id: networkId.value,
       };
       const response = await gaugeApi.getVotingInfo(params);
-      console.log("🚀 ~ fetchVotingInfo ~ response:", response)
       data.value = response;
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Unknown error occurred';
