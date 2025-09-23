@@ -9,16 +9,11 @@ const getLockedZAmount = async ({
 }) => {
   const myContract = new Contract(contractAddress, abi, provider);
   const lockedZAmount = await myContract.lockedAmount(walletAddress);
-  console.log('🚀 ~ lockedZAmount:', lockedZAmount);
   return lockedZAmount.toString() || 0;
 };
 const getMaturityPeriod = async ({ provider, abi, contractAddress }) => {
   const myContract = new Contract(contractAddress, abi, provider);
   const maturityPeriod = await myContract.redemptionMaturityPeriod();
-  console.log(
-    '🚀 ~ getMaturityPeriod ~ maturityPeriod:',
-    maturityPeriod.toString()
-  );
   return maturityPeriod.toString() || 0;
 };
 const getEstimateSzAmount = async ({
@@ -27,10 +22,8 @@ const getEstimateSzAmount = async ({
   contractAddress,
   amount,
 }) => {
-  console.log('🚀 ~ getEstimateSzAmount=>amount:', amount);
   const myContract = new Contract(contractAddress, abi, provider);
   const estimateSzAmount = await myContract.estimateSZ(amount);
-  console.log('🚀 ~ estimateSzAmount:', estimateSzAmount);
   return estimateSzAmount?.toString() || 0;
 };
 const getEstimateZAmount = async ({

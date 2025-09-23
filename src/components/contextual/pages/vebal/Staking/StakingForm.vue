@@ -123,7 +123,6 @@ const getRateSZ = async () => {
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       amount: amount,
     });
-    console.log('🚀 ~ getRateSZ ~ rateSZ:', rateSZ);
     return BigNumber(rateSZ)
       .div(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
       .toFixed();
@@ -139,17 +138,13 @@ const getMaturityPeriodInfo = async () => {
       provider: provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
     });
-    console.log('🚀 ~ getMaturityPeriod ~ maturityPeriod:', rs);
     const days = BigNumber(rs).div(86400).toFixed(0);
-    console.log('🚀 ~ getMaturityPeriodInfo ~ days:', days);
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + Number(days));
-    console.log('🚀 ~ getMaturityPeriodInfo ~ endDate:', endDate);
     maturityPeriod.value = {
       endDate: format(endDate, 'dd MMM yyyy'),
       days: days,
     };
-    console.log('🚀 ~ getMaturityPeriodInfo ~ maturityPeriod:', maturityPeriod);
   } catch (error) {
     console.log(error, 'getMaturityPeriod=>error');
   }

@@ -19,6 +19,7 @@ import { AprBreakdown } from '@defiverse/balancer-sdk';
 type Props = {
   pool: Pool;
   poolApr?: AprBreakdown;
+  isNextPeriodApr: boolean;
 };
 
 /**
@@ -35,7 +36,9 @@ const { fNum2 } = useNumbers();
  * COMPUTED
  */
 const apr = computed<AprBreakdown | undefined>(() => {
-  const data = props.pool?.apr || props.poolApr;
+  const data = props.isNextPeriodApr
+    ? props.pool?.nextPeriodApr
+    : props.pool?.apr || props.poolApr;
   return data;
 });
 const validAPR = computed(() => Number(apr.value?.min || 0) <= APR_THRESHOLD);
@@ -46,7 +49,7 @@ const hasYieldAPR = computed(() => {
 
 const hasVebalAPR = computed((): boolean => isVeBalPool(props.pool.id));
 
-const totalLabel = computed((): string =>
+const totalLabel = computed((): string | number =>
   apr.value ? totalAprLabel(apr.value, props.pool.boost) : '0'
 );
 </script>
@@ -88,7 +91,8 @@ const totalLabel = computed((): string =>
           {{ $t('totalAPR') }}
         </div>
         <div class="text-lg font-bold normal-nums tracking-tighter">
-          {{ totalLabel }}
+          <span v-if="totalLabel !== -1">{{ totalLabel }}</span>
+          <span v-else> &#8734; </span>
         </div>
       </div>
       <div class="p-3 text-left">

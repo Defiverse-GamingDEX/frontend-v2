@@ -3,8 +3,6 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { Network } from '@defiverse/balancer-sdk';
-console.log('🚀 ~ Network:', Network);
-
 import BalModal from '@/components/_global/BalModal/BalModal.vue';
 import useVeBAL from '@/composables/useVeBAL';
 import { getNetworkSlug } from '@/composables/useNetwork';
@@ -14,7 +12,7 @@ import { getNetworkSlug } from '@/composables/useNetwork';
  */
 const redirectModal = ref<typeof BalModal>();
 const isTestnet = import.meta.env.VITE_IS_TESTNET == 'true' ? 'true' : 'false';
-console.log('🚀 ~ isTestnet:', isTestnet);
+
 const networkName = computed(() => (isTestnet ? 'Oasys Testnet' : 'Oasys'));
 const network = computed(() =>
   isTestnet ? Network.OASYS_TESTNET : Network.MAINNET

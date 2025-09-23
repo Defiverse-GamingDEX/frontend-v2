@@ -50,8 +50,6 @@ export default class VeBAL {
     veBalMulticaller.call('totalSupply', this.address, 'totalSupply()');
 
     const result = await veBalMulticaller.execute<VeBalLockInfoResult>();
-    console.log('🚀 ~ VeBAL ~ getLockInfo ~ result:', result);
-
     return this.formatLockInfo(result);
   }
 

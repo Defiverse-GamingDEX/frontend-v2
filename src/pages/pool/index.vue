@@ -586,7 +586,9 @@ function loadMore() {
 // Watch for sort field changes and reload pools
 watch(poolsSortField, (newSort, oldSort) => {
   console.log('� Sort changed:', oldSort, '→', newSort);
-  loadPools(true);
+  if (newSort === 'totalLiquidity') {
+    loadPools(true);
+  }
 });
 
 // Watch for selected tokens changes and reload pools

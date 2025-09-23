@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 
 import useExpiredGaugesQuery from '@/composables/queries/useExpiredGaugesQuery';
 import useVeBalLockInfoQuery from '@/composables/queries/useVeBalLockInfoQuery';
@@ -11,6 +11,7 @@ import { poolURLFor } from '@/composables/usePool';
 import useVotingGauges from '@/composables/useVotingGauges';
 import useWeb3 from '@/services/web3/useWeb3';
 import usePoolCreation from '@/composables/pools/usePoolCreation';
+import useVotingInfo from '@/composables/gaugeReward/useVotingInfo';
 
 import { bnum, isSameAddress, scale } from '@/lib/utils';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
@@ -29,8 +30,9 @@ const tokenFilter = useDebouncedRef<string>('', 500);
 const showExpiredGauges = useDebouncedRef<boolean>(false, 500);
 const activeNetworkFilters = useDebouncedRef<Network[]>([], 500);
 const activeVotingGauge = ref<VotingGaugeWithVotes | null>(null);
+const tableRerenderCounter = ref<number>(0);
 
-const adminAddress = ref(null);
+const adminAddress = ref<string | null>(null);
 
 const networkFilters = [Network.MAINNET, Network.OASYS, Network.OASYS_TESTNET];
 
@@ -51,7 +53,7 @@ const veBalLockInfoQuery = useVeBalLockInfoQuery();
 
 const { shouldResubmitVotes } = useVotingEscrowLocks();
 
-const { isWalletReady, account } = useWeb3();
+const { account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
 
 const votingGaugeAddresses = computed<string[]>(
@@ -99,7 +101,9 @@ const hasExpiredLock = computed(
     veBalLockInfoQuery.data.value?.isExpired
 );
 
-const gaugesTableKey = computed(() => JSON.stringify(isLoading.value));
+const gaugesTableKey = computed(() =>
+  JSON.stringify([isLoading.value, tableRerenderCounter.value])
+);
 
 const gaugesFilteredByExpiring = computed(() => {
   if (showExpiredGauges.value) {
@@ -137,6 +141,29 @@ const filteredVotingGauges = computed(() => {
     );
   });
 });
+
+const { data: votingInfo, isLoading: isLoadingVotingInfo } = useVotingInfo();
+
+const nextEmissionFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.emission) {
+    return '—';
+  }
+  return `${fNum2(votingInfo.value.emission.toString(), FNumFormats.token)} sZ`;
+});
+
+const totalVotePowerFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.total_vote_powers) {
+    return '—';
+  }
+  return `${fNum2(votingInfo.value.total_vote_powers, FNumFormats.token)} sZ`;
+});
+
+const totalFeeFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.total_fee) {
+    return '—';
+  }
+  return `${fNum2(votingInfo.value.total_fee)}$`;
+});
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
@@ -152,12 +179,13 @@ function setActiveGaugeVote(votingGauge: VotingGaugeWithVotes) {
 function handleModalClose() {
   activeVotingGauge.value = null;
   refetchVotingGauges.value();
+  tableRerenderCounter.value++;
 }
 
 function handleVoteSuccess() {
   refetchVotingGauges.value();
 }
-function changeTab(tab) {
+function changeTab(tab: string) {
   tabSelect.value = tab;
 }
 </script>
@@ -185,8 +213,8 @@ function changeTab(tab) {
       class="mx-4 xl:mx-0 mb-7"
     ></ResubmitVotesAlert>
     <div class="flex flex-wrap justify-between items-end px-4 lg:px-0">
-      <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0">
-        <BalCard shadow="none" class="p-0 md:w-48 min-w-max">
+      <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0 w-full card-group">
+        <BalCard shadow="none" class="p-0 xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
             <p class="inline mr-1 text-sm text-secondary">
               My unallocated votes
@@ -218,6 +246,22 @@ function changeTab(tab) {
             class="relative top-0.5"
           />
         </BalCard>
+        <BalCard shadow="none" class="xs:w-full md:w-48 min-w-max">
+          <div class="flex items-center">
+            <p class="inline mr-1 text-sm text-secondary">Total vote power</p>
+          </div>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ totalVotePowerFormatted }}
+          </p>
+        </BalCard>
+        <BalCard shadow="none" class="md:w-48 min-w-max">
+          <div class="flex items-center">
+            <p class="inline mr-1 text-sm text-secondary">Total Fee</p>
+          </div>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ totalFeeFormatted }}
+          </p>
+        </BalCard>
         <BalCard shadow="none" class="md:w-48 min-w-max">
           <div class="flex items-center">
             <p
@@ -248,9 +292,17 @@ function changeTab(tab) {
             </span>
           </p>
         </BalCard>
+        <BalCard shadow="none" class="md:w-48 min-w-max">
+          <div class="flex items-center">
+            <p class="inline mr-1 text-sm text-secondary">Next Emission</p>
+          </div>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ nextEmissionFormatted }}
+          </p>
+        </BalCard>
       </div>
-      <div class="mb-3 lg:mb-0">
-        <div class="mb-4 gauge-tabs">
+      <div class="flex justify-between mt-4 mb-3 lg:mb-0 w-full">
+        <div class="gauge-tabs">
           <div class="flex justify-end align-center">
             <BalBtn
               v-if="isAdmin"
@@ -338,4 +390,15 @@ function changeTab(tab) {
     }
   }
 }
-</style> 
+.card-group {
+  @media (max-width: 768px) {
+    display: block;
+  }
+  .bal-card {
+    @media (max-width: 768px) {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+  }
+}
+</style>

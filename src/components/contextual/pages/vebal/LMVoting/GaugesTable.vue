@@ -38,12 +38,13 @@ import useNetwork from '@/composables/useNetwork';
 import { Pool } from '@/services/pool/types';
 import PoolRepository from '@/services/pool/pool.repository';
 import { useTokens } from '@/providers/tokens.provider';
+import BigNumber from 'bignumber.js';
 import { configService } from '@/services/config/config.service';
 import {
   PoolsFallbackRepository,
   PoolRepository as SDKPoolRepository,
 } from '@defiverse/balancer-sdk';
-
+import gaugeApi from '@/composables/gaugeReward/gauge.api';
 /**
  * TYPES
  */
@@ -69,7 +70,6 @@ const props = withDefaults(defineProps<Props>(), {
   tabSelect: 'gauge',
   data: () => [],
 });
-console.log('🚀 ~ props.data:', props.data);
 const emit = defineEmits<{
   (e: 'clickedVote', value: VotingGaugeWithVotes): void;
 }>();
@@ -77,9 +77,8 @@ const emit = defineEmits<{
 /**
  * STATE
  */
-const adminAddress = ref(null);
+const adminAddress = ref('');
 const gaugesWithApr = ref<VotingGaugeWithVotes[]>([]);
-const isLoadingApr = ref(false);
 const loadingAprGaugeIds = ref<Set<string>>(new Set());
 
 /**
@@ -122,8 +121,39 @@ const columns = computed(() => {
       id: 'poolComposition',
       accessor: 'id',
       Cell: 'poolCompositionCell',
-      width: 350,
+      width: 250,
     },
+    {
+      name: 'TVL',
+      id: 'total_liquidity',
+      accessor: 'total_liquidity',
+      align: 'right',
+      Cell: 'tvlCell',
+      sortKey: gauge => Number(gauge.total_liquidity || 0),
+      width: 200,
+      cellClassName: 'font-numeric',
+    },
+    {
+      name: 'Swap fee',
+      id: 'swap_fee',
+      accessor: 'swap_fee',
+      align: 'right',
+      Cell: 'swapFeeCell',
+      Header: 'swapFeeHeader',
+      sortKey: gauge => Number(gauge.swap_fee || 0),
+      width: 80,
+      cellClassName: 'font-numeric',
+    },
+    // {
+    //   name: 'Next Emission',
+    //   id: 'nextEmission',
+    //   accessor: 'nextEmission',
+    //   align: 'right',
+    //   Cell: 'nextEmissionCell',
+    //   sortKey: gauge => Number(gauge.nextEmission || 0),
+    //   width: 80,
+    //   cellClassName: 'font-numeric',
+    // },
     {
       name: t('veBAL.liquidityMining.table.nextPeriodVotes'),
       accessor: 'id',
@@ -140,23 +170,23 @@ const columns = computed(() => {
       align: 'right',
       id: 'myVotes',
       sortKey: gauge => Number(gauge.userVotes),
-      width: 100,
+      width: 140,
       Cell: 'myVotesCell',
       cellClassName: 'font-numeric',
       hidden: !isWalletReady.value,
     },
     {
-      name: t('apr'),
-      Cell: 'aprCell',
-      accessor: gauge => gauge.pool?.apr?.min.toString() || '0',
+      name: t('veBAL.liquidityMining.table.nextPeriodApr'),
+      Cell: 'nextPeriodAprCell',
+      accessor: gauge => gauge.pool?.nextPeriodApr?.min.toString() || '0',
       align: 'right',
-      id: 'apr',
+      id: 'nextPeriodApr',
       sortKey: gauge => {
-        let apr = 0;
-        if (gauge.pool?.apr) {
-          apr = Number(gauge.pool.apr.min || 0);
+        let nextPeriodApr = 0;
+        if (gauge.nextPeriodApr) {
+          nextPeriodApr = Number(gauge.nextPeriodApr.min || 0);
         }
-        return isFinite(apr) ? apr : 0;
+        return isFinite(nextPeriodApr) ? nextPeriodApr : 0;
       },
       width: 150,
     },
@@ -184,7 +214,7 @@ const columns = computed(() => {
   ];
 });
 
-const dataKey = computed(() => JSON.stringify(props.data));
+const dataKey = computed(() => JSON.stringify(gaugesWithApr.value));
 
 // COMPUTED
 const isAdmin = computed(() => {
@@ -270,187 +300,9 @@ function openConfigReward(gauge) {
 }
 
 /**
- * Fetch pool data with the correct repository for a specific chain
+ * Fetch next period voting pool details
  */
-async function fetchPoolWithCorrectRepository(
-  poolId: string,
-  chainId: number
-): Promise<Pool | null> {
-  try {
-    // Get network config for the specific chainId
-    const networkConfig = configService.getNetworkConfig(chainId);
-    if (!networkConfig) {
-      console.error(`No network config found for chainId ${chainId}`);
-      return null;
-    }
-
-    console.log(
-      `Using subgraph for network ${chainId}:`,
-      networkConfig.subgraphs.main
-    );
-
-    // Create a new PoolRepository instance
-    const poolRepository = new PoolRepository(tokenMeta);
-
-    // Get access to the private repository property
-    const repo = poolRepository as any;
-
-    // Save the original repository
-    const originalRepository = repo.repository;
-
-    // Create query args
-    const queryArgs = {
-      where: {
-        id: {
-          eq: poolId.toLowerCase(),
-        },
-        poolType: {
-          not_in: [
-            'Element',
-            'AaveLinear',
-            'EulerLinear',
-            'Linear',
-            'ERC4626Linear',
-            'FX',
-            'Gyro2',
-            'Gyro3',
-            'GyroE',
-            'HighAmpComposableStable',
-          ],
-        },
-        totalShares: {
-          gt: -1,
-        },
-      },
-    };
-
-    try {
-      // Temporarily create a new repository with the correct chainId
-      // This is a hack to override the repository's internal configuration
-
-      // Build custom repositories for the specific chainId
-      const customRepositories = buildRepositoriesForChainId(chainId, poolId);
-
-      // Replace the repository with our custom one
-      repo.repository = new PoolsFallbackRepository(customRepositories, {
-        timeout: 30 * 1000,
-      });
-
-      // Now fetch with the custom repository
-      const pool = await poolRepository.fetch(queryArgs);
-
-      if (!pool) {
-        console.warn(`No pool found for ID ${poolId} on chain ${chainId}`);
-        return null;
-      }
-
-      return pool;
-    } finally {
-      // Restore the original repository
-      repo.repository = originalRepository;
-    }
-  } catch (error) {
-    console.error(
-      `Error fetching pool data for ${poolId} on chain ${chainId}:`,
-      error
-    );
-    return null;
-  }
-}
-
-/**
- * Build repositories for a specific chainId
- */
-function buildRepositoriesForChainId(
-  chainId: number,
-  targetPoolId: string
-): SDKPoolRepository[] {
-  const repositories: SDKPoolRepository[] = [];
-
-  // Create a subgraph repository for the specific chainId
-  const subgraphRepository = {
-    fetch: async (): Promise<Pool[]> => {
-      // Get the network config for the chainId
-      const networkConfig = configService.getNetworkConfig(chainId);
-
-      // Use the first subgraph URL from the network config
-      const subgraphUrl = networkConfig.subgraphs.main[0];
-
-      // Create a temporary fetch function that uses the correct subgraph URL
-      const fetchFromSubgraph = async () => {
-        try {
-          const response = await fetch(subgraphUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              query: `
-                query GetPool($id: String!) {
-                  pool(id: $id) {
-                    id
-                    address
-                    poolType
-                    swapFee
-                    totalShares
-                    totalLiquidity
-                    tokens {
-                      address
-                      balance
-                      weight
-                      symbol
-                      name
-                      decimals
-                    }
-                  }
-                }
-              `,
-              variables: {
-                id: targetPoolId.toLowerCase(),
-              },
-            }),
-          });
-
-          const data = await response.json();
-
-          if (data.errors) {
-            console.error('Subgraph query errors:', data.errors);
-            return [];
-          }
-
-          if (!data.data.pool) {
-            return [];
-          }
-
-          // Convert the response to a Pool object
-          const pool = {
-            ...data.data.pool,
-            chainId,
-          };
-
-          return [pool];
-        } catch (error) {
-          console.error('Error fetching from subgraph:', error);
-          return [];
-        }
-      };
-
-      return fetchFromSubgraph();
-    },
-    get skip(): number {
-      return 0;
-    },
-  };
-
-  repositories.push(subgraphRepository);
-
-  return repositories;
-}
-
-/**
- * Fetch APR data for all gauges
- */
-async function fetchAprData() {
+async function fetchVotingPoolDetails() {
   if (!props.data || props.data.length === 0) return;
 
   // Initialize with all gauges
@@ -467,45 +319,35 @@ async function fetchAprData() {
     });
 
     // Create promises for each gauge in the batch
-    const promises = batch.map(async gauge => {
+    const promises = batch.map(async (gauge: any) => {
       try {
         // Fetch the actual pool data using our custom method
         const chainId = gauge.network || networkId.value;
-        console.log(
-          `Fetching pool data for ${gauge.pool.id} on chain ${chainId}`
-        );
+        const poolIds = [gauge.pool.id];
+        const gaugeIds = [gauge.id];
+        const userAddress = account.value;
+        const params = {
+          chain_id: chainId,
+          pool_ids: poolIds,
+          gauge_ids: gaugeIds,
+          user_address: userAddress,
+        };
+        const votingPoolDetails = await gaugeApi.getVotingPoolDetails(params);
 
-        // Use our custom method that creates a repository with the correct chainId
-        const pool = await fetchPoolWithCorrectRepository(
-          gauge.pool.id,
-          chainId
-        );
+        if (votingPoolDetails) {
+          const detail = votingPoolDetails[`${gauge.pool.id}`];
 
-        if (!pool) {
-          console.warn(
-            `No pool found for ID ${gauge.pool.id} on chain ${chainId}`
-          );
-          throw new Error(`Pool not found: ${gauge.pool.id}`);
-        }
-
-        console.log(
-          `Successfully fetched pool data for ${gauge.pool.id}:`,
-          pool
-        );
-
-        // Fetch APR data from Balancer SDK
-        const aprData = await getBalancer().pools.apr(pool);
-        console.log('🚀 ~ fetchAprData ~ aprData:', aprData);
-
-        if (aprData) {
-          // Find the gauge in our array and update it
           const gaugeIndex = gaugesWithApr.value.findIndex(
-            g => g.pool.id === gauge.pool.id
+            (g: any) => g.id === detail.gauge
           );
           if (gaugeIndex >= 0) {
-            const updatedGauge = { ...gaugesWithApr.value[gaugeIndex] };
-            (updatedGauge.pool as any).apr = aprData;
-            gaugesWithApr.value[gaugeIndex] = updatedGauge;
+            const updatedGauge = {
+              ...gaugesWithApr.value[gaugeIndex],
+              ...detail,
+            };
+            updatedGauge.pool.nextPeriodApr = detail.nextPeriodApr;
+
+            gaugesWithApr.value.splice(gaugeIndex, 1, updatedGauge);
           }
         }
       } catch (error) {
@@ -531,30 +373,30 @@ function isGaugeAprLoading(gauge: VotingGaugeWithVotes): boolean {
 /**
  * WATCHERS
  */
-watch(
-  () => props.data,
-  async newData => {
-    if (newData && newData.length > 0) {
-      // Initialize gaugesWithApr immediately with the data
-      gaugesWithApr.value = [...newData];
-      // Then fetch APR data asynchronously
-      fetchAprData();
-    }
-  },
-  { immediate: true }
-);
+// watch(
+//   () => props.data,
+//   async newData => {
+//     if (newData && newData.length > 0) {
+//       // Initialize gaugesWithApr immediately with the data
+//       gaugesWithApr.value = [...newData];
+//       // Then fetch APR data asynchronously
+//       await fetchAprData();
+//       await fetchVotingPoolDetails();
+//     }
+//   },
+//   { immediate: true }
+// );
 
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
 });
 
-onMounted(() => {
+onMounted(async () => {
   if (props.data && props.data.length > 0) {
     // Initialize gaugesWithApr immediately with the data
     gaugesWithApr.value = [...props.data];
-    // Then fetch APR data asynchronously
-    fetchAprData();
+    await fetchVotingPoolDetails();
   }
 });
 </script>
@@ -570,7 +412,7 @@ onMounted(() => {
     <BalTable
       :key="dataKey"
       :columns="columns"
-      :data="gaugesWithApr.length > 0 ? gaugesWithApr : data"
+      :data="gaugesWithApr"
       :isLoading="isLoading"
       skeletonClass="h-64"
       sticky="both"
@@ -630,11 +472,43 @@ onMounted(() => {
           <BalChipExpired v-if="getIsGaugeExpired(address)" class="ml-2" />
         </div>
       </template>
+      <template #tvlCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-6 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
+          <template v-else-if="gauge.total_liquidity >= 0">
+            <div class="break-all">
+              {{ fNum2(gauge.total_liquidity, { style: 'currency' }) }}
+            </div>
+          </template>
+          <template v-else> - </template>
+        </div>
+      </template>
+      <template #swapFeeCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-6 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
+          <template v-else-if="gauge.swap_fee >= 0">
+            {{ fNum2(gauge.swap_fee, { style: 'currency' }) }}
+          </template>
+          <template v-else> - </template>
+        </div>
+      </template>
+      <!-- <template #nextEmissionCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-6 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
+          <template v-else-if="gauge.nextEmission">
+            {{ fNum2(gauge.nextEmission, { style: 'decimal' }) }} sZ
+          </template>
+          <template v-else> - </template>
+        </div>
+      </template> -->
       <template #nextPeriodVotesCell="gauge">
         <!-- Put to BalLazy the most expensive to render component -->
         <BalLazy>
           <div v-if="!isLoading" class="flex justify-end py-4 px-6">
-            <GaugeVoteInfo :gauge="gauge" />
+            <GaugeVoteInfo
+              :gauge="gauge"
+              :isGaugeAprLoading="isGaugeAprLoading(gauge)"
+            />
             <div class="flex justify-end w-6">
               <IconLimit
                 v-if="gauge.pool.symbol === 'veBAL'"
@@ -666,16 +540,26 @@ onMounted(() => {
       </template>
       <template #myVotesCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
-          <GaugesTableMyVotes :gauge="gauge"></GaugesTableMyVotes>
-          {{ tabSelect?.value }}
+          <GaugesTableMyVotes
+            :gauge="gauge"
+            :isGaugeAprLoading="isGaugeAprLoading(gauge)"
+          />
         </div>
       </template>
-      <template #aprCell="gauge">
+      <template #nextPeriodAprCell="gauge">
         <div class="flex justify-end py-4 px-6 text-right font-numeric">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
-          <template v-else-if="gauge.pool?.apr">
-            {{ totalAprLabel(gauge.pool.apr, gauge.pool.boost) }}
-            <APRTooltip :pool="gauge.pool" />
+          <template v-else-if="gauge.pool?.nextPeriodApr">
+            <span
+              v-if="
+                totalAprLabel(gauge.pool.nextPeriodApr, gauge.pool.boost) !== -1
+              "
+              >{{
+                totalAprLabel(gauge.pool.nextPeriodApr, gauge.pool.boost)
+              }}</span
+            >
+            <span v-else> &#8734; </span>
+            <APRTooltip :pool="gauge.pool" :isNextPeriodApr="true" />
           </template>
           <template v-else> - </template>
         </div>
@@ -697,6 +581,18 @@ onMounted(() => {
           block
           @click.stop.prevent="openConfigReward(gauge)"
         />
+      </template>
+      <template #swapFeeHeader>
+        <div class="flex justify-end items-center">
+          <h5 class="text-base">Swap fee</h5>
+          <BalTooltip
+            text="Swap Fee (this period)"
+            iconSize="sm"
+            iconClass="text-gray-400 dark:text-gray-600"
+            width="72"
+            class="ml-1"
+          />
+        </div>
       </template>
     </BalTable>
   </BalCard>
