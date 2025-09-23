@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref, onBeforeMount } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import useExpiredGaugesQuery from '@/composables/queries/useExpiredGaugesQuery';
 import useVeBalLockInfoQuery from '@/composables/queries/useVeBalLockInfoQuery';
@@ -37,9 +38,11 @@ const adminAddress = ref<string | null>(null);
 const networkFilters = [Network.MAINNET, Network.OASYS, Network.OASYS_TESTNET];
 
 const tabSelect = ref('gauge');
+
 /**
  * COMPOSABLES
  */
+const { t: $t } = useI18n();
 const {
   isLoading,
   votingGauges,
@@ -164,6 +167,29 @@ const totalFeeFormatted = computed<string>(() => {
   }
   return `${fNum2(votingInfo.value.total_fee)}$`;
 });
+
+// TODO: Remove this after the voting period ends
+// Fixed end date: 2025/10/01 23:59:59
+const fixedEndDate = new Date('2025-10-01T23:59:59Z');
+
+const shouldShowFixedDate = computed<boolean>(() => {
+  return new Date() <= fixedEndDate;
+});
+
+const votingPeriodDisplayText = computed<string>(() => {
+  if (shouldShowFixedDate.value) {
+    return '2025/10/01 23:59:59';
+  }
+
+  if (votingPeriodEnd.value.length) {
+    return $t(
+      'veBAL.liquidityMining.votingPeriodCountdown',
+      votingPeriodEnd.value
+    );
+  }
+
+  return '';
+});
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
@@ -280,15 +306,12 @@ function changeTab(tab: string) {
           </div>
           <p class="text-lg font-semibold tabular-nums">
             <span
-              v-if="votingPeriodEnd.length"
-              :class="{ 'text-orange-500': votingPeriodLastHour }"
+              v-if="votingPeriodDisplayText"
+              :class="{
+                'text-orange-500': votingPeriodLastHour && !shouldShowFixedDate,
+              }"
             >
-              {{
-                $t(
-                  'veBAL.liquidityMining.votingPeriodCountdown',
-                  votingPeriodEnd
-                )
-              }}
+              {{ votingPeriodDisplayText }}
             </span>
           </p>
         </BalCard>
