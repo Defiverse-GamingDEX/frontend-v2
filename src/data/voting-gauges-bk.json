@@ -1,5 +1,63 @@
 [
   {
+    "address": "0xb6401f075da627f6906e3427903bb87f5e00b881",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0x62897f6003eb877cb9fea3011e1a2c1b7a23973c000200000000000000000031",
+      "address": "0x62897f6003eb877cb9fea3011e1a2c1b7a23973c",
+      "poolType": "Weighted",
+      "symbol": "50USDC-50BtcUSD",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC"
+        },
+        {
+          "address": "0x4Cda2D683E3AF90ea50855008BdB15D9454527B7",
+          "weight": "0.5",
+          "symbol": "BtcUSD"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4Cda2D683E3AF90ea50855008BdB15D9454527B7": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png",
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png"
+    }
+  },
+  {
+    "address": "0x7ebb37359b71ac83a706debbfae17b4e5e2032bf",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0xc55226c660b5d22efb5adf6f9eee196e26ca6480000200000000000000000000",
+      "address": "0xc55226c660b5d22efb5adf6f9eee196e26ca6480",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50USDC",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png"
+    }
+  },
+  {
     "address": "0xc8d059ca103cd2c17d5de9fe5ae3cc0b2560ae27",
     "network": 248,
     "isKilled": false,
