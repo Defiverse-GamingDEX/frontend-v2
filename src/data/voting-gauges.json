@@ -1280,7 +1280,7 @@
     "network": 9372,
     "isKilled": true,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756334817,
+    "addedTimestamp": 1756248417,
     "pool": {
       "id": "0xe78104d59b4912d29bc07e03a974ea853e644202000200000000000000000031",
       "address": "0xe78104d59b4912d29bc07e03a974ea853e644202",
@@ -1510,7 +1510,7 @@
     "address": "0xe3cb0c5466909cd81d3836d5dfd62aef1966306e",
     "network": 9372,
     "isKilled": true,
-    "addedTimestamp": 1756334817,
+    "addedTimestamp": 1756248417,
     "relativeWeightCap": "1",
     "pool": {
       "id": "0x45580cb46db20e1007ee0335bb9f97ddc545979e000200000000000000000021",
