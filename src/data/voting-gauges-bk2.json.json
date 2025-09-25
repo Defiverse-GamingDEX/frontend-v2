@@ -581,9 +581,9 @@
   },
 
   {
-    "address": "0x102bf0d231b410189cda9dd9ff109514bf380d73",
+    "address": "0x34a25930eef5cd81f14b1d5b88d6bb6468a71d67",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1756334817,
     "pool": {
@@ -610,11 +610,11 @@
     }
   },
   {
-    "address": "0x6f23c4a12ce2adaffe1c189afd436d613655b87f",
+    "address": "0xaa80e5d86a84fd4c5e4dda530efe5be09156e5b1",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x9fcd5447675ba979746fac40d398e292a514917e00020000000000000000001a",
       "address": "0x9fcd5447675ba979746fac40d398e292a514917e",
@@ -639,11 +639,11 @@
     }
   },
   {
-    "address": "0xe45afb61726b7c2b9b80bde1f889ab8ed992e4ab",
+    "address": "0xa9adfa2f5bb72eac6d3fc6537d0042608a4c36db",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x31d80d3f21b1e5ae8ac066e13fd327da8a5846a200020000000000000000001b",
       "address": "0x31d80d3f21b1e5ae8ac066e13fd327da8a5846a2",
@@ -668,11 +668,11 @@
     }
   },
   {
-    "address": "0xa9687364b4ea91ca98a2b1d2fdb0feecb6616e70",
+    "address": "0xa51a642e9d435cdbe3009f1fe3a2eb1663c13891",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xdd8df7c01cfb5896781eba0c137d9963c9510f8300020000000000000000001c",
       "address": "0xdd8df7c01cfb5896781eba0c137d9963c9510f83",
@@ -697,11 +697,11 @@
     }
   },
   {
-    "address": "0x8e0338d2d009e0d851338481ac07a5e02b7a5d80",
+    "address": "0x8c117dca9b212e86346e609ef7e659332ed436f4",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xc01fb7e4dcec1959a19249afadc1e935c9c24b4400020000000000000000001d",
       "address": "0xc01fb7e4dcec1959a19249afadc1e935c9c24b44",
@@ -726,11 +726,11 @@
     }
   },
   {
-    "address": "0x4c385ca41fb7629639d4403c9d7ef86dff11801c",
+    "address": "0x7939662ef003019e843dba3b47a67810e033694f",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x5728d67f9a732b23e847ec5bda243853b34e7c1c00020000000000000000001e",
       "address": "0x5728d67f9a732b23e847ec5bda243853b34e7c1c",
@@ -754,11 +754,11 @@
     }
   },
   {
-    "address": "0xb432e4026625e5d27657f0f6197a88aa2060545a",
+    "address": "0x428a1a4cf81b182bcef79d3d819d1597305a414e",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xb1eea5a3e56dd09c6d482f127695b297fff21a0000020000000000000000001f",
       "address": "0xb1eea5a3e56dd09c6d482f127695b297fff21a00",
@@ -783,11 +783,11 @@
     }
   },
   {
-    "address": "0x18ea56c2d4106d6177e4e64a672e3adf35f6ad5f",
+    "address": "0xedc38ed87d575e33655be438bcb68a8a81a079cf",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xab7d259cd1bb7cdda4a3b43e7293016ce1dde898000200000000000000000020",
       "address": "0xab7d259cd1bb7cdda4a3b43e7293016ce1dde898",
@@ -812,9 +812,9 @@
     }
   },
   {
-    "address": "0xe3cb0c5466909cd81d3836d5dfd62aef1966306e",
+    "address": "0x4662a615bb590ec4b0622272e600ee839a5b4a5a",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "addedTimestamp": 1756334817,
     "relativeWeightCap": "1",
     "pool": {
@@ -841,11 +841,11 @@
     }
   },
   {
-    "address": "0x27fd7f5bfa4a6a7a1f75cd6372d40e0617946d28",
+    "address": "0xfe9a8ee05f82e14f30bade5a064dbda801d35d49",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xd0412cf02c7d3bcad3ae6c612c168389083f2f3d000200000000000000000022",
       "address": "0xd0412cf02c7d3bcad3ae6c612c168389083f2f3d",
@@ -870,11 +870,11 @@
     }
   },
   {
-    "address": "0x3a91ded81f05e0351a6e245798fb399fbd616740",
+    "address": "0x9f4df0903556350429dfbd7245cc12c07f671878",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xc42b3c9131c4f2f184f4b7ae1a1a1abfe1883a43000200000000000000000026",
       "address": "0xc42b3c9131c4f2f184f4b7ae1a1a1abfe1883a43",
@@ -899,11 +899,11 @@
     }
   },
   {
-    "address": "0x3138a7da7ac0f209046150ff1fafc276853477b0",
+    "address": "0x5bba6226572fb5e4797c115db308bd4a3fbfbd48",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x4e928f70e281d60c1931faebf78ca6316ae1aaa6000200000000000000000023",
       "address": "0x4e928f70e281d60c1931faebf78ca6316ae1aaa6",
@@ -928,11 +928,11 @@
     }
   },
   {
-    "address": "0xe6c61622264eec13b01bd2651f32e8e01e0fc436",
+    "address": "0x7a64468e97f878ecc1862d4a8de958bddbed9fb1",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x63570a65b5dbc3dfe055d28bf9ee6bd660deb796000200000000000000000025",
       "address": "0x63570a65b5dbc3dfe055d28bf9ee6bd660deb796",
@@ -957,11 +957,11 @@
     }
   },
   {
-    "address": "0xa6eac08d61fef23cb4e789f569b3d9073d61f7ca",
+    "address": "0x170ee943aeb875ab8358ac97028d9719db0a8964",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x532492762e242730b72ffc97c8fea814c9b02788000200000000000000000027",
       "address": "0x532492762e242730b72ffc97c8fea814c9b02788",
@@ -986,11 +986,11 @@
     }
   },
   {
-    "address": "0x3e97a967edf11e14b12772a9b8e56418726924d3",
+    "address": "0x97fd864c7bb8378554f770805f245ffe32affccc",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x6af20f331d70f7cce2d03ce880cbbaf0ce97d4c8000200000000000000000028",
       "address": "0x6af20f331d70f7cce2d03ce880cbbaf0ce97d4c8",
@@ -1015,11 +1015,11 @@
     }
   },
   {
-    "address": "0x887fbc28483009bc8fa5480533ef13d0c552dd31",
+    "address": "0xfe15ce6eb0730166f1dbc41ec615b437e6212350",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x746c7c3cf1de801ee05b567bb21972e05b73722a000200000000000000000029",
       "address": "0x746c7c3cf1de801ee05b567bb21972e05b73722a",
@@ -1044,11 +1044,11 @@
     }
   },
   {
-    "address": "0x3f6380aad2821a758454852bf5966518e51aaa66",
+    "address": "0xd4501493abc6fb0e7247e69c4f2535bd18f499d2",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xb56444b341b3c557596d620775efc29acea86c9200020000000000000000002a",
       "address": "0xb56444b341b3c557596d620775efc29acea86c92",
@@ -1072,11 +1072,11 @@
     }
   },
   {
-    "address": "0x850820aafbd8b713f08b316023b521be13940ca9",
+    "address": "0x01001c4d5bed3bd9e05b01b5c766a6a71a93fcf1",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xf9224ae9b798338d9baed6cb328d17427ae5ea9a00020000000000000000002b",
       "address": "0xf9224ae9b798338d9baed6cb328d17427ae5ea9a",
@@ -1101,11 +1101,11 @@
     }
   },
   {
-    "address": "0x2e60120abb1ccf6a1689bba2e8a684f838daa326",
+    "address": "0x1f21903a1496fa04fc5dfa704c5bb1a34e772f45",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xb2b22d087e353b0635102ec871143f23d012a18500020000000000000000002c",
       "address": "0xb2b22d087e353b0635102ec871143f23d012a185",
@@ -1130,11 +1130,11 @@
     }
   },
   {
-    "address": "0x4b98391254a593cbc723dd8a2a7a1cccf1307783",
+    "address": "0xe42d2861449cbd097e0df8b5466bb3188b3b0da2",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x913edd16618c88ff1a3038e860010ee9fc6aed9400020000000000000000002d",
       "address": "0x913edd16618c88ff1a3038e860010ee9fc6aed94",
@@ -1159,11 +1159,11 @@
     }
   },
   {
-    "address": "0x3840e334fb283fae9ff641f50c2624077e101682",
+    "address": "0xcb1e82e5b46b90e753927074f6196acc14e48bb6",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024",
       "address": "0xed651c1e26cb0758572ea633b32213cbd7d4f267",
@@ -1188,11 +1188,11 @@
     }
   },
   {
-    "address": "0x2a23fad0ee30098d23283b230e50c581026e7ec6",
+    "address": "0xda1e26cfce039fee71321c9ef0233f02c06154e8",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0xbce3b08fb25a71e03c85275c917cbdc867a4299d00020000000000000000002f",
       "address": "0xbce3b08fb25a71e03c85275c917cbdc867a4299d",
@@ -1217,11 +1217,11 @@
     }
   },
   {
-    "address": "0x1bf69ca91fb503c4d8dd894070a56e8438c93715",
+    "address": "0xe155e45dd78fffb5a878e7a87a2d58458daaf01a",
     "network": 9372,
-    "isKilled": true,
+    "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1756248417,
+    "addedTimestamp": 1758576017,
     "pool": {
       "id": "0x950f31e8a327a49ae4443284d0137f3b74858474000200000000000000000030",
       "address": "0x950f31e8a327a49ae4443284d0137f3b74858474",
@@ -1242,6 +1242,35 @@
     },
     "tokenLogoURIs": {
       "0x2af09148c7bf784e54c7730724e4b48e4735426c": "tokens/USDC_L.png",
+      "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
+    }
+  },
+  {
+    "address": "0xa340a1ea96775e9d191d0cbdfcbf929f746a5ec6",
+    "network": 9372,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0x65a95c0bd7a04a558b1423b7d0c14918f5a99c27000200000000000000000032",
+      "address": "0x65a95c0bd7a04a558b1423b7d0c14918f5a99c27",
+      "poolType": "Weighted",
+      "symbol": "50stOAS-50btcUSD",
+      "tokens": [
+        {
+          "address": "0xf73d74a089366486401d67ad83013a623d40ac77",
+          "weight": "0.5",
+          "symbol": "stOAS"
+        },
+        {
+          "address": "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4",
+          "weight": "0.5",
+          "symbol": "btcUSD"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
       "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
     }
   }
