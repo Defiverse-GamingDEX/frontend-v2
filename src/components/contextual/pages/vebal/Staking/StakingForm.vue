@@ -190,10 +190,14 @@ const checkAllowanceForAmount = async (stakeAmount: number | string) => {
 
     console.log(
       '🚀 ~ checkAllowanceForAmount ~ requiredAmount:',
-      requiredAmount.toString()
+      requiredAmount.toFixed(0)
     );
+    console.log('🚀 ~ checkAllowanceForAmount ~ allowance:', allowance);
 
-    if (allowance.gte(requiredAmount.toString())) {
+    // Convert allowance to BigNumber for comparison
+    const allowanceBN = new BigNumber(allowance.toString());
+
+    if (allowanceBN.gte(requiredAmount)) {
       isApproved.value = true;
     } else {
       isApproved.value = false;
