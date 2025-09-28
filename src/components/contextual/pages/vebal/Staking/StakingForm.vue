@@ -5,7 +5,7 @@ export default {
 };
 </script>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 
 import BalCard from '@/components/_global/BalCard/BalCard.vue';
 import ZIcon from '@/assets/images/bridge/tokens/Z.png';
@@ -14,7 +14,7 @@ import useWeb3 from '@/services/web3/useWeb3';
 import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import { cloneDeep, debounce } from 'lodash';
+import { debounce } from 'lodash';
 import BigNumber from 'bignumber.js';
 import { format } from 'date-fns';
 import useNotifications from '@/composables/useNotifications';
@@ -56,7 +56,6 @@ const {
   checkTokenAllowance,
   approveToken,
   stakeZ,
-  stakeZForTest,
 } = useStakeZ();
 /**
  * METHODS
@@ -79,6 +78,7 @@ const handleAmountChange = async event => {
   amount.value = event.target.value;
   if (!amount.value) {
     receiveAmount.value = 0;
+    isApproved.value = false;
     return;
   }
 
@@ -93,8 +93,20 @@ const handleAmountChange = async event => {
     receiveAmount.value = 0;
   }
 };
+
+// Debounced allowance check to avoid too many contract calls
+const debouncedAllowanceCheck = debounce(async (amountValue: string) => {
+  if (account.value && amountValue && Number(amountValue) > 0) {
+    await checkAllowanceForAmount(amountValue);
+  } else {
+    isApproved.value = false;
+  }
+}, 800);
+
 const delayinputChange = debounce(async event => {
-  handleAmountChange(event);
+  await handleAmountChange(event);
+  // Check allowance after amount calculation
+  debouncedAllowanceCheck(event.target.value);
 }, 500);
 
 const getUserZBalance = async () => {
@@ -149,8 +161,14 @@ const getMaturityPeriodInfo = async () => {
     console.log(error, 'getMaturityPeriod=>error');
   }
 };
-const checkAllowance = async () => {
+const checkAllowanceForAmount = async (stakeAmount: number | string) => {
+  if (!stakeAmount || Number(stakeAmount) <= 0 || isNaN(Number(stakeAmount))) {
+    isApproved.value = false;
+    return;
+  }
+
   try {
+    isLoading.value = true;
     const provider = getProvider();
     const allowance = await checkTokenAllowance({
       provider: provider,
@@ -159,13 +177,32 @@ const checkAllowance = async () => {
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
     });
 
-    if (allowance.gt(0)) {
+    console.log(
+      '🚀 ~ checkAllowanceForAmount ~ allowance:',
+      allowance.toString()
+    );
+    console.log('🚀 ~ checkAllowanceForAmount ~ stakeAmount:', stakeAmount);
+
+    // Convert stakeAmount to BigNumber safely
+    const stakeAmountBN = new BigNumber(stakeAmount.toString());
+    const decimals = STAKE_Z_NETWORK.value?.z_token_decimals || 18;
+    const requiredAmount = stakeAmountBN.times(new BigNumber(10).pow(decimals));
+
+    console.log(
+      '🚀 ~ checkAllowanceForAmount ~ requiredAmount:',
+      requiredAmount.toString()
+    );
+
+    if (allowance.gte(requiredAmount.toString())) {
       isApproved.value = true;
     } else {
       isApproved.value = false;
     }
+    isLoading.value = false;
   } catch (error) {
-    console.log(error, 'checkAllowance=>error');
+    console.log(error, 'checkAllowanceForAmount=>error');
+    isApproved.value = false;
+    isLoading.value = false;
   }
 };
 const fetchData = async () => {
@@ -173,25 +210,40 @@ const fetchData = async () => {
     userZBalance.value = await getUserZBalance();
     rateSZ.value = await getRateSZ();
     await getMaturityPeriodInfo();
-    await checkAllowance();
+
+    // Only check allowance if there's an amount entered
+    if (amount.value && Number(amount.value) > 0) {
+      await checkAllowanceForAmount(String(amount.value));
+    } else {
+      isApproved.value = false;
+    }
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 };
 const handleApprove = async () => {
-  // TODO: Handle approve
   try {
     isLoading.value = true;
     const provider = getProvider();
     const signer = provider.getSigner();
-    console.log(
-      '🚀 ~ handleApprove ~ userZBalance?.value:',
-      userZBalance?.value
-    );
-    const balance: any = userZBalance?.value || 0;
-    const approveAmount: any = BigNumber(balance)
+
+    if (!amount.value || Number(amount.value) <= 0) {
+      addNotification({
+        type: 'error',
+        title: '',
+        message: 'Please enter a valid amount to approve',
+      });
+      isLoading.value = false;
+      return;
+    }
+
+    console.log('🚀 ~ handleApprove ~ amount:', amount.value);
+
+    // Approve only the amount user wants to stake
+    const approveAmount: any = BigNumber(Number(amount.value))
       .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
       .toFixed(0);
+
     const params = {
       provider,
       contractProvider: provider,
@@ -204,7 +256,7 @@ const handleApprove = async () => {
     console.log('🚀 ~ handleApprove ~ tx:', tx);
     txListener(tx, {
       onTxConfirmed: async () => {
-        await checkAllowance();
+        await checkAllowanceForAmount(String(amount.value));
         isLoading.value = false;
       },
       onTxFailed: () => {
@@ -374,6 +426,7 @@ onMounted(() => {
           <BalBtn
             label="Approve"
             :loading="isLoading"
+            :disabled="!amount || Number(amount) <= 0"
             classCustom="pink-white-shadow"
             block
             @click="handleApprove"
