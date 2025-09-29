@@ -60,6 +60,22 @@ const {
 /**
  * METHODS
  */
+const setMaxBalance = () => {
+  if (userZBalance.value && Number(userZBalance.value) > 0) {
+    amount.value = userZBalance.value;
+
+    // Trigger amount change to recalculate receive amount and validation
+    const mockEvent = {
+      target: {
+        value: userZBalance.value.toString(),
+      },
+    };
+
+    // Call the debounced function to handle all the calculations
+    delayinputChange(mockEvent);
+  }
+};
+
 const checkValidateAmount = () => {
   if (Number(amount?.value) > Number(userZBalance?.value)) {
     validate.value = {
@@ -350,7 +366,7 @@ onMounted(() => {
         <div class="flex justify-end items-center mb-1 balance-content">
           <span class="balance-label"
             >Balance:
-            <span class="balance-value">
+            <span class="balance-value clickable" @click="setMaxBalance">
               {{
                 fNum2(userZBalance?.toString() || '0', FNumFormats.token)
               }}</span
@@ -470,6 +486,16 @@ onMounted(() => {
     line-height: normal;
     .balance-value {
       color: #12a8ec;
+
+      &.clickable {
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: #0f8bb8;
+          text-decoration: underline;
+        }
+      }
     }
   }
   .input-control {
