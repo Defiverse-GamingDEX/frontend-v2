@@ -1,5 +1,34 @@
 [
   {
+    "address": "0xfd74021283ef150b9b79a4bc9bd95443eea56401",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0x3e2a0728fc27907f1f03c4c622a91268700798f6000200000000000000000105",
+      "address": "0x3e2a0728fc27907f1f03c4c622a91268700798f6",
+      "poolType": "Weighted",
+      "symbol": "50USDC-50MSM",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC"
+        },
+        {
+          "address": "0xd11E0F63B04868567c297A3119e491707DB19E4e",
+          "weight": "0.5",
+          "symbol": "MSM"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0xd11E0F63B04868567c297A3119e491707DB19E4e": "https://price-api.gaming-dex.com/static/image_eda41e6607e2487c93b1235ab94ebb2c.png"
+    }
+  },
+  {
     "address": "0x0ddb5a55d57b2974fa9613c6497cb12b29ebcb2e",
     "network": 248,
     "isKilled": false,
