@@ -21,7 +21,7 @@ const NAV_LINKS_MAINNET = [
     chainsSupport: [17117, 9372, 248, 16116],
   },
   {
-    text: 'sZ',
+    text: 'Vote',
     path: 'sZ',
     name_link: 'vebal',
     goal_key: 'ClickNavVebal',
