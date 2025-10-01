@@ -24,7 +24,7 @@ import { isVeBalSupported } from '@/composables/useVeBAL';
     <div class="staking-container">
       <StakingContent />
     </div>
-    <div v-if="isVeBalSupported" class="xl:container xl:px-4 pt-10 xl:mx-auto">
+    <div v-if="isVeBalSupported" class="xl:container xl:px-4 xl:mx-auto">
       <div class="xl:px-0 mb-16">
         <LMVoting />
       </div>
