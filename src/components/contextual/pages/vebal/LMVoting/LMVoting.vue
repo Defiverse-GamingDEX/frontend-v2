@@ -168,6 +168,22 @@ const totalFeeFormatted = computed<string>(() => {
   return `${fNum2(votingInfo.value.total_fee)}$`;
 });
 
+const totalStakingSZFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.total_staking_sz) {
+    return '—';
+  }
+  return `${fNum2(votingInfo.value.total_staking_sz, FNumFormats.token)} sZ`;
+});
+const totalVotePercentFormatted = computed<string>(() => {
+  if (isLoadingVotingInfo.value || !votingInfo.value?.total_vote_percent) {
+    return '—';
+  }
+  return `${fNum2(
+    votingInfo.value.total_vote_percent / 100,
+    FNumFormats.percent
+  )}`;
+});
+
 // TODO: Remove this after the voting period ends
 // Fixed end date: 2025/10/01 23:59:59
 const fixedEndDate = new Date('2025-10-01T23:59:59Z');
@@ -240,44 +256,29 @@ function changeTab(tab: string) {
     ></ResubmitVotesAlert>
     <div class="flex flex-wrap justify-between items-end px-4 lg:px-0">
       <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0 w-full card-group">
-        <BalCard shadow="none" class="p-0 xs:w-full md:w-48 min-w-max">
+        <BalCard shadow="none" class="xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
-            <p class="inline mr-1 text-sm text-secondary">
-              My unallocated votes
-            </p>
+            <p class="inline mr-1 text-sm text-secondary">Staking sZ</p>
             <BalTooltip
-              :text="$t('veBAL.liquidityMining.myUnallocatedVotesTooltip')"
-              iconClass="text-gray-400 dark:text-gray-600"
+              text="Total sZ Staked by Users（excluding the sZ for rewards）"
               iconSize="sm"
+              iconClass="text-gray-400 dark:text-gray-600"
               width="72"
               class="mt-1"
             />
           </div>
-          <p
-            class="inline mr-1 text-lg font-semibold"
-            :class="{ 'text-red-500': hasExpiredLock }"
-          >
-            <span v-if="hasLock">
-              {{ unallocatedVotesFormatted }}
-            </span>
-            <span v-else class="mr-1">—</span>
+          <p class="text-lg font-semibold tabular-nums">
+            {{ totalStakingSZFormatted }}
           </p>
-          <BalTooltip
-            v-if="hasExpiredLock"
-            :text="$t('veBAL.liquidityMining.votingPowerExpiredTooltip')"
-            iconSize="sm"
-            :iconName="'alert-triangle'"
-            :iconClass="'text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors'"
-            width="72"
-            class="relative top-0.5"
-          />
         </BalCard>
         <BalCard shadow="none" class="xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
-            <p class="inline mr-1 text-sm text-secondary">Total vote power</p>
+            <p class="inline mr-1 text-sm text-secondary">
+              Voted sZ (vote power)
+            </p>
           </div>
           <p class="text-lg font-semibold tabular-nums">
-            {{ totalVotePowerFormatted }}
+            {{ totalVotePowerFormatted }} ({{ totalVotePercentFormatted }})
           </p>
         </BalCard>
         <BalCard shadow="none" class="md:w-48 min-w-max">

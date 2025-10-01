@@ -15,6 +15,8 @@ import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import BigNumber from 'bignumber.js';
+import useVotingGauges from '@/composables/useVotingGauges';
+import { bnum, scale } from '@/lib/utils';
 const myZ = ref<number | unknown>(undefined);
 const myLockedZ = ref<number | unknown>(undefined);
 const mySZ = ref<number | unknown>(undefined);
@@ -31,6 +33,11 @@ const STAKE_Z_NETWORK = computed(() => {
   );
 });
 const { getTokenBalance, getLockedZAmount } = useStakeZ();
+const { unallocatedVotes, refetch: refetchVotingGauges } = useVotingGauges();
+console.log(unallocatedVotes.value, 'unallocatedVotes');
+const unallocatedVotesFormatted = computed<string>(() =>
+  fNum2(scale(bnum(unallocatedVotes.value), -4).toString(), FNumFormats.percent)
+);
 /**
 /**
  * FUNCTIONS
@@ -136,7 +143,7 @@ watch(account, () => {
               />
             </div>
           </div>
-          <div class="separator">-</div>
+          <!-- <div class="separator">-</div> -->
         </div>
       </BalCard>
 
@@ -153,7 +160,7 @@ watch(account, () => {
               <span class="token">Z</span>
             </div> -->
           </div>
-          <div class="separator">-</div>
+          <!-- <div class="separator">-</div> -->
         </div>
       </BalCard>
 
@@ -175,7 +182,19 @@ watch(account, () => {
               >
             </div>
           </div>
-          <div class="separator">-</div>
+          <!-- <div class="separator">-</div> -->
+        </div>
+      </BalCard>
+      <!-- My unallocated votes -->
+      <BalCard noBorder :square="upToLargeBreakpoint">
+        <div class="card-content">
+          <div class="title">My unallocated votes</div>
+          <div class="flex justify-between items-center">
+            <div class="amount">
+              {{ unallocatedVotesFormatted }}
+            </div>
+          </div>
+          <!-- <div class="separator">-</div> -->
         </div>
       </BalCard>
     </div>
@@ -188,14 +207,13 @@ watch(account, () => {
     color: #fff;
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   .card-content {
     .title {
       color: #314472;
       font-size: 16px;
       font-weight: 500;
-      margin-bottom: 0.5rem;
     }
 
     .amount {

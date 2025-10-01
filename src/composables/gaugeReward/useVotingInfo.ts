@@ -5,6 +5,8 @@ interface VotingInfoResponse {
   emission: number;
   total_vote_powers: string;
   total_fee: number;
+  total_staking_sz: number;
+  total_vote_percent: number;
 }
 
 export default function useVotingInfo() {
