@@ -31,7 +31,6 @@ export default class PoolRepository {
   private initializeDecoratedAPIRepository() {
     return {
       fetch: async (): Promise<Pool[]> => {
-        console.log('====HUNG 1:',this.queryArgs)
         const pool = await balancerAPIService.pool.get(this.queryArgs);
         if (!pool) throw new Error('Cannot find pool via Balancer API');
 
@@ -46,7 +45,6 @@ export default class PoolRepository {
   private initializeDecoratedSubgraphRepository() {
     return {
       fetch: async (): Promise<Pool[]> => {
-        console.log('====HUNG 2:',this.queryArgs)
         const pools = await balancerSubgraphService.pools.get(this.queryArgs);
 
         const poolDecorator = new PoolDecorator(pools);
