@@ -1,5 +1,92 @@
 [
   {
+    "address": "0x55df288bc78061da9459c8441446cd4699097065",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0xd414b468790b82da39a1bbd4c579264afdb3bc44000200000000000000000131",
+      "address": "0xd414b468790b82da39a1bbd4c579264afdb3bc44",
+      "poolType": "Weighted",
+      "symbol": "50USDC.e-50WETH",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x5801E5a61164024Be2554248E33127c6ebC8C113",
+          "weight": "0.5",
+          "symbol": "WETH"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0x5801E5a61164024Be2554248E33127c6ebC8C113": "tokens/ETH_L.png"
+    }
+  },
+  {
+    "address": "0x2955162a01806fefd2cb01ff5babb084274955b5",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0xd4b804d69cde14e5985d8ea228c5a97b9bb976ed000200000000000000000132",
+      "address": "0xd4b804d69cde14e5985d8ea228c5a97b9bb976ed",
+      "poolType": "Weighted",
+      "symbol": "50USDC.e-50WBTC",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0xdd30c42D57a0f14DD44c809F59836D57392FDbC9",
+          "weight": "0.5",
+          "symbol": "WBTC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0xdd30c42D57a0f14DD44c809F59836D57392FDbC9": "tokens/WBTC_L.png"
+    }
+  },
+  {
+    "address": "0xa551861092209a393559b8015cc4198bb3f7138f",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0xa022d226055404af6430adb386b9968cded82e37000200000000000000000130",
+      "address": "0xa022d226055404af6430adb386b9968cded82e37",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50MUSHI",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0xbb5e4922061D5347eAe47f0A8BCbbCADEA5480A5",
+          "weight": "0.5",
+          "symbol": "MUSHI"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0xbb5e4922061D5347eAe47f0A8BCbbCADEA5480A5": "https://price-api.gaming-dex.com/static/image_1f3287db1f4f4ec69d03c9e707ed86da.png"
+    }
+  },
+  {
     "address": "0x2b813bd8dfc96d44bde999e6513a78f3c599a4f3",
     "network": 248,
     "isKilled": false,
