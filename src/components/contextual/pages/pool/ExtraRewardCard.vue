@@ -39,7 +39,7 @@ const rewardList = ref<any>([]);
 const isCollapsed = ref(false);
 
 async function getGaugeRewardAmounts() {
-  if (!props.gaugeAddress) {
+  if (!props.gaugeAddress || !isWalletReady.value) {
     rewardList.value = [];
     return;
   }
@@ -99,6 +99,12 @@ function toggleCollapse() {
  */
 watch(
   () => props.gaugeAddress,
+  newVal => {
+    getGaugeRewardAmounts();
+  }
+);
+watch(
+  () => isWalletReady.value,
   newVal => {
     getGaugeRewardAmounts();
   }
