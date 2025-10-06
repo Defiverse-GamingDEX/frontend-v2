@@ -1,6 +1,6 @@
 [
   {
-    "address": "0xb671d8a8b43122ac08b85ece59382946a8d690f8",
+    "address": "0x2b813bd8dfc96d44bde999e6513a78f3c599a4f3",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -29,7 +29,7 @@
     }
   },
   {
-    "address": "0x53abf7bea02a34aacb235164c3b53953a0eeb14b",
+    "address": "0x88cdd90099f642e74293a7f3aa1507de7eca8f47",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -58,7 +58,7 @@
     }
   },
   {
-    "address": "0xfd74021283ef150b9b79a4bc9bd95443eea56401",
+    "address": "0x00974c81bceaff2a41b4efc881e96625cfe5b962",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -87,7 +87,7 @@
     }
   },
   {
-    "address": "0x0ddb5a55d57b2974fa9613c6497cb12b29ebcb2e",
+    "address": "0xfdd6f875f4e3a74f60c27b371492ae623907dbdd",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -116,7 +116,7 @@
     }
   },
   {
-    "address": "0xd67e82bf3f05f841a88077c2b480f195cf598d97",
+    "address": "0x09e251ff5b5faff533eccb357c9279d45e0f587c",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -145,7 +145,7 @@
     }
   },
   {
-    "address": "0x11ebb6d8a465d1958c6cfb6b1c108319e8b7edce",
+    "address": "0x86fad3434a5620f019db8a43d929b6a989ad52e6",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -174,7 +174,7 @@
     }
   },
   {
-    "address": "0x5e85e6d3717ca0352ab470e8a90a30fec9e6de40",
+    "address": "0xbc19b43f54ca9a8f180d7b4697a18430336f8026",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -203,7 +203,7 @@
     }
   },
   {
-    "address": "0x77b9fb93b3d2a9d99825d3df573ec5bf5b1a5440",
+    "address": "0x3864e417b97c714225eeb97873a25711012e8b71",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -261,7 +261,7 @@
     }
   },
   {
-    "address": "0x0ba8a602f990917bc7d3142e380177f3ff9928f7",
+    "address": "0x2037060ad18f55195ccc800dc9daa8d231794b2e",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -290,7 +290,7 @@
     }
   },
   {
-    "address": "0x34347f8bfce50c5d478fd7580f3cccfd37c24315",
+    "address": "0x2cc3bf4041fb407c81523495e57faea4bf2efd83",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -319,7 +319,7 @@
     }
   },
   {
-    "address": "0xc36c1c2597adca13fd505aa23157aaf876350b4e",
+    "address": "0x0bbeac5aec42cb3e9acc46fbf44a47664065376a",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -348,7 +348,7 @@
     }
   },
   {
-    "address": "0x21a869116268e816c5ac04859b2acd00f2e6ae56",
+    "address": "0x60f0708d001ac7932bd954a6967c4943b969b362",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -377,7 +377,7 @@
     }
   },
   {
-    "address": "0x49eb27e3e62e83380178453b6ced3f9c990d1869",
+    "address": "0x61db2097ccf9bbb1930dc723776bee5f2c9bd9b7",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -406,7 +406,7 @@
     }
   },
   {
-    "address": "0xcbfd16eadad24e2cbfed799018e47d167879facf",
+    "address": "0x3f01c91517e90c8d2075f77340ab89dac9bb44b3",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -435,7 +435,7 @@
     }
   },
   {
-    "address": "0x0be73e39ba132c72542479d22bb9898e9f2f5c42",
+    "address": "0x3a81147c240f0da744c9607dd98c6a7fbdd2852a",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -464,7 +464,7 @@
     }
   },
   {
-    "address": "0x082c5293c49f20322fcb9932b701161d06cbf2e4",
+    "address": "0x51d9330c87782a74b4e8d7233ab9da1ec309f4cf",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -493,7 +493,7 @@
     }
   },
   {
-    "address": "0x4e9f0a4443387609cdc8b7103f834065ae2071ac",
+    "address": "0xd4b8669e3b896019cabddfa85ee8740d8eb95d26",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -522,7 +522,7 @@
     }
   },
   {
-    "address": "0x8c0cfdef075e3ad9d83699898076f16bddd987c6",
+    "address": "0x69ad9d49eeab2df2f0671e7f65d4ecb784dd170d",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -551,7 +551,7 @@
     }
   },
   {
-    "address": "0xa42a00296126274ef398bef9c1c733e5910a157a",
+    "address": "0x49842c8bb6dcab5adaf3e5060a2754cc19046fa0",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -580,7 +580,7 @@
     }
   },
   {
-    "address": "0xce247bad087ba1193712298348e9f12a2d780304",
+    "address": "0xf92da662951ada0b0e4cf51d77d83b56543322d9",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -609,7 +609,7 @@
     }
   },
   {
-    "address": "0xcedfd3d362bcccf5cd31ecf46a57ac6c29afd81d",
+    "address": "0x1e34cd5aad79370141056d218a6a2ac17da8e155",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
@@ -638,7 +638,7 @@
     }
   },
   {
-    "address": "0x40b233afdd4db2415410b9d7e4ff8ce962b34a8c",
+    "address": "0xfb1d3119f3097232d7a3e7b32fb1a99474b61739",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",

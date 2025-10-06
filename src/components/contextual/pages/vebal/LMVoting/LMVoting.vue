@@ -134,14 +134,8 @@ const filteredVotingGauges = computed(() => {
       showByNetwork = false;
     }
 
-    return (
-      showByNetwork &&
-      gauge.pool.tokens.some(token => {
-        return token.symbol
-          ?.toLowerCase()
-          .includes(tokenFilter.value.toLowerCase());
-      })
-    );
+    // Removed token filter - now handled by GaugesTable with sorting
+    return showByNetwork;
   });
 });
 
