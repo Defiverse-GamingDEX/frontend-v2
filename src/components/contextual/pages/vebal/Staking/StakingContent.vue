@@ -9,7 +9,13 @@ import StakingInfo from './StakingInfo.vue';
       <StakingForm class="staking-form" />
       <StakingInfo class="staking-info" />
     </div>
-    <div class="p-4 mt-4 rounded-lg voting-warning">
+    <BalAlert
+      class="p-3 my-4 warning-alert"
+      type="error"
+      size="sm"
+      block
+      title=""
+    >
       <div class="warning-item">
         <span class="warning-icon">⚠️</span>
         <span>Voting will be locked for 8 days.</span>
@@ -22,7 +28,7 @@ import StakingInfo from './StakingInfo.vue';
           must submit a new voting transaction.
         </span>
       </div>
-    </div>
+    </BalAlert>
   </div>
 </template>
 
@@ -35,30 +41,23 @@ import StakingInfo from './StakingInfo.vue';
     padding: 1rem;
     width: 100%;
   }
-  .voting-warning {
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    background: linear-gradient(
-      135deg,
-      rgba(168, 162, 85, 0.9),
-      rgba(148, 143, 70, 0.9)
-    );
+  :deep(.warning-alert) {
+    .bal-alert-icon {
+      display: none;
+    }
+  }
+  .warning-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
 
-    .warning-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      .warning-icon {
-        flex-shrink: 0;
-        font-size: 18px;
-      }
+    .warning-icon {
+      flex-shrink: 0;
+      font-size: 18px;
     }
   }
   .staking-container {
