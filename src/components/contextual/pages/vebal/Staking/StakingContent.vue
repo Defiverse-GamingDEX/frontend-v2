@@ -9,12 +9,18 @@ import StakingInfo from './StakingInfo.vue';
       <StakingForm class="staking-form" />
       <StakingInfo class="staking-info" />
     </div>
-    <div class="mt-4 voting-warning">
-      <div>- Voting will be locked for 8 days.</div>
-      <div>
-        - If you acquire additional sZ after casting your vote, your voting
-        power will not automatically update. To apply the new balance, you must
-        submit a new voting transaction.
+    <div class="p-4 mt-4 rounded-lg voting-warning">
+      <div class="warning-item">
+        <span class="warning-icon">⚠️</span>
+        <span>Voting will be locked for 8 days.</span>
+      </div>
+      <div class="warning-item">
+        <span class="warning-icon">⚠️</span>
+        <span>
+          If you acquire additional sZ after casting your vote, your voting
+          power will not automatically update. To apply the new balance, you
+          must submit a new voting transaction.
+        </span>
       </div>
     </div>
   </div>
@@ -33,6 +39,27 @@ import StakingInfo from './StakingInfo.vue';
     color: white;
     font-size: 16px;
     font-weight: 600;
+    background: linear-gradient(
+      135deg,
+      rgba(168, 162, 85, 0.9),
+      rgba(148, 143, 70, 0.9)
+    );
+
+    .warning-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .warning-icon {
+        flex-shrink: 0;
+        font-size: 18px;
+      }
+    }
   }
   .staking-container {
     max-width: 1200px;
