@@ -9,26 +9,28 @@ import StakingInfo from './StakingInfo.vue';
       <StakingForm class="staking-form" />
       <StakingInfo class="staking-info" />
     </div>
-    <BalAlert
-      class="p-3 my-4 warning-alert"
-      type="error"
-      size="sm"
-      block
-      title=""
-    >
-      <div class="warning-item">
-        <span class="warning-icon">⚠️</span>
-        <span>Voting will be locked for 8 days.</span>
-      </div>
-      <div class="warning-item">
-        <span class="warning-icon">⚠️</span>
-        <span>
-          If you acquire additional sZ after casting your vote, your voting
-          power will not automatically update. To apply the new balance, you
-          must submit a new voting transaction.
-        </span>
-      </div>
-    </BalAlert>
+    <div class="grid !grid-cols-none staking-container">
+      <BalAlert
+        class="p-3 my-4 warning-alert"
+        type="error"
+        size="sm"
+        block
+        title=""
+      >
+        <div class="warning-item">
+          <span class="warning-icon">⚠️</span>
+          <span>Voting will be locked for 8 days.</span>
+        </div>
+        <div class="warning-item">
+          <span class="warning-icon">⚠️</span>
+          <span>
+            If you acquire additional sZ after casting your vote, your voting
+            power will not automatically update. To apply the new balance, you
+            must submit a new voting transaction.
+          </span>
+        </div>
+      </BalAlert>
+    </div>
   </div>
 </template>
 
