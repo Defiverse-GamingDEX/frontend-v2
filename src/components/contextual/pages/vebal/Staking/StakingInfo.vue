@@ -160,21 +160,21 @@ watch(account, () => {
       </BalCard>
 
       <!-- My locked Z -->
-      <BalCard noBorder :square="upToLargeBreakpoint">
+      <!-- <BalCard noBorder :square="upToLargeBreakpoint">
         <div class="card-content">
           <div class="title">My locked Z</div>
           <div class="flex justify-between items-center">
             <div class="amount">
               {{ fNum2(myLockedZ?.toString() || '0', FNumFormats.token) }}
             </div>
-            <!-- <div class="flex gap-1 items-center">
+            <div class="flex gap-1 items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
               <span class="token">Z</span>
-            </div> -->
+            </div>
           </div>
-          <!-- <div class="separator">-</div> -->
+          <div class="separator">-</div>
         </div>
-      </BalCard>
+      </BalCard> -->
 
       <!-- My sZ -->
       <BalCard noBorder :square="upToLargeBreakpoint">
