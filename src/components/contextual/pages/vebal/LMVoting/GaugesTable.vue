@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PoolToken } from '@defiverse/balancer-sdk';
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, ref, onMounted, onBeforeMount, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -80,6 +80,7 @@ const emit = defineEmits<{
 const adminAddress = ref('');
 const gaugesWithApr = ref<VotingGaugeWithVotes[]>([]);
 const loadingAprGaugeIds = ref<Set<string>>(new Set());
+const hasLoadedPoolDetails = ref(false);
 
 /**
  * COMPOSABLES
@@ -214,7 +215,24 @@ const columns = computed(() => {
   ];
 });
 
-const dataKey = computed(() => JSON.stringify(gaugesWithApr.value));
+const dataKey = computed(() =>
+  JSON.stringify([gaugesWithApr.value.map(g => g.id), props.filterText])
+);
+
+const tableInitialState = computed(() => {
+  // When filtering, disable table's internal sort to keep our custom sort order
+  if (props.filterText && props.filterText.trim() !== '') {
+    return {
+      sortColumn: null,
+      sortDirection: null,
+    };
+  }
+  // Default sort by next period votes
+  return {
+    sortColumn: 'nextPeriodVotes',
+    sortDirection: 'desc',
+  };
+});
 
 // COMPUTED
 const isAdmin = computed(() => {
@@ -271,23 +289,102 @@ function getTableRowClass(gauge: VotingGaugeWithVotes): string {
     : '';
 }
 
+function normalizeSymbol(symbol: string | undefined): string {
+  if (!symbol) return '';
+  // Convert WOAS to OAS for matching (same logic as TokenPills display)
+  return symbol === 'WOAS' ? 'OAS' : symbol;
+}
+
 function getSelectedTokens(tokens: PoolToken[]) {
-  return tokens
-    .filter(
-      token => token.symbol?.toLowerCase() === props.filterText?.toLowerCase()
-    )
+  const filterTextLower = props.filterText?.toLowerCase() || '';
+  const selected = tokens
+    .filter(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase() === filterTextLower;
+    })
     .map(item => item.address);
+
+  if (selected.length > 0) {
+    console.log(
+      'Selected tokens for filter "' + props.filterText + '":',
+      selected
+    );
+  }
+  return selected;
 }
 
 function getPickedTokens(tokens: PoolToken[]) {
-  return tokens
-    .filter(
-      token =>
-        props.filterText &&
-        token.symbol?.toLowerCase().includes(props.filterText?.toLowerCase())
-    )
+  if (!props.filterText) return [];
+
+  const filterTextLower = props.filterText.toLowerCase();
+  const picked = tokens
+    .filter(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase().includes(filterTextLower);
+    })
     .map(item => item.address);
+
+  if (picked.length > 0) {
+    console.log('Picked tokens for filter "' + props.filterText + '":', picked);
+  }
+  return picked;
 }
+
+function sortGaugesByFilterText() {
+  if (!props.filterText || props.filterText.trim() === '') {
+    // Reset to original order when filter is cleared
+    if (props.data && props.data.length > 0) {
+      gaugesWithApr.value = [...props.data];
+    }
+    return;
+  }
+
+  const filterTextLower = props.filterText.toLowerCase();
+  console.log('Sorting by filter text:', filterTextLower);
+
+  // Create a new sorted array
+  const sorted = [...gaugesWithApr.value].sort((gaugeA, gaugeB) => {
+    const tokensA = gaugeA.pool?.tokens || [];
+    const tokensB = gaugeB.pool?.tokens || [];
+
+    // Check for exact match (with WOAS -> OAS conversion)
+    const hasExactMatchA = tokensA.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase() === filterTextLower;
+    });
+    const hasExactMatchB = tokensB.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase() === filterTextLower;
+    });
+
+    if (hasExactMatchA && !hasExactMatchB) return -1;
+    if (!hasExactMatchA && hasExactMatchB) return 1;
+
+    // Check for partial match (with WOAS -> OAS conversion)
+    const hasPartialMatchA = tokensA.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase().includes(filterTextLower);
+    });
+    const hasPartialMatchB = tokensB.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase().includes(filterTextLower);
+    });
+
+    if (hasPartialMatchA && !hasPartialMatchB) return -1;
+    if (!hasPartialMatchA && hasPartialMatchB) return 1;
+
+    return 0; // Keep original order
+  });
+
+  gaugesWithApr.value = sorted;
+  console.log(
+    'Sorted. First 3 gauges:',
+    gaugesWithApr.value.slice(0, 3).map(g => ({
+      tokens: g.pool?.tokens?.map(t => normalizeSymbol(t.symbol)),
+    }))
+  );
+}
+
 function openConfigReward(gauge) {
   router.push({
     name: 'gauge-reward',
@@ -361,6 +458,9 @@ async function fetchVotingPoolDetails() {
     // Wait for all promises in the batch to resolve
     await Promise.all(promises);
   }
+
+  // Re-apply sorting after fetching pool details
+  sortGaugesByFilterText();
 }
 
 /**
@@ -373,31 +473,41 @@ function isGaugeAprLoading(gauge: VotingGaugeWithVotes): boolean {
 /**
  * WATCHERS
  */
-// watch(
-//   () => props.data,
-//   async newData => {
-//     if (newData && newData.length > 0) {
-//       // Initialize gaugesWithApr immediately with the data
-//       gaugesWithApr.value = [...newData];
-//       // Then fetch APR data asynchronously
-//       await fetchAprData();
-//       await fetchVotingPoolDetails();
-//     }
-//   },
-//   { immediate: true }
-// );
+watch(
+  () => props.filterText,
+  () => {
+    console.log('Filter text changed to:', props.filterText);
+    sortGaugesByFilterText();
+  }
+);
+
+watch(
+  () => props.data,
+  async newData => {
+    if (newData && newData.length > 0) {
+      gaugesWithApr.value = [...newData];
+
+      // Fetch voting pool details only once when data is first available
+      if (!hasLoadedPoolDetails.value) {
+        console.log(
+          'Fetching voting pool details for',
+          newData.length,
+          'gauges...'
+        );
+        hasLoadedPoolDetails.value = true;
+        await fetchVotingPoolDetails();
+      } else {
+        // Just re-sort if data updates later
+        sortGaugesByFilterText();
+      }
+    }
+  },
+  { immediate: true }
+);
 
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
-});
-
-onMounted(async () => {
-  if (props.data && props.data.length > 0) {
-    // Initialize gaugesWithApr immediately with the data
-    gaugesWithApr.value = [...props.data];
-    await fetchVotingPoolDetails();
-  }
 });
 </script>
 
@@ -421,10 +531,7 @@ onMounted(async () => {
       :href="{ getHref: gauge => getPoolExternalUrl(gauge) }"
       :onRowClick="redirectToPool"
       :getTableRowClass="getTableRowClass"
-      :initialState="{
-        sortColumn: 'nextPeriodVotes',
-        sortDirection: 'desc',
-      }"
+      :initialState="tableInitialState"
       :pin="{
         pinOn: 'address',
         pinnedData: ['0xE867AD0a48e8f815DC0cda2CDb275e0F163A480b'],
