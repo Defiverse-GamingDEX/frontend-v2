@@ -15,6 +15,9 @@ import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import BigNumber from 'bignumber.js';
+import useVotingGauges from '@/composables/useVotingGauges';
+import { bnum, scale } from '@/lib/utils';
+import useVeBalLockInfoQuery from '@/composables/queries/useVeBalLockInfoQuery';
 const myZ = ref<number | unknown>(undefined);
 const myLockedZ = ref<number | unknown>(undefined);
 const mySZ = ref<number | unknown>(undefined);
@@ -31,6 +34,22 @@ const STAKE_Z_NETWORK = computed(() => {
   );
 });
 const { getTokenBalance, getLockedZAmount } = useStakeZ();
+const { unallocatedVotes, refetch: refetchVotingGauges } = useVotingGauges();
+console.log(unallocatedVotes.value, 'unallocatedVotes');
+const unallocatedVotesFormatted = computed<string>(() =>
+  fNum2(scale(bnum(unallocatedVotes.value), -4).toString(), FNumFormats.percent)
+);
+const veBalLockInfoQuery = useVeBalLockInfoQuery();
+const hasLock = computed(
+  (): boolean =>
+    !!veBalLockInfoQuery.data.value?.hasExistingLock &&
+    !veBalLockInfoQuery.data.value?.isExpired
+);
+const hasExpiredLock = computed(
+  (): boolean =>
+    !!veBalLockInfoQuery.data.value?.hasExistingLock &&
+    veBalLockInfoQuery.data.value?.isExpired
+);
 /**
 /**
  * FUNCTIONS
@@ -136,26 +155,26 @@ watch(account, () => {
               />
             </div>
           </div>
-          <div class="separator">-</div>
+          <!-- <div class="separator">-</div> -->
         </div>
       </BalCard>
 
       <!-- My locked Z -->
-      <BalCard noBorder :square="upToLargeBreakpoint">
+      <!-- <BalCard noBorder :square="upToLargeBreakpoint">
         <div class="card-content">
           <div class="title">My locked Z</div>
           <div class="flex justify-between items-center">
             <div class="amount">
               {{ fNum2(myLockedZ?.toString() || '0', FNumFormats.token) }}
             </div>
-            <!-- <div class="flex gap-1 items-center">
+            <div class="flex gap-1 items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
               <span class="token">Z</span>
-            </div> -->
+            </div>
           </div>
           <div class="separator">-</div>
         </div>
-      </BalCard>
+      </BalCard> -->
 
       <!-- My sZ -->
       <BalCard noBorder :square="upToLargeBreakpoint">
@@ -175,7 +194,45 @@ watch(account, () => {
               >
             </div>
           </div>
-          <div class="separator">-</div>
+          <!-- <div class="separator">-</div> -->
+        </div>
+      </BalCard>
+      <!-- My unallocated votes -->
+      <BalCard noBorder :square="upToLargeBreakpoint">
+        <div class="card-content">
+          <div class="flex items-center title">
+            My unallocated votes
+            <BalTooltip
+              :text="$t('veBAL.liquidityMining.myUnallocatedVotesTooltip')"
+              iconClass="text-gray-400 dark:text-gray-600"
+              iconSize="sm"
+              width="72"
+              class="mt-1 ml-2"
+            />
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="amount">
+              <p
+                class="inline mr-1 text-lg font-semibold"
+                :class="{ 'text-red-500': hasExpiredLock }"
+              >
+                <span v-if="hasLock">
+                  {{ unallocatedVotesFormatted }}
+                </span>
+                <span v-else class="mr-1">—</span>
+              </p>
+              <BalTooltip
+                v-if="hasExpiredLock"
+                :text="$t('veBAL.liquidityMining.votingPowerExpiredTooltip')"
+                iconSize="sm"
+                :iconName="'alert-triangle'"
+                :iconClass="'text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors'"
+                width="72"
+                class="relative top-0.5"
+              />
+            </div>
+          </div>
+          <!-- <div class="separator">-</div> -->
         </div>
       </BalCard>
     </div>
@@ -188,14 +245,13 @@ watch(account, () => {
     color: #fff;
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   .card-content {
     .title {
       color: #314472;
       font-size: 16px;
       font-weight: 500;
-      margin-bottom: 0.5rem;
     }
 
     .amount {
