@@ -263,7 +263,7 @@
   {
     "address": "0xbc19b43f54ca9a8f180d7b4697a18430336f8026",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
     "pool": {
@@ -321,7 +321,7 @@
   {
     "address": "0xb29c1c44f85e52bed6c9e7e4cc527a3410cc2a15",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
     "pool": {
@@ -379,7 +379,7 @@
   {
     "address": "0x2cc3bf4041fb407c81523495e57faea4bf2efd83",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
     "pool": {
@@ -408,7 +408,7 @@
   {
     "address": "0x0bbeac5aec42cb3e9acc46fbf44a47664065376a",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
     "pool": {
