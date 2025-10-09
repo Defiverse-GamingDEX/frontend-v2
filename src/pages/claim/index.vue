@@ -46,7 +46,7 @@ const { isWalletReady } = useWeb3();
 const {
   gauges,
   gaugePools,
-  protocolRewards,
+  // protocolRewards,
   isLoading: isClaimsLoading,
 } = useClaimsData();
 
@@ -139,18 +139,18 @@ const balRewardsData = computed((): RewardRow[] => {
   }, []);
 });
 
-const protocolRewardsData = computed((): ProtocolRewardRow[] => {
-  return formatRewardsData(protocolRewards.value.v2);
-});
+// const protocolRewardsData = computed((): ProtocolRewardRow[] => {
+//   return formatRewardsData(protocolRewards.value.v2);
+// });
 
 /**
  * The feeDistributor contract was updated and so we need to support the old
  * one so that users can claim their rewards. Eventually we should be able to
  * remove this.
  */
-const protocolRewardsDataDeprecated = computed((): ProtocolRewardRow[] => {
-  return formatRewardsData(protocolRewards.value.v1);
-});
+// const protocolRewardsDataDeprecated = computed((): ProtocolRewardRow[] => {
+//   return formatRewardsData(protocolRewards.value.v1);
+// });
 
 const gaugesWithRewards = computed((): Gauge[] => {
   return gauges.value.filter(gauge => gauge.rewardTokens.length > 0);
@@ -256,7 +256,7 @@ watch(gaugePools, async newPools => {
  * LIFECYCLE
  */
 onBeforeMount(async () => {
-  if (!isL2.value) await getBBaUSDPrice();
+  // if (!isL2.value) await getBBaUSDPrice();
 });
 </script>
 
