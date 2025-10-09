@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PoolToken } from '@defiverse/balancer-sdk';
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, ref, onBeforeMount, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -18,7 +18,6 @@ import {
   orderedPoolTokens,
   poolURLFor,
   totalAprLabel,
-  absMaxApr,
 } from '@/composables/usePool';
 import { oneSecondInMs } from '@/composables/useTime';
 import { orderedTokenURIs } from '@/composables/useVotingGauges';
@@ -33,17 +32,7 @@ import GaugesTableVoteBtn from './GaugesTableVoteBtn.vue';
 import GaugeVoteInfo from './GaugeVoteInfo.vue';
 import useNumbers from '@/composables/useNumbers';
 import APRTooltip from '@/components/tooltips/APRTooltip/APRTooltip.vue';
-import { getBalancer } from '@/dependencies/balancer-sdk';
 import useNetwork from '@/composables/useNetwork';
-import { Pool } from '@/services/pool/types';
-import PoolRepository from '@/services/pool/pool.repository';
-import { useTokens } from '@/providers/tokens.provider';
-import BigNumber from 'bignumber.js';
-import { configService } from '@/services/config/config.service';
-import {
-  PoolsFallbackRepository,
-  PoolRepository as SDKPoolRepository,
-} from '@defiverse/balancer-sdk';
 import gaugeApi from '@/composables/gaugeReward/gauge.api';
 /**
  * TYPES
@@ -80,6 +69,7 @@ const emit = defineEmits<{
 const adminAddress = ref('');
 const gaugesWithApr = ref<VotingGaugeWithVotes[]>([]);
 const loadingAprGaugeIds = ref<Set<string>>(new Set());
+const hasLoadedPoolDetails = ref(false);
 
 /**
  * COMPOSABLES
@@ -91,7 +81,6 @@ const { isWalletReady, account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
 const { fNum2 } = useNumbers();
 const { networkId } = useNetwork();
-const { tokens: tokenMeta } = useTokens();
 
 /**
  * DATA
@@ -214,7 +203,24 @@ const columns = computed(() => {
   ];
 });
 
-const dataKey = computed(() => JSON.stringify(gaugesWithApr.value));
+const dataKey = computed(() =>
+  JSON.stringify([gaugesWithApr.value.map(g => g.id), props.filterText])
+);
+
+const tableInitialState = computed(() => {
+  // When filtering, disable table's internal sort to keep our custom sort order
+  if (props.filterText && props.filterText.trim() !== '') {
+    return {
+      sortColumn: null,
+      sortDirection: null,
+    };
+  }
+  // Default sort by next period votes
+  return {
+    sortColumn: 'nextPeriodVotes',
+    sortDirection: 'desc',
+  };
+});
 
 // COMPUTED
 const isAdmin = computed(() => {
@@ -230,8 +236,8 @@ const isAdmin = computed(() => {
 /**
  * METHODS
  */
-function isInternalUrl(url: string): boolean {
-  //return url.includes('balancer.fi') || url.includes('localhost');
+function isInternalUrl(_url: string): boolean {
+  //return _url.includes('balancer.fi') || _url.includes('localhost');
   return true;
 }
 
@@ -271,23 +277,101 @@ function getTableRowClass(gauge: VotingGaugeWithVotes): string {
     : '';
 }
 
+function normalizeSymbol(symbol: string | undefined): string {
+  if (!symbol) return '';
+  // Convert WOAS to OAS for matching (same logic as TokenPills display)
+  return symbol === 'WOAS' ? 'OAS' : symbol;
+}
+
 function getSelectedTokens(tokens: PoolToken[]) {
-  return tokens
-    .filter(
-      token => token.symbol?.toLowerCase() === props.filterText?.toLowerCase()
-    )
+  const filterTextLower = props.filterText?.toLowerCase() || '';
+  const selected = tokens
+    .filter(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase() === filterTextLower;
+    })
     .map(item => item.address);
+
+  if (selected.length > 0) {
+    console.log(
+      'Selected tokens for filter "' + props.filterText + '":',
+      selected
+    );
+  }
+  return selected;
 }
 
 function getPickedTokens(tokens: PoolToken[]) {
-  return tokens
-    .filter(
-      token =>
-        props.filterText &&
-        token.symbol?.toLowerCase().includes(props.filterText?.toLowerCase())
-    )
+  if (!props.filterText) return [];
+
+  const filterTextLower = props.filterText.toLowerCase();
+  const picked = tokens
+    .filter(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase().includes(filterTextLower);
+    })
     .map(item => item.address);
+
+  if (picked.length > 0) {
+    console.log('Picked tokens for filter "' + props.filterText + '":', picked);
+  }
+  return picked;
 }
+
+function sortGaugesByFilterText() {
+  if (!props.filterText || props.filterText.trim() === '') {
+    // Don't reset to props.data if we've already loaded APR data
+    // Just keep the current order with APR intact
+    console.log('No filter text, keeping current gaugesWithApr order');
+    return;
+  }
+
+  const filterTextLower = props.filterText.toLowerCase();
+  console.log('Sorting by filter text:', filterTextLower);
+
+  // Create a new sorted array
+  const sorted = [...gaugesWithApr.value].sort((gaugeA, gaugeB) => {
+    const tokensA = gaugeA.pool?.tokens || [];
+    const tokensB = gaugeB.pool?.tokens || [];
+
+    // Check for exact match (with WOAS -> OAS conversion)
+    const hasExactMatchA = tokensA.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase() === filterTextLower;
+    });
+    const hasExactMatchB = tokensB.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase() === filterTextLower;
+    });
+
+    if (hasExactMatchA && !hasExactMatchB) return -1;
+    if (!hasExactMatchA && hasExactMatchB) return 1;
+
+    // Check for partial match (with WOAS -> OAS conversion)
+    const hasPartialMatchA = tokensA.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase().includes(filterTextLower);
+    });
+    const hasPartialMatchB = tokensB.some(token => {
+      const normalizedSymbol = normalizeSymbol(token.symbol);
+      return normalizedSymbol.toLowerCase().includes(filterTextLower);
+    });
+
+    if (hasPartialMatchA && !hasPartialMatchB) return -1;
+    if (!hasPartialMatchA && hasPartialMatchB) return 1;
+
+    return 0; // Keep original order
+  });
+
+  gaugesWithApr.value = sorted;
+  console.log(
+    'Sorted. First 3 gauges:',
+    gaugesWithApr.value.slice(0, 3).map(g => ({
+      tokens: g.pool?.tokens?.map(t => normalizeSymbol(t.symbol)),
+    }))
+  );
+}
+
 function openConfigReward(gauge) {
   router.push({
     name: 'gauge-reward',
@@ -336,22 +420,12 @@ async function fetchVotingPoolDetails() {
 
         if (votingPoolDetails) {
           const detail = votingPoolDetails[`${gauge.pool.id}`];
-
-          const gaugeIndex = gaugesWithApr.value.findIndex(
-            (g: any) => g.id === detail.gauge
-          );
-          if (gaugeIndex >= 0) {
-            const updatedGauge = {
-              ...gaugesWithApr.value[gaugeIndex],
-              ...detail,
-            };
-            updatedGauge.pool.nextPeriodApr = detail.nextPeriodApr;
-
-            gaugesWithApr.value.splice(gaugeIndex, 1, updatedGauge);
-          }
+          return detail; // Return detail instead of updating immediately
         }
+        return null;
       } catch (error) {
         console.error(`Failed to fetch APR for pool ${gauge.pool.id}:`, error);
+        return null;
       } finally {
         // Remove this gauge from loading state
         loadingAprGaugeIds.value.delete(gauge.pool.id);
@@ -359,8 +433,48 @@ async function fetchVotingPoolDetails() {
     });
 
     // Wait for all promises in the batch to resolve
-    await Promise.all(promises);
+    const results = await Promise.all(promises);
+    console.log(
+      `Batch ${i / batchSize + 1} results:`,
+      results.filter(r => r !== null).length,
+      'successful'
+    );
+
+    // Update all gauges in one go to avoid race conditions
+    const updatedGauges = gaugesWithApr.value.map(currentGauge => {
+      // Find if this gauge has updated data in results
+      const detail = results.find(
+        result => result && result.gauge === currentGauge.id
+      );
+
+      if (detail) {
+        console.log(
+          `Updating gauge ${currentGauge.id} with APR:`,
+          detail.nextPeriodApr
+        );
+        return {
+          ...currentGauge,
+          ...detail,
+          pool: {
+            ...currentGauge.pool,
+            nextPeriodApr: detail.nextPeriodApr,
+          },
+        };
+      }
+
+      return currentGauge;
+    });
+
+    // Update gaugesWithApr once with all changes
+    gaugesWithApr.value = updatedGauges;
+    console.log(
+      `After batch ${i / batchSize + 1}, total gauges:`,
+      gaugesWithApr.value.length
+    );
   }
+
+  // Re-apply sorting after fetching pool details
+  sortGaugesByFilterText();
 }
 
 /**
@@ -373,31 +487,44 @@ function isGaugeAprLoading(gauge: VotingGaugeWithVotes): boolean {
 /**
  * WATCHERS
  */
-// watch(
-//   () => props.data,
-//   async newData => {
-//     if (newData && newData.length > 0) {
-//       // Initialize gaugesWithApr immediately with the data
-//       gaugesWithApr.value = [...newData];
-//       // Then fetch APR data asynchronously
-//       await fetchAprData();
-//       await fetchVotingPoolDetails();
-//     }
-//   },
-//   { immediate: true }
-// );
+watch(
+  () => props.filterText,
+  () => {
+    console.log('Filter text changed to:', props.filterText);
+    sortGaugesByFilterText();
+  }
+);
+
+watch(
+  () => props.data,
+  async newData => {
+    if (newData && newData.length > 0) {
+      // Fetch voting pool details only once when data is first available
+      if (!hasLoadedPoolDetails.value) {
+        console.log(
+          'Fetching voting pool details for',
+          newData.length,
+          'gauges...'
+        );
+        gaugesWithApr.value = [...newData]; // Initialize only on first load
+        hasLoadedPoolDetails.value = true;
+        await fetchVotingPoolDetails();
+      } else {
+        console.log(
+          'Props.data changed but APR already loaded, keeping existing APR data'
+        );
+        // Don't reset gaugesWithApr - keep the APR data we already fetched
+        // Just re-sort if needed
+        sortGaugesByFilterText();
+      }
+    }
+  },
+  { immediate: true }
+);
 
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
-});
-
-onMounted(async () => {
-  if (props.data && props.data.length > 0) {
-    // Initialize gaugesWithApr immediately with the data
-    gaugesWithApr.value = [...props.data];
-    await fetchVotingPoolDetails();
-  }
 });
 </script>
 
@@ -421,10 +548,7 @@ onMounted(async () => {
       :href="{ getHref: gauge => getPoolExternalUrl(gauge) }"
       :onRowClick="redirectToPool"
       :getTableRowClass="getTableRowClass"
-      :initialState="{
-        sortColumn: 'nextPeriodVotes',
-        sortDirection: 'desc',
-      }"
+      :initialState="tableInitialState"
       :pin="{
         pinOn: 'address',
         pinnedData: ['0xE867AD0a48e8f815DC0cda2CDb275e0F163A480b'],
