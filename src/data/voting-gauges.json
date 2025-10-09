@@ -263,9 +263,38 @@
   {
     "address": "0xbc19b43f54ca9a8f180d7b4697a18430336f8026",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0xa8495230dc93070feedc583b00c9792ac3f2567e000200000000000000000003",
+      "address": "0xa8495230dc93070feedc583b00c9792ac3f2567e",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50WETH",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0x5801e5a61164024be2554248e33127c6ebc8c113",
+          "weight": "0.5",
+          "symbol": "WETH"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x5801e5a61164024be2554248e33127c6ebc8c113": "tokens/ETH_L.png"
+    }
+  },
+  {
+    "address": "0x49dc24c0d707980781beda41583400f2a5006f09",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1759964241,
     "pool": {
       "id": "0xa8495230dc93070feedc583b00c9792ac3f2567e000200000000000000000003",
       "address": "0xa8495230dc93070feedc583b00c9792ac3f2567e",
@@ -321,9 +350,38 @@
   {
     "address": "0xb29c1c44f85e52bed6c9e7e4cc527a3410cc2a15",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0xdc186bfa1a012eea30dc1f79460446181fd84eb40002000000000000000000d4",
+      "address": "0xdc186bfa1a012eea30dc1f79460446181fd84eb4",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50SGC",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0x5a2941b1B328ADDe8193Cb8b0100787D7cbA2F9a",
+          "weight": "0.5",
+          "symbol": "SGC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x5a2941b1B328ADDe8193Cb8b0100787D7cbA2F9a": "https://price-api.gaming-dex.com/static/image_662293c7c3964e078bfcd758b07423f7.png"
+    }
+  },
+  {
+    "address": "0x40b666cd2e5065bcaf2a75ef2de95f8504a2321b",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1759964241,
     "pool": {
       "id": "0xdc186bfa1a012eea30dc1f79460446181fd84eb40002000000000000000000d4",
       "address": "0xdc186bfa1a012eea30dc1f79460446181fd84eb4",
@@ -379,7 +437,7 @@
   {
     "address": "0x2cc3bf4041fb407c81523495e57faea4bf2efd83",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
     "pool": {
@@ -406,11 +464,69 @@
     }
   },
   {
-    "address": "0x0bbeac5aec42cb3e9acc46fbf44a47664065376a",
+    "address": "0x63f42f14391c3cf70714333081a1ad542221c363",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
+    "addedTimestamp": 1759964241,
+    "pool": {
+      "id": "0xf945f2b132766899b0fb229bb4eab8230f4af874000200000000000000000004",
+      "address": "0xf945f2b132766899b0fb229bb4eab8230f4af874",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50TCGC",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0xddb07cc0f2f9fb7899dba5a21964f3c6d2740e44",
+          "weight": "0.5",
+          "symbol": "TCGC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0xddb07cc0f2f9fb7899dba5a21964f3c6d2740e44": "tokens/TCGC_L.png"
+    }
+  },
+  {
+    "address": "0x0bbeac5aec42cb3e9acc46fbf44a47664065376a",
+    "network": 248,
+    "isKilled": true,
+    "relativeWeightCap": "1",
     "addedTimestamp": 1758576017,
+    "pool": {
+      "id": "0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd000200000000000000000001",
+      "address": "0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd",
+      "poolType": "Weighted",
+      "symbol": "50OAS-50MCHC",
+      "tokens": [
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "weight": "0.5",
+          "symbol": "OAS"
+        },
+        {
+          "address": "0x5B1CC635E524cAbb63a581c050C895534755F297",
+          "weight": "0.5",
+          "symbol": "MCHC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5200000000000000000000000000000000000001": "tokens/OAS_L.png",
+      "0x5B1CC635E524cAbb63a581c050C895534755F297": "tokens/MCHC_L.png"
+    }
+  },
+  {
+    "address": "0xc1eb7c4ed023d9ab7e4c76fff475211dba106ef6",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1759964241,
     "pool": {
       "id": "0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd000200000000000000000001",
       "address": "0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd",
