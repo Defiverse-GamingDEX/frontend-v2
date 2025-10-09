@@ -183,7 +183,7 @@ const totalVotePercentFormatted = computed<string>(() => {
 const fixedEndDate = new Date('2025-10-01T23:59:59Z');
 
 const shouldShowFixedDate = computed<boolean>(() => {
-  return new Date() <= fixedEndDate;
+  return new Date() <= fixedEndDate && false; // false for testnet
 });
 
 const votingPeriodDisplayText = computed<string>(() => {
