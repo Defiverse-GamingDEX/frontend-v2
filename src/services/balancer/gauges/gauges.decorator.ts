@@ -39,8 +39,8 @@ export class GaugesDecorator {
   ): Promise<Gauge[]> {
     const ret: Gauge[] = [];
 
-    for (let i = 0; i < subgraphGauges.length; i += 150) {
-      const list = subgraphGauges.slice(i, i + 150);
+    for (let i = 0; i < subgraphGauges.length; i += 80) {
+      const list = subgraphGauges.slice(i, i + 80);
 
       this.multicaller = this.resetMulticaller(this.abi);
       this.callRewardTokens(list);
