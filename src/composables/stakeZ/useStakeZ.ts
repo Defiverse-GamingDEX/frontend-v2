@@ -93,9 +93,21 @@ async function approveToken({
     if (!approveAmount) {
       approveAmount = ethers.constants.MaxUint256;
     }
+    
+    // Handle both ethers.BigNumber and string/number inputs
+    let amountBN;
+    if (ethers.BigNumber.isBigNumber(approveAmount)) {
+      // Already a BigNumber, use it directly
+      amountBN = approveAmount;
+    } else {
+      // Convert string/number to BigNumber
+      const amountStr = String(approveAmount);
+      amountBN = ethers.BigNumber.from(amountStr);
+    }
+    
     const tx = await contract
       .connect(signer)
-      .approve(contractAddress, approveAmount);
+      .approve(contractAddress, amountBN);
     return tx;
   } catch (error) {
     console.log(error, 'approveToken=>error');

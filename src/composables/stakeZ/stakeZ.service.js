@@ -23,7 +23,9 @@ const getEstimateSzAmount = async ({
   amount,
 }) => {
   const myContract = new Contract(contractAddress, abi, provider);
-  const estimateSzAmount = await myContract.estimateSZ(amount);
+  // Convert string to ethers BigNumber to preserve precision
+  const amountBN = ethers.BigNumber.from(amount);
+  const estimateSzAmount = await myContract.estimateSZ(amountBN);
   return estimateSzAmount?.toString() || 0;
 };
 const getEstimateZAmount = async ({
@@ -35,7 +37,9 @@ const getEstimateZAmount = async ({
   account,
 }) => {
   const myContract = new Contract(contractAddress, abi, provider);
-  const rs = await myContract.calcReceivedZ(account, amount, stakeId);
+  // Convert string to ethers BigNumber to preserve precision
+  const amountBN = ethers.BigNumber.from(amount);
+  const rs = await myContract.calcReceivedZ(account, amountBN, stakeId);
   console.log('🚀 ~ stakeZService ~ calcReceivedZ: ', rs);
   return rs || null;
 };
@@ -99,19 +103,11 @@ const getRedeemableAmount_Z = async ({
     walletAddress,
     stakeId
   );
-  console.log(
-    '🚀 ~ getRedeemableAmount_Z ~ redeemableAmount_Z:',
-    redeemableAmount_Z
-  );
   return redeemableAmount_Z?.toString() || 0;
 };
 const getEarlyRedeemPenalty = async ({ provider, abi, contractAddress }) => {
   const myContract = new Contract(contractAddress, abi, provider);
   const earlyRedeemPenalty = await myContract.baseRedemptionRate();
-  console.log(
-    '🚀 ~ getEarlyRedeemPenalty ~ earlyRedeemPenalty:',
-    earlyRedeemPenalty
-  );
   return earlyRedeemPenalty?.toString() || 0;
 };
 const _sendRawTx = async (
@@ -190,11 +186,16 @@ const stakeZ = async params => {
 
   let overwrite = { from: account };
 
+  // Convert string to ethers BigNumber to preserve precision
+  // Force convert to string to ensure it's a pure string
+  const valueStr = String(value);
+  const valueBN = ethers.BigNumber.from(valueStr);
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
     'stake',
-    [value],
+    [valueBN],
     overwrite,
     signer,
     abi
@@ -214,11 +215,16 @@ const stakeZForTest = async params => {
 
   let overwrite = { from: account };
   const twoDaysAgo = 86400 * 2;
+
+  // Convert string to ethers BigNumber to preserve precision
+  const valueStr = String(value);
+  const valueBN = ethers.BigNumber.from(valueStr);
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
     'stakeForTest',
-    [value, twoDaysAgo],
+    [valueBN, twoDaysAgo],
     overwrite,
     signer,
     abi
@@ -262,11 +268,14 @@ const redeemSZ = async params => {
 
   let overwrite = { from: account };
 
+  // Convert string to ethers BigNumber to preserve precision
+  const valueBN = ethers.BigNumber.from(value);
+
   const rs = await _sendRawTx(
     contractAddress,
     contractProvider,
     'redeem',
-    [value, stakeId],
+    [valueBN, stakeId],
     overwrite,
     signer,
     abi

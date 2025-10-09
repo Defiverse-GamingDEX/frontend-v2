@@ -16,6 +16,7 @@ import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { debounce } from 'lodash';
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 import { format } from 'date-fns';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
@@ -99,8 +100,9 @@ const handleAmountChange = async event => {
   }
 
   try {
-    const calculatedAmount = BigNumber(Number(amount?.value))
-      .times(Number(rateSZ?.value || 0))
+    // Convert to BigNumber directly from string to preserve precision
+    const calculatedAmount = BigNumber(String(amount?.value || 0))
+      .times(BigNumber(String(rateSZ?.value || 0)))
       .toNumber();
     receiveAmount.value = calculatedAmount;
     checkValidateAmount();
@@ -142,18 +144,15 @@ const getUserZBalance = async () => {
 };
 const getRateSZ = async () => {
   try {
-    const amount = BigNumber(1)
-      .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
-      .toFixed(0);
+    const decimals = STAKE_Z_NETWORK.value?.z_token_decimals || 18;
+    const amount = BigNumber(1).times(BigNumber(10).pow(decimals)).toFixed(0);
     const provider = getProvider();
     const rateSZ = await getEstimateSzAmount({
       provider: provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       amount: amount,
     });
-    return BigNumber(rateSZ)
-      .div(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
-      .toFixed();
+    return BigNumber(rateSZ).div(BigNumber(10).pow(decimals)).toFixed();
   } catch (error) {
     console.log(error, 'getRateSZ=>error');
     return 0;
@@ -257,19 +256,29 @@ const handleApprove = async () => {
       return;
     }
 
-    console.log('🚀 ~ handleApprove ~ amount:', amount.value);
-
     // Approve only the amount user wants to stake
-    const approveAmount: any = BigNumber(Number(amount.value))
-      .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals || 18))
-      .toFixed(0);
+    // Use ethers.utils.parseUnits to preserve precision
+    const decimals = STAKE_Z_NETWORK.value?.z_token_decimals || 18;
+    const approveAmount = ethers.utils.parseUnits(
+      String(amount.value),
+      decimals
+    );
 
+    console.log('🚀 ~ handleApprove ~ amount:', amount.value);
+    console.log(
+      '🚀 ~ handleApprove ~ approveAmount (wei):',
+      approveAmount.toString()
+    );
+    console.log(
+      '🚀 ~ handleApprove ~ approveAmount hex:',
+      approveAmount.toHexString()
+    );
     const params = {
       provider,
       contractProvider: provider,
       tokenAddress: STAKE_Z_NETWORK.value?.z_token_address,
       signer,
-      approveAmount: approveAmount,
+      approveAmount,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
     };
     const tx = await approveToken(params);
@@ -296,18 +305,27 @@ const handleApprove = async () => {
 const handleStake = async () => {
   try {
     isLoading.value = true;
-    console.log('🚀 ~ handleStake:', amount.value);
     const provider = getProvider();
-    const decimals_amount = BigNumber(Number(amount.value))
-      .times(10 ** (STAKE_Z_NETWORK.value?.z_token_decimals ?? 18))
-      .toFixed(0);
     const signer = provider.getSigner();
+
+    // Use ethers.utils.parseUnits to preserve precision
+    const decimals = STAKE_Z_NETWORK.value?.z_token_decimals ?? 18;
+    const decimals_amount = ethers.utils.parseUnits(
+      String(amount.value),
+      decimals
+    );
+
+    console.log('🚀 ~ handleStake ~ amount:', amount.value);
+    console.log(
+      '🚀 ~ handleStake ~ decimals_amount (wei):',
+      decimals_amount.toString()
+    );
     const params = {
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       contractProvider: provider,
       account: account.value,
-      value: decimals_amount, // amount
-      signer: signer,
+      value: decimals_amount.toString(), // Convert BigNumber to string
+      signer,
     };
     console.log('🚀 ~ handleStake ~ params:', params);
     const tx = await stakeZ(params);
