@@ -30,10 +30,11 @@ type GaugePoolQueryResponse = {
  * @summary Combines queries for fetching claims page gauges and associated pools.
  */
 export function useClaimsData() {
-  const protocolRewardsQuery = useProtocolRewardsQuery();
-  const protocolRewards = computed(
-    (): ProtocolRewardsQueryResponse => protocolRewardsQuery.data.value || {}
-  );
+  // Hung: Disabled
+  // const protocolRewardsQuery = useProtocolRewardsQuery();
+  // const protocolRewards = computed(
+  //   (): ProtocolRewardsQueryResponse => protocolRewardsQuery.data.value || {}
+  // );
 
   // Fetch subgraph liquidity gauges
   const subgraphGaugesQuery = useGaugesQuery();
@@ -79,16 +80,21 @@ export function useClaimsData() {
     (): GaugePool[] => gaugePoolQuery.data.value?.pools || []
   );
 
+  // const isLoading = computed(
+  //   (): boolean =>
+  //     isQueryLoading(gaugePoolQuery) ||
+  //     (!isL2.value && !isGoerli.value && isQueryLoading(protocolRewardsQuery))
+  // );
+
   const isLoading = computed(
     (): boolean =>
-      isQueryLoading(gaugePoolQuery) ||
-      (!isL2.value && !isGoerli.value && isQueryLoading(protocolRewardsQuery))
+      isQueryLoading(gaugePoolQuery)
   );
 
   return {
     gauges,
     gaugePools,
-    protocolRewards,
+    protocolRewards: null,
     isLoading,
   };
 }
