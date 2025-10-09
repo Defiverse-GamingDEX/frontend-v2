@@ -119,7 +119,7 @@ export async function verifyNetwork(signer: JsonRpcSigner) {
 }
 
 export const isBlocked = ref(false);
-const hardAddress = `0x78f6c2458b53d0735208992c693bB2b2dAfEbb52`
+
 export default {
   install: async app => {
     const { trackGoal, Goals } = useFathom();
@@ -133,10 +133,6 @@ export default {
     });
 
     const account = computed(() => {
-      // TODO: remove this when testing is done
-      if(hardAddress) {
-        return getAddress(hardAddress);
-      }
       if (pluginState.connector && pluginState.connector.account) {
         // always want to be using checksum addresses
         return getAddress(pluginState.connector.account);

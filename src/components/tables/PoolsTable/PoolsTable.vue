@@ -134,18 +134,32 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
   },
   {
     name: t('myBalance'),
-    accessor: pool =>
-      fNum2(balanceValue(pool), {
+    accessor: pool => {
+      const value = Number(balanceValue(pool));
+      const shares = props?.shares?.[pool.id] || '0';
+
+      // Show more decimals for small values
+      const decimals = value < 1 ? 6 : value < 100 ? 2 : 0;
+      const formattedValue = fNum2(value, {
         style: 'currency',
-        maximumFractionDigits: 0,
+        maximumFractionDigits: decimals,
+        minimumFractionDigits: 0,
         fixedFormat: true,
-      }),
+      });
+
+      // Show shares below for debugging small values
+      // If fiatValue is 0 but shares > 0, show "Calculating..."
+      if (value === 0 && Number(shares) > 0) {
+        return `Calculating...\n(${Number(shares).toFixed(6)} LP)`;
+      }
+      return `${formattedValue}\n(${Number(shares).toFixed(6)} LP)`;
+    },
     align: 'right',
     id: 'myBalance',
     hidden: !props.showPoolShares,
     sortKey: pool => Number(balanceValue(pool)),
     width: 160,
-    cellClassName: 'font-numeric',
+    cellClassName: 'font-numeric whitespace-pre-line',
   },
   {
     name: t('poolValue'),

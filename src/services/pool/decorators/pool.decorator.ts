@@ -43,8 +43,15 @@ export class PoolDecorator {
         const poolSnapshot = poolSnapshots.find(p => p.id === pool.id);
         poolService.setFeesSnapshot(poolSnapshot);
         poolService.setVolumeSnapshot(poolSnapshot);
+        const start1 = Date.now();
         await poolService.setTotalLiquidity();
+        const end1 = Date.now();
+        console.log(`Total liquidity for ${pool.id} took ${end1 - start1}ms`);
+        // log duration time call set APR
+        const start = Date.now();
         await poolService.setAPR();
+        const end = Date.now();
+        console.log(`APR for ${pool.id} took ${end - start}ms`);
       }
 
       return poolService.pool;
