@@ -49,9 +49,28 @@ const provider = () => {
   const { data: _stakedPools, refetch: refetchStakedPools } = stakedPoolsQuery;
 
   // Pool records for all the pools where a user has staked BPT.
-  const stakedPools = computed(
-    (): Pool[] => _stakedPools.value?.pages[0].pools || []
-  );
+  // Filter out pools with 0 or negligible balance based on actual onchain data
+  const stakedPools = computed((): Pool[] => {
+    const pools = _stakedPools.value?.pages[0].pools || [];
+    
+    // If stakedShares data is not loaded yet, return empty to avoid showing pools with 0 balance
+    if (!stakedShares.value) return [];
+    
+    // Only return pools that have actual shares > 0 and valid totalLiquidity
+    // Filter out pools with no liquidity data (can't calculate fiat value)
+    return pools.filter(pool => {
+      const shares = stakedShares.value?.[pool.id];
+      if (!shares || Number(shares) === 0) return false;
+      
+      // Filter out pools with 0 or invalid totalLiquidity
+      if (!pool.totalLiquidity || Number(pool.totalLiquidity) === 0) {
+        console.log(`Filtering out staked pool ${pool.id}: totalLiquidity = ${pool.totalLiquidity}`);
+        return false;
+      }
+      
+      return true;
+    });
+  });
 
   // Total fiat value of staked shares.
   const totalStakedValue = computed((): string => {

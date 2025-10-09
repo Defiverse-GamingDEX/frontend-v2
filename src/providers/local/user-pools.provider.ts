@@ -56,9 +56,26 @@ export const provider = (userStaking: UserStakingResponse) => {
   const { data: _unstakedPools } = unstakedPoolsQuery;
 
   // Helper property to drill down to first page of results.
-  const unstakedPools = computed(
-    (): Pool[] => _unstakedPools.value?.pages[0].pools || []
-  );
+  // Filter out pools with 0 or negligible balance
+  const unstakedPools = computed((): Pool[] => {
+    const pools = _unstakedPools.value?.pages[0].pools || [];
+    if (!userPoolShares.value) return [];
+    
+    // Only return pools that have actual shares > 0 and valid totalLiquidity
+    // Filter out pools with no liquidity data (can't calculate fiat value)
+    return pools.filter(pool => {
+      const shares = userPoolShares.value?.[pool.id];
+      if (!shares || Number(shares) === 0) return false;
+      
+      // Filter out pools with 0 or invalid totalLiquidity
+      if (!pool.totalLiquidity || Number(pool.totalLiquidity) === 0) {
+        console.log(`Filtering out pool ${pool.id}: totalLiquidity = ${pool.totalLiquidity}`);
+        return false;
+      }
+      
+      return true;
+    });
+  });
 
   // Combine staked and unstaked pools.
   const userPools = computed((): Pool[] => [

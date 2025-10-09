@@ -141,7 +141,7 @@ export default {
     });
 
     const chainId = computed(() => {
-      return pluginState.connector?.chainId;
+      return pluginState.connector?.chainId || 248;
     });
 
     const provider = computed(
