@@ -127,8 +127,6 @@ const balRewardsData = computed((): RewardRow[] => {
     const amount = formatUnits(gauge.claimableTokens, decimals);
     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
 
-    console.log('HUNG:gauges:', amount);
-
     if (pool && bnum(amount).gt(0))
       arr.push({
         gauge,
