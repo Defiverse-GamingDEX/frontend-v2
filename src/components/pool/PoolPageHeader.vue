@@ -181,6 +181,19 @@ function symbolFor(titleTokenIndex: number): string {
         </span>
       </div>
       <BalChipNew v-if="pool?.isNew" class="mt-2 mr-2" />
+      <!-- GeckoTerminal chart link -->
+      <BalLink
+        :href="geckoTerminalLink"
+        external
+        noStyle
+        class="flex justify-center items-center mt-2 mr-2 bg-gray-50 dark:bg-gray-850 rounded-lg w-[40px] h-[40px]"
+      >
+        <BalIcon
+          name="trending-up"
+          size="sm"
+          class="text-gray-500 hover:text-green-500 transition-colors"
+        />
+      </BalLink>
       <APRTooltip
         v-if="!loadingApr"
         :pool="pool"
@@ -197,19 +210,6 @@ function symbolFor(titleTokenIndex: number): string {
           name="arrow-up-right"
           size="sm"
           class="mt-2 ml-2 text-white hover:text-blue-500 transition-colors"
-        />
-      </BalLink>
-      <!-- GeckoTerminal chart link -->
-      <BalLink
-        :href="geckoTerminalLink"
-        external
-        noStyle
-        class="flex items-center"
-      >
-        <BalIcon
-          name="trending-up"
-          size="sm"
-          class="mt-2 ml-2 text-white hover:text-green-500 transition-colors"
         />
       </BalLink>
     </div>
