@@ -18,9 +18,14 @@ export class FeeDistributor {
   //   '0xba100000625a3754423978a60c9317c58a424e3D', // BAL
   // ];
   // Hung
+  // // Testnet
+  // public claimableTokens: string[] = [
+  //   '0x9288F664FEFc9f374A53C4307BD3c8F91e83f466', // sZ
+  // ];
+
+  // Mainnet
   public claimableTokens: string[] = [
-    '0x42DD917a3C8A14a766712Fabe7B048f0306246F6', // Z
-    '0x9288F664FEFc9f374A53C4307BD3c8F91e83f466', // sZ
+    '0x2B726256AdD04e65403cEf6679A2f2dfF7DDe9F9', // sZ
   ];
 
   constructor(
