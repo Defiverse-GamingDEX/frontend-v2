@@ -219,6 +219,7 @@ const QUERY_KEYS = {
   },
   Gauges: {
     All: {
+      Api: () => ['gauges', 'api'],
       Static: () => ['gauges', 'all', 'static'],
       Onchain: (
         gauges: Ref<SubgraphGauge[] | undefined>,

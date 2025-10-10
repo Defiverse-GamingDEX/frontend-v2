@@ -5,6 +5,7 @@ import { PoolToken } from '@/services/pool/types';
 
 import useGaugesDecorationQuery from './queries/useGaugesDecorationQuery';
 import useGaugesQuery from './queries/useGaugesQuery';
+import useApiGaugesQuery from './queries/useApiGaugesQuery';
 import useGraphQuery from './queries/useGraphQuery';
 import useProtocolRewardsQuery, {
   ProtocolRewardsQueryResponse,
@@ -37,7 +38,7 @@ export function useClaimsData() {
   // );
 
   // Fetch subgraph liquidity gauges
-  const subgraphGaugesQuery = useGaugesQuery();
+  const subgraphGaugesQuery = useApiGaugesQuery();
 
   // Decorate subgraph gauges with current account's claim data, e.g. reward values
   const gaugesQuery = useGaugesDecorationQuery(subgraphGaugesQuery.data);

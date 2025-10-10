@@ -123,7 +123,7 @@ const balRewardsData = computed((): RewardRow[] => {
 
   // Using reduce to filter out gauges we don't have corresponding pools for
   return gauges.value.reduce<RewardRow[]>((arr, gauge) => {
-    const decimals = balToken && balToken.value ? balToken.value.decimals : 18;
+    const decimals = 18; // balToken && balToken.value ? balToken.value.decimals : 18;
     const amount = formatUnits(gauge.claimableTokens, decimals);
     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
 
