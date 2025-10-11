@@ -937,7 +937,7 @@
     },
     "liquidityMining": {
       "title": "Pools eligible for liquidity mining",
-      "description": "Liquidity incentives are directed by the community of sZ holders. If you hold sZ, vote below on any pools. Your vote will persist until you change it and editing a pool can only be done once in 8 days.",
+      "description": "Liquidity incentives are directed by the community of sZ holders. If you hold sZ, vote below on any pools. Your vote will persist until you change it and editing a pool can only be done once in 1 hour.",
       "myUnallocatedVotes": "My unallocated votes:",
       "myUnallocatedVotesTooltip": "sZ holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any sZ, your votes will not count.",
       "unallocatedVotes": "My unallocated votes: {0}.",
@@ -986,10 +986,10 @@
         "remainingVotesEditing": "Your remaining votes: {0} ({1} current allocation in this pool + {2} unallocated votes)",
         "remainingVotesExceeded": "This exceeds your remaining votes of: {0}",
         "resubmitVote": "Voting power is set at the time of the vote. If you get more sZ later, resubmit your vote to use your increased power.",
-        "voteLockInfo": "Votes are timelocked for 8 days. If you vote now, no edits can be made until {0}.",
+        "voteLockInfo": "Votes are timelocked for 1 hour. If you vote now, no edits can be made until {0}.",
         "warnings": {
           "votedTooRecently": {
-            "title": "Votes are locked for 8 days",
+            "title": "Votes are locked for 1 hour",
             "description": "You won't be able to make any edits to this vote allocation for {0}"
           },
           "noVeBal": {
@@ -1038,7 +1038,7 @@
       "title": "Locking is unavailable on this network",
       "description": "sZ on Defiverse Mainnet"
     },
-    "votingTransitionDescription": "Liquidity mining emissions as directed by sZ holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so sZ and vote for pools. Your vote will persist until you edit. Editing can only be done once in 8 days."
+    "votingTransitionDescription": "Liquidity mining emissions as directed by sZ holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so sZ and vote for pools. Your vote will persist until you edit. Editing can only be done once in 1 hour."
   },
   "getVeBAL": {
     "lockableTokens": {
@@ -1152,7 +1152,7 @@
       "returnToVeBalPage": "Return to sZ page",
       "firstVeBALReceived": {
         "title": "Vote on pools to direct liquidity incentives",
-        "description": "Your voting weight is set at the time of the vote. If you acquire additional sZ, resubmit your votes to utilize your newly acquired voting power. Voting per pool can only be done once every 8 days."
+        "description": "Your voting weight is set at the time of the vote. If you acquire additional sZ, resubmit your votes to utilize your newly acquired voting power. Voting per pool can only be done once every 1 hour."
       }
     },
     "notSupported": {
