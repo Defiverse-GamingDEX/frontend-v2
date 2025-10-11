@@ -225,7 +225,7 @@ const getData = async () => {
     const params = {
       user_address: account.value,
       network: networkSlug.replace('-testnet', ''),
-      page: pagination.value.currentPage,
+      offset: pagination.value.currentPage,
       limit: pagination.value.sizePerPage,
     };
     const res = await getStakedList(params);
