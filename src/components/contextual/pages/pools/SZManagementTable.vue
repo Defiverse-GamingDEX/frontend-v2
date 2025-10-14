@@ -161,6 +161,7 @@ const getRedeemableBalance = async stakeId => {
 const mapData = async stakedList => {
   // Create array of promises
   const promises = stakedList.map(async item => {
+    console.log('🚀 ~ mapData ~ item:', item);
     // get date now like 1744675200
     const dateNow = Date.now();
     let isRedeem = false;
@@ -225,7 +226,7 @@ const getData = async () => {
     const params = {
       user_address: account.value,
       network: networkSlug.replace('-testnet', ''),
-      offset: pagination.value.currentPage,
+      offset: (pagination.value.currentPage - 1) * pagination.value.sizePerPage,
       limit: pagination.value.sizePerPage,
     };
     const res = await getStakedList(params);
