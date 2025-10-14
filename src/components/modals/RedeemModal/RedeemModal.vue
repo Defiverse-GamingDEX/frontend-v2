@@ -10,23 +10,20 @@
       <div class="p-4 mb-2 rounded-xl border border-gray-800">
         <div class="flex flex-col justify-end items-end mb-1 balance-content">
           <div class="text-xs text-right balance-label">
-            Staked balance :
+            Redeemable balance :
             <span
               class="text-xs hover:underline cursor-pointer balance-value"
               @click="setMaxAmount"
-              >{{ pool?.amountSZ }}</span
             >
-            sZ
-          </div>
-          <!-- <div class="text-base text-right balance-label">
-            Redeemable balance:
-            <span class="text-base balance-value">
               {{
-                fNum2((redeemableBalance || 0).toString(), FNumFormats.token)
+                fNum2(
+                  (pool?.redeemableBalance || 0).toString(),
+                  FNumFormats.token
+                )
               }}</span
             >
-            sZ
-          </div> -->
+            Z
+          </div>
         </div>
         <div class="relative input-control">
           <input
@@ -146,7 +143,6 @@ import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import useWeb3 from '@/services/web3/useWeb3';
 import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import BigNumber from 'bignumber.js';
-import { format } from 'date-fns';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
@@ -354,7 +350,7 @@ const delayinputChange = debounce(async event => {
   handleAmountChange(event);
 }, 500);
 const checkValidateAmount = () => {
-  if (Number(amount?.value) > Number(props.pool?.amountSZ)) {
+  if (Number(amount?.value) > Number(props.pool?.redeemableBalance)) {
     validate.value = {
       isError: true,
       message: 'Insufficient balance',
@@ -441,7 +437,7 @@ const handleRedeem = async () => {
   }
 };
 const setMaxAmount = () => {
-  amount.value = props.pool?.amountSZ;
+  amount.value = props.pool?.redeemableBalance;
   calculateReceiveAmount();
 };
 /**
