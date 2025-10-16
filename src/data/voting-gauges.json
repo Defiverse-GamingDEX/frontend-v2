@@ -1,5 +1,63 @@
 [
   {
+    "address": "0xcd6ec0542e7e062187c5f142eaec33c09f3fe226",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1760574047,
+    "pool": {
+      "id": "0x6d54f2c9eb5fa715da89a7554360e1a00ffba118000200000000000000000135",
+      "address": "0x6d54f2c9eb5fa715da89a7554360e1a00ffba118",
+      "poolType": "Weighted",
+      "symbol": "10USDC.e-90WETH",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x5801E5a61164024Be2554248E33127c6ebC8C113",
+          "weight": "0.5",
+          "symbol": "WETH"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0x5801E5a61164024Be2554248E33127c6ebC8C113": "tokens/ETH_L.png"
+    }
+  },
+  {
+    "address": "0xdb183f81a44e3fd8aa76a9776dcc1b66bc506ed5",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1760574047,
+    "pool": {
+      "id": "0xe230ebc9deaf499ea4c3bc011c689874994961b7000200000000000000000136",
+      "address": "0xe230ebc9deaf499ea4c3bc011c689874994961b7",
+      "poolType": "Weighted",
+      "symbol": "10USDC.e-90WBTC",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.1",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0xdd30c42D57a0f14DD44c809F59836D57392FDbC9",
+          "weight": "0.9",
+          "symbol": "WBTC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0xdd30c42D57a0f14DD44c809F59836D57392FDbC9": "tokens/WBTC_L.png"
+    }
+  },
+  {
     "address": "0x55df288bc78061da9459c8441446cd4699097065",
     "network": 248,
     "isKilled": false,
