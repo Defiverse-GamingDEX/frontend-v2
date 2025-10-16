@@ -186,13 +186,14 @@ function symbolFor(titleTokenIndex: number): string {
         :href="geckoTerminalLink"
         external
         noStyle
-        class="flex justify-center items-center mt-2 mr-2 bg-gray-50 dark:bg-gray-850 rounded-lg w-[40px] h-[40px]"
+        class="flex justify-center items-center px-2 mt-2 mr-2 bg-gray-50 dark:bg-gray-850 rounded-lg h-[40px]"
       >
         <BalIcon
           name="trending-up"
           size="sm"
-          class="text-gray-500 hover:text-green-500 transition-colors"
+          class="mr-2 text-gray-500 hover:text-green-500 transition-colors"
         />
+        Chart
       </BalLink>
       <APRTooltip
         v-if="!loadingApr"
