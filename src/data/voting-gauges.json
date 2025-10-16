@@ -13,12 +13,12 @@
       "tokens": [
         {
           "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
-          "weight": "0.5",
+          "weight": "0.1",
           "symbol": "USDC.e"
         },
         {
           "address": "0x5801E5a61164024Be2554248E33127c6ebC8C113",
-          "weight": "0.5",
+          "weight": "0.9",
           "symbol": "WETH"
         }
       ]
