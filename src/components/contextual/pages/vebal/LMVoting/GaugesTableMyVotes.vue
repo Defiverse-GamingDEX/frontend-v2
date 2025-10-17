@@ -27,6 +27,9 @@ type Props = {
  */
 const props = defineProps<Props>();
 
+const isTestnet = computed(() => import.meta.env.VITE_IS_TESTNET === 'true');
+const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '8 days'));
+
 /**
  * COMPOSABLES
  */
@@ -77,14 +80,17 @@ const poolHasUnderUtilizedVotingPoewer = computed<boolean>(
       <div>
         <span class="font-semibold">
           {{
-            $t('veBAL.liquidityMining.popover.warnings.votedTooRecently.title')
+            $t(
+              'veBAL.liquidityMining.popover.warnings.votedTooRecently.title',
+              [lockPeriodText]
+            )
           }}
         </span>
         <p class="text-gray-500">
           {{
             $t(
               'veBAL.liquidityMining.popover.warnings.votedTooRecently.description',
-              [remainingVoteLockTime(gauge.lastUserVoteTime)]
+              [lockPeriodText, remainingVoteLockTime(gauge.lastUserVoteTime)]
             )
           }}
         </p>

@@ -2,6 +2,10 @@
 <script setup lang="ts">
 import StakingForm from './StakingForm.vue';
 import StakingInfo from './StakingInfo.vue';
+import { computed } from 'vue';
+
+const isTestnet = computed(() => import.meta.env.VITE_IS_TESTNET === 'true');
+const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '8 days'));
 </script>
 <template>
   <div class="staking-content">
@@ -19,7 +23,7 @@ import StakingInfo from './StakingInfo.vue';
       >
         <div class="warning-item">
           <span class="warning-icon">⚠️</span>
-          <span>Voting will be locked for 1 hour.</span>
+          <span>Voting will be locked for {{ lockPeriodText }}.</span>
         </div>
         <div class="warning-item">
           <span class="warning-icon">⚠️</span>
