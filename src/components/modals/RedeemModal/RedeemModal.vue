@@ -66,7 +66,7 @@
               iconClass="text-black"
             />
           </div>
-          <span class="value">{{ penaltyRate }} %</span>
+          <span class="value">-{{ penaltyRate }} %</span>
         </div>
         <p class="warning-text">
           Redemption prior to maturity reduces the sZ that can be received.
@@ -255,13 +255,24 @@ const getEstimateZRate = async (amountInput: number) => {
     console.log('🚀 ~ getEstimateZRate ~ rs:', rs);
     const { redemptionRate, zAmount } = rs;
     // Format penaltyRate to remove trailing zeros
+    console.log(
+      '🚀 ~ getEstimateZRate ~ redemptionRate:',
+      redemptionRate?.toString()
+    );
+    console.log('🚀 ~ getEstimateZRate ~ zAmount:', zAmount?.toString());
     const rateNum = BigNumber(redemptionRate?.toString() || 0).div(1e4);
     const rateStr = rateNum.toFixed(2);
     penaltyRate.value = rateStr.endsWith('.00')
       ? rateStr.slice(0, -3)
       : rateStr;
     console.log(
-      '🚀 ~ getEstimateZRate ~ penaltyRate.value :',
+      '🚀 ~ getEstimateZRate ~ penaltyRate.valueBefore :',
+      penaltyRate.value
+    );
+    // change penaltyRate follow logic -(100% - penaltyRate)
+    penaltyRate.value = BigNumber(100).minus(penaltyRate.value).toFixed(2);
+    console.log(
+      '🚀 ~ getEstimateZRate ~ penaltyRate.valueAfter :',
       penaltyRate.value
     );
     estimateZRate.value = BigNumber(zAmount?.toString() || 0)
