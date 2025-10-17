@@ -110,7 +110,7 @@ const columns = computed(() => {
       id: 'poolComposition',
       accessor: 'id',
       Cell: 'poolCompositionCell',
-      width: 250,
+      width: 400,
     },
     {
       name: 'TVL',
@@ -119,7 +119,7 @@ const columns = computed(() => {
       align: 'right',
       Cell: 'tvlCell',
       sortKey: gauge => Number(gauge.total_liquidity || 0),
-      width: 200,
+      width: 100,
       cellClassName: 'font-numeric',
     },
     // {
@@ -159,7 +159,7 @@ const columns = computed(() => {
       align: 'right',
       id: 'myVotes',
       sortKey: gauge => Number(gauge.userVotes),
-      width: 140,
+      width: 60,
       Cell: 'myVotesCell',
       cellClassName: 'font-numeric',
       hidden: !isWalletReady.value,
@@ -185,7 +185,7 @@ const columns = computed(() => {
       accessor: 'id',
       align: 'right',
       Cell: 'voteColumnCell',
-      width: 100,
+      width: 80,
       hidden: !isWalletReady.value || props?.tabSelect !== 'gauge',
     },
     {
@@ -598,13 +598,15 @@ onBeforeMount(async () => {
           <BalChipExpired v-if="getIsGaugeExpired(address)" class="ml-2" />
           <BalTooltip text="Swap Fee" :delayMs="50" width="auto" class="ml-2">
             <template #activator>
-              <div class="text-black swap-fee-pill">{{ swap_fee_rate }}%</div>
+              <div class="text-black swap-fee-pill">
+                {{ swap_fee_rate || 0 }}%
+              </div>
             </template>
           </BalTooltip>
         </div>
       </template>
       <template #tvlCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.total_liquidity >= 0">
             <div class="break-all">
@@ -615,7 +617,7 @@ onBeforeMount(async () => {
         </div>
       </template>
       <!-- <template #swapFeeCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.swap_fee_rate >= 0">
             {{ gauge.swap_fee_rate }}%
@@ -624,7 +626,7 @@ onBeforeMount(async () => {
         </div>
       </template> -->
       <!-- <template #nextEmissionCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.nextEmission">
             {{ fNum2(gauge.nextEmission, { style: 'decimal' }) }} sZ
@@ -670,7 +672,7 @@ onBeforeMount(async () => {
         </BalLazy>
       </template>
       <template #myVotesCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <GaugesTableMyVotes
             :gauge="gauge"
             :isGaugeAprLoading="isGaugeAprLoading(gauge)"
@@ -678,7 +680,7 @@ onBeforeMount(async () => {
         </div>
       </template>
       <template #nextPeriodAprCell="gauge">
-        <div class="flex justify-end py-4 px-6 text-right font-numeric">
+        <div class="flex justify-end py-4 px-2 text-right font-numeric">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
           <template v-else-if="gauge.pool?.nextPeriodApr">
             <span
