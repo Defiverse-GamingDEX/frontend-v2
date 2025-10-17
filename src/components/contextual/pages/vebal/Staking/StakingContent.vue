@@ -19,7 +19,7 @@ import StakingInfo from './StakingInfo.vue';
       >
         <div class="warning-item">
           <span class="warning-icon">⚠️</span>
-          <span>Voting will be locked for 1 hour.</span>
+          <span>Voting will be locked for 8 days.</span>
         </div>
         <div class="warning-item">
           <span class="warning-icon">⚠️</span>
