@@ -122,17 +122,17 @@ const columns = computed(() => {
       width: 200,
       cellClassName: 'font-numeric',
     },
-    {
-      name: 'Swap fee',
-      id: 'swap_fee',
-      accessor: 'swap_fee',
-      align: 'right',
-      Cell: 'swapFeeCell',
-      Header: 'swapFeeHeader',
-      sortKey: gauge => Number(gauge.swap_fee || 0),
-      width: 80,
-      cellClassName: 'font-numeric',
-    },
+    // {
+    //   name: 'Swap fee',
+    //   id: 'swap_fee_rate',
+    //   accessor: 'swap_fee_rate',
+    //   align: 'right',
+    //   Cell: 'swapFeeCell',
+    //   Header: 'swapFeeHeader',
+    //   sortKey: gauge => Number(gauge.swap_fee_rate || 0),
+    //   width: 80,
+    //   cellClassName: 'font-numeric',
+    // },
     // {
     //   name: 'Next Emission',
     //   id: 'nextEmission',
@@ -582,7 +582,9 @@ onBeforeMount(async () => {
           <BalAssetSet :logoURIs="orderedTokenURIs(gauge)" :width="100" />
         </div>
       </template>
-      <template #poolCompositionCell="{ pool, address, addedTimestamp }">
+      <template
+        #poolCompositionCell="{ pool, address, addedTimestamp, swap_fee_rate }"
+      >
         <div v-if="!isLoading" class="flex items-center py-4 px-6">
           <TokenPills
             :tokens="orderedPoolTokens(pool, pool.tokens)"
@@ -594,6 +596,11 @@ onBeforeMount(async () => {
           />
           <BalChipNew v-if="getIsGaugeNew(addedTimestamp)" class="ml-2" />
           <BalChipExpired v-if="getIsGaugeExpired(address)" class="ml-2" />
+          <BalTooltip text="Swap Fee" :delayMs="50" width="auto" class="ml-2">
+            <template #activator>
+              <div class="text-black swap-fee-pill">{{ swap_fee_rate }}%</div>
+            </template>
+          </BalTooltip>
         </div>
       </template>
       <template #tvlCell="gauge">
@@ -607,15 +614,15 @@ onBeforeMount(async () => {
           <template v-else> - </template>
         </div>
       </template>
-      <template #swapFeeCell="gauge">
+      <!-- <template #swapFeeCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
-          <template v-else-if="gauge.swap_fee >= 0">
-            {{ fNum2(gauge.swap_fee, { style: 'currency' }) }}
+          <template v-else-if="gauge.swap_fee_rate >= 0">
+            {{ gauge.swap_fee_rate }}%
           </template>
           <template v-else> - </template>
         </div>
-      </template>
+      </template> -->
       <!-- <template #nextEmissionCell="gauge">
         <div v-if="!isLoading" class="py-4 px-6 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
@@ -745,5 +752,11 @@ tr.expired-gauge-row {
 .distribution-btn-container {
   display: flex;
   justify-content: flex-end;
+}
+.swap-fee-pill {
+  @apply flex items-center px-2 py-1 rounded-lg bg-blue-50 dark:bg-blue-900 text-sm font-medium;
+  @apply text-blue-700 dark:text-blue-200;
+  @apply cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-800;
+  @apply transition-colors duration-150;
 }
 </style>
