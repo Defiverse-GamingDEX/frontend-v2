@@ -483,6 +483,9 @@ async function fetchVotingPoolDetails() {
 function isGaugeAprLoading(gauge: VotingGaugeWithVotes): boolean {
   return loadingAprGaugeIds.value.has(gauge.pool.id);
 }
+function isGaugeAprLoadingFromPoolId(poolId: string): boolean {
+  return loadingAprGaugeIds.value.has(poolId);
+}
 
 /**
  * WATCHERS
@@ -599,7 +602,14 @@ onBeforeMount(async () => {
           <BalTooltip text="Swap Fee" :delayMs="50" width="auto" class="ml-2">
             <template #activator>
               <div class="text-black swap-fee-pill">
-                {{ swap_fee_rate || 0 }}%
+                <BalLoadingBlock
+                  v-if="isGaugeAprLoadingFromPoolId(pool.id)"
+                  class="w-16 h-4"
+                />
+                <template v-else-if="swap_fee_rate >= 0">
+                  <div class="break-all">{{ swap_fee_rate || 0 }}%</div>
+                </template>
+                <template v-else> -%</template>
               </div>
             </template>
           </BalTooltip>
