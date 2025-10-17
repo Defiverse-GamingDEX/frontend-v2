@@ -113,14 +113,20 @@ const voteButtonText = computed(() =>
     : t('veBAL.liquidityMining.popover.button.vote')
 );
 
+const isTestnet = computed(() => import.meta.env.VITE_IS_TESTNET === 'true');
+const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '8 days'));
+
 const votedToRecentlyWarning = computed(() => {
   if (isVotingTimeLocked(props.gauge.lastUserVoteTime)) {
     const remainingTime = remainingVoteLockTime(props.gauge.lastUserVoteTime);
     return {
-      title: t('veBAL.liquidityMining.popover.warnings.votedTooRecently.title'),
+      title: t(
+        'veBAL.liquidityMining.popover.warnings.votedTooRecently.title',
+        [lockPeriodText.value]
+      ),
       description: t(
         'veBAL.liquidityMining.popover.warnings.votedTooRecently.description',
-        [remainingTime]
+        [lockPeriodText.value, remainingTime]
       ),
     };
   }
@@ -368,6 +374,7 @@ onMounted(() => {
           <li>
             {{
               t('veBAL.liquidityMining.popover.voteLockInfo', [
+                lockPeriodText,
                 voteLockedUntilText,
               ])
             }}
