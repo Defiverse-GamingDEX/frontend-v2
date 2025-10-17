@@ -17,6 +17,7 @@ import { Pool, PoolToken } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
 import { AprBreakdown } from '@defiverse/balancer-sdk';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
+import { configService } from '@/services/config/config.service';
 
 /**
  * TYPES
@@ -80,6 +81,14 @@ const swapFeeToolTip = computed(() => {
   } else {
     return t('ownerFeesTooltip');
   }
+});
+
+// GeckoTerminal link
+const geckoTerminalLink = computed(() => {
+  // Get network slug from config (e.g., "Oasys" -> "oasys")
+  const network = configService.network.shortName.toLowerCase();
+  const poolAddress = props.pool?.address?.toLowerCase();
+  return `https://www.geckoterminal.com/ja/${network}/pools/${poolAddress}`;
 });
 
 const poolFeeLabel = computed(() => {
@@ -172,6 +181,20 @@ function symbolFor(titleTokenIndex: number): string {
         </span>
       </div>
       <BalChipNew v-if="pool?.isNew" class="mt-2 mr-2" />
+      <!-- GeckoTerminal chart link -->
+      <BalLink
+        :href="geckoTerminalLink"
+        external
+        noStyle
+        class="flex justify-center items-center px-2 mt-2 mr-2 bg-gray-50 dark:bg-gray-850 rounded-lg h-[40px]"
+      >
+        <BalIcon
+          name="trending-up"
+          size="sm"
+          class="mr-2 text-gray-500 hover:text-green-500 transition-colors"
+        />
+        Chart
+      </BalLink>
       <APRTooltip
         v-if="!loadingApr"
         :pool="pool"
