@@ -10,19 +10,16 @@
       <div class="p-4 mb-2 rounded-xl border border-gray-800">
         <div class="flex flex-col justify-end items-end mb-1 balance-content">
           <div class="text-xs text-right balance-label">
-            Redeemable balance :
+            Redeemable :
             <span
               class="text-xs hover:underline cursor-pointer balance-value"
               @click="setMaxAmount"
             >
               {{
-                fNum2(
-                  (pool?.redeemableBalance || 0).toString(),
-                  FNumFormats.token
-                )
+                fNum2((redeemableBalance || 0).toString(), FNumFormats.token)
               }}</span
             >
-            Z
+            sZ
           </div>
         </div>
         <div class="relative input-control">
@@ -148,6 +145,7 @@ import useEthers from '@/composables/useEthers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import { debounce } from 'lodash';
+import { ethers } from 'ethers';
 const props = defineProps<{
   show: boolean;
   pool?: any;
@@ -194,31 +192,32 @@ const STAKE_Z_NETWORK = computed(() => {
     STAKE_Z_NETWORKS.find(network => network.chain_id === chainId.value) || null
   );
 });
+
 /**
  * FUNCTIONS
  */
-// const getRedeemableBalance = async () => {
-//   try {
-//     const provider = getProvider();
-//     let balance = await getRedeemableAmount_SZ({
-//       provider: provider,
-//       walletAddress: account.value,
-//       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-//       stakeId: props.pool?.id,
-//     });
-//     balance = BigNumber(balance)
-//       .div(10 ** Number(STAKE_Z_NETWORK.value?.sz_token_decimals))
-//       .toFixed();
-//     redeemableBalance.value = balance;
-//     console.log(
-//       '🚀 ~ getRedeemableBalance ~ redeemableBalance.value:',
-//       redeemableBalance.value
-//     );
-//   } catch (error) {
-//     console.log(error, 'getRedeemableBalance=>error');
-//     redeemableBalance.value = 0;
-//   }
-// };
+const getRedeemableBalance = async () => {
+  try {
+    const provider = getProvider();
+    let balance = await getRedeemableAmount_SZ({
+      provider: provider,
+      walletAddress: account.value,
+      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
+      stakeId: props.pool?.id,
+    });
+    balance = BigNumber(balance)
+      .div(10 ** Number(STAKE_Z_NETWORK.value?.sz_token_decimals))
+      .toFixed();
+    redeemableBalance.value = balance;
+    console.log(
+      '🚀 ~ getRedeemableBalance ~ redeemableBalance.value:',
+      redeemableBalance.value
+    );
+  } catch (error) {
+    console.log(error, 'getRedeemableBalance=>error');
+    redeemableBalance.value = 0;
+  }
+};
 // const getPenaltyRate = async () => {
 //   try {
 //     const provider = getProvider();
@@ -305,10 +304,19 @@ const handleApprove = async () => {
       '🚀 ~ handleApprove ~ redeemableBalance?.value:',
       redeemableBalance?.value
     );
-    const balance: any = redeemableBalance?.value || 0;
-    const approveAmount: any = BigNumber(balance)
-      .times(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
-      .toFixed(0);
+
+    // Use ethers.utils.parseUnits to preserve precision (similar to StakingForm)
+    const decimals = STAKE_Z_NETWORK.value?.sz_token_decimals || 18;
+    const approveAmount = ethers.utils.parseUnits(
+      String(redeemableBalance?.value || 0),
+      decimals
+    );
+
+    console.log(
+      '🚀 ~ handleApprove ~ approveAmount (wei):',
+      approveAmount.toString()
+    );
+
     const params = {
       provider,
       contractProvider: provider,
@@ -340,7 +348,7 @@ const handleApprove = async () => {
 };
 const fetchData = async () => {
   try {
-    //getRedeemableBalance();
+    await getRedeemableBalance();
     getEstimateZRate(1);
   } catch (error) {
     console.log('🚀 ~ error:', error);
@@ -350,7 +358,7 @@ const delayinputChange = debounce(async event => {
   handleAmountChange(event);
 }, 500);
 const checkValidateAmount = () => {
-  if (Number(amount?.value) > Number(props.pool?.redeemableBalance)) {
+  if (Number(amount?.value) > Number(redeemableBalance.value)) {
     validate.value = {
       isError: true,
       message: 'Insufficient balance',
@@ -390,15 +398,25 @@ const handleRedeem = async () => {
     isLoading.value = true;
     console.log('🚀 ~ handleRedeem:', amount.value);
     const provider = getProvider();
-    const decimals_amount = BigNumber(Number(amount.value))
-      .times(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals ?? 18))
-      .toFixed(0);
+
+    // Use ethers.utils.parseUnits to preserve precision
+    const decimals = STAKE_Z_NETWORK.value?.sz_token_decimals ?? 18;
+    const decimals_amount = ethers.utils.parseUnits(
+      String(amount.value),
+      decimals
+    );
+
+    console.log(
+      '🚀 ~ handleRedeem ~ decimals_amount (wei):',
+      decimals_amount.toString()
+    );
+
     const signer = provider.getSigner();
     const params = {
       provider,
       contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
       account: account.value,
-      value: decimals_amount, // amount
+      value: decimals_amount.toString(), // amount
       stakeId: props.pool?.id,
       signer: signer,
     };
@@ -437,7 +455,7 @@ const handleRedeem = async () => {
   }
 };
 const setMaxAmount = () => {
-  amount.value = props.pool?.redeemableBalance;
+  amount.value = redeemableBalance.value;
   calculateReceiveAmount();
 };
 /**
