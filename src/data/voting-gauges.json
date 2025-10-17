@@ -1649,5 +1649,34 @@
       "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
       "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
     }
+  },
+  {
+    "address": "0x325705a97d19fdcfe7c052f236e6187f4f1ab3fe",
+    "network": 9372,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1760126254,
+    "pool": {
+      "id": "0x5ab3b47c87cb3a104ed793d0d126efba102ec388000200000000000000000034",
+      "address": "0x5ab3b47c87cb3a104ed793d0d126efba102ec388",
+      "poolType": "Weighted",
+      "symbol": "50WBTC-50USDT",
+      "tokens": [
+        {
+          "address": "0x681d8394472ef320ad043ed6d8497d58be1ad2a6",
+          "weight": "0.5",
+          "symbol": "WBTC"
+        },
+        {
+          "address": "0xacb7a8e74a9f09735fece0176fcfb0591d801a77",
+          "weight": "0.5",
+          "symbol": "USDT"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x681d8394472ef320ad043ed6d8497d58be1ad2a6": "tokens/BTC_L.png",
+      "0xacb7a8e74a9f09735fece0176fcfb0591d801a77": "tokens/USDT_L.png"
+    }
   }
 ]
