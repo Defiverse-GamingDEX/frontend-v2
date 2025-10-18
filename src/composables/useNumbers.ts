@@ -28,6 +28,8 @@ export const FNumFormats: Record<string, FNumOptions> = {
   },
   fiat: {
     style: 'currency',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
   },
 };
 
