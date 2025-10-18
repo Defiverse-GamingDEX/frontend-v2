@@ -1,5 +1,40 @@
 [
   {
+    "address": "0xf1d47c662fb1213d2639c6eee8ce4bcf99c2e547",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1760574047,
+    "pool": {
+      "id": "0x49aa5346d6f53204f6394296d80e94e471290e9b000100000000000000000138",
+      "address": "0x49aa5346d6f53204f6394296d80e94e471290e9b",
+      "poolType": "Weighted",
+      "symbol": "10USDC.e-80stOAS-10Z",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.1",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x804c0ab078e4810edbec24a4ffb35ceb3e5bd61b",
+          "weight": "0.8",
+          "symbol": "stOAS"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png",
+      "0x804c0ab078e4810edbec24a4ffb35ceb3e5bd61b": "tokens/stOAS.png"
+    }
+  },
+  {
     "address": "0x75ad4f7e210414956bf21894cca5ce4cda178db6",
     "network": 248,
     "isKilled": false,
