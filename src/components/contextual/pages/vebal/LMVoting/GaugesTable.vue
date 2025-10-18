@@ -110,7 +110,7 @@ const columns = computed(() => {
       id: 'poolComposition',
       accessor: 'id',
       Cell: 'poolCompositionCell',
-      width: 250,
+      width: 400,
     },
     {
       name: 'TVL',
@@ -119,20 +119,20 @@ const columns = computed(() => {
       align: 'right',
       Cell: 'tvlCell',
       sortKey: gauge => Number(gauge.total_liquidity || 0),
-      width: 200,
+      width: 100,
       cellClassName: 'font-numeric',
     },
-    {
-      name: 'Swap fee',
-      id: 'swap_fee',
-      accessor: 'swap_fee',
-      align: 'right',
-      Cell: 'swapFeeCell',
-      Header: 'swapFeeHeader',
-      sortKey: gauge => Number(gauge.swap_fee || 0),
-      width: 80,
-      cellClassName: 'font-numeric',
-    },
+    // {
+    //   name: 'Swap fee',
+    //   id: 'swap_fee_rate',
+    //   accessor: 'swap_fee_rate',
+    //   align: 'right',
+    //   Cell: 'swapFeeCell',
+    //   Header: 'swapFeeHeader',
+    //   sortKey: gauge => Number(gauge.swap_fee_rate || 0),
+    //   width: 80,
+    //   cellClassName: 'font-numeric',
+    // },
     // {
     //   name: 'Next Emission',
     //   id: 'nextEmission',
@@ -159,7 +159,7 @@ const columns = computed(() => {
       align: 'right',
       id: 'myVotes',
       sortKey: gauge => Number(gauge.userVotes),
-      width: 140,
+      width: 60,
       Cell: 'myVotesCell',
       cellClassName: 'font-numeric',
       hidden: !isWalletReady.value,
@@ -185,7 +185,7 @@ const columns = computed(() => {
       accessor: 'id',
       align: 'right',
       Cell: 'voteColumnCell',
-      width: 100,
+      width: 80,
       hidden: !isWalletReady.value || props?.tabSelect !== 'gauge',
     },
     {
@@ -483,6 +483,9 @@ async function fetchVotingPoolDetails() {
 function isGaugeAprLoading(gauge: VotingGaugeWithVotes): boolean {
   return loadingAprGaugeIds.value.has(gauge.pool.id);
 }
+function isGaugeAprLoadingFromPoolId(poolId: string): boolean {
+  return loadingAprGaugeIds.value.has(poolId);
+}
 
 /**
  * WATCHERS
@@ -582,7 +585,9 @@ onBeforeMount(async () => {
           <BalAssetSet :logoURIs="orderedTokenURIs(gauge)" :width="100" />
         </div>
       </template>
-      <template #poolCompositionCell="{ pool, address, addedTimestamp }">
+      <template
+        #poolCompositionCell="{ pool, address, addedTimestamp, swap_fee_rate }"
+      >
         <div v-if="!isLoading" class="flex items-center py-4 px-6">
           <TokenPills
             :tokens="orderedPoolTokens(pool, pool.tokens)"
@@ -594,10 +599,24 @@ onBeforeMount(async () => {
           />
           <BalChipNew v-if="getIsGaugeNew(addedTimestamp)" class="ml-2" />
           <BalChipExpired v-if="getIsGaugeExpired(address)" class="ml-2" />
+          <BalTooltip text="Swap Fee" :delayMs="50" width="auto" class="ml-2">
+            <template #activator>
+              <div class="text-black swap-fee-pill">
+                <BalLoadingBlock
+                  v-if="isGaugeAprLoadingFromPoolId(pool.id)"
+                  class="w-16 h-4"
+                />
+                <template v-else-if="swap_fee_rate >= 0">
+                  <div class="break-all">{{ swap_fee_rate || 0 }}%</div>
+                </template>
+                <template v-else> -%</template>
+              </div>
+            </template>
+          </BalTooltip>
         </div>
       </template>
       <template #tvlCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.total_liquidity >= 0">
             <div class="break-all">
@@ -607,17 +626,17 @@ onBeforeMount(async () => {
           <template v-else> - </template>
         </div>
       </template>
-      <template #swapFeeCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+      <!-- <template #swapFeeCell="gauge">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
-          <template v-else-if="gauge.swap_fee >= 0">
-            {{ fNum2(gauge.swap_fee, { style: 'currency' }) }}
+          <template v-else-if="gauge.swap_fee_rate >= 0">
+            {{ gauge.swap_fee_rate }}%
           </template>
           <template v-else> - </template>
         </div>
-      </template>
+      </template> -->
       <!-- <template #nextEmissionCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-16 h-4" />
           <template v-else-if="gauge.nextEmission">
             {{ fNum2(gauge.nextEmission, { style: 'decimal' }) }} sZ
@@ -663,7 +682,7 @@ onBeforeMount(async () => {
         </BalLazy>
       </template>
       <template #myVotesCell="gauge">
-        <div v-if="!isLoading" class="py-4 px-6 text-right">
+        <div v-if="!isLoading" class="py-4 px-2 text-right">
           <GaugesTableMyVotes
             :gauge="gauge"
             :isGaugeAprLoading="isGaugeAprLoading(gauge)"
@@ -671,7 +690,7 @@ onBeforeMount(async () => {
         </div>
       </template>
       <template #nextPeriodAprCell="gauge">
-        <div class="flex justify-end py-4 px-6 text-right font-numeric">
+        <div class="flex justify-end py-4 px-2 text-right font-numeric">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
           <template v-else-if="gauge.pool?.nextPeriodApr">
             <span
@@ -745,5 +764,11 @@ tr.expired-gauge-row {
 .distribution-btn-container {
   display: flex;
   justify-content: flex-end;
+}
+.swap-fee-pill {
+  @apply flex items-center px-2 py-1 rounded-lg bg-blue-50 dark:bg-blue-900 text-sm font-medium;
+  @apply text-blue-700 dark:text-blue-200;
+  @apply cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-800;
+  @apply transition-colors duration-150;
 }
 </style>
