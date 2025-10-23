@@ -17,9 +17,10 @@ export type PoolGauges = {
     gauges: {
       id: string;
       relativeWeightCap: string;
+      totalSupply: string;
     }[];
   };
-  liquidityGauges: { id: string }[];
+  liquidityGauges: { id: string; totalSupply: string }[];
 };
 
 /**
@@ -59,6 +60,7 @@ export default function usePoolGaugesQuery(
       gauges: {
         id: true,
         relativeWeightCap: true,
+        totalSupply: true,
       },
     },
     liquidityGauges: {
@@ -68,6 +70,7 @@ export default function usePoolGaugesQuery(
         },
       },
       id: true,
+      totalSupply: true,
     },
   }));
 
