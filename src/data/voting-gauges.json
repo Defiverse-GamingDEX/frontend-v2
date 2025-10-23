@@ -1,5 +1,92 @@
 [
   {
+    "address": "0x450bb551f282a8daa398d4f42f27ce06a44e7b72",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761114308,
+    "pool": {
+      "id": "0xb5c79313175c2f4e3934343a601f6319f5a2e63f000200000000000000000139",
+      "address": "0xb5c79313175c2f4e3934343a601f6319f5a2e63f",
+      "poolType": "Weighted",
+      "symbol": "20stOAS-80Z",
+      "tokens": [
+        {
+          "address": "0x804c0AB078E4810eDBeC24a4ffB35ceb3e5BD61b",
+          "weight": "0.2",
+          "symbol": "stOAS"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.8",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x804c0AB078E4810eDBeC24a4ffB35ceb3e5BD61b": "tokens/stOAS.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0x4c9805754443050ae1b6fd2f272d1099128b2b29",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761114308,
+    "pool": {
+      "id": "0xafb1b382e3cc85e479cb31c4eac407b5664130eb00020000000000000000013a",
+      "address": "0xafb1b382e3cc85e479cb31c4eac407b5664130eb",
+      "poolType": "Weighted",
+      "symbol": "99Z-1USDC.e",
+      "tokens": [
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.99",
+          "symbol": "Z"
+        },
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.01",
+          "symbol": "USDC.e"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png",
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png"
+    }
+  },
+  {
+    "address": "0xb2772f94a3bada9853630db3098d0a52007e22b7",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761114308,
+    "pool": {
+      "id": "0x1ec0f0abc79236cf04f474678f388fa5a96718de0002000000000000000000c6",
+      "address": "0x1ec0f0abc79236cf04f474678f388fa5a96718de",
+      "poolType": "Weighted",
+      "symbol": "50USDC.e-50MCHC",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.5",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x5b1cc635e524cabb63a581c050c895534755f297",
+          "weight": "0.5",
+          "symbol": "MCHC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0x5b1cc635e524cabb63a581c050c895534755f297": "tokens/MCHC_L.png"
+    }
+  },
+  {
     "address": "0xf1d47c662fb1213d2639c6eee8ce4bcf99c2e547",
     "network": 248,
     "isKilled": false,

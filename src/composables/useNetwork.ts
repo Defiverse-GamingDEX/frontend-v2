@@ -19,11 +19,14 @@ const urlNetworkId: Network | null = routeSlug
   ? networkFromSlug(routeSlug)
   : null;
 
+const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
+const DEFAULT_NETWORK = IS_TESTNET ? Network.OASYS_TESTNET : Network.OASYS;
+
 const NETWORK_ID =
   urlNetworkId ||
   localStorageNetworkId ||
   (Number(import.meta.env.VITE_NETWORK) as Network) ||
-  Network.MAINNET;
+  DEFAULT_NETWORK;
 if (windowAvailable) localStorage.setItem('networkId', NETWORK_ID.toString());
 export const networkSlug = config[NETWORK_ID].slug;
 export const networkConfig = config[NETWORK_ID];
