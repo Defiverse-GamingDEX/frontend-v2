@@ -35,6 +35,7 @@ const {
   isLoading: isLoadingStakingData,
   isRefetchingStakedShares,
   stakedShares,
+  totalStakedShares,
   hasNonPrefGaugeBalance,
 } = usePoolStaking();
 
@@ -52,6 +53,13 @@ const fiatValueOfUnstakedShares = computed(() => {
   return bnum(props.pool.totalLiquidity)
     .div(props.pool.totalShares)
     .times(balanceFor(getAddress(props.pool.address)))
+    .toString();
+});
+
+const fiatValueOfAllStakedShares = computed(() => {
+  return bnum(props.pool.totalLiquidity)
+    .div(props.pool.totalShares)
+    .times((totalStakedShares.value || 0).toString())
     .toString();
 });
 
@@ -130,7 +138,7 @@ function handlePreviewClose() {
                 class="p-4 rounded-b-lg border-t dark:border-gray-900"
               >
                 <BalStack horizontal justify="between" class="rounded-b-lg">
-                  <span>{{ $t('staked') }} {{ $t('lpTokens') }}</span>
+                  <span>{{ $t('staking.yourStakedLpTokens') }}</span>
                   <BalStack horizontal spacing="sm" align="center">
                     <AnimatePresence :isVisible="isRefetchingStakedShares">
                       <BalLoadingBlock class="h-5" />
@@ -144,7 +152,7 @@ function handlePreviewClose() {
                   </BalStack>
                 </BalStack>
                 <BalStack horizontal justify="between">
-                  <span>{{ $t('unstaked') }} {{ $t('lpTokens') }}</span>
+                  <span>{{ $t('staking.yourUnstakedLpTokens') }}</span>
                   <BalStack horizontal spacing="sm" align="center">
                     <AnimatePresence :isVisible="isRefetchingStakedShares">
                       <BalLoadingBlock class="h-5" />
@@ -155,6 +163,24 @@ function handlePreviewClose() {
                       </span>
                     </AnimatePresence>
                     <BalTooltip :text="$t('staking.unstakedLpTokensTooltip')" />
+                  </BalStack>
+                </BalStack>
+                <BalStack horizontal justify="between">
+                  <span>{{ $t('staking.allStakedLpTokens') }}</span>
+                  <BalStack horizontal spacing="sm" align="center">
+                    <AnimatePresence :isVisible="isRefetchingStakedShares">
+                      <BalLoadingBlock class="h-5" />
+                    </AnimatePresence>
+                    <AnimatePresence :isVisible="!isRefetchingStakedShares">
+                      <span>
+                        {{
+                          fNum2(fiatValueOfAllStakedShares, FNumFormats.fiat)
+                        }}
+                      </span>
+                    </AnimatePresence>
+                    <BalTooltip
+                      :text="$t('staking.allStakedLpTokensTooltip')"
+                    />
                   </BalStack>
                 </BalStack>
                 <BalStack horizontal spacing="sm" class="mt-2">
