@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { format } from 'date-fns';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import gaugeApi from '@/composables/gaugeReward/gauge.api';
+import useWeb3 from '@/services/web3/useWeb3';
 
 import { ColumnDefinition } from '@/components/_global/BalTable/types';
 
@@ -38,6 +40,13 @@ import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
 import VerifiedIcon from '@/assets/images/pools/verified.png';
 import YukichiIcon from '@/assets/images/pools/yukichi.png';
+
+/**
+ * STATE
+ */
+const poolSwapFees = ref<Record<string, string>>({});
+const loadingSwapFeePoolIds = ref<Set<string>>(new Set());
+
 /**
  * TYPES
  */
@@ -52,6 +61,7 @@ type Props = {
   sortColumn?: string;
   selectedTokens?: string[];
   hiddenColumns?: string[];
+  showSwapFee?: boolean;
   showBoost?: boolean;
   showActions?: boolean;
   columnStates?: Record<string, string>;
@@ -68,6 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
   poolsType: 'unstaked',
   isLoadingMore: false,
   showPoolShares: false,
+  showSwapFee: true,
   noPoolsLabel: 'No pools',
   isPaginated: false,
   sortColumn: 'totalLiquidity',
@@ -86,6 +97,7 @@ const emit = defineEmits<{
   (e: 'triggerUnstake', value: Pool): void;
   (e: 'onColumnSort', value: string): void;
 }>();
+
 /**
  * COMPOSABLES
  */
@@ -96,6 +108,8 @@ const { trackGoal, Goals } = useFathom();
 const { darkMode } = useDarkMode();
 const { upToLargeBreakpoint, upToMediumBreakpoint } = useBreakpoints();
 const { networkSlug } = useNetwork();
+const { account } = useWeb3();
+const { networkId } = useNetwork();
 
 const wideCompositionWidth = computed(() =>
   upToMediumBreakpoint.value ? 450 : undefined
@@ -243,6 +257,83 @@ const visibleColumns = computed(() =>
 /**
  * METHODS
  */
+
+/**
+ * Fetch swap fees from voting-pool-details API
+ * TODO: Temporarily commented out
+ */
+// async function fetchPoolSwapFees() {
+//   return; // Temporarily disabled
+//   if (!props.data || props.data.length === 0) return;
+
+//   // Process pools in batches to avoid too many simultaneous requests
+//   const batchSize = 5;
+//   for (let i = 0; i < props.data.length; i += batchSize) {
+//     const batch = props.data.slice(i, i + batchSize);
+
+//     // Mark these pools as loading
+//     batch.forEach(pool => {
+//       loadingSwapFeePoolIds.value.add(pool.id);
+//     });
+
+//     // Create promises for each pool in the batch
+//     const promises = batch.map(async (pool: Pool) => {
+//       try {
+//         const chainId = networkId.value;
+//         const poolIds = [pool.id];
+//         const gaugeIds = []; // Empty for pools without gauges
+//         const userAddress = account.value || '';
+//         const params = {
+//           chain_id: chainId,
+//           pool_ids: poolIds,
+//           gauge_ids: gaugeIds,
+//           user_address: userAddress,
+//         };
+//         const votingPoolDetails = await gaugeApi.getVotingPoolDetails(params);
+
+//         if (votingPoolDetails && votingPoolDetails[pool.id]) {
+//           const detail = votingPoolDetails[pool.id];
+//           return { poolId: pool.id, swapFee: detail.swap_fee_rate };
+//         }
+//         return null;
+//       } catch (error) {
+//         console.error(`Failed to fetch swap fee for pool ${pool.id}:`, error);
+//         return null;
+//       } finally {
+//         // Remove this pool from loading state
+//         loadingSwapFeePoolIds.value.delete(pool.id);
+//       }
+//     });
+
+//     // Wait for all promises in the batch to resolve
+//     const results = await Promise.all(promises);
+
+//     // Update swap fees
+//     results.forEach(result => {
+//       if (result && result.swapFee !== undefined) {
+//         poolSwapFees.value[result.poolId] = result.swapFee;
+//       }
+//     });
+//   }
+// }
+
+/**
+ * WATCHERS
+ */
+// TODO: Temporarily commented out API watcher
+// watch(
+//   () => props.data,
+//   newData => {
+//     if (newData && newData.length > 0 && props.showSwapFee) {
+//       fetchPoolSwapFees();
+//     }
+//   },
+//   { immediate: true }
+// );
+
+/**
+ * METHODS
+ */
 function handleRowClick(pool: Pool, inNewTab?: boolean) {
   trackGoal(Goals.ClickPoolsTableRow);
   const route = router.resolve({
@@ -266,6 +357,29 @@ function navigateToPoolMigration(pool: Pool) {
 function balanceValue(pool: Pool): string {
   const bpt = props?.shares?.[pool.id] || '0';
   return fiatValueOf(pool, bpt);
+}
+
+function formatSwapFee(pool: Pool): string {
+  // TODO: Temporarily use contract data instead of API
+  // const apiSwapFee = poolSwapFees.value[pool.id];
+  // if (apiSwapFee !== undefined) {
+  //   if (!apiSwapFee || bnum(apiSwapFee).isZero()) return '-';
+  //   return `${bnum(apiSwapFee).toNumber()}%`;
+  // }
+
+  // Use contract swap fee data
+  const contractSwapFee = pool.swapFee;
+  if (!contractSwapFee || bnum(contractSwapFee).isZero()) return '-';
+  return `${bnum(contractSwapFee).times(100).toNumber()}%`;
+}
+
+function isSwapFeeLoading(pool: Pool): boolean {
+  // TODO: Temporarily disabled API loading
+  return false;
+  // return (
+  //   loadingSwapFeePoolIds.value.has(pool.id) ||
+  //   (poolSwapFees.value[pool.id] === undefined && !!pool.swapFee)
+  // );
 }
 
 function boostFor(pool: Pool): string {
@@ -420,6 +534,23 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
               :isStablePool="isStableLike(pool.poolType)"
               :selectedTokens="selectedTokens"
             />
+            <BalTooltip
+              v-if="props.showSwapFee"
+              text="Swap Fee"
+              :delayMs="50"
+              width="auto"
+              class="ml-2"
+            >
+              <template #activator>
+                <div class="swap-fee-pill">
+                  <BalLoadingBlock
+                    v-if="isSwapFeeLoading(pool)"
+                    class="w-16 h-4"
+                  />
+                  <div v-else class="">{{ formatSwapFee(pool) }}</div>
+                </div>
+              </template>
+            </BalTooltip>
           </div>
           <BalChip
             v-if="isLiquidityBootstrapping(pool.poolType)"
@@ -513,5 +644,10 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
   max-width: 220px;
   margin-left: auto;
   justify-content: flex-end;
+}
+.swap-fee-pill {
+  @apply flex items-center px-2 py-1 rounded-lg bg-blue-50 dark:bg-blue-900 text-sm font-medium;
+  @apply text-blue-700 dark:text-blue-200;
+  @apply cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-800;
 }
 </style>
