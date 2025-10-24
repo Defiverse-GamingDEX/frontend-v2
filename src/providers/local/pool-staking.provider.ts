@@ -132,6 +132,17 @@ const provider = (_poolId?: string) => {
     );
   });
 
+  // Total staked LP tokens across all users (from preferential gauge totalSupply)
+  const totalStakedShares = computed((): string => {
+    if (!poolGauges.value?.pool?.preferentialGauge?.id) return '0';
+
+    const preferentialGauge = poolGauges.value.pool.gauges.find(gauge =>
+      isSameAddress(gauge.id, poolGauges.value?.pool?.preferentialGauge?.id || '')
+    );
+
+    return preferentialGauge?.totalSupply || '0';
+  });
+
   /**
    * METHODS
    */
@@ -244,6 +255,7 @@ const provider = (_poolId?: string) => {
   return {
     isLoading,
     stakedShares,
+    totalStakedShares,
     isStakablePool,
     boost,
     hasNonPrefGaugeBalance,
