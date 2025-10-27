@@ -41,7 +41,8 @@ export default function usePoolsQuery(
   filterTokens: Ref<string[]> = ref([]),
   options: UseInfiniteQueryOptions<PoolsQueryResponse> = {},
   filterOptions?: Ref<FilterOptions>,
-  poolsSortField?: Ref<string>
+  poolsSortField?: Ref<string>,
+  skipExpensiveDecorations = false // Skip APR and TotalLiquidity for fast initial load
 ) {
   const currentFilterOptions = ref(filterOptions);
   const { injectTokens, tokens: tokenMeta } = useTokens();
@@ -85,7 +86,11 @@ export default function usePoolsQuery(
         const params = getQueryArgs(options);
         const pools = await balancerSubgraphService.pools.get(params);
         const poolDecorator = new PoolDecorator(pools);
-        let decoratedPools = await poolDecorator.decorate(tokenMeta.value);
+        let decoratedPools = await poolDecorator.decorate(
+          tokenMeta.value,
+          true,
+          skipExpensiveDecorations
+        );
         const tokens = flatten(
           pools.map(pool => [
             ...pool.tokensList,

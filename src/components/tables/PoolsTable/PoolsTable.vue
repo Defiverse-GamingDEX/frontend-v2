@@ -55,6 +55,7 @@ type Props = {
   poolsType?: 'unstaked' | 'staked';
   isLoading?: boolean;
   isLoadingMore?: boolean;
+  isLazyLoading?: boolean; // Loading state for APR and TotalLiquidity
   showPoolShares?: boolean;
   noPoolsLabel?: string;
   isPaginated?: boolean;
@@ -177,6 +178,7 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
   },
   {
     name: t('poolValue'),
+    Cell: 'totalLiquidityCell',
     accessor: pool =>
       fNum2(pool.totalLiquidity || 0, {
         style: 'currency',
@@ -561,6 +563,19 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
           <PoolWarningTooltip :pool="pool" />
         </div>
       </template>
+      <template #totalLiquidityCell="pool">
+        <div class="flex justify-end py-4 px-6 -mt-1 font-numeric">
+          <BalLoadingBlock v-if="!pool?.totalLiquidity || isLazyLoading" class="w-12 h-4" />
+          <span v-else class="text-right">
+            {{
+              fNum2(pool.totalLiquidity, {
+                style: 'currency',
+                maximumFractionDigits: 3,
+              })
+            }}
+          </span>
+        </div>
+      </template>
       <template #volumeCell="pool">
         <div
           :key="columnStates.volume"
@@ -590,7 +605,7 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
             },
           ]"
         >
-          <BalLoadingBlock v-if="!pool?.apr" class="w-12 h-4" />
+          <BalLoadingBlock v-if="!pool?.apr || isLazyLoading" class="w-12 h-4" />
           <template v-else>
             {{ aprLabelFor(pool) }}
             <BalTooltip

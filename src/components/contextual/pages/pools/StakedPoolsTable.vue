@@ -24,8 +24,14 @@ providePoolStaking();
 /**
  * COMPOSABLES
  */
-const { stakedPools, poolBoostsMap, stakedShares, isLoading } =
-  useUserStaking();
+const {
+  stakedPools,
+  poolBoostsMap,
+  stakedShares,
+  isLoading,
+  isLazyLoading,
+  lazyLoadPoolData,
+} = useUserStaking();
 const { refetchAllUserPools } = useUserPools();
 const { isWalletReady, isWalletConnecting } = useWeb3();
 const { t } = useI18n();
@@ -65,6 +71,24 @@ function handleModalClose() {
 async function handleUnstakeSuccess() {
   await refetchAllUserPools();
 }
+
+// Lazy load APR and TotalLiquidity after initial render
+watch(
+  () => stakedPools.value,
+  pools => {
+    if (pools && pools.length > 0 && !isLoading.value && !isLazyLoading.value) {
+      nextTick(() => {
+        console.log(
+          '[StakedPoolsTable] Triggering lazy load for',
+          pools.length,
+          'pools'
+        );
+        lazyLoadPoolData(pools);
+      });
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -81,12 +105,13 @@ async function handleUnstakeSuccess() {
         :boosts="poolBoostsMap"
         poolsType="staked"
         :noPoolsLabel="noPoolsLabel"
-        :hiddenColumns="hiddenColumns"
-        sortColumn="myBalance"
         :isLoading="isLoading"
+        :isLazyLoading="isLazyLoading"
+        sortColumn="myBalance"
+        :hiddenColumns="hiddenColumns"
         showPoolShares
+        showBoost
         showActions
-        :showBoost="!isL2"
         @trigger-unstake="handleUnstake"
       />
     </BalStack>

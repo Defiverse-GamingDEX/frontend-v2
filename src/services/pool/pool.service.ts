@@ -65,10 +65,24 @@ export default class PoolService {
    */
   public async setAPR(): Promise<AprBreakdown> {
     let apr = this.pool.apr;
-
+    
+    if (this.pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.totalLiquidity:`, this.pool.totalLiquidity);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.totalShares:`, this.pool.totalShares);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.swapFee:`, this.pool.swapFee);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.gauge:`, this.pool.gauge);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.totalSwapVolume:`, this.pool.totalSwapVolume);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.volumeSnapshot:`, this.pool.volumeSnapshot);
+      console.log(`🚀 ~ PoolService ~ setAPR ~ this.pool.feesSnapshot:`, this.pool.feesSnapshot);
+    }
+    
     try {
       const sdkApr = await getBalancer().pools.apr(this.pool);
-      console.log(`🚀 ~ PoolService ~ setAPR ~ sdkApr:${this.pool.id}`, sdkApr)
+      
+      if (this.pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
+        console.log(`🚀 ~ PoolService ~ setAPR ~ original pool.apr:`, apr);
+        console.log(`🚀 ~ PoolService ~ setAPR ~ sdkApr from SDK:`, sdkApr);
+      }
 
       if (sdkApr) apr = sdkApr;
     } catch (error) {

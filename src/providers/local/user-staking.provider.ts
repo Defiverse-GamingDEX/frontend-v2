@@ -10,6 +10,7 @@ import { Pool } from '@/services/pool/types';
 import { computed, InjectionKey, provide, reactive, ref } from 'vue';
 import { safeInject } from '../inject';
 import { useUserData } from '../user-data.provider';
+import { PoolDecorator } from '@/services/pool/decorators/pool.decorator';
 
 const provider = () => {
   /**
@@ -37,29 +38,42 @@ const provider = () => {
     (): boolean => stakedPoolIds.value.length > 0
   );
 
+  const filterOptions = computed(() => ({
+    poolIds: stakedPoolIds,
+    pageSize: 999,
+  }));
+
   const stakedPoolsQuery = usePoolsQuery(
     ref([]),
     reactive({
       enabled: true // isPoolsQueryEnabled,
     }),
-    {
-      poolIds: stakedPoolIds,
-      pageSize: 999,
-    }
+    filterOptions,
+    undefined, // poolsSortField
+    false // skipExpensiveDecorations - CHANGED: load APR immediately instead of lazy loading
   );
   const { data: _stakedPools, refetch: refetchStakedPools } = stakedPoolsQuery;
+
+  // Lazy loading state - defined here to use in computed
+  const isLazyLoading = ref(false);
+  const lazyLoadedPoolIds = ref<Set<string>>(new Set());
+  // Store APR data separately to avoid readonly issues
+  const lazyLoadedAprData = ref<Record<string, { apr: any; totalLiquidity: string }>>({});
 
   // Pool records for all the pools where a user has staked BPT.
   // Filter out pools with 0 or negligible balance based on actual onchain data
   const stakedPools = computed((): Pool[] => {
-    const pools = _stakedPools.value?.pages[0].pools || [];
+    const pools = _stakedPools.value?.pages[0]?.pools || [];
     console.log('HUNG:stakedPools:',_stakedPools.value);
+    console.log('[stakedPools computed] lazyLoadedAprData:', lazyLoadedAprData.value);
+    console.log('[stakedPools computed] pools count:', pools.length);
+    
     // If stakedShares data is not loaded yet, return empty to avoid showing pools with 0 balance
     if (!stakedShares.value) return [];
 
     // Only return pools that have actual shares > 0 and valid totalLiquidity
     // Filter out pools with no liquidity data (can't calculate fiat value)
-    return pools.filter(pool => {
+    const filteredPools = pools.filter(pool => {
       const shares = stakedShares.value?.[pool.id];
       if (!shares || Number(shares) === 0) return false;
 
@@ -71,6 +85,26 @@ const provider = () => {
 
       return true;
     });
+
+    console.log('[stakedPools computed] filteredPools count:', filteredPools.length);
+
+    // Merge lazy loaded APR data into pools
+    const result = filteredPools.map(pool => {
+      const lazyData = lazyLoadedAprData.value[pool.id];
+      console.log(`[stakedPools computed] Pool ${pool.id}: has lazyData=${!!lazyData}, original APR:`, pool.apr);
+      if (lazyData) {
+        console.log(`[stakedPools computed] Merging APR for pool ${pool.id}:`, lazyData.apr);
+        return {
+          ...pool,
+          apr: lazyData.apr,
+          totalLiquidity: lazyData.totalLiquidity,
+        };
+      }
+      return pool;
+    });
+    
+    console.log('[stakedPools computed] Final result:', result.map(p => ({ id: p.id, hasApr: !!p.apr })));
+    return result;
   });
 
   // Total fiat value of staked shares.
@@ -115,14 +149,54 @@ const provider = () => {
     return stakedShares?.value?.[poolId] || '0';
   }
 
+  // Lazy load APR and TotalLiquidity for staked pools
+  async function lazyLoadPoolData(pools: Pool[]) {
+    if (isLazyLoading.value || pools.length === 0) return;
+    
+    // Filter out pools that have already been lazy loaded
+    const poolsToLoad = pools.filter(pool => !lazyLoadedPoolIds.value.has(pool.id));
+    if (poolsToLoad.length === 0) return;
+
+    isLazyLoading.value = true;
+    console.log(`[LazyLoad Staked] Starting lazy load for ${poolsToLoad.length} pools`);
+
+    try {
+      const decorator = new PoolDecorator(poolsToLoad);
+      const updatedPools = await decorator.decoratePoolsLazy(poolsToLoad);
+      
+      console.log(`[LazyLoad Staked] Decorated pools:`, updatedPools);
+      
+      // Store APR data in a separate reactive object
+      updatedPools.forEach(pool => {
+        if (pool.apr && pool.totalLiquidity) {
+          lazyLoadedAprData.value[pool.id] = {
+            apr: pool.apr,
+            totalLiquidity: pool.totalLiquidity,
+          };
+          console.log(`[LazyLoad Staked] Saved APR data for pool ${pool.id}:`, pool.apr);
+        }
+        lazyLoadedPoolIds.value.add(pool.id);
+      });
+      
+      console.log(`[LazyLoad Staked] Completed lazy load for ${updatedPools.length} pools`);
+      console.log(`[LazyLoad Staked] APR data store:`, lazyLoadedAprData.value);
+    } catch (error) {
+      console.error('[LazyLoad Staked] Failed to lazy load pool data:', error);
+    } finally {
+      isLazyLoading.value = false;
+    }
+  }
+
   return {
     stakedPools,
     stakedShares,
     poolBoostsMap,
     totalStakedValue,
     isLoading,
+    isLazyLoading,
     refetchStakedPools,
     stakedSharesFor,
+    lazyLoadPoolData,
   };
 };
 

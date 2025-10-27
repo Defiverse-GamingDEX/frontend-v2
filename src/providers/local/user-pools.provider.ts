@@ -11,6 +11,7 @@ import { fiatValueOf } from '@/composables/usePool';
 import { isQueryLoading } from '@/composables/queries/useQueryHelpers';
 import { isVeBalSupported } from '@/composables/useVeBAL';
 import { useTokens } from '../tokens.provider';
+import { PoolDecorator } from '@/services/pool/decorators/pool.decorator';
 
 /**
  * Provides user pools data. Primarily for the portfolio page.
@@ -31,6 +32,12 @@ export const provider = (userStaking: UserStakingResponse) => {
   const { totalLockedValue } = useLock();
   const { injectTokens } = useTokens();
 
+  // Lazy loading state
+  const isLazyLoading = ref(false);
+  const lazyLoadedPoolIds = ref<Set<string>>(new Set());
+  // Store APR data separately to avoid readonly issues
+  const lazyLoadedAprData = ref<Record<string, { apr: any; totalLiquidity: string }>>({});
+
   // Array of pool IDs that the user hasn't staked.
   const unstakedPoolIds = computed((): string[] =>
     Object.keys(userPoolShares.value || {})
@@ -42,28 +49,34 @@ export const provider = (userStaking: UserStakingResponse) => {
   );
 
   // Fetch pools that the user hasn't staked.
+  const filterOptions = computed(() => ({
+    poolIds: unstakedPoolIds,
+    pageSize: 999,
+  }));
 
   const unstakedPoolsQuery = usePoolsQuery(
     ref([]),
     reactive({
       enabled: true // isPoolsQueryEnabled,
     }),
-    {
-      poolIds: unstakedPoolIds,
-      pageSize: 999,
-    }
+    filterOptions,
+    undefined, // poolsSortField
+    false // skipExpensiveDecorations - CHANGED: load APR immediately instead of lazy loading
   );
   const { data: _unstakedPools } = unstakedPoolsQuery;
 
   // Helper property to drill down to first page of results.
   // Filter out pools with 0 or negligible balance
   const unstakedPools = computed((): Pool[] => {
-    const pools = _unstakedPools.value?.pages[0].pools || [];
+    const pools = _unstakedPools.value?.pages[0]?.pools || [];
+    console.log('[unstakedPools computed] lazyLoadedAprData:', lazyLoadedAprData.value);
+    console.log('[unstakedPools computed] pools count:', pools.length);
+    
     if (!userPoolShares.value) return [];
 
     // Only return pools that have actual shares > 0 and valid totalLiquidity
     // Filter out pools with no liquidity data (can't calculate fiat value)
-    return pools.filter(pool => {
+    const filteredPools = pools.filter(pool => {
       const shares = userPoolShares.value?.[pool.id];
       if (!shares || Number(shares) === 0) return false;
 
@@ -75,6 +88,26 @@ export const provider = (userStaking: UserStakingResponse) => {
 
       return true;
     });
+
+    console.log('[unstakedPools computed] filteredPools count:', filteredPools.length);
+
+    // Merge lazy loaded APR data into pools
+    const result = filteredPools.map(pool => {
+      const lazyData = lazyLoadedAprData.value[pool.id];
+      console.log(`[unstakedPools computed] Pool ${pool.id}: has lazyData=${!!lazyData}, original APR:`, pool.apr);
+      if (lazyData) {
+        console.log(`[unstakedPools computed] Merging APR for pool ${pool.id}:`, lazyData.apr);
+        return {
+          ...pool,
+          apr: lazyData.apr,
+          totalLiquidity: lazyData.totalLiquidity,
+        };
+      }
+      return pool;
+    });
+    
+    console.log('[unstakedPools computed] Final result:', result.map(p => ({ id: p.id, hasApr: !!p.apr })));
+    return result;
   });
 
   // Combine staked and unstaked pools.
@@ -122,6 +155,44 @@ export const provider = (userStaking: UserStakingResponse) => {
     ]);
   }
 
+  // Lazy load APR and TotalLiquidity for pools
+  async function lazyLoadPoolData(pools: Pool[]) {
+    if (isLazyLoading.value || pools.length === 0) return;
+    
+    // Filter out pools that have already been lazy loaded
+    const poolsToLoad = pools.filter(pool => !lazyLoadedPoolIds.value.has(pool.id));
+    if (poolsToLoad.length === 0) return;
+
+    isLazyLoading.value = true;
+    console.log(`[LazyLoad Unstaked] Starting lazy load for ${poolsToLoad.length} pools`);
+
+    try {
+      const decorator = new PoolDecorator(poolsToLoad);
+      const updatedPools = await decorator.decoratePoolsLazy(poolsToLoad);
+      
+      console.log(`[LazyLoad Unstaked] Decorated pools:`, updatedPools);
+      
+      // Store APR data in a separate reactive object
+      updatedPools.forEach(pool => {
+        if (pool.apr && pool.totalLiquidity) {
+          lazyLoadedAprData.value[pool.id] = {
+            apr: pool.apr,
+            totalLiquidity: pool.totalLiquidity,
+          };
+          console.log(`[LazyLoad Unstaked] Saved APR data for pool ${pool.id}:`, pool.apr);
+        }
+        lazyLoadedPoolIds.value.add(pool.id);
+      });
+      
+      console.log(`[LazyLoad Unstaked] Completed lazy load for ${updatedPools.length} pools`);
+      console.log(`[LazyLoad Unstaked] APR data store:`, lazyLoadedAprData.value);
+    } catch (error) {
+      console.error('[LazyLoad Unstaked] Failed to lazy load pool data:', error);
+    } finally {
+      isLazyLoading.value = false;
+    }
+  }
+
   // Whenever new pools show up in the user pools array, inject their tokens so
   // that we can add the user's balance to the token registry.
   watch(userPools, newUserPools => {
@@ -134,7 +205,9 @@ export const provider = (userStaking: UserStakingResponse) => {
     userPoolShares,
     totalFiatValue,
     isLoading,
+    isLazyLoading,
     refetchAllUserPools,
+    lazyLoadPoolData,
   };
 };
 

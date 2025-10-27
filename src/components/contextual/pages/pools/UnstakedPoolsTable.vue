@@ -31,6 +31,8 @@ const {
   userPoolShares,
   refetchAllUserPools,
   isLoading: isLoadingPools,
+  isLazyLoading,
+  lazyLoadPoolData,
 } = useUserPools();
 
 /**
@@ -64,6 +66,21 @@ async function handleStakeSuccess() {
 onMounted(() => {
   refetchAllUserPools();
 });
+
+// Lazy load APR and TotalLiquidity after initial render
+watch(
+  () => unstakedPools.value,
+  (pools) => {
+    if (pools && pools.length > 0 && !isLoadingPools.value && !isLazyLoading.value) {
+      // Use nextTick to ensure table is rendered first
+      nextTick(() => {
+        console.log('[UnstakedPoolsTable] Triggering lazy load for', pools.length, 'pools');
+        lazyLoadPoolData(pools);
+      });
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -76,6 +93,7 @@ onMounted(() => {
         :key="poolsToRenderKey"
         class="unstaked-pools"
         :isLoading="isLoadingPools"
+        :isLazyLoading="isLazyLoading"
         :data="unstakedPools"
         :shares="userPoolShares"
         :noPoolsLabel="noPoolsLabel"

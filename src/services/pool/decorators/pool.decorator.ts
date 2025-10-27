@@ -17,7 +17,8 @@ export class PoolDecorator {
 
   public async decorate(
     tokens: TokenInfoMap,
-    decorateAll = true
+    decorateAll = true,
+    skipExpensiveDecorations = false // Skip APR and TotalLiquidity for fast initial load
   ): Promise<Pool[]> {
     const processedPools = this.pools.map(pool => {
       const poolService = new this.poolServiceClass(pool);
@@ -43,17 +44,81 @@ export class PoolDecorator {
         const poolSnapshot = poolSnapshots.find(p => p.id === pool.id);
         poolService.setFeesSnapshot(poolSnapshot);
         poolService.setVolumeSnapshot(poolSnapshot);
-        const start1 = Date.now();
-        await poolService.setTotalLiquidity();
-        const end1 = Date.now();
-        console.log(`Total liquidity for ${pool.id} took ${end1 - start1}ms`);
-        // log duration time call set APR
-        const start = Date.now();
-        await poolService.setAPR();
-        const end = Date.now();
-        console.log(`APR for ${pool.id} took ${end - start}ms`);
+        
+        // Skip expensive decorations for fast initial load (portfolio page)
+        if (!skipExpensiveDecorations) {
+          const start = Date.now();
+          
+          if (pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
+            console.log(`[decorate] Pool ${pool.id} - calling setAPR with volumeSnapshot:`, pool.volumeSnapshot, 'feesSnapshot:', pool.feesSnapshot);
+          }
+          
+          // Run setTotalLiquidity first, then setAPR (APR may need totalLiquidity)
+          await poolService.setTotalLiquidity();
+          await poolService.setAPR();
+          
+          const end = Date.now();
+          if (pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
+            console.log(`[decorate] TotalLiquidity + APR for ${pool.id} took ${end - start}ms`);
+            console.log(`[decorate] Pool ${pool.id} APR after setAPR:`, poolService.pool.apr);
+          }
+        }
       }
 
+      return poolService.pool;
+    });
+
+    return await Promise.all(promises);
+  }
+
+  /**
+   * Lazily decorate pools with APR and TotalLiquidity data
+   * This is called after initial load to avoid blocking the UI
+   */
+  public async decoratePoolsLazy(pools: Pool[]): Promise<Pool[]> {
+    // Temporarily set this.pools for getSnapshots to work
+    const originalPools = this.pools;
+    this.pools = pools;
+    
+    // Fetch snapshots for all pools (needed for APR calculation)
+    const poolSnapshots = await this.getSnapshots();
+    
+    // Restore original pools
+    this.pools = originalPools;
+    
+    const promises = pools.map(async pool => {
+      console.log(`[Lazy] Processing pool ${pool.id}, original APR:`, pool.apr);
+      
+      // Clone pool to avoid Vue readonly proxy issues
+      // When pools are already in Vue reactive state, they become readonly
+      const poolClone = JSON.parse(JSON.stringify(pool));
+      const poolService = new this.poolServiceClass(poolClone);
+      
+      // Set snapshots (required for APR calculation)
+      const poolSnapshot = poolSnapshots.find(p => p.id === pool.id);
+      poolService.setFeesSnapshot(poolSnapshot);
+      poolService.setVolumeSnapshot(poolSnapshot);
+      
+      console.log(`[Lazy] Pool ${pool.id} after setting snapshots - volumeSnapshot:`, poolService.pool.volumeSnapshot, 'feesSnapshot:', poolService.pool.feesSnapshot);
+      
+      try {
+        const start = Date.now();
+        
+        // Run setTotalLiquidity first, then setAPR (APR may need totalLiquidity)
+        await poolService.setTotalLiquidity();
+        await poolService.setAPR();
+        
+        const end = Date.now();
+        if(pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
+          console.log(`[Lazy] TotalLiquidity + APR for ${pool.id} took ${end - start}ms`);
+          console.log(`[Lazy] Pool ${pool.id} APR after setAPR():`, poolService.pool.apr);
+          console.log(`[Lazy] Pool ${pool.id} totalLiquidity after setTotalLiquidity():`, poolService.pool.totalLiquidity);
+        }
+      } catch (error) {
+        console.error(`Failed to lazy load data for pool ${pool.id}:`, error);
+      }
+      
+      // Return the updated clone, not the original readonly pool
       return poolService.pool;
     });
 
