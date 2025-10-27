@@ -40,7 +40,7 @@ const provider = () => {
   const stakedPoolsQuery = usePoolsQuery(
     ref([]),
     reactive({
-      enabled: isPoolsQueryEnabled,
+      enabled: true // isPoolsQueryEnabled,
     }),
     {
       poolIds: stakedPoolIds,
