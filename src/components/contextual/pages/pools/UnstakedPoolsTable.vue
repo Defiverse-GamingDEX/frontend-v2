@@ -103,4 +103,4 @@ onMounted(() => {
 .unstaked-pools .content .max-w-full .overflow-auto .table-fixed {
   min-width: 1440px;
 }
-</style> 
+</style>

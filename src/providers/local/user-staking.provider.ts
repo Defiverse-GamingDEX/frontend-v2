@@ -29,7 +29,8 @@ const provider = () => {
   const stakedPoolIds = computed((): string[] => {
     if (!userGaugeShares.value) return [];
 
-    return userGaugeShares.value.map(gaugeShare => gaugeShare.gauge.poolId);
+    const arr = userGaugeShares.value.map(gaugeShare => gaugeShare.gauge.poolId);
+    return arr;
   });
 
   const isPoolsQueryEnabled = computed(
@@ -39,7 +40,7 @@ const provider = () => {
   const stakedPoolsQuery = usePoolsQuery(
     ref([]),
     reactive({
-      enabled: isPoolsQueryEnabled,
+      enabled: true // isPoolsQueryEnabled,
     }),
     {
       poolIds: stakedPoolIds,
@@ -52,22 +53,22 @@ const provider = () => {
   // Filter out pools with 0 or negligible balance based on actual onchain data
   const stakedPools = computed((): Pool[] => {
     const pools = _stakedPools.value?.pages[0].pools || [];
-    
+    console.log('HUNG:stakedPools:',_stakedPools.value);
     // If stakedShares data is not loaded yet, return empty to avoid showing pools with 0 balance
     if (!stakedShares.value) return [];
-    
+
     // Only return pools that have actual shares > 0 and valid totalLiquidity
     // Filter out pools with no liquidity data (can't calculate fiat value)
     return pools.filter(pool => {
       const shares = stakedShares.value?.[pool.id];
       if (!shares || Number(shares) === 0) return false;
-      
+
       // Filter out pools with 0 or invalid totalLiquidity
       if (!pool.totalLiquidity || Number(pool.totalLiquidity) === 0) {
         console.log(`Filtering out staked pool ${pool.id}: totalLiquidity = ${pool.totalLiquidity}`);
         return false;
       }
-      
+
       return true;
     });
   });
