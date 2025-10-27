@@ -61,7 +61,7 @@ export const provider = (userStaking: UserStakingResponse) => {
     }),
     filterOptions,
     undefined, // poolsSortField
-    false // skipExpensiveDecorations - CHANGED: load APR immediately instead of lazy loading
+    true 
   );
   const { data: _unstakedPools } = unstakedPoolsQuery;
 

@@ -42,7 +42,7 @@ export default function usePoolsQuery(
   options: UseInfiniteQueryOptions<PoolsQueryResponse> = {},
   filterOptions?: Ref<FilterOptions>,
   poolsSortField?: Ref<string>,
-  skipExpensiveDecorations = false // Skip APR and TotalLiquidity for fast initial load
+  skipExpensiveDecorations = false 
 ) {
   const currentFilterOptions = ref(filterOptions);
   const { injectTokens, tokens: tokenMeta } = useTokens();

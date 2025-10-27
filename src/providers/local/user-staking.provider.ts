@@ -50,7 +50,7 @@ const provider = () => {
     }),
     filterOptions,
     undefined, // poolsSortField
-    false // skipExpensiveDecorations - CHANGED: load APR immediately instead of lazy loading
+    true
   );
   const { data: _stakedPools, refetch: refetchStakedPools } = stakedPoolsQuery;
 

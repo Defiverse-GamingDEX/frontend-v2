@@ -47,21 +47,12 @@ export class PoolDecorator {
         
         // Skip expensive decorations for fast initial load (portfolio page)
         if (!skipExpensiveDecorations) {
-          const start = Date.now();
-          
-          if (pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
-            console.log(`[decorate] Pool ${pool.id} - calling setAPR with volumeSnapshot:`, pool.volumeSnapshot, 'feesSnapshot:', pool.feesSnapshot);
-          }
-          
-          // Run setTotalLiquidity first, then setAPR (APR may need totalLiquidity)
-          await poolService.setTotalLiquidity();
-          await poolService.setAPR();
-          
-          const end = Date.now();
-          if (pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
-            console.log(`[decorate] TotalLiquidity + APR for ${pool.id} took ${end - start}ms`);
-            console.log(`[decorate] Pool ${pool.id} APR after setAPR:`, poolService.pool.apr);
-          }
+                
+          // Run both in parallel for better performance
+          await Promise.all([
+            poolService.setTotalLiquidity(),
+            poolService.setAPR()
+          ]);
         }
       }
 
@@ -79,41 +70,26 @@ export class PoolDecorator {
     // Temporarily set this.pools for getSnapshots to work
     const originalPools = this.pools;
     this.pools = pools;
-    
-    // Fetch snapshots for all pools (needed for APR calculation)
-    const poolSnapshots = await this.getSnapshots();
+
     
     // Restore original pools
     this.pools = originalPools;
     
     const promises = pools.map(async pool => {
-      console.log(`[Lazy] Processing pool ${pool.id}, original APR:`, pool.apr);
       
       // Clone pool to avoid Vue readonly proxy issues
       // When pools are already in Vue reactive state, they become readonly
       const poolClone = JSON.parse(JSON.stringify(pool));
       const poolService = new this.poolServiceClass(poolClone);
-      
-      // Set snapshots (required for APR calculation)
-      const poolSnapshot = poolSnapshots.find(p => p.id === pool.id);
-      poolService.setFeesSnapshot(poolSnapshot);
-      poolService.setVolumeSnapshot(poolSnapshot);
-      
-      console.log(`[Lazy] Pool ${pool.id} after setting snapshots - volumeSnapshot:`, poolService.pool.volumeSnapshot, 'feesSnapshot:', poolService.pool.feesSnapshot);
-      
-      try {
-        const start = Date.now();
+   
+      try {        
+        // Run both in parallel for better performance
+        await Promise.all([
+          poolService.setTotalLiquidity(),
+          poolService.setAPR()
+        ]);
         
-        // Run setTotalLiquidity first, then setAPR (APR may need totalLiquidity)
-        await poolService.setTotalLiquidity();
-        await poolService.setAPR();
         
-        const end = Date.now();
-        if(pool.id === '0xed651c1e26cb0758572ea633b32213cbd7d4f267000200000000000000000024') {
-          console.log(`[Lazy] TotalLiquidity + APR for ${pool.id} took ${end - start}ms`);
-          console.log(`[Lazy] Pool ${pool.id} APR after setAPR():`, poolService.pool.apr);
-          console.log(`[Lazy] Pool ${pool.id} totalLiquidity after setTotalLiquidity():`, poolService.pool.totalLiquidity);
-        }
       } catch (error) {
         console.error(`Failed to lazy load data for pool ${pool.id}:`, error);
       }
