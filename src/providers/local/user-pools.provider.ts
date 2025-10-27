@@ -46,7 +46,7 @@ export const provider = (userStaking: UserStakingResponse) => {
   const unstakedPoolsQuery = usePoolsQuery(
     ref([]),
     reactive({
-      enabled: true, // isPoolsQueryEnabled,
+      enabled: isPoolsQueryEnabled,
     }),
     {
       poolIds: unstakedPoolIds,
