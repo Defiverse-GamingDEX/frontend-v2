@@ -18,6 +18,7 @@ import useWeb3 from '@/services/web3/useWeb3';
 import { AprBreakdown } from '@defiverse/balancer-sdk';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 import { configService } from '@/services/config/config.service';
+import { isRestakeFeatureEnabled } from '@/constants/feature-flags';
 
 /**
  * TYPES
@@ -261,7 +262,7 @@ function symbolFor(titleTokenIndex: number): string {
     block
   />
   <BalAlert
-    v-if="hasNonPrefGaugeBalance && !isAffected"
+    v-if="hasNonPrefGaugeBalance && !isAffected && isRestakeFeatureEnabled"
     :title="$t('staking.restakeGauge')"
     :type="'warning'"
     class="mt-2"
