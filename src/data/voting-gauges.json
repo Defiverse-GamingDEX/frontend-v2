@@ -1800,5 +1800,59 @@
       "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
       "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
     }
+  },
+  {
+    "address": "0x3e3c7910f5c78f2927c13f30c42308b94aa272a3",
+    "network": 9372,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761646674,
+    "pool": {
+      "id": "0xeaac5ae5255407cf933dfcf2b0d3eb4f5dc042cd000000000000000000000035",
+      "address": "0xeaac5ae5255407cf933dfcf2b0d3eb4f5dc042cd",
+      "poolType": "ComposableStable",
+      "symbol": "BtcUSD-USDC",
+      "tokens": [
+        {
+          "address": "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4",
+          "symbol": "BtcUSD"
+        },
+        {
+          "address": "0x2af09148c7bf784e54c7730724e4b48e4735426c",
+          "symbol": "USDC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x2af09148c7bf784e54c7730724e4b48e4735426c": "tokens/USDC_L.png",
+      "0x408a619b6d614e3084ed7ce77476ebd7ba4e1db4": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png"
+    }
+  },
+  {
+    "address": "0x242804e268cee70c38cdd73bf4c5ec13b4c73c9f",
+    "network": 9372,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761646674,
+    "pool": {
+      "id": "0x34936c3e61371e9ebd1dcd580b23a52c26080b70000000000000000000000036",
+      "address": "0x34936c3e61371e9ebd1dcd580b23a52c26080b70",
+      "poolType": "ComposableStable",
+      "symbol": "stOAS-OAS",
+      "tokens": [
+        {
+          "address": "0xf73d74a089366486401d67ad83013a623d40ac77",
+          "symbol": "stOAS"
+        },
+        {
+          "address": "0x5200000000000000000000000000000000000001",
+          "symbol": "OAS"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
+      "0x5200000000000000000000000000000000000001": "https://testnet.gaming-dex.com/tokens/OAS_L.png"
+    }
   }
 ]
