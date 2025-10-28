@@ -12,6 +12,7 @@ import { Pool } from '@/services/pool/types';
 import StakePreviewModal from './StakePreviewModal.vue';
 import { StakeAction } from '@/components/contextual/pages/pool/staking/StakePreview.vue';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
+import { isRestakeFeatureEnabled } from '@/constants/feature-flags';
 
 type Props = {
   pool: Pool;
@@ -206,7 +207,7 @@ function handlePreviewClose() {
                   </BalBtn>
                 </BalStack>
                 <BalAlert
-                  v-if="hasNonPrefGaugeBalance"
+                  v-if="hasNonPrefGaugeBalance && isRestakeFeatureEnabled"
                   :title="$t('staking.restakeGauge')"
                   class="mt-2"
                 >
