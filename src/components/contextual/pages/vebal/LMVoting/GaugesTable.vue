@@ -204,7 +204,7 @@ const columns = computed(() => {
 });
 
 const dataKey = computed(() =>
-  JSON.stringify([gaugesWithApr.value.map(g => g.id), props.filterText])
+  JSON.stringify([gaugesWithApr.value.map(g => g.address), props.filterText])
 );
 
 const tableInitialState = computed(() => {
@@ -312,9 +312,6 @@ function getPickedTokens(tokens: PoolToken[]) {
     })
     .map(item => item.address);
 
-  if (picked.length > 0) {
-    console.log('Picked tokens for filter "' + props.filterText + '":', picked);
-  }
   return picked;
 }
 
@@ -384,6 +381,80 @@ function openConfigReward(gauge) {
 }
 
 /**
+ * Fetch voting pool details for specific gauges
+ */
+async function fetchVotingPoolDetailsForGauges(gaugesToFetch: any[]) {
+  if (!gaugesToFetch || gaugesToFetch.length === 0) return;
+
+  // Process gauges in batches to avoid too many simultaneous requests
+  const batchSize = 5;
+  for (let i = 0; i < gaugesToFetch.length; i += batchSize) {
+    const batch = gaugesToFetch.slice(i, i + batchSize);
+
+    // Mark these gauges as loading APR
+    batch.forEach(gauge => {
+      loadingAprGaugeIds.value.add(gauge.pool.id);
+    });
+
+    // Create promises for each gauge in the batch
+    const promises = batch.map(async (gauge: any) => {
+      try {
+        const chainId = gauge.network || networkId.value;
+        const poolIds = [gauge.pool.id];
+        const gaugeIds = [gauge.id];
+        const userAddress = account.value;
+        const params = {
+          chain_id: chainId,
+          pool_ids: poolIds,
+          gauge_ids: gaugeIds,
+          user_address: userAddress,
+        };
+        const votingPoolDetails = await gaugeApi.getVotingPoolDetails(params);
+
+        if (votingPoolDetails) {
+          const detail = votingPoolDetails[`${gauge.pool.id}`];
+          return { ...detail, gaugeAddress: gauge.address };
+        }
+        return null;
+      } catch (error) {
+        console.error(`Failed to fetch APR for pool ${gauge.pool.id}:`, error);
+        return null;
+      } finally {
+        loadingAprGaugeIds.value.delete(gauge.pool.id);
+      }
+    });
+
+    // Wait for all promises in the batch to resolve
+    const results = await Promise.all(promises);
+
+    // Update gauges with new APR data
+    const updatedGauges = gaugesWithApr.value.map(currentGauge => {
+      const detail = results.find(
+        result => result && result.gaugeAddress === currentGauge.address
+      );
+
+      if (detail) {
+        return {
+          ...currentGauge,
+          ...detail,
+          pool: {
+            ...currentGauge.pool,
+            nextPeriodApr: detail.nextPeriodApr,
+          },
+        };
+      }
+
+      return currentGauge;
+    });
+
+    gaugesWithApr.value = updatedGauges;
+  }
+
+  // Re-apply sorting after fetching pool details
+  sortGaugesByFilterText();
+}
+
+/**
  * Fetch next period voting pool details
  */
 async function fetchVotingPoolDetails() {
@@ -408,7 +479,7 @@ async function fetchVotingPoolDetails() {
         // Fetch the actual pool data using our custom method
         const chainId = gauge.network || networkId.value;
         const poolIds = [gauge.pool.id];
-        const gaugeIds = [gauge.id];
+        const gaugeIds = [gauge.address];
         const userAddress = account.value;
         const params = {
           chain_id: chainId,
@@ -420,7 +491,7 @@ async function fetchVotingPoolDetails() {
 
         if (votingPoolDetails) {
           const detail = votingPoolDetails[`${gauge.pool.id}`];
-          return detail; // Return detail instead of updating immediately
+          return { ...detail, gaugeAddress: gauge.address }; // Return detail with gaugeAddress
         }
         return null;
       } catch (error) {
@@ -444,12 +515,12 @@ async function fetchVotingPoolDetails() {
     const updatedGauges = gaugesWithApr.value.map(currentGauge => {
       // Find if this gauge has updated data in results
       const detail = results.find(
-        result => result && result.gauge === currentGauge.id
+        result => result && result.gaugeAddress === currentGauge.address
       );
 
       if (detail) {
         console.log(
-          `Updating gauge ${currentGauge.id} with APR:`,
+          `Updating gauge ${currentGauge.address} with APR:`,
           detail.nextPeriodApr
         );
         return {
@@ -514,10 +585,34 @@ watch(
         await fetchVotingPoolDetails();
       } else {
         console.log(
-          'Props.data changed but APR already loaded, keeping existing APR data'
+          'Props.data changed but APR already loaded, filtering existing APR data'
         );
-        // Don't reset gaugesWithApr - keep the APR data we already fetched
-        // Just re-sort if needed
+        // Filter gaugesWithApr to only show gauges that are in newData
+        // This preserves APR data while respecting parent filters (like My Wallet filter)
+        const newDataAddresses = new Set(newData.map(g => g.address));
+        gaugesWithApr.value = gaugesWithApr.value.filter(gauge =>
+          newDataAddresses.has(gauge.address)
+        );
+
+        // Add any new gauges from newData that aren't in gaugesWithApr yet
+        const existingAddresses = new Set(
+          gaugesWithApr.value.map(g => g.address)
+        );
+        const newGauges = newData.filter(
+          g => !existingAddresses.has(g.address)
+        );
+        if (newGauges.length > 0) {
+          console.log(
+            'Adding',
+            newGauges.length,
+            'new gauges and fetching their APR...'
+          );
+          gaugesWithApr.value = [...gaugesWithApr.value, ...newGauges];
+          // Fetch APR for new gauges
+          await fetchVotingPoolDetailsForGauges(newGauges);
+        }
+
+        // Re-sort if needed
         sortGaugesByFilterText();
       }
     }
