@@ -60,6 +60,7 @@ const isHighWeight = computed(() => {
           :class="[
             {
               'font-medium': isSelected || isPicked,
+              '!font-bold': isHighWeight,
             },
           ]"
         >
@@ -79,7 +80,7 @@ const isHighWeight = computed(() => {
             v-if="isHighWeight"
             src="/images/pools/markdown.png"
             alt="High weight"
-            class="inline-block w-4 h-4"
+            class="inline-block w-8 h-8"
           />
         </span>
       </div>
