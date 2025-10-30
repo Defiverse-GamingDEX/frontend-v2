@@ -1347,6 +1347,7 @@
   "transactionAction": {
     "stake": "Stake",
     "unstake": "Unstake",
+    "restake": "Restake",
     "approve": "Approve",
     "depositTokens": "Deposit tokens",
     "transfer": "Transfer",
@@ -1406,6 +1407,7 @@
   "transactionSummary": {
     "stake": "{amount} in {pool}",
     "unstake": "{amount} from {pool}",
+    "restake": "{amount} from {pool}",
     "approveForInvesting": "Approve {0} for adding liquidity",
     "approveForSwapping": "Approve {0} for swapping",
     "approveForLocking": "Approve {0} for locking",
