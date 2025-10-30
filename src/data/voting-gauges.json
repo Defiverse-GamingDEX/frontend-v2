@@ -503,7 +503,7 @@
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1759964241,
+    "addedTimestamp": 1761820207,
     "pool": {
       "id": "0xa8495230dc93070feedc583b00c9792ac3f2567e000200000000000000000003",
       "address": "0xa8495230dc93070feedc583b00c9792ac3f2567e",
@@ -561,7 +561,7 @@
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1759964241,
+    "addedTimestamp": 1761820207,
     "pool": {
       "id": "0xdc186bfa1a012eea30dc1f79460446181fd84eb40002000000000000000000d4",
       "address": "0xdc186bfa1a012eea30dc1f79460446181fd84eb4",
@@ -619,7 +619,7 @@
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1759964241,
+    "addedTimestamp": 1761820207,
     "pool": {
       "id": "0xf945f2b132766899b0fb229bb4eab8230f4af874000200000000000000000004",
       "address": "0xf945f2b132766899b0fb229bb4eab8230f4af874",
@@ -648,7 +648,7 @@
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
-    "addedTimestamp": 1759964241,
+    "addedTimestamp": 1761820207,
     "pool": {
       "id": "0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd000200000000000000000001",
       "address": "0x7b550899a0ee8049e07c444bca8d95eb9ff8d5dd",
