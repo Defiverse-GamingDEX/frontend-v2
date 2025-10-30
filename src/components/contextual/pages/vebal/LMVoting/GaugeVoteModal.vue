@@ -114,7 +114,7 @@ const voteButtonText = computed(() =>
 );
 
 const isTestnet = computed(() => import.meta.env.VITE_IS_TESTNET === 'true');
-const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '8 days'));
+const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '1 hour'));
 
 const votedToRecentlyWarning = computed(() => {
   if (isVotingTimeLocked(props.gauge.lastUserVoteTime)) {
