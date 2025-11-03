@@ -67,7 +67,7 @@ const socialLinks = {
   },
   DiscordIcon: {
     component: DiscordIcon,
-    url: 'https://discord.com/invite/Kuptu5qcMc',
+    url: 'https://discord.com/invite/ZRneWRBfhm',
   },
   MediumIcon: {
     component: MediumIcon,
