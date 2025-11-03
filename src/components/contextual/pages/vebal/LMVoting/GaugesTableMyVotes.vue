@@ -28,7 +28,7 @@ type Props = {
 const props = defineProps<Props>();
 
 const isTestnet = computed(() => import.meta.env.VITE_IS_TESTNET === 'true');
-const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '8 days'));
+const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '1 hour'));
 
 /**
  * COMPOSABLES
