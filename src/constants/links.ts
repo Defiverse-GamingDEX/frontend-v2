@@ -10,7 +10,7 @@ export const EXTERNAL_LINKS = {
     Forum: 'https://forum.balancer.finance/',
     Grants: 'http://grants.balancer.community/',
     Social: {
-      Discord: 'https://discord.com/invite/Kuptu5qcMc',
+      Discord: 'https://discord.com/invite/ZRneWRBfhm',
       Github: 'https://github.com/GamingDEX',
       Mail: 'mailto:contact@balancer.finance',
       Medium: 'https://medium.com/@GamingDEX_Oasys',
