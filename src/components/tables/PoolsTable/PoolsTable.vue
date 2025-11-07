@@ -143,7 +143,7 @@ const columns = computed<ColumnDefinition<Pool>[]>(() => [
     id: 'myBoost',
     hidden: !props.showBoost,
     sortKey: pool => Number(boostFor(pool)),
-    width: 150,
+    width: 100,
     cellClassName: 'font-numeric',
   },
   {
@@ -635,13 +635,10 @@ function formatPoolNameFromPoolInfo(pool: Pool) {
 </template>
 <style lang="scss" scoped>
 .pool-name {
-  max-width: 280px;
   word-break: break-word;
   text-align: left;
-  min-width: 200px;
 }
 .pool-pills {
-  max-width: 220px;
   margin-left: auto;
   justify-content: flex-end;
 }

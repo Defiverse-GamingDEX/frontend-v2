@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { PoolToken } from '@/services/pool/types';
 import BalanceTooltip from './BalanceTooltip.vue';
 
@@ -12,11 +13,27 @@ type Props = {
   isShowPopup: boolean;
 };
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   hasBalance: false,
   isSelected: false,
   isPicked: false,
   isShowPopup: false,
+});
+
+// Parse weight percentage
+const weightPercentage = computed(() => {
+  const match = props.weight.match(/([\d.]+)%/);
+  return match ? parseFloat(match[1]) : 0;
+});
+
+// Check if weight should be hidden (50%)
+const shouldHideWeight = computed(() => {
+  return weightPercentage.value === 50;
+});
+
+// Check if weight is >= 80%
+const isHighWeight = computed(() => {
+  return weightPercentage.value >= 80;
 });
 </script>
 
@@ -43,13 +60,28 @@ withDefaults(defineProps<Props>(), {
           :class="[
             {
               'font-medium': isSelected,
+              '!font-bold': isHighWeight,
             },
           ]"
         >
           {{ symbol }}
         </span>
-        <span class="pill-weight">
+        <span
+          v-if="!shouldHideWeight"
+          :class="[
+            'pill-weight flex items-center',
+            {
+              '!font-bold': isHighWeight,
+            },
+          ]"
+        >
           {{ weight }}
+          <img
+            v-if="isHighWeight"
+            src="/images/pools/markdown.png"
+            alt="High weight"
+            class="inline-block w-8 h-8"
+          />
         </span>
       </div>
     </template>
