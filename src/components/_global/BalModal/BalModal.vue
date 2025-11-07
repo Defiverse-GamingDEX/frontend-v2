@@ -108,7 +108,6 @@ defineExpose({ hide });
   @apply relative w-full h-3/4 sm:h-auto max-h-screen;
 
   max-width: 450px;
-  transform-style: preserve-3d;
 }
 
 .modal-bg {
