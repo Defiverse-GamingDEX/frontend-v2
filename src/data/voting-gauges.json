@@ -1,5 +1,34 @@
 [
   {
+    "address": "0xf62cc750c079c349d8408e89ded6ce5361d61e0c",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761820207,
+    "pool": {
+      "id": "0x7cab139f44aa9c2c7b5c2e538bbb965992f895c500020000000000000000014d",
+      "address": "0x7cab139f44aa9c2c7b5c2e538bbb965992f895c5",
+      "poolType": "Weighted",
+      "symbol": "80Z-20USDC.e",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.2",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.8",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
     "address": "0xe97e08d47b05efcfda21751a65a89bef4753655f",
     "network": 248,
     "isKilled": false,
