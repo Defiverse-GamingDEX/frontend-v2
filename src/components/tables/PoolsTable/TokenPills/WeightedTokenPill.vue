@@ -59,8 +59,8 @@ const isHighWeight = computed(() => {
         <span
           :class="[
             {
-              'font-medium': isSelected,
               '!font-bold': isHighWeight,
+              'font-medium': isSelected || isPicked,
             },
           ]"
         >
@@ -99,7 +99,7 @@ const isHighWeight = computed(() => {
 }
 
 .pill-picked {
-  @apply bg-blue-50 dark:bg-blue-500 dark:bg-opacity-20;
+  @apply bg-blue-50 dark:bg-blue-500 dark:bg-opacity-20 ring-2 ring-blue-500 dark:ring-blue-400;
 }
 
 .pill-weight {

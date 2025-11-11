@@ -23,6 +23,10 @@ import ResubmitVotesAlert from './ResubmitVotes/ResubmitVotesAlert.vue';
 import { orderedTokenURIs } from '@/composables/useVotingGauges';
 import { Network } from '@defiverse/balancer-sdk';
 import GaugesFilters from './GaugesFilters.vue';
+import TokenSearchInputSelectTokens from '@/components/inputs/TokenSearchInputSelectTokens.vue';
+import { useTokens } from '@/providers/tokens.provider';
+import { take, pick } from 'lodash';
+import { includesAddress } from '@/lib/utils';
 
 /**
  * DATA
@@ -32,6 +36,7 @@ const showExpiredGauges = useDebouncedRef<boolean>(false, 500);
 const activeNetworkFilters = useDebouncedRef<Network[]>([], 500);
 const activeVotingGauge = ref<VotingGaugeWithVotes | null>(null);
 const tableRerenderCounter = ref<number>(0);
+const selectedWalletTokens = ref<string[]>([]);
 
 const adminAddress = ref<string | null>(null);
 
@@ -58,6 +63,7 @@ const { shouldResubmitVotes } = useVotingEscrowLocks();
 
 const { account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
+const { getToken, tokens, balances } = useTokens();
 
 const votingGaugeAddresses = computed<string[]>(
   () => votingGauges.value?.map(gauge => gauge.address) || []
@@ -134,8 +140,20 @@ const filteredVotingGauges = computed(() => {
       showByNetwork = false;
     }
 
+    // Filter by selected wallet tokens (OR logic)
+    let showByWalletToken = true;
+    if (selectedWalletTokens.value.length > 0) {
+      // Check if any of the gauge's pool tokens match any selected wallet token
+      const poolTokenAddresses = gauge.pool?.tokens?.map(t => t.address) || [];
+      showByWalletToken = selectedWalletTokens.value.some(selectedToken =>
+        poolTokenAddresses.some(poolToken =>
+          includesAddress([poolToken], selectedToken)
+        )
+      );
+    }
+
     // Removed token filter - now handled by GaugesTable with sorting
-    return showByNetwork;
+    return showByNetwork && showByWalletToken;
   });
 });
 
@@ -200,6 +218,34 @@ const votingPeriodDisplayText = computed<string>(() => {
 
   return '';
 });
+
+// My Wallet tokens - sorted by biggest balance, limited to 6
+const sortedBalances = computed(() => {
+  const addressesWithBalance = Object.entries(balances.value)
+    .filter(([, balance]) => Number(balance) > 0)
+    .map(([address]) => address);
+  const tokensWithBalance = Object.values(
+    pick(tokens.value, addressesWithBalance)
+  );
+
+  return take(tokensWithBalance, 6);
+});
+
+const hasNoBalances = computed(() => !sortedBalances.value.length);
+
+const selectableWalletTokensAddresses = computed<string[]>(() => {
+  if (!account.value || hasNoBalances.value) {
+    return [];
+  }
+
+  return sortedBalances.value.reduce(
+    (acc, token) =>
+      includesAddress(selectedWalletTokens.value, token.address)
+        ? acc
+        : [...acc, token.address],
+    [] as string[]
+  );
+});
 // LIFE CYCLES
 onBeforeMount(async () => {
   adminAddress.value = await getAdminAddress();
@@ -223,6 +269,23 @@ function handleVoteSuccess() {
 }
 function changeTab(tab: string) {
   tabSelect.value = tab;
+}
+
+function addWalletToken(token: string) {
+  selectedWalletTokens.value = [...selectedWalletTokens.value, token];
+}
+
+function removeWalletToken(token: string) {
+  selectedWalletTokens.value = selectedWalletTokens.value.filter(
+    t => t !== token
+  );
+}
+
+function symbolFor(tokenAddress: string): string {
+  let symbol = getToken(tokenAddress)?.symbol || '---';
+  // Hung: Rename WOAS
+  if (symbol == 'WOAS') symbol = 'OAS';
+  return symbol;
 }
 </script>
 
@@ -342,7 +405,36 @@ function changeTab(tab: string) {
             </BalBtn>
           </div>
         </div>
-        <div class="flex">
+        <div class="flex flex-wrap gap-3 items-center">
+          <!-- My Wallet Token Filter -->
+          <div
+            v-if="
+              selectableWalletTokensAddresses.length ||
+              selectedWalletTokens.length
+            "
+            class="flex flex-wrap gap-2 items-center"
+          >
+            <!-- Selected tokens -->
+            <BalChip
+              v-for="token in selectedWalletTokens"
+              :key="token"
+              color="white"
+              iconSize="sm"
+              :closeable="true"
+              @closed="removeWalletToken(token)"
+            >
+              <BalAsset :address="token" :size="20" class="flex-auto" />
+              <span class="ml-2">{{ symbolFor(token) }}</span>
+            </BalChip>
+            <!-- Available tokens to select -->
+            <TokenSearchInputSelectTokens
+              v-if="selectableWalletTokensAddresses.length"
+              :label="$t('myWallet2')"
+              :addresses="selectableWalletTokensAddresses"
+              @click="address => addWalletToken(address)"
+            />
+          </div>
+
           <BalTextInput
             v-model="tokenFilter"
             class="mr-5"
