@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import {
   PoolChart,
@@ -38,6 +38,7 @@ import BrandedRedirectCard from '@/components/pool/branded-redirect/BrandedRedir
 import ExtraRewardCard from '@/components/contextual/pages/pool/ExtraRewardCard.vue';
 import gaugeApi from '@/composables/gaugeReward/gauge.api';
 import useConfig from '@/composables/useConfig';
+import { isExcludedPool } from '@/constants/excludedPools';
 /**
  * STATE
  */
@@ -55,12 +56,19 @@ providePoolStaking(poolId);
  * COMPOSABLES
  */
 const { t } = useI18n();
+const router = useRouter();
 
 const { prices } = useTokens();
 const { isWalletReady } = useWeb3();
 const { addAlert, removeAlert } = useAlerts();
 const _isVeBalPool = isVeBalPool(poolId);
 const { networkConfig } = useConfig();
+
+// Check if the current pool is excluded and redirect if necessary
+if (isExcludedPool(poolId)) {
+  console.log(`🚫 Pool ${poolId} is excluded, redirecting to pools list`);
+  router.push({ name: 'list-pool' });
+}
 
 //#region pool query
 const poolQuery = usePoolQuery(poolId, undefined, undefined);
