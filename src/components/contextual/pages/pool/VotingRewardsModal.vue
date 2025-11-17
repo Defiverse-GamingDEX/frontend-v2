@@ -35,6 +35,7 @@ const amount = ref<string>('');
 const period = ref<number>(1);
 const isApproved = ref(false);
 const isLoading = ref(false);
+const isCheckingAllowance = ref(false);
 const balanceError = ref<string>('');
 
 /**
@@ -99,6 +100,7 @@ async function checkAllowanceForAmount(amountValue: string) {
   }
 
   try {
+    isCheckingAllowance.value = true;
     const provider = getProvider();
     const allowance = await checkTokenAllowance(
       selectedToken.value.address,
@@ -116,6 +118,8 @@ async function checkAllowanceForAmount(amountValue: string) {
   } catch (error) {
     console.error('Error checking allowance:', error);
     isApproved.value = false;
+  } finally {
+    isCheckingAllowance.value = false;
   }
 }
 
@@ -256,6 +260,10 @@ watch(
         isApproved.value = true;
       } else {
         isApproved.value = false;
+        // Check allowance for new token if amount is already entered
+        if (amount.value && Number(amount.value) > 0) {
+          checkAllowanceForAmount(amount.value);
+        }
       }
     }
   }
@@ -331,23 +339,29 @@ watch(() => amount.value, handleAmountChange);
             "
             color="gradient"
             :loading="isLoading"
-            :disabled="!isFormValid"
+            :disabled="!isFormValid || isCheckingAllowance"
             block
             @click="handleApprove"
           >
-            Approve {{ selectedToken.symbol }}
+            <span v-if="isCheckingAllowance">Checking Allowance...</span>
+            <span v-else>Approve {{ selectedToken.symbol }}</span>
           </BalBtn>
 
           <BalBtn
             v-else
             color="gradient"
             :loading="isLoading"
-            :disabled="!isFormValid || (!isApproved && !isNativeToken)"
+            :disabled="
+              !isFormValid ||
+              (!isApproved && !isNativeToken) ||
+              isCheckingAllowance
+            "
             block
             @click="handleSubmit"
           >
             <span v-if="!selectedToken">Select Token</span>
             <span v-else-if="!amount || Number(amount) <= 0">Enter Amount</span>
+            <span v-else-if="isCheckingAllowance">Checking Allowance...</span>
             <span v-else-if="!isApproved && !isNativeToken">Approve First</span>
             <span v-else>Add Voting Reward</span>
           </BalBtn>

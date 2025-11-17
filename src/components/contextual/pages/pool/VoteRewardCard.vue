@@ -15,8 +15,12 @@ import VotingRewardsModal from './VotingRewardsModal.vue';
 /**
  * COMPOSABLES
  */
-const { isWalletReady, startConnectWithInjectedProvider, getProvider } =
-  useWeb3();
+const {
+  isWalletReady,
+  startConnectWithInjectedProvider,
+  getProvider,
+  account,
+} = useWeb3();
 const { getRewardAmounts } = useVoteRewardScheduler();
 const { getToken } = useTokens();
 const { fNum2 } = useNumbers();
@@ -38,11 +42,22 @@ async function getVoteRewardAmounts() {
   }
   try {
     const provider = getProvider();
+    console.log('🚀 ~ getVoteRewardAmounts ~ provider:', provider);
+    console.log('🚀 ~ getVoteRewardAmounts ~ account:', account.value);
+
     let rs = await getRewardAmounts(provider);
+    console.log('🚀 ~ getVoteRewardAmounts ~ raw response:', rs);
+
     if (rs) {
       const data = rs.map(item => {
+        console.log('🚀 ~ processing item:', item);
         const token = getToken(item.token);
-        if (!token) return null;
+        console.log('🚀 ~ found token:', token, 'for address:', item.token);
+
+        if (!token) {
+          console.log('❌ ~ Token not found for address:', item.token);
+          return null;
+        }
 
         const convertedAmount = BigNumber(item.amount)
           .div(10 ** token.decimals)
@@ -53,18 +68,20 @@ async function getVoteRewardAmounts() {
           token,
         };
       });
-      console.log('🚀 ~ getVoteRewardAmounts ~ data:', data);
+      console.log('🚀 ~ getVoteRewardAmounts ~ processed data:', data);
 
       if (data) {
         rewardList.value = data.filter(t => !!t) || [];
         console.log(
-          '🚀 ~ getVoteRewardAmounts ~ rewardList.value:',
+          '🚀 ~ getVoteRewardAmounts ~ final rewardList.value:',
           rewardList.value
         );
       }
+    } else {
+      console.log('❌ ~ getRewardAmounts returned empty/null');
     }
   } catch (error) {
-    console.log('getVoteRewardAmounts error :', error);
+    console.log('❌ ~ getVoteRewardAmounts error:', error);
   }
 }
 
@@ -124,10 +141,10 @@ onMounted(async () => {
     </template>
     <div class="py-2">
       <BalStack v-show="!isCollapsed" vertical spacing="sm" class="py-2 px-4">
-        <div class="flex justify-between title-container">
+        <!-- <div class="flex justify-between title-container">
           <div class="text-sm">Token</div>
           <div class="text-sm">Pending Rewards</div>
-        </div>
+        </div> -->
         <BalStack
           v-for="(item, index) in rewardList"
           :key="index"

@@ -118,41 +118,36 @@ async function getRewardAmounts(currentProvider: any) {
     const provider = currentProvider;
     const contract = new Contract(VOTE_REWARD_SCHEDULER_CONTRACT_ADDRESS, VoteRewardSchedulerABI, provider);
     
-    // Get all registered tokens first
-    const registeredTokens: string[] = [];
-    let tokenIndex = 0;
+    console.log('🚀 ~ Calling getRewardAmounts on contract:', VOTE_REWARD_SCHEDULER_CONTRACT_ADDRESS);
     
-    try {
-      while (true) {
-        const token = await contract.rewardTokens(tokenIndex);
-        if (token === '0x0000000000000000000000000000000000000000') break;
-        registeredTokens.push(token);
-        tokenIndex++;
-      }
-    } catch (error) {
-      // End of array reached
-    }
-
+    // Call getRewardAmounts function from ABI
+    const result = await contract.getRewardAmounts();
+    console.log('🚀 ~ Raw contract result:', result);
+    
+    // Result is [address[], uint256[]]
+    const [tokenAddresses, amounts] = result;
+    console.log('🚀 ~ Token addresses:', tokenAddresses);
+    console.log('🚀 ~ Amounts:', amounts);
+    
     const data: any[] = [];
     
-    // Get pending rewards for each token
-    for (const token of registeredTokens) {
-      try {
-        const pendingRewards = await contract.getPendingRewards(token);
-        if (pendingRewards && pendingRewards.toString() !== '0') {
-          data.push({
-            token: token,
-            amount: pendingRewards.toString(),
-          });
-        }
-      } catch (error) {
-        console.log('Error getting pending rewards for token:', token, error);
+    // Combine addresses and amounts
+    for (let i = 0; i < tokenAddresses.length; i++) {
+      const tokenAddress = tokenAddresses[i];
+      const amount = amounts[i];
+      
+      if (amount && amount.toString() !== '0') {
+        data.push({
+          token: tokenAddress,
+          amount: amount.toString(),
+        });
       }
     }
-
+    
+    console.log('🚀 ~ Processed data:', data);
     return data;
   } catch (error) {
-    console.log('getRewardAmounts error:', error);
+    console.log('❌ ~ getRewardAmounts error:', error);
     throw error;
   }
 }
