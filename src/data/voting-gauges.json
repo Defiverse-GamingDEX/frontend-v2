@@ -1,5 +1,151 @@
 [
   {
+    "address": "0xf62cc750c079c349d8408e89ded6ce5361d61e0c",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761820207,
+    "pool": {
+      "id": "0x7cab139f44aa9c2c7b5c2e538bbb965992f895c500020000000000000000014d",
+      "address": "0x7cab139f44aa9c2c7b5c2e538bbb965992f895c5",
+      "poolType": "Weighted",
+      "symbol": "80Z-20USDC.e",
+      "tokens": [
+        {
+          "address": "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D",
+          "weight": "0.2",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.8",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4D17C0609B77e456Fb98Ea99a62bCeF09adae32D": "tokens/USDC_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0xe97e08d47b05efcfda21751a65a89bef4753655f",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761820207,
+    "pool": {
+      "id": "0xaf2c6d5bd5b7e4ac4c7a0580676e2b7d8974b8ec000200000000000000000141",
+      "address": "0xaf2c6d5bd5b7e4ac4c7a0580676e2b7d8974b8ec",
+      "poolType": "Weighted",
+      "symbol": "90WETH-10Z",
+      "tokens": [
+        {
+          "address": "0x5801E5a61164024Be2554248E33127c6ebC8C113",
+          "weight": "0.9",
+          "symbol": "WETH"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5801E5a61164024Be2554248E33127c6ebC8C113": "tokens/ETH_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0xbafba9566774ad2bd905cbabaa67f3b9297f1af1",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761820207,
+    "pool": {
+      "id": "0x7a9e56b3500b50c53d5eff76f85ee6cd9503e0f3000200000000000000000143",
+      "address": "0x7a9e56b3500b50c53d5eff76f85ee6cd9503e0f3",
+      "poolType": "Weighted",
+      "symbol": "10Z-90WBTC",
+      "tokens": [
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        },
+        {
+          "address": "0xdd30c42D57a0f14DD44c809F59836D57392FDbC9",
+          "weight": "0.9",
+          "symbol": "WBTC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xdd30c42D57a0f14DD44c809F59836D57392FDbC9": "tokens/WBTC_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0x019f49c47b18058a4aa5e97d0254789364244b3b",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761820207,
+    "pool": {
+      "id": "0x247caca6c3dbdc8dd649fb197f648b495e61e432000200000000000000000148",
+      "address": "0x247caca6c3dbdc8dd649fb197f648b495e61e432",
+      "poolType": "Weighted",
+      "symbol": "90MUSHI-10Z",
+      "tokens": [
+        {
+          "address": "0xbb5e4922061D5347eAe47f0A8BCbbCADEA5480A5",
+          "weight": "0.9",
+          "symbol": "MUSHI"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xbb5e4922061D5347eAe47f0A8BCbbCADEA5480A5": "https://price-api.gaming-dex.com/static/image_1f3287db1f4f4ec69d03c9e707ed86da.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0x166bfb88451afbd37b1f35d06ab6668803d20a1f",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1761820207,
+    "pool": {
+      "id": "0xade91377560517cb453f39c040018462578b2676000200000000000000000147",
+      "address": "0xade91377560517cb453f39c040018462578b2676",
+      "poolType": "Weighted",
+      "symbol": "90MSM-10Z",
+      "tokens": [
+        {
+          "address": "0xd11E0F63B04868567c297A3119e491707DB19E4e",
+          "weight": "0.9",
+          "symbol": "MSM"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xd11E0F63B04868567c297A3119e491707DB19E4e": "https://price-api.gaming-dex.com/static/image_eda41e6607e2487c93b1235ab94ebb2c.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+
+  {
     "address": "0x2f1c91d0d40ef2fa0e06601d410cf3ef9ca230f5",
     "network": 248,
     "isKilled": false,

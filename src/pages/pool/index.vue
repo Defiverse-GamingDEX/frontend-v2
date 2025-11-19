@@ -24,6 +24,7 @@ import useWeb3 from '@/services/web3/useWeb3';
 import { configService } from '@/services/config/config.service';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { EXCLUDED_POOL_IDS } from '@/constants/excludedPools';
 
 const { account } = useWeb3();
 // STATES
@@ -70,6 +71,20 @@ const isFetchingApr = ref(false);
 const isFetchingSnapshots = ref(false);
 const snapshotsCache = ref<any[]>([]);
 const pageSize = 30;
+
+// Computed property to filter out the excluded pools
+const filteredPools = computed(() => {
+  const filtered = rawPools.value.filter(
+    pool => !EXCLUDED_POOL_IDS.includes(pool.id)
+  );
+  const excludedCount = rawPools.value.length - filtered.length;
+  if (excludedCount > 0) {
+    console.log(
+      `🚫 Excluded ${excludedCount} pool(s) from the excluded pools list`
+    );
+  }
+  return filtered;
+});
 
 // Function to clean and validate token address
 const cleanTokenAddress = (address: string) => {
@@ -710,7 +725,7 @@ onBeforeMount(async () => {
           </div>
         </div>
         <PoolsTable
-          :data="rawPools"
+          :data="filteredPools"
           :noPoolsLabel="$t('noPoolsFound')"
           :isLoading="isLoading"
           :selectedTokens="selectedTokens"
