@@ -36,6 +36,7 @@ import { providePoolStaking } from '@/providers/local/pool-staking.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 import BrandedRedirectCard from '@/components/pool/branded-redirect/BrandedRedirectCard.vue';
 import ExtraRewardCard from '@/components/contextual/pages/pool/ExtraRewardCard.vue';
+import VoteRewardCard from '@/components/contextual/pages/pool/VoteRewardCard.vue';
 import gaugeApi from '@/composables/gaugeReward/gauge.api';
 import useConfig from '@/composables/useConfig';
 import { isExcludedPool } from '@/constants/excludedPools';
@@ -330,6 +331,10 @@ watch(poolQuery.error, () => {
             v-if="canStake && !loadingPool && pool && isWalletReady"
             :pool="pool"
             class="staking-incentives"
+          />
+          <VoteRewardCard
+            v-if="!loadingPool && pool && isWalletReady"
+            :pool="pool"
           />
           <PoolLockingCard
             v-if="_isVeBalPool && !loadingPool && pool"

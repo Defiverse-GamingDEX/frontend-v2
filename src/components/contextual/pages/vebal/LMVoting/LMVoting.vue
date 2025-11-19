@@ -382,7 +382,7 @@ function symbolFor(tokenAddress: string): string {
           </p>
         </BalCard>
       </div>
-      <div class="flex justify-between mt-4 mb-3 lg:mb-0 w-full">
+      <div class="lg:flex justify-between mt-4 mb-3 lg:mb-0 w-full f">
         <div class="gauge-tabs">
           <div class="flex justify-end align-center">
             <BalBtn
@@ -405,7 +405,7 @@ function symbolFor(tokenAddress: string): string {
             </BalBtn>
           </div>
         </div>
-        <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex flex-wrap gap-3 items-center mt-4 md:mt-0">
           <!-- My Wallet Token Filter -->
           <div
             v-if="

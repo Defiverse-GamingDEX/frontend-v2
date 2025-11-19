@@ -14,6 +14,14 @@ import useEthers from '@/composables/useEthers';
 /**
  * PROPS & EMITS
  */
+interface Props {
+  pool?: any;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  pool: undefined,
+});
+
 const emit = defineEmits(['close', 'success']);
 
 /**
@@ -44,6 +52,17 @@ const balanceError = ref<string>('');
 const selectedToken = computed(() => {
   if (!selectedTokenAddress.value) return null;
   return getToken(selectedTokenAddress.value);
+});
+
+const poolTokens = computed(() => {
+  if (!props.pool || !props.pool.tokens) return [];
+  // Filter out BPT token and get main tokens
+  return props.pool.tokens
+    .filter(
+      (token: any) =>
+        token.address.toLowerCase() !== props.pool.address.toLowerCase()
+    )
+    .slice(0, 2); // Get first 2 tokens for the pair
 });
 
 const isNativeToken = computed(() => {
@@ -285,6 +304,36 @@ watch(() => amount.value, handleAmountChange);
       </template>
 
       <div class="p-4 space-y-4">
+        <!-- Pool Information -->
+        <div
+          v-if="props.pool && poolTokens.length > 0"
+          class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+        >
+          <div class="flex justify-center items-center space-x-2">
+            <div class="flex items-center space-x-1">
+              <BalAsset
+                v-for="token in poolTokens"
+                :key="token.address"
+                :address="token.address"
+                :iconURI="getToken(token.address)?.logoURI"
+                :size="24"
+                class="relative"
+                :class="{ '-ml-2': poolTokens.indexOf(token) > 0 }"
+              />
+            </div>
+            <span class="font-semibold text-gray-800 dark:text-gray-200">
+              {{
+                poolTokens
+                  .map(token => getToken(token.address)?.symbol || token.symbol)
+                  .join(' / ')
+              }}
+            </span>
+          </div>
+          <div class="mt-1 text-xs text-center text-gray-500">
+            Pool: {{ props.pool.name || 'Weighted Pool' }}
+          </div>
+        </div>
+
         <!-- Token Selection & Amount Input Combined -->
         <div class="space-y-2">
           <label

@@ -10,7 +10,13 @@ import VotingRewardsModal from './VotingRewardsModal.vue';
 /**
  * TYPES
  */
-// No props needed for VoteRewardCard
+interface Props {
+  pool?: any;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  pool: undefined,
+});
 
 /**
  * COMPOSABLES
@@ -190,6 +196,7 @@ onMounted(async () => {
     <!-- Voting Rewards Modal -->
     <VotingRewardsModal
       v-if="showVotingRewardsModal"
+      :pool="props.pool"
       @close="closeVotingRewardsModal"
       @success="getVoteRewardAmounts"
     />
