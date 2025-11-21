@@ -48,6 +48,7 @@ const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = ref('');
 const streamerAddress = ref('');
 const canStake = ref(false);
+const canVote = ref(false);
 /**
  * PROVIDERS
  */
@@ -167,6 +168,17 @@ async function getGaugeAddress() {
     if (response.stake_enabled) {
       canStake.value = true;
     }
+    if (response.vote_enabled) {
+      canVote.value = true;
+    }
+
+    // Log gauge address for debugging
+    console.log(
+      '🚀 ~ getGaugeAddress ~ pool.value:',
+      pool.value,
+      'gaugeAddress.value:',
+      gaugeAddress.value
+    );
   } catch (error) {
     console.error(error);
   }
@@ -332,10 +344,6 @@ watch(poolQuery.error, () => {
             :pool="pool"
             class="staking-incentives"
           />
-          <VoteRewardCard
-            v-if="!loadingPool && pool && isWalletReady"
-            :pool="pool"
-          />
           <PoolLockingCard
             v-if="_isVeBalPool && !loadingPool && pool"
             :pool="pool"
@@ -352,6 +360,11 @@ watch(poolQuery.error, () => {
             :streamerAddress="streamerAddress"
             :pool="pool"
             class="mb-4"
+          />
+          <VoteRewardCard
+            v-if="canVote && !loadingPool && pool && isWalletReady"
+            :pool="pool"
+            :gaugeAddress="gaugeAddress"
           />
         </BalStack>
       </div>
