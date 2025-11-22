@@ -265,32 +265,15 @@ function closeVotingRewardsModal() {
   selectedGaugeForReward.value = null;
 }
 
-function formatVoteIncentives(voteIncentives: any) {
-  if (!voteIncentives || !voteIncentives.tokens || !voteIncentives.rewards) {
-    return '-';
-  }
+function formatTokenReward(tokenAddress: string, reward: string) {
+  const token = getToken(tokenAddress);
+  if (!token || !reward) return '-';
 
-  const { tokens, rewards } = voteIncentives;
-  if (!tokens.length || !rewards.length) {
-    return '-';
-  }
+  // Convert reward amount from wei to readable format
+  const amount = Number(reward) / Math.pow(10, token.decimals || 18);
+  const symbol = token.symbol || token.name || 'Unknown';
 
-  const formattedTokens = tokens
-    .map((tokenAddress: string, index: number) => {
-      const token = getToken(tokenAddress);
-      const reward = rewards[index];
-
-      if (!token || !reward) return null;
-
-      // Convert reward amount from wei to readable format
-      const amount = Number(reward) / Math.pow(10, token.decimals || 18);
-      const symbol = token.symbol || token.name || 'Unknown';
-
-      return `${fNum2(amount.toString())} ${symbol}`;
-    })
-    .filter(Boolean);
-
-  return formattedTokens.length > 0 ? formattedTokens.join(', ') : '-';
+  return `${fNum2(amount.toString())} ${symbol}`;
 }
 
 function redirectToPool(gauge: VotingGaugeWithVotes, inNewTab) {
@@ -855,8 +838,29 @@ onBeforeMount(async () => {
         </div>
       </template>
       <template #voteIncentivesCell="gauge">
-        <div class="px-4 text-xs text-right break-words">
-          {{ formatVoteIncentives(gauge.vote_incentives) }}
+        <div class="px-4 text-xs text-right">
+          <div v-if="gauge.vote_incentives?.tokens?.length" class="space-y-1">
+            <div
+              v-for="(tokenAddress, index) in gauge.vote_incentives.tokens"
+              :key="tokenAddress"
+              class="flex justify-end items-center space-x-1"
+            >
+              <BalAsset
+                :address="tokenAddress"
+                :iconURI="getToken(tokenAddress)?.logoURI"
+                :size="16"
+              />
+              <span class="break-words">
+                {{
+                  formatTokenReward(
+                    tokenAddress,
+                    gauge.vote_incentives.rewards[index]
+                  )
+                }}
+              </span>
+            </div>
+          </div>
+          <div v-else class="text-gray-400">-</div>
         </div>
       </template>
       <template #voteColumnCell="gauge">
