@@ -10,7 +10,15 @@ import VotingRewardsModal from './VotingRewardsModal.vue';
 /**
  * TYPES
  */
-// No props needed for VoteRewardCard
+interface Props {
+  pool?: any;
+  gaugeAddress?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  pool: undefined,
+  gaugeAddress: undefined,
+});
 
 /**
  * COMPOSABLES
@@ -40,12 +48,28 @@ async function getVoteRewardAmounts() {
     rewardList.value = [];
     return;
   }
+  console.log('🚀 ~ getVoteRewardAmounts ~ props.pool:', props.pool);
+  console.log(
+    '🚀 ~ getVoteRewardAmounts ~ props.gaugeAddress:',
+    props.gaugeAddress
+  );
+
+  if (!props.gaugeAddress) {
+    console.log('❌ ~ No gauge address available');
+    rewardList.value = [];
+    return;
+  }
+
   try {
     const provider = getProvider();
     console.log('🚀 ~ getVoteRewardAmounts ~ provider:', provider);
     console.log('🚀 ~ getVoteRewardAmounts ~ account:', account.value);
+    console.log(
+      '🚀 ~ getVoteRewardAmounts ~ gauge_address:',
+      props.gaugeAddress
+    );
 
-    let rs = await getRewardAmounts(provider);
+    let rs = await getRewardAmounts(props.gaugeAddress, provider);
     console.log('🚀 ~ getVoteRewardAmounts ~ raw response:', rs);
 
     if (rs) {
@@ -190,6 +214,17 @@ onMounted(async () => {
     <!-- Voting Rewards Modal -->
     <VotingRewardsModal
       v-if="showVotingRewardsModal"
+      :pool="{
+        ...props.pool,
+        tokenLogoURIs: props.pool?.tokens?.reduce((acc: any, token: any) => {
+          const tokenInfo = getToken(token.address);
+          if (tokenInfo?.logoURI) {
+            acc[token.address] = tokenInfo.logoURI;
+          }
+          return acc;
+        }, {}) || {}
+      }"
+      :gaugeAddress="props.gaugeAddress"
       @close="closeVotingRewardsModal"
       @success="getVoteRewardAmounts"
     />
