@@ -85,6 +85,7 @@ export interface Config {
     veBALHelpers: string;
     feeDistributor: string;
     feeDistributorDeprecated: string;
+    voteRewardDistributor: string;
     faucet: string;
     gaugeRewardsHelper?: string;
     oracle?: string;

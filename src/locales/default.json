@@ -133,7 +133,8 @@
     "tips": {
       "BalIncentives": "Incentives for LPs who stake in eligible pools (based on the previous week's voting). This doesn't include swap fees or intrinsic yield from certain yield bearing tokens which accumulate into LP positions automatically.",
       "ProtocolAndVebal": "Additional incentives for sZ holders: For locking in the B-80Z-20OAS pool (based on the previous week's voting), and their share of protocol revenue.",
-      "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any Z liquidity incentives."
+      "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any Z liquidity incentives.",
+      "VoteIncentives": "Vote Incentives."
     }
   },
   "claimAll": "Claim all",
@@ -638,6 +639,7 @@
   "oops": "Oops",
   "oracleWeightedPool": "Oracle Weighted Pool",
   "otherTokenIncentives": "Other token incentives",
+  "voteIncentives": "Vote incentives",
   "overview": "Overview",
   "ownerFeesTooltip": "Liquidity providers earn dynamic swap fees on every swap that utilizes the liquidity in this pool. Dynamic swap fees are controlled by the Pool Owner.",
   "payload": "Payload",
