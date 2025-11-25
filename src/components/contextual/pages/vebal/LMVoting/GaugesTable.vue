@@ -871,7 +871,7 @@ onBeforeMount(async () => {
             @click.stop.prevent="emit('clickedVote', gauge)"
           />
           <div
-            class="w-full text-xs text-blue-600 hover:text-blue-500 break-words cursor-pointer !mt-2"
+            class="w-full text-xs text-blue-600 hover:text-blue-500 break-words cursor-pointer !my-2"
             @click.stop.prevent="openVotingRewardsModal(gauge)"
           >
             <span class="block ml-6 break-words"
