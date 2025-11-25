@@ -874,7 +874,9 @@ onBeforeMount(async () => {
             class="w-full text-xs text-blue-600 hover:text-blue-500 break-words cursor-pointer !mt-2"
             @click.stop.prevent="openVotingRewardsModal(gauge)"
           >
-            + vote incentives
+            <span class="block ml-6 break-words"
+              >+ increase vote incentives</span
+            >
           </div>
         </div>
       </template>

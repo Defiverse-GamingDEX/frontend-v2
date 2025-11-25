@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 
 import useWeb3 from '@/services/web3/useWeb3';
 import { useTokens } from '@/providers/tokens.provider';
+import { useTokenLists } from '@/providers/token-lists.provider';
 import { useVoteRewardScheduler } from '@/composables/voteRewardScheduler/useVoteRewardScheduler';
 import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
 import useNotifications from '@/composables/useNotifications';
@@ -33,6 +34,7 @@ const emit = defineEmits(['close', 'success']);
  */
 const { account, getProvider } = useWeb3();
 const { getToken } = useTokens();
+const { activeTokenLists } = useTokenLists();
 const { checkTokenAllowance, approveToken, depositToken } =
   useVoteRewardScheduler();
 const { addNotification } = useNotifications();
@@ -174,6 +176,43 @@ const isNativeToken = computed(() => {
         '0x0000000000000000000000000000000000000000' ||
       selectedToken.value.symbol === 'OAS')
   );
+});
+
+// Get token list origin for owner filtering
+const tokenListOrigin = computed(() => {
+  const tokenListArray = Object.entries(activeTokenLists.value) || [];
+  return tokenListArray.length > 0 &&
+    tokenListArray[0] &&
+    tokenListArray[0].length >= 2
+    ? tokenListArray[0][1].tokens
+    : [];
+});
+
+// Custom excluded tokens for voting rewards - exclude OAS and non-gamingdex tokens
+const customExcludedTokens = computed(() => {
+  const excludedAddresses: string[] = [];
+
+  // Get all tokens from token list origin
+  const allTokens = tokenListOrigin.value || [];
+
+  allTokens.forEach(token => {
+    // Exclude OAS tokens (native token)
+    if (token.symbol === 'OAS' || token.name === 'OASYS') {
+      excludedAddresses.push(token.address);
+      return;
+    }
+
+    // Exclude tokens that don't have owner='gamingdex'
+    if (token.owner !== 'gamingdex') {
+      excludedAddresses.push(token.address);
+    }
+  });
+
+  // Also exclude native asset addresses
+  excludedAddresses.push('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+  excludedAddresses.push('0x0000000000000000000000000000000000000000');
+
+  return excludedAddresses;
 });
 
 const isFormValid = computed(() => {
@@ -454,7 +493,7 @@ watch(() => amount.value, handleAmountChange);
             v-model:address="selectedTokenAddress"
             name="token"
             :rules="[]"
-            :excludedTokens="[]"
+            :excludedTokens="customExcludedTokens"
             placeholder="0.0"
             @amount-change="handleAmountChange"
           />
