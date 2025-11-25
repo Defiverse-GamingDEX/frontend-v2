@@ -394,7 +394,7 @@ function symbolFor(tokenAddress: string): string {
             >
               Gauge
             </BalBtn>
-            <BalBtn
+            <!-- <BalBtn
               v-if="isAdmin"
               color="white"
               class="ml-5 gauge-tab"
@@ -402,7 +402,7 @@ function symbolFor(tokenAddress: string): string {
               @click="changeTab('gauge-reward')"
             >
               Addition Reward
-            </BalBtn>
+            </BalBtn> -->
           </div>
         </div>
         <div class="flex flex-wrap gap-3 items-center mt-4 md:mt-0">
