@@ -838,29 +838,39 @@ onBeforeMount(async () => {
         </div>
       </template>
       <template #voteIncentivesCell="gauge">
-        <div class="px-4 text-xs text-right">
-          <div v-if="gauge.vote_incentives?.tokens?.length" class="space-y-1">
+        <div class="flex justify-end px-4 text-xs text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
+          <div
+            v-else-if="gauge.vote_incentives?.tokens?.length"
+            class="space-y-1"
+          >
             <div
               v-for="(tokenAddress, index) in gauge.vote_incentives.tokens"
               :key="tokenAddress"
               class="flex justify-end items-center space-x-1"
             >
-              <BalAsset
-                :address="tokenAddress"
-                :iconURI="getToken(tokenAddress)?.logoURI"
-                :size="16"
-              />
-              <span class="break-words">
-                {{
-                  formatTokenReward(
-                    tokenAddress,
-                    gauge.vote_incentives.rewards[index]
-                  )
-                }}
-              </span>
+              <div
+                v-if="gauge.vote_incentives.rewards[index] > 0"
+                class="flex items-center space-x-1"
+              >
+                <BalAsset
+                  :address="tokenAddress"
+                  :iconURI="getToken(tokenAddress)?.logoURI"
+                  :size="16"
+                />
+                <span class="break-words">
+                  {{
+                    formatTokenReward(
+                      tokenAddress,
+                      gauge.vote_incentives.rewards[index]
+                    )
+                  }}
+                </span>
+              </div>
+              <div v-else>-</div>
             </div>
           </div>
-          <div v-else class="text-gray-400">-</div>
+          <div v-else>-</div>
         </div>
       </template>
       <template #voteColumnCell="gauge">
