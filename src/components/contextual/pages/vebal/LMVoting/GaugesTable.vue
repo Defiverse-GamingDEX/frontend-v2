@@ -194,6 +194,17 @@ const columns = computed(() => {
       hidden: props?.tabSelect !== 'gauge',
     },
     {
+      name: 'Vote APR',
+      id: 'vote_incentives_apr',
+      accessor: 'vote_incentives_apr',
+      align: 'right',
+      Cell: 'voteAprCell',
+      sortKey: gauge => Number(gauge.vote_incentives_apr || 0),
+      width: 120,
+      cellClassName: 'font-numeric',
+      hidden: props?.tabSelect !== 'gauge',
+    },
+    {
       name: t('veBAL.liquidityMining.table.vote'),
       id: 'vote',
       accessor: 'id',
@@ -871,6 +882,15 @@ onBeforeMount(async () => {
             </div>
           </div>
           <div v-else>-</div>
+        </div>
+      </template>
+      <template #voteAprCell="gauge">
+        <div class="flex justify-end px-4 text-xs text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
+          <template v-else-if="gauge.vote_incentives_apr">
+            <div>{{ gauge.vote_incentives_apr?.toFixed(2) }}%</div>
+          </template>
+          <template v-else> - </template>
         </div>
       </template>
       <template #voteColumnCell="gauge">
