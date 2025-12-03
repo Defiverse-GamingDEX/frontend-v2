@@ -2,7 +2,7 @@
 // import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
 
 import megaethTestnetJson from '@/constants/megaeth.testnet.listed.tokenlist.json';
-// import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
+import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
 
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
@@ -109,16 +109,16 @@ let networksDev = [
   //   gasUnit: 'wei',
   //   maxPriorityFee: 0,
   // },
-  // {
-  //   id: 'oasys-testnet',
-  //   name: 'Oasys-Testnet',
-  //   networkSlug: 'oasys-testnet',
-  //   key: '9372',
-  //   tokens: oasysTestnetJson.tokens,
-  //   // price: 35000000000, // 50 Gwei
-  //   gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  // },
+  {
+    id: 'oasys-testnet',
+    name: 'Oasys-Testnet',
+    networkSlug: 'oasys-testnet',
+    key: '9372',
+    tokens: oasysTestnetJson.tokens,
+    // price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
   {
     id: 'megaeth-testnet',
     name: 'MegaETH-Testnet',
