@@ -28,6 +28,7 @@
     "stylelint:fix": "npm run stylelint -- --fix",
     "tailwind:build": "tailwind-config-viewer export ./tailwind-static",
     "tailwind:view": "tailwind-config-viewer -o",
+    "generate:tokenlists": "npx vite-node --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk-megaeth ./src/lib/scripts/tokenlists.generator.ts",
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {

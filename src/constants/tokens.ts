@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth-megaeth';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 
 import { networkId } from '@/composables/useNetwork';
 import { configService } from '@/services/config/config.service';
@@ -275,6 +275,22 @@ export const TOKENS_OASYS_TESTNET: TokenConstants = {
   },
 };
 
+export const TOKENS_MEGAETH_TESTNET: TokenConstants = {
+  Popular: {
+    Symbols: ['Z', 'BAL', 'WETH'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0xAba76Cdc5910F6627856EB75Bcce0171376999C7', // need CONFIRM
+    WETH: '0xAba76Cdc5910F6627856EB75Bcce0171376999C7',
+    BAL: '0x8D23f3B57cF4B5Ed734574738Fa0Fc2C5b5e37d1',
+    Z: '0x8D23f3B57cF4B5Ed734574738Fa0Fc2C5b5e37d1',
+  },
+  PriceChainMap: {
+    //
+  },
+};
+
 const TOKENS_MAP = {
   [Network.GOERLI]: TOKENS_GOERLI,
   [Network.MAINNET]: TOKENS_MAINNET,
@@ -284,6 +300,7 @@ const TOKENS_MAP = {
   [Network.DEFIVERSE_TESTNET]: TOKENS_DEFIVERSE_TESTNET,
   [Network.OASYS]: TOKENS_OASYS,
   [Network.OASYS_TESTNET]: TOKENS_OASYS_TESTNET,
+  [Network.MEGAETH_TESTNET]: TOKENS_MEGAETH_TESTNET,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]

@@ -39,6 +39,7 @@ const NAV_LINKS_MAINNET = [
     path: 'transfer/token',
     name_link: 'transfer-token',
     goal_key: 'ClickNavTransferToken',
+    chainsSupport: [248, 16116],
     children: [
       {
         text: 'transfer.transferToken',
