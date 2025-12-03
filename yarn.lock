@@ -318,28 +318,6 @@
     json-to-graphql-query "^2.2.4"
     lodash "^4.17.21"
 
-"@defiverse/balancer-sdk@0.1.251":
-  version "0.1.251"
-  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk/-/balancer-sdk-0.1.251.tgz#3b47e47f1e34dbe2089d925f27dad2fa27e0b0a4"
-  integrity sha512-OH6Ouf/1HH9oLeyWTMk4AkDStUuIrfSQahiplLjGHV/vAlb6V09416UtgN/+uyIHBAAdWGiOBnBcLe9eaJ+8xw==
-  dependencies:
-    "@balancer-labs/typechain" "^1.0.0"
-    "@defiverse/sor" "4.1.14"
-    "@ethersproject/abi" "^5.4.0"
-    "@ethersproject/abstract-signer" "^5.4.0"
-    "@ethersproject/address" "^5.4.0"
-    "@ethersproject/base64" "5.5.0"
-    "@ethersproject/bignumber" "^5.4.0"
-    "@ethersproject/bytes" "^5.4.0"
-    "@ethersproject/constants" "^5.4.0"
-    "@ethersproject/contracts" "^5.4.0"
-    "@ethersproject/providers" "^5.4.5"
-    axios "^0.24.0"
-    graphql "^15.6.1"
-    graphql-request "^3.5.0"
-    json-to-graphql-query "^2.2.4"
-    lodash "^4.17.21"
-
 "@defiverse/sor@4.1.14":
   version "4.1.14"
   resolved "https://registry.yarnpkg.com/@defiverse/sor/-/sor-4.1.14.tgz#ad2b66fbf8c014df614674395d23577b4f43515e"
