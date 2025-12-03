@@ -1,9 +1,9 @@
 import { BigNumber } from 'ethers';
 import { Address } from '@/types';
-import { Pool as SDKPool, PoolToken } from '@defiverse/balancer-sdk';
+import { Pool as SDKPool, PoolToken } from '@defiverse/balancer-sdk-megaeth';
 
-export type { SubPool, PoolToken } from '@defiverse/balancer-sdk';
-export { PoolType } from '@defiverse/balancer-sdk';
+export type { SubPool, PoolToken } from '@defiverse/balancer-sdk-megaeth';
+export { PoolType } from '@defiverse/balancer-sdk-megaeth';
 export interface Pool extends SDKPool {
   tokens: PoolToken[];
   onchain?: OnchainPoolData;

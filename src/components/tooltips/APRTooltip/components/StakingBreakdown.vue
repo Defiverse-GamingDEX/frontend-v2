@@ -5,7 +5,7 @@ import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { bnum } from '@/lib/utils';
 import { Pool } from '@/services/pool/types';
 import { hasBalEmissions } from '@/services/staking/utils';
-import { AprBreakdown } from '@defiverse/balancer-sdk';
+import { AprBreakdown } from '@defiverse/balancer-sdk-megaeth';
 import { useTokens } from '@/providers/tokens.provider';
 
 const BLOCK_TOKENS = ['0x4b3954b1fc477730e4e492a406e0b407d37136fb'];
@@ -134,7 +134,7 @@ const breakdownItems = computed((): Array<any> => {
 
 <template>
   <div data-testid="staking-apr">
-    <!-- 
+    <!--
     Hung: Can check lai
     <div v-if="hasBoost">
       <div class="flex items-center">

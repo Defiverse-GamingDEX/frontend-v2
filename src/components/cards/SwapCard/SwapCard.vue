@@ -203,7 +203,7 @@ import { isRequired } from '@/lib/utils/validations';
 import { useTokens } from '@/providers/tokens.provider';
 import { ApiErrorCodes } from '@/services/cowswap/errors/OperatorError';
 import useWeb3 from '@/services/web3/useWeb3';
-import { SubgraphPoolBase } from '@defiverse/balancer-sdk';
+import { SubgraphPoolBase } from '@defiverse/balancer-sdk-megaeth';
 import { getAddress, isAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';
 import { useI18n } from 'vue-i18n';

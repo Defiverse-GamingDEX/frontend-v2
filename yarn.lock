@@ -296,6 +296,28 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz#2cbcf822bf3764c9658c4d2e568bd0c0cb748016"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
+"@defiverse/balancer-sdk-megaeth@0.1.253":
+  version "0.1.253"
+  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk-megaeth/-/balancer-sdk-megaeth-0.1.253.tgz#8d17bc80484372759611aa1d227cd2b676d71db5"
+  integrity sha512-XBxHxfUoagfzFGF2ScSME11t5cn08CnKkpHlPsO5kob3hSS6oLFhbhPcMIUe8jhJw3vHclJwuNnwrdsmRnVT+g==
+  dependencies:
+    "@balancer-labs/typechain" "^1.0.0"
+    "@defiverse/sor" "4.1.14"
+    "@ethersproject/abi" "^5.4.0"
+    "@ethersproject/abstract-signer" "^5.4.0"
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/base64" "5.5.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/bytes" "^5.4.0"
+    "@ethersproject/constants" "^5.4.0"
+    "@ethersproject/contracts" "^5.4.0"
+    "@ethersproject/providers" "^5.4.5"
+    axios "^0.24.0"
+    graphql "^15.6.1"
+    graphql-request "^3.5.0"
+    json-to-graphql-query "^2.2.4"
+    lodash "^4.17.21"
+
 "@defiverse/balancer-sdk@0.1.251":
   version "0.1.251"
   resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk/-/balancer-sdk-0.1.251.tgz#3b47e47f1e34dbe2089d925f27dad2fa27e0b0a4"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PoolToken } from '@defiverse/balancer-sdk';
+import { PoolToken } from '@defiverse/balancer-sdk-megaeth';
 import { computed, ref } from 'vue';
 import TokenPills from '@/components/tables/PoolsTable/TokenPills/TokenPills.vue';
 

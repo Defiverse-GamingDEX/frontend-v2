@@ -1,4 +1,4 @@
-import { GraphQLArgs } from '@defiverse/balancer-sdk';
+import { GraphQLArgs } from '@defiverse/balancer-sdk-megaeth';
 import { merge } from 'lodash';
 
 const defaultArgs: GraphQLArgs = {

@@ -13,7 +13,7 @@ import useProtocolRewardsQuery, {
 import { isQueryLoading } from './queries/useQueryHelpers';
 import { isGoerli, isL2 } from './useNetwork';
 import { subgraphFallbackService } from '@/services/balancer/subgraph/subgraph-fallback.service';
-import { PoolType } from '@defiverse/balancer-sdk';
+import { PoolType } from '@defiverse/balancer-sdk-megaeth';
 
 export type GaugePool = {
   id: string;

@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 
 import { isMainnet, networkId } from '@/composables/useNetwork';
 
@@ -825,6 +825,64 @@ const POOLS_DEFIVERSE_TESTNET: Pools = {
   ],
 };
 
+const POOLS_MEGAETH_TESTNET: Pools = {
+  IdsMap: {
+    // staBAL:
+    //   '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
+    // bbAaveUSD: {
+    //   v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+    //   v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
+    // },
+    veBAL: '',
+  },
+  Pagination: {
+    PerPage: 30,
+    PerPool: 10,
+    PerPoolInitial: 5,
+  },
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
+  ZeroAddress: '0x0000000000000000000000000000000000000000',
+  DynamicFees: {
+    Gauntlet: [],
+  },
+  BlockList: [
+    '0x950f31e8a327a49ae4443284d0137f3b74858474000200000000000000000030'
+  ],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'EulerLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
+  Stable: {
+    AllowList: [
+      //
+    ],
+  },
+  Investment: {
+    AllowList: [
+      // '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+    ],
+  },
+  Factories: {
+    '0x84f75879c0ac87eafaf4f1e3e1a2372caab5273b': 'weightedPool', // WeightedPool V3
+  },
+  Stakable: {
+    AllowList: [],
+  },
+  Metadata: {},
+  DisabledJoins: [],
+  VerifiedPools: [
+    //
+  ],
+};
+
 const POOLS_OASYS_TESTNET: Pools = {
   IdsMap: {
     // staBAL:
@@ -983,6 +1041,7 @@ const POOLS_MAP = {
   [Network.DEFIVERSE_TESTNET]: POOLS_DEFIVERSE_TESTNET,
   [Network.OASYS_TESTNET]: POOLS_OASYS_TESTNET,
   [Network.OASYS]: POOLS_OASYS,
+  [Network.MEGAETH_TESTNET]: POOLS_MEGAETH_TESTNET,
 };
 
 export const POOLS: Pools = POOLS_MAP[networkId.value]

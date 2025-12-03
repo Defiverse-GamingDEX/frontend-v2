@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth-megaeth';
 
 import { networkId } from '@/composables/useNetwork';
 import { configService } from '@/services/config/config.service';

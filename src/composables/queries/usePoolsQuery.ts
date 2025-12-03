@@ -16,7 +16,7 @@ import {
   PoolsFallbackRepository,
   PoolsRepositoryFetchOptions,
   PoolRepository as SDKPoolRepository,
-} from '@defiverse/balancer-sdk';
+} from '@defiverse/balancer-sdk-megaeth';
 import { flatten } from 'lodash';
 import useNetwork from '../useNetwork';
 import { tokenTreeLeafs } from '../usePool';

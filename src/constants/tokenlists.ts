@@ -2,6 +2,7 @@ import defiverseJson from './defiverse.listed.tokenlist.json';
 import defiverseTestnetJson from './defiverse.testnet.listed.tokenlist.json';
 import oasysJson from './oasys.listed.tokenlist.json';
 import oasysTestnetJson from './oasys.testnet.listed.tokenlist.json';
+import megaethTestnetJson from './megaeth.testnet.vetted.tokenlist.json';
 import axios from 'axios';
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
 //const chain_ids = IS_TESTNET ? '9372,17117' : '248,16116';
@@ -64,17 +65,20 @@ async function fetchTokenLists() {
   try {
     const oasysChainId = IS_TESTNET ? 9372 : 248;
     const defiverseChainId = IS_TESTNET ? 17117 : 16116;
+    const megaethChainId = IS_TESTNET ? 6343 : 6343;
     const [response] = await Promise.all([
       axios.get(
-        `${BASE_API_URL}/api/v1/tokens/search?chain_id=${oasysChainId},${defiverseChainId}`
+        `${BASE_API_URL}/api/v1/tokens/search?chain_id=${megaethChainId}`
       ),
     ]);
 
     const jsonFromApi = await response.data;
     const oasysJsonFromApi = jsonFromApi[oasysChainId];
+    const megaethJsonFromApi = jsonFromApi[megaethChainId];
     const defiverseJsonFromApi = jsonFromApi[defiverseChainId];
 
     return {
+      megaethJsonBE: megaethJsonFromApi,
       oasysJsonBE: oasysJsonFromApi,
       defiverseJsonBE: defiverseJsonFromApi,
     };
@@ -84,14 +88,22 @@ async function fetchTokenLists() {
     return {
       oasysJson,
       defiverseJson,
+      megaethTestnetJson,
     };
   }
 }
 // init TOKEN_LIST_MAP
 export const initializeTokenListMap = async () => {
-  const { oasysJsonBE: oasysJsonBE, defiverseJsonBE: defiverseJsonBE } =
+  const { oasysJsonBE: oasysJsonBE, defiverseJsonBE: defiverseJsonBE, megaethJsonBE } =
     await fetchTokenLists();
   return {
+    '6343': {
+      Balancer: {
+        Default: JSON.stringify(megaethJsonBE),
+        Vetted: JSON.stringify(megaethJsonBE),
+      },
+      External: [],
+    },
     '16116': {
       Balancer: {
         Default: JSON.stringify(defiverseJsonBE),

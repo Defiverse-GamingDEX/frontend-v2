@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SubgraphPoolBase } from '@defiverse/balancer-sdk';
+import { SubgraphPoolBase } from '@defiverse/balancer-sdk-megaeth';
 import { formatUnits } from '@ethersproject/units';
 import { mapValues } from 'lodash';
 import { computed, ref, watch } from 'vue';

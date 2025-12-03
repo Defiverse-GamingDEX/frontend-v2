@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { JsonRpcProvider, WebSocketProvider } from '@ethersproject/providers';
 
 import template from '@/lib/utils/template';

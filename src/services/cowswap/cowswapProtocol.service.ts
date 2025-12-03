@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import axios from 'axios';
 
 import { networkId } from '@/composables/useNetwork';

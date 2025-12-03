@@ -1,4 +1,4 @@
-import { RelayerAuthorization } from '@defiverse/balancer-sdk';
+import { RelayerAuthorization } from '@defiverse/balancer-sdk-megaeth';
 import {
   TransactionReceipt,
   TransactionResponse,

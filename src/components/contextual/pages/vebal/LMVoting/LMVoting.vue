@@ -21,7 +21,7 @@ import GaugesTable from './GaugesTable.vue';
 import GaugeVoteModal from './GaugeVoteModal.vue';
 import ResubmitVotesAlert from './ResubmitVotes/ResubmitVotesAlert.vue';
 import { orderedTokenURIs } from '@/composables/useVotingGauges';
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import GaugesFilters from './GaugesFilters.vue';
 import TokenSearchInputSelectTokens from '@/components/inputs/TokenSearchInputSelectTokens.vue';
 import { useTokens } from '@/providers/tokens.provider';

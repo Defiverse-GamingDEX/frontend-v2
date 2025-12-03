@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { PoolSeedToken } from '@/composables/pools/usePoolCreation';
 
 import { TransactionBuilder } from '@/services/web3/transactions/transaction.builder';
-import { JoinPoolRequest, WeightedPoolEncoder } from '@defiverse/balancer-sdk';
+import { JoinPoolRequest, WeightedPoolEncoder } from '@defiverse/balancer-sdk-megaeth';
 import { WeightedPool__factory } from '@balancer-labs/typechain';
 import WeightedPoolsService from './weighted-pool.service';
 import polygonCreatePoolReceipt from './__mocks__/polygon-create-pool-receipt';

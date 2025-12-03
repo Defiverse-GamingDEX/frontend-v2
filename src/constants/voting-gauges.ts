@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { PoolToken, PoolType } from '@/services/pool/types';
 
 // voting-gauges.json is inside src

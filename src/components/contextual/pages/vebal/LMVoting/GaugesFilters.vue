@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { networkLabelMap } from '@/composables/useNetwork';
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { ref, computed } from 'vue';
 
 /**

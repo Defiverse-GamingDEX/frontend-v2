@@ -6,7 +6,7 @@ import {
 } from '@/composables/useNetwork';
 import { isJoinsDisabled } from '@/composables/usePool';
 import config from '@/lib/config';
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { ref } from 'vue';
 import { Router } from 'vue-router';
 /**

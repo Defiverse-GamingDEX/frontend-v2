@@ -2,7 +2,7 @@ import { computed, ref } from 'vue';
 
 import config from '@/lib/config';
 import { configService } from '@/services/config/config.service';
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { RouteParamsRaw } from 'vue-router';
 
 /**

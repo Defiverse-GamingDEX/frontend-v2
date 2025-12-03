@@ -13,7 +13,7 @@ import {
   ExitPoolHandler,
   QueryOutput,
 } from './handlers/exit-pool.handler';
-import { BalancerSDK } from '@defiverse/balancer-sdk';
+import { BalancerSDK } from '@defiverse/balancer-sdk-megaeth';
 import { ExactInExitHandler } from './handlers/exact-in-exit.handler';
 import { ExactOutExitHandler } from './handlers/exact-out-exit.handler';
 

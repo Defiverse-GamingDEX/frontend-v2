@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { computed, defineComponent, reactive, toRefs } from 'vue';
 import { useStore } from 'vuex';
 

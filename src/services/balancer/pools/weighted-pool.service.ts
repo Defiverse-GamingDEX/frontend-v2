@@ -3,7 +3,7 @@ import {
   WeightedPool__factory,
   WeightedPoolFactory__factory,
 } from '@balancer-labs/typechain';
-import { toNormalizedWeights } from '@defiverse/balancer-sdk';
+import { toNormalizedWeights } from '@defiverse/balancer-sdk-megaeth';
 import { defaultAbiCoder } from '@ethersproject/abi';
 import { BigNumber as EPBigNumber } from '@ethersproject/bignumber';
 import { AddressZero } from '@ethersproject/constants';

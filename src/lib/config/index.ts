@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 
 import arbitrum from './arbitrum.json';
 import defiverseTestnet from './defiverse-testnet.json';
