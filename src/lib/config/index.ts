@@ -120,7 +120,7 @@ const config: Record<Network | number, Config> = {
   [Network.DEFIVERSE]: defiverse,
   [Network.DEFIVERSE_TESTNET]: defiverseTestnet,
   [Network.OASYS]: oasys,
-  [Network.OASYS_TESTNET]: oasysTestnet,
+  //[Network.OASYS_TESTNET]: oasysTestnet,
   [Network.MEGAETH_TESTNET]: megaethTestnet,
   12345: test,
   // @ts-ignore

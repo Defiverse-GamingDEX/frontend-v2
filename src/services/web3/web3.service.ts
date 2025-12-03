@@ -34,7 +34,7 @@ export default class Web3Service {
     // HUNG
     // this.ensProvider = this.rpcProviderService.getJsonProvider(Network.MAINNET);
     const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
-    const ensNetwork = IS_TESTNET ? Network.OASYS_TESTNET : Network.OASYS;
+    const ensNetwork = IS_TESTNET ? Network.MEGAETH_TESTNET : Network.OASYS;
     this.ensProvider = this.rpcProviderService.getJsonProvider(ensNetwork);
   }
 

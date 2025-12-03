@@ -20,7 +20,7 @@ const urlNetworkId: Network | null = routeSlug
   : null;
 
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
-const DEFAULT_NETWORK = IS_TESTNET ? Network.OASYS_TESTNET : Network.OASYS;
+const DEFAULT_NETWORK = IS_TESTNET ? Network.MEGAETH_TESTNET : Network.OASYS;
 
 const NETWORK_ID =
   urlNetworkId ||
@@ -39,7 +39,8 @@ export const networkLabelMap = {
   [Network.DEFIVERSE]: 'defiverse',
   [Network.DEFIVERSE_TESTNET]: 'defiverse-testnet',
   [Network.OASYS]: 'oasys',
-  [Network.OASYS_TESTNET]: 'oasys-testnet',
+  //[Network.OASYS_TESTNET]: 'oasys-testnet',
+  [Network.MEGAETH_TESTNET]: 'megaeth-testnet',
 };
 
 /**
@@ -93,8 +94,10 @@ export function networkFor(key: string | number): Network | number {
       return Network.DEFIVERSE_TESTNET;
     case '248':
       return Network.OASYS;
-    case '9372':
-      return Network.OASYS_TESTNET;
+    // case '9372':
+    //   return Network.OASYS_TESTNET;
+    case '6343':
+      return Network.MEGAETH_TESTNET;
     case '29548':
       return 29548;
     case '2400':

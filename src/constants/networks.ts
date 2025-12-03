@@ -99,16 +99,6 @@ let networks: any = [
 ];
 
 let networksDev = [
-  // {
-  //   id: 'defiverse-testnet',
-  //   name: 'DefiVerse-Testnet',
-  //   networkSlug: 'defiverse-testnet',
-  //   key: '17117',
-  //   tokens: defiverseTestnetJson.tokens,
-  //   price: 35000000000, // 50 Gwei
-  //   gasUnit: 'wei',
-  //   maxPriorityFee: 0,
-  // },
   {
     id: 'oasys-testnet',
     name: 'Oasys-Testnet',
@@ -118,6 +108,7 @@ let networksDev = [
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     maxPriorityFee: 0,
+    externalLink: 'https://testnet.gaming-dex.com',
   },
   {
     id: 'megaeth-testnet',
@@ -128,7 +119,6 @@ let networksDev = [
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     // maxPriorityFee: 0,
-    externalLink: 'https://megaeth-testnet.gaming-dex.com/#/',
   },
 ];
 
