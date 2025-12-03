@@ -128,6 +128,7 @@ let networksDev = [
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     // maxPriorityFee: 0,
+    externalLink: 'https://megaeth-testnet.gaming-dex.com/#/',
   },
 ];
 
