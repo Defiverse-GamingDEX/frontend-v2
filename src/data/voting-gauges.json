@@ -1,5 +1,122 @@
 [
   {
+    "address": "0x380882a38733ee6cbc8d957a4aa47fda490114d5",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1763516423,
+    "pool": {
+      "id": "0x9baddbd80fa992c08fa66c2ca5d7586c8ceb7263000200000000000000000144",
+      "address": "0x9baddbd80fa992c08fa66c2ca5d7586c8ceb7263",
+      "poolType": "Weighted",
+      "symbol": "90BtcUSD-10Z",
+      "tokens": [
+        {
+          "address": "0x4Cda2D683E3AF90ea50855008BdB15D9454527B7",
+          "weight": "0.9",
+          "symbol": "BtcUSD"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x4Cda2D683E3AF90ea50855008BdB15D9454527B7": "https://price-api.gaming-dex.com/static/image_fb45e3092bd2431897e6b3ec8c5c8227.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0x81e651944d57e1589ccea7a9b3d69acebe63e2f0",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1763516423,
+    "pool": {
+      "id": "0xb2d7422a1870d0b4e5c5ee867d1ebea24d4ee9e4000200000000000000000145",
+      "address": "0xb2d7422a1870d0b4e5c5ee867d1ebea24d4ee9e4",
+      "poolType": "Weighted",
+      "symbol": "90TCGC-10Z",
+      "tokens": [
+        {
+          "address": "0xddb07cc0f2f9fb7899dba5a21964f3c6d2740e44",
+          "weight": "0.9",
+          "symbol": "TCGC"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0xddb07cc0f2f9fb7899dba5a21964f3c6d2740e44": "tokens/TCGC_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0xd6257c5e94db2a73459372954473d2f6170c2277",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1763516423,
+    "pool": {
+      "id": "0x44275eaba20822347f1fbadb6de2cde1a4e2850c000200000000000000000146",
+      "address": "0x44275eaba20822347f1fbadb6de2cde1a4e2850c",
+      "poolType": "Weighted",
+      "symbol": "90MCHC-10Z",
+      "tokens": [
+        {
+          "address": "0x5B1CC635E524cAbb63a581c050C895534755F297",
+          "weight": "0.9",
+          "symbol": "MCHC"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x5B1CC635E524cAbb63a581c050C895534755F297": "tokens/MCHC_L.png",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+  {
+    "address": "0x27c373d108d40203fcffba8b3004271f7a69a69f",
+    "network": 248,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1763516423,
+    "pool": {
+      "id": "0x448f4122fa22820461ac3210e517819517fa4a25000200000000000000000149",
+      "address": "0x448f4122fa22820461ac3210e517819517fa4a25",
+      "poolType": "Weighted",
+      "symbol": "90SAISN-10Z",
+      "tokens": [
+        {
+          "address": "0x9b5484A4eAd4e799A75Ef9Ee4E912f7C59D632bA",
+          "weight": "0.9",
+          "symbol": "SAISN"
+        },
+        {
+          "address": "0xC683DA627fF9fD56740C72A703528861c33d3B3a",
+          "weight": "0.1",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x9b5484A4eAd4e799A75Ef9Ee4E912f7C59D632bA": "https://price-api.gaming-dex.com/static/image_84722f160c8945d881ab1c441a65660e.jpg",
+      "0xC683DA627fF9fD56740C72A703528861c33d3B3a": "tokens/Z.png"
+    }
+  },
+
+  {
     "address": "0xf62cc750c079c349d8408e89ded6ce5361d61e0c",
     "network": 248,
     "isKilled": false,
@@ -705,7 +822,7 @@
   {
     "address": "0x378e7ea6be8febc2db0ce618d22cba2b4fd5f013",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1761820207,
     "pool": {
@@ -995,7 +1112,7 @@
   {
     "address": "0xeaa112aeefccdc54ea90ab9e3df030a7b8e3d447",
     "network": 248,
-    "isKilled": false,
+    "isKilled": true,
     "relativeWeightCap": "1",
     "addedTimestamp": 1761820207,
     "pool": {
