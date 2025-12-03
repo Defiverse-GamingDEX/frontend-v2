@@ -118,6 +118,15 @@ let networksDev = [
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },
+  {
+    id: 'megaeth-testnet',
+    name: 'MegaETH-Testnet',
+    networkSlug: 'megaeth-testnet',
+    key: '6343',
+    tokens: [],
+    gasUnit: 'wei',
+    externalLink: 'https://megaeth-testnet.gaming-dex.com/#/',
+  },
 ];
 
 // add network for bridge testnet
