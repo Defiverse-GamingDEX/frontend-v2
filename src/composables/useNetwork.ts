@@ -9,17 +9,27 @@ import { RouteParamsRaw } from 'vue-router';
  * STATE
  */
 const windowAvailable = typeof window !== 'undefined';
-const localStorageNetworkId: Network | null =
+const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
+let localStorageNetworkId: Network | null =
   windowAvailable && localStorage.getItem('networkId')
     ? (Number(localStorage.getItem('networkId')) as Network)
     : null;
+if (IS_TESTNET) {
+  if(localStorageNetworkId !== Network.MEGAETH_TESTNET){
+    localStorageNetworkId = Network.MEGAETH_TESTNET;
+  }
+}else {
+  if(localStorageNetworkId !== Network.OASYS){
+    localStorageNetworkId = Network.OASYS;
+  }
+}
 const routeSlug =
   (windowAvailable && window.location.hash.split(/[/?]/)[1]) ?? '';
 const urlNetworkId: Network | null = routeSlug
   ? networkFromSlug(routeSlug)
   : null;
 
-const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
+
 const DEFAULT_NETWORK = IS_TESTNET ? Network.MEGAETH_TESTNET : Network.OASYS;
 
 const NETWORK_ID =
