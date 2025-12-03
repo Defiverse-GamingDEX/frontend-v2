@@ -1,4 +1,4 @@
-import { Address, BalancerSDK } from '@defiverse/balancer-sdk';
+import { Address, BalancerSDK } from '@defiverse/balancer-sdk-megaeth';
 import { AmountOut } from '@/providers/local/exit-pool.provider';
 import { TokenPrices } from '@/services/coingecko/api/price.service';
 import { GasPriceService } from '@/services/gas-price/gas-price.service';

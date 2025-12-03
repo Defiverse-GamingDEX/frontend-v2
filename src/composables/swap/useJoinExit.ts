@@ -3,7 +3,7 @@ import {
   SubgraphPoolBase,
   SwapInfo,
   SwapTypes,
-} from '@defiverse/balancer-sdk';
+} from '@defiverse/balancer-sdk-megaeth';
 import { BigNumber, parseFixed } from '@ethersproject/bignumber';
 import OldBigNumber from 'bignumber.js';
 import { formatUnits } from '@ethersproject/units';

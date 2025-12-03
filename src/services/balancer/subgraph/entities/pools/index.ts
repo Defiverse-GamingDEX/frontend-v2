@@ -5,7 +5,7 @@ import {
   GraphQLArgs,
   GraphQLQuery,
   PoolsSubgraphRepository,
-} from '@defiverse/balancer-sdk';
+} from '@defiverse/balancer-sdk-megaeth';
 import _ from 'lodash';
 import Service from '../../balancer-subgraph.service';
 import queryBuilder from './query';

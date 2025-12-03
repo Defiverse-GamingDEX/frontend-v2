@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { Web3Provider } from '@ethersproject/providers';
 import debounce from 'lodash/debounce';
 import { computed, inject, reactive, ref } from 'vue';

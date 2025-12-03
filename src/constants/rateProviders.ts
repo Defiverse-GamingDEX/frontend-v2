@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { networkId } from '@/composables/useNetwork';
 
 const ALLOWED_RATE_PROVIDERS_MAP = {

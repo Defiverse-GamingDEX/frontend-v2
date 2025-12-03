@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 
 import arbitrum from './arbitrum.json';
 import defiverseTestnet from './defiverse-testnet.json';
@@ -22,6 +22,7 @@ import homeverse from './homeverse.json';
 import mchverse from './mchverse.json';
 import oasys from './oasys.json';
 import oasysTestnet from './oasys-testnet.json';
+import megaethTestnet from './megaeth-testnet.json';
 import saakuru from './saakuru.json';
 import tcgverse from './tcgverse.json';
 export interface Config {
@@ -120,6 +121,7 @@ const config: Record<Network | number, Config> = {
   [Network.DEFIVERSE_TESTNET]: defiverseTestnet,
   [Network.OASYS]: oasys,
   [Network.OASYS_TESTNET]: oasysTestnet,
+  [Network.MEGAETH_TESTNET]: megaethTestnet,
   12345: test,
   // @ts-ignore
   17: docker,

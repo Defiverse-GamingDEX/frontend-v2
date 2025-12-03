@@ -1,7 +1,7 @@
 import { initBalancer } from '@/dependencies/balancer-sdk';
 // eslint-disable-next-line no-restricted-imports
 import { balancer } from '@/lib/balancer.sdk';
-import { SubgraphPoolBase, SwapInfo } from '@defiverse/balancer-sdk';
+import { SubgraphPoolBase, SwapInfo } from '@defiverse/balancer-sdk-megaeth';
 import { BigNumber } from '@ethersproject/bignumber';
 import { mockDeep } from 'vitest-mock-extended';
 

@@ -13,7 +13,7 @@ import { TokenInfoMap } from '@/types/TokenList';
 
 import { networkId } from '@/composables/useNetwork';
 import { getBalancer } from '@/dependencies/balancer-sdk';
-import { AprBreakdown, Pool as SDKPool } from '@defiverse/balancer-sdk';
+import { AprBreakdown, Pool as SDKPool } from '@defiverse/balancer-sdk-megaeth';
 import { captureException } from '@sentry/browser';
 import LiquidityConcern from './concerns/liquidity.concern';
 import { OnchainDataFormater } from './decorators/onchain-data.formater';

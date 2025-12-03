@@ -1,4 +1,4 @@
-import { BalancerSDK, Network } from '@defiverse/balancer-sdk';
+import { BalancerSDK, Network } from '@defiverse/balancer-sdk-megaeth';
 import { configService } from '@/services/config/config.service';
 import { ref } from 'vue';
 import { isTestMode } from '@/plugins/modes';

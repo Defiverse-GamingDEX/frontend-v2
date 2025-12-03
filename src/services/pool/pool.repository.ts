@@ -5,7 +5,7 @@ import {
   GraphQLArgs,
   PoolRepository as SDKPoolRepository,
   PoolsFallbackRepository,
-} from '@defiverse/balancer-sdk';
+} from '@defiverse/balancer-sdk-megaeth';
 import { balancerAPIService } from '@/services/balancer/api/balancer-api.service';
 import { Pool } from '@/services/pool/types';
 import { TokenInfoMap } from '@/types/TokenList';

@@ -1,4 +1,4 @@
-import { AprBreakdown } from '@defiverse/balancer-sdk';
+import { AprBreakdown } from '@defiverse/balancer-sdk-megaeth';
 import { EmptyPoolMock } from '@/__mocks__/pool';
 
 import APRTooltip from './APRTooltip.vue';

@@ -1,4 +1,4 @@
-import { stableBPTForTokensZeroPriceImpact as _bptForTokensZeroPriceImpact } from '@defiverse/balancer-sdk';
+import { stableBPTForTokensZeroPriceImpact as _bptForTokensZeroPriceImpact } from '@defiverse/balancer-sdk-megaeth';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import * as SDK from '@georgeroman/balancer-v2-pools';

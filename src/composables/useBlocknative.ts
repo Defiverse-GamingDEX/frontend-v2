@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import BlocknativeSdk from 'bnc-sdk';
 import { computed, inject } from 'vue';
 

@@ -1,4 +1,4 @@
-import { toNormalizedWeights } from '@defiverse/balancer-sdk';
+import { toNormalizedWeights } from '@defiverse/balancer-sdk-megaeth';
 import { formatUnits } from '@ethersproject/units';
 
 import { isStableLike, isWeightedLike } from '@/composables/usePool';

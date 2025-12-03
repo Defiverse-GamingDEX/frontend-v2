@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 
 export type Pool = {
   id: string;

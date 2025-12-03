@@ -1,4 +1,4 @@
-import { SubgraphPoolBase, SwapType, SwapTypes } from '@defiverse/balancer-sdk';
+import { SubgraphPoolBase, SwapType, SwapTypes } from '@defiverse/balancer-sdk-megaeth';
 import { BigNumber, formatFixed, parseFixed } from '@ethersproject/bignumber';
 import {
   AddressZero,

@@ -11,7 +11,7 @@ import { useTokens } from '@/providers/tokens.provider';
 import useAlerts, { AlertPriority, AlertType } from '../useAlerts';
 import useBlocknative from '../useBlocknative';
 import useTransactions, { ReplacementReason } from '../useTransactions';
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { switchToAppNetwork } from '@/services/web3/utils/helpers';
 import { configService } from '@/services/config/config.service';
 
@@ -63,17 +63,17 @@ export default function useWeb3Watchers() {
       (chainId.value === Network.DEFIVERSE || chainId.value === Network.DEFIVERSE_TESTNET)
     ) {
       // Map Defiverse networks to corresponding Oasys networks
-      const targetNetwork = chainId.value === Network.DEFIVERSE 
-        ? Network.OASYS 
+      const targetNetwork = chainId.value === Network.DEFIVERSE
+        ? Network.OASYS
         : Network.OASYS_TESTNET;
       const targetNetworkName = chainId.value === Network.DEFIVERSE ? 'Oasys' : 'Oasys Testnet';
-      
+
       // Create custom switch function that switches to the correct Oasys network
       const switchToOasys = async () => {
         const targetNetworkConfig = configService.getNetworkConfig(targetNetwork);
         await switchToAppNetwork(provider.value as any, targetNetworkConfig as any);
       };
-      
+
       addAlert({
         id: 'defiverse-redirect',
         label: `Please switch to ${targetNetworkName}`,
@@ -95,7 +95,7 @@ export default function useWeb3Watchers() {
     if (checkDefiverseNetwork()) {
       return;
     }
-    
+
     if (
       !isSwitchNetwork.value &&
       chainId.value &&

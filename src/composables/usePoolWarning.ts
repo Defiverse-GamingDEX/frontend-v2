@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk';
+import { Network } from '@defiverse/balancer-sdk-megaeth';
 import { computed, Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { networkId } from './useNetwork';
