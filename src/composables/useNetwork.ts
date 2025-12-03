@@ -201,6 +201,11 @@ export function getRedirectUrlFor(
   const subdomainNetwork = networkFromSlug(subdomain);
 
   if (subdomainNetwork) {
+    // Allow megaeth-testnet subdomain
+    if (subdomain === 'megaeth-testnet') {
+      return;
+    }
+
     // Legacy network subdomain, we need to redirect to app.balancer.fi.
     const newDomain = appUrl().replace(subdomain, 'app');
     // If networkSlug provided it will be in the fullPath, so pass empty string instead.
