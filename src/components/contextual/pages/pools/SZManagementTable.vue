@@ -13,6 +13,7 @@ import useDarkMode from '@/composables/useDarkMode';
 import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
 import RedeemModal from '@/components/modals/RedeemModal/RedeemModal.vue';
+import RedeemAllModal from '@/components/modals/RedeemAllModal/RedeemAllModal.vue';
 import useNetwork from '@/composables/useNetwork';
 import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -20,13 +21,11 @@ import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import BigNumber from 'bignumber.js';
 import { format } from 'date-fns';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import useEthers from '@/composables/useEthers';
-import useNotifications from '@/composables/useNotifications';
-import useTransactions from '@/composables/useTransactions';
 
 const isLoading = ref(false);
 const isLoadingRedeemAll = ref(false);
 const showRedeemModal = ref(false);
+const showRedeemAllModal = ref(false);
 const selectedPool = ref();
 const { t } = useI18n();
 const isRedeemAll = ref(false);
@@ -116,19 +115,15 @@ const columns = [
 const { darkMode } = useDarkMode();
 const {
   getStakedList,
-  redeemAllSZ,
   getAllRedeemableAmount_SZ,
   canRedeemAll,
   getRedeemableAmount_SZ,
   getRedeemableAmount_Z,
 } = useStakeZ();
 const { networkSlug } = useNetwork();
-const { account, chainId, getSigner, getProvider } = useWeb3();
+const { account, chainId, getProvider } = useWeb3();
 console.log('🚀 ~ account:', account);
 const { fNum2 } = useNumbers();
-const { addNotification } = useNotifications();
-const { addTransaction } = useTransactions();
-const { txListener } = useEthers();
 /**
  * COMPUTED
  */
@@ -245,49 +240,13 @@ const onClickHandler = (page: number) => {
   pagination.value.currentPage = page;
   getData();
 };
-const handleRedeemAll = async () => {
-  console.log('Redeem All');
-  try {
-    isLoadingRedeemAll.value = true;
-    const provider = getProvider();
-    const signer = getSigner();
-    const params = {
-      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-      contractProvider: provider,
-      account: account.value,
-      signer: signer,
-    };
-    console.log('🚀 ~ handleRedeemAll ~ params:', params);
-    const tx = await redeemAllSZ(params);
-    console.log('🚀 ~ handleRedeemAll ~ rs:', tx);
-    const summary = `Redeem all success!`;
-    addTransaction({
-      id: tx?.hash || tx,
-      type: 'tx',
-      action: 'redeemAllSZ',
-      summary,
-    });
-
-    tx &&
-      txListener(tx, {
-        onTxConfirmed: async (receipt: any) => {
-          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
-          fetchData();
-          isLoadingRedeemAll.value = false;
-        },
-        onTxFailed: () => {
-          isLoadingRedeemAll.value = false;
-        },
-      });
-  } catch (error: any) {
-    console.log('🚀 ~ handleRedeemAll ~ error:', error);
-    addNotification({
-      type: 'error',
-      title: '',
-      message: error?.message ? error.message : JSON.stringify(error),
-    });
-    isLoadingRedeemAll.value = false;
-  }
+const handleRedeemAllClick = () => {
+  showRedeemAllModal.value = true;
+};
+const handleRedeemAllSubmit = ({ receipt }) => {
+  console.log('🚀 ~ handleRedeemAllSubmit ~ receipt:', receipt);
+  showRedeemAllModal.value = false;
+  fetchData();
 };
 const handleRedeem = pool => {
   selectedPool.value = pool;
@@ -350,10 +309,10 @@ onMounted(() => {
             <BalBtn
               label="Redeem all"
               :loading="isLoadingRedeemAll"
-              :disabled="!isRedeemAll"
+              :disabled="isRedeemAll"
               classCustom="blue-white !rounded !h-8"
               block
-              @click="handleRedeemAll"
+              @click="handleRedeemAllClick"
             />
           </template>
           myBalance
@@ -420,6 +379,16 @@ onMounted(() => {
         :pool="selectedPool"
         @close="showRedeemModal = false"
         @redeem="handleRedeemSubmit"
+      />
+    </teleport>
+
+    <!-- Redeem All Modal -->
+    <teleport to="#modal">
+      <RedeemAllModal
+        v-if="showRedeemAllModal"
+        :show="showRedeemAllModal"
+        @close="showRedeemAllModal = false"
+        @redeem-all="handleRedeemAllSubmit"
       />
     </teleport>
   </div>
