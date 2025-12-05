@@ -74,6 +74,9 @@ export const isOasys = computed(() => networkId.value === Network.OASYS);
 export const isOasysTestnet = computed(
   () => networkId.value === Network.OASYS_TESTNET
 );
+export const isMegaethTestnet = computed(
+  () => networkId.value === Network.MEGAETH_TESTNET
+);
 
 export const isL2 = computed(
   () =>

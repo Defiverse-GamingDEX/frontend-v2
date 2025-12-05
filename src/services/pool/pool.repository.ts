@@ -45,15 +45,23 @@ export default class PoolRepository {
   private initializeDecoratedSubgraphRepository() {
     return {
       fetch: async (): Promise<Pool[]> => {
-        const pools = await balancerSubgraphService.pools.get(this.queryArgs);
+        try {
+          console.log('🔍 Fetching pools from subgraph with queryArgs:', JSON.stringify(this.queryArgs));
+          const pools = await balancerSubgraphService.pools.get(this.queryArgs);
+          console.log('✅ Subgraph returned pools:', pools?.length || 0);
 
-        const poolDecorator = new PoolDecorator(pools);
-        const decoratedPools = await poolDecorator.decorate(
-          this.tokens.value,
-          true
-        );
+          const poolDecorator = new PoolDecorator(pools);
+          const decoratedPools = await poolDecorator.decorate(
+            this.tokens.value,
+            true
+          );
+          console.log('✅ Decorated pools:', decoratedPools?.length || 0);
 
-        return decoratedPools;
+          return decoratedPools;
+        } catch (error) {
+          console.error('❌ Error in subgraph repository fetch:', error);
+          throw error;
+        }
       },
       get skip(): number {
         return 0;

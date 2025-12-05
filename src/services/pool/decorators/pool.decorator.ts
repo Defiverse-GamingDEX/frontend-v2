@@ -19,6 +19,8 @@ export class PoolDecorator {
     tokens: TokenInfoMap,
     decorateAll = true
   ): Promise<Pool[]> {
+    console.log('🔧 PoolDecorator.decorate() starting with pools:', this.pools.length);
+    
     const processedPools = this.pools.map(pool => {
       const poolService = new this.poolServiceClass(pool);
       poolService.setUnwrappedTokens(); // NEED CONFIRM
@@ -27,10 +29,14 @@ export class PoolDecorator {
 
     const poolMulticaller = new PoolMulticaller(processedPools);
 
-    const [poolSnapshots, rawOnchainDataMap] = await Promise.all([
-      decorateAll ? this.getSnapshots() : [],
-      poolMulticaller.fetch(),
-    ]);
+    try {
+      console.log('🔧 Calling poolMulticaller.fetch() and getSnapshots()...');
+      const [poolSnapshots, rawOnchainDataMap] = await Promise.all([
+        decorateAll ? this.getSnapshots() : [],
+        poolMulticaller.fetch(),
+      ]);
+      console.log('✅ poolMulticaller.fetch() completed, rawOnchainDataMap keys:', Object.keys(rawOnchainDataMap));
+      console.log('✅ poolSnapshots count:', poolSnapshots?.length || 0);
 
     const promises = processedPools.map(async pool => {
       const poolService = new this.poolServiceClass(pool);
@@ -58,6 +64,10 @@ export class PoolDecorator {
     });
 
     return await Promise.all(promises);
+    } catch (error) {
+      console.error('❌ PoolDecorator.decorate() error:', error);
+      throw error;
+    }
   }
 
   /**
