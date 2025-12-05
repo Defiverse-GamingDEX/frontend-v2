@@ -64,7 +64,7 @@
               iconClass="text-black"
             />
           </div>
-          <span class="value">{{ penaltyRate }} %</span>
+          <span class="value">-{{ penaltyRate }} %</span>
         </div>
         <p class="warning-text">
           Redemption prior to maturity reduces the sZ that can be received.
@@ -124,7 +124,7 @@ import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
 import { ethers } from 'ethers';
-
+import BigNumber from 'bignumber.js';
 defineProps<{
   show: boolean;
 }>();
@@ -194,7 +194,20 @@ const fetchRedeemAllInfo = async () => {
       // penaltyRate needs to be divided by 1,000,000 to get the rate, then * 100 for percentage
       // So effectively divide by 10,000
       const penalty = parseFloat(info.penaltyRate) / 10000;
-      penaltyRate.value = penalty;
+      const rateStr = penalty.toFixed(2);
+      penaltyRate.value = rateStr.endsWith('.00')
+        ? rateStr.slice(0, -3)
+        : rateStr;
+      console.log(
+        '🚀 ~ fetchRedeemAllInfo ~ penaltyRate.valueBefore :',
+        penaltyRate.value
+      );
+      // change penaltyRate follow logic -(100% - penaltyRate)
+      penaltyRate.value = BigNumber(100).minus(penaltyRate.value).toFixed(2);
+      console.log(
+        '🚀 ~ fetchRedeemAllInfo ~ penaltyRate.valueAfter :',
+        penaltyRate.value
+      );
 
       // Calculate estimate Z rate: zAmount / sZAmount
       if (parseFloat(sZAmountEther) > 0) {
