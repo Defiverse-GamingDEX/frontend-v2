@@ -28,12 +28,12 @@
   "supportsElementPools": false,
   "blockTime": 2,
   "nativeAsset": {
-    "name": "WOAS",
+    "name": "ETH",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    "symbol": "WOAS",
+    "symbol": "ETH",
     "decimals": 18,
-    "deeplinkId": "oas",
-    "logoURI": "tokens/oas.png",
+    "deeplinkId": "eth",
+    "logoURI": "tokens/ETH_L.png",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
