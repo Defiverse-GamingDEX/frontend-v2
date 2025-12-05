@@ -20,7 +20,11 @@ providerUserPools(userStaking);
 // const { lockPool, lock } = useLock();
 const { networkConfig } = useConfig();
 const isShowSZManagement = computed(() => {
-  if (networkConfig.chainId === 248 || networkConfig.chainId === 9372) {
+  if (
+    networkConfig.chainId === 248 ||
+    networkConfig.chainId === 9372 ||
+    networkConfig.chainId === 6343
+  ) {
     return true;
   }
   return false;

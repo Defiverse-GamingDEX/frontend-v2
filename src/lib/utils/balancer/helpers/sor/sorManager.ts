@@ -108,7 +108,7 @@ export class SorManager {
 
       // ==============================================================================
       try {
-        const chain_id = IS_TESTNET ? 9372 : 248;
+        const chain_id = IS_TESTNET ? 6343 : 248;
         const response = await axios.get(
           `${BASE_API_URL}/api/v1/tokens/search?chain_id=${chain_id}`
         );
