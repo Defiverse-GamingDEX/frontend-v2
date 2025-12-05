@@ -20,13 +20,11 @@
           </div>
         </div>
         <div class="relative input-control">
-          <input
-            :value="totalBalance"
-            type="number"
-            placeholder="0"
-            disabled
-            class="pr-10 w-full text-xl font-bold bg-white disabled:opacity-100 disabled:cursor-not-allowed focus:outline-none font-sm"
-          />
+          <div
+            class="pr-10 w-full text-xl font-bold bg-white opacity-100 cursor-not-allowed focus:outline-none font-sm balance-input-div"
+          >
+            {{ totalBalance }}
+          </div>
           <div
             class="flex absolute top-1/2 right-0 gap-2 items-center -translate-y-1/2"
           >
@@ -125,6 +123,7 @@ import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
+import { ethers } from 'ethers';
 
 defineProps<{
   show: boolean;
@@ -135,17 +134,17 @@ const emit = defineEmits(['close', 'redeemAll']);
 /**
  * STATES
  */
-const totalBalance = ref(100); // TODO: Get from contract
-const penaltyRate = ref<number | string>(50.0); // TODO: Get from contract
-const estimateZRate = ref<number | string>(1.05); // TODO: Get from contract
-const receiveAmount = ref<number | string>(52.5); // TODO: Calculate from contract
+const totalBalance = ref(0);
+const penaltyRate = ref<number | string>(0);
+const estimateZRate = ref<number | string>(0);
+const receiveAmount = ref<number | string>(0);
 const isLoading = ref(false);
 
 /**
  * COMPOSABLES
  */
 const { fNum2 } = useNumbers();
-const { redeemAllSZ } = useStakeZ();
+const { redeemAllSZ, getRedeemAllInfo } = useStakeZ();
 const {
   account,
   chainId,
@@ -169,6 +168,47 @@ const STAKE_Z_NETWORK = computed(() => {
 /**
  * FUNCTIONS
  */
+const fetchRedeemAllInfo = async () => {
+  if (!account.value || !STAKE_Z_NETWORK.value) return;
+
+  try {
+    const provider = getProvider();
+    const params = {
+      contractAddress: STAKE_Z_NETWORK.value.sz_token_address,
+      provider: provider,
+      walletAddress: account.value,
+    };
+
+    const info = await getRedeemAllInfo(params);
+    console.log('🚀 ~ fetchRedeemAllInfo ~ info:', info);
+
+    if (info) {
+      // sZAmount is in wei, convert to ether for display
+      const sZAmountEther = ethers.utils.formatEther(info.sZAmount);
+      totalBalance.value = parseFloat(sZAmountEther);
+
+      // zAmount is in wei
+      const zAmountEther = ethers.utils.formatEther(info.zAmount);
+      receiveAmount.value = parseFloat(zAmountEther);
+
+      // penaltyRate needs to be divided by 1,000,000 to get the rate, then * 100 for percentage
+      // So effectively divide by 10,000
+      const penalty = parseFloat(info.penaltyRate) / 10000;
+      penaltyRate.value = penalty;
+
+      // Calculate estimate Z rate: zAmount / sZAmount
+      if (parseFloat(sZAmountEther) > 0) {
+        estimateZRate.value =
+          parseFloat(zAmountEther) / parseFloat(sZAmountEther);
+      } else {
+        estimateZRate.value = 0;
+      }
+    }
+  } catch (error) {
+    console.log('🚀 ~ fetchRedeemAllInfo ~ error:', error);
+  }
+};
+
 const handleRedeemAll = async () => {
   console.log('Redeem All');
   try {
@@ -220,11 +260,11 @@ const handleRedeemAll = async () => {
  * LIFE CYCLES
  */
 onMounted(() => {
-  // TODO: Fetch data from contract when methods are available
-  // - Get total redeemable balance
-  // - Get average penalty rate
-  // - Get estimate Z rate
-  // - Calculate receive amount
+  fetchRedeemAllInfo();
+});
+
+watch(account, () => {
+  fetchRedeemAllInfo();
 });
 </script>
 
@@ -243,21 +283,16 @@ onMounted(() => {
         }
       }
       .input-control {
-        input {
+        .balance-input-div {
           color: #000;
           font-size: 24px;
           font-style: normal;
           font-weight: 400;
           line-height: normal;
           padding-right: 48px;
-          &::-webkit-inner-spin-button,
-          &::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            appearance: none;
-            margin: 0;
-          }
-          -moz-appearance: textfield;
-          appearance: textfield;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
       .ratio-content {

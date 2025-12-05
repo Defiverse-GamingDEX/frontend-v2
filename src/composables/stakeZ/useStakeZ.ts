@@ -205,6 +205,16 @@ async function getEarlyRedeemPenalty(params) {
     throw error;
   }
 }
+async function getRedeemAllInfo(params) {
+  try {
+    params.abi = SZ_TOKEN_ABI;
+    const rs = await stakeZService.getRedeemAllInfo(params);
+    return rs;
+  } catch (error) {
+    console.log(error, 'getRedeemAllInfo=>error');
+    throw error;
+  }
+}
 async function stakeZ(params) {
   try {
     params.abi = SZ_TOKEN_ABI;
@@ -275,5 +285,6 @@ export function useStakeZ() {
     redeemSZ,
     stakeZForTest,
     canRedeemAll,
+    getRedeemAllInfo,
   };
 }

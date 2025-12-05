@@ -11,7 +11,7 @@ import { buildNetworkIconURL } from '@/lib/utils/urls';
 import { hardRedirectTo } from '@/plugins/router/nav-guards';
 import { configService } from '@/services/config/config.service';
 import useWeb3 from '@/services/web3/useWeb3';
-
+import { networkFor } from '@/composables/useNetwork';
 import networksSupport from '@/constants/networks';
 
 export interface NetworkOption {
@@ -124,6 +124,11 @@ watch(chainId, (newChainId, oldChainId) => {
       n => Number(n.key) === newChainId
     );
     if (newNetwork) {
+      let isSupportedNetwork = networkFor(newChainId);
+
+      if (!isSupportedNetwork) {
+        return;
+      }
       localStorage.setItem('networkId', newChainId.toString());
       if (route.name !== 'bridge') {
         hardRedirectTo(getNetworkChangeUrl(newNetwork));
