@@ -309,7 +309,7 @@ onMounted(() => {
             <BalBtn
               label="Redeem all"
               :loading="isLoadingRedeemAll"
-              :disabled="isRedeemAll"
+              :disabled="!isRedeemAll"
               classCustom="blue-white !rounded !h-8"
               block
               @click="handleRedeemAllClick"
