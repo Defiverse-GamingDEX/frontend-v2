@@ -15,6 +15,8 @@ import DefiverseProvider from './providers/defiverse.provider';
 import OasysTestnetProvider from './providers/oasys-testnet.provider';
 import OasysProvider from './providers/oasys-testnet.provider';
 
+import MegaETHTestnetProvider from './providers/megaeth-testnet.provider';
+
 import PolygonProvider from './providers/polygon.provider';
 import { GasPrice, GasSettings } from './providers/types';
 const USE_BLOCKNATIVE_GAS_PLATFORM =
@@ -30,7 +32,8 @@ export class GasPriceService {
     private readonly defiverseProvider = new DefiverseProvider(),
     private readonly defiverseTestnetProvider = new DefiverseTestnetProvider(),
     private readonly oasysProvider = new OasysProvider(),
-    private readonly oasysTestnetProvider = new OasysTestnetProvider()
+    private readonly oasysTestnetProvider = new OasysTestnetProvider(),
+    private readonly megaETHTestnetProvider = new MegaETHTestnetProvider()
   ) {}
 
   public async getGasPrice(): Promise<GasPrice | null> {
@@ -50,6 +53,8 @@ export class GasPriceService {
         return await this.oasysProvider.getGasPrice();
       case '9372':
         return await this.oasysTestnetProvider.getGasPrice();
+      case '6343':
+        return await this.megaETHTestnetProvider.getGasPrice();
       //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       default:
         return null;
