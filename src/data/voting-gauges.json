@@ -1,12 +1,12 @@
 [
   {
-    "address": "0x380882a38733Ee6cbC8D957A4aA47fdA490114D5",
+    "address": "0x380882a38733ee6cbc8d957a4aa47fda490114d5",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1763516423,
     "pool": {
-      "id": "0x9BADDBD80FA992C08FA66C2CA5D7586C8CEB7263000200000000000000000144",
+      "id": "0x9baddbd80fa992c08fa66c2ca5d7586c8ceb7263000200000000000000000144",
       "address": "0x9baddbd80fa992c08fa66c2ca5d7586c8ceb7263",
       "poolType": "Weighted",
       "symbol": "90BtcUSD-10Z",
@@ -29,13 +29,13 @@
     }
   },
   {
-    "address": "0x81e651944d57E1589ccea7A9B3d69ACeBe63E2F0",
+    "address": "0x81e651944d57e1589ccea7a9b3d69acebe63e2f0",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1763516423,
     "pool": {
-      "id": "0xB2D7422A1870D0B4E5C5EE867D1EBEA24D4EE9E4000200000000000000000145",
+      "id": "0xb2d7422a1870d0b4e5c5ee867d1ebea24d4ee9e4000200000000000000000145",
       "address": "0xb2d7422a1870d0b4e5c5ee867d1ebea24d4ee9e4",
       "poolType": "Weighted",
       "symbol": "90TCGC-10Z",
@@ -58,13 +58,13 @@
     }
   },
   {
-    "address": "0xd6257c5E94dB2A73459372954473D2F6170C2277",
+    "address": "0xd6257c5e94db2a73459372954473d2f6170c2277",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1763516423,
     "pool": {
-      "id": "0x44275EABA20822347F1FBADB6DE2CDE1A4E2850C000200000000000000000146",
+      "id": "0x44275eaba20822347f1fbadb6de2cde1a4e2850c000200000000000000000146",
       "address": "0x44275eaba20822347f1fbadb6de2cde1a4e2850c",
       "poolType": "Weighted",
       "symbol": "90MCHC-10Z",
@@ -87,13 +87,13 @@
     }
   },
   {
-    "address": "0x27c373d108D40203fCfFbA8b3004271f7A69a69F",
+    "address": "0x27c373d108d40203fcffba8b3004271f7a69a69f",
     "network": 248,
     "isKilled": false,
     "relativeWeightCap": "1",
     "addedTimestamp": 1763516423,
     "pool": {
-      "id": "0x448F4122FA22820461AC3210E517819517FA4A25000200000000000000000149",
+      "id": "0x448f4122fa22820461ac3210e517819517fa4a25000200000000000000000149",
       "address": "0x448f4122fa22820461ac3210e517819517fa4a25",
       "poolType": "Weighted",
       "symbol": "90SAISN-10Z",
