@@ -11,7 +11,7 @@ const mapNetwork = (id: number) => {
 };
 
 export const chainIdsForTransferToken: any = IS_TESTNET
-  ? [1, 56, 97, 81, 592, 137, 248]
+  ? [1, 56, 97, 81, 592, 137, 248, 6343]
   : [1, 56, 97, 81, 592, 137, 248];
 export const networksForTransferToken: any = chainIdsForTransferToken?.map(
   id => {
