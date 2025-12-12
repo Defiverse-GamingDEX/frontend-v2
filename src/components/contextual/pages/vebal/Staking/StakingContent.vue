@@ -3,7 +3,6 @@
 import StakingForm from './StakingForm.vue';
 import StakingInfo from './StakingInfo.vue';
 import { computed } from 'vue';
-
 const isTestnet = computed(() => import.meta.env.VITE_IS_TESTNET === 'true');
 const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '1 hour'));
 </script>

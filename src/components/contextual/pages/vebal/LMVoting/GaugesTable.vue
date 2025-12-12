@@ -34,6 +34,8 @@ import useNumbers from '@/composables/useNumbers';
 import APRTooltip from '@/components/tooltips/APRTooltip/APRTooltip.vue';
 import useNetwork from '@/composables/useNetwork';
 import gaugeApi from '@/composables/gaugeReward/gauge.api';
+import { useTokens } from '@/providers/tokens.provider';
+import VotingRewardsModal from '@/components/contextual/pages/pool/VotingRewardsModal.vue';
 /**
  * TYPES
  */
@@ -70,6 +72,8 @@ const adminAddress = ref('');
 const gaugesWithApr = ref<VotingGaugeWithVotes[]>([]);
 const loadingAprGaugeIds = ref<Set<string>>(new Set());
 const hasLoadedPoolDetails = ref(false);
+const showVotingRewardsModal = ref(false);
+const selectedGaugeForReward = ref<VotingGaugeWithVotes | null>(null);
 
 /**
  * COMPOSABLES
@@ -81,6 +85,7 @@ const { isWalletReady, account } = useWeb3();
 const { getAdminAddress } = usePoolCreation();
 const { fNum2 } = useNumbers();
 const { networkId } = useNetwork();
+const { getToken } = useTokens();
 
 /**
  * DATA
@@ -110,7 +115,7 @@ const columns = computed(() => {
       id: 'poolComposition',
       accessor: 'id',
       Cell: 'poolCompositionCell',
-      width: 400,
+      width: 300,
     },
     {
       name: 'TVL',
@@ -180,12 +185,32 @@ const columns = computed(() => {
       width: 150,
     },
     {
+      name: 'Vote Incentives',
+      id: 'vote_incentives',
+      accessor: 'vote_incentives',
+      align: 'right',
+      Cell: 'voteIncentivesCell',
+      width: 150,
+      hidden: props?.tabSelect !== 'gauge',
+    },
+    {
+      name: 'Vote APR',
+      id: 'vote_incentives_apr',
+      accessor: 'vote_incentives_apr',
+      align: 'right',
+      Cell: 'voteAprCell',
+      sortKey: gauge => Number(gauge.vote_incentives_apr || 0),
+      width: 120,
+      cellClassName: 'font-numeric',
+      hidden: props?.tabSelect !== 'gauge',
+    },
+    {
       name: t('veBAL.liquidityMining.table.vote'),
       id: 'vote',
       accessor: 'id',
       align: 'right',
       Cell: 'voteColumnCell',
-      width: 80,
+      width: 150,
       hidden: !isWalletReady.value || props?.tabSelect !== 'gauge',
     },
     {
@@ -239,6 +264,27 @@ const isAdmin = computed(() => {
 function isInternalUrl(_url: string): boolean {
   //return _url.includes('balancer.fi') || _url.includes('localhost');
   return true;
+}
+
+function openVotingRewardsModal(gauge: VotingGaugeWithVotes) {
+  selectedGaugeForReward.value = gauge;
+  showVotingRewardsModal.value = true;
+}
+
+function closeVotingRewardsModal() {
+  showVotingRewardsModal.value = false;
+  selectedGaugeForReward.value = null;
+}
+
+function formatTokenReward(tokenAddress: string, reward: string) {
+  const token = getToken(tokenAddress);
+  if (!token || !reward) return '-';
+
+  // Convert reward amount from wei to readable format
+  const amount = Number(reward) / Math.pow(10, token.decimals || 18);
+  const symbol = token.symbol || token.name || 'Unknown';
+
+  return `${fNum2(amount.toString())} ${symbol}`;
 }
 
 function redirectToPool(gauge: VotingGaugeWithVotes, inNewTab) {
@@ -802,13 +848,66 @@ onBeforeMount(async () => {
           <template v-else> - </template>
         </div>
       </template>
+      <template #voteIncentivesCell="gauge">
+        <div class="flex justify-end px-4 text-xs text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
+          <div
+            v-else-if="gauge.vote_incentives?.tokens?.length"
+            class="space-y-1"
+          >
+            <div
+              v-for="(tokenAddress, index) in gauge.vote_incentives.tokens"
+              :key="tokenAddress"
+              class="flex justify-end items-center space-x-1"
+            >
+              <div
+                v-if="gauge.vote_incentives.rewards[index] > 0"
+                class="flex items-center space-x-1"
+              >
+                <BalAsset
+                  :address="tokenAddress"
+                  :iconURI="getToken(tokenAddress)?.logoURI"
+                  :size="16"
+                />
+                <span class="break-words">
+                  {{
+                    formatTokenReward(
+                      tokenAddress,
+                      gauge.vote_incentives.rewards[index]
+                    )
+                  }}
+                </span>
+              </div>
+              <div v-else>-</div>
+            </div>
+          </div>
+          <div v-else>-</div>
+        </div>
+      </template>
+      <template #voteAprCell="gauge">
+        <div class="flex justify-end px-4 text-right">
+          <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
+          <template v-else-if="gauge.vote_incentives_apr">
+            <div>{{ gauge.vote_incentives_apr?.toFixed(2) }}%</div>
+          </template>
+          <template v-else> - </template>
+        </div>
+      </template>
       <template #voteColumnCell="gauge">
-        <div v-if="isWalletReady" class="px-4">
+        <div v-if="isWalletReady" class="px-4 space-y-1">
           <GaugesTableVoteBtn
             :hasUserVotes="getHasUserVotes(gauge.userVotes)"
             :isGaugeExpired="getIsGaugeExpired(gauge.address)"
             @click.stop.prevent="emit('clickedVote', gauge)"
           />
+          <div
+            class="w-full text-xs text-blue-600 hover:text-blue-500 break-words cursor-pointer !my-2"
+            @click.stop.prevent="openVotingRewardsModal(gauge)"
+          >
+            <span class="block ml-6 break-words"
+              >+ increase vote incentives</span
+            >
+          </div>
         </div>
       </template>
       <template #RewardColumnCell="gauge">
@@ -840,6 +939,21 @@ onBeforeMount(async () => {
   >
     <DistributeRewardsBtn />
   </div>
+
+  <!-- Voting Rewards Modal -->
+  <VotingRewardsModal
+    v-if="showVotingRewardsModal && selectedGaugeForReward"
+    :pool="{
+      tokens: selectedGaugeForReward.pool?.tokens || [],
+      name: selectedGaugeForReward.pool?.symbol || 'Pool',
+      id: selectedGaugeForReward.pool?.id || '',
+      address: selectedGaugeForReward.pool?.address || '',
+      tokenLogoURIs: selectedGaugeForReward.tokenLogoURIs || {},
+    }"
+    :gaugeAddress="selectedGaugeForReward.address"
+    @close="closeVotingRewardsModal"
+    @success="closeVotingRewardsModal"
+  />
 </template>
 
 <style lang="scss">
@@ -864,6 +978,9 @@ tr.expired-gauge-row {
   @apply flex items-center px-2 py-1 rounded-lg bg-blue-50 dark:bg-blue-900 text-sm font-medium;
   @apply text-blue-700 dark:text-blue-200;
   @apply cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-800;
+}
+.space-y-1 > * + * {
+  margin-top: 0.25rem;
   @apply transition-colors duration-150;
 }
 </style>

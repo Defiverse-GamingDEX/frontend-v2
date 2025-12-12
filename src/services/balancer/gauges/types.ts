@@ -23,6 +23,8 @@ export interface OnchainGaugeData {
   rewardTokens: string[];
   claimableTokens: string;
   claimableRewards: Record<string, string>;
+  voteRewardTokens: string[];
+  voteClaimableRewards: Record<string, string>;
 }
 
 export type OnchainGaugeDataMap = Record<string, OnchainGaugeData>;

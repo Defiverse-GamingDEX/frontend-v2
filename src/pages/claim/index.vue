@@ -8,11 +8,12 @@ import BalClaimsTable, {
   RewardRow,
 } from '@/components/tables/BalClaimsTable.vue';
 import GaugeRewardsTable from '@/components/tables/GaugeRewardsTable.vue';
-import ProtocolRewardsTable, {
-  ProtocolRewardRow,
-} from '@/components/tables/ProtocolRewardsTable.vue';
+import VoteRewardsTable from '@/components/tables/VoteRewardsTable.vue';
+// import ProtocolRewardsTable, {
+//   ProtocolRewardRow,
+// } from '@/components/tables/ProtocolRewardsTable.vue';
 import { GaugePool, useClaimsData } from '@/composables/useClaimsData';
-import { isDefiverse, isL2, isMainnet } from '@/composables/useNetwork';
+import { isL2, isMainnet } from '@/composables/useNetwork';
 import useNumbers from '@/composables/useNumbers';
 import { isStableLike } from '@/composables/usePool';
 import { useTokenHelpers } from '@/composables/useTokenHelpers';
@@ -161,6 +162,29 @@ const gaugeTables = computed((): GaugeTable[] => {
   return gaugesWithRewards.value.reduce<GaugeTable[]>((arr, gauge) => {
     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
     const totalRewardValue = Object.values(gauge.claimableRewards).reduce(
+      (acc, reward) => acc.plus(reward),
+      bnum(0)
+    );
+
+    if (pool && totalRewardValue.gt(0))
+      arr.push({
+        gauge,
+        pool,
+      });
+
+    return arr;
+  }, []);
+});
+
+const voteGaugesWithRewards = computed((): Gauge[] => {
+  return gauges.value.filter(gauge => gauge.voteRewardTokens.length > 0);
+});
+
+const voteGaugeTables = computed((): GaugeTable[] => {
+  // Only return gauges if we have a corresponding pool and rewards > 0
+  return voteGaugesWithRewards.value.reduce<GaugeTable[]>((arr, gauge) => {
+    const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
+    const totalRewardValue = Object.values(gauge.voteClaimableRewards).reduce(
       (acc, reward) => acc.plus(reward),
       bnum(0)
     );
@@ -356,6 +380,36 @@ onBeforeMount(async () => {
             </div>
           </div>
         </template>
+
+        <div v-if="!isL2">
+          <h3 class="inline-block px-4 xl:px-0 mt-8 mr-1.5 text-xl text-white">
+            {{ $t('voteIncentives') }}
+          </h3>
+          <BalTooltip
+            iconSize="xs"
+            textAlign="left"
+            class="relative top-px"
+            iconClass="text-white"
+            width="60"
+          >
+            {{ $t('claimPage.tips.VoteIncentives') }}
+          </BalTooltip>
+        </div>
+
+        <BalLoadingBlock v-if="loading" class="mt-6 mb-2 h-56" />
+        <template v-if="!isClaimsLoading && voteGaugeTables.length > 0">
+          <div v-for="{ gauge, pool } in voteGaugeTables" :key="gauge.id">
+            <div class="mb-16">
+              <div class="flex px-4 xl:px-0 mt-4">
+                <h4 class="mb-2 text-base">
+                  {{ gaugeTitle(pool) }}
+                </h4>
+              </div>
+              <VoteRewardsTable :gauge="gauge" :isLoading="isClaimsLoading" />
+            </div>
+          </div>
+        </template>
+
         <!-- <BalBlankSlate v-else-if="isDefiverse" class="px-4 xl:px-0 mt-4 mb-16">
           {{ $t('noClaimableIncentivesOnThisChain') }}
         </BalBlankSlate> -->
