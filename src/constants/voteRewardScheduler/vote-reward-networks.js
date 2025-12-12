@@ -14,7 +14,7 @@ const VOTE_REWARD_SCHEDULER_NETWORKS_MAINNET = [
     chainId: 248,
     chainIdHex: '0xf8',
     voteRewardSchedulerContractAddress:
-      '0x9750e90CD84Fda76E4b23E9411e6DE33b6716662', // Update this if different
+      '0xA201Cc73E2803D2576e57087a65A8A4DACeeA1BF', // Update this if different
   },
 ];
 
