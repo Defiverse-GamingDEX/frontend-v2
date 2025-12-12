@@ -277,13 +277,17 @@ function closeVotingRewardsModal() {
 }
 
 function formatTokenReward(tokenAddress: string, reward: string) {
+  // If reward is null or undefined, show "-"
+  if (reward === null || reward === undefined || reward === '') return '-';
+
   const token = getToken(tokenAddress);
-  if (!token || !reward) return '-';
+  if (!token) return '-';
 
   // Convert reward amount from wei to readable format
   const amount = Number(reward) / Math.pow(10, token.decimals || 18);
   const symbol = token.symbol || token.name || 'Unknown';
 
+  // If amount is 0, show "0", otherwise format normally
   return `${fNum2(amount.toString())} ${symbol}`;
 }
 
@@ -887,8 +891,11 @@ onBeforeMount(async () => {
       <template #voteAprCell="gauge">
         <div class="flex justify-end px-4 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
-          <template v-else-if="gauge.vote_incentives_apr">
+          <template v-else-if="gauge.vote_incentives_apr >= 0">
             <div>{{ gauge.vote_incentives_apr?.toFixed(2) }}%</div>
+          </template>
+          <template v-else-if="gauge.vote_incentives_apr === -1">
+            <div>∞</div>
           </template>
           <template v-else> - </template>
         </div>
