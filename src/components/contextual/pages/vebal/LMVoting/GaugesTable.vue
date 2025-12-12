@@ -891,11 +891,7 @@ onBeforeMount(async () => {
       <template #voteAprCell="gauge">
         <div class="flex justify-end px-4 text-right">
           <BalLoadingBlock v-if="isGaugeAprLoading(gauge)" class="w-12 h-4" />
-          <template
-            v-else-if="
-              gauge.vote_incentives_apr || gauge.vote_incentives_apr === 0
-            "
-          >
+          <template v-else-if="gauge.vote_incentives_apr >= 0">
             <div>{{ gauge.vote_incentives_apr?.toFixed(2) }}%</div>
           </template>
           <template v-else-if="gauge.vote_incentives_apr === -1">
