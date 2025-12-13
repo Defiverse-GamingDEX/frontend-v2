@@ -20,8 +20,8 @@ export const networksForTransferToken: any = chainIdsForTransferToken?.map(
 );
 
 export const chainIdsForTransferNft: any = IS_TESTNET
-  ? [29548, 9372, 20197, 97]
-  : [29548, 9372, 20197, 97];
+  ? [29548, 9372, 20197, 97, 6343, 998]
+  : [29548, 9372, 20197, 97, 6343, 998];
 export const networksForTransferNft: any = chainIdsForTransferNft?.map(id => {
   return mapNetwork(id);
 });
