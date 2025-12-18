@@ -1,0 +1,88 @@
+{
+  "key": "6343",
+  "chainId": 6343,
+  "chainName": "MegaETH Testnet",
+  "name": "MegaETH - Testnet",
+  "shortName": "MegaETH",
+  "slug": "megaeth-testnet",
+  "network": "megaeth",
+  "unknown": false,
+  "rpc": "https://timothy.megaeth.com/rpc",
+  "ws": "",
+  "publicRpc": "https://timothy.megaeth.com/rpc",
+  "explorer": "https://megaeth-testnet-v2.blockscout.com",
+  "explorerName": "Megaexplorer",
+  "subgraph": "",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [],
+    "aave": "",
+    "gauge": "",
+    "blocks": ""
+  },
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
+  "nativeAsset": {
+    "name": "ETH",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "ETH",
+    "decimals": 18,
+    "deeplinkId": "ether",
+    "logoURI": "tokens/megaeth.svg",
+    "minTransactionBuffer": "0.05"
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "",
+    "authorizer": "",
+    "vault": "",
+    "weightedPoolFactory": "",
+    "stablePoolFactory": "",
+    "weth": "",
+    "rETH": "",
+    "stMATIC": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "",
+    "batchRelayer": "",
+    "batchRelayerV4": "",
+    "gaugeFactory": "",
+    "balancerMinter": "",
+    "gaugeController": "",
+    "tokenAdmin": "",
+    "veBAL": "",
+    "veDelegationProxy": "",
+    "veBALHelpers": "",
+    "feeDistributor": "",
+    "feeDistributorDeprecated": "",
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "disperse": "0xB7fB1f9f13DbA5E24cEbd575ae15D179E3B05653",
+    "nftTransfer": "0x4924D1fBB8aE0E7316708F5DdbA7E68A859E798A"
+  },
+  "keys": {
+    "infura": "",
+    "alchemy": ""
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 2,
+    "weight": 100
+  }
+}

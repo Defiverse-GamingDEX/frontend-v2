@@ -11,8 +11,8 @@ const mapNetwork = (id: number) => {
 };
 
 export const chainIdsForTransferToken: any = IS_TESTNET
-  ? [1, 56, 97, 81, 592, 137, 248]
-  : [1, 56, 97, 81, 592, 137, 248];
+  ? [1, 56, 97, 81, 592, 137, 248, 6343, 998, 999]
+  : [1, 56, 97, 81, 592, 137, 248, 6343, 998, 999];
 export const networksForTransferToken: any = chainIdsForTransferToken?.map(
   id => {
     return mapNetwork(id);
@@ -20,8 +20,8 @@ export const networksForTransferToken: any = chainIdsForTransferToken?.map(
 );
 
 export const chainIdsForTransferNft: any = IS_TESTNET
-  ? [29548, 9372, 20197, 97]
-  : [29548, 9372, 20197, 97];
+  ? [29548, 9372, 20197, 97, 6343, 998, 999]
+  : [29548, 9372, 20197, 97, 6343, 998, 999];
 export const networksForTransferNft: any = chainIdsForTransferNft?.map(id => {
   return mapNetwork(id);
 });

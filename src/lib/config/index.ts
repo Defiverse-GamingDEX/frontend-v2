@@ -14,6 +14,9 @@ import bsc from './bsc.json';
 import astarTestnet from './astar-testnet.json';
 import astar from './astar.json';
 import oasysSandverse from './oasys-sandverse.json';
+import megaethTestnet from './megaeth-testnet.json';
+import hyperEVMTestnet from './hyperevm-testnet.json';
+import hyperEVM from './hyperevm.json';
 
 // network for bridge
 import avalancheTestnet from './avalanche-testnet.json';
@@ -135,6 +138,9 @@ const config: Record<Network | number, Config> = {
   81: astarTestnet,
   592: astar,
   20197: oasysSandverse,
+  6343: megaethTestnet,
+  998: hyperEVMTestnet,
+  999: hyperEVM,
 };
 
 export default config;
