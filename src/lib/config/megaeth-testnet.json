@@ -5,13 +5,13 @@
   "name": "MegaETH - Testnet",
   "shortName": "MegaETH",
   "slug": "megaeth-testnet",
-  "network": "megaeth",
+  "network": "megaeth-testnet",
   "unknown": false,
   "rpc": "https://timothy.megaeth.com/rpc",
   "ws": "",
   "publicRpc": "https://timothy.megaeth.com/rpc",
   "explorer": "https://megaeth-testnet-v2.blockscout.com",
-  "explorerName": "Megaexplorer",
+  "explorerName": "megaeth-testnet",
   "subgraph": "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/megaeth-testnet",
   "poolsUrlV2": "",
   "subgraphs": {
@@ -62,6 +62,7 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
+    "voteRewardDistributor": "0xA11A98288f89464F06b17680B9E941d9dA94A5a4",
     "disperse": "0xB7fB1f9f13DbA5E24cEbd575ae15D179E3B05653",
     "nftTransfer": "0x4924D1fBB8aE0E7316708F5DdbA7E68A859E798A"
   },
