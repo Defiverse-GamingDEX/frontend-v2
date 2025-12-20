@@ -110,6 +110,21 @@ const getEarlyRedeemPenalty = async ({ provider, abi, contractAddress }) => {
   const earlyRedeemPenalty = await myContract.baseRedemptionRate();
   return earlyRedeemPenalty?.toString() || 0;
 };
+
+const getRedeemAllInfo = async ({
+  abi,
+  provider,
+  contractAddress,
+  walletAddress,
+}) => {
+  const myContract = new Contract(contractAddress, abi, provider);
+  const result = await myContract.getRedeemAllInfo(walletAddress);
+  return {
+    sZAmount: result.sZAmount.toString(),
+    zAmount: result.zAmount.toString(),
+    penaltyRate: result.penaltyRate.toString(),
+  };
+};
 const _sendRawTx = async (
   contractAddress,
   contractProvider,
@@ -297,4 +312,5 @@ export default {
   redeemSZ,
   stakeZForTest,
   canRedeemAll,
+  getRedeemAllInfo,
 };

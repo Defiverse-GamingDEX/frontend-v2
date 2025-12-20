@@ -36,6 +36,7 @@ import { providePoolStaking } from '@/providers/local/pool-staking.provider';
 import useWeb3 from '@/services/web3/useWeb3';
 import BrandedRedirectCard from '@/components/pool/branded-redirect/BrandedRedirectCard.vue';
 import ExtraRewardCard from '@/components/contextual/pages/pool/ExtraRewardCard.vue';
+import VoteRewardCard from '@/components/contextual/pages/pool/VoteRewardCard.vue';
 import gaugeApi from '@/composables/gaugeReward/gauge.api';
 import useConfig from '@/composables/useConfig';
 import { isExcludedPool } from '@/constants/excludedPools';
@@ -47,6 +48,7 @@ const poolId = (route.params.id as string).toLowerCase();
 const gaugeAddress = ref('');
 const streamerAddress = ref('');
 const canStake = ref(false);
+const canVote = ref(false);
 /**
  * PROVIDERS
  */
@@ -166,6 +168,17 @@ async function getGaugeAddress() {
     if (response.stake_enabled) {
       canStake.value = true;
     }
+    if (response.vote_enabled) {
+      canVote.value = true;
+    }
+
+    // Log gauge address for debugging
+    console.log(
+      '🚀 ~ getGaugeAddress ~ pool.value:',
+      pool.value,
+      'gaugeAddress.value:',
+      gaugeAddress.value
+    );
   } catch (error) {
     console.error(error);
   }
@@ -347,6 +360,11 @@ watch(poolQuery.error, () => {
             :streamerAddress="streamerAddress"
             :pool="pool"
             class="mb-4"
+          />
+          <VoteRewardCard
+            v-if="canVote && !loadingPool && pool && isWalletReady"
+            :pool="pool"
+            :gaugeAddress="gaugeAddress"
           />
         </BalStack>
       </div>

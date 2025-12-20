@@ -7,6 +7,7 @@ import useGaugesQuery from '@/composables/queries/useGaugesQuery';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { LiquidityGauge } from '@/services/balancer/contracts/contracts/liquidity-gauge';
 import { LiquidityGaugeRewardsHelper } from '@/services/balancer/contracts/contracts/gauge-reward-helper';
+import { VoteRewardDistributor } from '@/services/balancer/contracts/contracts/vote-reward-distributor';
 import { Gauge } from '@/services/balancer/gauges/types';
 
 import TxActionBtn from '../TxActionBtn/TxActionBtn.vue';
@@ -19,6 +20,7 @@ import useWeb3 from '@/services/web3/useWeb3';
  */
 type Props = {
   gauge: Gauge;
+  isVoteReward?: boolean;
   fiatValue: string;
 };
 
@@ -51,6 +53,15 @@ function claimTx() {
       configService.network.addresses.gaugeRewardsHelper || ''
     );
     return liquidityGaugeRewardsHelperContract.claimRewardsForGauge(
+      gaugeAddress,
+      account.value
+    );
+  }
+  if (props.isVoteReward) {
+    const voteRewardDistributorContract = new VoteRewardDistributor(
+      configService.network.addresses.voteRewardDistributor || ''
+    );
+    return voteRewardDistributorContract.claimRewardsForGauge(
       gaugeAddress,
       account.value
     );
