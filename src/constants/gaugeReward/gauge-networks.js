@@ -11,6 +11,12 @@ const GAUGE_REWARD_NETWORKS_TESTNET = [
     chainIdHex: '0x42DD',
     gaugeRewardContractAddress: '0xfeE8F38BB6C9aa8D2828a7d8542612e4E725aC69',
   },
+  {
+    id: 'megaeth-testnet',
+    chainId: 6343,
+    chainIdHex: '0x18C7',
+    gaugeRewardContractAddress: '0x1AC444064Da49947742c2180Cd44b89886717C4C',
+  },
 ];
 const GAUGE_REWARD_NETWORKS_MAINNET = [
   {

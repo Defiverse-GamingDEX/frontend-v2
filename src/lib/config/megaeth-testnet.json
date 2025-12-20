@@ -21,7 +21,7 @@
       "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/megaeth-testnet"
     ],
     "aave": "",
-    "gauge": "",
+    "gauge": "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/gauges-megaeth-testnet",
     "blocks": ""
   },
   "supportsEIP1559": false,
