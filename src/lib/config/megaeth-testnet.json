@@ -62,6 +62,7 @@
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
+    "oracle": "0x25E43bE623830731176021AbeA4BFfd7E8000C5D",
     "voteRewardDistributor": "0xA11A98288f89464F06b17680B9E941d9dA94A5a4",
     "disperse": "0xB7fB1f9f13DbA5E24cEbd575ae15D179E3B05653",
     "nftTransfer": "0x4924D1fBB8aE0E7316708F5DdbA7E68A859E798A"
