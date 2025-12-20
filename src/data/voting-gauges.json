@@ -2030,5 +2030,33 @@
       "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
       "0x5200000000000000000000000000000000000001": "https://testnet.gaming-dex.com/tokens/OAS_L.png"
     }
+  },
+
+  {
+    "address": "0x35f8f3063aa49c606a7b7155d64c39f05a6c2099",
+    "network": 6343,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1766187738,
+    "pool": {
+      "id": "0x2275e23987d68ced7e93da22b90cd72091d461e2000200000000000000000003",
+      "address": "0x2275e23987d68ced7e93da22b90cd72091d461e2",
+      "poolType": "ComposableStable",
+      "symbol": "50USDC.e-50WBTC",
+      "tokens": [
+        {
+          "address": "0x310ef97a217563d36a5469b7f432e72816cea84e",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b",
+          "symbol": "WBTC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x310ef97a217563d36a5469b7f432e72816cea84e": "https://testnet.gaming-dex.com/tokens/USDC_L.png",
+      "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b": "https://testnet.gaming-dex.com/tokens/BTC_L.png"
+    }
   }
 ]

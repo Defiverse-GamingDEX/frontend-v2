@@ -34,6 +34,14 @@ const STAKE_Z_NETWORKS_TESTNET = [
     sz_token_address: '0xb5C5C48D3082751f60EE1CAc8FC84a921931EC24',
     sz_token_decimals: 18,
   },
+  {
+    chain_id: 6343,
+    name: 'MegaETH Testnet',
+    z_token_address: '0x79b32EbCeB5551262C9C71D07E7a4bE819d36290',
+    z_token_decimals: 18,
+    sz_token_address: '0x8D23f3B57cF4B5Ed734574738Fa0Fc2C5b5e37d1',
+    sz_token_decimals: 18,
+  },
 ];
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 

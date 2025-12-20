@@ -6,6 +6,13 @@ const VOTE_REWARD_SCHEDULER_NETWORKS_TESTNET = [
     voteRewardSchedulerContractAddress:
       '0x9750e90CD84Fda76E4b23E9411e6DE33b6716662',
   },
+  {
+    id: 'megaeth-testnet',
+    chainId: 6343,
+    chainIdHex: '0x18C7',
+    voteRewardSchedulerContractAddress:
+      '0x74B7Bc0dBe0d6cE27C1908242C4379a09eba21D3',
+  },
 ];
 
 const VOTE_REWARD_SCHEDULER_NETWORKS_MAINNET = [
