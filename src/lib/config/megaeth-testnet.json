@@ -12,6 +12,7 @@
   "publicRpc": "https://timothy.megaeth.com/rpc",
   "explorer": "https://megaeth-testnet-v2.blockscout.com",
   "explorerName": "megaeth-testnet",
+  "priceUrl": "https://price-api-testnet.gaming-dex.com/api/v1",
   "subgraph": "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/megaeth-testnet",
   "poolsUrlV2": "",
   "subgraphs": {
