@@ -110,22 +110,22 @@ let networksDev = [
     maxPriorityFee: 0,
     externalLink: 'https://testnet.gaming-dex.com',
   },
+  // {
+  //   id: 'megaeth-testnet',
+  //   name: 'MegaETH-Testnet',
+  //   networkSlug: 'megaeth-testnet',
+  //   key: '6343',
+  //   tokens: megaethTestnetJson.tokens,
+  //   // price: 35000000000, // 50 Gwei
+  //   gasUnit: 'wei',
+  //   // maxPriorityFee: 0,
+  // },
   {
     id: 'megaeth-testnet',
     name: 'MegaETH-Testnet',
     networkSlug: 'megaeth-testnet',
     key: '6343',
     tokens: megaethTestnetJson.tokens,
-    // price: 35000000000, // 50 Gwei
-    gasUnit: 'wei',
-    // maxPriorityFee: 0,
-  },
-  {
-    id: 'megaeth-testnet',
-    name: 'MegaETH-Testnet',
-    networkSlug: 'megaeth-testnet',
-    key: '6343',
-    tokens: [],
     gasUnit: 'wei',
     externalLink: 'https://megaeth-testnet.gaming-dex.com/#/',
   },

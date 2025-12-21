@@ -188,6 +188,8 @@ export class GaugeControllerDecorator {
       return Network.OASYS;
     } else if (this.config.env.NETWORK === Network.OASYS_TESTNET) {
       return Network.OASYS_TESTNET;
+    } else if (this.config.env.NETWORK === Network.MEGAETH_TESTNET) {
+      return Network.MEGAETH_TESTNET;
     } else {
       return Network.MAINNET;
     }
