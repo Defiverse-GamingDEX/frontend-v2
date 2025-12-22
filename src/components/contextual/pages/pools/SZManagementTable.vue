@@ -68,21 +68,21 @@ const columns = [
     align: 'right',
   },
   {
-    name: 'Amount(sZ)',
+    name: 'Amount(MsZ)',
     id: 'amountSZ',
     Cell: 'amountSZColumnCell',
     width: 120,
     align: 'right',
   },
   {
-    name: 'Amount(Z)',
+    name: 'Amount(MZ)',
     id: 'amountZ',
     Cell: 'amountZColumnCell',
     width: 120,
     align: 'right',
   },
   {
-    name: 'Redeemable amount(Z)',
+    name: 'Redeemable amount(MZ)',
     id: 'redeemable',
     Cell: 'redeemableZColumnCell',
     width: 150,
@@ -169,7 +169,7 @@ const mapData = async stakedList => {
     }
     return {
       id: item.id,
-      name: 'sZ',
+      name: 'MsZ',
       myBalance: BigNumber(item.value_usd || 0).toFixed(2),
       amountSZ: BigNumber(item.sz_amount || 0)
         .div(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
@@ -322,12 +322,12 @@ onMounted(() => {
           <template #amountSZColumnCell="pool">
             <div class="mr-6 text-right">
               {{ fNum2(pool.amountSZ?.toString() || '0', FNumFormats.token) }}
-              sZ
+              MsZ
             </div>
           </template>
           <template #amountZColumnCell="pool">
             <div class="mr-6 text-right">
-              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} Z
+              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} MZ
             </div>
           </template>
           <template #redeemableZColumnCell="pool">
@@ -338,7 +338,7 @@ onMounted(() => {
                   FNumFormats.token
                 )
               }}
-              Z
+              MZ
             </div>
           </template>
 

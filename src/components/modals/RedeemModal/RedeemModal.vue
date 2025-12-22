@@ -19,7 +19,7 @@
                 fNum2((redeemableBalance || 0).toString(), FNumFormats.token)
               }}</span
             >
-            sZ
+            MsZ
           </div>
         </div>
         <div class="relative input-control">
@@ -34,7 +34,7 @@
             class="flex absolute top-1/2 right-0 gap-2 items-center -translate-y-1/2"
           >
             <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-            <span class="text-xl font-bold text-gray-800">sZ</span>
+            <span class="text-xl font-bold text-gray-800">MsZ</span>
           </div>
         </div>
         <div v-if="validate.isError" class="validate-amount">
@@ -43,7 +43,7 @@
       </div>
 
       <div class="flex justify-end items-center mb-4 ratio-content">
-        <span>1 sZ = {{ estimateZRate }} Z</span>
+        <span>1 MsZ = {{ estimateZRate }} MZ</span>
       </div>
 
       <div class="flex justify-between items-center mb-8 maturity-content">
@@ -56,7 +56,7 @@
           <div class="flex gap-2 items-center">
             <span class="label">Early redemption penalty</span>
             <BalTooltip
-              text="Early redemption will incur a penalty that reduces the amount of Z tokens you receive."
+              text="Early redemption will incur a penalty that reduces the amount of MZ tokens you receive."
               placement="top"
               iconSize="sm"
               width="64"
@@ -66,7 +66,7 @@
           <span class="value">-{{ penaltyRate }} %</span>
         </div>
         <p class="warning-text">
-          Redemption prior to maturity reduces the sZ that can be received.
+          Redemption prior to maturity reduces the MsZ that can be received.
         </p>
       </div>
 
@@ -79,7 +79,7 @@
             }}</span>
             <div class="flex items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-              <span class="ml-1 text-xl font-bold text-black">Z</span>
+              <span class="ml-1 text-xl font-bold text-black">MZ</span>
             </div>
           </div>
           <hr class="mt-4 border-gray-800" />
@@ -434,7 +434,7 @@ const handleRedeem = async () => {
     console.log('🚀 ~ handleRedeem ~ params:', params);
     const tx = await redeemSZ(params);
     console.log('🚀 ~ handleRedeem ~ rs:', tx);
-    const summary = `Redeem sZ success!`;
+    const summary = `Redeem MsZ success!`;
     addTransaction({
       id: tx?.hash || tx,
       type: 'tx',

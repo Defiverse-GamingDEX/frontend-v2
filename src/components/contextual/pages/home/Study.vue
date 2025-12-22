@@ -12,9 +12,9 @@ Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX wei
     author: 'AT-Field',
   },
   {
-    content: `The native token of both DeFi Verse and Gaming DEX, Z, encompasses various utilities. Z serves as the DeFi Verse's gas and base currency, while also being utilized as incentives for providing liquidity. Adjustments to incentives for specific pools are made through a voting system known as sZ. Protocol revenue distributions are also carried out via sZ, which is used for various other forms of governance voting. Furthermore, it plays a role in boosting rewards for liquidity providers through something called incentive boosts.`,
+    content: `The native token of both DeFi Verse and Gaming DEX, MZ, encompasses various utilities. MZ serves as the DeFi Verse's gas and base currency, while also being utilized as incentives for providing liquidity. Adjustments to incentives for specific pools are made through a voting system known as MsZ. Protocol revenue distributions are also carried out via MsZ, which is used for various other forms of governance voting. Furthermore, it plays a role in boosting rewards for liquidity providers through something called incentive boosts.`,
     img: '',
-    author: 'Z Token',
+    author: 'MZ Token',
   },
 ];
 </script>
