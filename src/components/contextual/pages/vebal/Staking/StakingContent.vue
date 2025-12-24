@@ -27,7 +27,7 @@ const lockPeriodText = computed(() => (isTestnet.value ? '1 hour' : '1 hour'));
         <div class="warning-item">
           <span class="warning-icon">⚠️</span>
           <span>
-            If you acquire additional MsZ after casting your vote, your voting
+            If you acquire additional sMZ after casting your vote, your voting
             power will not automatically update. To apply the new balance, you
             must submit a new voting transaction.
           </span>

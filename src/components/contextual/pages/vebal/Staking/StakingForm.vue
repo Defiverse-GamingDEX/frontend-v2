@@ -413,7 +413,7 @@ onMounted(() => {
       </div>
 
       <div class="flex justify-end items-center mb-4 ratio-content">
-        <span>1 MZ = {{ rateSZ }} MsZ</span>
+        <span>1 MZ = {{ rateSZ }} sMZ</span>
       </div>
 
       <div class="flex justify-between items-center mb-2 maturity-content">
@@ -428,7 +428,7 @@ onMounted(() => {
         <div class="warning-text">
           <ul>
             <li>
-              Redemption prior to maturity reduces the MsZ that can be received.
+              Redemption prior to maturity reduces the sMZ that can be received.
             </li>
             <li>Cannot be redeemed early until 30 days after staking.</li>
           </ul>
@@ -444,7 +444,7 @@ onMounted(() => {
             }}</span>
             <div class="flex items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-              <span class="ml-1 text-xl font-bold text-black">MsZ</span>
+              <span class="ml-1 text-xl font-bold text-black">sMZ</span>
             </div>
           </div>
           <hr class="mt-4 border-gray-800" />

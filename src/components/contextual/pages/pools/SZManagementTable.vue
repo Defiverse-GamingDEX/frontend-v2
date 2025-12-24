@@ -68,7 +68,7 @@ const columns = [
     align: 'right',
   },
   {
-    name: 'Amount(MsZ)',
+    name: 'Amount(sMZ)',
     id: 'amountSZ',
     Cell: 'amountSZColumnCell',
     width: 120,
@@ -169,7 +169,7 @@ const mapData = async stakedList => {
     }
     return {
       id: item.id,
-      name: 'MsZ',
+      name: 'sMZ',
       myBalance: BigNumber(item.value_usd || 0).toFixed(2),
       amountSZ: BigNumber(item.sz_amount || 0)
         .div(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
@@ -322,7 +322,7 @@ onMounted(() => {
           <template #amountSZColumnCell="pool">
             <div class="mr-6 text-right">
               {{ fNum2(pool.amountSZ?.toString() || '0', FNumFormats.token) }}
-              MsZ
+              sMZ
             </div>
           </template>
           <template #amountZColumnCell="pool">

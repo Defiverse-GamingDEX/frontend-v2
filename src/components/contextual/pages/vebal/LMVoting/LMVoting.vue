@@ -166,14 +166,14 @@ const nextEmissionFormatted = computed<string>(() => {
   return `${fNum2(
     votingInfo.value.emission.toString(),
     FNumFormats.token
-  )} MsZ`;
+  )} sMZ`;
 });
 
 const totalVotePowerFormatted = computed<string>(() => {
   if (isLoadingVotingInfo.value || !votingInfo.value?.total_vote_powers) {
     return '—';
   }
-  return `${fNum2(votingInfo.value.total_vote_powers, FNumFormats.token)} MsZ`;
+  return `${fNum2(votingInfo.value.total_vote_powers, FNumFormats.token)} sMZ`;
 });
 
 const totalFeeFormatted = computed<string>(() => {
@@ -187,7 +187,7 @@ const totalStakingSZFormatted = computed<string>(() => {
   if (isLoadingVotingInfo.value || !votingInfo.value?.total_staking_sz) {
     return '—';
   }
-  return `${fNum2(votingInfo.value.total_staking_sz, FNumFormats.token)} MsZ`;
+  return `${fNum2(votingInfo.value.total_staking_sz, FNumFormats.token)} sMZ`;
 });
 const totalVotePercentFormatted = computed<string>(() => {
   if (isLoadingVotingInfo.value || !votingInfo.value?.total_vote_percent) {
@@ -318,9 +318,9 @@ function symbolFor(tokenAddress: string): string {
       <div class="flex gap-2 xs:gap-3 mb-3 lg:mb-0 w-full card-group">
         <BalCard shadow="none" class="xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
-            <p class="inline mr-1 text-sm text-secondary">Staking MsZ</p>
+            <p class="inline mr-1 text-sm text-secondary">Staking sMZ</p>
             <BalTooltip
-              text="Total MsZ Staked by Users（excluding the MsZ for rewards）"
+              text="Total sMZ Staked by Users（excluding the sMZ for rewards）"
               iconSize="sm"
               iconClass="text-gray-400 dark:text-gray-600"
               width="72"
@@ -334,7 +334,7 @@ function symbolFor(tokenAddress: string): string {
         <BalCard shadow="none" class="xs:w-full md:w-48 min-w-max">
           <div class="flex items-center">
             <p class="inline mr-1 text-sm text-secondary">
-              Voted MsZ (vote power)
+              Voted sMZ (vote power)
             </p>
           </div>
           <p class="text-lg font-semibold tabular-nums">
