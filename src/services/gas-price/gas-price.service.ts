@@ -34,7 +34,7 @@ export class GasPriceService {
     private readonly defiverseTestnetProvider = new DefiverseTestnetProvider(),
     private readonly oasysProvider = new OasysProvider(),
     private readonly oasysTestnetProvider = new OasysTestnetProvider(),
-    private readonly megaETHTestnetProvider = new MegaETHTestnetProvider()
+    private readonly megaETHTestnetProvider = new MegaETHTestnetProvider(),
     private readonly megaETHMainnetProvider = new MegaETHMainnetProvider()
   ) {}
 
