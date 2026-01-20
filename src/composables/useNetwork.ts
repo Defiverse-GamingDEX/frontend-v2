@@ -213,7 +213,7 @@ export function getRedirectUrlFor(
 
   if (subdomainNetwork) {
     // Allow megaeth-testnet subdomain
-    if (subdomain === 'megaeth-testnet') {
+    if (subdomain === 'megaeth-testnet' || subdomain === 'megaeth') {
       return;
     }
 
