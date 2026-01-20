@@ -37,3 +37,5 @@ pnpm-debug.log*
 stats.html
 .qodo
 tailwind.config.js
+# Antigravity Agents
+.agent/

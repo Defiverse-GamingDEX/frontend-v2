@@ -20,6 +20,7 @@ export interface NetworkOption {
   subdomain?: string;
   networkSlug?: string;
   key?: string;
+  externalLink?: string;
 }
 
 // COMPOSABLES
@@ -183,7 +184,9 @@ function isActive(network: NetworkOption): boolean {
       <a
         v-for="network in allNetworks"
         :key="network.id"
-        :href="getNetworkChangeUrl(network)"
+        :href="network.externalLink || getNetworkChangeUrl(network)"
+        :target="network.externalLink ? '_blank' : '_self'"
+        :rel="network.externalLink ? 'noopener noreferrer' : undefined"
         class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-850 cursor-pointer"
       >
         <div class="flex items-center">
@@ -212,4 +215,3 @@ function isActive(network: NetworkOption): boolean {
   }
 }
 </style>
-
