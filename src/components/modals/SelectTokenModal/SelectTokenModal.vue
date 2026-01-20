@@ -162,7 +162,7 @@ const tokens = computed(() => {
 const excludedTokens = computed(() => [
   ...props.excludedTokens,
   ...(props.includeEther ? [] : [nativeAsset.address]),
-  // configService.network.addresses.veBAL,
+  configService.network.addresses.veBAL,
 ]);
 
 const focussedTokenAddress = computed((): string => {
