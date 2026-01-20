@@ -62,6 +62,7 @@
     "veBALHelpers": "",
     "feeDistributor": "",
     "feeDistributorDeprecated": "",
+    "voteRewardDistributor": "0xFfC90e9bD71c28F69201De4C34f944faaD59458E",
     "faucet": "",
     "gaugeRewardsHelper": "",
     "oracle": "0xA7E726E19573f492f39eedF6B709d4cbCA26f86D",

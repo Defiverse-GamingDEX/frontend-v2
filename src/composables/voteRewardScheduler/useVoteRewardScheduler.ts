@@ -69,6 +69,7 @@ async function approveToken(address: string, provider: any, walletAddress: strin
 }
 
 async function depositToken(
+  gaugeAddress: string,
   tokenAddress: string,
   amount: string,
   period: number,
@@ -93,14 +94,18 @@ async function depositToken(
     
     // Convert to ethers BigNumber for contract call
     const amountBN = ethers.BigNumber.from(amountInWei);
-    console.log(tokenAddress, 'tokenAddress');
-    console.log(amountBN, 'amountBN');
-    console.log(period, 'period');
-    console.log(account, 'account');
-    console.log(signer, 'signer');
+    console.log('depositToken params:', {
+      gaugeAddress,
+      tokenAddress,
+      period,
+      amountBN: amountBN.toString(),
+      account,
+    });
+    
+    // ABI: depositToken(address gauge, address token, uint256 period, uint256 amount)
     const tx = await contract
       .connect(signer)
-      .depositToken(tokenAddress, period, amountBN);
+      .depositToken(gaugeAddress, tokenAddress, period, amountBN);
 
     return tx;
   } catch (error) {
@@ -109,19 +114,21 @@ async function depositToken(
   }
 }
 
-async function getRewardAmounts(currentProvider: any) {
+async function getRewardAmounts(gaugeAddress: string, currentProvider: any) {
   try {
     if (!VOTE_REWARD_SCHEDULER_CONTRACT_ADDRESS) {
       throw new Error('Vote reward scheduler contract address not found for current network');
     }
     
+    if (!gaugeAddress) {
+      throw new Error('Gauge address is required');
+    }
+    
     const provider = currentProvider;
     const contract = new Contract(VOTE_REWARD_SCHEDULER_CONTRACT_ADDRESS, VoteRewardSchedulerABI, provider);
-    
-    console.log('🚀 ~ Calling getRewardAmounts on contract:', VOTE_REWARD_SCHEDULER_CONTRACT_ADDRESS);
-    
-    // Call getRewardAmounts function from ABI
-    const result = await contract.getRewardAmounts();
+       
+    // ABI: getRewardAmounts(address gauge) returns (address[], uint256[])
+    const result = await contract.getRewardAmounts(gaugeAddress);
     console.log('🚀 ~ Raw contract result:', result);
     
     // Result is [address[], uint256[]]

@@ -1,39 +1,38 @@
 {
   "key": "6343",
   "chainId": 6343,
-  "chainName": "MegaETH-Testnet",
-  "name": "MegaETH-Testnet",
-  "shortName": "MegaETH-Testnet",
+  "chainName": "MegaETH Testnet",
+  "name": "MegaETH - Testnet",
+  "shortName": "MegaETH",
   "slug": "megaeth-testnet",
   "network": "megaeth-testnet",
   "unknown": false,
   "rpc": "https://megaeth-testnet.g.alchemy.com/v2/drZJfN8D2ODAZagijuNvF",
-  "ws": "wss://ws.testnet.oasys.games/",
+  "ws": "",
   "publicRpc": "https://megaeth-testnet.g.alchemy.com/v2/drZJfN8D2ODAZagijuNvF",
-  "explorer": "https://www.megaexplorer.xyz",
-  "priceUrl": "https://price-api-testnet.gaming-dex.com/api/v1",
+  "explorer": "https://megaeth-testnet-v2.blockscout.com",
   "explorerName": "megaeth-testnet",
+  "priceUrl": "https://price-api-testnet.gaming-dex.com/api/v1",
   "subgraph": "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/megaeth-testnet",
-  "poolsUrlV1": "",
   "poolsUrlV2": "",
   "subgraphs": {
     "main": [
       "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/megaeth-testnet"
     ],
     "aave": "",
-    "gauge": "",
+    "gauge": "https://graphnode-megaeth-testnet.defi-verse.org/subgraphs/name/balancer-labs/gauges-megaeth-testnet",
     "blocks": ""
   },
-  "supportsEIP1559": false,
-  "supportsElementPools": false,
-  "blockTime": 2,
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
   "nativeAsset": {
     "name": "ETH",
     "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     "symbol": "ETH",
     "decimals": 18,
-    "deeplinkId": "eth",
-    "logoURI": "tokens/ETH_L.png",
+    "deeplinkId": "ether",
+    "logoURI": "tokens/megaeth.svg",
     "minTransactionBuffer": "0.05"
   },
   "addresses": {
@@ -53,24 +52,25 @@
     "balancerHelpers": "0x0309DA369DF0f208d117c8291d34a041122Be0AD",
     "batchRelayer": "0x7b9B6f094DC2Bd1c12024b0D9CC63d6993Be1888",
     "batchRelayerV4": "0x00e695aA8000df01B8DC8401B4C34Fba5D56BBb2",
-    "gaugeFactory": "",
-    "balancerMinter": "",
-    "gaugeController": "",
+    "gaugeFactory": "0x6E970276FBA7f923B160bF659a2cB5B91040C902",
+    "balancerMinter": "0x08F7E3ae6E402554e83dBB22D556EEBA70E873ff",
+    "gaugeController": "0x8b91eB206963A50B739fCe40CcB8E87384CE0576",
     "tokenAdmin": "0x3c06643e8344CD88683889CCDe74100E99A8BB7E",
     "veBAL": "0x8D23f3B57cF4B5Ed734574738Fa0Fc2C5b5e37d1",
-    "veDelegationProxy": "",
+    "veDelegationProxy": "0x0AAea5d401Ea5f82a03edBBeE67cE665C349aA97",
     "veBALHelpers": "",
     "feeDistributor": "",
     "feeDistributorDeprecated": "",
     "faucet": "",
     "gaugeRewardsHelper": "",
     "oracle": "0x25E43bE623830731176021AbeA4BFfd7E8000C5D",
-    "nftTransfer": ""
+    "voteRewardDistributor": "0xA11A98288f89464F06b17680B9E941d9dA94A5a4",
+    "disperse": "0xB7fB1f9f13DbA5E24cEbd575ae15D179E3B05653",
+    "nftTransfer": "0x4924D1fBB8aE0E7316708F5DdbA7E68A859E798A"
   },
   "keys": {
-    "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",
-    "alchemy": "VBeQgTCRqqPtuuEPsFzRdwKXzDyN6aFh",
-    "balancerApi": "da2-7a3ukmnw7bexndpx5x522uafui"
+    "infura": "",
+    "alchemy": ""
   },
   "strategies": {
     "0": {

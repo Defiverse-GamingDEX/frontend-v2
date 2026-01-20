@@ -1,6 +1,7 @@
 // import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 // import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
 
+import megaethJson from '@/constants/megaeth.listed.tokenlist.json';
 import megaethTestnetJson from '@/constants/megaeth.testnet.listed.tokenlist.json';
 import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
@@ -96,6 +97,16 @@ let networks: any = [
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },
+  {
+    id: 'megaeth',
+    name: 'Megaeth',
+    networkSlug: 'megaeth',
+    key: '4326',
+    tokens: megaethJson.tokens,
+    // price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
 ];
 
 let networksDev = [
@@ -110,15 +121,24 @@ let networksDev = [
     maxPriorityFee: 0,
     externalLink: 'https://testnet.gaming-dex.com',
   },
+  // {
+  //   id: 'megaeth-testnet',
+  //   name: 'MegaETH-Testnet',
+  //   networkSlug: 'megaeth-testnet',
+  //   key: '6343',
+  //   tokens: megaethTestnetJson.tokens,
+  //   // price: 35000000000, // 50 Gwei
+  //   gasUnit: 'wei',
+  //   // maxPriorityFee: 0,
+  // },
   {
     id: 'megaeth-testnet',
     name: 'MegaETH-Testnet',
     networkSlug: 'megaeth-testnet',
     key: '6343',
     tokens: megaethTestnetJson.tokens,
-    // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
-    // maxPriorityFee: 0,
+    externalLink: 'https://megaeth-testnet.gaming-dex.com/#/',
   },
 ];
 

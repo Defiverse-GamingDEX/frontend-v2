@@ -4,7 +4,14 @@ const VOTE_REWARD_SCHEDULER_NETWORKS_TESTNET = [
     chainId: 9372,
     chainIdHex: '0x249C',
     voteRewardSchedulerContractAddress:
-      '0x9750e90CD84Fda76E4b23E9411e6DE33b6716662',
+      '0xd3aD8d3fC418641dBe58F1f1c80c18185d699cDE',
+  },
+  {
+    id: 'megaeth-testnet',
+    chainId: 6343,
+    chainIdHex: '0x18C7',
+    voteRewardSchedulerContractAddress:
+      '0x74B7Bc0dBe0d6cE27C1908242C4379a09eba21D3',
   },
 ];
 
@@ -14,7 +21,7 @@ const VOTE_REWARD_SCHEDULER_NETWORKS_MAINNET = [
     chainId: 248,
     chainIdHex: '0xf8',
     voteRewardSchedulerContractAddress:
-      '0x9750e90CD84Fda76E4b23E9411e6DE33b6716662', // Update this if different
+      '0xA201Cc73E2803D2576e57087a65A8A4DACeeA1BF', // Update this if different
   },
 ];
 

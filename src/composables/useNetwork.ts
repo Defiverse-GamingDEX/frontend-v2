@@ -15,12 +15,12 @@ let localStorageNetworkId: Network | null =
     ? (Number(localStorage.getItem('networkId')) as Network)
     : null;
 if (IS_TESTNET) {
-  if(localStorageNetworkId !== Network.MEGAETH_TESTNET){
+  if (localStorageNetworkId !== Network.MEGAETH_TESTNET) {
     localStorageNetworkId = Network.MEGAETH_TESTNET;
   }
-}else {
-  if(localStorageNetworkId !== Network.OASYS){
-    localStorageNetworkId = Network.OASYS;
+} else {
+  if (localStorageNetworkId !== Network.MEGAETH_MAINNET) {
+    localStorageNetworkId = Network.MEGAETH_MAINNET;
   }
 }
 const routeSlug =
@@ -29,8 +29,9 @@ const urlNetworkId: Network | null = routeSlug
   ? networkFromSlug(routeSlug)
   : null;
 
-
-const DEFAULT_NETWORK = IS_TESTNET ? Network.MEGAETH_TESTNET : Network.OASYS;
+const DEFAULT_NETWORK = IS_TESTNET
+  ? Network.MEGAETH_TESTNET
+  : Network.MEGAETH_MAINNET;
 
 const NETWORK_ID =
   urlNetworkId ||
@@ -51,6 +52,7 @@ export const networkLabelMap = {
   [Network.OASYS]: 'oasys',
   //[Network.OASYS_TESTNET]: 'oasys-testnet',
   [Network.MEGAETH_TESTNET]: 'megaeth-testnet',
+  [Network.MEGAETH_MAINNET]: 'megaeth',
 };
 
 /**
@@ -59,7 +61,9 @@ export const networkLabelMap = {
 
 export const networkId = ref<Network>(NETWORK_ID);
 
-export const isMainnet = computed(() => networkId.value === Network.OASYS);
+export const isMainnet = computed(
+  () => networkId.value === Network.MEGAETH_MAINNET
+);
 export const isPolygon = computed(() => networkId.value === Network.POLYGON);
 export const isArbitrum = computed(() => networkId.value === Network.ARBITRUM);
 export const isGoerli = computed(() => networkId.value === Network.GOERLI);
@@ -77,7 +81,9 @@ export const isOasysTestnet = computed(
 export const isMegaethTestnet = computed(
   () => networkId.value === Network.MEGAETH_TESTNET
 );
-
+export const isMegaethMainnet = computed(
+  () => networkId.value === Network.MEGAETH_MAINNET
+);
 export const isL2 = computed(
   () =>
     isPolygon.value ||
@@ -111,6 +117,8 @@ export function networkFor(key: string | number): Network | number {
     //   return Network.OASYS_TESTNET;
     case '6343':
       return Network.MEGAETH_TESTNET;
+    case '4326':
+      return Network.MEGAETH_MAINNET;
     case '29548':
       return 29548;
     case '2400':

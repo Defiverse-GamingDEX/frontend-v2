@@ -106,12 +106,12 @@ const breakdownItems = computed((): Array<any> => {
   const items: Array<any> = [];
 
   if (!isMinMaxSame.value) {
-    items.push(['Min sZ', minBalAPR.value], ['Max sZ', maxBalAPR.value]);
+    items.push(['Min sMZ', minBalAPR.value], ['Max sMZ', maxBalAPR.value]);
   }
 
   if (hasRewardTokens.value) {
     if (isMinMaxSame.value) {
-      items.push(['sZ', minBalAPR.value]);
+      items.push(['sMZ', minBalAPR.value]);
     }
 
     const rewardAprTokens = apr.value?.rewardAprs.breakdown;

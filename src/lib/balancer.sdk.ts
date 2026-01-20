@@ -23,6 +23,8 @@ const network = ((): Network => {
       return Network.OASYS_TESTNET;
     case '6343':
       return Network.MEGAETH_TESTNET;
+    case '4326':
+      return Network.MEGAETH_MAINNET;
     default:
       return Network.MAINNET;
   }

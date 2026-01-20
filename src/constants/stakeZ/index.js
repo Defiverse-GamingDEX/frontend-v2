@@ -15,6 +15,14 @@ const STAKE_Z_NETWORKS_MAINNET = [
     sz_token_address: '0x0000000000000000000000000000000000000000',
     sz_token_decimals: 18,
   },
+  {
+    chain_id: 4326,
+    name: 'MegaETH',
+    z_token_address: '0xd6428F5311ada795B37B44Fd64036EbD94A1a309',
+    z_token_decimals: 18,
+    sz_token_address: '0x3EeaBC1632B47b0da9681674E67160d65811E7AB',
+    sz_token_decimals: 18,
+  },
 ];
 
 const STAKE_Z_NETWORKS_TESTNET = [
@@ -32,6 +40,14 @@ const STAKE_Z_NETWORKS_TESTNET = [
     z_token_address: '0x0000000000000000000000000000000000000000',
     z_token_decimals: 18,
     sz_token_address: '0xb5C5C48D3082751f60EE1CAc8FC84a921931EC24',
+    sz_token_decimals: 18,
+  },
+  {
+    chain_id: 6343,
+    name: 'MegaETH Testnet',
+    z_token_address: '0x79b32EbCeB5551262C9C71D07E7a4bE819d36290',
+    z_token_decimals: 18,
+    sz_token_address: '0x8D23f3B57cF4B5Ed734574738Fa0Fc2C5b5e37d1',
     sz_token_decimals: 18,
   },
 ];

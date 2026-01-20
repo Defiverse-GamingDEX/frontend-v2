@@ -113,7 +113,7 @@
   "claimHero": {
     "title": "Claim liquidity incentives",
     "legacyTitle": "Claim legacy incentives",
-    "description": "Gaming DEX liquidity incentives are directed to pools by sZ voters. Stake in these pools to earn incentives. Boost with sZ for up to 2.5x extra on Mainnet pools.",
+    "description": "Gaming DEX liquidity incentives are directed to pools by sMZ voters. Stake in these pools to earn incentives. Boost with sMZ for up to 2.5x extra on Mainnet pools.",
     "nodescription": "",
     "legacyDescription": "Liquidity mining incentive systems before the launch of ve8020-tokenomics have been deprecated. If you provided liquidity before this change and have outstanding incentives you can claim them here.",
     "tipLabel": {
@@ -123,23 +123,24 @@
       "claim": "Claim anytime"
     },
     "tips": {
-      "addLiquidity": "To earn liquidity mining incentives, add liquidity to eligible pools across Defiverse Mainnet and supported Layer 2's like Polygon and Arbitrum (see the table on the sZ page). Note: You'll earn swap fees with or without staking but you don't need to claim these as they are automatically added to your position.",
+      "addLiquidity": "To earn liquidity mining incentives, add liquidity to eligible pools across Defiverse Mainnet and supported Layer 2's like Polygon and Arbitrum (see the table on the sMZ page). Note: You'll earn swap fees with or without staking but you don't need to claim these as they are automatically added to your position.",
       "stake": "If you've provided liquidity in an eligible pool, you'll have an option to stake your Liquidity Provider (LP) tokens from that pool. Stake them to receive liquidity mining incentives in addition to any swap fees.",
-      "boost": "sZ to boost your liquidity mining incentives by up to 2.5x (on Defiverse Mainnet only). The more sZ you hold, the larger your boost. sZ holders also earn protocol fees and can vote to direct future pool emissions. Note, there is no additional boost from holding sZ on Layer 2 pools like Polygon and Arbitrum.",
-      "claim": "Token earnings from liquidity mining accumulate every block and can be claimed at any time. Some pools offer multiple token incentives (not just Z). Additionally, sZ holders also get a share of protocol revenue, in both bb-a-USD and Z."
+      "boost": "sMZ to boost your liquidity mining incentives by up to 2.5x (on Defiverse Mainnet only). The more sMZ you hold, the larger your boost. sMZ holders also earn protocol fees and can vote to direct future pool emissions. Note, there is no additional boost from holding sMZ on Layer 2 pools like Polygon and Arbitrum.",
+      "claim": "Token earnings from liquidity mining accumulate every block and can be claimed at any time. Some pools offer multiple token incentives (not just MZ). Additionally, sMZ holders also get a share of protocol revenue, in both bb-a-USD and MZ."
     }
   },
   "claimPage": {
     "tips": {
       "BalIncentives": "Incentives for LPs who stake in eligible pools (based on the previous week's voting). This doesn't include swap fees or intrinsic yield from certain yield bearing tokens which accumulate into LP positions automatically.",
-      "ProtocolAndVebal": "Additional incentives for sZ holders: For locking in the B-80Z-20OAS pool (based on the previous week's voting), and their share of protocol revenue.",
-      "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any Z liquidity incentives."
+      "ProtocolAndVebal": "Additional incentives for sMZ holders: For locking in the B-80MZ-20OAS pool (based on the previous week's voting), and their share of protocol revenue.",
+      "OtherIncentives": "Incentives from third parties who want to further incentivize liquidity on top of any MZ liquidity incentives.",
+      "VoteIncentives": "Vote Incentives."
     }
   },
   "claimAll": "Claim all",
-  "claimBAL": "Claim $Z for",
+  "claimBAL": "Claim $MZ for",
   "claiming": "Claiming...",
-  "claimSuccess": "You successfully claimed $Z!",
+  "claimSuccess": "You successfully claimed $MZ!",
   "classic": "Classic",
   "clearForms": "Clear forms",
   "clearTransactions": "Clear transactions",
@@ -351,7 +352,7 @@
   "dynamicSwapFeeLabel": "Dynamic swap fees: Currently <span class='font-semibold'>{0}</span>",
   "docs": "Docs",
   "earnings": "Earnings",
-  "earnBAL": "Earn $Z when swapping eligible tokens",
+  "earnBAL": "Earn $MZ when swapping eligible tokens",
   "effectivePrice": "Effective price:",
   "enterAmount": "Enter amount",
   "enterAPrice": "Enter a price",
@@ -435,7 +436,7 @@
   "hourAbbrev": "h",
   "incentives": "incentives",
   "incentiveToken": "Incentive token",
-  "inclXInVeBal": "{0} in sZ",
+  "inclXInVeBal": "{0} in sMZ",
   "initialBPT": "Initial BPT",
   "initialWeight": "Initial weight",
   "insufficientBalance": "Not enough funds",
@@ -497,7 +498,7 @@
   },
   "investmentPool": "Liquidity pool",
   "investmentPools": "Liquidity pools",
-  "investmentPoolsAbout": "Stake your assets to get $Z tokens for participating in Balancer V2 liquidity mining.",
+  "investmentPoolsAbout": "Stake your assets to get $MZ tokens for participating in Balancer V2 liquidity mining.",
   "investmentPoolsAboutLink": "Learn more ->",
   "investmentSettled": "Your liquidity add has settled",
   "investmentSuccess": "Your tokens have been added to this pool, and you have received a new LP token representing this action.",
@@ -507,22 +508,22 @@
   "joinPool": "Join pool",
   "language": "Language",
   "learnMore": "Learn more",
-  "lockToGetVeBAL": "Lock this to sZ",
+  "lockToGetVeBAL": "Lock this to sMZ",
   "light": "Light",
   "liquidityBootstrappingPool": "Liquidity Bootstrapping Pool",
   "liquidityIncentives": "liquidity incentives",
   "liquidityMining": "Liquidity mining",
   "liquidityMiningAPR": "Liquidity Mining APR",
   "liquidityMiningIncentives": "Liquidity mining incentives",
-  "liquidityMiningIncentivesCopy": "Liquidity incentives on {0} are paused for 1 week during its upgrade to the sZ system. Incentives will resume on April 28.",
+  "liquidityMiningIncentivesCopy": "Liquidity incentives on {0} are paused for 1 week during its upgrade to the sMZ system. Incentives will resume on April 28.",
   "liquidityMiningPopover": {
-    "airdropEligibility": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $Z distributions as incentives. $Z token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
+    "airdropEligibility": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $MZ distributions as incentives. $MZ token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
     "airdropExplainer": "Weekly distributions from liquidity mining on {0} are airdropped on Wednesdays, sent directly to your wallet using disperse.app",
     "claimFreezeWarning": {
       "description": "Since you have several weeks' worth of tokens unclaimed, your screen may appear to freeze after pressing the claim button while it is processed. Just leave your browser open and your wallet will eventually pop open for you to complete the claim.",
       "title": "Too many claims"
     },
-    "networksExplainer": "Switch networks in the header to see your current cumulative $Z incentives on {0} and {1}.",
+    "networksExplainer": "Switch networks in the header to see your current cumulative $MZ incentives on {0} and {1}.",
     "noRewards": {
       "description": "Certain eligible pools have ‘liquidity mining’ token incentives which are distributed to liquidity providers weekly in proportion to their contribution.",
       "title": "You have no token incentives to claim"
@@ -532,7 +533,7 @@
     },
     "title": "Token incentives"
   },
-  "liquidityProviderCopy": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $Z distributions as incentives. $Z token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
+  "liquidityProviderCopy": "People who provide liquidity to eligible pools or swap on eligible token pairs receive weekly $MZ distributions as incentives. $MZ token holders own the Balancer Protocol and can help shape its future by voting on governance proposals.",
   "liquidityProvision": "Liquidity provision",
   "loading": "Loading...",
   "loadingBestPrice": "Looking for the best price...",
@@ -541,10 +542,10 @@
   "locked": "Locked",
   "locking": {
     "expiredLockLpTokens": "Expired lock LP tokens",
-    "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any sZ or voting power. You will no longer earn protocol fees, boosted yields on staked Defiverse Mainnet pools or sZ incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80Z-20OAS LP tokens and then create a new lock to sZ.",
-    "lockBptForVeBal": "Lock LP for sZ",
-    "lockedLpTokensTooltip": "The USD value of your sZ. These are your locked LP tokens in the Z 80% / OAS 20% pool.",
-    "unlockedLpTokensTooltip": "The USD value of your liquidity provided to the Z 80% / OAS 20% pool that has not been locked."
+    "expiredLockTooltip": "Your previous locking period has expired, so you no longer have any sMZ or voting power. You will no longer earn protocol fees, boosted yields on staked Defiverse Mainnet pools or sMZ incentives. However, you'll still get the minimum 1.0x rate. Redeem your expired locked B-80MZ-20OAS LP tokens and then create a new lock to sMZ.",
+    "lockBptForVeBal": "Lock LP for sMZ",
+    "lockedLpTokensTooltip": "The USD value of your sMZ. These are your locked LP tokens in the MZ 80% / OAS 20% pool.",
+    "unlockedLpTokensTooltip": "The USD value of your liquidity provided to the MZ 80% / OAS 20% pool that has not been locked."
   },
   "logOut": "Log out",
   "lost": "Lost",
@@ -566,7 +567,7 @@
   "modals": {
     "veBalRedirectModal": {
       "title": "Proceed to mainnet",
-      "description": "Getting and using sZ to vest and vote must be performed on the {networkName}."
+      "description": "Getting and using sMZ to vest and vote must be performed on the {networkName}."
     }
   },
   "month": "month",
@@ -622,8 +623,8 @@
   "noRecentActivity": "Your recent activity will appear here…",
   "noResults": "No results",
   "noResultsTable": {
-    "noBalIncentives": "No Z incentives to claim from staking",
-    "noProtocolRevenue": "Nothing to claim from holding sZ"
+    "noBalIncentives": "No MZ incentives to claim from staking",
+    "noProtocolRevenue": "Nothing to claim from holding sMZ"
   },
   "noSwapsPool": "No swaps in this pool.",
   "noTokensInWallet": "You don't have any tokens in your connected wallet on {0}",
@@ -638,13 +639,14 @@
   "oops": "Oops",
   "oracleWeightedPool": "Oracle Weighted Pool",
   "otherTokenIncentives": "Other token incentives",
+  "voteIncentives": "Vote incentives",
   "overview": "Overview",
   "ownerFeesTooltip": "Liquidity providers earn dynamic swap fees on every swap that utilizes the liquidity in this pool. Dynamic swap fees are controlled by the Pool Owner.",
   "payload": "Payload",
   "pages": {
     "claim": {
       "title": "Claim your liquidity mining incentives",
-      "description": "Incentives to attract liquidity are set by the Balancer protocol and partners. Stakers in eligible pools can claim incentives every block. People with sZ get a boosted rate—up to 2.5x extra.",
+      "description": "Incentives to attract liquidity are set by the Balancer protocol and partners. Stakers in eligible pools can claim incentives every block. People with sMZ get a boosted rate—up to 2.5x extra.",
       "titles": {
         "incentivesOnOtherNetworks": "Incentives on other networks",
         "legacyIncentives": "Legacy incentives"
@@ -793,7 +795,7 @@
   "proportionalSuggestion": "Proportional suggestion",
   "proportionalWithdrawal": "Proportional withdrawal",
   "protocolFees": "Protocol fees",
-  "protocolIncentives": "Protocol revenue & sZ incentives",
+  "protocolIncentives": "Protocol revenue & sMZ incentives",
   "rank": "Rank (1{0})",
   "receipt": "Receipt",
   "receive": "Receive",
@@ -886,52 +888,52 @@
         "vote": "Vote to direct liquidity mining emissions"
       },
       "tokens": {
-        "balWETH": "Z + OAS",
-        "lpToken": "B-80Z-20OAS",
-        "veBAL": "sZ"
+        "balWETH": "MZ + OAS",
+        "lpToken": "B-80MZ-20OAS",
+        "veBAL": "sMZ"
       },
       "tokenInfo": {
-        "balWETH": "Add liquidity to the 80% Z / 20% OAS pool to get the B-80Z-20OAS LP token.",
-        "lpToken": "Lock up the LP tokens from the 80% Z / 20% OAS pool for up to a year to sZ. The longer you lock, the more sZ you get.",
-        "veBAL": "Use sZ to earn extra on your staked pools. Only some pools are eligible for staking. Check any pools that you are in, and stake it to earn liquidity mining incentives. You can also use sZ to vote to direct future liquidity mining emissions"
+        "balWETH": "Add liquidity to the 80% MZ / 20% OAS pool to get the B-80MZ-20OAS LP token.",
+        "lpToken": "Lock up the LP tokens from the 80% MZ / 20% OAS pool for up to a year to sMZ. The longer you lock, the more sMZ you get.",
+        "veBAL": "Use sMZ to earn extra on your staked pools. Only some pools are eligible for staking. Check any pools that you are in, and stake it to earn liquidity mining incentives. You can also use sMZ to vote to direct future liquidity mining emissions"
       },
       "buttons": {
-        "getVeBAL": "sZ",
+        "getVeBAL": "sMZ",
         "learnMore": "Learn more"
       }
     },
     "myVeBAL": {
-      "title": "My sZ",
+      "title": "My sMZ",
       "cards": {
         "myLpToken": {
-          "label": "My B-80Z-20OAS"
+          "label": "My B-80MZ-20OAS"
         },
         "myLockedLpToken": {
-          "label": "My locked B-80Z-20OAS"
+          "label": "My locked B-80MZ-20OAS"
         },
         "lockedEndDate": {
           "label": "Locked until",
           "secondaryText": "{0} days"
         },
         "myVeBAL": {
-          "label": "My sZ",
-          "secondaryText": "{0} of all sZ"
+          "label": "My sMZ",
+          "secondaryText": "{0} of all sMZ"
         },
-        "myExpiredLockTooltip": "Your previous lockup period has expired, so you no longer have any sZ or voting power. You will no longer earn protocol fees, boosted yields on staked Defiverse Mainnet pools or sZ incentives. However, you’ll still get the minimum 1.0x rate. Tap the minus icon to redeem your expired locked B-80Z-20OAS LP tokens and then create a new lock to sZ."
+        "myExpiredLockTooltip": "Your previous lockup period has expired, so you no longer have any sMZ or voting power. You will no longer earn protocol fees, boosted yields on staked Defiverse Mainnet pools or sMZ incentives. However, you’ll still get the minimum 1.0x rate. Tap the minus icon to redeem your expired locked B-80MZ-20OAS LP tokens and then create a new lock to sMZ."
       }
     },
     "communityVeBAL": {
-      "title": "Community sZ",
+      "title": "Community sMZ",
       "cards": {
-        "totalVeBAL": "Total sZ",
+        "totalVeBAL": "Total sMZ",
         "avgLockUpPeriod": "Ave. lock-up period",
-        "effectiveBalLocked": "Effective Z locked",
-        "shareOfBalLocked": "Share of Z locked"
+        "effectiveBalLocked": "Effective MZ locked",
+        "shareOfBalLocked": "Share of MZ locked"
       },
       "stats": {
         "currentWeekVoting": "Current week voting",
         "nextWeekVoting": "Next week voting",
-        "balIncentives": "Z incentives"
+        "balIncentives": "MZ incentives"
       },
       "table": {
         "poolGauge": "Pool gauge",
@@ -941,14 +943,14 @@
     },
     "liquidityMining": {
       "title": "Pools eligible for liquidity mining",
-      "description": "Liquidity incentives are directed by the community of sZ holders. If you hold sZ, vote below on any pools. Your vote will persist until you change it and editing a pool can only be done once in {0}.",
+      "description": "Liquidity incentives are directed by the community of sMZ holders. If you hold sMZ, vote below on any pools. Your vote will persist until you change it and editing a pool can only be done once in {0}.",
       "myUnallocatedVotes": "My unallocated votes:",
-      "myUnallocatedVotesTooltip": "sZ holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any sZ, your votes will not count.",
+      "myUnallocatedVotesTooltip": "sMZ holders can vote for a single pool or multiple pools in whatever weights they choose, up to their max of 100%. Note: If you’ve previously voted for a pool but no longer have any sMZ, your votes will not count.",
       "unallocatedVotes": "My unallocated votes: {0}.",
       "votingPeriod": "Voting period ends: {0}d {1}h {2}m {3}s",
-      "votingPeriodTooltip": "There is a weekly vote for sZ holders which ends at 0:00 UTC on Thursdays. This vote determines the Z incentives allocation for all Stakers in these pools for the next week. Although you don’t have to vote to get a boosted yield, your vote can help you earn more by voting on pools where you are a staker.",
+      "votingPeriodTooltip": "There is a weekly vote for sMZ holders which ends at 0:00 UTC on Thursdays. This vote determines the MZ incentives allocation for all Stakers in these pools for the next week. Although you don’t have to vote to get a boosted yield, your vote can help you earn more by voting on pools where you are a staker.",
       "votingPeriodCountdown": "{0}d : {1}h : {2}m : {3}s",
-      "votingPowerExpiredTooltip": "Your previous lock period has expired, so you no longer have any sZ or voting power. Any votes that have been allocated in the past will no longer count. Lock up B-80Z-20OAS LP tokens to sZ for higher yields and voting power.",
+      "votingPowerExpiredTooltip": "Your previous lock period has expired, so you no longer have any sMZ or voting power. Any votes that have been allocated in the past will no longer count. Lock up B-80MZ-20OAS LP tokens to sMZ for higher yields and voting power.",
       "table": {
         "chain": "Chain",
         "assets": "Assets",
@@ -966,7 +968,7 @@
         "nextPeriod": "Next period: {0}"
       },
       "limitsTooltip": {
-        "distributionsCappedVeBAL": "Distributions to the sZ gauge are capped at 10%",
+        "distributionsCappedVeBAL": "Distributions to the sMZ gauge are capped at 10%",
         "distributionsCappedAt": "Distributions to this gauge are capped at {0}%"
       },
       "popover": {
@@ -989,7 +991,7 @@
         "remainingVotes": "Your remaining votes: {0}",
         "remainingVotesEditing": "Your remaining votes: {0} ({1} current allocation in this pool + {2} unallocated votes)",
         "remainingVotesExceeded": "This exceeds your remaining votes of: {0}",
-        "resubmitVote": "Voting power is set at the time of the vote. If you get more sZ later, resubmit your vote to use your increased power.",
+        "resubmitVote": "Voting power is set at the time of the vote. If you get more sMZ later, resubmit your vote to use your increased power.",
         "voteLockInfo": "Votes are timelocked for {0}. If you vote now, no edits can be made until {1}.",
         "warnings": {
           "votedTooRecently": {
@@ -997,17 +999,17 @@
             "description": "You won't be able to make any edits to this vote allocation for {1}"
           },
           "noVeBal": {
-            "title": "You need some sZ to vote on gauges",
-            "description": "sZ by locking up LP tokens from the 80% Z / 20% OAS pool.",
-            "inputHintText": "You can't vote since you have no sZ"
+            "title": "You need some sMZ to vote on gauges",
+            "description": "sMZ by locking up LP tokens from the 80% MZ / 20% OAS pool.",
+            "inputHintText": "You can't vote since you have no sMZ"
           },
           "veBalLockTooShort": {
-            "title": "sZ not locked for 7 days",
-            "description": "You must have sZ locked for more than 7 days to vote on gauges."
+            "title": "sMZ not locked for 7 days",
+            "description": "You must have sMZ locked for more than 7 days to vote on gauges."
           },
           "veBalVoteOverLimitWarning": {
-            "title": "You may be wasting your vote: sZ cap hit",
-            "description": "Distributions to sZ holders of weekly emissions are capped at 10%. Any votes exceeding this amount at Thursday 0:00 UTC will not be counted."
+            "title": "You may be wasting your vote: sMZ cap hit",
+            "description": "Distributions to sMZ holders of weekly emissions are capped at 10%. Any votes exceeding this amount at Thursday 0:00 UTC will not be counted."
           },
           "lpVoteOverLimitWarning": {
             "title": "You may be wasting your vote",
@@ -1032,17 +1034,17 @@
         },
         "hint": {
           "title": "Resubmit your votes to utilize your full voting power",
-          "description": "Votes on pools are set at the time of your last vote. Since you’ve added new sZ after your original vote, the additional voting power is not being used."
+          "description": "Votes on pools are set at the time of your last vote. Since you’ve added new sMZ after your original vote, the additional voting power is not being used."
         },
-        "resubmitWarning": "Votes on pools are set at the time of the vote. Since you’ve added new sZ since your original vote, you have additional voting power which is not being used. To use your full voting power, resubmit your votes.",
+        "resubmitWarning": "Votes on pools are set at the time of the vote. Since you’ve added new sMZ since your original vote, you have additional voting power which is not being used. To use your full voting power, resubmit your votes.",
         "btn": "Resubmit votes"
       }
     },
     "notSupported": {
       "title": "Locking is unavailable on this network",
-      "description": "sZ on Defiverse Mainnet"
+      "description": "sMZ on Defiverse Mainnet"
     },
-    "votingTransitionDescription": "Liquidity mining emissions as directed by sZ holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so sZ and vote for pools. Your vote will persist until you edit. Editing can only be done once in {0}."
+    "votingTransitionDescription": "Liquidity mining emissions as directed by sMZ holders start on 7 April 2022 at 0:00 UTC! Voting is now live, so sMZ and vote for pools. Your vote will persist until you edit. Editing can only be done once in {0}."
   },
   "getVeBAL": {
     "lockableTokens": {
@@ -1054,27 +1056,27 @@
       "steps": {
         "investPart1": "Add liquidity to the",
         "investPart2": "pool.",
-        "lock": "Lock-up the resulting LP token ({0}). The longer you lock (1 year max), the more sZ you get."
+        "lock": "Lock-up the resulting LP token ({0}). The longer you lock (1 year max), the more sMZ you get."
       },
       "earn": {
-        "boost": "sZ holders get boosted liquidity mining yields (up to 2.5x) and increased voting power.",
+        "boost": "sMZ holders get boosted liquidity mining yields (up to 2.5x) and increased voting power.",
         "voting": "Use this voting power to choose which pool gauges get allocated liquidity mining incentives. Vote on the pools where you have added liquidity to earn more yield."
       }
     },
     "myVeBAL": {
-      "title": "My sZ",
+      "title": "My sMZ",
       "lockedEndDate": "Locked until",
       "expiredOn": "Expired on",
-      "percentVeBAL": "% of total sZ"
+      "percentVeBAL": "% of total sMZ"
     },
     "lockForm": {
-      "title": "Lock to sZ",
+      "title": "Lock to sMZ",
       "lockAmount": {
         "title": "How much do you want to lock?"
       },
       "lockEndDate": {
         "title": "Lock until",
-        "tooltip": "The longer you lock your stake, the more sZ voting power you get (up to 4 years). You can extend the lock later. Be careful, locking is not reversible."
+        "tooltip": "The longer you lock your stake, the more sMZ voting power you get (up to 4 years). You can extend the lock later. Be careful, locking is not reversible."
       },
       "summary": {
         "receive": {
@@ -1122,7 +1124,7 @@
           "explainer": "Lock-up end dates can only be on Thursdays at 0:00 UTC. To get as close as possible to a 1 year lock, locking on Thursday is recommended.",
           "table": {
             "lockPeriod": "Lock period",
-            "totalVeBAL": "Total sZ"
+            "totalVeBAL": "Total sMZ"
           }
         },
         "increasedLockAmount": "Increased lock amount",
@@ -1153,18 +1155,18 @@
           "loadingLabel": "Confirm lock in wallet"
         }
       },
-      "returnToVeBalPage": "Return to sZ page",
+      "returnToVeBalPage": "Return to sMZ page",
       "firstVeBALReceived": {
         "title": "Vote on pools to direct liquidity incentives",
-        "description": "Your voting weight is set at the time of the vote. If you acquire additional sZ, resubmit your votes to utilize your newly acquired voting power. Voting per pool can only be done once every {0}."
+        "description": "Your voting weight is set at the time of the vote. If you acquire additional sMZ, resubmit your votes to utilize your newly acquired voting power. Voting per pool can only be done once every {0}."
       }
     },
     "notSupported": {
       "title": "Locking is unavailable on this network",
-      "description": "sZ on Defiverse Mainnet"
+      "description": "sMZ on Defiverse Mainnet"
     }
   },
-  "getVeBALToVote": "sZ to vote",
+  "getVeBALToVote": "sMZ to vote",
   "unlockVeBAL": {
     "expiredLockableTokens": {
       "title": "Expired locked tokens"
@@ -1197,7 +1199,7 @@
           "loadingLabel": "Confirm unlock in wallet"
         }
       },
-      "returnToVeBalPage": "Return to sZ page"
+      "returnToVeBalPage": "Return to sMZ page"
     },
     "notSupported": {
       "title": "Unlocking is unavailable on this network",
@@ -1210,7 +1212,7 @@
     "apr": {
       "token": "Token APR",
       "boosted": "Boosted APR",
-      "veBAL": "sZ APR"
+      "veBAL": "sMZ APR"
     },
     "fiat": {
       "token": "Token rewards",
@@ -1247,8 +1249,8 @@
       "total": "The total value in {0} you’ll be withdrawing from this pool."
     },
     "veBalApr": {
-      "title": "Max locking/sZ APR",
-      "breakdown1": "Z",
+      "title": "Max locking/sMZ APR",
+      "breakdown1": "MZ",
       "breakdown2": "bb-a-USD"
     }
   },
@@ -1371,8 +1373,8 @@
     "atfSwap": "ATF Swap",
     "atfLimit": "ATF Limit",
     "bridge": "Bridge",
-    "stakeZ": "Stake Z",
-    "redeemAllSZ": "Redeem all sZ",
+    "stakeZ": "Stake MZ",
+    "redeemAllSZ": "Redeem all sMZ",
     "redeemSZ": "Redeem SZ"
   },
   "transactionDeadline": "Transaction deadline",
@@ -1450,9 +1452,9 @@
   "v2": "V2",
   "value": "Value",
   "vault": "Vault",
-  "vebal": "sZ",
-  "veBalProtocolLiquidity": "sZ protocol liquidity",
-  "sZManagement": "sZ management",
+  "vebal": "sMZ",
+  "veBalProtocolLiquidity": "sMZ protocol liquidity",
+  "sZManagement": "sMZ management",
   "vestVote": "Vest+Vote",
   "viewAllAssets": "View all assets ({0})",
   "viewAndManangeOnElement": "View and manage all pools on Element.fi",

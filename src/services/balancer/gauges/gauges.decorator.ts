@@ -3,6 +3,7 @@ import { AddressZero } from '@ethersproject/constants';
 import { isL2 } from '@/composables/useNetwork';
 import LiquidityGaugeAbi from '@/lib/abi/LiquidityGaugeV5.json';
 import LiquidityGaugeRewardHelperAbi from '@/lib/abi/LiquidityGaugeHelperAbi.json';
+import VoteRewardDistributorAbi from '@/lib/abi/VoteRewardDistributor.json';
 import { configService } from '@/services/config/config.service';
 import { rpcProviderService } from '@/services/rpc-provider/rpc-provider.service';
 
@@ -24,6 +25,7 @@ export class GaugesDecorator {
   constructor(
     private readonly abi = LiquidityGaugeAbi,
     private readonly rewardsHelperAbi = LiquidityGaugeRewardHelperAbi,
+    private readonly voteRewardAbi = VoteRewardDistributorAbi,
     private readonly provider = rpcProviderService.jsonProvider,
     private readonly config = configService
   ) {
@@ -48,18 +50,36 @@ export class GaugesDecorator {
 
       let gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>();
 
-      if (isL2.value) {
-        this.multicaller = this.resetMulticaller(this.rewardsHelperAbi);
-      }
+      // if (isL2.value) {
+      //   this.multicaller = this.resetMulticaller(this.rewardsHelperAbi);
+      // }
+
+      // this.multicaller = this.resetMulticaller(this.abi);
       this.callClaimableRewards(list, userAddress, gaugesDataMap);
       gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
         gaugesDataMap
       );
 
+      // Vote incentives data
+      {
+        this.multicaller = this.resetMulticaller(this.voteRewardAbi);
+        this.callVoteRewardTokens(list);
+
+        gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
+          gaugesDataMap
+        );
+
+        this.callVoteClaimableRewards(list, userAddress, gaugesDataMap);
+        gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
+          gaugesDataMap
+        );
+      }
+
       const arr = list.map(subgraphGauge => ({
         ...subgraphGauge,
         ...this.format(gaugesDataMap[subgraphGauge.id]),
       }));
+
       ret.push(...arr);
     }
 
@@ -79,6 +99,8 @@ export class GaugesDecorator {
       rewardTokens: this.formatRewardTokens(gaugeData.rewardTokens),
       claimableTokens: gaugeData.claimableTokens?.toString() || '0',
       claimableRewards: this.formatClaimableRewards(gaugeData.claimableRewards),
+      voteRewardTokens: this.formatRewardTokens(gaugeData.voteRewardTokens),
+      voteClaimableRewards: this.formatClaimableRewards(gaugeData.voteClaimableRewards),
     };
   }
 
@@ -96,6 +118,17 @@ export class GaugesDecorator {
           [i]
         );
       }
+    });
+  }
+
+  private callVoteRewardTokens(subgraphGauges: SubgraphGauge[]) {
+    subgraphGauges.forEach(gauge => {
+      this.multicaller.call(
+        `${gauge.id}.voteRewardTokens`,
+        this.config.network.addresses.voteRewardDistributor,
+        'getVoteRewardTokens',
+        [gauge.id]
+      );
     });
   }
 
@@ -160,6 +193,27 @@ export class GaugesDecorator {
     });
   }
 
+  private callVoteClaimableRewards(
+    subgraphGauges: SubgraphGauge[],
+    userAddress: string,
+    gaugesDataMap: OnchainGaugeDataMap
+  ) {
+    subgraphGauges.forEach(gauge => {
+      gaugesDataMap[gauge.id].voteRewardTokens.forEach(rewardToken => {
+        if (rewardToken === AddressZero) return;
+
+        const callArgs = [gauge.id, userAddress, rewardToken];
+        const contractAddress = configService.network.addresses.voteRewardDistributor;
+        this.multicaller.call(
+          `${gauge.id}.voteClaimableRewards.${rewardToken}`,
+          contractAddress,
+          "getPendingRewards",
+          callArgs
+        );
+      });
+    });
+  }
+
   /**
    * @summary converts claimable reward values in map to strings from BigNumbers.
    */
@@ -169,14 +223,14 @@ export class GaugesDecorator {
     if (!claimableRewards) return {};
 
     Object.keys(claimableRewards).forEach(rewardToken => {
-      claimableRewards[rewardToken] = claimableRewards[rewardToken].toString();
+      claimableRewards[rewardToken] = claimableRewards[rewardToken] ? claimableRewards[rewardToken].toString() : '0';
     });
 
     return claimableRewards;
   }
 
   private resetMulticaller(
-    abi: typeof LiquidityGaugeAbi | typeof LiquidityGaugeRewardHelperAbi
+    abi: typeof LiquidityGaugeAbi | typeof LiquidityGaugeRewardHelperAbi | typeof VoteRewardDistributorAbi
   ) {
     const Multicaller = getOldMulticaller();
     return new Multicaller(this.config.network.key, this.provider, abi);

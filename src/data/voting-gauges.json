@@ -2030,5 +2030,60 @@
       "0xf73d74a089366486401d67ad83013a623d40ac77": "tokens/stOAS.png",
       "0x5200000000000000000000000000000000000001": "https://testnet.gaming-dex.com/tokens/OAS_L.png"
     }
+  },
+
+  {
+    "address": "0x35f8f3063aa49c606a7b7155d64c39f05a6c2099",
+    "network": 6343,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1766187738,
+    "pool": {
+      "id": "0x2275e23987d68ced7e93da22b90cd72091d461e2000200000000000000000003",
+      "address": "0x2275e23987d68ced7e93da22b90cd72091d461e2",
+      "poolType": "Weighted",
+      "symbol": "50USDC.e-50WBTC",
+      "tokens": [
+        {
+          "address": "0x310ef97a217563d36a5469b7f432e72816cea84e",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b",
+          "symbol": "WBTC"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x310ef97a217563d36a5469b7f432e72816cea84e": "https://testnet.gaming-dex.com/tokens/USDC_L.png",
+      "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b": "https://testnet.gaming-dex.com/tokens/BTC_L.png"
+    }
+  },
+  {
+    "address": "0x0a0fb0de95c1ee172d068e93e12b9322311944a5",
+    "network": 6343,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1766187738,
+    "pool": {
+      "id": "0x95696e5a22e9b92a4b11ff8d49a12607a807abff000200000000000000000004",
+      "address": "0x95696e5a22e9b92a4b11ff8d49a12607a807abff",
+      "poolType": "Weighted",
+      "symbol": "50USDC.e-50Z",
+      "tokens": [
+        {
+          "address": "0x310ef97a217563d36a5469b7f432e72816cea84e",
+          "symbol": "USDC.e"
+        },
+        {
+          "address": "0x79b32ebceb5551262c9c71d07e7a4be819d36290",
+          "symbol": "Z"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x310ef97a217563d36a5469b7f432e72816cea84e": "https://testnet.gaming-dex.com/tokens/USDC_L.png",
+      "0x79b32ebceb5551262c9c71d07e7a4be819d36290": "https://price-api-testnet.gaming-dex.com/static/image_dbd0e571600e450988f035dc2e14d1da.png"
+    }
   }
 ]

@@ -5,15 +5,28 @@ import BigNumber from 'bignumber.js';
 
 import useWeb3 from '@/services/web3/useWeb3';
 import { useTokens } from '@/providers/tokens.provider';
+import { useTokenLists } from '@/providers/token-lists.provider';
 import { useVoteRewardScheduler } from '@/composables/voteRewardScheduler/useVoteRewardScheduler';
 import TokenInput from '@/components/inputs/TokenInput/TokenInput.vue';
 import useNotifications from '@/composables/useNotifications';
 import useTransactions from '@/composables/useTransactions';
 import useEthers from '@/composables/useEthers';
+import ALL_VOTING_GAUGES from '@/data/voting-gauges.json';
+import { VotingGauge } from '@/constants/voting-gauges';
 
 /**
  * PROPS & EMITS
  */
+interface Props {
+  pool?: any;
+  gaugeAddress?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  pool: undefined,
+  gaugeAddress: undefined,
+});
+
 const emit = defineEmits(['close', 'success']);
 
 /**
@@ -21,6 +34,7 @@ const emit = defineEmits(['close', 'success']);
  */
 const { account, getProvider } = useWeb3();
 const { getToken } = useTokens();
+const { activeTokenLists } = useTokenLists();
 const { checkTokenAllowance, approveToken, depositToken } =
   useVoteRewardScheduler();
 const { addNotification } = useNotifications();
@@ -46,6 +60,112 @@ const selectedToken = computed(() => {
   return getToken(selectedTokenAddress.value);
 });
 
+const poolTokens = computed(() => {
+  if (!props.pool || !props.pool.tokens) return [];
+  console.log('🚀 ~ VotingRewardsModal poolTokens ~ props.pool:', props.pool);
+  console.log(
+    '🚀 ~ VotingRewardsModal poolTokens ~ tokenLogoURIs:',
+    props.pool.tokenLogoURIs
+  );
+
+  // Filter out BPT token and get main tokens
+  return props.pool.tokens
+    .filter(
+      (token: any) =>
+        !props.pool.address ||
+        token.address?.toLowerCase() !== props.pool.address?.toLowerCase()
+    )
+    .slice(0, 2); // Get first 2 tokens for the pair
+});
+
+// Helper function to get base URL for token assets based on current domain
+const getTokenAssetsBaseURL = () => {
+  // Use current domain automatically
+  return window.location.origin;
+};
+
+// Helper function to map token symbols to correct file names
+const applyTokenSymbolMapping = (logoURI: string): string => {
+  // Map known symbol mismatches to correct file names
+  const symbolMappings = {
+    'BTC_L.png': 'WBTC_L.png',
+    'OAS_L.png': 'WOAS_L.png', // If needed
+    'BTC.png': 'WBTC.png',
+    'OAS.png': 'WOAS.png', // If needed
+  };
+
+  // Extract filename from URI
+  const filename = logoURI.split('/').pop() || '';
+
+  // Check if we need to map this filename
+  if (symbolMappings[filename]) {
+    const mappedURI = logoURI.replace(filename, symbolMappings[filename]);
+    console.log(`🔄 ~ Mapped ${filename} → ${symbolMappings[filename]}`);
+    return mappedURI;
+  }
+
+  return logoURI;
+};
+
+// Helper function to get token logo URI
+const getTokenLogoURI = (tokenAddress: string) => {
+  console.log('🚀 ~ getTokenLogoURI ~ tokenAddress:', tokenAddress);
+
+  // First try from pool's tokenLogoURIs (from GaugesTable)
+  if (props.pool?.tokenLogoURIs?.[tokenAddress]) {
+    let logoURI = props.pool.tokenLogoURIs[tokenAddress];
+    console.log('✅ ~ Using pool tokenLogoURIs:', logoURI);
+
+    // Apply token symbol mapping for known mismatches
+    logoURI = applyTokenSymbolMapping(logoURI);
+
+    // Convert relative paths to absolute URLs
+    if (logoURI.startsWith('tokens/')) {
+      logoURI = `${getTokenAssetsBaseURL()}/${logoURI}`;
+      console.log('🔄 ~ Converted to current domain URL:', logoURI);
+    }
+
+    return logoURI;
+  }
+
+  // Second try: search in voting gauges data by pool ID or gauge address
+  if (props.pool?.id || props.gaugeAddress) {
+    const votingGauges = ALL_VOTING_GAUGES as VotingGauge[];
+    const matchingGauge = votingGauges.find(
+      gauge =>
+        gauge.pool.id === props.pool?.id || gauge.address === props.gaugeAddress
+    );
+
+    if (matchingGauge?.tokenLogoURIs?.[tokenAddress]) {
+      let logoURI = matchingGauge.tokenLogoURIs[tokenAddress];
+      console.log('✅ ~ Using voting gauges tokenLogoURIs:', logoURI);
+
+      // Apply token symbol mapping for known mismatches
+      logoURI = applyTokenSymbolMapping(logoURI);
+
+      // Convert relative paths to absolute URLs
+      if (logoURI.startsWith('tokens/')) {
+        logoURI = `${getTokenAssetsBaseURL()}/${logoURI}`;
+        console.log('🔄 ~ Converted to current domain URL:', logoURI);
+      }
+
+      return logoURI;
+    }
+  }
+
+  // Third try: tokens provider
+  const token = getToken(tokenAddress);
+  if (token?.logoURI) {
+    console.log('✅ ~ Using tokens provider logoURI:', token.logoURI);
+    return token.logoURI;
+  }
+
+  // Final fallback - generate from token address
+  const fallbackURI = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+  console.log('⚠️ ~ Using fallback URI:', fallbackURI);
+  return fallbackURI;
+};
+
 const isNativeToken = computed(() => {
   // Check if selected token is native token (OAS)
   return (
@@ -56,6 +176,43 @@ const isNativeToken = computed(() => {
         '0x0000000000000000000000000000000000000000' ||
       selectedToken.value.symbol === 'OAS')
   );
+});
+
+// Get token list origin for owner filtering
+const tokenListOrigin = computed(() => {
+  const tokenListArray = Object.entries(activeTokenLists.value) || [];
+  return tokenListArray.length > 0 &&
+    tokenListArray[0] &&
+    tokenListArray[0].length >= 2
+    ? tokenListArray[0][1].tokens
+    : [];
+});
+
+// Custom excluded tokens for voting rewards - exclude OAS and non-gamingdex tokens
+const customExcludedTokens = computed(() => {
+  const excludedAddresses: string[] = [];
+
+  // Get all tokens from token list origin
+  const allTokens = tokenListOrigin.value || [];
+
+  allTokens.forEach(token => {
+    // Exclude OAS tokens (native token)
+    if (token.symbol === 'OAS' || token.name === 'OASYS') {
+      excludedAddresses.push(token.address);
+      return;
+    }
+
+    // Exclude tokens that don't have owner='gamingdex'
+    if (token.owner !== 'gamingdex') {
+      excludedAddresses.push(token.address);
+    }
+  });
+
+  // Also exclude native asset addresses
+  excludedAddresses.push('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+  excludedAddresses.push('0x0000000000000000000000000000000000000000');
+
+  return excludedAddresses;
 });
 
 const isFormValid = computed(() => {
@@ -184,21 +341,30 @@ async function handleApprove() {
 async function handleSubmit() {
   if (!isFormValid.value || !selectedToken.value) return;
 
+  if (!props.gaugeAddress) {
+    addNotification({
+      type: 'error',
+      title: 'Missing Gauge Address',
+      message: 'Gauge address is required for voting rewards',
+    });
+    return;
+  }
+
   try {
     isLoading.value = true;
     const provider = getProvider();
     const signer = provider.getSigner();
-    console.log(
-      selectedToken.value.address,
-      amount.value,
-      period.value,
-      selectedToken.value.decimals,
-      account.value,
-      signer,
-      'depositData'
-    );
-    console.log(provider);
+    console.log('depositToken params:', {
+      gaugeAddress: props.gaugeAddress,
+      tokenAddress: selectedToken.value.address,
+      amount: amount.value,
+      period: period.value,
+      decimals: selectedToken.value.decimals,
+      account: account.value,
+    });
+
     const tx = await depositToken(
+      props.gaugeAddress,
       selectedToken.value.address,
       amount.value,
       period.value,
@@ -285,6 +451,36 @@ watch(() => amount.value, handleAmountChange);
       </template>
 
       <div class="p-4 space-y-4">
+        <!-- Pool Information -->
+        <div
+          v-if="props.pool && poolTokens.length > 0"
+          class="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+        >
+          <div class="flex justify-center items-center space-x-2">
+            <div class="flex items-center space-x-1">
+              <BalAsset
+                v-for="token in poolTokens"
+                :key="token.address"
+                :address="token.address"
+                :iconURI="getTokenLogoURI(token.address)"
+                :size="24"
+                class="relative"
+                :class="{ '-ml-2': poolTokens.indexOf(token) > 0 }"
+              />
+            </div>
+            <span class="font-semibold text-gray-800 dark:text-gray-200">
+              {{
+                poolTokens
+                  .map(token => getToken(token.address)?.symbol || token.symbol)
+                  .join(' / ')
+              }}
+            </span>
+          </div>
+          <div class="mt-1 text-xs text-center text-gray-500">
+            Pool: {{ props.pool.name || 'Weighted Pool' }}
+          </div>
+        </div>
+
         <!-- Token Selection & Amount Input Combined -->
         <div class="space-y-2">
           <label
@@ -297,7 +493,7 @@ watch(() => amount.value, handleAmountChange);
             v-model:address="selectedTokenAddress"
             name="token"
             :rules="[]"
-            :excludedTokens="[]"
+            :excludedTokens="customExcludedTokens"
             placeholder="0.0"
             @amount-change="handleAmountChange"
           />

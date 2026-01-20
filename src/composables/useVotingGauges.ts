@@ -7,6 +7,7 @@ import {
   // DEFIVERSE_TESTNET_VOTING_GAUGES,
   OASYS_VOTING_GAUGES,
   OASYS_TESTNET_VOTING_GAUGES,
+  MEGAETH_TESTNET_VOTING_GAUGES,
   // MAINNET_VOTING_GAUGES,
   VotingGauge,
 } from '@/constants/voting-gauges';
@@ -18,6 +19,7 @@ import {
   isDefiverseTestnet,
   isOasys,
   isOasysTestnet,
+  isMegaethTestnet,
 } from './useNetwork';
 import { orderedPoolTokens } from '@/composables/usePool';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';
@@ -53,6 +55,8 @@ export default function useVotingGauges() {
       return OASYS_TESTNET_VOTING_GAUGES as VotingGauge[];
     } else if (isOasys.value) {
       return OASYS_VOTING_GAUGES as VotingGauge[];
+    } else if (isMegaethTestnet.value) {
+      return MEGAETH_TESTNET_VOTING_GAUGES as VotingGauge[];
     } else {
       return OASYS_TESTNET_VOTING_GAUGES as VotingGauge[];
     }

@@ -13,6 +13,7 @@ import useDarkMode from '@/composables/useDarkMode';
 import TokensWhite from '@/assets/images/icons/tokens_white.svg';
 import TokensBlack from '@/assets/images/icons/tokens_black.svg';
 import RedeemModal from '@/components/modals/RedeemModal/RedeemModal.vue';
+import RedeemAllModal from '@/components/modals/RedeemAllModal/RedeemAllModal.vue';
 import useNetwork from '@/composables/useNetwork';
 import { useStakeZ } from '@/composables/stakeZ/useStakeZ';
 import useWeb3 from '@/services/web3/useWeb3';
@@ -20,13 +21,11 @@ import { STAKE_Z_NETWORKS } from '@/constants/stakeZ';
 import BigNumber from 'bignumber.js';
 import { format } from 'date-fns';
 import useNumbers, { FNumFormats } from '@/composables/useNumbers';
-import useEthers from '@/composables/useEthers';
-import useNotifications from '@/composables/useNotifications';
-import useTransactions from '@/composables/useTransactions';
 
 const isLoading = ref(false);
 const isLoadingRedeemAll = ref(false);
 const showRedeemModal = ref(false);
+const showRedeemAllModal = ref(false);
 const selectedPool = ref();
 const { t } = useI18n();
 const isRedeemAll = ref(false);
@@ -69,21 +68,21 @@ const columns = [
     align: 'right',
   },
   {
-    name: 'Amount(sZ)',
+    name: 'Amount(sMZ)',
     id: 'amountSZ',
     Cell: 'amountSZColumnCell',
     width: 120,
     align: 'right',
   },
   {
-    name: 'Amount(Z)',
+    name: 'Amount(MZ)',
     id: 'amountZ',
     Cell: 'amountZColumnCell',
     width: 120,
     align: 'right',
   },
   {
-    name: 'Redeemable amount(Z)',
+    name: 'Redeemable amount(MZ)',
     id: 'redeemable',
     Cell: 'redeemableZColumnCell',
     width: 150,
@@ -116,19 +115,15 @@ const columns = [
 const { darkMode } = useDarkMode();
 const {
   getStakedList,
-  redeemAllSZ,
   getAllRedeemableAmount_SZ,
   canRedeemAll,
   getRedeemableAmount_SZ,
   getRedeemableAmount_Z,
 } = useStakeZ();
 const { networkSlug } = useNetwork();
-const { account, chainId, getSigner, getProvider } = useWeb3();
+const { account, chainId, getProvider } = useWeb3();
 console.log('🚀 ~ account:', account);
 const { fNum2 } = useNumbers();
-const { addNotification } = useNotifications();
-const { addTransaction } = useTransactions();
-const { txListener } = useEthers();
 /**
  * COMPUTED
  */
@@ -174,7 +169,7 @@ const mapData = async stakedList => {
     }
     return {
       id: item.id,
-      name: 'sZ',
+      name: 'sMZ',
       myBalance: BigNumber(item.value_usd || 0).toFixed(2),
       amountSZ: BigNumber(item.sz_amount || 0)
         .div(10 ** (STAKE_Z_NETWORK.value?.sz_token_decimals || 18))
@@ -245,49 +240,13 @@ const onClickHandler = (page: number) => {
   pagination.value.currentPage = page;
   getData();
 };
-const handleRedeemAll = async () => {
-  console.log('Redeem All');
-  try {
-    isLoadingRedeemAll.value = true;
-    const provider = getProvider();
-    const signer = getSigner();
-    const params = {
-      contractAddress: STAKE_Z_NETWORK.value?.sz_token_address,
-      contractProvider: provider,
-      account: account.value,
-      signer: signer,
-    };
-    console.log('🚀 ~ handleRedeemAll ~ params:', params);
-    const tx = await redeemAllSZ(params);
-    console.log('🚀 ~ handleRedeemAll ~ rs:', tx);
-    const summary = `Redeem all success!`;
-    addTransaction({
-      id: tx?.hash || tx,
-      type: 'tx',
-      action: 'redeemAllSZ',
-      summary,
-    });
-
-    tx &&
-      txListener(tx, {
-        onTxConfirmed: async (receipt: any) => {
-          console.log('🚀 ~ onTxConfirmed: ~ receipt:', receipt);
-          fetchData();
-          isLoadingRedeemAll.value = false;
-        },
-        onTxFailed: () => {
-          isLoadingRedeemAll.value = false;
-        },
-      });
-  } catch (error: any) {
-    console.log('🚀 ~ handleRedeemAll ~ error:', error);
-    addNotification({
-      type: 'error',
-      title: '',
-      message: error?.message ? error.message : JSON.stringify(error),
-    });
-    isLoadingRedeemAll.value = false;
-  }
+const handleRedeemAllClick = () => {
+  showRedeemAllModal.value = true;
+};
+const handleRedeemAllSubmit = ({ receipt }) => {
+  console.log('🚀 ~ handleRedeemAllSubmit ~ receipt:', receipt);
+  showRedeemAllModal.value = false;
+  fetchData();
 };
 const handleRedeem = pool => {
   selectedPool.value = pool;
@@ -353,7 +312,7 @@ onMounted(() => {
               :disabled="!isRedeemAll"
               classCustom="blue-white !rounded !h-8"
               block
-              @click="handleRedeemAll"
+              @click="handleRedeemAllClick"
             />
           </template>
           myBalance
@@ -363,12 +322,12 @@ onMounted(() => {
           <template #amountSZColumnCell="pool">
             <div class="mr-6 text-right">
               {{ fNum2(pool.amountSZ?.toString() || '0', FNumFormats.token) }}
-              sZ
+              sMZ
             </div>
           </template>
           <template #amountZColumnCell="pool">
             <div class="mr-6 text-right">
-              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} Z
+              {{ fNum2(pool.amountZ?.toString() || '0', FNumFormats.token) }} MZ
             </div>
           </template>
           <template #redeemableZColumnCell="pool">
@@ -379,7 +338,7 @@ onMounted(() => {
                   FNumFormats.token
                 )
               }}
-              Z
+              MZ
             </div>
           </template>
 
@@ -420,6 +379,16 @@ onMounted(() => {
         :pool="selectedPool"
         @close="showRedeemModal = false"
         @redeem="handleRedeemSubmit"
+      />
+    </teleport>
+
+    <!-- Redeem All Modal -->
+    <teleport to="#modal">
+      <RedeemAllModal
+        v-if="showRedeemAllModal"
+        :show="showRedeemAllModal"
+        @close="showRedeemAllModal = false"
+        @redeem-all="handleRedeemAllSubmit"
       />
     </teleport>
   </div>

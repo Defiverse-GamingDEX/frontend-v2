@@ -291,6 +291,22 @@ export const TOKENS_MEGAETH_TESTNET: TokenConstants = {
   },
 };
 
+export const TOKENS_MEGAETH_MAINNET: TokenConstants = {
+  Popular: {
+    Symbols: ['Z', 'BAL', 'WETH'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0x4200000000000000000000000000000000000006', // need CONFIRM
+    WETH: '0x4200000000000000000000000000000000000006',
+    BAL: '0x3EeaBC1632B47b0da9681674E67160d65811E7AB',
+    Z: '0xd6428F5311ada795B37B44Fd64036EbD94A1a309',
+  },
+  PriceChainMap: {
+    //
+  },
+};
+
 const TOKENS_MAP = {
   [Network.GOERLI]: TOKENS_GOERLI,
   [Network.MAINNET]: TOKENS_MAINNET,
@@ -301,6 +317,7 @@ const TOKENS_MAP = {
   [Network.OASYS]: TOKENS_OASYS,
   [Network.OASYS_TESTNET]: TOKENS_OASYS_TESTNET,
   [Network.MEGAETH_TESTNET]: TOKENS_MEGAETH_TESTNET,
+  [Network.MEGAETH_MAINNET]: TOKENS_MEGAETH_MAINNET,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]
