@@ -96,6 +96,7 @@ let networks: any = [
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     maxPriorityFee: 0,
+    externalLink: 'https://gaming-dex.com',
   },
   {
     id: 'megaeth',

@@ -100,6 +100,13 @@ export const initializeTokenListMap = async () => {
     megaethJsonBE,
   } = await fetchTokenLists();
   return {
+    '4326': {
+      Balancer: {
+        Default: JSON.stringify(megaethJsonBE),
+        Vetted: JSON.stringify(megaethJsonBE),
+      },
+      External: [],
+    },
     '6343': {
       Balancer: {
         Default: JSON.stringify(megaethJsonBE),
