@@ -1,6 +1,7 @@
 // import defiverseJson from '@/constants/defiverse.listed.tokenlist.json';
 // import defiverseTestnetJson from '@/constants/defiverse.testnet.listed.tokenlist.json';
 
+import megaethJson from '@/constants/megaeth.listed.tokenlist.json';
 import megaethTestnetJson from '@/constants/megaeth.testnet.listed.tokenlist.json';
 import oasysTestnetJson from '@/constants/oasys.testnet.listed.tokenlist.json';
 import oasysJson from '@/constants/oasys.listed.tokenlist.json';
@@ -92,6 +93,16 @@ let networks: any = [
     networkSlug: 'oasys',
     key: '248',
     tokens: oasysJson.tokens,
+    // price: 35000000000, // 50 Gwei
+    gasUnit: 'wei',
+    maxPriorityFee: 0,
+  },
+  {
+    id: 'megaeth',
+    name: 'Megaeth',
+    networkSlug: 'megaeth',
+    key: '4326',
+    tokens: megaethJson.tokens,
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     maxPriorityFee: 0,

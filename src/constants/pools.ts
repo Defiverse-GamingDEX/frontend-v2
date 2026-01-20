@@ -848,7 +848,7 @@ const POOLS_MEGAETH_TESTNET: Pools = {
   BlockList: [
     '0x9e4427ee0219fc03f0dd627ce10e454696f7fb40000200000000000000000001',
     '0x8cdbb24239e73bdf46cdf5a0440ac68558002a78000200000000000000000000',
-    '0x1a90c0ea30da68eab7d2a692edb73eee1cf34689000200000000000000000005'
+    '0x1a90c0ea30da68eab7d2a692edb73eee1cf34689000200000000000000000005',
   ],
   ExcludedPoolTypes: [
     'Element',
@@ -885,6 +885,62 @@ const POOLS_MEGAETH_TESTNET: Pools = {
   ],
 };
 
+const POOLS_MEGAETH_MAINNET: Pools = {
+  IdsMap: {
+    // staBAL:
+    //   '0xdcdd4a3d36dec8d57594e89763d069a7e9b223e2000000000000000000000062',
+    // bbAaveUSD: {
+    //   v1: '0x13acd41c585d7ebb4a9460f7c8f50be60dc080cd00000000000000000000005f',
+    //   v2: '0x3d5981bdd8d3e49eb7bbdc1d2b156a3ee019c18e0000000000000000000001a7',
+    // },
+    veBAL: '',
+  },
+  Pagination: {
+    PerPage: 30,
+    PerPool: 10,
+    PerPoolInitial: 5,
+  },
+  DelegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
+  ZeroAddress: '0x0000000000000000000000000000000000000000',
+  DynamicFees: {
+    Gauntlet: [],
+  },
+  BlockList: [],
+  ExcludedPoolTypes: [
+    'Element',
+    'AaveLinear',
+    'EulerLinear',
+    'Linear',
+    'ERC4626Linear',
+    'FX',
+    'Gyro2',
+    'Gyro3',
+    'GyroE',
+    'HighAmpComposableStable',
+  ],
+  Stable: {
+    AllowList: [
+      //
+    ],
+  },
+  Investment: {
+    AllowList: [
+      // '0xd92e2e3c13c3712af12e4389ee37b67021318812000200000000000000000002',
+    ],
+  },
+  Factories: {
+    '0x083904d9006abda7950337c7215ecfc028855f0b': 'weightedPool', // WeightedPool V3
+  },
+  Stakable: {
+    AllowList: [],
+  },
+  Metadata: {},
+  DisabledJoins: [],
+  VerifiedPools: [
+    //
+  ],
+};
+
 const POOLS_OASYS_TESTNET: Pools = {
   IdsMap: {
     // staBAL:
@@ -906,7 +962,7 @@ const POOLS_OASYS_TESTNET: Pools = {
     Gauntlet: [],
   },
   BlockList: [
-    '0x950f31e8a327a49ae4443284d0137f3b74858474000200000000000000000030'
+    '0x950f31e8a327a49ae4443284d0137f3b74858474000200000000000000000030',
   ],
   ExcludedPoolTypes: [
     'Element',
@@ -972,7 +1028,7 @@ const POOLS_OASYS: Pools = {
     '0x0d1bb060e94e2f74d4467391292848ad4c7dbb2e0002000000000000000000d1',
     '0x29b6c1316bf0ac3d2baf3b21c891fb8d44a7d0a9000200000000000000000107',
     '0x61edb7dcd6ece2d275bb09d006cd17195e687a62000200000000000000000108',
-    '0x393ab83367334e9ec1311b95d58c9ab84b2837c4000200000000000000000142'
+    '0x393ab83367334e9ec1311b95d58c9ab84b2837c4000200000000000000000142',
   ],
   ExcludedPoolTypes: [
     'Element',
@@ -1044,6 +1100,7 @@ const POOLS_MAP = {
   [Network.OASYS_TESTNET]: POOLS_OASYS_TESTNET,
   [Network.OASYS]: POOLS_OASYS,
   [Network.MEGAETH_TESTNET]: POOLS_MEGAETH_TESTNET,
+  [Network.MEGAETH_MAINNET]: POOLS_MEGAETH_MAINNET,
 };
 
 export const POOLS: Pools = POOLS_MAP[networkId.value]

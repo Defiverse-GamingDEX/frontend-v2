@@ -1,0 +1,93 @@
+{
+  "key": "4326",
+  "chainId": 4326,
+  "chainName": "MegaETH",
+  "name": "MegaETH",
+  "shortName": "MegaETH",
+  "slug": "megaeth",
+  "network": "megaeth",
+  "unknown": false,
+  "rpc": "https://mainnet.megaeth.com/rpc",
+  "ws": "",
+  "publicRpc": "https://mainnet.megaeth.com/rpc",
+  "explorer": "https://megaeth.blockscout.com/",
+  "explorerName": "megaeth",
+  "priceUrl": "https://price-api.gaming-dex.com/api/v1",
+  "subgraph": "https://graphnode-megaeth.defi-verse.org/subgraphs/name/balancer-labs/megaeth",
+  "poolsUrlV2": "",
+  "subgraphs": {
+    "main": [
+      "https://graphnode-megaeth.defi-verse.org/subgraphs/name/balancer-labs/megaeth"
+    ],
+    "aave": "",
+    "gauge": "https://graphnode-megaeth.defi-verse.org/subgraphs/name/balancer-labs/gauges-megaeth",
+    "blocks": ""
+  },
+  "supportsEIP1559": true,
+  "supportsElementPools": true,
+  "blockTime": 12,
+  "nativeAsset": {
+    "name": "ETH",
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "symbol": "ETH",
+    "decimals": 18,
+    "deeplinkId": "ether",
+    "logoURI": "tokens/megaeth.svg",
+    "minTransactionBuffer": "0.05"
+  },
+  "addresses": {
+    "merkleRedeem": "",
+    "merkleOrchard": "",
+    "multicall": "0x32Ea7B7c8d85D26D53D4Ab6eb98a6C9012F7e1Da",
+    "authorizer": "0x9b0c9b2F55EA699364d5a2C345c863356847FA13",
+    "vault": "0x56e0c32496c5F20B5a367aBb350629609FB3bA60",
+    "weightedPoolFactory": "0x083904D9006abDA7950337C7215Ecfc028855f0B",
+    "stablePoolFactory": "",
+    "weth": "0x4200000000000000000000000000000000000006",
+    "stMATIC": "",
+    "rETH": "",
+    "stETH": "",
+    "wstETH": "",
+    "lidoRelayer": "",
+    "balancerHelpers": "0x2a46b959efc72a9f450E2ef11BF9b9322FB5a337",
+    "batchRelayer": "0x7b9B6f094DC2Bd1c12024b0D9CC63d6993Be1888",
+    "batchRelayerV4": "0x00e695aA8000df01B8DC8401B4C34Fba5D56BBb2",
+    "gaugeFactory": "0xF4252689961064FF580E244428A16D384e10412E",
+    "balancerMinter": "0x0575bB02116E28Fa8C01D40cBD7aFb5b4bc3Bf8b",
+    "gaugeController": "0x3C7297968403fB10c4dA289814a0158Ec164bA7c",
+    "tokenAdmin": "0x2DE712DDa93712205180e19571BA428f61F6C4FF",
+    "veBAL": "0x3EeaBC1632B47b0da9681674E67160d65811E7AB",
+    "veDelegationProxy": "0xcC463A1818b8b9Ac6F884DD77C031b352E3Bf11f",
+    "veBALHelpers": "",
+    "feeDistributor": "",
+    "feeDistributorDeprecated": "",
+    "faucet": "",
+    "gaugeRewardsHelper": "",
+    "oracle": "0x4F40Fe3A48AAC9b52459b4839a39726b27cE66E6",
+    "voteRewardDistributor": "",
+    "disperse": "",
+    "nftTransfer": ""
+  },
+  "keys": {
+    "infura": "",
+    "alchemy": ""
+  },
+  "strategies": {
+    "0": {
+      "type": "0",
+      "name": "stablePool"
+    },
+    "1": {
+      "type": "1",
+      "name": "weightedPool"
+    },
+    "2": {
+      "type": "2",
+      "name": "weightedPool"
+    }
+  },
+  "gauges": {
+    "type": 2,
+    "weight": 100
+  }
+}

@@ -31,6 +31,12 @@ const GAUGE_REWARD_NETWORKS_MAINNET = [
     chainIdHex: '0x3EF4',
     gaugeRewardContractAddress: '0xEbAB4820901a5383b7F305C278cF501c7cfBd73f',
   },
+  {
+    id: 'megaeth',
+    chainId: 4326,
+    chainIdHex: '0x10E6',
+    gaugeRewardContractAddress: '0xb61f122AB285f8ab046C75b6F2852BBf1F6F70c8',
+  },
 ];
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 

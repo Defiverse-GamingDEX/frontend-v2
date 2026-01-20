@@ -25,7 +25,7 @@ import homeverse from './homeverse.json';
 import mchverse from './mchverse.json';
 import oasys from './oasys.json';
 import oasysTestnet from './oasys-testnet.json';
-import megaethTestnet from './megaeth-testnet.json';
+import megaeth from './megaeth.json';
 import saakuru from './saakuru.json';
 import tcgverse from './tcgverse.json';
 export interface Config {
@@ -126,6 +126,7 @@ const config: Record<Network | number, Config> = {
   [Network.OASYS]: oasys,
   //[Network.OASYS_TESTNET]: oasysTestnet,
   [Network.MEGAETH_TESTNET]: megaethTestnet,
+  [Network.MEGAETH_MAINNET]: megaeth,
   12345: test,
   // @ts-ignore
   17: docker,
@@ -141,6 +142,7 @@ const config: Record<Network | number, Config> = {
   592: astar,
   20197: oasysSandverse,
   6343: megaethTestnet,
+  4326: megaeth,
   998: hyperEVMTestnet,
   999: hyperEVM,
 };

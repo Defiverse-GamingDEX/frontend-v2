@@ -65,7 +65,7 @@ async function fetchTokenLists() {
   try {
     const oasysChainId = IS_TESTNET ? 9372 : 248;
     const defiverseChainId = IS_TESTNET ? 17117 : 16116;
-    const megaethChainId = IS_TESTNET ? 6343 : 6343;
+    const megaethChainId = IS_TESTNET ? 6343 : 4326;
     const [response] = await Promise.all([
       axios.get(
         `${BASE_API_URL}/api/v1/tokens/search?chain_id=${megaethChainId}`
@@ -94,8 +94,11 @@ async function fetchTokenLists() {
 }
 // init TOKEN_LIST_MAP
 export const initializeTokenListMap = async () => {
-  const { oasysJsonBE: oasysJsonBE, defiverseJsonBE: defiverseJsonBE, megaethJsonBE } =
-    await fetchTokenLists();
+  const {
+    oasysJsonBE: oasysJsonBE,
+    defiverseJsonBE: defiverseJsonBE,
+    megaethJsonBE,
+  } = await fetchTokenLists();
   return {
     '6343': {
       Balancer: {

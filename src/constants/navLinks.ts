@@ -11,14 +11,14 @@ const NAV_LINKS_MAINNET = [
     path: 'claim',
     name_link: 'claim',
     goal_key: 'ClickNavClaim',
-    chainsSupport: [17117, 9372, 248, 16116, 6343],
+    chainsSupport: [17117, 9372, 248, 16116, 6343, 4326],
   },
   {
     text: 'portfolio',
     path: 'portfolio',
     name_link: 'portfolio',
     goal_key: 'ClickNavPortfolio',
-    chainsSupport: [17117, 9372, 248, 16116, 6343],
+    chainsSupport: [17117, 9372, 248, 16116, 6343, 4326],
   },
   {
     text: 'Vote',
