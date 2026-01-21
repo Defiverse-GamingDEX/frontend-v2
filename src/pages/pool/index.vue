@@ -693,7 +693,7 @@ onBeforeMount(async () => {
                   <span class="text-sm text-white">Permissionless</span>
                 </div>
 
-                <div class="flex gap-2 items-center toggle-custom">
+                <!-- <div class="flex gap-2 items-center toggle-custom">
                   <BalToggle
                     :modelValue="filterState.isYukichi"
                     name="yukichi"
@@ -707,7 +707,7 @@ onBeforeMount(async () => {
                       class="mr-1 verified-icon"
                     />Yukichi</span
                   >
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="flex gap-4 items-center">
