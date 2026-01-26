@@ -378,7 +378,13 @@
     "Copper": "Fjord (formerly known as Copper Launch) is a community platform that connects inspired projects with passionate supporters via the power of Liquidity Bootstrapping Pools (LBPs).",
     "Element": "An open source protocol for fixed & variable yield markets, Element enables efficient swaps with a Balancer Pool that minimizes slippage and impermanent loss.",
     "Sense": "Sense is a protocol for DeFi yield primitives, and Sense Space, an AMM built on Balancer, facilitates efficient swaps between yield and principle tokens.",
-    "Tracer": "Mycelium (formerly TracerDAO) is an open-source protocol for derivative markets. It utilizes Balancer for aggregated liquidity and creating a market for leveraged tokens."
+    "Tracer": "Mycelium (formerly TracerDAO) is an open-source protocol for derivative markets. It utilizes Balancer for aggregated liquidity and creating a market for leveraged tokens.",
+    "Valhalla": "Valhalla is a high-performance decentralized exchange built on MegaETH, offering fully on-chain perpetuals and margin trading with an innovative and open approach to collateral.",
+    "Euphoria": "Euphoria is a decentralized derivative exchange that redefines the trading experience with unique tools and insights, aiming to make finance more accessible and emotionally engaging.",
+    "Cap": "Cap is a non-custodial stablecoin protocol providing verifiable money with credible financial guarantees, focusing on transparency and security within the DeFi ecosystem.",
+    "Avon": "Avon is the first real-time credit layer and on-chain lending order book on MegaETH, designed to unlock the best rates for loans through segmented risk and aggregated rates.",
+    "Blackhaven": "Blackhaven is a reserve-backed treasury protocol that captures liquidity as protocol-owned assets to ensure permanent liquidity and long-term sustainability for the ecosystem.",
+    "HelloTrade": "HelloTrade is a global trading platform built on MegaETH providing 24/7 access to stocks, commodities, and real-world assets (RWAs) with up to 10x leverage and institutional-grade security."
   },
   "fees": "fees",
   "feesManagedByGauntlet": "Liquidity providers earn dynamic swap fees on every swap utilizing the liquidity in this pool. Dynamic swap fees are controlled by governance and are currently set by Gauntlet.",
