@@ -20,6 +20,7 @@ import {
   isOasys,
   isOasysTestnet,
   isMegaethTestnet,
+  isMegaethMainnet,
 } from './useNetwork';
 import { orderedPoolTokens } from '@/composables/usePool';
 import { VotingGaugeWithVotes } from '@/services/balancer/gauges/gauge-controller.decorator';

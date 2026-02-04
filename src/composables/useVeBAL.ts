@@ -9,6 +9,7 @@ import {
   isOasys,
   isOasysTestnet,
   isMegaethTestnet,
+  isMegaethMainnet,
 } from '@/composables/useNetwork';
 import { POOLS } from '@/constants/pools';
 import { bnum } from '@/lib/utils';
@@ -32,7 +33,10 @@ export const isVeBalSupported = computed(
     // isGoerli.value ||
     // isDefiverse.value ||
     // isDefiverseTestnet.value ||
-    isOasys.value || isOasysTestnet.value || isMegaethTestnet.value
+    isOasys.value ||
+    isOasysTestnet.value ||
+    isMegaethTestnet.value ||
+    isMegaethMainnet.value
 );
 
 /**
