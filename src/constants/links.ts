@@ -45,6 +45,24 @@ export const EXTERNAL_LINKS = {
   Sense: {
     Home: 'https://sense.finance/',
   },
+  Valhalla: {
+    Home: 'https://valhalla.exchange/',
+  },
+  Euphoria: {
+    Home: 'https://euphoria.finance/',
+  },
+  Cap: {
+    Home: 'https://cap.app/',
+  },
+  Avon: {
+    Home: 'https://www.avon.xyz/',
+  },
+  Blackhaven: {
+    Home: 'https://blackhaven.xyz/',
+  },
+  HelloTrade: {
+    Home: 'https://www.hello.trade/',
+  },
 };
 
 export const PATH_NAME_USE_NAV_SWITCH_NETWORK = [
