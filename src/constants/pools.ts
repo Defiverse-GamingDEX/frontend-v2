@@ -905,7 +905,9 @@ const POOLS_MEGAETH_MAINNET: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [],
+  BlockList: [
+    '0xxx9077151ced4f8ef841d1f7b722e58731a34883000200000000000000000001',
+  ],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',

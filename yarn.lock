@@ -296,10 +296,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz#2cbcf822bf3764c9658c4d2e568bd0c0cb748016"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
 
-"@defiverse/balancer-sdk-megaeth@0.1.258":
-  version "0.1.258"
-  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk-megaeth/-/balancer-sdk-megaeth-0.1.258.tgz#8f5032a78218d1be8ed5fd10c9a5f185d25bf5fc"
-  integrity sha512-7cUcNA/X2LuSlTS7J65G3qtIohqzeZQDVQmm1ZNlFx+RCVPHkAbY5DX7SQ+MA7CIxVQYw3daq1FzhiMVz3pshg==
+"@defiverse/balancer-sdk-megaeth@0.1.260":
+  version "0.1.260"
+  resolved "https://registry.yarnpkg.com/@defiverse/balancer-sdk-megaeth/-/balancer-sdk-megaeth-0.1.260.tgz#70db5cf7f1bf21913031320d009fbf6a35868fed"
+  integrity sha512-Nx5f27Rk79Cn5iPtf4pOkfoBvo9VVtocuXLXprYvMZV/07RJMUnHJRwgGyzgU+46HiVJ8QrU2qK9+19c0iVErg==
   dependencies:
     "@balancer-labs/typechain" "^1.0.0"
     "@defiverse/sor" "4.1.14"
