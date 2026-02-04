@@ -69,8 +69,9 @@
     "nftTransfer": ""
   },
   "keys": {
-    "infura": "",
-    "alchemy": ""
+    "infura": "75a7c1bdcc964ee4a4d97ef7856749c3",
+    "alchemy": "VBeQgTCRqqPtuuEPsFzRdwKXzDyN6aFh",
+    "balancerApi": "da2-7a3ukmnw7bexndpx5x522uafui"
   },
   "strategies": {
     "0": {
