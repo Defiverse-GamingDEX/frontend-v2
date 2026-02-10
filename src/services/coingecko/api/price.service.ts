@@ -64,7 +64,8 @@ export class PriceService {
 
   async fetchPrice(addressString): Promise<Price> {
     const priceUrl = this.configService.network.priceUrl;
-    const endpoint = `${priceUrl}/price?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
+    const chainId = this.configService.network.chainId;
+    const endpoint = `${priceUrl}/price?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}&chain_id=${chainId}`;
     return axios.get<Price>(endpoint).then(({ data }) => {
       return data;
     });
