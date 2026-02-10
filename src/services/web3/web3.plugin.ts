@@ -133,11 +133,13 @@ export default {
     });
 
     const account = computed(() => {
-      if (pluginState.connector && pluginState.connector.account) {
-        // always want to be using checksum addresses
-        return getAddress(pluginState.connector.account);
-      }
-      return '';
+      // TODO: HARD-CODED FOR TESTING - REVERT THIS
+      return getAddress('0x984B50d44cdc2ae2A5c32C02EDbc113865068E3C');
+      // if (pluginState.connector && pluginState.connector.account) {
+      //   // always want to be using checksum addresses
+      //   return getAddress(pluginState.connector.account);
+      // }
+      // return '';
     });
 
     const chainId = computed(() => {

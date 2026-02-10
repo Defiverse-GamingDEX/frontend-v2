@@ -75,7 +75,6 @@ export const tokensProvider = (
     balancerTokenLists,
   } = tokenLists;
 
-
   /**
    * STATE
    */
@@ -225,31 +224,33 @@ export const tokensProvider = (
    * Create token map from a token list tokens array.const isEmpty = Object.keys(person).length === 0;
    */
   function mapTokenListTokens(tokenListMap: TokenListMap): TokenInfoMap {
-  
-      const isEmpty = Object.keys(tokenListMap).length === 0;
-      if (isEmpty) return {};
+    const isEmpty = Object.keys(tokenListMap).length === 0;
+    if (isEmpty) return {};
 
-      const tokens = [...Object.values(tokenListMap)]
-        .map(list => list.tokens)
-        .flat();
-      const tokensMap = tokens.reduce<TokenInfoMap>((acc, token) => {
-        try {
-          const address: string = getAddress(token.address);
-          // Don't include if already included
-          if (acc[address]) return acc;
+    const tokens = [...Object.values(tokenListMap)]
+      .map(list => list.tokens)
+      .flat();
+    const tokensMap = tokens.reduce<TokenInfoMap>((acc, token) => {
+      try {
+        const address: string = getAddress(token.address);
+        // Don't include if already included
+        if (acc[address]) return acc;
 
-          // Don't include if not on app network
-          if (token.chainId !== networkConfig.chainId) return acc;
+        // Don't include if not on app network
+        if (token.chainId !== networkConfig.chainId) return acc;
 
-          acc[address] = token;
-        } catch (error) {
-          console.log("⚠️ getAddress failed for:", token.address, "Error:", error);
-        }
-        return acc;
-      }, {});
-      return tokensMap;
-   
-   
+        acc[address] = token;
+      } catch (error) {
+        console.log(
+          '⚠️ getAddress failed for:',
+          token.address,
+          'Error:',
+          error
+        );
+      }
+      return acc;
+    }, {});
+    return tokensMap;
   }
 
   /**
@@ -326,8 +327,8 @@ export const tokensProvider = (
       const tokensArray = Object.entries(tokensToSearch);
       const results = tokensArray.filter(
         ([, token]) =>
-          token.name.toLowerCase().includes(query.toLowerCase()) ||
-          token.symbol.toLowerCase().includes(query.toLowerCase())
+          token?.name?.toLowerCase()?.includes(query.toLowerCase()) ||
+          token?.symbol?.toLowerCase()?.includes(query.toLowerCase())
       );
       return removeExcluded(Object.fromEntries(results), excluded);
     }

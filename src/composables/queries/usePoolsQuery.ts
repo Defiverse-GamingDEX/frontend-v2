@@ -1,5 +1,5 @@
 import { UseInfiniteQueryOptions } from 'react-query/types';
-import { Ref, ref, watch, nextTick } from 'vue';
+import { Ref, ref, unref, nextTick } from 'vue';
 import { useInfiniteQuery } from 'vue-query';
 import { POOLS, GAMING_DEX_OWNER_ADDRESS } from '@/constants/pools';
 import QUERY_KEYS from '@/constants/queryKeys';
@@ -40,7 +40,7 @@ type FilterOptions = {
 export default function usePoolsQuery(
   filterTokens: Ref<string[]> = ref([]),
   options: UseInfiniteQueryOptions<PoolsQueryResponse> = {},
-  filterOptions?: Ref<FilterOptions>,
+  filterOptions?: Ref<FilterOptions> | FilterOptions,
   poolsSortField?: Ref<string>
 ) {
   const currentFilterOptions = ref(filterOptions);
@@ -62,7 +62,7 @@ export default function usePoolsQuery(
   function initializeDecoratedAPIRepository() {
     return {
       fetch: async (options: PoolsRepositoryFetchOptions): Promise<Pool[]> => {
-        const pools = await balancerAPIService.pools.get(getQueryArgs(params));
+        const pools = await balancerAPIService.pools.get(getQueryArgs(options));
         const tokens = flatten(
           pools.map(pool => [
             ...pool.tokensList,
@@ -113,6 +113,7 @@ export default function usePoolsQuery(
   }
 
   function getQueryArgs(options: PoolsRepositoryFetchOptions): GraphQLArgs {
+    const filters = unref(filterOptions);
     const isVerified = currentFilterOptions.value?.isVerified ?? false;
     const isPermissionless =
       currentFilterOptions.value?.isPermissionless ?? false;
@@ -120,7 +121,7 @@ export default function usePoolsQuery(
 
     const gameDexOwnerAddress = GAMING_DEX_OWNER_ADDRESS;
     const verifiedPools = POOLS.VerifiedPools || [];
-    const tokensListFilterOperation = filterOptions?.isExactTokensList
+    const tokensListFilterOperation = filters?.isExactTokensList
       ? 'eq'
       : 'contains';
     const tokenListFormatted = filterTokens.value.map(address =>
@@ -139,11 +140,11 @@ export default function usePoolsQuery(
       },
     };
 
-    if (queryArgs.where && filterOptions?.poolIds?.value) {
-      queryArgs.where.id = { in: filterOptions.poolIds.value };
+    if (queryArgs.where && filters?.poolIds?.value) {
+      queryArgs.where.id = { in: filters.poolIds.value };
     }
-    if (queryArgs.where && filterOptions?.poolAddresses?.value) {
-      queryArgs.where.address = { in: filterOptions.poolAddresses.value };
+    if (queryArgs.where && filters?.poolAddresses?.value) {
+      queryArgs.where.address = { in: filters.poolAddresses.value };
     }
     if (options.first) {
       queryArgs.first = options.first;
@@ -163,10 +164,10 @@ export default function usePoolsQuery(
       } else if (isVerified) {
         // Combine with poolIds if they exist
         let idConditions = [...verifiedPools];
-        if (filterOptions?.poolIds?.value) {
+        if (filters?.poolIds?.value) {
           // Only keep IDs that are both in verifiedPools and poolIds
           idConditions = idConditions.filter(id =>
-            filterOptions.poolIds.value.includes(id)
+            filters!.poolIds!.value.includes(id)
           );
         }
         queryArgs.where.id = { in: idConditions };
@@ -185,9 +186,10 @@ export default function usePoolsQuery(
   }
 
   function getFetchOptions(pageParam = 0): PoolsRepositoryFetchOptions {
+    const filters = unref(filterOptions);
     const fetchArgs: PoolsRepositoryFetchOptions = {};
     if (!filterTokens.value.length) {
-      fetchArgs.first = filterOptions?.pageSize || POOLS.Pagination.PerPage;
+      fetchArgs.first = filters?.pageSize || POOLS.Pagination.PerPage;
     }
     if (pageParam && pageParam > 0) {
       fetchArgs.skip = pageParam * POOLS.Pagination.PerPage;
@@ -195,53 +197,50 @@ export default function usePoolsQuery(
     }
     return fetchArgs;
   }
-  const isReady = ref(false);
+  // const isReady = ref(false);
+  // watch(
+  //   () => [filterOptions?.value, filterTokens?.value, poolsSortField?.value],
+  //   async (newValues, oldValues) => {
+  //     currentFilterOptions.value = filterOptions?.value;
+  //     isReady.value = true;
+  //     try {
+  //       if (!poolsRepository) {
+  //         poolsRepository = initializePoolsRepository();
+  //       }
+  //       // get time call queryFn
+  //       const startTime = performance.now();
+  //       await nextTick();
+  //       const result = await queryFn({ pageParam: 0 });
+  //       const endTime = performance.now();
+  //       const executionTime = endTime - startTime;
+  //       currentData.value = result; // save result to current data
+  //       isInitialLoad.value = false;
+  //       isReady.value = false;
+  //     } catch (e) {
+  //       console.error('Error fetching pools', e);
+  //       isReady.value = false;
+  //     }
+  //   },
+  //   { deep: true, immediate: true }
+  // );
+
   const isInitialLoad = ref(true);
 
   // Create ref to track result
   const currentData = ref<PoolsQueryResponse | null>(null);
 
-  watch(
-    () => [filterOptions?.value, filterTokens?.value, poolsSortField?.value],
-    async (newValues, oldValues) => {
-      currentFilterOptions.value = filterOptions.value;
-      isReady.value = true;
-
-      try {
-        if (!poolsRepository) {
-          poolsRepository = initializePoolsRepository();
-        }
-        // get time call queryFn
-        const startTime = performance.now();
-        await nextTick();
-        const result = await queryFn({ pageParam: 0 });
-        const endTime = performance.now();
-        const executionTime = endTime - startTime;
-        currentData.value = result; // save result to current data
-        isInitialLoad.value = false;
-        isReady.value = false;
-      } catch (e) {
-        console.error('Error fetching pools', e);
-        isReady.value = false;
-      }
-    },
-    { deep: true, immediate: true }
-  );
-
+  const filters = unref(filterOptions);
   const queryKey = QUERY_KEYS.Pools.All(
     networkId,
     filterTokens,
     poolsSortField,
-    filterOptions?.poolIds,
-    filterOptions?.poolAddresses
+    filters?.poolIds,
+    filters?.poolAddresses
   );
 
   const queryFn = async ({ pageParam = 0 }) => {
-    // if it is merge (pageParam > 0),
-    if (pageParam > 0) {
-      isReady.value = true;
-    } else {
-      // if it is filter reset data
+    // if it is filter reset data
+    if (pageParam === 0) {
       if (query.data?.value) {
         // Instead of directly modifying query.data, use query methods
         await query.remove.value();
@@ -251,11 +250,6 @@ export default function usePoolsQuery(
           refetchPage: (page, index) => index === 0,
         });
       }
-    }
-
-    if (!isReady.value) {
-      const savedPools = poolsStoreService.pools.value;
-      return { pools: savedPools || [], skip: 0 };
     }
 
     if (!poolsRepository) {
@@ -289,6 +283,8 @@ export default function usePoolsQuery(
       await nextTick(); // wait Vue update DOM
       poolsStoreService.setPools(pools);
 
+      isInitialLoad.value = false;
+
       return { pools, skip };
     } catch (e) {
       const savedPools = poolsStoreService.pools.value;
@@ -303,7 +299,7 @@ export default function usePoolsQuery(
     ...options,
     getNextPageParam: (lastPage: PoolsQueryResponse) => {
       console.log('🚀 ~ lastPage:', lastPage);
-      return lastPage.skip / POOLS.Pagination.PerPage + 1;
+      return (lastPage.skip || 0) / POOLS.Pagination.PerPage + 1;
     },
     onSuccess: data => {
       // update currentData
