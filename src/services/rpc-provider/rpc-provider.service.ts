@@ -4,7 +4,7 @@ import { JsonRpcProvider, WebSocketProvider } from '@ethersproject/providers';
 import template from '@/lib/utils/template';
 import { configService } from '@/services/config/config.service';
 
-import { StaticJsonRpcBatchProvider } from './static-json-rpc-batch-provider';
+import { StaticJsonRpcProvider } from './static-json-rpc-provider';
 
 type NewBlockHandler = (blockNumber: number) => any;
 
@@ -12,7 +12,7 @@ export default class RpcProviderService {
   constructor(
     private readonly config = configService,
     public readonly network = config.network.shortName,
-    public readonly jsonProvider = new StaticJsonRpcBatchProvider(config.rpc)
+    public readonly jsonProvider = new StaticJsonRpcProvider(config.rpc)
   ) {}
 
   public initBlockListener(newBlockHandler: NewBlockHandler): void {
@@ -36,7 +36,7 @@ export default class RpcProviderService {
       INFURA_KEY: this.config.env.INFURA_PROJECT_ID,
       ALCHEMY_KEY: this.config.env.ALCHEMY_KEY,
     });
-    return new StaticJsonRpcBatchProvider(rpcUrl);
+    return new StaticJsonRpcProvider(rpcUrl);
   }
 }
 
