@@ -96,6 +96,7 @@ let networks: any = [
     // price: 35000000000, // 50 Gwei
     gasUnit: 'wei',
     maxPriorityFee: 0,
+    externalLink: 'https://gaming-dex.com',
   },
   {
     id: 'megaeth',
@@ -103,9 +104,9 @@ let networks: any = [
     networkSlug: 'megaeth',
     key: '4326',
     tokens: megaethJson.tokens,
-    // price: 35000000000, // 50 Gwei
+    price: 1100000, // 50 Gwei
     gasUnit: 'wei',
-    maxPriorityFee: 0,
+    // maxPriorityFee: 0,
   },
 ];
 

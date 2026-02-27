@@ -88,7 +88,7 @@ export function useTokenBreakdown(rootPool: Ref<Pool>) {
     if (isLeaf || !isDeepPool.value) return;
 
     const shareOfTokenInPool = bnum(token?.balance || '0')
-      .div(token.token?.pool?.totalShares || 1)
+      .div(token.token?.pool?.totalShares || 0)
       .times(shareOfParentInPool)
       .toNumber();
 

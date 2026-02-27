@@ -874,6 +874,7 @@ const POOLS_MEGAETH_TESTNET: Pools = {
   },
   Factories: {
     '0x84f75879c0ac87eafaf4f1e3e1a2372caab5273b': 'weightedPool', // WeightedPool V3
+    '0x8cdbb94fc25c4c94c60664b63f6df452776f9d5d': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
@@ -905,7 +906,10 @@ const POOLS_MEGAETH_MAINNET: Pools = {
   DynamicFees: {
     Gauntlet: [],
   },
-  BlockList: [],
+  BlockList: [
+    '0xxx9077151ced4f8ef841d1f7b722e58731a34883000200000000000000000001',
+    '0xa49077151ced4f8ef841d1f7b722e58731a34883000200000000000000000000',
+  ],
   ExcludedPoolTypes: [
     'Element',
     'AaveLinear',

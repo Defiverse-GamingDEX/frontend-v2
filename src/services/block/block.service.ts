@@ -8,6 +8,7 @@ import {
   isOasysTestnet,
   isOasys,
   isMegaethTestnet,
+  isMegaethMainnet,
 } from '@/composables/useNetwork';
 import { rpcProviderService } from '../rpc-provider/rpc-provider.service';
 import { configService } from '../config/config.service';
@@ -26,7 +27,8 @@ export default class BlockService {
       isDefiverseTestnet.value ||
       isOasys.value ||
       isOasysTestnet.value ||
-      isMegaethTestnet.value
+      isMegaethTestnet.value ||
+      isMegaethMainnet.value
     )
       return this.fetchBlockByApprox(timestamp);
     return this.fetchBlockByTimeWithGraph(timestamp, useRange);

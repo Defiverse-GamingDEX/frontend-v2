@@ -132,7 +132,7 @@ const tokens = computed(() => {
     };
   });
 
-  /*    
+  /*
     2023-12-16: Change request
     ====================================================================================================
     Is it currently designed so that all tokens held are loaded and displayed on the Token list?
@@ -466,5 +466,3 @@ watchEffect(() => {
   background-color: #374151;
 }
 </style>
-
-

@@ -37,4 +37,4 @@ pnpm-debug.log*
 stats.html
 .qodo
 tailwind.config.js
-/.agent
+.agent/
