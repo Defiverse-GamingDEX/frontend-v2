@@ -2057,5 +2057,32 @@
       "0x310ef97a217563d36a5469b7f432e72816cea84e": "https://testnet.gaming-dex.com/tokens/USDC_L.png",
       "0x79b32ebceb5551262c9c71d07e7a4be819d36290": "https://price-api-testnet.gaming-dex.com/static/image_dbd0e571600e450988f035dc2e14d1da.png"
     }
+  },
+  {
+    "address": "0xF1e80e8856061B67559f786819eEfc4af6968b63",
+    "network": 6343,
+    "isKilled": false,
+    "relativeWeightCap": "1",
+    "addedTimestamp": 1772218514,
+    "pool": {
+      "id": "0x6ecd612537a436643e179b999bb490de88b77c32000200000000000000000002",
+      "address": "0x6ecd612537a436643e179b999bb490de88b77c32",
+      "poolType": "Weighted",
+      "symbol": "50WBTC.e-50MZ",
+      "tokens": [
+        {
+          "address": "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b",
+          "symbol": "WBTC"
+        },
+        {
+          "address": "0x79b32ebceb5551262c9c71d07e7a4be819d36290",
+          "symbol": "MZ"
+        }
+      ]
+    },
+    "tokenLogoURIs": {
+      "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b": "tokens/BTC_L.png",
+      "0x79b32ebceb5551262c9c71d07e7a4be819d36290": "https://price-api-testnet.gaming-dex.com/static/image_dbd0e571600e450988f035dc2e14d1da.png"
+    }
   }
 ]
