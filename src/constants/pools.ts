@@ -849,6 +849,7 @@ const POOLS_MEGAETH_TESTNET: Pools = {
     '0x9e4427ee0219fc03f0dd627ce10e454696f7fb40000200000000000000000001',
     '0x8cdbb24239e73bdf46cdf5a0440ac68558002a78000200000000000000000000',
     '0x1a90c0ea30da68eab7d2a692edb73eee1cf34689000200000000000000000005',
+    '0xd5c6b06d1ca3ebd63561e97db520d81d15f7fb87000200000000000000000001',
   ],
   ExcludedPoolTypes: [
     'Element',
@@ -874,6 +875,7 @@ const POOLS_MEGAETH_TESTNET: Pools = {
   },
   Factories: {
     '0x84f75879c0ac87eafaf4f1e3e1a2372caab5273b': 'weightedPool', // WeightedPool V3
+    '0x8cdbb94fc25c4c94c60664b63f6df452776f9d5d': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
@@ -933,6 +935,7 @@ const POOLS_MEGAETH_MAINNET: Pools = {
   },
   Factories: {
     '0x083904d9006abda7950337c7215ecfc028855f0b': 'weightedPool', // WeightedPool V3
+    '0xe72146d7d4b4f842db075cca7237dd193c0d2593': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],

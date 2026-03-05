@@ -18,7 +18,7 @@ const STAKE_Z_NETWORKS_MAINNET = [
   {
     chain_id: 4326,
     name: 'MegaETH',
-    z_token_address: '0xd6428F5311ada795B37B44Fd64036EbD94A1a309',
+    z_token_address: '0xa5B20b45e0985331939eF91CD746E29076ce599e',
     z_token_decimals: 18,
     sz_token_address: '0x3EeaBC1632B47b0da9681674E67160d65811E7AB',
     sz_token_decimals: 18,
