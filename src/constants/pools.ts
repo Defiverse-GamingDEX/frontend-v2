@@ -935,6 +935,7 @@ const POOLS_MEGAETH_MAINNET: Pools = {
   },
   Factories: {
     '0x083904d9006abda7950337c7215ecfc028855f0b': 'weightedPool', // WeightedPool V3
+    '0xe72146d7d4b4f842db075cca7237dd193c0d2593': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],
