@@ -1,4 +1,4 @@
-import { GraphQLArgs } from '@defiverse/balancer-sdk-megaeth';
+import { GraphQLArgs } from '@defiverse/balancer-sdk-hyperevm';
 import { POOLS } from '@/constants/pools';
 import { merge } from 'lodash';
 

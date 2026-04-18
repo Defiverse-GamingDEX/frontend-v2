@@ -1,4 +1,7 @@
-import { FundManagement, TransactionData } from '@defiverse/balancer-sdk-megaeth';
+import {
+  FundManagement,
+  TransactionData,
+} from '@defiverse/balancer-sdk-hyperevm';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { Contract } from 'ethers';
 

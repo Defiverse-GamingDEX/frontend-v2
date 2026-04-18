@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 
 import { networkId } from '@/composables/useNetwork';
 import { configService } from '@/services/config/config.service';
@@ -307,6 +307,22 @@ export const TOKENS_MEGAETH_MAINNET: TokenConstants = {
   },
 };
 
+export const TOKENS_HYPEREVM_MAINNET: TokenConstants = {
+  Popular: {
+    Symbols: ['Z', 'BAL', 'WETH'],
+  },
+  Addresses: {
+    nativeAsset: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // need CONFIRM
+    wNativeAsset: '0x1cB8B8987683CcC0f61dB795B482Ca1B2Abc60F6', // need CONFIRM
+    WETH: '0x1cB8B8987683CcC0f61dB795B482Ca1B2Abc60F6',
+    BAL: '0x389fA935970Cd411A7c9d7B03AD3405374fC7B65',
+    Z: '0x8aEa5737520ddCc1f97f922e681D0e7D1f5a16b9',
+  },
+  PriceChainMap: {
+    //
+  },
+};
+
 const TOKENS_MAP = {
   [Network.GOERLI]: TOKENS_GOERLI,
   [Network.MAINNET]: TOKENS_MAINNET,
@@ -318,6 +334,7 @@ const TOKENS_MAP = {
   [Network.OASYS_TESTNET]: TOKENS_OASYS_TESTNET,
   [Network.MEGAETH_TESTNET]: TOKENS_MEGAETH_TESTNET,
   [Network.MEGAETH_MAINNET]: TOKENS_MEGAETH_MAINNET,
+  [Network.HYPEREVM_MAINNET]: TOKENS_HYPEREVM_MAINNET,
 };
 
 export const TOKENS: TokenConstants = TOKENS_MAP[networkId.value]

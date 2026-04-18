@@ -27,7 +27,7 @@ import { BalanceMap } from '@/services/token/concerns/balances.concern';
 import useWeb3 from '@/services/web3/useWeb3';
 import { TOKENS } from '@/constants/tokens';
 import { buildNetworkIconURL } from '@/lib/utils/urls';
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 
 /**
  * TYPES

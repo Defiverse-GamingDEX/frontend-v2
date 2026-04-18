@@ -3,7 +3,7 @@ import {
   SingleSwap,
   SwapType,
   SwapV2,
-} from '@defiverse/balancer-sdk-megaeth';
+} from '@defiverse/balancer-sdk-hyperevm';
 import { BigNumber } from '@ethersproject/bignumber';
 
 import { SwapToken, SwapTokenType } from '../swap/swap.service';

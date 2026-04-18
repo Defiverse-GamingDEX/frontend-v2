@@ -13,7 +13,7 @@ import useProtocolRewardsQuery, {
 import { isQueryLoading } from './queries/useQueryHelpers';
 import { isGoerli, isL2 } from './useNetwork';
 import { subgraphFallbackService } from '@/services/balancer/subgraph/subgraph-fallback.service';
-import { PoolType } from '@defiverse/balancer-sdk-megaeth';
+import { PoolType } from '@defiverse/balancer-sdk-hyperevm';
 
 export type GaugePool = {
   id: string;
@@ -87,10 +87,7 @@ export function useClaimsData() {
   //     (!isL2.value && !isGoerli.value && isQueryLoading(protocolRewardsQuery))
   // );
 
-  const isLoading = computed(
-    (): boolean =>
-      isQueryLoading(gaugePoolQuery)
-  );
+  const isLoading = computed((): boolean => isQueryLoading(gaugePoolQuery));
 
   return {
     gauges,

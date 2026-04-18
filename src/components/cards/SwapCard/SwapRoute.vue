@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SubgraphPoolBase, SwapV2 } from '@defiverse/balancer-sdk-megaeth';
+import { SubgraphPoolBase, SwapV2 } from '@defiverse/balancer-sdk-hyperevm';
 import { getAddress } from '@ethersproject/address';
 import { AddressZero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
@@ -344,8 +344,6 @@ function formatShare(share: number): string {
     </div>
   </BalCard>
 </template>
-
-
 
 <style scoped>
 .pair-line {

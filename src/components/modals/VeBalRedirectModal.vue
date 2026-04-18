@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import BalModal from '@/components/_global/BalModal/BalModal.vue';
 import useVeBAL from '@/composables/useVeBAL';
 import { getNetworkSlug } from '@/composables/useNetwork';

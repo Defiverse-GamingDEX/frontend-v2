@@ -8,7 +8,7 @@ import { Pool } from '@/services/pool/types';
 
 import useNetwork from '../useNetwork';
 import usePoolQuery from './usePoolQuery';
-import { AprBreakdown } from '@defiverse/balancer-sdk-megaeth';
+import { AprBreakdown } from '@defiverse/balancer-sdk-hyperevm';
 import { getBalancer } from '@/dependencies/balancer-sdk';
 
 export default function usePoolAprQuery(

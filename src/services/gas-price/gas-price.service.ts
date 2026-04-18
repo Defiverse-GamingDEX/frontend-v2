@@ -18,6 +18,8 @@ import OasysProvider from './providers/oasys-testnet.provider';
 import MegaETHTestnetProvider from './providers/megaeth-testnet.provider';
 import MegaETHMainnetProvider from './providers/megaeth.provider';
 
+import HyperEVMMainnetProvider from './providers/hyperevm.provider';
+
 import PolygonProvider from './providers/polygon.provider';
 import { GasPrice, GasSettings } from './providers/types';
 const USE_BLOCKNATIVE_GAS_PLATFORM =
@@ -35,7 +37,8 @@ export class GasPriceService {
     private readonly oasysProvider = new OasysProvider(),
     private readonly oasysTestnetProvider = new OasysTestnetProvider(),
     private readonly megaETHTestnetProvider = new MegaETHTestnetProvider(),
-    private readonly megaETHMainnetProvider = new MegaETHMainnetProvider()
+    private readonly megaETHMainnetProvider = new MegaETHMainnetProvider(),
+    private readonly hyperEVMMainnetProvider = new HyperEVMMainnetProvider()
   ) {}
 
   public async getGasPrice(): Promise<GasPrice | null> {
@@ -59,6 +62,8 @@ export class GasPriceService {
         return await this.megaETHTestnetProvider.getGasPrice();
       case '4326':
         return await this.megaETHMainnetProvider.getGasPrice();
+      case '999':
+        return await this.hyperEVMMainnetProvider.getGasPrice();
       //return tokensUtils.getGasPriceCustom(this.configService.network.key);
       default:
         return null;

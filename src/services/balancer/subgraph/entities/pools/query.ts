@@ -1,7 +1,7 @@
 import { merge } from 'lodash';
 
 import { POOLS } from '@/constants/pools';
-import { GraphQLArgs } from '@defiverse/balancer-sdk-megaeth';
+import { GraphQLArgs } from '@defiverse/balancer-sdk-hyperevm';
 
 const defaultArgs: GraphQLArgs = {
   first: 1000,

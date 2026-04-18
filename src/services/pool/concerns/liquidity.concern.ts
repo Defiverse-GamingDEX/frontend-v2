@@ -7,7 +7,7 @@ import { bnum, isSameAddress } from '@/lib/utils';
 import { TokenPrices } from '@/services/coingecko/api/price.service';
 import { AnyPool, OnchainTokenData } from '@/services/pool/types';
 import { TokenInfoMap } from '@/types/TokenList';
-import { PoolToken } from '@defiverse/balancer-sdk-megaeth';
+import { PoolToken } from '@defiverse/balancer-sdk-hyperevm';
 
 interface OnchainTokenInfo extends OnchainTokenData {
   address: string;

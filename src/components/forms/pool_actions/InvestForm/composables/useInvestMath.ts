@@ -1,5 +1,5 @@
 import { handleFetchException } from '@/lib/utils/exceptions';
-import { queryBatchSwapTokensIn, SOR } from '@defiverse/balancer-sdk-megaeth';
+import { queryBatchSwapTokensIn, SOR } from '@defiverse/balancer-sdk-hyperevm';
 import { parseUnits } from '@ethersproject/units';
 import { BigNumber } from 'ethers';
 import { computed, Ref, ref, watch } from 'vue';

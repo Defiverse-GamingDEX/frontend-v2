@@ -1,4 +1,4 @@
-import { GraphQLQuery } from '@defiverse/balancer-sdk-megaeth';
+import { GraphQLQuery } from '@defiverse/balancer-sdk-hyperevm';
 
 export type QueryArgs = Record<string, any>;
 export type QueryAttrs = Record<string, any>;

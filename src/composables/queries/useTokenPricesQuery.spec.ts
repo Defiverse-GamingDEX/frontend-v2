@@ -1,6 +1,6 @@
 import { initBalancer } from '@/dependencies/balancer-sdk';
 import { initDependenciesWithDefaultMocks } from '@/dependencies/default-mocks';
-import { BalancerSDK } from '@defiverse/balancer-sdk-megaeth';
+import { BalancerSDK } from '@defiverse/balancer-sdk-hyperevm';
 import { mountComposable, waitForQueryData } from '@tests/mount-helpers';
 import { mockDeep } from 'vitest-mock-extended';
 import { ref } from 'vue';

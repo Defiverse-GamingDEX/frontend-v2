@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { PoolToken, PoolType } from '@/services/pool/types';
 
 // voting-gauges.json is inside src
@@ -44,10 +44,7 @@ export const OASYS_TESTNET_VOTING_GAUGES: VotingGauge[] = (
 
 export const MEGAETH_TESTNET_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]
-).filter(
-  gauge =>
-    gauge.network === Network.MEGAETH_TESTNET
-);
+).filter(gauge => gauge.network === Network.MEGAETH_TESTNET);
 
 export const OASYS_VOTING_GAUGES: VotingGauge[] = (
   ALL_VOTING_GAUGES as VotingGauge[]

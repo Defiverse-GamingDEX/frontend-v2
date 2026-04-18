@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { getUnixTime } from 'date-fns';
 import { getAddress } from '@ethersproject/address';
 import { formatUnits } from '@ethersproject/units';

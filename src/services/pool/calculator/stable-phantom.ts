@@ -1,4 +1,4 @@
-import { phantomStableBPTForTokensZeroPriceImpact as _bptForTokensZeroPriceImpact } from '@defiverse/balancer-sdk-megaeth';
+import { phantomStableBPTForTokensZeroPriceImpact as _bptForTokensZeroPriceImpact } from '@defiverse/balancer-sdk-hyperevm';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import OldBigNumber from 'bignumber.js';

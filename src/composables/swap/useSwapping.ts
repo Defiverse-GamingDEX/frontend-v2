@@ -12,7 +12,7 @@ import {
   someJoinExit,
   SubgraphPoolBase,
   SwapTypes,
-} from '@defiverse/balancer-sdk-megaeth';
+} from '@defiverse/balancer-sdk-hyperevm';
 
 import { sleep } from '@/lib/utils';
 import { useTokens } from '@/providers/tokens.provider';

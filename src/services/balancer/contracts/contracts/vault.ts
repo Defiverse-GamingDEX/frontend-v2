@@ -1,4 +1,7 @@
-import { PoolType, toNormalizedWeights } from '@defiverse/balancer-sdk-megaeth';
+import {
+  PoolType,
+  toNormalizedWeights,
+} from '@defiverse/balancer-sdk-hyperevm';
 import { Vault__factory } from '@balancer-labs/typechain';
 import { getAddress } from '@ethersproject/address';
 import { BigNumber } from '@ethersproject/bignumber';

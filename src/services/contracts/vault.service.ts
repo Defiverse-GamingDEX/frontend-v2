@@ -3,7 +3,7 @@ import {
   SingleSwap,
   SwapType,
   SwapV2,
-} from '@defiverse/balancer-sdk-megaeth';
+} from '@defiverse/balancer-sdk-hyperevm';
 import { Vault__factory } from '@balancer-labs/typechain';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { ContractInterface } from '@ethersproject/contracts';

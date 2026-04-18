@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { computed, Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { networkId } from './useNetwork';
@@ -76,6 +76,7 @@ const POOL_ISSUES = {
   [Network.OASYS_TESTNET]: {},
   [Network.MEGAETH_TESTNET]: {},
   [Network.MEGAETH_MAINNET]: {},
+  [Network.HYPEREVM_MAINNET]: {},
 };
 
 const issues = POOL_ISSUES[networkId.value];

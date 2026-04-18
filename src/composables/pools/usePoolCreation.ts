@@ -23,7 +23,7 @@ import { configService } from '@/services/config/config.service';
 import useWeb3 from '@/services/web3/useWeb3';
 
 import { useTokens } from '@/providers/tokens.provider';
-import { PoolType } from '@defiverse/balancer-sdk-megaeth';
+import { PoolType } from '@defiverse/balancer-sdk-hyperevm';
 
 export const POOL_CREATION_STATE_VERSION = '1.0';
 export const POOL_CREATION_STATE_KEY = 'poolCreationState';

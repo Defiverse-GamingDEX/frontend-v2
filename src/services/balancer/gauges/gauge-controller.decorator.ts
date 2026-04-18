@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { BigNumber } from '@ethersproject/bignumber';
 import { JsonRpcProvider } from '@ethersproject/providers';
 
@@ -192,6 +192,8 @@ export class GaugeControllerDecorator {
       return Network.MEGAETH_TESTNET;
     } else if (this.config.env.NETWORK === Network.MEGAETH_MAINNET) {
       return Network.MEGAETH_MAINNET;
+    } else if (this.config.env.NETWORK === Network.HYPEREVM_MAINNET) {
+      return Network.HYPEREVM_MAINNET;
     } else {
       return Network.MAINNET;
     }

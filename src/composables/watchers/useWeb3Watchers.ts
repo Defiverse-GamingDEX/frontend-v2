@@ -11,7 +11,7 @@ import { useTokens } from '@/providers/tokens.provider';
 import useAlerts, { AlertPriority, AlertType } from '../useAlerts';
 import useBlocknative from '../useBlocknative';
 import useTransactions, { ReplacementReason } from '../useTransactions';
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { switchToAppNetwork } from '@/services/web3/utils/helpers';
 import { configService } from '@/services/config/config.service';
 
@@ -60,18 +60,25 @@ export default function useWeb3Watchers() {
     // Check if user is connected to Defiverse network
     if (
       chainId.value &&
-      (chainId.value === Network.DEFIVERSE || chainId.value === Network.DEFIVERSE_TESTNET)
+      (chainId.value === Network.DEFIVERSE ||
+        chainId.value === Network.DEFIVERSE_TESTNET)
     ) {
       // Map Defiverse networks to corresponding Oasys networks
-      const targetNetwork = chainId.value === Network.DEFIVERSE
-        ? Network.OASYS
-        : Network.OASYS_TESTNET;
-      const targetNetworkName = chainId.value === Network.DEFIVERSE ? 'Oasys' : 'Oasys Testnet';
+      const targetNetwork =
+        chainId.value === Network.DEFIVERSE
+          ? Network.OASYS
+          : Network.OASYS_TESTNET;
+      const targetNetworkName =
+        chainId.value === Network.DEFIVERSE ? 'Oasys' : 'Oasys Testnet';
 
       // Create custom switch function that switches to the correct Oasys network
       const switchToOasys = async () => {
-        const targetNetworkConfig = configService.getNetworkConfig(targetNetwork);
-        await switchToAppNetwork(provider.value as any, targetNetworkConfig as any);
+        const targetNetworkConfig =
+          configService.getNetworkConfig(targetNetwork);
+        await switchToAppNetwork(
+          provider.value as any,
+          targetNetworkConfig as any
+        );
       };
 
       addAlert({

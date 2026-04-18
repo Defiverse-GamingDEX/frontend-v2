@@ -1,7 +1,7 @@
 import useWeb3 from '@/services/web3/useWeb3';
 import { computed, ref, watch } from 'vue';
 import useNetwork from '../useNetwork';
-import { Relayer } from '@defiverse/balancer-sdk-megaeth';
+import { Relayer } from '@defiverse/balancer-sdk-hyperevm';
 import { configService } from '@/services/config/config.service';
 import { Vault__factory } from '@balancer-labs/typechain';
 import { useI18n } from 'vue-i18n';

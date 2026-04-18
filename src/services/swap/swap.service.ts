@@ -4,7 +4,7 @@ import {
   SingleSwap,
   SwapType,
   SwapV2,
-} from '@defiverse/balancer-sdk-megaeth';
+} from '@defiverse/balancer-sdk-hyperevm';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { BigNumber } from '@ethersproject/bignumber';
 import { AddressZero } from '@ethersproject/constants';

@@ -66,9 +66,10 @@ async function fetchTokenLists() {
     const oasysChainId = IS_TESTNET ? 9372 : 248;
     const defiverseChainId = IS_TESTNET ? 17117 : 16116;
     const megaethChainId = IS_TESTNET ? 6343 : 4326;
+    const hyperEVMChainId = IS_TESTNET ? 998 : 999;
     const [response] = await Promise.all([
       axios.get(
-        `${BASE_API_URL}/api/v1/tokens/search?chain_id=${megaethChainId}`
+        `${BASE_API_URL}/api/v1/tokens/search?chain_id=${hyperEVMChainId}`
       ),
     ]);
 
@@ -76,8 +77,10 @@ async function fetchTokenLists() {
     const oasysJsonFromApi = jsonFromApi[oasysChainId];
     const megaethJsonFromApi = jsonFromApi[megaethChainId];
     const defiverseJsonFromApi = jsonFromApi[defiverseChainId];
+    const hyperevmJsonFromApi = jsonFromApi[hyperEVMChainId];
 
     return {
+      hyperEVMJsonBE: hyperevmJsonFromApi,
       megaethJsonBE: megaethJsonFromApi,
       oasysJsonBE: oasysJsonFromApi,
       defiverseJsonBE: defiverseJsonFromApi,
@@ -89,6 +92,7 @@ async function fetchTokenLists() {
       oasysJson,
       defiverseJson,
       megaethTestnetJson,
+      hyperEVMJsonBE: [],
     };
   }
 }
@@ -98,8 +102,16 @@ export const initializeTokenListMap = async () => {
     oasysJsonBE: oasysJsonBE,
     defiverseJsonBE: defiverseJsonBE,
     megaethJsonBE,
+    hyperEVMJsonBE,
   } = await fetchTokenLists();
   return {
+    '999': {
+      Balancer: {
+        Default: JSON.stringify(hyperEVMJsonBE),
+        Vetted: JSON.stringify(hyperEVMJsonBE),
+      },
+      External: [],
+    },
     '4326': {
       Balancer: {
         Default: JSON.stringify(megaethJsonBE),

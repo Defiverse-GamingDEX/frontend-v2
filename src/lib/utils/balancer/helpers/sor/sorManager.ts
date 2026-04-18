@@ -5,7 +5,7 @@ import {
   SwapInfo,
   SwapOptions,
   SwapTypes,
-} from '@defiverse/balancer-sdk-megaeth';
+} from '@defiverse/balancer-sdk-hyperevm';
 import { BigNumber } from '@ethersproject/bignumber';
 import { AddressZero } from '@ethersproject/constants';
 import { Provider } from '@ethersproject/providers';
@@ -108,7 +108,7 @@ export class SorManager {
 
       // ==============================================================================
       try {
-        const chain_id = IS_TESTNET ? 6343 : 4326;
+        const chain_id = IS_TESTNET ? 998 : 999;
         const response = await axios.get(
           `${BASE_API_URL}/api/v1/tokens/search?chain_id=${chain_id}`
         );

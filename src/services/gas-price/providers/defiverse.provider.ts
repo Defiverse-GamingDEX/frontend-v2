@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GasPrice } from './types';
 import { bnum } from '@/lib/utils';
 import { configService } from '@/services/config/config.service';
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 
 interface DefiverseChainGasStationResponse {
   id: number;

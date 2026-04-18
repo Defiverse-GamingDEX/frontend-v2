@@ -15,7 +15,7 @@ import { POOLS } from '@/constants/pools';
 import { includesAddress } from '@/lib/utils';
 import { Pool, PoolToken } from '@/services/pool/types';
 import useWeb3 from '@/services/web3/useWeb3';
-import { AprBreakdown } from '@defiverse/balancer-sdk-megaeth';
+import { AprBreakdown } from '@defiverse/balancer-sdk-hyperevm';
 import { usePoolStaking } from '@/providers/local/pool-staking.provider';
 import { configService } from '@/services/config/config.service';
 import { isRestakeFeatureEnabled } from '@/constants/feature-flags';

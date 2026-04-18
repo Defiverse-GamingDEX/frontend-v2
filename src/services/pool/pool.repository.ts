@@ -5,7 +5,7 @@ import {
   GraphQLArgs,
   PoolRepository as SDKPoolRepository,
   PoolsFallbackRepository,
-} from '@defiverse/balancer-sdk-megaeth';
+} from '@defiverse/balancer-sdk-hyperevm';
 import { balancerAPIService } from '@/services/balancer/api/balancer-api.service';
 import { Pool } from '@/services/pool/types';
 import { TokenInfoMap } from '@/types/TokenList';
@@ -46,7 +46,10 @@ export default class PoolRepository {
     return {
       fetch: async (): Promise<Pool[]> => {
         try {
-          console.log('🔍 Fetching pools from subgraph with queryArgs:', JSON.stringify(this.queryArgs));
+          console.log(
+            '🔍 Fetching pools from subgraph with queryArgs:',
+            JSON.stringify(this.queryArgs)
+          );
           const pools = await balancerSubgraphService.pools.get(this.queryArgs);
           console.log('✅ Subgraph returned pools:', pools?.length || 0);
 

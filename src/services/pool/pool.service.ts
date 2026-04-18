@@ -13,7 +13,10 @@ import { TokenInfoMap } from '@/types/TokenList';
 
 import { networkId } from '@/composables/useNetwork';
 import { getBalancer } from '@/dependencies/balancer-sdk';
-import { AprBreakdown, Pool as SDKPool } from '@defiverse/balancer-sdk-megaeth';
+import {
+  AprBreakdown,
+  Pool as SDKPool,
+} from '@defiverse/balancer-sdk-hyperevm';
 import { captureException } from '@sentry/browser';
 import LiquidityConcern from './concerns/liquidity.concern';
 import { OnchainDataFormater } from './decorators/onchain-data.formater';
@@ -68,7 +71,7 @@ export default class PoolService {
 
     try {
       const sdkApr = await getBalancer().pools.apr(this.pool);
-      console.log(`🚀 ~ PoolService ~ setAPR ~ sdkApr:${this.pool.id}`, sdkApr)
+      console.log(`🚀 ~ PoolService ~ setAPR ~ sdkApr:${this.pool.id}`, sdkApr);
 
       if (sdkApr) apr = sdkApr;
     } catch (error) {

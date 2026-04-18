@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import {
   JsonRpcProvider,
   JsonRpcSigner,
@@ -36,7 +36,7 @@ export default class Web3Service {
     const IS_TESTNET = import.meta.env.VITE_IS_TESTNET === 'true';
     const ensNetwork = IS_TESTNET
       ? Network.MEGAETH_TESTNET
-      : Network.MEGAETH_MAINNET;
+      : Network.HYPEREVM_MAINNET;
     this.ensProvider = this.rpcProviderService.getJsonProvider(ensNetwork);
   }
 

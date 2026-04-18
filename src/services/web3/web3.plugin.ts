@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { getAddress } from '@ethersproject/address';
 import {
   JsonRpcProvider,

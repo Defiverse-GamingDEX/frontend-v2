@@ -1,4 +1,8 @@
-import { BatchSwapStep, SwapType, SwapV2 } from '@defiverse/balancer-sdk-megaeth';
+import {
+  BatchSwapStep,
+  SwapType,
+  SwapV2,
+} from '@defiverse/balancer-sdk-hyperevm';
 import { BigNumber } from '@ethersproject/bignumber';
 import { TransactionResponse } from '@ethersproject/providers';
 

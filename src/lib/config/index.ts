@@ -1,4 +1,4 @@
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 
 import arbitrum from './arbitrum.json';
 import defiverseTestnet from './defiverse-testnet.json';
@@ -127,6 +127,7 @@ const config: Record<Network | number, Config> = {
   //[Network.OASYS_TESTNET]: oasysTestnet,
   [Network.MEGAETH_TESTNET]: megaethTestnet,
   [Network.MEGAETH_MAINNET]: megaeth,
+  [Network.HYPEREVM_MAINNET]: hyperEVM,
   12345: test,
   // @ts-ignore
   17: docker,
@@ -144,7 +145,6 @@ const config: Record<Network | number, Config> = {
   6343: megaethTestnet,
   4326: megaeth,
   998: hyperEVMTestnet,
-  999: hyperEVM,
 };
 
 export default config;

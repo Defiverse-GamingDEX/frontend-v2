@@ -2,7 +2,7 @@ import { computed, ref } from 'vue';
 
 import config from '@/lib/config';
 import { configService } from '@/services/config/config.service';
-import { Network } from '@defiverse/balancer-sdk-megaeth';
+import { Network } from '@defiverse/balancer-sdk-hyperevm';
 import { RouteParamsRaw } from 'vue-router';
 
 /**
@@ -19,8 +19,8 @@ if (IS_TESTNET) {
     localStorageNetworkId = Network.MEGAETH_TESTNET;
   }
 } else {
-  if (localStorageNetworkId !== Network.MEGAETH_MAINNET) {
-    localStorageNetworkId = Network.MEGAETH_MAINNET;
+  if (localStorageNetworkId !== Network.HYPEREVM_MAINNET) {
+    localStorageNetworkId = Network.HYPEREVM_MAINNET;
   }
 }
 const routeSlug =
@@ -31,7 +31,7 @@ const urlNetworkId: Network | null = routeSlug
 
 const DEFAULT_NETWORK = IS_TESTNET
   ? Network.MEGAETH_TESTNET
-  : Network.MEGAETH_MAINNET;
+  : Network.HYPEREVM_MAINNET;
 
 const NETWORK_ID =
   urlNetworkId ||
@@ -53,6 +53,7 @@ export const networkLabelMap = {
   //[Network.OASYS_TESTNET]: 'oasys-testnet',
   [Network.MEGAETH_TESTNET]: 'megaeth-testnet',
   [Network.MEGAETH_MAINNET]: 'megaeth',
+  [Network.HYPEREVM_MAINNET]: 'hyperevm',
 };
 
 /**
@@ -62,7 +63,7 @@ export const networkLabelMap = {
 export const networkId = ref<Network>(NETWORK_ID);
 
 export const isMainnet = computed(
-  () => networkId.value === Network.MEGAETH_MAINNET
+  () => networkId.value === Network.HYPEREVM_MAINNET
 );
 export const isPolygon = computed(() => networkId.value === Network.POLYGON);
 export const isArbitrum = computed(() => networkId.value === Network.ARBITRUM);
@@ -81,8 +82,8 @@ export const isOasysTestnet = computed(
 export const isMegaethTestnet = computed(
   () => networkId.value === Network.MEGAETH_TESTNET
 );
-export const isMegaethMainnet = computed(
-  () => networkId.value === Network.MEGAETH_MAINNET
+export const isHyperEVMMainnet = computed(
+  () => networkId.value === Network.HYPEREVM_MAINNET
 );
 export const isL2 = computed(
   () =>
@@ -119,6 +120,8 @@ export function networkFor(key: string | number): Network | number {
       return Network.MEGAETH_TESTNET;
     case '4326':
       return Network.MEGAETH_MAINNET;
+    case '999':
+      return Network.HYPEREVM_MAINNET;
     case '29548':
       return 29548;
     case '2400':
@@ -213,7 +216,7 @@ export function getRedirectUrlFor(
 
   if (subdomainNetwork) {
     // Allow megaeth-testnet subdomain
-    if (subdomain === 'megaeth-testnet' || subdomain === 'megaeth') {
+    if (subdomain === 'hyperevm-testnet' || subdomain === 'hyperevm') {
       return;
     }
 

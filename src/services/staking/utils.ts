@@ -6,7 +6,7 @@ import { TokenInfoMap } from '@/types/TokenList';
 
 import { RewardTokenData } from '../balancer/contracts/contracts/liquidity-gauge';
 import { TokenPrices } from '../coingecko/api/price.service';
-import { AprBreakdown } from '@defiverse/balancer-sdk-megaeth';
+import { AprBreakdown } from '@defiverse/balancer-sdk-hyperevm';
 
 const MIN_BOOST = 1;
 const MAX_BOOST = 2.5;

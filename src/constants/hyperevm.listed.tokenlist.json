@@ -1,0 +1,21 @@
+{
+  "name": "Gaming DEX",
+  "timestamp": "2023-03-23T00:00:00.000Z",
+  "logoURI": "/images/gamingdex_icon.png",
+  "keywords": ["balancer", "listed"],
+  "version": {
+    "major": 2,
+    "minor": 1,
+    "patch": 0
+  },
+  "tokens": [
+    {
+      "address": "0x5555555555555555555555555555555555555555",
+      "chainId": 4326,
+      "name": "Wrapped HYPE",
+      "symbol": "WHYPE",
+      "decimals": 18,
+      "logoURI": "tokens/ETH_L.png"
+    }
+  ]
+}

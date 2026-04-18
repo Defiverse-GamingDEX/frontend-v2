@@ -3,7 +3,7 @@ import { TokenPrices } from '@/services/coingecko/api/price.service';
 import { GasPriceService } from '@/services/gas-price/gas-price.service';
 import { Pool } from '@/services/pool/types';
 import { TokenInfoMap } from '@/types/TokenList';
-import { BalancerSDK } from '@defiverse/balancer-sdk-megaeth';
+import { BalancerSDK } from '@defiverse/balancer-sdk-hyperevm';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { JsonRpcSigner } from '@ethersproject/providers';
 import { Ref } from 'vue';

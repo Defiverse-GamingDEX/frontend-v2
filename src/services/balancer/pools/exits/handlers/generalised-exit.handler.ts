@@ -4,7 +4,7 @@ import { bnum, isSameAddress } from '@/lib/utils';
 import { GasPriceService } from '@/services/gas-price/gas-price.service';
 import { Pool } from '@/services/pool/types';
 import { TransactionBuilder } from '@/services/web3/transactions/transaction.builder';
-import { BalancerSDK } from '@defiverse/balancer-sdk-megaeth';
+import { BalancerSDK } from '@defiverse/balancer-sdk-hyperevm';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { getAddress } from '@ethersproject/address';
 import { formatFixed, parseFixed } from '@ethersproject/bignumber';

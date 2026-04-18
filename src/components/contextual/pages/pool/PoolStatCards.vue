@@ -7,7 +7,7 @@ import useNumbers, { FNumFormats } from '@/composables/useNumbers';
 import { isLBP, totalAprLabel } from '@/composables/usePool';
 import { APR_THRESHOLD } from '@/constants/pools';
 import { Pool } from '@/services/pool/types';
-import { AprBreakdown } from '@defiverse/balancer-sdk-megaeth';
+import { AprBreakdown } from '@defiverse/balancer-sdk-hyperevm';
 
 /**
  * TYPES

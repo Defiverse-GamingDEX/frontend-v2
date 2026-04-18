@@ -1,4 +1,4 @@
-import { BatchSwapStep, SwapV2 } from '@defiverse/balancer-sdk-megaeth';
+import { BatchSwapStep, SwapV2 } from '@defiverse/balancer-sdk-hyperevm';
 import { BigNumberish } from '@ethersproject/bignumber';
 
 export type RuleFunction = (val: string | number) => string | boolean;

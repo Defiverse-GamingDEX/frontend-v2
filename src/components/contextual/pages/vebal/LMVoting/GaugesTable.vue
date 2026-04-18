@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PoolToken } from '@defiverse/balancer-sdk-megaeth';
+import { PoolToken } from '@defiverse/balancer-sdk-hyperevm';
 import { computed, ref, onBeforeMount, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';

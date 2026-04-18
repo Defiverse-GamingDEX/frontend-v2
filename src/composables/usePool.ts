@@ -1,4 +1,8 @@
-import { Network, AprBreakdown, PoolType } from '@defiverse/balancer-sdk-megaeth';
+import {
+  Network,
+  AprBreakdown,
+  PoolType,
+} from '@defiverse/balancer-sdk-hyperevm';
 import { isAddress, getAddress } from '@ethersproject/address';
 import { computed, Ref } from 'vue';
 
@@ -251,7 +255,10 @@ export function absMaxApr(aprs: AprBreakdown, boost?: string): string {
 /**
  * @summary Returns total APR label, whether range or single value.
  */
-export function totalAprLabel(aprs: AprBreakdown, boost?: string): string | number {
+export function totalAprLabel(
+  aprs: AprBreakdown,
+  boost?: string
+): string | number {
   if (aprs.min === -1 || aprs.max === -1) return -1;
   if (boost) {
     numF(absMaxApr(aprs, boost), FNumFormats.bp);

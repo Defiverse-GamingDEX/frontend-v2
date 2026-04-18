@@ -4,18 +4,18 @@ import { bnum } from '@/lib/utils';
 import { configService } from '@/services/config/config.service';
 import { Network } from '@defiverse/balancer-sdk-hyperevm';
 
-interface MegaETHTestnetChainGasStationResponse {
+interface HyperEVMMainnetChainGasStationResponse {
   id: number;
   jsonrpc: string;
   result: string;
 }
 
-export default class MegaETHTestnetChainProvider {
+export default class HyperEVMMainnetChainProvider {
   public async getGasPrice(): Promise<GasPrice | null> {
     try {
       const [gasPrice, maxPriorityFee] = await Promise.all([
-        this.fetchMegaETHTestnetChainProvider('eth_gasPrice'),
-        this.fetchMegaETHTestnetChainProvider('eth_maxPriorityFeePerGas'),
+        this.fetchHyperEVMMainnetChainProvider('eth_gasPrice'),
+        this.fetchHyperEVMMainnetChainProvider('eth_maxPriorityFeePerGas'),
       ]);
       const price = bnum(gasPrice.result).toNumber();
       const maxPriorityFeePerGas = bnum(maxPriorityFee.result).toNumber();
@@ -25,14 +25,14 @@ export default class MegaETHTestnetChainProvider {
         maxPriorityFeePerGas,
       };
     } catch (error) {
-      console.log('[Oasys-testnet-chain] Gas Platform Error', error);
+      console.log('[HyperEVM-chain] Gas Platform Error', error);
       return null;
     }
   }
 
-  private async fetchMegaETHTestnetChainProvider(method: string) {
-    const { data } = await axios.post<MegaETHTestnetChainGasStationResponse>(
-      configService.getNetworkRpc(Network.MEGAETH_TESTNET),
+  private async fetchHyperEVMMainnetChainProvider(method: string) {
+    const { data } = await axios.post<HyperEVMMainnetChainGasStationResponse>(
+      configService.getNetworkRpc(Network.HYPEREVM_MAINNET),
       { method, id: 1, jsonrpc: '2.0' }
     );
 

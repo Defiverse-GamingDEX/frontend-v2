@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 
-import { PoolToken } from '@defiverse/balancer-sdk-megaeth';
+import { PoolToken } from '@defiverse/balancer-sdk-hyperevm';
 
 import { isArbitrum, isMainnet, isPolygon } from '../useNetwork';
 

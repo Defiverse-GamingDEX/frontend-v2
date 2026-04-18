@@ -1,4 +1,4 @@
-import { BalancerSDK, Network } from '@defiverse/balancer-sdk-megaeth';
+import { BalancerSDK, Network } from '@defiverse/balancer-sdk-hyperevm';
 import { configService } from '@/services/config/config.service';
 import { ref } from 'vue';
 import { isTestMode } from '@/plugins/modes';
@@ -25,6 +25,8 @@ const network = ((): Network => {
       return Network.MEGAETH_TESTNET;
     case '4326':
       return Network.MEGAETH_MAINNET;
+    case '999':
+      return Network.HYPEREVM_MAINNET;
     default:
       return Network.MAINNET;
   }
