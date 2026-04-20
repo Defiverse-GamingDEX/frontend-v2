@@ -60,6 +60,9 @@ export const networkMap = {
   [Network.DEFIVERSE_TESTNET]: 'defiverse-testnet',
   [Network.OASYS]: 'oasys',
   [Network.OASYS_TESTNET]: 'oasys-testnet',
+  [Network.MEGAETH_TESTNET]: 'megaeth-testnet',
+  [Network.MEGAETH_MAINNET]: 'megaeth',
+  [Network.HYPEREVM_MAINNET]: 'hyperevm',
 };
 
 export const Web3ProviderSymbol = Symbol('WEB3_PROVIDER');
