@@ -64,8 +64,20 @@ export class PriceService {
 
   async fetchPrice(addressString): Promise<Price> {
     const priceUrl = this.configService.network.priceUrl;
-    const endpoint = `${priceUrl}/price?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
-    return axios.get<Price>(endpoint).then(({ data }) => {
+
+    // const endpoint = `${priceUrl}/price?contract_addresses=${addressString}&vs_currencies=${this.fiatParam}`;
+    // return axios.get<Price>(endpoint).then(({ data }) => {
+    //   return data;
+    // });
+
+    // Hung: Fix url to long
+    const endpoint = `${priceUrl}/price/search`;
+    const body = {
+      chain_id: this.configService.network.chainId,
+      contract_addresses: addressString,
+      vs_currencies: this.fiatParam,
+    };
+    return axios.post<Price>(endpoint, body).then(({ data }) => {
       return data;
     });
   }
