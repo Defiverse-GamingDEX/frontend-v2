@@ -72,6 +72,17 @@ async function handleSwitchToMode(mode: boolean) {
         class="object-contain mb-4 w-16 h-16"
       />
 
+      <p class="mb-4 text-sm text-center text-gray-600 dark:text-gray-400">
+        Toggle your account between big and small blocks on HyperEVM. Ensure
+        you've moved HYPE from the L1 first (<a
+          href="https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/evm"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline"
+          >docs</a
+        >).
+      </p>
+
       <p
         v-if="isCreatePoolContext"
         class="mb-6 text-sm text-center text-gray-500 dark:text-gray-400"
@@ -131,7 +142,7 @@ async function handleSwitchToMode(mode: boolean) {
             account before switching modes.
           </p>
 
-          <div class="flex items-center gap-2">
+          <div class="flex gap-2 items-center">
             <a
               href="https://app.hyperliquid.xyz/portfolio"
               target="_blank"
@@ -142,17 +153,29 @@ async function handleSwitchToMode(mode: boolean) {
             </a>
             <BalTooltip width="320" placement="top">
               <template #activator>
-                <BalIcon name="info" size="sm" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer" />
+                <BalIcon
+                  name="info"
+                  size="sm"
+                  class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"
+                />
               </template>
               <div class="text-left">
                 <p class="mb-2 text-sm font-semibold">How to deposit:</p>
                 <ol class="space-y-1 text-xs list-decimal list-inside">
                   <li>Click the link above to open Hyperliquid Portfolio.</li>
                   <li>Click the <b>Deposit</b> button on the header.</li>
-                  <li>Make sure you have some USDC on networks like <b>Arbitrum</b>, <b>Optimism</b>, etc.</li>
-                  <li>Select <b>USDC</b> as the Asset and choose your <b>Deposit Chain</b>.</li>
+                  <li>
+                    Make sure you have some USDC on networks like
+                    <b>Arbitrum</b>, <b>Optimism</b>, etc.
+                  </li>
+                  <li>
+                    Select <b>USDC</b> as the Asset and choose your
+                    <b>Deposit Chain</b>.
+                  </li>
                   <li>Enter an amount (e.g., $1) and click <b>Deposit</b>.</li>
-                  <li>Sign the transaction in MetaMask. Return here when done!</li>
+                  <li>
+                    Sign the transaction in MetaMask. Return here when done!
+                  </li>
                 </ol>
                 <img
                   src="@/assets/images/hyperliquid_deposit_guide.png"
