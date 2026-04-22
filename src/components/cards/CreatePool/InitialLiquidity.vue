@@ -9,6 +9,8 @@ import { useTokens } from '@/providers/tokens.provider';
 import { bnum, isSameAddress } from '@/lib/utils';
 import { isGreaterThan } from '@/lib/utils/validations';
 import useWeb3 from '@/services/web3/useWeb3';
+import HyperEvmBigBlockModal from '@/components/modals/HyperEvmBigBlockModal.vue';
+import { useIsUsingBigBlocks } from '@/composables/hyperevm/useIsUsingBigBlocks';
 
 const emit = defineEmits(['update:height']);
 
@@ -53,6 +55,9 @@ const { t } = useI18n();
 
 const tokenAddresses = ref([] as string[]);
 
+const { isUsingBigBlocks } = useIsUsingBigBlocks();
+const isBigBlockModalOpen = ref(false);
+
 /**
  * COMPUTED
  */
@@ -64,12 +69,16 @@ const areAmountsMaxed = computed(() => {
 });
 
 const isExceedingWalletBalance = computed(() => {
+  // TODO TEMP: bypass balance check for testing Big Block modal
+  return false;
+  /*
   // need to perform rounding here as JS cuts off those
   // really long numbers which makes it impossible to compare
   const isExceeding = tokenAddresses.value.some((t, i) =>
     bnum(seedTokens.value[i].amount).gt(balanceFor(t))
   );
   return isExceeding;
+  */
 });
 
 const arbitrageDelta = computed(() => {
@@ -89,7 +98,9 @@ const arbitrageDelta = computed(() => {
 });
 
 const hasZeroAmount = computed(() => {
-  return seedTokens.value.some(seedToken => bnum(seedToken.amount).eq(0));
+  // TODO TEMP: bypass zero amount check for testing Big Block modal
+  return false;
+  // return seedTokens.value.some(seedToken => bnum(seedToken.amount).eq(0));
 });
 
 /**
@@ -213,6 +224,16 @@ function onAlertMountChange() {
 }
 
 function saveAndProceed() {
+  if (isUsingBigBlocks.value !== true) {
+    isBigBlockModalOpen.value = true;
+    return;
+  }
+  saveState();
+  proceed();
+}
+
+function handleBigBlockSuccess() {
+  isBigBlockModalOpen.value = false;
   saveState();
   proceed();
 }
@@ -371,5 +392,14 @@ function saveAndProceed() {
         </BalBtn>
       </BalStack>
     </BalCard>
+
+    <teleport to="#modal">
+      <HyperEvmBigBlockModal
+        v-if="isBigBlockModalOpen"
+        :isOpen="isBigBlockModalOpen"
+        @close="isBigBlockModalOpen = false"
+        @success="handleBigBlockSuccess"
+      />
+    </teleport>
   </div>
 </template>

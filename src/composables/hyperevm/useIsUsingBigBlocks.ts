@@ -58,6 +58,7 @@ export function useIsUsingBigBlocks() {
         'eth_usingBigBlocks',
         [account.value]
       );
+      console.log(`[DEBUG] RPC eth_usingBigBlocks for ${account.value} returned:`, result);
       isUsingBigBlocks.value = result;
     } catch (err) {
       console.error('Failed to fetch block mode:', err);

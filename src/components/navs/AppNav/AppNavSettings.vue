@@ -22,7 +22,7 @@
       </div>
       <div class="flex mt-1 mb-1">
         <div class="flex">
-          <div class="relative">
+          <div class="relative self-start">
             <Avatar :iconURI="profile?.avatar" :address="account" :size="44" />
             <div class="connector-icon-wrapper">
               <img
@@ -73,6 +73,24 @@
             </div>
             <div class="text-sm">
               {{ connectorName }}
+            </div>
+            <div v-if="isHyperEVMNetwork" class="mt-2">
+              <BalBtn
+                size="xs"
+                color="gray"
+                outline
+                @click="isBigBlockModalOpen = true"
+              >
+                <div class="flex items-center gap-2">
+                  <div 
+                    :class="[
+                      'w-2 h-2 rounded-full', 
+                      isUsingBigBlocks === true ? 'bg-yellow-500' : 'bg-green-500'
+                    ]" 
+                  />
+                  {{ blockModeLabel }}
+                </div>
+              </BalBtn>
             </div>
           </div>
         </div>
@@ -134,6 +152,14 @@
         {{ isUnsupportedNetwork ? getBridgeNetworkName() : networkName }}
       </div>
     </div>
+    <teleport to="#modal">
+      <HyperEvmBigBlockModal
+        v-if="isBigBlockModalOpen"
+        :isOpen="isBigBlockModalOpen"
+        @close="isBigBlockModalOpen = false"
+        @success="isBigBlockModalOpen = false"
+      />
+    </teleport>
   </div>
 </template>
 
@@ -155,10 +181,15 @@ import {
   getConnectorName,
 } from '@/services/web3/web3.plugin';
 import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
+import HyperEvmBigBlockModal from '@/components/modals/HyperEvmBigBlockModal.vue';
+import { useIsUsingBigBlocks } from '@/composables/hyperevm/useIsUsingBigBlocks';
+
 export default defineComponent({
   components: {
     AppSlippageForm,
     Avatar,
+    HyperEvmBigBlockModal,
   },
 
   setup() {
@@ -180,6 +211,9 @@ export default defineComponent({
     } = useWeb3();
     const { ethereumTxType, setEthereumTxType } = useEthereumTxType();
     const { t } = useI18n();
+
+    const { isUsingBigBlocks, isLoading: isQueryingBlocks } = useIsUsingBigBlocks();
+    const isBigBlockModalOpen = ref(false);
 
     // DATA
     const data = reactive({
@@ -215,6 +249,12 @@ export default defineComponent({
     const isCowswapSupportedNetwork = computed(() =>
       COW_SUPPORTED_NETWORKS.includes(appNetworkConfig.chainId)
     );
+    const isHyperEVMNetwork = computed(() => userNetworkConfig.value?.chainId === 999);
+    const blockModeLabel = computed(() => {
+      if (isQueryingBlocks.value && isUsingBigBlocks.value === null) return 'Loading...';
+      if (isUsingBigBlocks.value === null) return 'Unknown';
+      return isUsingBigBlocks.value ? 'Big Blocks' : 'Small Blocks';
+    });
 
     // METHODS
     const setDarkMode = val => store.commit('app/setDarkMode', val);
@@ -255,6 +295,10 @@ export default defineComponent({
       isEIP1559SupportedNetwork,
       isCowswapSupportedNetwork,
       isUnsupportedNetwork,
+      isHyperEVMNetwork,
+      isUsingBigBlocks,
+      blockModeLabel,
+      isBigBlockModalOpen,
       // methods
       shorten,
       disconnectWallet,
