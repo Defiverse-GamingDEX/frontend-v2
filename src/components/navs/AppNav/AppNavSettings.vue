@@ -81,12 +81,14 @@
                 outline
                 @click="isBigBlockModalOpen = true"
               >
-                <div class="flex items-center gap-2">
-                  <div 
+                <div class="flex gap-2 items-center">
+                  <div
                     :class="[
-                      'w-2 h-2 rounded-full', 
-                      isUsingBigBlocks === true ? 'bg-yellow-500' : 'bg-green-500'
-                    ]" 
+                      'w-2 h-2 rounded-full',
+                      isUsingBigBlocks === true
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500',
+                    ]"
                   />
                   {{ blockModeLabel }}
                 </div>
@@ -212,7 +214,8 @@ export default defineComponent({
     const { ethereumTxType, setEthereumTxType } = useEthereumTxType();
     const { t } = useI18n();
 
-    const { isUsingBigBlocks, isLoading: isQueryingBlocks } = useIsUsingBigBlocks();
+    const { isUsingBigBlocks, isLoading: isQueryingBlocks } =
+      useIsUsingBigBlocks();
     const isBigBlockModalOpen = ref(false);
 
     // DATA
@@ -249,9 +252,12 @@ export default defineComponent({
     const isCowswapSupportedNetwork = computed(() =>
       COW_SUPPORTED_NETWORKS.includes(appNetworkConfig.chainId)
     );
-    const isHyperEVMNetwork = computed(() => userNetworkConfig.value?.chainId === 999);
+    const isHyperEVMNetwork = computed(
+      () => userNetworkConfig.value?.chainId === 999
+    );
     const blockModeLabel = computed(() => {
-      if (isQueryingBlocks.value && isUsingBigBlocks.value === null) return 'Loading...';
+      if (isQueryingBlocks.value && isUsingBigBlocks.value === null)
+        return 'Loading...';
       if (isUsingBigBlocks.value === null) return 'Unknown';
       return isUsingBigBlocks.value ? 'Big Blocks' : 'Small Blocks';
     });

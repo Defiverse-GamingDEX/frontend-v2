@@ -1,22 +1,22 @@
 /**
- * useIsUsingBigBlocks - Composable kiểm tra block mode hiện tại
+ * useIsUsingBigBlocks - Composable to check current block mode
  *
  * === FLOW ===
- * 1. Lấy address ví của user từ useWeb3() (pattern có sẵn)
- * 2. Lấy JsonRpcProvider từ rpcProviderService (service có sẵn)
- * 3. Gọi RPC method "eth_usingBigBlocks" với param là address
- *    -> method này là custom RPC riêng của HyperEVM, không có trên chain khác
- * 4. Trả về boolean: true = big blocks, false = small blocks
- * 5. Poll mỗi 5 giây để cập nhật trạng thái
+ * 1. Get user wallet address from useWeb3() (existing pattern)
+ * 2. Get JsonRpcProvider from rpcProviderService (existing service)
+ * 3. Call RPC method "eth_usingBigBlocks" with address as param
+ *    -> this is a custom RPC specific to HyperEVM, not available on other chains
+ * 4. Return boolean: true = big blocks, false = small blocks
+ * 5. Poll every 5 seconds to update status
  *
- * === TẠI SAO POLL? ===
- * Vì sau khi user toggle, cần vài giây để HyperEVM node cập nhật.
- * Poll giúp UI tự động reflect trạng thái mới.
+ * === WHY POLL? ===
+ * Because after user toggles, it takes a few seconds for the HyperEVM node to update.
+ * Polling helps the UI automatically reflect the new status.
  *
- * === PATTERN THEO PROJECT ===
- * - Import useWeb3 từ '@/services/web3/useWeb3' (giống SwapCard, bridge, etc.)
- * - Import rpcProviderService từ '@/services/rpc-provider/'
- * - Dùng ref() + watch() + onUnmounted() (Vue 3 Composition API)
+ * === PROJECT PATTERNS ===
+ * - Import useWeb3 from '@/services/web3/useWeb3' (like SwapCard, bridge, etc.)
+ * - Import rpcProviderService from '@/services/rpc-provider/'
+ * - Use ref() + watch() + onUnmounted() (Vue 3 Composition API)
  */
 
 import { ref, watch, onUnmounted } from 'vue';
@@ -24,17 +24,17 @@ import { rpcProviderService } from '@/services/rpc-provider/rpc-provider.service
 import useWeb3 from '@/services/web3/useWeb3';
 
 export function useIsUsingBigBlocks() {
-  // State - dùng ref() theo pattern project
-  const isUsingBigBlocks = ref<boolean | null>(null); // null = chưa load
+  // State - use ref() following project pattern
+  const isUsingBigBlocks = ref<boolean | null>(null); // null = not loaded
   const isLoading = ref(false);
   const error = ref<Error | null>(null);
 
-  // Lấy thông tin ví từ useWeb3() - pattern giống SwapCard.vue, bridge.vue
+  // Get wallet info from useWeb3() - pattern like SwapCard.vue, bridge.vue
   const { account, isWalletReady } = useWeb3();
 
-  // Hàm gọi RPC để query block mode
+  // Function to call RPC to query block mode
   async function fetchBlockMode() {
-    // Không query nếu ví chưa connect
+    // Don't query if wallet is not connected
     if (!isWalletReady.value || !account.value) {
       isUsingBigBlocks.value = null;
       return;
@@ -45,14 +45,14 @@ export function useIsUsingBigBlocks() {
 
     try {
       /**
-       * eth_usingBigBlocks là custom RPC method của HyperEVM
-       * - Input: [userAddress] - address cần check
-       * - Output: boolean - true nếu user đang dùng big blocks
+       * eth_usingBigBlocks is a custom RPC method of HyperEVM
+       * - Input: [userAddress] - address to check
+       * - Output: boolean - true if user is using big blocks
        *
-       * Dùng provider.send() để gọi raw RPC method
-       * vì ethers.js không có wrapper cho method này.
-       * rpcProviderService.jsonProvider là StaticJsonRpcProvider
-       * (xem: src/services/rpc-provider/rpc-provider.service.ts)
+       * Use provider.send() to call raw RPC method
+       * because ethers.js doesn't have a wrapper for this method.
+       * rpcProviderService.jsonProvider is a StaticJsonRpcProvider
+       * (see: src/services/rpc-provider/rpc-provider.service.ts)
        */
       const result = await rpcProviderService.jsonProvider.send(
         'eth_usingBigBlocks',
@@ -74,8 +74,8 @@ export function useIsUsingBigBlocks() {
 
   function startPolling() {
     stopPolling();
-    fetchBlockMode(); // Fetch ngay lập tức
-    pollInterval = setInterval(fetchBlockMode, 5000); // Poll mỗi 5s
+    fetchBlockMode(); // Fetch immediately
+    pollInterval = setInterval(fetchBlockMode, 5000); // Poll every 5s
   }
 
   function stopPolling() {
@@ -85,7 +85,7 @@ export function useIsUsingBigBlocks() {
     }
   }
 
-  // Watch wallet connection - bắt đầu poll khi ví connect
+  // Watch wallet connection - start polling when wallet connects
   watch(
     [() => account.value, () => isWalletReady.value],
     () => {
@@ -99,12 +99,12 @@ export function useIsUsingBigBlocks() {
     { immediate: true }
   );
 
-  // Cleanup khi component unmount
+  // Cleanup when component unmounts
   onUnmounted(() => stopPolling());
 
   return {
-    isUsingBigBlocks, // Ref<boolean | null> - trạng thái block mode
-    isLoading, // Ref<boolean> - đang loading
+    isUsingBigBlocks, // Ref<boolean | null> - block mode status
+    isLoading, // Ref<boolean> - loading state
     error, // Ref<Error | null>
     refetch: fetchBlockMode, // Manual refetch
   };

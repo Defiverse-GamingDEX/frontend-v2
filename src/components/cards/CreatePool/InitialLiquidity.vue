@@ -69,16 +69,12 @@ const areAmountsMaxed = computed(() => {
 });
 
 const isExceedingWalletBalance = computed(() => {
-  // TODO TEMP: bypass balance check for testing Big Block modal
-  return false;
-  /*
   // need to perform rounding here as JS cuts off those
   // really long numbers which makes it impossible to compare
   const isExceeding = tokenAddresses.value.some((t, i) =>
     bnum(seedTokens.value[i].amount).gt(balanceFor(t))
   );
   return isExceeding;
-  */
 });
 
 const arbitrageDelta = computed(() => {
@@ -98,9 +94,7 @@ const arbitrageDelta = computed(() => {
 });
 
 const hasZeroAmount = computed(() => {
-  // TODO TEMP: bypass zero amount check for testing Big Block modal
-  return false;
-  // return seedTokens.value.some(seedToken => bnum(seedToken.amount).eq(0));
+  return seedTokens.value.some(seedToken => bnum(seedToken.amount).eq(0));
 });
 
 /**
@@ -397,6 +391,7 @@ function handleBigBlockSuccess() {
       <HyperEvmBigBlockModal
         v-if="isBigBlockModalOpen"
         :isOpen="isBigBlockModalOpen"
+        isCreatePoolContext
         @close="isBigBlockModalOpen = false"
         @success="handleBigBlockSuccess"
       />
