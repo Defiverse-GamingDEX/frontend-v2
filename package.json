@@ -156,6 +156,7 @@
   "license": "MIT",
   "repository": "balancer-labs/frontend-v2",
   "dependencies": {
+    "@nktkas/hyperliquid": "^0.32.2",
     "crypto-js": "^4.2.0",
     "mitt": "^3.0.1",
     "singularity-init": "^1.0.3",
