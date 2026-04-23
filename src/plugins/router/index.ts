@@ -78,10 +78,6 @@ const TransferTokenPage = () =>
   import(
     /* webpackChunkName: "TransferTokenPage" */ /* webpackPrefetch: true */ '@/pages/transfer/transfer-token.vue'
   );
-const HyperEvmBigBlocksPage = () =>
-  import(
-    /* webpackChunkName: "HyperEvmBigBlocksPage" */ '@/pages/hyperevm-big-blocks.vue'
-  );
 declare module 'vue-router' {
   interface RouteMeta {
     layout?: string;
@@ -220,11 +216,6 @@ const routes: RouteRecordRaw[] = [
     path: '/transfer/token',
     name: 'transfer-token',
     component: TransferTokenPage,
-  },
-  {
-    path: '/:networkSlug/big-blocks',
-    name: 'big-blocks',
-    component: HyperEvmBigBlocksPage,
   },
   {
     path: '/:networkSlug?',
