@@ -37,7 +37,7 @@ export default function useGaugesQuery(
   const queryFn = async () => {
     try {
       // return await gaugesSubgraphService.gauges.get();
-      const rs = await axios.get(`${domain}/v1/pools/gauges`);
+      const rs = await axios.get(`${domain}/v1/pools/gauges/hyperevm`);
       return rs?.data.data.liquidityGauges;
     } catch (error) {
       console.error('Failed to fetch gauges', error);
