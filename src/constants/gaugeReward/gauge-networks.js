@@ -37,6 +37,12 @@ const GAUGE_REWARD_NETWORKS_MAINNET = [
     chainIdHex: '0x10E6',
     gaugeRewardContractAddress: '0xb61f122AB285f8ab046C75b6F2852BBf1F6F70c8',
   },
+  {
+    id: 'hyperevm',
+    chainId: 999,
+    chainIdHex: '0x3E7',
+    gaugeRewardContractAddress: '0xAbb6C695f8b43f0f7bd666fFEFFe519Eb3B5e698',
+  },
 ];
 const IS_TESTNET = import.meta.env.VITE_IS_TESTNET == 'true' || 'false';
 
