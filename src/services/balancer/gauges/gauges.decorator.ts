@@ -62,17 +62,16 @@ export class GaugesDecorator {
 
       // Vote incentives data
       {
-        this.multicaller = this.resetMulticaller(this.voteRewardAbi);
-        this.callVoteRewardTokens(list);
-
-        gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
-          gaugesDataMap
-        );
-
-        this.callVoteClaimableRewards(list, userAddress, gaugesDataMap);
-        gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
-          gaugesDataMap
-        );
+        // HUNG: Not release yet
+        // this.multicaller = this.resetMulticaller(this.voteRewardAbi);
+        // this.callVoteRewardTokens(list);
+        // gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
+        //   gaugesDataMap
+        // );
+        // this.callVoteClaimableRewards(list, userAddress, gaugesDataMap);
+        // gaugesDataMap = await this.multicaller.execute<OnchainGaugeDataMap>(
+        //   gaugesDataMap
+        // );
       }
 
       const arr = list.map(subgraphGauge => ({
@@ -96,11 +95,15 @@ export class GaugesDecorator {
   private format(gaugeData: OnchainGaugeData): OnchainGaugeData {
     return {
       ...gaugeData,
-      rewardTokens: this.formatRewardTokens(gaugeData.rewardTokens),
+      rewardTokens: this.formatRewardTokens(gaugeData.rewardTokens || []),
       claimableTokens: gaugeData.claimableTokens?.toString() || '0',
       claimableRewards: this.formatClaimableRewards(gaugeData.claimableRewards),
-      voteRewardTokens: this.formatRewardTokens(gaugeData.voteRewardTokens),
-      voteClaimableRewards: this.formatClaimableRewards(gaugeData.voteClaimableRewards),
+      voteRewardTokens: this.formatRewardTokens(
+        gaugeData.voteRewardTokens || []
+      ),
+      voteClaimableRewards: this.formatClaimableRewards(
+        gaugeData.voteClaimableRewards || []
+      ),
     };
   }
 
@@ -203,11 +206,12 @@ export class GaugesDecorator {
         if (rewardToken === AddressZero) return;
 
         const callArgs = [gauge.id, userAddress, rewardToken];
-        const contractAddress = configService.network.addresses.voteRewardDistributor;
+        const contractAddress =
+          configService.network.addresses.voteRewardDistributor;
         this.multicaller.call(
           `${gauge.id}.voteClaimableRewards.${rewardToken}`,
           contractAddress,
-          "getPendingRewards",
+          'getPendingRewards',
           callArgs
         );
       });
@@ -223,14 +227,19 @@ export class GaugesDecorator {
     if (!claimableRewards) return {};
 
     Object.keys(claimableRewards).forEach(rewardToken => {
-      claimableRewards[rewardToken] = claimableRewards[rewardToken] ? claimableRewards[rewardToken].toString() : '0';
+      claimableRewards[rewardToken] = claimableRewards[rewardToken]
+        ? claimableRewards[rewardToken].toString()
+        : '0';
     });
 
     return claimableRewards;
   }
 
   private resetMulticaller(
-    abi: typeof LiquidityGaugeAbi | typeof LiquidityGaugeRewardHelperAbi | typeof VoteRewardDistributorAbi
+    abi:
+      | typeof LiquidityGaugeAbi
+      | typeof LiquidityGaugeRewardHelperAbi
+      | typeof VoteRewardDistributorAbi
   ) {
     const Multicaller = getOldMulticaller();
     return new Multicaller(this.config.network.key, this.provider, abi);
