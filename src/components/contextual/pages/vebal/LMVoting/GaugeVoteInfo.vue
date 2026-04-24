@@ -72,7 +72,7 @@ function formatVotesAsPercent(votes: string): string {
         <BalLoadingBlock v-if="isGaugeAprLoading" class="w-12 h-4" />
         <template v-else-if="gauge.poolVotes">
           <div class="text-right">
-            {{ formatNumberToCurrency(gauge.poolVotes, 2) }} (sMZ)
+            {{ formatNumberToCurrency(gauge.poolVotes, 2) }} (sHZ)
           </div>
         </template>
         <template v-else><div class="text-right">-</div></template>

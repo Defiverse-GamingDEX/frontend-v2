@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const list = [
   {
-    content: `The weighted pools are highly versatile and customizable pools. These pools employ a weighted calculation and are best suited for general use with tokens that are not necessarily price correlated. (e.g. USDC/OAS). 
+    content: `The weighted pools are highly versatile and customizable pools. These pools employ a weighted calculation and are best suited for general use with tokens that are not necessarily price correlated. (e.g. USDC/OAS).
 Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX weighted pools enable users to create pools with varying token counts and weightings, such as 80/20 or 60/20/20 pools.`,
     img: '',
     author: 'Weighted Pools',
@@ -12,9 +12,9 @@ Unlike traditional AMM pools, which only offer a 50/50 weighting, Gaming DEX wei
     author: 'AT-Field',
   },
   {
-    content: `The native token of both DeFi Verse and Gaming DEX, MZ, encompasses various utilities. MZ serves as the DeFi Verse's gas and base currency, while also being utilized as incentives for providing liquidity. Adjustments to incentives for specific pools are made through a voting system known as sMZ. Protocol revenue distributions are also carried out via sMZ, which is used for various other forms of governance voting. Furthermore, it plays a role in boosting rewards for liquidity providers through something called incentive boosts.`,
+    content: `The native token of both DeFi Verse and Gaming DEX, HZ, encompasses various utilities. HZ serves as the DeFi Verse's gas and base currency, while also being utilized as incentives for providing liquidity. Adjustments to incentives for specific pools are made through a voting system known as sHZ. Protocol revenue distributions are also carried out via sHZ, which is used for various other forms of governance voting. Furthermore, it plays a role in boosting rewards for liquidity providers through something called incentive boosts.`,
     img: '',
-    author: 'MZ Token',
+    author: 'HZ Token',
   },
 ];
 </script>

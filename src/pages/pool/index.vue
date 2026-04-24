@@ -737,9 +737,9 @@ onBeforeMount(async () => {
           @on-column-sort="onColumnSort"
           @load-more="loadMore"
         />
-        <div v-if="isElementSupported" class="p-4 xl:p-0 mt-16">
+        <!-- <div v-if="isElementSupported" class="p-4 xl:p-0 mt-16">
           <FeaturedProtocols />
-        </div>
+        </div> -->
       </BalStack>
     </div>
   </div>

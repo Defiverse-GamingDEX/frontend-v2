@@ -16,7 +16,7 @@
                 fNum2((totalBalance || 0).toString(), FNumFormats.token)
               }}</span
             >
-            sMZ
+            sHZ
           </div>
         </div>
         <div class="relative input-control">
@@ -29,13 +29,13 @@
             class="flex absolute top-1/2 right-0 gap-2 items-center -translate-y-1/2"
           >
             <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-            <span class="text-xl font-bold text-gray-800">sMZ</span>
+            <span class="text-xl font-bold text-gray-800">sHZ</span>
           </div>
         </div>
       </div>
 
       <div class="flex justify-end items-center mb-4 ratio-content">
-        <span>1 sMZ = {{ estimateZRate }} MZ</span>
+        <span>1 sHZ = {{ estimateZRate }} HZ</span>
       </div>
 
       <div class="flex flex-col mb-2">
@@ -57,7 +57,7 @@
           <div class="flex gap-2 items-center">
             <span class="label">Average Early redemption penalty</span>
             <BalTooltip
-              text="Redemption prior to maturity reduces the sMZ that can be received."
+              text="Redemption prior to maturity reduces the sHZ that can be received."
               placement="top"
               iconSize="sm"
               width="64"
@@ -67,7 +67,7 @@
           <span class="value">-{{ penaltyRate }} %</span>
         </div>
         <p class="warning-text">
-          Redemption prior to maturity reduces the sMZ that can be received.
+          Redemption prior to maturity reduces the sHZ that can be received.
         </p>
       </div>
 
@@ -80,7 +80,7 @@
             }}</span>
             <div class="flex items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-              <span class="ml-1 text-xl font-bold text-black">MZ</span>
+              <span class="ml-1 text-xl font-bold text-black">HZ</span>
             </div>
           </div>
           <hr class="mt-4 border-gray-800" />

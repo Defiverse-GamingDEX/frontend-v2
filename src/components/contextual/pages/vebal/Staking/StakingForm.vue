@@ -330,7 +330,7 @@ const handleStake = async () => {
     console.log('🚀 ~ handleStake ~ params:', params);
     const tx = await stakeZ(params);
     console.log('🚀 ~ handleStake ~ rs:', tx);
-    const summary = `Stake MZ success!`;
+    const summary = `Stake HZ success!`;
     addTransaction({
       id: tx?.hash || tx,
       type: 'tx',
@@ -377,7 +377,7 @@ onMounted(() => {
   <div class="staking-form">
     <BalCard noBorder :square="upToLargeBreakpoint">
       <template #header>
-        <h5 class="mb-6 text-3xl font-bold text-black">MZ Staking</h5>
+        <h5 class="mb-6 text-3xl font-bold text-black">HZ Staking</h5>
       </template>
 
       <div class="p-4 mb-2 rounded-xl border border-gray-800">
@@ -389,7 +389,7 @@ onMounted(() => {
                 fNum2(userZBalance?.toString() || '0', FNumFormats.token)
               }}</span
             >
-            MZ
+            HZ
           </span>
         </div>
         <div class="relative input-control">
@@ -404,7 +404,7 @@ onMounted(() => {
             class="flex absolute top-1/2 right-0 gap-2 items-center -translate-y-1/2"
           >
             <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-            <span class="text-xl font-bold text-gray-800">MZ</span>
+            <span class="text-xl font-bold text-gray-800">HZ</span>
           </div>
         </div>
         <div v-if="validate.isError" class="validate-amount">
@@ -413,7 +413,7 @@ onMounted(() => {
       </div>
 
       <div class="flex justify-end items-center mb-4 ratio-content">
-        <span>1 MZ = {{ rateSZ }} sMZ</span>
+        <span>1 HZ = {{ rateSZ }} sHZ</span>
       </div>
 
       <div class="flex justify-between items-center mb-2 maturity-content">
@@ -428,7 +428,7 @@ onMounted(() => {
         <div class="warning-text">
           <ul>
             <li>
-              Redemption prior to maturity reduces the sMZ that can be received.
+              Redemption prior to maturity reduces the sHZ that can be received.
             </li>
             <li>Cannot be redeemed early until 30 days after staking.</li>
           </ul>
@@ -444,7 +444,7 @@ onMounted(() => {
             }}</span>
             <div class="flex items-center">
               <img :src="ZIcon" alt="Z Token" class="w-4 h-4" />
-              <span class="ml-1 text-xl font-bold text-black">sMZ</span>
+              <span class="ml-1 text-xl font-bold text-black">sHZ</span>
             </div>
           </div>
           <hr class="mt-4 border-gray-800" />
@@ -493,7 +493,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .staking-form {
   // Styles for staking form container
   .balance-content {
