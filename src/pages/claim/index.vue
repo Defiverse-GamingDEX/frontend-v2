@@ -176,28 +176,28 @@ const gaugeTables = computed((): GaugeTable[] => {
   }, []);
 });
 
-const voteGaugesWithRewards = computed((): Gauge[] => {
-  return gauges.value.filter(gauge => gauge.voteRewardTokens.length > 0);
-});
+// const voteGaugesWithRewards = computed((): Gauge[] => {
+//   return gauges.value.filter(gauge => gauge.voteRewardTokens.length > 0);
+// });
 
-const voteGaugeTables = computed((): GaugeTable[] => {
-  // Only return gauges if we have a corresponding pool and rewards > 0
-  return voteGaugesWithRewards.value.reduce<GaugeTable[]>((arr, gauge) => {
-    const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
-    const totalRewardValue = Object.values(gauge.voteClaimableRewards).reduce(
-      (acc, reward) => acc.plus(reward),
-      bnum(0)
-    );
+// const voteGaugeTables = computed((): GaugeTable[] => {
+//   // Only return gauges if we have a corresponding pool and rewards > 0
+//   return voteGaugesWithRewards.value.reduce<GaugeTable[]>((arr, gauge) => {
+//     const pool = gaugePools.value.find(pool => pool.id === gauge.poolId);
+//     const totalRewardValue = Object.values(gauge.voteClaimableRewards).reduce(
+//       (acc, reward) => acc.plus(reward),
+//       bnum(0)
+//     );
 
-    if (pool && totalRewardValue.gt(0))
-      arr.push({
-        gauge,
-        pool,
-      });
+//     if (pool && totalRewardValue.gt(0))
+//       arr.push({
+//         gauge,
+//         pool,
+//       });
 
-    return arr;
-  }, []);
-});
+//     return arr;
+//   }, []);
+// });
 
 /**
  * METHODS
@@ -299,7 +299,7 @@ onBeforeMount(async () => {
         <template v-if="!isL2">
           <!-- Hung tam thoi disable deploy mainnet -->
 
-          <div class="mb-16">
+          <!-- <div class="mb-16">
             <div class="px-4 xl:px-0">
               <div class="flex items-center mt-6 mb-2">
                 <h3 class="inline-block mr-1.5 text-xl text-white">
@@ -320,7 +320,7 @@ onBeforeMount(async () => {
               :rewardsData="balRewardsData"
               :isLoading="loading"
             />
-          </div>
+          </div> -->
 
           <!--
           <div class="mb-16">
@@ -381,7 +381,7 @@ onBeforeMount(async () => {
           </div>
         </template>
 
-        <div v-if="!isL2">
+        <!-- <div v-if="!isL2">
           <h3 class="inline-block px-4 xl:px-0 mt-8 mr-1.5 text-xl text-white">
             {{ $t('voteIncentives') }}
           </h3>
@@ -408,7 +408,7 @@ onBeforeMount(async () => {
               <VoteRewardsTable :gauge="gauge" :isLoading="isClaimsLoading" />
             </div>
           </div>
-        </template>
+        </template> -->
 
         <!-- <BalBlankSlate v-else-if="isDefiverse" class="px-4 xl:px-0 mt-4 mb-16">
           {{ $t('noClaimableIncentivesOnThisChain') }}
