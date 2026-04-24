@@ -23,8 +23,8 @@ const isShowSZManagement = computed(() => {
   if (
     networkConfig.chainId === 248 ||
     networkConfig.chainId === 9372 ||
-    networkConfig.chainId === 6343 ||
-    networkConfig.chainId === 999
+    networkConfig.chainId === 6343
+    // networkConfig.chainId === 999 // Hung: Not release yet
   ) {
     return true;
   }
