@@ -136,13 +136,13 @@ watch(account, () => {
 
 <template>
   <div class="staking-info">
-    <h5 class="staking-info-title">My sMZ</h5>
+    <h5 class="staking-info-title">My sHZ</h5>
 
     <div class="flex flex-col gap-5">
       <!-- My Z -->
       <BalCard noBorder :square="upToLargeBreakpoint">
         <div class="card-content">
-          <div class="title">My MZ</div>
+          <div class="title">My HZ</div>
           <div class="flex justify-between items-center">
             <div class="amount">
               {{ fNum2(myZ?.toString() || '0', FNumFormats.token) }}
@@ -179,7 +179,7 @@ watch(account, () => {
       <!-- My sZ -->
       <BalCard noBorder :square="upToLargeBreakpoint">
         <div class="card-content">
-          <div class="title">My sMZ</div>
+          <div class="title">My sHZ</div>
           <div class="flex justify-between items-center">
             <div class="amount">
               {{ fNum2(mySZ?.toString() || '0', FNumFormats.token) }}

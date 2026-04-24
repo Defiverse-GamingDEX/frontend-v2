@@ -2041,7 +2041,7 @@
       "id": "0x57aeb49efdda03f31fad30131993bfbe082d36ea000200000000000000000000",
       "address": "0x57aeb49efdda03f31fad30131993bfbe082d36ea",
       "poolType": "Weighted",
-      "symbol": "50USDC.e-50MZ",
+      "symbol": "50USDC.e-50HZ",
       "tokens": [
         {
           "address": "0x310ef97a217563d36a5469b7f432e72816cea84e",
@@ -2049,7 +2049,7 @@
         },
         {
           "address": "0x79b32ebceb5551262c9c71d07e7a4be819d36290",
-          "symbol": "MZ"
+          "symbol": "HZ"
         }
       ]
     },
@@ -2068,7 +2068,7 @@
       "id": "0x6ecd612537a436643e179b999bb490de88b77c32000200000000000000000002",
       "address": "0x6ecd612537a436643e179b999bb490de88b77c32",
       "poolType": "Weighted",
-      "symbol": "50WBTC.e-50MZ",
+      "symbol": "50WBTC.e-50HZ",
       "tokens": [
         {
           "address": "0x9a97ab8f485a5617fa036e4268c8997e80ca0e2b",
@@ -2076,7 +2076,7 @@
         },
         {
           "address": "0x79b32ebceb5551262c9c71d07e7a4be819d36290",
-          "symbol": "MZ"
+          "symbol": "HZ"
         }
       ]
     },
