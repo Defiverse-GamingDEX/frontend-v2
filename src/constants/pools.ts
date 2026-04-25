@@ -993,8 +993,7 @@ const POOLS_HYPEREVM_MAINNET: Pools = {
     ],
   },
   Factories: {
-    '0xb05d8c946f8875e45e267e6f5739704763605d59': 'weightedPool', // WeightedPool V3
-    '0xd5744a1cd1bd77c6dd1d2b29674648c017774bb5': 'weightedPool', // WeightedPool V3
+    '0xe204cafd0b5096e1ad425e9d5af658c352ae488c': 'weightedPool', // WeightedPool V3
   },
   Stakable: {
     AllowList: [],

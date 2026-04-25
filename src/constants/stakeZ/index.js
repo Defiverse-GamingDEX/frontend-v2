@@ -26,9 +26,9 @@ const STAKE_Z_NETWORKS_MAINNET = [
   {
     chain_id: 999,
     name: 'HyperEVM',
-    z_token_address: '0x8aEa5737520ddCc1f97f922e681D0e7D1f5a16b9',
+    z_token_address: '0xE0a96a085e3b1236D56A3A05bfc8e987979BeDB3',
     z_token_decimals: 18,
-    sz_token_address: '0x389fA935970Cd411A7c9d7B03AD3405374fC7B65',
+    sz_token_address: '0xEe8dB8C952Ab169128aE1Ce2aF060b46c76355e2',
     sz_token_decimals: 18,
   },
 ];
