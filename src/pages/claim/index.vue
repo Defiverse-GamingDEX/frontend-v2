@@ -381,6 +381,7 @@ onBeforeMount(async () => {
           </div>
         </template>
 
+        <!--
         <div v-if="!isL2">
           <h3 class="inline-block px-4 xl:px-0 mt-8 mr-1.5 text-xl text-white">
             {{ $t('voteIncentives') }}
@@ -395,7 +396,8 @@ onBeforeMount(async () => {
             {{ $t('claimPage.tips.VoteIncentives') }}
           </BalTooltip>
         </div>
-
+      -->
+        <!--
         <BalLoadingBlock v-if="loading" class="mt-6 mb-2 h-56" />
         <template v-if="!isClaimsLoading && voteGaugeTables.length > 0">
           <div v-for="{ gauge, pool } in voteGaugeTables" :key="gauge.id">
@@ -409,6 +411,7 @@ onBeforeMount(async () => {
             </div>
           </div>
         </template>
+      -->
 
         <!-- <BalBlankSlate v-else-if="isDefiverse" class="px-4 xl:px-0 mt-4 mb-16">
           {{ $t('noClaimableIncentivesOnThisChain') }}
