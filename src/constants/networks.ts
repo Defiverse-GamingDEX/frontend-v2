@@ -95,6 +95,15 @@ let networks: any = [
     gasUnit: 'wei',
     maxPriorityFee: 0,
   },
+  {
+    id: 'megaeth',
+    name: 'MegaETH',
+    networkSlug: 'megaeth',
+    key: '4326',
+    tokens: [],
+    gasUnit: 'wei',
+    externalLink: 'https://megaeth.gaming-dex.com/#/',
+  },
 ];
 
 let networksDev = [
