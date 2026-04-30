@@ -56,6 +56,15 @@ export class OnchainDataFormater {
 
   private formatPoolTokens(): OnchainTokenDataMap {
     const tokens = <OnchainTokenDataMap>{};
+    if (
+      !this.rawData ||
+      !this.rawData.poolTokens ||
+      !this.rawData.poolTokens.tokens
+    ) {
+      console.error('Invalid pool tokens data', this.rawData?.poolTokens);
+      return tokens;
+    }
+
     const weights = this.normalizeWeights();
 
     this.rawData.poolTokens.tokens.forEach((token, i) => {
@@ -88,7 +97,7 @@ export class OnchainDataFormater {
       const value = this.pool.tokensList.map(
         () => 1 / this.pool.tokensList.length
       );
-      return this.rawData.poolTokens.tokens.map(() => value[0]);
+      return this.rawData?.poolTokens?.tokens?.map(() => value[0]) || [];
     } else {
       return [];
     }
