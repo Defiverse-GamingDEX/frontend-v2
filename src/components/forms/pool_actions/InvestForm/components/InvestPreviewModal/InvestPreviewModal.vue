@@ -172,7 +172,7 @@ watch(account, () => emit('close'));
       :pool="pool"
       :math="math"
       :tokenAddresses="tokenAddresses"
-      :disabled="rektPriceImpact"
+      :disabled="false"
       class="mt-4"
       @success="investmentConfirmed = true"
       @show-stake-modal="handleShowStakeModal"

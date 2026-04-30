@@ -491,8 +491,8 @@
     },
     "error": {
       "rektPriceImpact": {
-        "description": "The likelihood of you losing money is too high. For your protection, you can’t perform this transaction on this interface.",
-        "title": "This price impact is too high. You cannot proceed"
+        "description": "The price impact is extremely high. Proceeding with this transaction will likely result in a significant loss of funds. Please review your amounts carefully.",
+        "title": "Warning: High price impact"
       }
     }
   },
