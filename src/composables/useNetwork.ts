@@ -33,12 +33,15 @@ const DEFAULT_NETWORK = IS_TESTNET
   ? Network.MEGAETH_TESTNET
   : Network.MEGAETH_MAINNET;
 
-const NETWORK_ID =
+let NETWORK_ID =
   urlNetworkId ||
   localStorageNetworkId ||
   (Number(import.meta.env.VITE_NETWORK) as Network) ||
   DEFAULT_NETWORK;
 if (windowAvailable) localStorage.setItem('networkId', NETWORK_ID.toString());
+if (!config[NETWORK_ID]) {
+  NETWORK_ID = DEFAULT_NETWORK;
+}
 export const networkSlug = config[NETWORK_ID].slug;
 export const networkConfig = config[NETWORK_ID];
 export const networkLabelMap = {

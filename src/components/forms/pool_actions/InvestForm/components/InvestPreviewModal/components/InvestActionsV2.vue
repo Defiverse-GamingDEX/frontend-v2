@@ -169,7 +169,7 @@ async function submit(): Promise<TransactionResponse> {
     <BalActionSteps
       v-if="!txState.confirmed || !txState.receipt"
       :actions="actions"
-      :disabled="rektPriceImpact"
+      :disabled="false"
     />
     <div v-else>
       <ConfirmationIndicator :txReceipt="txState.receipt" />
