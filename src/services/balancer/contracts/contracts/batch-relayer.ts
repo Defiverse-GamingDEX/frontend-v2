@@ -9,19 +9,18 @@ import { TransactionBuilder } from '@/services/web3/transactions/transaction.bui
 
 export default class BatchRelayer {
   service: ContractService;
-  instance: Contract;
+  instance?: Contract;
 
   constructor(service, public readonly abi = BatchRelayerAbi) {
     this.service = service;
 
-    if (!this.service.config.addresses.batchRelayer)
-      throw new Error('BatchRelayer address not set');
-
-    this.instance = new Contract(
-      this.service.config.addresses.batchRelayer,
-      this.abi,
-      this.service.provider
-    );
+    if (this.service.config.addresses.batchRelayer) {
+      this.instance = new Contract(
+        this.service.config.addresses.batchRelayer,
+        this.abi,
+        this.service.provider
+      );
+    }
   }
 
   public get address(): string {

@@ -104,6 +104,16 @@ let networks: any = [
     gasUnit: 'wei',
     externalLink: 'https://megaeth.gaming-dex.com/#/',
   },
+
+  {
+    id: 'hyperevm',
+    name: 'HyperEVM',
+    networkSlug: 'hyperevm',
+    key: '999',
+    tokens: [],
+    gasUnit: 'wei',
+    externalLink: 'https://hyperevm.gaming-dex.com/#/',
+  },
 ];
 
 let networksDev = [
