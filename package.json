@@ -2,14 +2,16 @@
   "name": "@balancer-labs/frontend-v2",
   "version": "1.91.20",
   "engines": {
-    "node": "=16",
+    "node": ">=18",
     "npm": ">=8"
   },
   "scripts": {
+    "check:quarantine": "node scripts/enforce-quarantine.js",
+    "postinstall": "pnpm run check:quarantine",
     "vite": "vite --force",
-    "dev": "npm run generate:tokenlists && vite --force",
-    "serve": "npm run dev",
-    "build": "npm run generate:tokenlists && vite build",
+    "dev": "pnpm run generate:tokenlists && vite --force",
+    "serve": "pnpm run dev",
+    "build": "pnpm run generate:tokenlists && vite build",
     "build:withouttokenlists": "vite build",
     "build:watch": "vite build --watch",
     "preview": "vite preview",
@@ -18,14 +20,14 @@
     "test:unit:watch": "NODE_ENV=test vitest -- --watch",
     "test:unit:coverage": "vitest --coverage",
     "lint": "eslint . --ext .js,.ts,.vue --max-warnings 0",
-    "lint:fix": "npm run lint -- --fix",
+    "lint:fix": "pnpm run lint -- --fix",
     "import-abis": "cp ../core/deployments/artifacts/dockerParity/*.json ./src/utils/balancer/abi/.",
     "import-config": "tsc ./scripts/update-config.ts && node ./scripts/update-config.ts",
     "prettier": "prettier --check '**/*.*(md|json|yaml|html)' --loglevel warn",
-    "prettier:fix": "npm run prettier -- --write",
+    "prettier:fix": "pnpm run prettier -- --write",
     "prepare": "node ./prepare.js",
     "stylelint": "stylelint '**/*.{vue,css}'",
-    "stylelint:fix": "npm run stylelint -- --fix",
+    "stylelint:fix": "pnpm run stylelint -- --fix",
     "tailwind:build": "tailwind-config-viewer export ./tailwind-static",
     "tailwind:view": "tailwind-config-viewer -o",
     "generate:tokenlists": "npx vite-node --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk ./src/lib/scripts/tokenlists.generator.ts",
@@ -135,7 +137,7 @@
     "vitest-mock-extended": "^1.0.8",
     "vue": "3.2.45",
     "vue-echarts": "^6.0.0",
-    "vue-i18n": "^9.2.2",
+    "vue-i18n": "9.2.2",
     "vue-loader": "^17.0.1",
     "vue-query": "^1.6.0",
     "vue-router": "^4.0.10",
@@ -183,5 +185,12 @@
     "ansi-regex": "5.0.1",
     "simple-swizzle": "0.2.2",
     "supports-hyperlinks": "2.3.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@intlify/shared": "9.14.5",
+      "@intlify/core-base": "9.14.5",
+      "@intlify/message-compiler": "9.14.5"
+    }
   }
 }
