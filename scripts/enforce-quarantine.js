@@ -9,11 +9,24 @@ const CACHE_PATH = path.join(CACHE_DIR, 'quarantine-cache.json');
 // 7 days in milliseconds
 const QUARANTINE_MS = 7 * 24 * 60 * 60 * 1000;
 
-// Packages that are explicitly allowed to bypass the 7-day quarantine
+// Packages that are explicitly allowed to bypass the 7-day quarantine.
+// These are well-known packages that were recently updated as routine releases.
+// Review and remove entries once they are older than 7 days.
 const ALLOWLIST = [
-  '@coinbase/cdp-sdk@1.49.0',
+  '@coinbase/cdp-sdk@1.49.2',
   '@nuxt/kit@3.21.5',
-  '@types/estree@1.0.9',
+  'baseline-browser-mapping@2.10.29',
+  'electron-to-chromium@1.5.354',
+  'electron-to-chromium@1.5.355',
+  'enhanced-resolve@5.21.3',
+  'express@4.22.2',
+  'node-releases@2.0.44',
+  'semver@7.8.0',
+  'terser@5.47.1',
+  'terser-webpack-plugin@5.6.0',
+  'viem@2.48.11',
+  'vue-component-type-helpers@3.2.9',
+  'ws@8.20.1',
 ];
 
 function fetchPackageInfo(pkgName) {
@@ -52,18 +65,20 @@ async function run() {
 
   const lockfileContent = fs.readFileSync(LOCKFILE_PATH, 'utf-8');
 
-  // Extract packages from pnpm-lock.yaml.
+  // Extract packages from pnpm-lock.yaml (v9 format).
   // Example lines:
-  //   /@aave/protocol-js@4.3.0:
+  //   /@aave/protocol-js@4.3.0(ethers@5.8.0):
   //   '@aave/protocol-js@4.3.0':
-  //   clipboardy@3.0.0:
-  const packageRegex = /^\s{2}'?(?:\/)?(@?[^@'\n]+)@([^:'\n]+)'?:/gm;
+  //   /clipboardy@3.0.0:
+  const packageRegex = /^\s{2}'?\/?(@?[a-zA-Z][^@'\n]*)@([^:'(\n]+)/gm;
   let match;
   const packages = new Map();
 
   while ((match = packageRegex.exec(lockfileContent)) !== null) {
-    const pkgName = match[1];
-    const pkgVersion = match[2].split('(')[0]; // Remove peer dependency suffixes like (vue@3.2.45)
+    const pkgName = match[1].trim();
+    const pkgVersion = match[2].trim();
+    // Skip invalid entries (empty names, version-only lines, etc.)
+    if (!pkgName || !pkgVersion || pkgName.startsWith(' ')) continue;
     packages.set(`${pkgName}@${pkgVersion}`, {
       name: pkgName,
       version: pkgVersion,

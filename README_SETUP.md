@@ -4,9 +4,9 @@ This document provides detailed instructions for setting up, developing, and bui
 
 ## 🛠 Prerequisites
 
-The project is currently optimized to run on a Node.js 18 environment. Although the legacy configuration was Node 16, Node 18.18.2 has been thoroughly tested and runs perfectly.
+The project is currently optimized to run on a Node.js 22 LTS environment.
 
-- **Node.js:** v18.18.2 (Recommended to use [nvm](https://github.com/nvm-sh/nvm): `nvm use 18.18.2`)
+- **Node.js:** v22.x LTS (Recommended to use [nvm](https://github.com/nvm-sh/nvm): `nvm install 22 && nvm use 22`)
 - **Package Manager:** pnpm >= 10.x (`npm install -g pnpm`)
 
 ---
