@@ -48,8 +48,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(ethers@5.8.0)
       '@balancer-labs/assets':
-        specifier: github:balancer-labs/assets#master
-        version: assets@git+https://git@github.com:balancer-labs/assets.git#889b85c7dec246e66f08d2d096a1b4e0e9886633
+        specifier: git+https://github.com/balancer-labs/assets.git#master
+        version: assets@git+https://github.com/balancer-labs/assets.git#889b85c7dec246e66f08d2d096a1b4e0e9886633
       '@balancer-labs/typechain':
         specifier: 1.0.0
         version: 1.0.0(@ethersproject/abi@5.7.0)(@ethersproject/bytes@5.8.0)(@ethersproject/constants@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.8.0)
@@ -2577,8 +2577,8 @@ packages:
   assertion-error@1.1.0:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
 
-  assets@git+https://git@github.com:balancer-labs/assets.git#889b85c7dec246e66f08d2d096a1b4e0e9886633:
-    resolution: {commit: 889b85c7dec246e66f08d2d096a1b4e0e9886633, repo: git@github.com:balancer-labs/assets.git, type: git}
+  assets@git+https://github.com/balancer-labs/assets.git#889b85c7dec246e66f08d2d096a1b4e0e9886633:
+    resolution: {commit: 889b85c7dec246e66f08d2d096a1b4e0e9886633, repo: https://github.com/balancer-labs/assets.git, type: git}
     version: 1.0.0
 
   astral-regex@2.0.0:
@@ -11186,7 +11186,7 @@ snapshots:
 
   assertion-error@1.1.0: {}
 
-  assets@git+https://git@github.com:balancer-labs/assets.git#889b85c7dec246e66f08d2d096a1b4e0e9886633:
+  assets@git+https://github.com/balancer-labs/assets.git#889b85c7dec246e66f08d2d096a1b4e0e9886633:
     dependencies:
       dotenv: 8.6.0
 
