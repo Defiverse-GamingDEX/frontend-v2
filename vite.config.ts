@@ -15,6 +15,8 @@ import viteSentry from 'vite-plugin-sentry';
 import { defineConfig } from 'vitest/config';
 import { version as pkgVersion } from './package.json';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig(({ mode }) => {
   const envConfig = loadEnv(mode, process.cwd());
   console.log('🚀 ~ defineConfig ~ envConfig:', envConfig);
