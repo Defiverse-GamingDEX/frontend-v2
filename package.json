@@ -135,7 +135,7 @@
     "vitest-mock-extended": "^1.0.8",
     "vue": "3.2.45",
     "vue-echarts": "^6.0.0",
-    "vue-i18n": "^9.2.2",
+    "vue-i18n": "9.2.2",
     "vue-loader": "^17.0.1",
     "vue-query": "^1.6.0",
     "vue-router": "^4.0.10",
