@@ -108,6 +108,9 @@ export default defineConfig(({ mode }) => {
       },
       strictPort: true,
       host: true,
+      watch: {
+        ignored: ['**/.pnpm-store/**', '**/node_modules/**'],
+      },
     },
     preview: {
       port: 8080,
