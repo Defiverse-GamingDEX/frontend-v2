@@ -2,7 +2,7 @@
   "name": "@balancer-labs/frontend-v2",
   "version": "1.94.3",
   "engines": {
-    "node": "=16",
+    "node": ">=22",
     "npm": ">=8"
   },
   "scripts": {
@@ -28,12 +28,13 @@
     "stylelint:fix": "npm run stylelint -- --fix",
     "tailwind:build": "tailwind-config-viewer export ./tailwind-static",
     "tailwind:view": "tailwind-config-viewer -o",
-    "generate:tokenlists": "npx vite-node --options.deps.inline=@ethersproject/basex --options.deps.inline=@ethersproject/signing-key --options.deps.inline=@defiverse/balancer-sdk-hyperevm ./src/lib/scripts/tokenlists.generator.ts",
+    "generate:tokenlists": "npx vite-node ./src/lib/scripts/tokenlists.generator.ts",
+    "generate:voting-gauges": "npx vite-node ./src/lib/scripts/voting-gauge.generator.ts",
     "typecheck": "vue-tsc --noEmit"
   },
   "devDependencies": {
     "@aave/protocol-js": "^4.3.0",
-    "@balancer-labs/assets": "github:balancer-labs/assets#master",
+    "@balancer-labs/assets": "git+https://github.com/balancer-labs/assets.git#master",
     "@balancer-labs/typechain": "1.0.0",
     "@balancer-labs/v2-deployments": "1.1.1",
     "@cowprotocol/contracts": "^1.3.1",
@@ -48,6 +49,8 @@
     "@ethersproject/contracts": "~5.7.0",
     "@ethersproject/providers": "~5.7.0",
     "@ethersproject/units": "~5.7.0",
+    "@ethersproject/networks": "~5.7.0",
+    "@ethersproject/properties": "~5.7.0",
     "@georgeroman/balancer-v2-pools": "^0.0.5",
     "@gnosis.pm/safe-apps-provider": "^0.6.0",
     "@gnosis.pm/safe-apps-sdk": "4.0.0",
@@ -70,7 +73,7 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitest/coverage-c8": "^0.25.3",
     "@vue/test-utils": "^2.2.7",
-    "@vueuse/core": "^4.3.4",
+    "@vueuse/core": "^9.13.0",
     "@walletconnect/ethereum-provider": "^2.10.2",
     "@walletconnect/modal": "^2.6.2",
     "animejs": "^3.2.1",
@@ -158,6 +161,8 @@
   "dependencies": {
     "@nktkas/hyperliquid": "^0.32.2",
     "crypto-js": "^4.2.0",
+    "ethers": "5.8.0",
+    "mersenne-twister": "1.1.0",
     "mitt": "^3.0.1",
     "singularity-init": "^1.0.3",
     "uuid": "^10.0.0",
@@ -183,5 +188,6 @@
     "ansi-regex": "5.0.1",
     "simple-swizzle": "0.2.2",
     "supports-hyperlinks": "2.3.0"
-  }
+  },
+  "packageManager": "pnpm@11.1.1+sha512.d1fdf5f73c617b64fa1a56a81c3c8dfe0e966e33a6010aa256b517ae77be21d93e05affc0de1a83b0e4f29d569f68b446ae8f068cd7247c0bb3df0fb4d7bdf9a"
 }
