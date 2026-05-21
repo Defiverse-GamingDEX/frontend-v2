@@ -59,9 +59,9 @@ importers:
       '@cowprotocol/contracts':
         specifier: ^1.3.1
         version: 1.8.0(ethers@5.8.0)
-      '@defiverse/balancer-sdk':
-        specifier: 0.1.251
-        version: 0.1.251(encoding@0.1.13)(ethers@5.8.0)
+      '@defiverse/balancer-sdk-megaeth':
+        specifier: 0.1.262
+        version: 0.1.262(encoding@0.1.13)(ethers@5.8.0)
       '@ensdomains/content-hash':
         specifier: ^2.5.3
         version: 2.5.7
@@ -351,7 +351,7 @@ importers:
         specifier: ^6.0.0
         version: 6.7.3(@vue/runtime-core@3.5.34)(echarts@5.6.0)(vue@3.2.45)
       vue-i18n:
-        specifier: 9.2.2
+        specifier: ^9.2.2
         version: 9.2.2(vue@3.2.45)
       vue-loader:
         specifier: ^17.0.1
@@ -620,8 +620,8 @@ packages:
     peerDependencies:
       postcss-selector-parser: ^6.0.10
 
-  '@defiverse/balancer-sdk@0.1.251':
-    resolution: {integrity: sha512-OH6Ouf/1HH9oLeyWTMk4AkDStUuIrfSQahiplLjGHV/vAlb6V09416UtgN/+uyIHBAAdWGiOBnBcLe9eaJ+8xw==}
+  '@defiverse/balancer-sdk-megaeth@0.1.262':
+    resolution: {integrity: sha512-qP73cmIMBfxZDcMcU2wdAJor+tnAI6RJzha68QRmeyzi0fQtCZp6pmVVhaM90Ob9HvscBl2vanMFKjt9JWJlQA==}
 
   '@defiverse/sor@4.1.14':
     resolution: {integrity: sha512-0+ne6hIXmvNRWpGTBrRwnBu/9+WtxLK6jl487n09VDn8zBWSTod2G9Pz9arkNDOwfaIc5x7XjqDWsgm+QS10DA==}
@@ -7882,7 +7882,7 @@ snapshots:
     dependencies:
       postcss-selector-parser: 6.1.2
 
-  '@defiverse/balancer-sdk@0.1.251(encoding@0.1.13)(ethers@5.8.0)':
+  '@defiverse/balancer-sdk-megaeth@0.1.262(encoding@0.1.13)(ethers@5.8.0)':
     dependencies:
       '@balancer-labs/typechain': 1.0.0(@ethersproject/abi@5.7.0)(@ethersproject/bytes@5.8.0)(@ethersproject/constants@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.8.0)
       '@defiverse/sor': 4.1.14(@ethersproject/abi@5.7.0)(@ethersproject/address@5.7.0)(@ethersproject/bignumber@5.7.0)(@ethersproject/constants@5.7.0)(@ethersproject/contracts@5.7.0)(@ethersproject/providers@5.7.2)
