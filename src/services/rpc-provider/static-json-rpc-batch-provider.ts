@@ -1,10 +1,8 @@
 import { Logger } from '@ethersproject/logger';
-import { Network } from '@ethersproject/networks';
-import { defineReadOnly } from '@ethersproject/properties';
-import { logger, providers } from 'ethers';
+import { logger, providers, utils } from 'ethers';
 
 class StaticJsonRpcBatchProvider extends providers.JsonRpcBatchProvider {
-  async detectNetwork(): Promise<Network> {
+  async detectNetwork(): Promise<providers.Network> {
     let network = this.network;
     if (network == null) {
       network = await super.detectNetwork();
@@ -20,7 +18,7 @@ class StaticJsonRpcBatchProvider extends providers.JsonRpcBatchProvider {
       // If still not set, set it
       if (this._network == null) {
         // A static network does not support "any"
-        defineReadOnly(this, '_network', network);
+        utils.defineReadOnly(this, '_network', network);
 
         this.emit('network', network, null);
       }
