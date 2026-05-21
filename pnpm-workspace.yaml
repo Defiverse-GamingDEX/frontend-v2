@@ -1,0 +1,39 @@
+# pnpm 11 Security Configuration
+# Docs: https://pnpm.io/settings
+
+# Block packages published less than 7 days ago (10,080 minutes)
+# Protects against supply chain attacks by quarantining newly published packages.
+minimumReleaseAge: 10080
+
+# Exclude packages that have missing "time" metadata in the npm registry
+# which causes ERR_PNPM_MISSING_TIME errors.
+# minimumReleaseAgeExclude:
+#   - 'jest'
+#   - '@babel/*'
+#   - 'ws'
+#   - '@sentry/*'
+#   - '@sentry-internal/*'
+#   - '@typescript-eslint/*'
+#   - 'electron-to-chromium'
+#   - '@coinbase/cdp-sdk'
+#   - 'yaml'
+#   - 'commander'
+#   - '@vitest/*'
+#   - 'es-toolkit'
+
+# Enable exotic subdeps blocking to prevent supply chain attacks via git/tarball URLs.
+blockExoticSubdeps: true
+
+# Whitelist trusted packages to run their post-install build scripts.
+# These are required for libraries that involve native compilation (C++/Rust).
+allowBuilds:
+  '@parcel/watcher': true
+  '@reown/appkit': true
+  '@sentry/cli': true
+  core-js: true
+  esbuild: true
+  keccak: true
+  msw: true
+  secp256k1: true
+  vue-demi: true
+  vue-echarts: true
