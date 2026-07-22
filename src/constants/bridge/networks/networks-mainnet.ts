@@ -64,7 +64,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
     name: 'OASYS Mainnet',
     gasPrice: null,
     explorer: 'https://explorer.oasys.games',
-    rpc: 'https://oasys.blockpi.network/v1/rpc/public',
+    rpc: 'https://rpc.mainnet.oasys.games',
     bridgeContract: '', // get from router data API
     bridgeABI: IL1StandardBridge,
     bridgeABIExternal: cBridgeABI,
@@ -76,7 +76,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       symbol: 'OAS',
       decimals: 18,
     },
-    verseBridgeVersion: 2
+    verseBridgeVersion: 2,
   },
   {
     chain_id: '0x3EF4',
@@ -99,7 +99,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 1
+    verseBridgeVersion: 1,
   },
   {
     chain_id: '0x736C',
@@ -122,7 +122,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 2
+    verseBridgeVersion: 2,
   },
   {
     chain_id: '0x960',
@@ -145,7 +145,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 1
+    verseBridgeVersion: 1,
   },
   {
     chain_id: '0x4a43',
@@ -168,7 +168,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 1
+    verseBridgeVersion: 1,
   },
   {
     chain_id: '0x15b3',
@@ -191,7 +191,7 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 1
+    verseBridgeVersion: 1,
   },
   {
     chain_id: '0x6E4216',
@@ -214,6 +214,6 @@ export const BRIDGE_NETWORKS_MAINNET = [
       decimals: 18,
       address: '0x4200000000000000000000000000000000000010',
     },
-    verseBridgeVersion: 2
+    verseBridgeVersion: 2,
   },
 ];

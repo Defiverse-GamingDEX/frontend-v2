@@ -7,7 +7,7 @@ export const OASYS_NETWORK_MAINNET = {
   name: 'OASYS Mainnet',
   gasPrice: null,
   explorer: 'https://explorer.oasys.games',
-  rpc: 'https://oasys.blockpi.network/v1/rpc/public',
+  rpc: 'https://rpc.mainnet.oasys.games',
   bridgeContract: '0x5200000000000000000000000000000000000015',
   type: 'L1',
   isOnlyDefiBridge: false,

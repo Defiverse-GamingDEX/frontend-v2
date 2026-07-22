@@ -1,6 +1,6 @@
 import tcgcIcon from '@/assets/images/bridge/tokens/tcgc.png';
 import oasIcon from '@/assets/images/bridge/networks/oas.png';
-const rpc = 'https://oasys.blockpi.network/v1/rpc/public';
+const rpc = 'https://rpc.mainnet.oasys.games';
 export const BRIDGE_OASYS_TOKENS_MAINNET = [
   {
     name: 'OASYS',
