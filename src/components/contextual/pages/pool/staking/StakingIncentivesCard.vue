@@ -68,9 +68,12 @@ const fiatValueOfAllStakedShares = computed(() => {
  * METHODS
  */
 function showStakePreview() {
-  if (fiatValueOfUnstakedShares.value === '0') return;
-  stakeAction.value = 'stake';
-  isStakePreviewVisible.value = true;
+  // if (fiatValueOfUnstakedShares.value === '0') return;
+  // stakeAction.value = 'stake';
+  // isStakePreviewVisible.value = true;
+
+  // Staking is disabled following requiment 14/09/2026
+  return;
 }
 
 function showUnstakePreview() {
@@ -188,10 +191,7 @@ function handlePreviewClose() {
                   <BalBtn
                     color="gradient"
                     size="sm"
-                    :disabled="
-                      fiatValueOfUnstakedShares === '0' ||
-                      hasNonPrefGaugeBalance
-                    "
+                    :disabled="true"
                     @click="showStakePreview"
                   >
                     {{ $t('stake') }}
@@ -206,6 +206,18 @@ function handlePreviewClose() {
                     {{ $t('unstake') }}
                   </BalBtn>
                 </BalStack>
+                <BalAlert
+                  type="warning"
+                  :title="$t('staking.stakingDisabledNotice')"
+                  block
+                  class="mt-2"
+                >
+                  <ul class="pl-4 space-y-1 text-sm list-disc">
+                    <li>{{ $t('staking.stakingDisabledPoint1') }}</li>
+                    <li>{{ $t('staking.stakingDisabledPoint2') }}</li>
+                    <li>{{ $t('staking.stakingDisabledPoint3') }}</li>
+                  </ul>
+                </BalAlert>
                 <BalAlert
                   v-if="hasNonPrefGaugeBalance && isRestakeFeatureEnabled"
                   :title="$t('staking.restakeGauge')"
