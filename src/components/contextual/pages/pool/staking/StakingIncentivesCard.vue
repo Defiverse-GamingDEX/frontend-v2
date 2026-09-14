@@ -191,7 +191,11 @@ function handlePreviewClose() {
                   <BalBtn
                     color="gradient"
                     size="sm"
-                    :disabled="true"
+                    :disabled="
+                      fiatValueOfUnstakedShares === '0' ||
+                      hasNonPrefGaugeBalance ||
+                      true // always disabled following requirements 14/09/2026
+                    "
                     @click="showStakePreview"
                   >
                     {{ $t('stake') }}

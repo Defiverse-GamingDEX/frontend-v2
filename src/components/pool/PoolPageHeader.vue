@@ -274,6 +274,7 @@ function symbolFor(titleTokenIndex: number): string {
           :color="'gradient'"
           class="p-2"
           :size="'sm'"
+          :disabled="true"
           @click="isRestakePreviewVisible = true"
         >
           {{ $t('restake') }}
